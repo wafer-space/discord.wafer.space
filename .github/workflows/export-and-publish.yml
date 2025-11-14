@@ -42,20 +42,22 @@ jobs:
         id: cache-dce
         uses: actions/cache@v4
         with:
-          path: DiscordChatExporter.Cli
+          path: bin/discord-exporter
           key: dce-${{ runner.os }}-latest
 
       - name: Download DiscordChatExporter
         if: steps.cache-dce.outputs.cache-hit != 'true'
         run: |
+          mkdir -p bin/discord-exporter
           wget https://github.com/Tyrrrz/DiscordChatExporter/releases/latest/download/DiscordChatExporter.Cli.linux-x64.zip
-          unzip DiscordChatExporter.Cli.linux-x64.zip
-          chmod +x DiscordChatExporter.Cli
+          unzip DiscordChatExporter.Cli.linux-x64.zip -d bin/discord-exporter
+          chmod +x bin/discord-exporter/DiscordChatExporter.Cli
           rm DiscordChatExporter.Cli.linux-x64.zip
 
       - name: Run export script
         env:
           DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
+          PYTHONPATH: .
         run: |
           echo "Starting export..."
           uv run python scripts/export_channels.py
@@ -64,6 +66,8 @@ jobs:
 
       - name: Organize exports
         if: steps.export.outcome == 'success' || steps.export.outcome == 'failure'
+        env:
+          PYTHONPATH: .
         run: |
           echo "Organizing exports..."
           uv run python scripts/organize_exports.py
@@ -72,6 +76,8 @@ jobs:
 
       - name: Run navigation generator
         if: steps.organize.outcome == 'success' || steps.organize.outcome == 'failure'
+        env:
+          PYTHONPATH: .
         run: |
           echo "Generating navigation..."
           uv run python scripts/generate_navigation.py
