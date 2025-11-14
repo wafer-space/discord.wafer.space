@@ -27,26 +27,26 @@ def test_should_include_channel_with_wildcard():
     include = ["*"]
     exclude = ["admin", "private-*"]
 
-    assert should_include_channel("general", include, exclude) == True
-    assert should_include_channel("announcements", include, exclude) == True
+    assert should_include_channel("general", include, exclude)
+    assert should_include_channel("announcements", include, exclude)
 
 def test_should_include_channel_excludes_patterns():
     """Test channel exclusion patterns"""
     include = ["*"]
     exclude = ["admin", "private-*"]
 
-    assert should_include_channel("admin", include, exclude) == False
-    assert should_include_channel("private-chat", include, exclude) == False
-    assert should_include_channel("private-logs", include, exclude) == False
+    assert not should_include_channel("admin", include, exclude)
+    assert not should_include_channel("private-chat", include, exclude)
+    assert not should_include_channel("private-logs", include, exclude)
 
 def test_should_include_channel_specific_includes():
     """Test specific channel inclusion"""
     include = ["general", "announcements"]
     exclude = []
 
-    assert should_include_channel("general", include, exclude) == True
-    assert should_include_channel("announcements", include, exclude) == True
-    assert should_include_channel("random", include, exclude) == False
+    assert should_include_channel("general", include, exclude)
+    assert should_include_channel("announcements", include, exclude)
+    assert not should_include_channel("random", include, exclude)
 
 def test_format_export_command():
     """Test export command formatting"""
@@ -80,3 +80,25 @@ def test_format_export_command_with_after():
 
     assert "--after" in cmd
     assert "2025-01-15T14:00:00Z" in cmd
+
+def test_format_export_command_invalid_format():
+    """Test that invalid format_type raises ValueError"""
+    with pytest.raises(ValueError, match="Invalid format_type"):
+        format_export_command(
+            token="test_token",
+            channel_id="123456",
+            output_path="exports/test.html",
+            format_type="InvalidFormat",
+            after_timestamp=None
+        )
+
+def test_format_export_command_invalid_channel_id():
+    """Test that non-numeric channel_id raises ValueError"""
+    with pytest.raises(ValueError, match="Invalid channel_id"):
+        format_export_command(
+            token="test_token",
+            channel_id="abc123",
+            output_path="exports/test.html",
+            format_type="HtmlDark",
+            after_timestamp=None
+        )
