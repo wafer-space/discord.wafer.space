@@ -87,7 +87,8 @@ jobs:
       - name: Check for changes
         id: check_changes
         run: |
-          if git diff --quiet public/ state.json 2>/dev/null; then
+          # Check both tracked changes and new files
+          if [ -z "$(git status --porcelain public/ state.json 2>/dev/null)" ]; then
             echo "has_changes=false" >> $GITHUB_OUTPUT
           else
             echo "has_changes=true" >> $GITHUB_OUTPUT
