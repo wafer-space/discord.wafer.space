@@ -1,0 +1,22 @@
+# config.toml
+[site]
+title = "wafer.space Discord Logs"
+description = "Public archive of wafer.space Discord server"
+base_url = "https://discord.wafer.space"
+
+[servers.wafer-space]
+guild_id = "PLACEHOLDER_GUILD_ID"  # To be configured later
+name = "wafer.space"
+include_channels = ["*"]
+exclude_channels = ["admin", "moderators", "private-*"]
+
+[export]
+formats = ["html", "txt", "json", "csv"]
+partition_by = "month"
+include_threads = "all"
+download_media = true
+media_dir = "public/assets/media"
+
+[github]
+pages_branch = "gh-pages"
+commit_author = "Discord Archive Bot"
