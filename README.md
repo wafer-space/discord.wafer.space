@@ -45,7 +45,7 @@ See [Design Document](docs/plans/2025-11-14-discord-wafer-space-design.md) for c
 2. **Update config.toml**:
    ```toml
    [servers.wafer-space]
-   guild_id = "YOUR_GUILD_ID_HERE"  # Right-click server → Copy ID
+   guild_id = "YOUR_GUILD_ID_HERE"  # See step 3 below for how to get this
 
    channels = [
        { name = "general", id = "YOUR_CHANNEL_ID" },
@@ -53,10 +53,17 @@ See [Design Document](docs/plans/2025-11-14-discord-wafer-space-design.md) for c
    ]
    ```
 
-3. **Get IDs**:
-   - Enable Developer Mode: Settings → Advanced → Developer Mode
-   - Right-click server → Copy Server ID
-   - Right-click channel → Copy Channel ID
+3. **Get Server and Channel IDs**:
+
+   **First, enable Developer Mode in Discord:**
+   - Open Discord User Settings (gear icon next to your username)
+   - Go to "App Settings" → "Advanced"
+   - Toggle on "Developer Mode"
+
+   **Then copy the IDs:**
+   - **Server ID (guild_id)**: Right-click the server icon in the left sidebar → "Copy Server ID"
+   - **Channel IDs**: Right-click any channel name → "Copy Channel ID"
+   - Paste these IDs into your `config.toml` file
 
 ### 3. Initial Export
 
