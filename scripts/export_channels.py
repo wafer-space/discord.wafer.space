@@ -233,6 +233,8 @@ def export_all_channels() -> Dict:
             - total_exports: Total number of format exports completed
             - errors: List of error dicts with channel, format, and error details
     """
+    from scripts.channel_classifier import classify_channel, ChannelType, sanitize_thread_name
+
     print("Loading configuration...")
     config = load_config()
 
@@ -262,7 +264,8 @@ def export_all_channels() -> Dict:
         # Fetch channels dynamically from Discord
         try:
             print(f"  Fetching channels from Discord...")
-            channels = fetch_guild_channels(token, server_config['guild_id'])
+            include_threads = config['export'].get('include_threads', 'all').lower() == 'all'
+            channels = fetch_guild_channels(token, server_config['guild_id'], include_threads)
             print(f"  Found {len(channels)} channels")
         except RuntimeError as e:
             print(f"  ERROR: {e}")
@@ -275,13 +278,45 @@ def export_all_channels() -> Dict:
 
         include_patterns = server_config['include_channels']
         exclude_patterns = server_config['exclude_channels']
+        forum_list = server_config.get('forum_channels', [])
+
+        # Classify all channels
+        channel_classifications = {}
+        for channel in channels:
+            channel_type = classify_channel(channel, forum_list, channels)
+            channel_classifications[channel['id']] = channel_type
 
         channel_export_attempted = False
 
         for channel in channels:
             channel_name = channel['name']
             channel_id = channel['id']
+            channel_type = channel_classifications[channel_id]
 
+            # Skip forum parent channels (only export their threads)
+            if channel_type == ChannelType.FORUM:
+                # Create directory for forum
+                forum_dir = server_dir / channel_name
+                forum_dir.mkdir(exist_ok=True)
+                print(f"  Created forum directory: {channel_name}/")
+                continue
+
+            # For threads, use sanitized name and forum directory
+            if channel_type == ChannelType.THREAD:
+                forum_name = channel.get('parent_id', 'unknown-forum')
+                thread_dir = server_dir / forum_name
+                thread_dir.mkdir(exist_ok=True)
+
+                # Sanitize thread name for filename
+                safe_name = sanitize_thread_name(channel_name, channel_id)
+                export_name = safe_name
+                export_dir = thread_dir
+            else:
+                # Regular channel
+                export_name = channel_name
+                export_dir = server_dir
+
+            # Apply include/exclude filters to channel names
             if not should_include_channel(channel_name, include_patterns, exclude_patterns):
                 print(f"  Skipping {channel_name} (excluded by pattern)")
                 continue
@@ -289,7 +324,12 @@ def export_all_channels() -> Dict:
             print(f"  Exporting #{channel_name}...")
 
             # Get last export time for incremental updates
-            channel_state = state_manager.get_channel_state(server_key, channel_name)
+            if channel_type == ChannelType.THREAD:
+                # TODO: Thread state tracking (will implement in state management task)
+                channel_state = None
+            else:
+                channel_state = state_manager.get_channel_state(server_key, channel_name)
+
             after_timestamp = channel_state['last_export'] if channel_state else None
 
             # Export all configured formats
@@ -304,7 +344,7 @@ def export_all_channels() -> Dict:
             channel_failed = False
 
             for fmt in config['export']['formats']:
-                output_path = server_dir / f"{channel_name}.{fmt}"
+                output_path = export_dir / f"{export_name}.{fmt}"
 
                 cmd = format_export_command(
                     token=token,
@@ -331,7 +371,7 @@ def export_all_channels() -> Dict:
 
             # Update state with current timestamp
             # In real implementation, we'd parse the actual last message timestamp from export
-            if not channel_failed:
+            if not channel_failed and channel_type != ChannelType.THREAD:
                 state_manager.update_channel(
                     server_key,
                     channel_name,

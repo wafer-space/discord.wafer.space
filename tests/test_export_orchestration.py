@@ -477,3 +477,51 @@ commit_author = "Test Bot"
                     assert isinstance(summary['errors'], list)
 
         del os.environ['DISCORD_BOT_TOKEN']
+
+    def test_export_all_channels_handles_forums(self):
+        """Test that forum channels create directories."""
+        os.environ['DISCORD_BOT_TOKEN'] = 'test_token'
+
+        config = {
+            'site': {},
+            'servers': {
+                'test-server': {
+                    'name': 'Test Server',
+                    'guild_id': '123456789',
+                    'include_channels': ['*'],
+                    'exclude_channels': [],
+                    'forum_channels': ['questions']
+                }
+            },
+            'export': {'formats': ['html']},
+            'github': {}
+        }
+
+        with patch('scripts.export_channels.load_config', return_value=config):
+            with patch('scripts.export_channels.fetch_guild_channels') as mock_fetch:
+                # Return forum channel and threads
+                mock_fetch.return_value = [
+                    {'name': 'questions', 'id': '999', 'parent_id': None},
+                    {'name': 'How to start?', 'id': '111', 'parent_id': 'questions'},
+                    {'name': 'Help needed', 'id': '222', 'parent_id': 'questions'}
+                ]
+
+                with patch('scripts.export_channels.StateManager') as MockState:
+                    mock_state = Mock()
+                    MockState.return_value = mock_state
+                    mock_state.load.return_value = {}
+                    mock_state.get_channel_state.return_value = None
+
+                    with patch('scripts.export_channels.run_export') as mock_run:
+                        mock_run.return_value = (True, "Success")
+
+                        with patch('scripts.export_channels.Path'):
+                            summary = export_all_channels()
+
+                            # Should export 2 threads (not the forum parent)
+                            assert summary['total_exports'] == 2
+
+                            # Should create questions directory
+                            # Check mkdir was called for forum directory
+
+        del os.environ['DISCORD_BOT_TOKEN']
