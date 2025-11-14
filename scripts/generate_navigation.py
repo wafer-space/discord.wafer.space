@@ -1,10 +1,17 @@
 # scripts/generate_navigation.py
 """Generate navigation index pages from exported logs."""
 import json
+import sys
 from pathlib import Path
 from typing import List, Dict
 from datetime import datetime, timezone
 from jinja2 import Environment, FileSystemLoader
+
+# Handle imports for both direct execution and pytest
+try:
+    from scripts.config import load_config
+except ModuleNotFoundError:
+    from config import load_config
 
 def scan_exports(public_dir: Path) -> List[Dict]:
     """
@@ -167,3 +174,137 @@ def generate_channel_index(
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(html)
+
+def organize_data(exports: List[Dict], public_dir: Path) -> Dict:
+    """
+    Organize exports data by server and channel with statistics.
+
+    Args:
+        exports: List of export info dicts from scan_exports
+        public_dir: Path to public directory for message counting
+
+    Returns:
+        Dict mapping server names to server data with channels
+    """
+    servers_data = {}
+
+    for export in exports:
+        server = export['server']
+        channel = export['channel']
+        date = export['date']
+
+        # Initialize server if not exists
+        if server not in servers_data:
+            servers_data[server] = {
+                'name': server,
+                'display_name': server.replace('-', ' ').title(),
+                'channels': {}
+            }
+
+        # Initialize channel if not exists
+        if channel not in servers_data[server]['channels']:
+            servers_data[server]['channels'][channel] = {
+                'name': channel,
+                'archives': []
+            }
+
+        # Count messages from JSON file
+        json_path = public_dir / server / channel / f"{date}.json"
+        message_count = count_messages_from_json(str(json_path))
+
+        servers_data[server]['channels'][channel]['archives'].append({
+            'date': date,
+            'message_count': message_count
+        })
+
+    # Calculate statistics for each server and channel
+    for server_data in servers_data.values():
+        server_data['channel_count'] = len(server_data['channels'])
+        server_data['last_updated'] = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')
+
+        for channel_data in server_data['channels'].values():
+            # Sort archives reverse chronologically (newest first)
+            channel_data['archives'].sort(key=lambda a: a['date'], reverse=True)
+            channel_data['archive_count'] = len(channel_data['archives'])
+
+            # Current month message count (most recent archive)
+            if channel_data['archives']:
+                channel_data['message_count'] = channel_data['archives'][0]['message_count']
+            else:
+                channel_data['message_count'] = 0
+
+    return servers_data
+
+def main():
+    """Entry point for navigation generation."""
+    print("Generating navigation pages...")
+
+    try:
+        config = load_config()
+        public_dir = Path("public")
+
+        if not public_dir.exists():
+            print("ERROR: public/ directory not found. Run export first.")
+            sys.exit(1)
+
+        # Scan all exports
+        print("Scanning exports...")
+        exports = scan_exports(public_dir)
+
+        if not exports:
+            print("WARNING: No exports found.")
+            return
+
+        # Organize data by server and channel
+        servers_data = organize_data(exports, public_dir)
+
+        # Generate site index
+        print("Generating site index...")
+        generate_site_index(
+            config,
+            list(servers_data.values()),
+            public_dir / "index.html"
+        )
+
+        # Generate server indexes and channel indexes
+        for server_data in servers_data.values():
+            print(f"Generating index for {server_data['display_name']}...")
+
+            # Sort channels alphabetically
+            channels_list = list(server_data['channels'].values())
+            channels_list.sort(key=lambda c: c['name'])
+
+            # Generate server index
+            generate_server_index(
+                config,
+                server_data,
+                channels_list,
+                public_dir / server_data['name'] / "index.html"
+            )
+
+            # Generate channel indexes
+            for channel_data in channels_list:
+                generate_channel_index(
+                    config,
+                    server_data,
+                    channel_data,
+                    channel_data['archives'],
+                    public_dir / server_data['name'] / channel_data['name'] / "index.html"
+                )
+
+        print(f"\n✓ Generated {len(servers_data)} server indexes")
+        print(f"✓ Site index at public/index.html")
+
+    except FileNotFoundError as e:
+        print(f"FATAL ERROR: {e}")
+        import traceback
+        traceback.print_exc()
+        sys.exit(1)
+    except Exception as e:
+        print(f"FATAL ERROR: {e}")
+        import traceback
+        traceback.print_exc()
+        sys.exit(1)
+
+if __name__ == "__main__":
+    main()
