@@ -59,7 +59,7 @@ def test_format_export_command():
     )
 
     expected = [
-        "./DiscordChatExporter.Cli", "export",
+        "bin/discord-exporter/DiscordChatExporter.Cli", "export",
         "-t", "test_token",
         "-c", "123456",
         "-f", "HtmlDark",
