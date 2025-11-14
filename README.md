@@ -27,8 +27,12 @@ See [Design Document](docs/plans/2025-11-14-discord-wafer-space-design.md) for c
 4. **Enable "Message Content Intent"** (required!)
 5. Copy bot token (keep secret!)
 6. Go to OAuth2 → URL Generator
-7. Select "bot" scope and permissions code: `66560`
-8. Open generated URL and invite bot to your server
+7. Select "bot" scope
+8. Under "Bot Permissions", select these checkboxes:
+   - ☑ **View Channels** (under "General Permissions")
+   - ☑ **Read Message History** (under "Text Permissions")
+   - Permissions code should show: `66560`
+9. Open generated URL and invite bot to your server
 
 ### 2. Configure Repository
 
