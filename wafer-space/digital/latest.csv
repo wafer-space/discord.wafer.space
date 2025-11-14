@@ -1,0 +1,28 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"443147704126668801","carlfk","2025-10-15T09:26:43.8570000+00:00","@Tim 'mithro' Ansell where is your path to open source serdes slides/talk/something","",""
+"169786952432746498","mithro_","2025-10-15T10:27:13.0170000+00:00","You mean https://bit.ly/open-pipe-talk ?","",""
+"756011607603019777","anfroholic","2025-10-16T01:24:18.2170000+00:00","Yeah, this was the one. Is there video of this somewhere?","",""
+"169786952432746498","mithro_","2025-10-16T01:48:08.6010000+00:00","Sadly, not....","","👍 (1)"
+"600324974296956938","hardwall","2025-10-16T13:10:50.9660000+00:00","That must be the longest power point for a presentation I have seen in my life. :)))","",""
+"756011607603019777","anfroholic","2025-10-16T22:36:18.2730000+00:00","Tim is great like this. At his SuperCon talk he said there were 115 slides in his 26min talk. 
+Keep it up Tim!!","","🔥 (1)"
+"756011607603019777","anfroholic","2025-10-16T22:36:22.0510000+00:00","https://www.youtube.com/watch?v=EHePto95qoE","",""
+"169786952432746498","mithro_","2025-10-17T09:15:38.7130000+00:00","I have https://bit.ly/tim-silicon-2024 which links to some of my other silicon presentations","","🔥 (2),💜 (2)"
+"220639106915368960","tholin","2025-10-30T19:33:51.5960000+00:00","For some reason, I can’t  run cocotb anymore? Even in projects where it used to work, on two different systems and inside the iic-osic-tools container. Its all broken.
+It instantly quits with the message `/bin/sh: line 1: /cmds.f: Permission denied` when trying to build target `/sim.vpp`","",""
+"220639106915368960","tholin","2025-10-30T20:45:02.0060000+00:00","Yeah, apparently there was an update and I had to edit all my makefiles.","",""
+"220639106915368960","tholin","2025-10-30T20:45:39.0890000+00:00","I get console spam before my tests run, though","https://cdn.discordapp.com/attachments/1409664140196188251/1433557486748565535/image.png?ex=69183db3&is=6916ec33&hm=5a9352658dda9984b51e0c22eed087993906891e8bd3eb7e7ee921736a31bddd&",""
+"323371864074485771","mole99","2025-10-31T07:24:30.0660000+00:00","@Tholin You can use the Nix setup in the template which comes with cocotb 2.0.
+
+Yes, that is to be expected given that iverilog does not support that feature. This is only important, however, if you run SDF-backannotated simulations.","",""
+"220639106915368960","tholin","2025-11-01T04:30:13.1100000+00:00","So, about the fab SRAM macros: they have their VDD/VSS power straps on the Metal3 layer in the form of horizontal strips. However, the vertical Metal4 strips in chip_top’s power grid will not connect to them. Why?","https://cdn.discordapp.com/attachments/1409664140196188251/1434036786643861645/image.png?ex=691801d5&is=6916b055&hm=dec6cbbcd64b0011e7ded92e3e0e65ffa15f6b052ed8d01b4cef9942c2e28478&",""
+"220639106915368960","tholin","2025-11-01T04:44:49.9750000+00:00","Also, the SRAM macros have DRC errors.","",""
+"596068704471482370","246tnt","2025-11-01T06:15:20.2460000+00:00","Are you sure they do ?  AFAIR Magic thinks they do because the tech file doesn't know about sram rules. But if you checks they are all false positive","",""
+"691780627338625077","rebelmike","2025-11-01T08:39:34.3770000+00:00","I believe the SRAM macro in https://github.com/MichaelBell/ttgf0p2-tinyQV/actions/runs/18697252507 is connected correctly, though would appreciate a double check on that!","",""
+"691780627338625077","rebelmike","2025-11-01T08:41:15.8950000+00:00","However, that project is a bit stalled, both because of the DRC errors (which should be ignorable), and because when I increased the utilisation I started getting LVS errors.","",""
+"596068704471482370","246tnt","2025-11-01T09:29:47.0810000+00:00","It's connected through power but only on the end. The only reason I can think of for that is that the LEF only defines the end zone as pins for connections.","",""
+"596068704471482370","246tnt","2025-11-01T09:29:53.7460000+00:00","","https://cdn.discordapp.com/attachments/1409664140196188251/1434112202838900746/2025-11-01_1022x479_scrot.png?ex=69184811&is=6916f691&hm=e57e467e04ec7668887777bd72323e74a27b766cd1a12d6610b7c7bd8e32f599&",""
+"596068704471482370","246tnt","2025-11-01T09:31:57.1390000+00:00","It's also connected in the center control zone. So maybe they wanted to avoid random vias in the SRAM core zone, maybe it can distord metal a bit or cause some stress that they didn't want to risk given the tighter rules they use in there.","",""
+"691780627338625077","rebelmike","2025-11-01T10:27:05.7170000+00:00","Yeah, I had to be fairly precise aligning the met4 stripes to get the connections to align with the pins.","",""
+"220639106915368960","tholin","2025-11-02T14:45:49.7870000+00:00","Any reason why only those end zones are valid pins? Could the LEF be updated to label the whole horizontal strips?","",""
+"596068704471482370","246tnt","2025-11-02T16:50:38.5960000+00:00","As stated above, the only reason I can think of is avoid any disturbance in the sram core area ...","",""

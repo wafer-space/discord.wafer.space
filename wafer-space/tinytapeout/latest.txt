@@ -1,0 +1,246 @@
+==============================================================
+Guild: wafer.space Community
+Channel: Information / tinytapeout
+==============================================================
+
+[08/26/2025 05:24] urish
+❤️
+
+
+[08/26/2025 13:41] algofoogle
+🤩
+
+
+[09/16/2025 21:39] urish
+Early experimentation on GF180 Tiny Tapeout GitHub action:
+
+https://github.com/urish/tt-gf180-factory-test/actions/runs/17778063270
+
+{Embed}
+https://github.com/urish/tt-gf180-factory-test/actions/runs/17778063270
+chore: adapt for gf180mcu · urish/tt-gf180-factory-test@aca8bfd
+Factory test project for Tiny Tapeout GF shuttles. Contribute to urish/tt-gf180-factory-test development by creating an account on GitHub.
+https://images-ext-1.discordapp.net/external/1Lgw24sT4tcZBlKuAO53bD83z2XZv9lHPi4dnjdQpro/https/opengraph.githubassets.com/de814336099dc9df29a673041c47028c49d916fcd4e63899d646d9b32fb26cc0/urish/tt-gf180-factory-test
+
+{Reactions}
+👍 (2) 🎉 👏 (3)
+
+[09/16/2025 22:24] mithro_
+@urish - Awesome work.
+
+
+[09/17/2025 14:13] algofoogle
+Great stuff  @urish 🙂 For fun I ran it on one of my old designs, and it worked: https://github.com/algofoogle/tt-gf180-toy/actions/runs/17800061560 -- I was surprised that the flow seems to define `USE_POWER_PINS` (and since my code was originally written to support Caravel, it's sensitive to those defines and gives a linter warning, though safe to ignore I guess).
+
+
+[09/17/2025 14:14] algofoogle
+I was thinking about using Magic's `plot` to render GDS instead of the existing renderer used by the TT actions. Maybe it will look better for IHP and GF's standard cells -- I will give it a try soon.
+
+{Reactions}
+👍
+
+[09/29/2025 18:28] urish
+The verilog project template is ready!
+
+https://github.com/TinyTapeout/ttgf-verilog-template/
+
+One caveat: the "precheck" part will fail, and that's expected. We'll fix it over the next week or two.
+
+{Embed}
+https://github.com/TinyTapeout/ttgf-verilog-template/
+GitHub - TinyTapeout/ttgf-verilog-template: Submission template for...
+Submission template for Tiny Tapeout GF180 (wafer.space) shuttles - Verilog HDL Projects - TinyTapeout/ttgf-verilog-template
+https://images-ext-1.discordapp.net/external/XtjpLtJUGu2T0NyrGuKdENzQB5Iz3VOS5hFxR9m0RDY/https/repository-images.githubusercontent.com/1066571101/1df1e918-07ad-4314-a3e0-26b497370dd1
+
+{Reactions}
+🎉 (4) 👀
+
+[09/29/2025 21:52] mithro_
+@urish - Should I promote that to people yet?
+
+
+[09/30/2025 04:28] urish
+Everyone should be able to use the template as-is right now, but we're thinking to only open submission for people who submitted to a Tiny Tapeout shuttle in the past (our past experience shows that this is a good way to get higher quality submissions)
+
+{Reactions}
+👀
+
+[09/30/2025 05:06] mithro_
+@urish - BTW Have you ever tested what happens if someone shorts VDD to GND together aggressively?
+
+
+[09/30/2025 05:07] mithro_
+@urish - The power gating should stop it from causing any problem.
+
+
+[09/30/2025 05:11] urish
+Yes, it should stop it.
+
+
+[09/30/2025 05:12] urish
+But the current shuttle won't be power gated
+
+
+[09/30/2025 05:25] h_thoreson_71412
+I did one past TT, kinda have been digging around Discord looking for ideas to work on for the next run. Is there anything I can try to do with this that would be helpful?
+
+
+[09/30/2025 05:37] urish
+Started a thread.
+
+
+[09/30/2025 06:21] 246tnt
+@Tim 'mithro' Ansell The power gate stops it as long as you don't enable that particular design 😅   If you do enable it, you will get potentially damaging high currents.
+
+
+[09/30/2025 06:22] mithro_
+But have you actually tested such a thing?
+
+
+[09/30/2025 06:22] 246tnt
+No.
+
+
+[09/30/2025 06:23] 246tnt
+We had one design that had a short but it was through `li` in sky130 so it ended up drawing way more than expected and more than we recommend, but it was only ~ 15 mA which is still very much in the "chip will survive" zone.
+
+
+[09/30/2025 06:25] 246tnt
+I had a power gate test design that was meant to test high current usage in TT07 but I made a mistake in the layout so it wasn't able to generate very high current. There is a fixed version in TT08 but given I just got the chips yesterday, I'll wait a bit before trying to burn those 😅
+
+
+[09/30/2025 06:29] urish
+We do have a way to mark dangerous projects post silicon, so users get warned before enabling them through the commander app
+
+
+[09/30/2025 07:20] algofoogle
+Will you be taking custom GDS on this run, or just digital LibreLane generated stuff?
+
+
+[09/30/2025 07:47] 246tnt
+Only LibreLane stuff. Without power gating it's a bit risky to accept random GDS 😅
+
+
+[09/30/2025 07:55] urish
+If you manually add a power gate yourself we can consider including it
+
+
+[09/30/2025 07:55] urish
+Or if might just wait for the next shuttle
+
+
+[09/30/2025 09:30] algofoogle
+Yeah makes sense, I figured that would be the case. I think I will try an assortment of digital and analog/mixed stuff in GF180 and see whichever shuttles I can get onto, whenever 🙂
+
+
+[09/30/2025 17:31] mithro_
+BTW It's GF180MCU not GF180 🙂 -- Going to keep saying that because if successful we'll end up with multiple GF180 technologies.
+
+{Reactions}
+❤️
+
+[11/03/2025 23:56] mithro_
+Is there a way to reference / link / connect the https://discord.com/channels/1009193568256135208/1422290927816540402 channel from here?
+
+
+[11/04/2025 05:21] urish
+A link (as you posted) is the way I know
+
+
+[11/04/2025 05:21] urish
+You can pin the message to make it easier for others to find
+
+
+[11/04/2025 07:32] xobs
+This is what people see when they can’t access that channel. I think a bot is the way to go, and people I know tend to use Fletcher to teleport messages between channels and servers. I haven’t managed that particular bot myself before, though.
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1409664261952639098/1435169768301662369/IMG_0825.png?ex=69182c80&is=6916db00&hm=6821bf2b4bbf042c29c6ffd0bb4a8d5eaa33d7e483dcfd192f363450eabd8e1a&
+
+
+[11/04/2025 20:29] anfroholic (pinned)
+Join the Tiny Tapeout Server and see [#ttgf0p2-tapeout](https://discord.com/channels/1009193568256135208/1422290927816540402)
+for the first [wafer.space](https://wafer.space/) run
+
+https://discord.gg/dbzGmXNFJ9
+
+{Embed}
+https://wafer.space/
+wafer.space - Budget silicon manufacturing.
+Create integrated circuits without breaking the bank!
+
+{Reactions}
+🎉 (3)
+
+[11/04/2025 20:30] anfroholic
+Pinned a message.
+
+
+[11/05/2025 02:46] mithro_
+Thanks!
+
+
+[11/07/2025 05:24] urish (pinned)
+If you have previously submitted to any Tiny Tapeout shuttle (including TTSKY25b) and want to add your own project to this test shuttle:
+
+1. Use this template: <https://github.com/TinyTapeout/ttgf-verilog-template>
+2. Submit through this link: <https://app.tinytapeout.com/projects/create?shuttle=ttgf0p2>
+
+This is a test shuttle, so there's a chance the silicon won't work, and it's likely that we won't ship the silicon to everyone who submitted a design.
+
+
+[11/07/2025 05:30] anfroholic
+Are you sure the submission link is correct?
+
+
+[11/07/2025 05:35] urish
+Yes, once the current shuttle (SKY 25B) is over, this banner will be replaced with the deadline for the GF0p2 shuttle
+
+
+[11/07/2025 05:35] anfroholic
+Ah, ok. I get it, but it is confusing.
+
+{Reactions}
+👍
+
+[11/08/2025 01:39] mithro_
+FYI - See here @proppy
+
+{Reactions}
+👀
+
+[11/08/2025 01:39] mithro_
+Pinned a message.
+
+
+[11/12/2025 09:07] urish
+Just published a Wokwi project template for TTGF0p2: 
+
+https://github.com/TinyTapeout/ttgf-wokwi-template
+
+{Embed}
+https://github.com/TinyTapeout/ttgf-wokwi-template
+GitHub - TinyTapeout/ttgf-wokwi-template: Submission template for T...
+Submission template for Tiny Tapeout GF180MCU (GlobalFoundries) shuttles - Wokwi Projects - TinyTapeout/ttgf-wokwi-template
+https://images-ext-1.discordapp.net/external/IXQWIKkybBmZ9ABsmqdZgst4gt00IXzkwLJtDDm3N6Y/https/repository-images.githubusercontent.com/1094815792/c5c4b68d-072e-4c88-a96e-5cfad49dc522
+
+{Reactions}
+👍 (3)
+
+[11/13/2025 21:41] mithro_
+@urish - Could we get your Tiny Tapeout bot to post here for the GF shuttle too?
+
+
+[11/14/2025 04:53] urish
+Good idea, will look into this
+
+
+[11/14/2025 04:55] urish
+Do you want it to go to this channel? Since it sometimes gets really spammy.
+
+We can also have a dedicated channel like in the TT discord
+
+
+==============================================================
+Exported 44 message(s)
+==============================================================

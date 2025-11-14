@@ -1,0 +1,143 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 🏗️ - Designing / digital
+==============================================================
+
+[10/15/2025 09:26] carlfk
+@Tim 'mithro' Ansell where is your path to open source serdes slides/talk/something
+
+
+[10/15/2025 10:27] mithro_
+You mean https://bit.ly/open-pipe-talk ?
+
+{Embed}
+https://bit.ly/open-pipe-talk
+[External Access] SERDES, PIPE and protocols - Pathway to fully ope...
+SERDES, PIPE and protocols Pathway to fully open source implementations... Presenters Tim ‘mithro’ Ansell <tansell@google.com> bit.ly/open-pipe-talk
+https://images-ext-1.discordapp.net/external/KBJwi_JiwJuPMjlfB0qcNTLxWYBCwAqSYFNr_pLTVOg/https/lh7-us.googleusercontent.com/docs/AHkbwyIQog-BJ7NfAzAixq-YYbxeE-bh-71SoU0T3mOG2vMYn93S3WREKDzKAtfUG5-kz0yvD4pBteF7fLhM6X7aUPmWGTqCZHcfAWuroqSwHFYO9_ewv98J%3Dw1200-h630-p
+
+
+[10/16/2025 01:24] anfroholic
+Yeah, this was the one. Is there video of this somewhere?
+
+
+[10/16/2025 01:48] mithro_
+Sadly, not....
+
+{Reactions}
+👍
+
+[10/16/2025 13:10] hardwall
+That must be the longest power point for a presentation I have seen in my life. :)))
+
+
+[10/16/2025 22:36] anfroholic
+Tim is great like this. At his SuperCon talk he said there were 115 slides in his 26min talk. 
+Keep it up Tim!!
+
+{Reactions}
+🔥
+
+[10/16/2025 22:36] anfroholic
+https://www.youtube.com/watch?v=EHePto95qoE
+
+{Embed}
+HACKADAY
+https://www.youtube.com/watch?v=EHePto95qoE
+Timothy Ansell - Xilinx Series 7 FPGAs Now Have a Fully Open Source...
+You should be super excited about FPGAs and how they allow open source projects to do hardware development. In this talk I will cover a basic introduction into what an FPGA is and can do, what an FPGA toolchain is, and how much things sucked when the only option was to use proprietary toolchains. The SymbiFlow project changed this and I’ll dis...
+https://images-ext-1.discordapp.net/external/JGPFTSFiLkV54TO9EeXxhDxS4dTtptUB5RC28Pl3uWQ/https/i.ytimg.com/vi/EHePto95qoE/maxresdefault.jpg
+
+
+[10/17/2025 09:15] mithro_
+I have https://bit.ly/tim-silicon-2024 which links to some of my other silicon presentations
+
+{Embed}
+https://bit.ly/tim-silicon-2024
+Tim's Silicon Presentations - bit.ly/tim-silicon-2024
+Tim's Silicon Presentations bit.ly/tim-silicon-2024
+
+{Reactions}
+🔥 (2) 💜 (2)
+
+[10/30/2025 19:33] tholin
+For some reason, I can’t  run cocotb anymore? Even in projects where it used to work, on two different systems and inside the iic-osic-tools container. Its all broken.
+It instantly quits with the message `/bin/sh: line 1: /cmds.f: Permission denied` when trying to build target `/sim.vpp`
+
+
+[10/30/2025 20:45] tholin
+Yeah, apparently there was an update and I had to edit all my makefiles.
+
+
+[10/30/2025 20:45] tholin
+I get console spam before my tests run, though
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1409664140196188251/1433557486748565535/image.png?ex=69183db3&is=6916ec33&hm=5a9352658dda9984b51e0c22eed087993906891e8bd3eb7e7ee921736a31bddd&
+
+
+[10/31/2025 07:24] mole99
+@Tholin You can use the Nix setup in the template which comes with cocotb 2.0.
+
+Yes, that is to be expected given that iverilog does not support that feature. This is only important, however, if you run SDF-backannotated simulations.
+
+
+[11/01/2025 04:30] tholin
+So, about the fab SRAM macros: they have their VDD/VSS power straps on the Metal3 layer in the form of horizontal strips. However, the vertical Metal4 strips in chip_top’s power grid will not connect to them. Why?
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1409664140196188251/1434036786643861645/image.png?ex=691801d5&is=6916b055&hm=dec6cbbcd64b0011e7ded92e3e0e65ffa15f6b052ed8d01b4cef9942c2e28478&
+
+
+[11/01/2025 04:44] tholin
+Also, the SRAM macros have DRC errors.
+
+
+[11/01/2025 06:15] 246tnt
+Are you sure they do ?  AFAIR Magic thinks they do because the tech file doesn't know about sram rules. But if you checks they are all false positive
+
+
+[11/01/2025 08:39] rebelmike
+I believe the SRAM macro in https://github.com/MichaelBell/ttgf0p2-tinyQV/actions/runs/18697252507 is connected correctly, though would appreciate a double check on that!
+
+{Embed}
+https://github.com/MichaelBell/ttgf0p2-tinyQV/actions/runs/18697252507
+Fix tests · MichaelBell/ttgf0p2-tinyQV@3396d80
+TinyQV for TT gf180 run 0.2. Contribute to MichaelBell/ttgf0p2-tinyQV development by creating an account on GitHub.
+https://images-ext-1.discordapp.net/external/UfCpZyAqmlsIYoysYnGs5Dz0cbF9EPjwfUd6j4paRkc/https/opengraph.githubassets.com/96fe004054f57b3f15ea4296ccf0c0b926b2fcb232d7f422bf233093a01ff153/MichaelBell/ttgf0p2-tinyQV
+
+
+[11/01/2025 08:41] rebelmike
+However, that project is a bit stalled, both because of the DRC errors (which should be ignorable), and because when I increased the utilisation I started getting LVS errors.
+
+
+[11/01/2025 09:29] 246tnt
+It's connected through power but only on the end. The only reason I can think of for that is that the LEF only defines the end zone as pins for connections.
+
+
+[11/01/2025 09:29] 246tnt
+
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1409664140196188251/1434112202838900746/2025-11-01_1022x479_scrot.png?ex=69184811&is=6916f691&hm=e57e467e04ec7668887777bd72323e74a27b766cd1a12d6610b7c7bd8e32f599&
+
+
+[11/01/2025 09:31] 246tnt
+It's also connected in the center control zone. So maybe they wanted to avoid random vias in the SRAM core zone, maybe it can distord metal a bit or cause some stress that they didn't want to risk given the tighter rules they use in there.
+
+
+[11/01/2025 10:27] rebelmike
+Yeah, I had to be fairly precise aligning the met4 stripes to get the connections to align with the pins.
+
+
+[11/02/2025 14:45] tholin
+Any reason why only those end zones are valid pins? Could the LEF be updated to label the whole horizontal strips?
+
+
+[11/02/2025 16:50] 246tnt
+As stated above, the only reason I can think of is avoid any disturbance in the sram core area ...
+
+
+==============================================================
+Exported 23 message(s)
+==============================================================
