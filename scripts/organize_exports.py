@@ -26,8 +26,9 @@ def organize_exports(exports_dir: Path = None, public_dir: Path = None) -> Dict[
     """
     Move exports from exports/ to public/ with date-based organization.
 
-    For MVP: Uses current month as archive name. Future enhancement could
-    parse actual date ranges from export files.
+    Handles both regular channels and forum/thread structure:
+    - Regular: exports/server/channel.html -> public/server/channel/YYYY-MM/YYYY-MM.html
+    - Forums: exports/server/forum/thread.html -> public/server/forum/thread/YYYY-MM/YYYY-MM.html
 
     Args:
         exports_dir: Source directory (defaults to "exports")
@@ -77,51 +78,90 @@ def organize_exports(exports_dir: Path = None, public_dir: Path = None) -> Dict[
 
         print(f"Organizing {server_name}...")
 
-        # Process each export file in the server directory
-        for export_file in server_dir.iterdir():
-            if not export_file.is_file():
-                continue
+        # Process all items in server directory
+        for item in server_dir.iterdir():
+            # Check if it's a forum directory (contains multiple files, no parent channel)
+            if item.is_dir():
+                # Forum directory - process threads
+                forum_name = item.name
+                public_forum_dir = public_server / forum_name
+                public_forum_dir.mkdir(parents=True, exist_ok=True)
 
-            try:
-                # Parse filename: channel-name.ext
-                channel_name = export_file.stem  # filename without extension
-                ext = export_file.suffix  # .html, .txt, .json, .csv
+                # Process each thread in forum
+                for thread_file in item.iterdir():
+                    if thread_file.is_file():
+                        thread_name = thread_file.stem  # filename without extension
+                        extension = thread_file.suffix
 
-                # Validate extension
-                valid_extensions = {'.html', '.txt', '.json', '.csv'}
-                if ext not in valid_extensions:
-                    print(f"  ⚠ Skipping {export_file.name} (unsupported format)")
-                    continue
+                        # Skip non-export files
+                        if extension not in ['.html', '.txt', '.json', '.csv']:
+                            continue
 
-                # Create channel directory
-                channel_dir = public_server / channel_name
-                channel_dir.mkdir(parents=True, exist_ok=True)
+                        try:
+                            # Create thread directory
+                            public_thread_dir = public_forum_dir / thread_name
+                            month_dir = public_thread_dir / current_month
+                            month_dir.mkdir(parents=True, exist_ok=True)
 
-                # Track unique channels
-                channel_key = f"{server_name}/{channel_name}"
-                channels_seen.add(channel_key)
+                            # Copy file to month directory
+                            dest_file = month_dir / f"{current_month}{extension}"
+                            shutil.copy2(thread_file, dest_file)
+                            stats['files_organized'] += 1
 
-                # Destination: public/server/channel/YYYY-MM.ext
-                dest = channel_dir / f"{current_month}{ext}"
+                            # Create/update latest symlink
+                            latest_link = public_thread_dir / f"latest{extension}"
+                            if latest_link.exists() or latest_link.is_symlink():
+                                latest_link.unlink()
+                            latest_link.symlink_to(f"{current_month}/{current_month}{extension}")
 
-                # Copy file (preserve metadata)
-                shutil.copy2(export_file, dest)
-                stats['files_organized'] += 1
+                            # Track unique channels
+                            channel_key = f"{server_name}/{forum_name}/{thread_name}"
+                            channels_seen.add(channel_key)
 
-                # Create "latest" symlink for convenience
-                latest = channel_dir / f"latest{ext}"
-                if latest.exists() or latest.is_symlink():
-                    latest.unlink()
+                            print(f"  ✓ {forum_name}/{thread_name}{extension} → {dest_file.relative_to(public_dir)}")
 
-                # Use relative path for symlink
-                latest.symlink_to(dest.name)
+                        except Exception as e:
+                            error_msg = f"Failed to organize {thread_file.name}: {str(e)}"
+                            stats['errors'].append(error_msg)
+                            print(f"  ✗ {error_msg}")
 
-                print(f"  ✓ {channel_name}{ext} → {dest.relative_to(public_dir)}")
+            elif item.is_file():
+                # Regular channel file
+                try:
+                    channel_name = item.stem
+                    ext = item.suffix
 
-            except Exception as e:
-                error_msg = f"Failed to organize {export_file.name}: {str(e)}"
-                stats['errors'].append(error_msg)
-                print(f"  ✗ {error_msg}")
+                    # Skip non-export files
+                    if ext not in ['.html', '.txt', '.json', '.csv']:
+                        print(f"  ⚠ Skipping {item.name} (unsupported format)")
+                        continue
+
+                    # Create channel directory structure
+                    channel_dir = public_server / channel_name
+                    month_dir = channel_dir / current_month
+                    month_dir.mkdir(parents=True, exist_ok=True)
+
+                    # Copy file to month directory
+                    dest_file = month_dir / f"{current_month}{ext}"
+                    shutil.copy2(item, dest_file)
+                    stats['files_organized'] += 1
+
+                    # Create/update latest symlink
+                    latest_link = channel_dir / f"latest{ext}"
+                    if latest_link.exists() or latest_link.is_symlink():
+                        latest_link.unlink()
+                    latest_link.symlink_to(f"{current_month}/{current_month}{ext}")
+
+                    # Track unique channels
+                    channel_key = f"{server_name}/{channel_name}"
+                    channels_seen.add(channel_key)
+
+                    print(f"  ✓ {channel_name}{ext} → {dest_file.relative_to(public_dir)}")
+
+                except Exception as e:
+                    error_msg = f"Failed to organize {item.name}: {str(e)}"
+                    stats['errors'].append(error_msg)
+                    print(f"  ✗ {error_msg}")
 
     stats['channels_processed'] = len(channels_seen)
     return stats

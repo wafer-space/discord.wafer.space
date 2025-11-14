@@ -45,14 +45,16 @@ def test_organize_exports_creates_directory_structure():
         assert stats['channels_processed'] == 1
         assert len(stats['errors']) == 0
 
-        # Check directory structure
+        # Check directory structure (now with month subdirectories)
         current_month = get_current_month()
         channel_dir = public / "test-server" / "general"
         assert channel_dir.exists()
-        assert (channel_dir / f"{current_month}.html").exists()
-        assert (channel_dir / f"{current_month}.txt").exists()
-        assert (channel_dir / f"{current_month}.json").exists()
-        assert (channel_dir / f"{current_month}.csv").exists()
+        month_dir = channel_dir / current_month
+        assert month_dir.exists()
+        assert (month_dir / f"{current_month}.html").exists()
+        assert (month_dir / f"{current_month}.txt").exists()
+        assert (month_dir / f"{current_month}.json").exists()
+        assert (month_dir / f"{current_month}.csv").exists()
 
 
 def test_organize_exports_creates_latest_symlinks():
@@ -70,14 +72,14 @@ def test_organize_exports_creates_latest_symlinks():
         # Organize exports
         organize_exports(exports, public)
 
-        # Check symlink exists and points to correct file
+        # Check symlink exists and points to correct file (now in month subdirectory)
         channel_dir = public / "test-server" / "general"
         latest_link = channel_dir / "latest.html"
         assert latest_link.exists()
         assert latest_link.is_symlink()
 
         current_month = get_current_month()
-        expected_target = f"{current_month}.html"
+        expected_target = f"{current_month}/{current_month}.html"
         assert latest_link.readlink() == Path(expected_target)
 
 
@@ -160,9 +162,9 @@ def test_organize_exports_preserves_file_metadata():
         # Organize exports
         organize_exports(exports, public)
 
-        # Check that destination has same modification time
+        # Check that destination has same modification time (now in month subdirectory)
         current_month = get_current_month()
-        dest_file = public / "test-server" / "general" / f"{current_month}.html"
+        dest_file = public / "test-server" / "general" / current_month / f"{current_month}.html"
         dest_mtime = dest_file.stat().st_mtime
 
         # Allow small difference due to filesystem precision
@@ -267,9 +269,66 @@ def test_organize_exports_replaces_existing_symlinks():
         server_dir.mkdir(parents=True)
         (server_dir / "general.html").write_text("new")
 
-        # Organize should replace old symlink
+        # Organize should replace old symlink (now pointing to month subdirectory)
         organize_exports(exports, public)
 
         current_month = get_current_month()
-        expected_target = f"{current_month}.html"
+        expected_target = f"{current_month}/{current_month}.html"
         assert old_link.readlink() == Path(expected_target)
+
+
+def test_organize_exports_handles_forum_structure():
+    """Test that forum directories are organized correctly."""
+    with tempfile.TemporaryDirectory() as tmpdir:
+        tmpdir = Path(tmpdir)
+        exports = tmpdir / "exports"
+        public = tmpdir / "public"
+
+        # Create forum structure
+        forum_dir = exports / "test-server" / "questions"
+        forum_dir.mkdir(parents=True)
+        (forum_dir / "how-to-start.html").write_text("<html>Thread 1</html>")
+        (forum_dir / "how-to-start.json").write_text('{"messages": []}')
+        (forum_dir / "help-needed.html").write_text("<html>Thread 2</html>")
+
+        # Organize exports
+        organize_exports(exports, public)
+
+        # Should create forum directory in public
+        assert (public / "test-server" / "questions").exists()
+
+        # Should create thread directories
+        assert (public / "test-server" / "questions" / "how-to-start").exists()
+        assert (public / "test-server" / "questions" / "help-needed").exists()
+
+        # Should organize files by month
+        current_month = get_current_month()
+        assert (public / "test-server" / "questions" / "how-to-start" / current_month).exists()
+        assert (public / "test-server" / "questions" / "how-to-start" / current_month / f"{current_month}.html").exists()
+        assert (public / "test-server" / "questions" / "how-to-start" / current_month / f"{current_month}.json").exists()
+
+
+def test_organize_exports_mixed_regular_and_forum():
+    """Test organizing mix of regular channels and forums."""
+    with tempfile.TemporaryDirectory() as tmpdir:
+        tmpdir = Path(tmpdir)
+        exports = tmpdir / "exports"
+        public = tmpdir / "public"
+
+        # Create regular channel
+        server_dir = exports / "test-server"
+        server_dir.mkdir(parents=True)
+        (server_dir / "general.html").write_text("<html>General</html>")
+
+        # Create forum structure
+        forum_dir = server_dir / "questions"
+        forum_dir.mkdir(parents=True)
+        (forum_dir / "thread-1.html").write_text("<html>Thread</html>")
+
+        # Organize exports
+        organize_exports(exports, public)
+
+        # Should have both regular and forum (both in month subdirectories)
+        current_month = get_current_month()
+        assert (public / "test-server" / "general" / current_month / f"{current_month}.html").exists()
+        assert (public / "test-server" / "questions" / "thread-1" / current_month / f"{current_month}.html").exists()
