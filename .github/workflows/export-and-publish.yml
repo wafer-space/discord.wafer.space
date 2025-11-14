@@ -62,8 +62,16 @@ jobs:
         continue-on-error: true
         id: export
 
-      - name: Run navigation generator
+      - name: Organize exports
         if: steps.export.outcome == 'success' || steps.export.outcome == 'failure'
+        run: |
+          echo "Organizing exports..."
+          uv run python scripts/organize_exports.py
+        continue-on-error: true
+        id: organize
+
+      - name: Run navigation generator
+        if: steps.organize.outcome == 'success' || steps.organize.outcome == 'failure'
         run: |
           echo "Generating navigation..."
           uv run python scripts/generate_navigation.py
@@ -109,6 +117,7 @@ jobs:
           echo "## Export Summary" >> $GITHUB_STEP_SUMMARY
           echo "- **Status**: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Export Step**: ${{ steps.export.outcome }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Organize Step**: ${{ steps.organize.outcome }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Navigation Step**: ${{ steps.navigation.outcome }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Changes Detected**: ${{ steps.check_changes.outputs.has_changes }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Timestamp**: $(date -u +%Y-%m-%d\ %H:%M\ UTC)" >> $GITHUB_STEP_SUMMARY
