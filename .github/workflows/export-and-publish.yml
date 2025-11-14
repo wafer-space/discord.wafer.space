@@ -1,0 +1,114 @@
+# .github/workflows/export-and-publish.yml
+name: Export and Publish Discord Logs
+
+on:
+  schedule:
+    # Run hourly as specified in requirements
+    - cron: '0 * * * *'
+
+  workflow_dispatch:  # Allow manual trigger
+
+  push:
+    branches: [feature/discord-wafer-space]  # For testing
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  export-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for state.json
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install uv
+        run: pip install uv
+
+      - name: Install Python dependencies
+        run: uv pip install --system -r requirements.txt
+
+      - name: Cache DiscordChatExporter
+        id: cache-dce
+        uses: actions/cache@v4
+        with:
+          path: DiscordChatExporter.Cli
+          key: dce-${{ runner.os }}-latest
+
+      - name: Download DiscordChatExporter
+        if: steps.cache-dce.outputs.cache-hit != 'true'
+        run: |
+          wget https://github.com/Tyrrrz/DiscordChatExporter/releases/latest/download/DiscordChatExporter.Cli.linux-x64.zip
+          unzip DiscordChatExporter.Cli.linux-x64.zip
+          chmod +x DiscordChatExporter.Cli
+          rm DiscordChatExporter.Cli.linux-x64.zip
+
+      - name: Run export script
+        env:
+          DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
+        run: |
+          echo "Starting export..."
+          uv run python scripts/export_channels.py
+        continue-on-error: true
+        id: export
+
+      - name: Run navigation generator
+        if: steps.export.outcome == 'success' || steps.export.outcome == 'failure'
+        run: |
+          echo "Generating navigation..."
+          uv run python scripts/generate_navigation.py
+        continue-on-error: true
+        id: navigation
+
+      - name: Check for changes
+        id: check_changes
+        run: |
+          if git diff --quiet public/ state.json 2>/dev/null; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit state.json to main
+        if: steps.check_changes.outputs.has_changes == 'true'
+        run: |
+          git config user.name "Discord Archive Bot"
+          git config user.email "actions@github.com"
+          git add state.json
+          git commit -m "chore: update export state
+
+          Updated by GitHub Actions on $(date -u +%Y-%m-%d\ %H:%M\ UTC)"
+          git push origin HEAD:main
+        continue-on-error: true
+
+      - name: Deploy to GitHub Pages
+        if: steps.check_changes.outputs.has_changes == 'true'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          publish_branch: gh-pages
+          user_name: 'Discord Archive Bot'
+          user_email: 'actions@github.com'
+          commit_message: 'chore: deploy updated logs'
+        continue-on-error: true
+
+      - name: Report summary
+        if: always()
+        run: |
+          echo "## Export Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status**: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Export Step**: ${{ steps.export.outcome }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Navigation Step**: ${{ steps.navigation.outcome }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Changes Detected**: ${{ steps.check_changes.outputs.has_changes }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Timestamp**: $(date -u +%Y-%m-%d\ %H:%M\ UTC)" >> $GITHUB_STEP_SUMMARY
