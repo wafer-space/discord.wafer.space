@@ -143,6 +143,70 @@ def run_export(
         return False, f"Export failed: {str(e)}"
 
 
+def fetch_guild_channels(token: str, guild_id: str) -> List[Dict[str, str]]:
+    """
+    Fetch all channels from a Discord guild using DiscordChatExporter.
+
+    Args:
+        token: Discord bot token
+        guild_id: Guild (server) ID
+
+    Returns:
+        List of channel dicts with 'name' and 'id' keys
+
+    Raises:
+        RuntimeError: If channel fetching fails
+    """
+    cmd = [
+        "bin/discord-exporter/DiscordChatExporter.Cli", "channels",
+        "-t", token,
+        "-g", guild_id
+    ]
+
+    try:
+        result = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=30
+        )
+
+        if result.returncode != 0:
+            raise RuntimeError(
+                f"Failed to fetch channels: {result.stderr or result.stdout}"
+            )
+
+        # Parse output - DiscordChatExporter outputs one channel per line
+        # Format: "Category / ChannelName [ChannelID]" or "ChannelName [ChannelID]"
+        channels = []
+        for line in result.stdout.strip().split('\n'):
+            if not line or not line.strip():
+                continue
+
+            # Extract channel ID from brackets
+            if '[' in line and ']' in line:
+                channel_id = line.split('[')[-1].split(']')[0].strip()
+
+                # Extract channel name (after last / or whole line before [)
+                name_part = line.split('[')[0].strip()
+                if '/' in name_part:
+                    channel_name = name_part.split('/')[-1].strip()
+                else:
+                    channel_name = name_part
+
+                channels.append({
+                    'name': channel_name,
+                    'id': channel_id
+                })
+
+        return channels
+
+    except subprocess.TimeoutExpired:
+        raise RuntimeError("Channel fetching timed out after 30 seconds")
+    except Exception as e:
+        raise RuntimeError(f"Channel fetching failed: {str(e)}")
+
+
 def export_all_channels() -> Dict:
     """
     Main export orchestration function.
@@ -183,8 +247,20 @@ def export_all_channels() -> Dict:
         server_dir = exports_dir / server_key
         server_dir.mkdir(exist_ok=True)
 
-        # Get channels from configuration
-        channels = server_config.get('channels', [])
+        # Fetch channels dynamically from Discord
+        try:
+            print(f"  Fetching channels from Discord...")
+            channels = fetch_guild_channels(token, server_config['guild_id'])
+            print(f"  Found {len(channels)} channels")
+        except RuntimeError as e:
+            print(f"  ERROR: {e}")
+            summary['errors'].append({
+                'channel': 'N/A',
+                'format': 'N/A',
+                'error': f"Failed to fetch channels: {e}"
+            })
+            continue
+
         include_patterns = server_config['include_channels']
         exclude_patterns = server_config['exclude_channels']
 

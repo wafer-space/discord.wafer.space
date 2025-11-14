@@ -8,7 +8,8 @@ from pathlib import Path
 from unittest.mock import Mock, patch, call
 from scripts.export_channels import (
     run_export,
-    export_all_channels
+    export_all_channels,
+    fetch_guild_channels
 )
 
 
@@ -109,22 +110,25 @@ commit_author = "Test Bot"
                     'servers': {
                         'test-server': {
                             'name': 'Test Server',
+                            'guild_id': '123456789',
                             'include_channels': ['*'],
-                            'exclude_channels': [],
-                            'channels': []
+                            'exclude_channels': []
                         }
                     },
                     'export': {'formats': ['html']},
                     'github': {}
                 }
 
-                with patch('scripts.export_channels.StateManager'):
-                    with patch('scripts.export_channels.Path'):
-                        summary = export_all_channels()
+                with patch('scripts.export_channels.fetch_guild_channels') as mock_fetch:
+                    mock_fetch.return_value = []
 
-                        mock_load.assert_called_once()
-                        assert 'channels_updated' in summary
-                        assert 'channels_failed' in summary
+                    with patch('scripts.export_channels.StateManager'):
+                        with patch('scripts.export_channels.Path'):
+                            summary = export_all_channels()
+
+                            mock_load.assert_called_once()
+                            assert 'channels_updated' in summary
+                            assert 'channels_failed' in summary
 
             del os.environ['DISCORD_BOT_TOKEN']
 
@@ -140,15 +144,18 @@ commit_author = "Test Bot"
                 'github': {}
             }
 
-            with patch('scripts.export_channels.StateManager') as MockState:
-                mock_state_instance = Mock()
-                MockState.return_value = mock_state_instance
+            with patch('scripts.export_channels.fetch_guild_channels') as mock_fetch:
+                mock_fetch.return_value = [{'name': 'general', 'id': '123'}]
 
-                with patch('scripts.export_channels.Path'):
-                    summary = export_all_channels()
+                with patch('scripts.export_channels.StateManager') as MockState:
+                    mock_state_instance = Mock()
+                    MockState.return_value = mock_state_instance
 
-                    MockState.assert_called_once()
-                    mock_state_instance.load.assert_called_once()
+                    with patch('scripts.export_channels.Path'):
+                        summary = export_all_channels()
+
+                        MockState.assert_called_once()
+                        mock_state_instance.load.assert_called_once()
 
         del os.environ['DISCORD_BOT_TOKEN']
 
@@ -161,15 +168,15 @@ commit_author = "Test Bot"
             'servers': {
                 'server1': {
                     'name': 'Server 1',
+                    'guild_id': '111111111',
                     'include_channels': ['*'],
-                    'exclude_channels': [],
-                    'channels': []
+                    'exclude_channels': []
                 },
                 'server2': {
                     'name': 'Server 2',
+                    'guild_id': '222222222',
                     'include_channels': ['*'],
-                    'exclude_channels': [],
-                    'channels': []
+                    'exclude_channels': []
                 }
             },
             'export': {'formats': ['html']},
@@ -177,16 +184,19 @@ commit_author = "Test Bot"
         }
 
         with patch('scripts.export_channels.load_config', return_value=config):
-            with patch('scripts.export_channels.StateManager') as MockState:
-                mock_state = Mock()
-                MockState.return_value = mock_state
-                mock_state.load.return_value = {}
+            with patch('scripts.export_channels.fetch_guild_channels') as mock_fetch:
+                mock_fetch.return_value = []
 
-                with patch('scripts.export_channels.Path'):
-                    summary = export_all_channels()
+                with patch('scripts.export_channels.StateManager') as MockState:
+                    mock_state = Mock()
+                    MockState.return_value = mock_state
+                    mock_state.load.return_value = {}
 
-                    # Both servers should have been processed
-                    assert summary['channels_updated'] >= 0
+                    with patch('scripts.export_channels.Path'):
+                        summary = export_all_channels()
+
+                        # Both servers should have been processed
+                        assert summary['channels_updated'] >= 0
 
         del os.environ['DISCORD_BOT_TOKEN']
 
@@ -201,11 +211,7 @@ commit_author = "Test Bot"
                     'name': 'Test Server',
                     'include_channels': ['*'],
                     'exclude_channels': ['private-*'],
-                    'channels': [
-                        {'name': 'general', 'id': '111'},
-                        {'name': 'private-chat', 'id': '222'},
-                        {'name': 'announcements', 'id': '333'}
-                    ]
+                    'guild_id': '123456789'
                 }
             },
             'export': {'formats': ['html']},
@@ -213,21 +219,29 @@ commit_author = "Test Bot"
         }
 
         with patch('scripts.export_channels.load_config', return_value=config):
-            with patch('scripts.export_channels.StateManager') as MockState:
-                mock_state = Mock()
-                MockState.return_value = mock_state
-                mock_state.load.return_value = {}
-                mock_state.get_channel_state.return_value = None
+            with patch('scripts.export_channels.fetch_guild_channels') as mock_fetch:
+                # Return 3 channels: 2 will pass filter, 1 will be excluded
+                mock_fetch.return_value = [
+                    {'name': 'general', 'id': '111'},
+                    {'name': 'announcements', 'id': '222'},
+                    {'name': 'private-chat', 'id': '333'}
+                ]
 
-                with patch('scripts.export_channels.run_export') as mock_run:
-                    mock_run.return_value = (True, "Success")
+                with patch('scripts.export_channels.StateManager') as MockState:
+                    mock_state = Mock()
+                    MockState.return_value = mock_state
+                    mock_state.load.return_value = {}
+                    mock_state.get_channel_state.return_value = None
 
-                    with patch('scripts.export_channels.Path'):
-                        summary = export_all_channels()
+                    with patch('scripts.export_channels.run_export') as mock_run:
+                        mock_run.return_value = (True, "Success")
 
-                        # Should export general and announcements, skip private-chat
-                        # 2 channels * 1 format = 2 exports
-                        assert summary['total_exports'] == 2
+                        with patch('scripts.export_channels.Path'):
+                            summary = export_all_channels()
+
+                            # Should export general and announcements, skip private-chat
+                            # 2 channels * 1 format = 2 exports
+                            assert summary['total_exports'] == 2
 
         del os.environ['DISCORD_BOT_TOKEN']
 
@@ -242,9 +256,7 @@ commit_author = "Test Bot"
                     'name': 'Test Server',
                     'include_channels': ['*'],
                     'exclude_channels': [],
-                    'channels': [
-                        {'name': 'general', 'id': '111'}
-                    ]
+                    'guild_id': '123456789'
                 }
             },
             'export': {'formats': ['html', 'txt', 'json', 'csv']},
@@ -252,20 +264,23 @@ commit_author = "Test Bot"
         }
 
         with patch('scripts.export_channels.load_config', return_value=config):
-            with patch('scripts.export_channels.StateManager') as MockState:
-                mock_state = Mock()
-                MockState.return_value = mock_state
-                mock_state.load.return_value = {}
-                mock_state.get_channel_state.return_value = None
+            with patch('scripts.export_channels.fetch_guild_channels') as mock_fetch:
+                mock_fetch.return_value = [{'name': 'general', 'id': '123'}]
 
-                with patch('scripts.export_channels.run_export') as mock_run:
-                    mock_run.return_value = (True, "Success")
+                with patch('scripts.export_channels.StateManager') as MockState:
+                    mock_state = Mock()
+                    MockState.return_value = mock_state
+                    mock_state.load.return_value = {}
+                    mock_state.get_channel_state.return_value = None
 
-                    with patch('scripts.export_channels.Path'):
-                        summary = export_all_channels()
+                    with patch('scripts.export_channels.run_export') as mock_run:
+                        mock_run.return_value = (True, "Success")
 
-                        # 1 channel * 4 formats = 4 exports
-                        assert summary['total_exports'] == 4
+                        with patch('scripts.export_channels.Path'):
+                            summary = export_all_channels()
+
+                            # 1 channel * 4 formats = 4 exports
+                            assert summary['total_exports'] == 4
 
         del os.environ['DISCORD_BOT_TOKEN']
 
@@ -280,9 +295,7 @@ commit_author = "Test Bot"
                     'name': 'Test Server',
                     'include_channels': ['*'],
                     'exclude_channels': [],
-                    'channels': [
-                        {'name': 'general', 'id': '111'}
-                    ]
+                    'guild_id': '123456789'
                 }
             },
             'export': {'formats': ['html']},
@@ -290,28 +303,31 @@ commit_author = "Test Bot"
         }
 
         with patch('scripts.export_channels.load_config', return_value=config):
-            with patch('scripts.export_channels.StateManager') as MockState:
-                mock_state = Mock()
-                MockState.return_value = mock_state
-                mock_state.load.return_value = {}
-                mock_state.get_channel_state.return_value = {
-                    'last_export': '2025-01-15T10:00:00Z',
-                    'last_message_id': '999'
-                }
+            with patch('scripts.export_channels.fetch_guild_channels') as mock_fetch:
+                mock_fetch.return_value = [{'name': 'general', 'id': '123'}]
 
-                with patch('scripts.export_channels.format_export_command') as mock_format:
-                    mock_format.return_value = ['test', 'command']
+                with patch('scripts.export_channels.StateManager') as MockState:
+                    mock_state = Mock()
+                    MockState.return_value = mock_state
+                    mock_state.load.return_value = {}
+                    mock_state.get_channel_state.return_value = {
+                        'last_export': '2025-01-15T10:00:00Z',
+                        'last_message_id': '999'
+                    }
 
-                    with patch('scripts.export_channels.run_export') as mock_run:
-                        mock_run.return_value = (True, "Success")
+                    with patch('scripts.export_channels.format_export_command') as mock_format:
+                        mock_format.return_value = ['test', 'command']
 
-                        with patch('scripts.export_channels.Path'):
-                            summary = export_all_channels()
+                        with patch('scripts.export_channels.run_export') as mock_run:
+                            mock_run.return_value = (True, "Success")
 
-                            # Should call format_export_command with after_timestamp
-                            mock_format.assert_called_once()
-                            call_kwargs = mock_format.call_args
-                            assert call_kwargs[1]['after_timestamp'] == '2025-01-15T10:00:00Z'
+                            with patch('scripts.export_channels.Path'):
+                                summary = export_all_channels()
+
+                                # Should call format_export_command with after_timestamp
+                                mock_format.assert_called_once()
+                                call_kwargs = mock_format.call_args
+                                assert call_kwargs[1]['after_timestamp'] == '2025-01-15T10:00:00Z'
 
         del os.environ['DISCORD_BOT_TOKEN']
 
@@ -326,9 +342,7 @@ commit_author = "Test Bot"
                     'name': 'Test Server',
                     'include_channels': ['*'],
                     'exclude_channels': [],
-                    'channels': [
-                        {'name': 'general', 'id': '111'}
-                    ]
+                    'guild_id': '123456789'
                 }
             },
             'export': {'formats': ['html']},
@@ -336,22 +350,25 @@ commit_author = "Test Bot"
         }
 
         with patch('scripts.export_channels.load_config', return_value=config):
-            with patch('scripts.export_channels.StateManager') as MockState:
-                mock_state = Mock()
-                MockState.return_value = mock_state
-                mock_state.load.return_value = {}
-                mock_state.get_channel_state.return_value = None
+            with patch('scripts.export_channels.fetch_guild_channels') as mock_fetch:
+                mock_fetch.return_value = [{'name': 'general', 'id': '123'}]
 
-                with patch('scripts.export_channels.run_export') as mock_run:
-                    mock_run.return_value = (True, "Success")
+                with patch('scripts.export_channels.StateManager') as MockState:
+                    mock_state = Mock()
+                    MockState.return_value = mock_state
+                    mock_state.load.return_value = {}
+                    mock_state.get_channel_state.return_value = None
 
-                    with patch('scripts.export_channels.Path'):
-                        summary = export_all_channels()
+                    with patch('scripts.export_channels.run_export') as mock_run:
+                        mock_run.return_value = (True, "Success")
 
-                        # State should be updated for the channel
-                        mock_state.update_channel.assert_called_once()
-                        # State should be saved
-                        mock_state.save.assert_called_once()
+                        with patch('scripts.export_channels.Path'):
+                            summary = export_all_channels()
+
+                            # State should be updated for the channel
+                            mock_state.update_channel.assert_called_once()
+                            # State should be saved
+                            mock_state.save.assert_called_once()
 
         del os.environ['DISCORD_BOT_TOKEN']
 
@@ -366,9 +383,7 @@ commit_author = "Test Bot"
                     'name': 'Test Server',
                     'include_channels': ['*'],
                     'exclude_channels': [],
-                    'channels': [
-                        {'name': 'general', 'id': '111'}
-                    ]
+                    'guild_id': '123456789'
                 }
             },
             'export': {'formats': ['html', 'txt']},
@@ -376,27 +391,30 @@ commit_author = "Test Bot"
         }
 
         with patch('scripts.export_channels.load_config', return_value=config):
-            with patch('scripts.export_channels.StateManager') as MockState:
-                mock_state = Mock()
-                MockState.return_value = mock_state
-                mock_state.load.return_value = {}
-                mock_state.get_channel_state.return_value = None
+            with patch('scripts.export_channels.fetch_guild_channels') as mock_fetch:
+                mock_fetch.return_value = [{'name': 'general', 'id': '123'}]
 
-                with patch('scripts.export_channels.run_export') as mock_run:
-                    # First export succeeds, second fails
-                    mock_run.side_effect = [
-                        (True, "Success"),
-                        (False, "Error: Network timeout")
-                    ]
+                with patch('scripts.export_channels.StateManager') as MockState:
+                    mock_state = Mock()
+                    MockState.return_value = mock_state
+                    mock_state.load.return_value = {}
+                    mock_state.get_channel_state.return_value = None
 
-                    with patch('scripts.export_channels.Path'):
-                        summary = export_all_channels()
+                    with patch('scripts.export_channels.run_export') as mock_run:
+                        # First export succeeds, second fails
+                        mock_run.side_effect = [
+                            (True, "Success"),
+                            (False, "Error: Network timeout")
+                        ]
 
-                        assert summary['total_exports'] == 1
-                        assert summary['channels_failed'] == 1
-                        assert len(summary['errors']) == 1
-                        assert summary['errors'][0]['channel'] == 'general'
-                        assert summary['errors'][0]['format'] == 'txt'
+                        with patch('scripts.export_channels.Path'):
+                            summary = export_all_channels()
+
+                            assert summary['total_exports'] == 1
+                            assert summary['channels_failed'] == 1
+                            assert len(summary['errors']) == 1
+                            assert summary['errors'][0]['channel'] == 'general'
+                            assert summary['errors'][0]['format'] == 'txt'
 
         del os.environ['DISCORD_BOT_TOKEN']
 
