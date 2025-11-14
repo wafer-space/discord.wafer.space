@@ -97,7 +97,7 @@ def format_export_command(
         )
 
     cmd = [
-        "./DiscordChatExporter.Cli", "export",
+        "bin/discord-exporter/DiscordChatExporter.Cli", "export",
         "-t", token,
         "-c", channel_id,
         "-f", format_type,
