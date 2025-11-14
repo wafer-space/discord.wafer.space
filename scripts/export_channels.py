@@ -2,7 +2,13 @@
 """Export Discord channels using DiscordChatExporter CLI."""
 import fnmatch
 import os
-from typing import List, Optional
+import subprocess
+import sys
+from pathlib import Path
+from datetime import datetime, UTC
+from typing import List, Optional, Dict, Tuple
+from scripts.config import load_config
+from scripts.state import StateManager
 
 def get_bot_token() -> str:
     """
@@ -102,3 +108,183 @@ def format_export_command(
         cmd.extend(["--after", after_timestamp])
 
     return cmd
+
+
+def run_export(
+    cmd: List[str],
+    timeout: int = 300
+) -> Tuple[bool, str]:
+    """
+    Run DiscordChatExporter command.
+
+    Args:
+        cmd: Command as list
+        timeout: Timeout in seconds
+
+    Returns:
+        Tuple of (success, output)
+    """
+    try:
+        result = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=timeout
+        )
+
+        success = result.returncode == 0
+        output = result.stdout + result.stderr
+
+        return success, output
+
+    except subprocess.TimeoutExpired:
+        return False, f"Export timed out after {timeout} seconds"
+    except Exception as e:
+        return False, f"Export failed: {str(e)}"
+
+
+def export_all_channels() -> Dict:
+    """
+    Main export orchestration function.
+
+    Loads configuration, initializes state manager, and orchestrates
+    export of all channels from all configured servers.
+
+    Returns:
+        Summary dict with stats:
+            - channels_updated: Number of channels successfully exported
+            - channels_failed: Number of channels that failed export
+            - total_exports: Total number of format exports completed
+            - errors: List of error dicts with channel, format, and error details
+    """
+    print("Loading configuration...")
+    config = load_config()
+
+    token = get_bot_token()
+    state_manager = StateManager()
+    state_manager.load()
+
+    summary = {
+        'channels_updated': 0,
+        'channels_failed': 0,
+        'total_exports': 0,
+        'errors': []
+    }
+
+    # Create exports directory
+    exports_dir = Path("exports")
+    exports_dir.mkdir(exist_ok=True)
+
+    print(f"\nStarting exports...")
+
+    for server_key, server_config in config['servers'].items():
+        print(f"\nProcessing server: {server_config['name']}")
+
+        server_dir = exports_dir / server_key
+        server_dir.mkdir(exist_ok=True)
+
+        # Get channels from configuration
+        channels = server_config.get('channels', [])
+        include_patterns = server_config['include_channels']
+        exclude_patterns = server_config['exclude_channels']
+
+        channel_export_attempted = False
+
+        for channel in channels:
+            channel_name = channel['name']
+            channel_id = channel['id']
+
+            if not should_include_channel(channel_name, include_patterns, exclude_patterns):
+                print(f"  Skipping {channel_name} (excluded by pattern)")
+                continue
+
+            print(f"  Exporting #{channel_name}...")
+
+            # Get last export time for incremental updates
+            channel_state = state_manager.get_channel_state(server_key, channel_name)
+            after_timestamp = channel_state['last_export'] if channel_state else None
+
+            # Export all configured formats
+            format_map = {
+                'html': 'HtmlDark',
+                'txt': 'PlainText',
+                'json': 'Json',
+                'csv': 'Csv'
+            }
+
+            channel_export_attempted = True
+            channel_failed = False
+
+            for fmt in config['export']['formats']:
+                output_path = server_dir / f"{channel_name}.{fmt}"
+
+                cmd = format_export_command(
+                    token=token,
+                    channel_id=channel_id,
+                    output_path=str(output_path),
+                    format_type=format_map[fmt],
+                    after_timestamp=after_timestamp
+                )
+
+                success, output = run_export(cmd)
+
+                if success:
+                    summary['total_exports'] += 1
+                    print(f"    ✓ {fmt.upper()}")
+                else:
+                    channel_failed = True
+                    summary['channels_failed'] += 1
+                    summary['errors'].append({
+                        'channel': channel_name,
+                        'format': fmt,
+                        'error': output
+                    })
+                    print(f"    ✗ {fmt.upper()} failed")
+
+            # Update state with current timestamp
+            # In real implementation, we'd parse the actual last message timestamp from export
+            if not channel_failed:
+                state_manager.update_channel(
+                    server_key,
+                    channel_name,
+                    datetime.now(UTC).isoformat(),
+                    "placeholder_message_id"
+                )
+                summary['channels_updated'] += 1
+
+    # Save state
+    state_manager.save()
+
+    return summary
+
+
+def main():
+    """Entry point for export script."""
+    print("Discord Channel Exporter")
+    print("=" * 50)
+
+    try:
+        summary = export_all_channels()
+
+        print("\n" + "=" * 50)
+        print("Export Summary:")
+        print(f"  Channels updated: {summary['channels_updated']}")
+        print(f"  Channels failed: {summary['channels_failed']}")
+        print(f"  Total exports: {summary['total_exports']}")
+
+        if summary['errors']:
+            print(f"\nErrors ({len(summary['errors'])}):")
+            for error in summary['errors'][:5]:  # Show first 5
+                print(f"  - {error['channel']} ({error['format']}): {error['error'][:100]}")
+
+        sys.exit(0 if summary['channels_failed'] == 0 else 1)
+
+    except Exception as e:
+        print(f"\nFATAL ERROR: {e}")
+        import traceback
+        traceback.print_exc()
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()
