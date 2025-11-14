@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ server.display_name }} - {{ site.title }}</title>
+    <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+    <header>
+        <nav class="breadcrumb">
+            <a href="/index.html">Home</a> &gt;
+            <span>{{ server.display_name }}</span>
+        </nav>
+        <h1>{{ server.display_name }} Discord Server</h1>
+    </header>
+
+    <main>
+        <section class="channels">
+            <h2>Channels</h2>
+            {% for channel in channels %}
+            <div class="channel-card">
+                <h3><a href="/{{ server.name }}/{{ channel.name }}/index.html">#{{ channel.name }}</a></h3>
+                <p class="stats">{{ channel.message_count }} messages this month</p>
+                <div class="formats">
+                    Formats:
+                    <a href="/{{ server.name }}/{{ channel.name }}/latest.html">HTML</a> |
+                    <a href="/{{ server.name }}/{{ channel.name }}/latest.txt">TXT</a> |
+                    <a href="/{{ server.name }}/{{ channel.name }}/latest.json">JSON</a> |
+                    <a href="/{{ server.name }}/{{ channel.name }}/latest.csv">CSV</a>
+                </div>
+                <details>
+                    <summary>Archive History ({{ channel.archive_count }} months)</summary>
+                    <ul class="archives">
+                        {% for archive in channel.archives[:5] %}
+                        <li>
+                            <a href="/{{ server.name }}/{{ channel.name }}/{{ archive.date }}.html">{{ archive.date }}</a>
+                            ({{ archive.message_count }} messages)
+                        </li>
+                        {% endfor %}
+                        {% if channel.archive_count > 5 %}
+                        <li><a href="/{{ server.name }}/{{ channel.name }}/index.html">See all {{ channel.archive_count }} archives...</a></li>
+                        {% endif %}
+                    </ul>
+                </details>
+            </div>
+            {% endfor %}
+        </section>
+    </main>
+
+    <footer>
+        <p><a href="/index.html">← Back to all servers</a></p>
+    </footer>
+</body>
+</html>
