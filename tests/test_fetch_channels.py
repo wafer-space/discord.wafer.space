@@ -17,8 +17,8 @@ def test_fetch_guild_channels_success():
         channels = fetch_guild_channels("test_token", "guild123")
 
         assert len(channels) == 2
-        assert channels[0] == {'name': 'announcements', 'id': '123456'}
-        assert channels[1] == {'name': 'general', 'id': '789012'}
+        assert channels[0] == {'name': 'announcements', 'id': '123456', 'parent_id': 'Information'}
+        assert channels[1] == {'name': 'general', 'id': '789012', 'parent_id': 'General'}
 
 
 def test_fetch_guild_channels_without_category():
@@ -33,8 +33,8 @@ def test_fetch_guild_channels_without_category():
         channels = fetch_guild_channels("test_token", "guild123")
 
         assert len(channels) == 2
-        assert channels[0] == {'name': 'general', 'id': '123456'}
-        assert channels[1] == {'name': 'announcements', 'id': '789012'}
+        assert channels[0] == {'name': 'general', 'id': '123456', 'parent_id': None}
+        assert channels[1] == {'name': 'announcements', 'id': '789012', 'parent_id': None}
 
 
 def test_fetch_guild_channels_empty_output():
@@ -81,3 +81,39 @@ def test_fetch_guild_channels_exception():
 
         with pytest.raises(RuntimeError, match="Channel fetching failed"):
             fetch_guild_channels("test_token", "guild123")
+
+
+def test_fetch_guild_channels_includes_threads():
+    """Test that threads are included when fetching channels."""
+    with patch('subprocess.run') as mock_run:
+        mock_run.return_value = Mock(
+            returncode=0,
+            stdout="""General / general [123456]
+Questions / How do I start? [789012]
+Questions / Troubleshooting help [789013]
+""",
+            stderr=""
+        )
+
+        channels = fetch_guild_channels("test_token", "guild123", include_threads=True)
+
+        # Should include both regular channel and threads
+        assert len(channels) == 3
+        assert channels[0] == {'name': 'general', 'id': '123456', 'parent_id': 'General'}
+        assert channels[1] == {'name': 'How do I start?', 'id': '789012', 'parent_id': 'Questions'}
+        assert channels[2] == {'name': 'Troubleshooting help', 'id': '789013', 'parent_id': 'Questions'}
+
+
+def test_fetch_guild_channels_without_threads():
+    """Test that threads are excluded when include_threads=False."""
+    with patch('subprocess.run') as mock_run:
+        mock_run.return_value = Mock(
+            returncode=0,
+            stdout="General / general [123456]\n",
+            stderr=""
+        )
+
+        channels = fetch_guild_channels("test_token", "guild123", include_threads=False)
+
+        assert len(channels) == 1
+        assert channels[0] == {'name': 'general', 'id': '123456', 'parent_id': 'General'}

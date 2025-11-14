@@ -143,16 +143,17 @@ def run_export(
         return False, f"Export failed: {str(e)}"
 
 
-def fetch_guild_channels(token: str, guild_id: str) -> List[Dict[str, str]]:
+def fetch_guild_channels(token: str, guild_id: str, include_threads: bool = True) -> List[Dict[str, str]]:
     """
     Fetch all channels from a Discord guild using DiscordChatExporter.
 
     Args:
         token: Discord bot token
         guild_id: Guild (server) ID
+        include_threads: Whether to include threads (default: True)
 
     Returns:
-        List of channel dicts with 'name' and 'id' keys
+        List of channel dicts with 'name', 'id', and 'parent_id' keys
 
     Raises:
         RuntimeError: If channel fetching fails
@@ -162,6 +163,9 @@ def fetch_guild_channels(token: str, guild_id: str) -> List[Dict[str, str]]:
         "-t", token,
         "-g", guild_id
     ]
+
+    if include_threads:
+        cmd.extend(["--include-threads", "All"])
 
     try:
         result = subprocess.run(
@@ -189,14 +193,22 @@ def fetch_guild_channels(token: str, guild_id: str) -> List[Dict[str, str]]:
 
                 # Extract channel name (after last / or whole line before [)
                 name_part = line.split('[')[0].strip()
+                parent_id = None
+
                 if '/' in name_part:
-                    channel_name = name_part.split('/')[-1].strip()
+                    parts = name_part.split('/')
+                    if len(parts) == 2:
+                        parent_id = parts[0].strip()
+                        channel_name = parts[1].strip()
+                    else:
+                        channel_name = parts[-1].strip()
                 else:
                     channel_name = name_part
 
                 channels.append({
                     'name': channel_name,
-                    'id': channel_id
+                    'id': channel_id,
+                    'parent_id': parent_id
                 })
 
         return channels
