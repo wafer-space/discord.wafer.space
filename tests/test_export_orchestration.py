@@ -1,15 +1,12 @@
 # tests/test_export_orchestration.py
 """Tests for export orchestration functionality."""
-import pytest
 import tempfile
-import json
 import os
 from pathlib import Path
-from unittest.mock import Mock, patch, call
+from unittest.mock import Mock, patch
 from scripts.export_channels import (
     run_export,
-    export_all_channels,
-    fetch_guild_channels
+    export_all_channels
 )
 
 
@@ -152,7 +149,7 @@ commit_author = "Test Bot"
                     MockState.return_value = mock_state_instance
 
                     with patch('scripts.export_channels.Path'):
-                        summary = export_all_channels()
+                        export_all_channels()
 
                         MockState.assert_called_once()
                         mock_state_instance.load.assert_called_once()
@@ -322,7 +319,7 @@ commit_author = "Test Bot"
                             mock_run.return_value = (True, "Success")
 
                             with patch('scripts.export_channels.Path'):
-                                summary = export_all_channels()
+                                export_all_channels()
 
                                 # Should call format_export_command with after_timestamp
                                 mock_format.assert_called_once()
@@ -363,7 +360,7 @@ commit_author = "Test Bot"
                         mock_run.return_value = (True, "Success")
 
                         with patch('scripts.export_channels.Path'):
-                            summary = export_all_channels()
+                            export_all_channels()
 
                             # State should be updated for the channel
                             mock_state.update_channel.assert_called_once()
@@ -422,9 +419,7 @@ commit_author = "Test Bot"
         """Test that exports directory is created."""
         os.environ['DISCORD_BOT_TOKEN'] = 'test_token'
 
-        with tempfile.TemporaryDirectory() as tmpdir:
-            exports_dir = Path(tmpdir) / "exports"
-
+        with tempfile.TemporaryDirectory():
             config = {
                 'site': {},
                 'servers': {},
@@ -442,7 +437,7 @@ commit_author = "Test Bot"
                         mock_exports_path = Mock()
                         MockPath.return_value = mock_exports_path
 
-                        summary = export_all_channels()
+                        export_all_channels()
 
                         # Should call mkdir on exports directory
                         mock_exports_path.mkdir.assert_called()

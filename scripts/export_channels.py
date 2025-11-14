@@ -253,7 +253,7 @@ def export_all_channels() -> Dict:
     exports_dir = Path("exports")
     exports_dir.mkdir(exist_ok=True)
 
-    print(f"\nStarting exports...")
+    print("\nStarting exports...")
 
     for server_key, server_config in config['servers'].items():
         print(f"\nProcessing server: {server_config['name']}")
@@ -263,7 +263,7 @@ def export_all_channels() -> Dict:
 
         # Fetch channels dynamically from Discord
         try:
-            print(f"  Fetching channels from Discord...")
+            print("  Fetching channels from Discord...")
             include_threads = config['export'].get('include_threads', 'all').lower() == 'all'
             channels = fetch_guild_channels(token, server_config['guild_id'], include_threads)
             print(f"  Found {len(channels)} channels")
@@ -285,8 +285,6 @@ def export_all_channels() -> Dict:
         for channel in channels:
             channel_type = classify_channel(channel, forum_list, channels)
             channel_classifications[channel['id']] = channel_type
-
-        channel_export_attempted = False
 
         for channel in channels:
             channel_name = channel['name']
@@ -340,7 +338,6 @@ def export_all_channels() -> Dict:
                 'csv': 'Csv'
             }
 
-            channel_export_attempted = True
             channel_failed = False
 
             for fmt in config['export']['formats']:
