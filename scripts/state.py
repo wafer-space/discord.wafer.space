@@ -1,7 +1,7 @@
 """State management for tracking export progress."""
 import json
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Optional
 
 class StateManager:
     """Manages export state tracking."""
@@ -14,9 +14,9 @@ class StateManager:
             state_path: Path to state JSON file
         """
         self.state_path = Path(state_path)
-        self.state: Dict = {}
+        self.state: dict = {}
 
-    def load(self) -> Dict:
+    def load(self) -> dict:
         """
         Load state from disk.
 
@@ -27,15 +27,21 @@ class StateManager:
             self.state = {}
             return self.state
 
-        with open(self.state_path, 'r') as f:
-            self.state = json.load(f)
+        try:
+            with open(self.state_path, 'r', encoding='utf-8') as f:
+                self.state = json.load(f)
+        except (OSError, json.JSONDecodeError) as e:
+            raise RuntimeError(f"Failed to load state from {self.state_path}: {e}") from e
 
         return self.state
 
     def save(self) -> None:
         """Save state to disk."""
-        with open(self.state_path, 'w') as f:
-            json.dump(self.state, f, indent=2)
+        try:
+            with open(self.state_path, 'w', encoding='utf-8') as f:
+                json.dump(self.state, f, indent=2)
+        except OSError as e:
+            raise RuntimeError(f"Failed to save state to {self.state_path}: {e}") from e
 
     def update_channel(
         self,
@@ -65,7 +71,7 @@ class StateManager:
         self,
         server: str,
         channel: str
-    ) -> Optional[Dict]:
+    ) -> Optional[dict]:
         """
         Get state for a channel.
 
