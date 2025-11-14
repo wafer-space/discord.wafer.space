@@ -29,3 +29,22 @@ def test_load_config_export_formats():
     assert "txt" in config["export"]["formats"]
     assert "json" in config["export"]["formats"]
     assert "csv" in config["export"]["formats"]
+
+def test_load_config_forum_channels():
+    """Test that forum_channels are loaded from config."""
+    config = load_config()
+
+    assert 'servers' in config
+    for server_key, server_config in config['servers'].items():
+        # Should have forum_channels list
+        assert 'forum_channels' in server_config
+        assert isinstance(server_config['forum_channels'], list)
+
+
+def test_load_config_forum_channels_values():
+    """Test specific forum channel values."""
+    config = load_config()
+
+    wafer_space = config['servers']['wafer-space']
+    assert 'questions' in wafer_space['forum_channels']
+    assert 'ideas' in wafer_space['forum_channels']
