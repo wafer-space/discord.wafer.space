@@ -1,5 +1,4 @@
 # tests/test_generate_navigation.py
-import pytest
 import tempfile
 from pathlib import Path
 from scripts.generate_navigation import (
@@ -227,3 +226,152 @@ def test_generate_channel_index():
         assert '#general' in html
         assert '2025-01' in html
         assert '2025-02' in html
+
+
+def test_generate_forum_index():
+    """Test forum index generation."""
+    from scripts.generate_navigation import generate_forum_index
+
+    # Setup
+    config = {'site': {'title': 'Test Site'}}
+    server_info = {'name': 'test-server', 'display_name': 'Test Server'}
+
+    threads_data = [
+        {
+            'name': 'how-to-start',
+            'title': 'How to start?',
+            'url': 'how-to-start/',
+            'reply_count': 5,
+            'last_activity': '2025-11-10',
+            'archived': False
+        },
+        {
+            'name': 'old-thread',
+            'title': 'Old Thread',
+            'url': 'old-thread/',
+            'reply_count': 10,
+            'last_activity': '2025-01-15',
+            'archived': True
+        }
+    ]
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        output_path = Path(tmpdir) / 'index.html'
+
+        generate_forum_index(
+            config, server_info,
+            forum_name='questions',
+            threads=threads_data,
+            output_path=output_path,
+            forum_description='Ask questions'
+        )
+
+        html = output_path.read_text()
+
+        assert '<!DOCTYPE html>' in html
+        assert 'Questions' in html or 'questions' in html
+        assert 'Ask questions' in html
+        assert 'How to start?' in html
+        assert '5 replies' in html
+        assert 'Old Thread' in html
+        assert '10 replies' in html
+
+
+def test_collect_forum_threads():
+    """Test collecting thread metadata from forum directory."""
+    import tempfile
+    import json
+    from pathlib import Path
+    from scripts.generate_navigation import collect_forum_threads
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        # Create forum directory structure
+        forum_dir = Path(tmpdir) / 'questions'
+        forum_dir.mkdir()
+
+        # Create thread directories with JSON files
+        thread1_dir = forum_dir / 'how-to-start'
+        thread1_dir.mkdir()
+
+        thread1_json = {
+            'channel': {'name': 'How to start?'},
+            'messages': [
+                {'id': '1', 'timestamp': '2025-11-01T10:00:00Z', 'content': 'msg1'},
+                {'id': '2', 'timestamp': '2025-11-10T15:00:00Z', 'content': 'msg2'}
+            ]
+        }
+        (thread1_dir / '2025-11' / '2025-11.json').parent.mkdir(parents=True, exist_ok=True)
+        with open(thread1_dir / '2025-11' / '2025-11.json', 'w') as f:
+            json.dump(thread1_json, f)
+
+        # Collect threads
+        threads = collect_forum_threads(forum_dir)
+
+        assert len(threads) == 1
+        assert threads[0]['name'] == 'how-to-start'
+        assert threads[0]['title'] == 'How to start?'
+        assert threads[0]['reply_count'] == 2
+        assert threads[0]['last_activity'] == '2025-11-10'
+
+
+def test_collect_forum_threads_multiple():
+    """Test collecting metadata from multiple threads, sorted by activity."""
+    import tempfile
+    import json
+    from pathlib import Path
+    from scripts.generate_navigation import collect_forum_threads
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        forum_dir = Path(tmpdir) / 'questions'
+        forum_dir.mkdir()
+
+        # Create thread 1 (older)
+        thread1_dir = forum_dir / 'old-thread'
+        thread1_dir.mkdir()
+        thread1_json = {
+            'channel': {'name': 'Old Thread'},
+            'messages': [
+                {'id': '1', 'timestamp': '2025-01-15T10:00:00Z', 'content': 'msg1'},
+            ]
+        }
+        (thread1_dir / '2025-01' / '2025-01.json').parent.mkdir(parents=True)
+        with open(thread1_dir / '2025-01' / '2025-01.json', 'w') as f:
+            json.dump(thread1_json, f)
+
+        # Create thread 2 (newer)
+        thread2_dir = forum_dir / 'new-thread'
+        thread2_dir.mkdir()
+        thread2_json = {
+            'channel': {'name': 'New Thread'},
+            'messages': [
+                {'id': '1', 'timestamp': '2025-11-10T10:00:00Z', 'content': 'msg1'},
+            ]
+        }
+        (thread2_dir / '2025-11' / '2025-11.json').parent.mkdir(parents=True)
+        with open(thread2_dir / '2025-11' / '2025-11.json', 'w') as f:
+            json.dump(thread2_json, f)
+
+        # Collect threads
+        threads = collect_forum_threads(forum_dir)
+
+        assert len(threads) == 2
+        # Should be sorted by last_activity, newest first
+        assert threads[0]['name'] == 'new-thread'
+        assert threads[0]['last_activity'] == '2025-11-10'
+        assert threads[1]['name'] == 'old-thread'
+        assert threads[1]['last_activity'] == '2025-01-15'
+
+
+def test_collect_forum_threads_empty_directory():
+    """Test collecting threads from empty forum directory."""
+    import tempfile
+    from pathlib import Path
+    from scripts.generate_navigation import collect_forum_threads
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        forum_dir = Path(tmpdir) / 'questions'
+        forum_dir.mkdir()
+
+        threads = collect_forum_threads(forum_dir)
+
+        assert threads == []

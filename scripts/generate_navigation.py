@@ -1,6 +1,5 @@
 # scripts/generate_navigation.py
 """Generate navigation index pages from exported logs."""
-import json
 import sys
 from pathlib import Path
 from typing import List, Dict
@@ -10,8 +9,10 @@ from jinja2 import Environment, FileSystemLoader
 # Handle imports for both direct execution and pytest
 try:
     from scripts.config import load_config
+    from scripts.thread_metadata import extract_thread_metadata
 except ModuleNotFoundError:
     from config import load_config
+    from thread_metadata import extract_thread_metadata
 
 def scan_exports(public_dir: Path) -> List[Dict]:
     """
@@ -235,6 +236,80 @@ def organize_data(exports: List[Dict], public_dir: Path) -> Dict:
 
     return servers_data
 
+def collect_forum_threads(forum_dir: Path) -> List[Dict]:
+    """Collect metadata for all threads in a forum directory.
+
+    Args:
+        forum_dir: Path to forum directory (e.g., public/server/questions/)
+
+    Returns:
+        List of thread metadata dictionaries
+    """
+    threads = []
+
+    # Iterate through thread directories
+    for thread_dir in forum_dir.iterdir():
+        if not thread_dir.is_dir():
+            continue
+
+        # More efficient: use recursive glob to find any JSON in subdirectories
+        json_files = list(thread_dir.glob('*/*.json'))
+        if not json_files:
+            continue
+
+        # Use first JSON file found (usually there's only one per thread)
+        json_file = json_files[0]
+
+        # Extract metadata
+        metadata = extract_thread_metadata(json_file)
+        if metadata:
+            threads.append({
+                'name': thread_dir.name,
+                'title': metadata['title'],
+                'url': f"{thread_dir.name}/",
+                'reply_count': metadata['reply_count'],
+                'last_activity': metadata['last_activity'],
+                'archived': metadata['archived']
+            })
+
+    # Sort by last activity (newest first)
+    threads.sort(key=lambda t: t['last_activity'] or '', reverse=True)
+
+    return threads
+
+
+def generate_forum_index(
+    config: Dict,
+    server: Dict,
+    forum_name: str,
+    threads: List[Dict],
+    output_path: Path,
+    forum_description: str = None
+) -> None:
+    """Generate forum index page.
+
+    Args:
+        config: Site configuration
+        server: Server info dict
+        forum_name: Name of the forum
+        threads: List of thread metadata dicts
+        output_path: Where to write index.html
+        forum_description: Optional forum description
+    """
+    env = Environment(loader=FileSystemLoader('templates'))
+    template = env.get_template('forum_index.html.j2')
+
+    html = template.render(
+        site=config['site'],
+        server=server,
+        forum_name=forum_name.title(),  # Capitalize for display
+        forum_description=forum_description,
+        threads=threads
+    )
+
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(html)
+
 def main():
     """Entry point for navigation generation."""
     print("Generating navigation pages...")
@@ -292,8 +367,35 @@ def main():
                     public_dir / server_data['name'] / channel_data['name'] / "index.html"
                 )
 
+            # Generate forum index pages
+            server_name = server_data['name']
+            server_config = config.get('servers', {}).get(server_name, {})
+            forum_channels = server_config.get('forum_channels', [])
+
+            if forum_channels:
+                print(f"Generating forum indexes for {server_data['display_name']}...")
+
+                for forum_name in forum_channels:
+                    forum_dir = public_dir / server_name / forum_name
+
+                    if forum_dir.exists() and forum_dir.is_dir():
+                        # Collect thread metadata
+                        threads = collect_forum_threads(forum_dir)
+
+                        # Generate forum index page
+                        generate_forum_index(
+                            config,
+                            server_data,
+                            forum_name,
+                            threads,
+                            forum_dir / "index.html",
+                            forum_description=None  # Could be added to config
+                        )
+
+                        print(f"  ✓ Generated forum index: {forum_name} ({len(threads)} threads)")
+
         print(f"\n✓ Generated {len(servers_data)} server indexes")
-        print(f"✓ Site index at public/index.html")
+        print("✓ Site index at public/index.html")
 
     except FileNotFoundError as e:
         print(f"FATAL ERROR: {e}")
