@@ -9,7 +9,7 @@ on:
   workflow_dispatch:  # Allow manual trigger
 
   push:
-    branches: [feature/discord-wafer-space]  # For testing
+    branches: [master]  # Run on master branch pushes
 
 permissions:
   contents: write
@@ -103,7 +103,7 @@ jobs:
           git commit -m "chore: update export state
 
           Updated by GitHub Actions on $(date -u +%Y-%m-%d\ %H:%M\ UTC)"
-          git push origin HEAD:main
+          git push origin HEAD:master
         continue-on-error: true
 
       - name: Deploy to GitHub Pages
