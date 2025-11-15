@@ -76,3 +76,110 @@ def test_state_manager_saves_state():
 
     assert state["server"]["channel"]["last_export"] == "2025-01-15T15:00:00Z"
     Path(state_path).unlink()
+
+
+def test_state_manager_updates_thread_state():
+    """Test that thread state is updated correctly."""
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+        f.write('{}')
+        state_file = f.name
+
+    try:
+        manager = StateManager(state_file)
+        manager.load()
+
+        # Update thread state
+        manager.update_thread_state(
+            server='test-server',
+            forum='questions',
+            thread_id='123456',
+            thread_name='how-to-start',
+            thread_title='How to start?',
+            last_message_id='999',
+            archived=False
+        )
+
+        # Verify thread state was saved
+        state = manager.get_thread_state('test-server', 'questions', '123456')
+
+        assert state is not None
+        assert state['name'] == 'how-to-start'
+        assert state['title'] == 'How to start?'
+        assert state['last_message_id'] == '999'
+        assert state['archived'] is False
+        assert 'last_export' in state
+    finally:
+        Path(state_file).unlink()
+
+
+def test_state_manager_gets_thread_state():
+    """Test retrieving thread state."""
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+        state_data = {
+            'test-server': {
+                'forums': {
+                    'questions': {
+                        'threads': {
+                            '123456': {
+                                'name': 'how-to-start',
+                                'title': 'How to start?',
+                                'last_export': '2025-11-14T10:00:00Z',
+                                'last_message_id': '999',
+                                'archived': False
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        json.dump(state_data, f)
+        state_file = f.name
+
+    try:
+        manager = StateManager(state_file)
+        manager.load()
+        state = manager.get_thread_state('test-server', 'questions', '123456')
+
+        assert state['name'] == 'how-to-start'
+        assert state['title'] == 'How to start?'
+        assert state['last_message_id'] == '999'
+    finally:
+        Path(state_file).unlink()
+
+
+def test_state_manager_thread_state_returns_none_if_missing():
+    """Test that get_thread_state returns None for non-existent threads."""
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+        f.write('{}')
+        state_file = f.name
+
+    try:
+        manager = StateManager(state_file)
+        manager.load()
+        state = manager.get_thread_state('test-server', 'questions', '123456')
+
+        assert state is None
+    finally:
+        Path(state_file).unlink()
+
+
+def test_state_manager_updates_forum_index_timestamp():
+    """Test updating forum index update timestamp."""
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+        f.write('{}')
+        state_file = f.name
+
+    try:
+        manager = StateManager(state_file)
+        manager.load()
+
+        manager.update_forum_index_timestamp('test-server', 'questions')
+
+        # Verify forum has last_index_update
+        state = manager.state
+        assert 'test-server' in state
+        assert 'forums' in state['test-server']
+        assert 'questions' in state['test-server']['forums']
+        assert 'last_index_update' in state['test-server']['forums']['questions']
+    finally:
+        Path(state_file).unlink()
