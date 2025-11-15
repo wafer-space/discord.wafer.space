@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#{{ channel.name }} Archive - {{ server.display_name }}</title>
+    <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+    <header>
+        <nav class="breadcrumb">
+            <a href="/index.html">Home</a> &gt;
+            <a href="/{{ server.name }}/index.html">{{ server.display_name }}</a> &gt;
+            <span>#{{ channel.name }}</span>
+        </nav>
+        <h1>#{{ channel.name }} Archive</h1>
+    </header>
+
+    <main>
+        <section class="archives">
+            {% for year, archives in archives_by_year.items() %}
+            <h2>{{ year }}</h2>
+            <ul class="archive-list">
+                {% for archive in archives %}
+                <li>
+                    <strong>{{ archive.date }}</strong> ({{ archive.message_count }} messages)
+                    <div class="formats">
+                        <a href="/{{ server.name }}/{{ channel.name }}/{{ archive.date }}.html">HTML</a> |
+                        <a href="/{{ server.name }}/{{ channel.name }}/{{ archive.date }}.txt">TXT</a> |
+                        <a href="/{{ server.name }}/{{ channel.name }}/{{ archive.date }}.json">JSON</a> |
+                        <a href="/{{ server.name }}/{{ channel.name }}/{{ archive.date }}.csv">CSV</a>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+            {% endfor %}
+        </section>
+    </main>
+
+    <footer>
+        <p><a href="/{{ server.name }}/index.html">← Back to {{ server.display_name }}</a></p>
+    </footer>
+</body>
+</html>

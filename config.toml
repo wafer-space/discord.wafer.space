@@ -1,0 +1,31 @@
+# config.toml
+[site]
+title = "wafer.space Discord Logs"
+description = "Public archive of wafer.space Discord server"
+base_url = "https://discord.wafer.space"
+
+[servers.wafer-space]
+guild_id = "1361349522684510449"
+name = "wafer.space"
+# Channels are automatically discovered from Discord using the bot token
+# Use include_channels and exclude_channels to filter which channels to export
+include_channels = ["*"]  # "*" means all channels
+exclude_channels = [
+    "admin",
+    "moderators",
+    "private-*"
+]
+
+# Forum channels (threads exported separately)
+forum_channels = ["questions", "ideas"]
+
+[export]
+formats = ["html", "txt", "json", "csv"]
+partition_by = "month"
+include_threads = "all"
+download_media = true
+media_dir = "public/assets/media"
+
+[github]
+pages_branch = "gh-pages"
+commit_author = "Discord Archive Bot"

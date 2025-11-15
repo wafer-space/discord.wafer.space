@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ forum_name }} - {{ server.display_name }} - {{ site.title }}</title>
+    <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+    <header>
+        <nav class="breadcrumb">
+            <a href="/index.html">Home</a> &gt;
+            <a href="/{{ server.name }}/index.html">{{ server.display_name }}</a> &gt;
+            <span>{{ forum_name }}</span>
+        </nav>
+        <h1>{{ forum_name }} Forum</h1>
+        {% if forum_description %}
+        <p class="forum-description">{{ forum_description }}</p>
+        {% endif %}
+    </header>
+
+    <main>
+        <section class="thread-list">
+            <h2>Threads</h2>
+            {% if threads %}
+            {% for thread in threads %}
+            <div class="thread-card {% if thread.archived %}archived{% endif %}">
+                <h3>
+                    <a href="/{{ server.name }}/{{ forum_name|lower }}/{{ thread.url }}">
+                        {{ thread.title }}
+                    </a>
+                </h3>
+                <span class="meta">
+                    {% if thread.archived %}<span class="archived-badge">Archived</span> • {% endif %}
+                    {{ thread.reply_count }} replies
+                    {% if thread.last_activity %} • Last: {{ thread.last_activity }}{% endif %}
+                </span>
+            </div>
+            {% endfor %}
+            {% else %}
+            <p class="no-threads">No threads in this forum yet.</p>
+            {% endif %}
+        </section>
+    </main>
+
+    <footer>
+        <p><a href="/{{ server.name }}/index.html">← Back to {{ server.display_name }}</a></p>
+    </footer>
+</body>
+</html>

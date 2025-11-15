@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ site.title }}</title>
+    <meta name="description" content="{{ site.description }}">
+    <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+    <header>
+        <h1>{{ site.title }}</h1>
+        <p class="description">{{ site.description }}</p>
+        <p class="last-updated">Last updated: {{ last_updated }}</p>
+    </header>
+
+    <main>
+        <section class="servers">
+            <h2>Available Servers</h2>
+            {% for server in servers %}
+            <div class="server-card">
+                <h3><a href="/{{ server.name }}/index.html">{{ server.display_name }}</a></h3>
+                <p class="stats">{{ server.channel_count }} channels</p>
+                <p class="updated">Last updated: {{ server.last_updated }}</p>
+            </div>
+            {% endfor %}
+        </section>
+    </main>
+
+    <footer>
+        <p>Generated with <a href="https://github.com/Tyrrrz/DiscordChatExporter">DiscordChatExporter</a></p>
+        <p>Archived for public access - Not affiliated with Discord Inc.</p>
+    </footer>
+</body>
+</html>
