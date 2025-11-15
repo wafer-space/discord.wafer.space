@@ -506,6 +506,7 @@ commit_author = "Test Bot"
                     MockState.return_value = mock_state
                     mock_state.load.return_value = {}
                     mock_state.get_channel_state.return_value = None
+                    mock_state.get_thread_state.return_value = None
 
                     with patch('scripts.export_channels.run_export') as mock_run:
                         mock_run.return_value = (True, "Success")
@@ -520,3 +521,141 @@ commit_author = "Test Bot"
                             # Check mkdir was called for forum directory
 
         del os.environ['DISCORD_BOT_TOKEN']
+
+    def test_export_all_channels_tracks_thread_state(self):
+        """Test that thread exports update state."""
+        os.environ['DISCORD_BOT_TOKEN'] = 'test_token'
+
+        config = {
+            'site': {},
+            'servers': {
+                'test-server': {
+                    'name': 'Test Server',
+                    'guild_id': '123456789',
+                    'include_channels': ['*'],
+                    'exclude_channels': [],
+                    'forum_channels': ['questions']
+                }
+            },
+            'export': {'formats': ['html'], 'include_threads': 'all'},
+            'github': {}
+        }
+
+        with patch('scripts.export_channels.load_config', return_value=config):
+            with patch('scripts.export_channels.fetch_guild_channels') as mock_fetch:
+                with patch('scripts.export_channels.run_export') as mock_run:
+                    with tempfile.TemporaryDirectory() as tmpdir:
+                        with patch('scripts.export_channels.Path') as mock_path:
+                            # Setup mocks
+                            mock_fetch.return_value = [
+                                {'name': 'questions', 'id': '999', 'parent_id': None},
+                                {'name': 'How to start?', 'id': '111', 'parent_id': 'questions'}
+                            ]
+
+                            mock_run.return_value = (True, '')
+
+                            # Mock Path to use temp directory
+                            exports_dir = Path(tmpdir) / 'exports'
+                            exports_dir.mkdir(parents=True)
+                            mock_path.return_value = exports_dir
+
+                            # Mock StateManager
+                            with patch('scripts.export_channels.StateManager') as MockState:
+                                mock_state = Mock()
+                                MockState.return_value = mock_state
+                                mock_state.get_channel_state.return_value = None
+                                mock_state.get_thread_state.return_value = None
+
+                                # Run export
+                                _ = export_all_channels()
+
+                                # Verify thread state was updated
+                                mock_state.update_thread_state.assert_called_once()
+                                call_args = mock_state.update_thread_state.call_args
+                                assert call_args[1]['server'] == 'test-server'
+                                assert call_args[1]['forum'] == 'questions'
+                                assert call_args[1]['thread_id'] == '111'
+
+        del os.environ['DISCORD_BOT_TOKEN']
+
+    def test_export_all_channels_uses_incremental_for_threads(self):
+        """Test that thread exports use --after for incremental updates."""
+        import json
+        os.environ['DISCORD_BOT_TOKEN'] = 'test_token'
+
+        # Create state with existing thread
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+            state_data = {
+                'test-server': {
+                    'forums': {
+                        'questions': {
+                            'threads': {
+                                '111': {
+                                    'name': 'how-to-start',
+                                    'title': 'How to start?',
+                                    'last_export': '2025-11-14T10:00:00Z',
+                                    'last_message_id': '888',
+                                    'archived': False
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            json.dump(state_data, f)
+            state_file = f.name
+
+        try:
+            config = {
+                'site': {},
+                'servers': {
+                    'test-server': {
+                        'name': 'Test Server',
+                        'guild_id': '123456789',
+                        'include_channels': ['*'],
+                        'exclude_channels': [],
+                        'forum_channels': ['questions']
+                    }
+                },
+                'export': {'formats': ['html'], 'include_threads': 'all'},
+                'github': {}
+            }
+
+            with patch('scripts.export_channels.load_config', return_value=config):
+                with patch('scripts.export_channels.StateManager') as mock_state_class:
+                    with patch('scripts.export_channels.fetch_guild_channels') as mock_fetch:
+                        with patch('scripts.export_channels.run_export') as mock_run:
+                            with patch('scripts.export_channels.format_export_command') as mock_format:
+                                # Setup state manager mock
+                                mock_state = Mock()
+                                mock_state.get_thread_state.return_value = state_data['test-server']['forums']['questions']['threads']['111']
+                                mock_state.get_channel_state.return_value = None
+                                mock_state_class.return_value = mock_state
+
+                                mock_fetch.return_value = [
+                                    {'name': 'questions', 'id': '999', 'parent_id': None},
+                                    {'name': 'How to start?', 'id': '111', 'parent_id': 'questions'}
+                                ]
+
+                                mock_format.return_value = ['test', 'command', '--after', '2025-11-14T10:00:00Z']
+                                mock_run.return_value = (True, '')
+
+                                with patch('scripts.export_channels.Path'):
+                                    # Run export
+                                    export_all_channels()
+
+                                    # Verify --after was used in format_export_command
+                                    # Check that format_export_command was called with after_timestamp
+                                    calls = mock_format.call_args_list
+                                    assert len(calls) > 0
+                                    # Find the call for the thread
+                                    thread_call = None
+                                    for call in calls:
+                                        if call[1].get('channel_id') == '111':
+                                            thread_call = call
+                                            break
+                                    assert thread_call is not None
+                                    assert thread_call[1]['after_timestamp'] == '2025-11-14T10:00:00Z'
+        finally:
+            Path(state_file).unlink()
+            del os.environ['DISCORD_BOT_TOKEN']

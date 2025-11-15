@@ -323,12 +323,12 @@ def export_all_channels() -> Dict:
 
             # Get last export time for incremental updates
             if channel_type == ChannelType.THREAD:
-                # TODO: Thread state tracking (will implement in state management task)
-                channel_state = None
+                # Get thread state for incremental export (forum_name already set above)
+                thread_state = state_manager.get_thread_state(server_key, forum_name, channel_id)
+                after_timestamp = thread_state['last_export'] if thread_state else None
             else:
                 channel_state = state_manager.get_channel_state(server_key, channel_name)
-
-            after_timestamp = channel_state['last_export'] if channel_state else None
+                after_timestamp = channel_state['last_export'] if channel_state else None
 
             # Export all configured formats
             format_map = {
@@ -368,13 +368,25 @@ def export_all_channels() -> Dict:
 
             # Update state with current timestamp
             # In real implementation, we'd parse the actual last message timestamp from export
-            if not channel_failed and channel_type != ChannelType.THREAD:
-                state_manager.update_channel(
-                    server_key,
-                    channel_name,
-                    datetime.now(UTC).isoformat(),
-                    "placeholder_message_id"
-                )
+            if not channel_failed:
+                if channel_type == ChannelType.THREAD:
+                    # Update thread state
+                    state_manager.update_thread_state(
+                        server=server_key,
+                        forum=forum_name,
+                        thread_id=channel_id,
+                        thread_name=safe_name,
+                        thread_title=channel_name,
+                        last_message_id=None,  # Could extract from export
+                        archived=False  # Could detect from channel data
+                    )
+                else:
+                    state_manager.update_channel(
+                        server_key,
+                        channel_name,
+                        datetime.now(UTC).isoformat(),
+                        "placeholder_message_id"
+                    )
                 summary['channels_updated'] += 1
 
     # Save state
