@@ -1,5 +1,4 @@
 """Tests for Jinja2 template rendering."""
-import pytest
 from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
 
@@ -138,3 +137,62 @@ def test_templates_use_css_link():
         template_path = Path(f"templates/{template_name}")
         content = template_path.read_text()
         assert '/assets/style.css' in content, f"{template_name} should link to style.css"
+
+
+def test_forum_index_template_exists():
+    """Test that forum index template exists."""
+    template_path = Path("templates/forum_index.html.j2")
+    assert template_path.exists(), "Forum index template should exist"
+
+
+def test_forum_index_template_renders():
+    """Test that forum index template renders with thread data."""
+    env = Environment(loader=FileSystemLoader('templates'))
+    template = env.get_template('forum_index.html.j2')
+
+    thread_data = [
+        {
+            'title': 'How do I start?',
+            'url': 'how-do-i-start/',
+            'reply_count': 5,
+            'last_activity': '2025-11-10',
+            'archived': False
+        },
+        {
+            'title': 'Old Question',
+            'url': 'old-question/',
+            'reply_count': 12,
+            'last_activity': '2025-01-15',
+            'archived': True
+        }
+    ]
+
+    result = template.render(
+        site={'title': 'Test Site'},
+        server={
+            'name': 'wafer-space',
+            'display_name': 'wafer.space'
+        },
+        forum_name='Questions',
+        forum_description='Ask questions about the project',
+        threads=thread_data
+    )
+
+    # Verify basic structure
+    assert '<!DOCTYPE html>' in result
+    assert 'Questions' in result
+    assert 'Ask questions about the project' in result
+
+    # Verify thread content
+    assert 'How do I start?' in result
+    assert '5 replies' in result
+    assert 'Old Question' in result
+
+    # Verify archived status is shown
+    assert 'Archived' in result or 'archived' in result
+
+    # Verify breadcrumb navigation
+    assert 'breadcrumb' in result
+
+    # Verify CSS link
+    assert '/assets/style.css' in result
