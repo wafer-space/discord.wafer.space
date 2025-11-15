@@ -2,7 +2,6 @@
 """Tests for navigation generation main orchestration function."""
 import pytest
 import tempfile
-import json
 from pathlib import Path
 from scripts.generate_navigation import main, organize_data
 

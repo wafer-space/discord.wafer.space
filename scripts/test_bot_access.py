@@ -24,7 +24,7 @@ def test_bot_token():
         print("   Format should be: base64.hmac.signature")
         return False
 
-    print(f"✓ Token format looks correct (3 parts)")
+    print("✓ Token format looks correct (3 parts)")
 
     # Test if we can list guilds
     print("\nTesting Discord API access...")
@@ -37,13 +37,13 @@ def test_bot_token():
         )
 
         if result.returncode != 0:
-            print(f"❌ ERROR: Cannot access Discord API")
+            print("❌ ERROR: Cannot access Discord API")
             print(f"\nOutput: {result.stdout}")
             print(f"Error: {result.stderr}")
             return False
 
         guilds = [line for line in result.stdout.strip().split('\n') if line.strip()]
-        print(f"✓ Successfully accessed Discord API")
+        print("✓ Successfully accessed Discord API")
         print(f"\nFound {len(guilds)} servers:")
         for guild in guilds:
             print(f"  {guild}")
@@ -81,7 +81,7 @@ def test_server_access(guild_id):
             return False
 
         channels = [line for line in result.stdout.strip().split('\n') if line.strip()]
-        print(f"✓ Successfully accessed server")
+        print("✓ Successfully accessed server")
         print(f"\nFound {len(channels)} channels:")
         for channel in channels[:10]:  # Show first 10
             print(f"  {channel}")

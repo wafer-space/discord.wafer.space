@@ -1,6 +1,4 @@
 # tests/test_config.py
-import pytest
-from pathlib import Path
 from scripts.config import load_config
 
 def test_load_config_returns_dict():

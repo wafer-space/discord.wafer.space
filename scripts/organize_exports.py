@@ -9,7 +9,7 @@ import shutil
 import sys
 from pathlib import Path
 from datetime import datetime, timezone
-from typing import Dict, List
+from typing import Dict
 
 
 def get_current_month() -> str:

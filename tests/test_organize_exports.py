@@ -2,7 +2,6 @@
 import pytest
 import tempfile
 from pathlib import Path
-from datetime import datetime, timezone
 from scripts.organize_exports import (
     get_current_month,
     organize_exports,
