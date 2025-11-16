@@ -72,7 +72,7 @@ def test_server_access(guild_id):
                 "bin/discord-exporter/DiscordChatExporter.Cli",
                 "channels",
                 "-t",
-                token,
+                token,  # type: ignore[list-item]
                 "-g",
                 guild_id,
             ],

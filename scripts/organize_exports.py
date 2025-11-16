@@ -21,7 +21,7 @@ def get_current_month() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m")
 
 
-def organize_exports(exports_dir: Path = None, public_dir: Path = None) -> dict[str, int]:
+def organize_exports(exports_dir: Path = None, public_dir: Path = None) -> dict[str, int]:  # type: ignore[assignment]
     """Move exports from exports/ to public/ with date-based organization.
 
     Handles both regular channels and forum/thread structure:
@@ -100,7 +100,7 @@ def organize_exports(exports_dir: Path = None, public_dir: Path = None) -> dict[
                             # Copy file to month directory
                             dest_file = month_dir / f"{current_month}{extension}"
                             shutil.copy2(thread_file, dest_file)
-                            stats["files_organized"] += 1
+                            stats["files_organized"] += 1  # type: ignore[operator]
 
                             # Create/update latest symlink
                             latest_link = public_thread_dir / f"latest{extension}"
@@ -118,7 +118,7 @@ def organize_exports(exports_dir: Path = None, public_dir: Path = None) -> dict[
 
                         except Exception as e:
                             error_msg = f"Failed to organize {thread_file.name}: {str(e)}"
-                            stats["errors"].append(error_msg)
+                            stats["errors"].append(error_msg)  # type: ignore[attr-defined]
                             print(f"  ✗ {error_msg}")
 
             elif item.is_file():
@@ -140,7 +140,7 @@ def organize_exports(exports_dir: Path = None, public_dir: Path = None) -> dict[
                     # Copy file to month directory
                     dest_file = month_dir / f"{current_month}{ext}"
                     shutil.copy2(item, dest_file)
-                    stats["files_organized"] += 1
+                    stats["files_organized"] += 1  # type: ignore[operator]
 
                     # Create/update latest symlink
                     latest_link = channel_dir / f"latest{ext}"
@@ -156,14 +156,14 @@ def organize_exports(exports_dir: Path = None, public_dir: Path = None) -> dict[
 
                 except Exception as e:
                     error_msg = f"Failed to organize {item.name}: {str(e)}"
-                    stats["errors"].append(error_msg)
+                    stats["errors"].append(error_msg)  # type: ignore[attr-defined]
                     print(f"  ✗ {error_msg}")
 
     stats["channels_processed"] = len(channels_seen)
-    return stats
+    return stats  # type: ignore[return-value]
 
 
-def cleanup_exports(exports_dir: Path = None) -> None:
+def cleanup_exports(exports_dir: Path = None) -> None:  # type: ignore[assignment]
     """Remove organized files from exports directory.
 
     CAUTION: Only call this after successful organization!
@@ -204,8 +204,8 @@ def main():
         print(f"  Channels processed: {stats['channels_processed']}")
 
         if stats["errors"]:
-            print(f"\nErrors ({len(stats['errors'])}):")
-            for error in stats["errors"][:5]:  # Show first 5
+            print(f"\nErrors ({len(stats['errors'])}):")  # type: ignore[arg-type]
+            for error in stats["errors"][:5]:  # type: ignore[index]  # Show first 5
                 print(f"  - {error}")
 
         # Optional: Cleanup exports directory

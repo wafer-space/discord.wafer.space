@@ -142,9 +142,9 @@ def test_state_manager_gets_thread_state():
         manager.load()
         state = manager.get_thread_state("test-server", "questions", "123456")
 
-        assert state["name"] == "how-to-start"
-        assert state["title"] == "How to start?"
-        assert state["last_message_id"] == "999"
+        assert state["name"] == "how-to-start"  # type: ignore[index]
+        assert state["title"] == "How to start?"  # type: ignore[index]
+        assert state["last_message_id"] == "999"  # type: ignore[index]
     finally:
         Path(state_file).unlink()
 

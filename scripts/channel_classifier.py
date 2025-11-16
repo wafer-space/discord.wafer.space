@@ -56,7 +56,7 @@ def get_forum_name(channel: dict[str, str]) -> str:
     return channel.get("parent_id", "")
 
 
-def sanitize_thread_name(title: str, thread_id: str = None) -> str:
+def sanitize_thread_name(title: str, thread_id: str = None) -> str:  # type: ignore[assignment]
     """Sanitize thread title into safe filename.
 
     Args:

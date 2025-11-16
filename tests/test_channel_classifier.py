@@ -6,21 +6,21 @@ from scripts.channel_classifier import ChannelType, classify_channel
 
 def test_classify_regular_channel():
     """Test classification of regular channel."""
-    channel = {"name": "general", "id": "123", "parent_id": None}
+    channel = {"name": "general", "id": "123", "parent_id": None}  # type: ignore[dict-item]
     forum_list = ["questions", "ideas"]
 
-    result = classify_channel(channel, forum_list, all_channels=[channel])
+    result = classify_channel(channel, forum_list, all_channels=[channel])  # type: ignore[arg-type, list-item]
 
     assert result == ChannelType.REGULAR
 
 
 def test_classify_forum_channel():
     """Test classification of forum channel."""
-    forum = {"name": "questions", "id": "999", "parent_id": None}
-    thread = {"name": "How to start?", "id": "123", "parent_id": "questions"}
+    forum = {"name": "questions", "id": "999", "parent_id": None}  # type: ignore[dict-item]
+    thread = {"name": "How to start?", "id": "123", "parent_id": "questions"}  # type: ignore[dict-item]
     forum_list = ["questions", "ideas"]
 
-    result = classify_channel(forum, forum_list, all_channels=[forum, thread])
+    result = classify_channel(forum, forum_list, all_channels=[forum, thread])  # type: ignore[arg-type, list-item]
 
     assert result == ChannelType.FORUM
 

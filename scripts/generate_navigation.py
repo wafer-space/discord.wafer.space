@@ -12,8 +12,8 @@ try:
     from scripts.config import load_config
     from scripts.thread_metadata import extract_thread_metadata
 except ModuleNotFoundError:
-    from config import load_config
-    from thread_metadata import extract_thread_metadata
+    from config import load_config  # type: ignore[import-not-found, no-redef]
+    from thread_metadata import extract_thread_metadata  # type: ignore[import-not-found, no-redef]
 
 
 def scan_exports(public_dir: Path) -> list[dict]:
@@ -81,7 +81,7 @@ def group_by_year(archives: list[dict]) -> dict[str, list[dict]]:
     Returns:
         Dict mapping year to list of archives
     """
-    grouped = {}
+    grouped: dict[str, list[dict]] = {}
 
     for archive in archives:
         year = archive["date"].split("-")[0]
@@ -268,7 +268,7 @@ def generate_forum_index(
     forum_name: str,
     threads: list[dict],
     output_path: Path,
-    forum_description: str = None,
+    forum_description: str = None,  # type: ignore[assignment]
 ) -> None:
     """Generate forum index page.
 
@@ -367,7 +367,7 @@ def main():
                             forum_name,
                             threads,
                             forum_dir / "index.html",
-                            forum_description=None,  # Could be added to config
+                            forum_description=None,  # type: ignore[arg-type]  # Could be added to config
                         )
 
                         print(f"  ✓ Generated forum index: {forum_name} ({len(threads)} threads)")

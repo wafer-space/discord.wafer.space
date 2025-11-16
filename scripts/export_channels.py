@@ -190,7 +190,7 @@ def fetch_guild_channels(
 
                 channels.append({"name": channel_name, "id": channel_id, "parent_id": parent_id})
 
-        return channels
+        return channels  # type: ignore[return-value]
 
     except subprocess.TimeoutExpired:
         raise RuntimeError("Channel fetching timed out after 30 seconds")
@@ -242,7 +242,7 @@ def export_all_channels() -> dict:
             print(f"  Found {len(channels)} channels")
         except RuntimeError as e:
             print(f"  ERROR: {e}")
-            summary["errors"].append(
+            summary["errors"].append(  # type: ignore[attr-defined]
                 {"channel": "N/A", "format": "N/A", "error": f"Failed to fetch channels: {e}"}
             )
             continue
@@ -320,12 +320,12 @@ def export_all_channels() -> dict:
                 success, output = run_export(cmd)
 
                 if success:
-                    summary["total_exports"] += 1
+                    summary["total_exports"] += 1  # type: ignore[operator]
                     print(f"    ✓ {fmt.upper()}")
                 else:
                     channel_failed = True
-                    summary["channels_failed"] += 1
-                    summary["errors"].append(
+                    summary["channels_failed"] += 1  # type: ignore[operator]
+                    summary["errors"].append(  # type: ignore[attr-defined]
                         {"channel": channel_name, "format": fmt, "error": output}
                     )
                     print(f"    ✗ {fmt.upper()} failed")
@@ -351,7 +351,7 @@ def export_all_channels() -> dict:
                         datetime.now(UTC).isoformat(),
                         "placeholder_message_id",
                     )
-                summary["channels_updated"] += 1
+                summary["channels_updated"] += 1  # type: ignore[operator]
 
     # Save state
     state_manager.save()

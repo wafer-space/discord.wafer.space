@@ -44,8 +44,8 @@ def test_should_include_channel_excludes_patterns():
 
 def test_should_include_channel_specific_includes():
     """Test specific channel inclusion"""
-    include = ["general", "announcements"]
-    exclude = []
+    include: list[str] = ["general", "announcements"]
+    exclude: list[str] = []
 
     assert should_include_channel("general", include, exclude)
     assert should_include_channel("announcements", include, exclude)

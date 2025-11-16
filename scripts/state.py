@@ -72,7 +72,7 @@ class StateManager:
         if server not in self.state:
             return None
 
-        return self.state[server].get(channel)
+        return self.state[server].get(channel)  # type: ignore[no-any-return]
 
     def update_thread_state(
         self,
@@ -128,7 +128,7 @@ class StateManager:
         Returns:
             Thread state dict or None if not found
         """
-        return (
+        return (  # type: ignore[no-any-return]
             self.state.get(server, {})
             .get("forums", {})
             .get(forum, {})

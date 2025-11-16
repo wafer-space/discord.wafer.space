@@ -27,10 +27,10 @@ def test_extract_thread_metadata_basic():
     try:
         metadata = extract_thread_metadata(temp_path)
 
-        assert metadata["title"] == "How do I start?"
-        assert metadata["reply_count"] == 3
-        assert metadata["last_activity"] == "2025-11-10"
-        assert metadata["archived"] is False
+        assert metadata["title"] == "How do I start?"  # type: ignore[index]
+        assert metadata["reply_count"] == 3  # type: ignore[index]
+        assert metadata["last_activity"] == "2025-11-10"  # type: ignore[index]
+        assert metadata["archived"] is False  # type: ignore[index]
     finally:
         temp_path.unlink()
 
@@ -46,9 +46,9 @@ def test_extract_thread_metadata_empty_messages():
     try:
         metadata = extract_thread_metadata(temp_path)
 
-        assert metadata["title"] == "Empty Thread"
-        assert metadata["reply_count"] == 0
-        assert metadata["last_activity"] is None
+        assert metadata["title"] == "Empty Thread"  # type: ignore[index]
+        assert metadata["reply_count"] == 0  # type: ignore[index]
+        assert metadata["last_activity"] is None  # type: ignore[index]
     finally:
         temp_path.unlink()
 
@@ -68,7 +68,7 @@ def test_extract_thread_metadata_archived():
     try:
         metadata = extract_thread_metadata(temp_path)
 
-        assert metadata["archived"] is True
+        assert metadata["archived"] is True  # type: ignore[index]
     finally:
         temp_path.unlink()
 

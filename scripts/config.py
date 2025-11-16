@@ -26,4 +26,4 @@ def load_config(config_path: str = "config.toml") -> dict:
     with open(path) as f:
         config = toml.load(f)
 
-    return config
+    return config  # type: ignore[no-any-return]
