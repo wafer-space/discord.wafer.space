@@ -360,3 +360,125 @@ def test_organize_exports_mixed_regular_and_forum() -> None:
             / current_month
             / f"{current_month}.html"
         ).exists()
+
+
+def test_organize_exports_copies_channel_media_directory() -> None:
+    """Test that media directories are copied alongside channel files."""
+    with tempfile.TemporaryDirectory() as tmpdir:
+        tmpdir_path = Path(tmpdir)
+        exports = tmpdir_path / "exports"
+        public = tmpdir_path / "public"
+
+        # Create channel with media directory
+        server_dir = exports / "test-server"
+        server_dir.mkdir(parents=True)
+        (server_dir / "general.html").write_text("<html>Channel content</html>")
+
+        # Create media directory with sample media files
+        media_dir = server_dir / "general_media"
+        media_dir.mkdir()
+        (media_dir / "avatar.png").write_bytes(b"fake png data")
+        (media_dir / "attachment.jpg").write_bytes(b"fake jpg data")
+
+        # Organize exports
+        organize_exports(exports, public)
+
+        # Check that media directory was copied
+        channel_dir = public / "test-server" / "general"
+        assert channel_dir.exists()
+
+        public_media_dir = channel_dir / "general_media"
+        assert public_media_dir.exists()
+        assert public_media_dir.is_dir()
+
+        # Check that media files were copied
+        assert (public_media_dir / "avatar.png").exists()
+        assert (public_media_dir / "attachment.jpg").exists()
+        assert (public_media_dir / "avatar.png").read_bytes() == b"fake png data"
+        assert (public_media_dir / "attachment.jpg").read_bytes() == b"fake jpg data"
+
+
+def test_organize_exports_copies_thread_media_directory() -> None:
+    """Test that media directories are copied for forum threads."""
+    with tempfile.TemporaryDirectory() as tmpdir:
+        tmpdir_path = Path(tmpdir)
+        exports = tmpdir_path / "exports"
+        public = tmpdir_path / "public"
+
+        # Create forum thread with media directory
+        forum_dir = exports / "test-server" / "questions"
+        forum_dir.mkdir(parents=True)
+        (forum_dir / "help-needed.html").write_text("<html>Thread content</html>")
+
+        # Create media directory for thread
+        media_dir = forum_dir / "help-needed_media"
+        media_dir.mkdir()
+        (media_dir / "screenshot.png").write_bytes(b"fake screenshot")
+
+        # Organize exports
+        organize_exports(exports, public)
+
+        # Check that media directory was copied
+        thread_dir = public / "test-server" / "questions" / "help-needed"
+        assert thread_dir.exists()
+
+        public_media_dir = thread_dir / "help-needed_media"
+        assert public_media_dir.exists()
+        assert public_media_dir.is_dir()
+        assert (public_media_dir / "screenshot.png").exists()
+        assert (public_media_dir / "screenshot.png").read_bytes() == b"fake screenshot"
+
+
+def test_organize_exports_handles_missing_media_directory() -> None:
+    """Test that organizing works when no media directory exists."""
+    with tempfile.TemporaryDirectory() as tmpdir:
+        tmpdir_path = Path(tmpdir)
+        exports = tmpdir_path / "exports"
+        public = tmpdir_path / "public"
+
+        # Create channel WITHOUT media directory
+        server_dir = exports / "test-server"
+        server_dir.mkdir(parents=True)
+        (server_dir / "general.html").write_text("<html>No media</html>")
+
+        # Organize should work without errors
+        stats = organize_exports(exports, public)
+        assert stats["files_organized"] == 1
+        assert len(stats["errors"]) == 0
+
+        # Channel should exist but no media directory
+        channel_dir = public / "test-server" / "general"
+        assert channel_dir.exists()
+        assert not (channel_dir / "general_media").exists()
+
+
+def test_organize_exports_replaces_existing_media_directory() -> None:
+    """Test that existing media directory is replaced with new one."""
+    with tempfile.TemporaryDirectory() as tmpdir:
+        tmpdir_path = Path(tmpdir)
+        exports = tmpdir_path / "exports"
+        public = tmpdir_path / "public"
+
+        # Create channel directory with old media
+        channel_dir = public / "test-server" / "general"
+        old_media_dir = channel_dir / "general_media"
+        old_media_dir.mkdir(parents=True)
+        (old_media_dir / "old-file.png").write_bytes(b"old data")
+
+        # Create new export with new media
+        server_dir = exports / "test-server"
+        server_dir.mkdir(parents=True)
+        (server_dir / "general.html").write_text("<html>Updated</html>")
+
+        media_dir = server_dir / "general_media"
+        media_dir.mkdir()
+        (media_dir / "new-file.png").write_bytes(b"new data")
+
+        # Organize exports
+        organize_exports(exports, public)
+
+        # Old file should be gone, new file should exist
+        public_media_dir = channel_dir / "general_media"
+        assert not (public_media_dir / "old-file.png").exists()
+        assert (public_media_dir / "new-file.png").exists()
+        assert (public_media_dir / "new-file.png").read_bytes() == b"new data"

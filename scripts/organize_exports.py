@@ -36,6 +36,31 @@ def _update_latest_symlink(target_dir: Path, extension: str, current_month: str)
     latest_link.symlink_to(f"{current_month}/{current_month}{extension}")
 
 
+def _copy_media_directory(source_media_dir: Path, target_dir: Path) -> bool:
+    """Copy media directory to target location.
+
+    Args:
+        source_media_dir: Source media directory (e.g., exports/server/channel_media/)
+        target_dir: Target channel directory (e.g., public/server/channel/)
+
+    Returns:
+        True if copy succeeded, False otherwise
+    """
+    if not source_media_dir.exists() or not source_media_dir.is_dir():
+        return False
+
+    dest_media_dir = target_dir / source_media_dir.name
+    try:
+        # Remove existing media directory if it exists
+        if dest_media_dir.exists():
+            shutil.rmtree(dest_media_dir)
+        # Copy entire media directory
+        shutil.copytree(source_media_dir, dest_media_dir)
+        return True
+    except Exception:
+        return False
+
+
 def _copy_to_month_directory(
     source_file: Path, target_dir: Path, current_month: str
 ) -> tuple[Path, bool]:
@@ -91,6 +116,12 @@ def _organize_thread_file(
     dest_file, success = _copy_to_month_directory(thread_file, public_thread_dir, current_month)
 
     if success:
+        # Copy associated media directory if it exists
+        media_dir = thread_file.parent / f"{thread_name}_media"
+        if media_dir.exists():
+            if _copy_media_directory(media_dir, public_thread_dir):
+                print(f"    ↳ Copied media directory: {media_dir.name}")
+
         channel_key = f"{server_name}/{forum_name}/{thread_name}"
         rel_path = dest_file.relative_to(public_dir)
         print(f"  ✓ {forum_name}/{thread_name}{extension} → {rel_path}")
@@ -130,6 +161,12 @@ def _organize_channel_file(
     dest_file, success = _copy_to_month_directory(channel_file, channel_dir, current_month)
 
     if success:
+        # Copy associated media directory if it exists
+        media_dir = channel_file.parent / f"{channel_name}_media"
+        if media_dir.exists():
+            if _copy_media_directory(media_dir, channel_dir):
+                print(f"    ↳ Copied media directory: {media_dir.name}")
+
         channel_key = f"{server_name}/{channel_name}"
         print(f"  ✓ {channel_name}{ext} → {dest_file.relative_to(public_dir)}")
         return channel_key, None
