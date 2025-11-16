@@ -16,6 +16,7 @@ from scripts.state import StateManager, ThreadInfo
 
 # Constants
 CHANNEL_PATH_PARTS = 2
+MIN_PIPE_PARTS = 2
 
 
 @dataclass
@@ -386,6 +387,45 @@ def run_export(cmd: list[str], timeout: int = 300) -> tuple[bool, str]:
         return False, f"Export failed: {str(e)}"
 
 
+def _parse_channel_line(line: str) -> dict[str, str | None] | None:
+    """Parse a single channel line from DiscordChatExporter output.
+
+    Args:
+        line: Output line from DiscordChatExporter
+
+    Returns:
+        Channel dict with 'name', 'id', and 'parent_id' keys, or None if invalid
+    """
+    # Remove thread indicator if present
+    line = line.lstrip(" *").strip()
+
+    # Split by pipe to get channel ID and name
+    if "|" not in line:
+        return None
+
+    parts = line.split("|")
+    if len(parts) < MIN_PIPE_PARTS:
+        return None
+
+    channel_id = parts[0].strip()
+    name_part = parts[1].strip()
+
+    # For threads, there may be a third part (status), ignore it
+    # Extract category and channel name from the name part
+    parent_id = None
+    if "/" in name_part:
+        name_parts = name_part.split("/")
+        if len(name_parts) >= CHANNEL_PATH_PARTS:
+            parent_id = name_parts[0].strip()
+            channel_name = name_parts[1].strip()
+        else:
+            channel_name = name_parts[-1].strip()
+    else:
+        channel_name = name_part
+
+    return {"name": channel_name, "id": channel_id, "parent_id": parent_id}
+
+
 def fetch_guild_channels(
     token: str, guild_id: str, include_threads: bool = True
 ) -> list[dict[str, str | None]]:
@@ -421,32 +461,9 @@ def fetch_guild_channels(
             if not line or not line.strip():
                 continue
 
-            # Remove thread indicator if present
-            line = line.lstrip(" *").strip()
-
-            # Split by pipe to get channel ID and name
-            if "|" in line:
-                parts = line.split("|")
-                if len(parts) < 2:
-                    continue
-
-                channel_id = parts[0].strip()
-                name_part = parts[1].strip()
-
-                # For threads, there may be a third part (status), ignore it
-                # Extract category and channel name from the name part
-                parent_id = None
-                if "/" in name_part:
-                    name_parts = name_part.split("/")
-                    if len(name_parts) >= CHANNEL_PATH_PARTS:
-                        parent_id = name_parts[0].strip()
-                        channel_name = name_parts[1].strip()
-                    else:
-                        channel_name = name_parts[-1].strip()
-                else:
-                    channel_name = name_part
-
-                channels.append({"name": channel_name, "id": channel_id, "parent_id": parent_id})
+            channel = _parse_channel_line(line)
+            if channel:
+                channels.append(channel)
 
         return channels
 
