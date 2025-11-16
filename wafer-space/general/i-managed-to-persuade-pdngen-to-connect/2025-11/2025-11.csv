@@ -19,7 +19,7 @@ place_io_terminals gf180mcu_fd_io__*/DVDD
 
 It seems that `place_io_terminals` simply promotes the first pin of the specified port to a BTerm.","",""
 "323371864074485771","mole99","2025-08-30T17:24:23.8600000+00:00","For the default power/ground pads that would be one of the pins on the side, resulting in this:","",""
-"323371864074485771","mole99","2025-08-30T17:24:35.2710000+00:00","","/home/runner/work/discord.wafer.space/discord.wafer.space/public/assets/media/Bildschirmfoto_vom_2025-08-30_18-29-36-9051A.png",""
+"323371864074485771","mole99","2025-08-30T17:24:35.2710000+00:00","","i-managed-to-persuade-pdngen-to-connect_media/Bildschirmfoto_vom_2025-08-30_18-29-36-9051A.png",""
 "323371864074485771","mole99","2025-08-30T17:24:53.7000000+00:00","It turns out that the power/ground pads don't even have pins at the bondpad locations, so by default the `place_io_terminals` command cannot work as we want it to work.
 
 Therefore, I tried to add a `PAD` port, just like the other I/O pads, which initially seemed to work fine: I could global-connect it to the respective VDD/VSS net. However, PSM would throw an error, because there is no physical connection between PAD and any of the power pins.
@@ -46,7 +46,7 @@ place_io_terminals gf180mcu_fd_io__dvdd*/DVDD
 
 As otherwise we would still get one BTerm at the side of the power/ground pad.","",""
 "323371864074485771","mole99","2025-08-30T17:25:30.7400000+00:00","With this change the PDN is complete:","",""
-"323371864074485771","mole99","2025-08-30T17:25:37.6890000+00:00","","/home/runner/work/discord.wafer.space/discord.wafer.space/public/assets/media/Bildschirmfoto_vom_2025-08-30_19-00-07-96E58.png",""
+"323371864074485771","mole99","2025-08-30T17:25:37.6890000+00:00","","i-managed-to-persuade-pdngen-to-connect_media/Bildschirmfoto_vom_2025-08-30_19-00-07-96E58.png",""
 "323371864074485771","mole99","2025-08-30T17:25:46.4970000+00:00","PSM is happy:
 
 ```

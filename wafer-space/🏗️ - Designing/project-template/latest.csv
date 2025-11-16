@@ -34,10 +34,10 @@ Leo","","👍 (2)"
 "1413605821430104114","xintingjiang_36756","2025-10-04T01:11:24.8120000+00:00","I'm curious what is the current problem of this template, is this made the nov gf180 mpw shuttle","",""
 "169786952432746498","mithro_","2025-10-04T01:23:57.0660000+00:00","@Xinting Jiang - It should be usable but just keep it up to date as you go.","","👍 (1)"
 "323371864074485771","mole99","2025-10-04T07:35:48.1590000+00:00","Exactly. You can already get started with your design, just make sure to keep it up to date with the upstream template.","","👍 (1)"
-"378788837452677120","asc9742","2025-10-11T03:01:33.4850000+00:00","@mole99 Hi Leo, I am trying to replace all 56 user pads with analog pads (gf180mcu_fd_io_asig_5p0). Got this error ""No shape in terminal analog[0\].pad/ASIG5V found on layer Metal5"". Any ideas on this issue? Attached a screenshot + the yaml and system verilog files.","/home/runner/work/discord.wafer.space/discord.wafer.space/public/assets/media/image-B347D.png,/home/runner/work/discord.wafer.space/discord.wafer.space/public/assets/media/config_sv_files-19959.zip",""
+"378788837452677120","asc9742","2025-10-11T03:01:33.4850000+00:00","@mole99 Hi Leo, I am trying to replace all 56 user pads with analog pads (gf180mcu_fd_io_asig_5p0). Got this error ""No shape in terminal analog[0\].pad/ASIG5V found on layer Metal5"". Any ideas on this issue? Attached a screenshot + the yaml and system verilog files.","project-template_media/image-B347D.png,project-template_media/config_sv_files-19959.zip",""
 "323371864074485771","mole99","2025-10-11T08:20:24.0460000+00:00","Hi @asc, there was a port missing for the bondpad BTerm in the `gf180mcu_fd_io__asig_5p0` cell.
 If you update your PDK, it should run through now.","","👍 (1)"
-"378788837452677120","asc9742","2025-10-11T16:52:17.3220000+00:00","Thank you @mole99 Ran into a new problem with the global routing. I had exchanged all user pads with analog pads, including the clk and rst pad. Could that be causing an issue?","/home/runner/work/discord.wafer.space/discord.wafer.space/public/assets/media/image-6899C.png",""
+"378788837452677120","asc9742","2025-10-11T16:52:17.3220000+00:00","Thank you @mole99 Ran into a new problem with the global routing. I had exchanged all user pads with analog pads, including the clk and rst pad. Could that be causing an issue?","project-template_media/image-6899C.png",""
 "323371864074485771","mole99","2025-10-12T05:21:54.1300000+00:00","Yes, that will be a problem. The SDC expects at least one clock. Can you share a repository with your current state? I will take a look tomorrow.","",""
 "323371864074485771","mole99","2025-10-13T11:59:05.9030000+00:00","Started a thread.","",""
 "323371864074485771","mole99","2025-10-16T13:48:51.5630000+00:00","The [precheck](https://github.com/wafer-space/gf180mcu-precheck) has been updated to finish cleanly with the example project.
@@ -73,12 +73,12 @@ Always double check how functions are supposed to be used (the naming actually s
 "169786952432746498","mithro_","2025-10-27T02:50:36.7770000+00:00","","",""
 "169786952432746498","mithro_","2025-10-27T02:51:12.1350000+00:00","@Tholin - That was from @tnt in the #cob channel.","",""
 "220639106915368960","tholin","2025-10-27T08:12:04.7600000+00:00","Ah, I see. Thank you.","",""
-"220639106915368960","tholin","2025-11-01T19:17:19.2950000+00:00","Getting some *extreme* hold violations when integrating a macro into chip_top that is not present when hardening the macro itself. Checking the logs, the worst slack is simply from the reset pad.","/home/runner/work/discord.wafer.space/discord.wafer.space/public/assets/media/image-91CC9.png",""
+"220639106915368960","tholin","2025-11-01T19:17:19.2950000+00:00","Getting some *extreme* hold violations when integrating a macro into chip_top that is not present when hardening the macro itself. Checking the logs, the worst slack is simply from the reset pad.","project-template_media/image-91CC9.png",""
 "323874444344950794","markemer","2025-11-01T19:21:10.7870000+00:00","Is that in ns? If so, oof. And could it be a bad capacitance extraction on the pads themselves?","",""
 "596068704471482370","246tnt","2025-11-01T19:28:49.0980000+00:00","That's probably because the macro has its own clock tree. So the clock that its internal FF sees is delayed by many ns compared to the clock on its input pin.","",""
 "596068704471482370","246tnt","2025-11-01T19:29:29.2210000+00:00","If the CTS inside your top level project isn't setup to feed the macro an ""early clock"" (i.e. from the root of its clock tree instead of a leaf), that could explain why you see so many hold violations.","",""
 "596068704471482370","246tnt","2025-11-01T19:30:27.2500000+00:00","(Just a theory of course ... can't do more than theorize without more data)","",""
-"220639106915368960","tholin","2025-11-01T19:45:54.9430000+00:00","","/home/runner/work/discord.wafer.space/discord.wafer.space/public/assets/media/image-226EA.png",""
+"220639106915368960","tholin","2025-11-01T19:45:54.9430000+00:00","","project-template_media/image-226EA.png",""
 "220639106915368960","tholin","2025-11-01T19:45:57.8170000+00:00","I don't have a repo for this yet","",""
 "220639106915368960","tholin","2025-11-01T19:46:37.3770000+00:00","There is no CTS in the top level","",""
 "220639106915368960","tholin","2025-11-01T19:46:50.7330000+00:00","Actually, there is no standard cells in the top level","",""
@@ -87,10 +87,10 @@ Always double check how functions are supposed to be used (the naming actually s
 "220639106915368960","tholin","2025-11-01T22:33:29.6630000+00:00","Literally nothing I do is changing the hold violations. Its refusing to budge.","",""
 "220639106915368960","tholin","2025-11-02T16:16:59.0550000+00:00","Almost got it. Commit soon. Just trying to clean up my SDC file.","",""
 "220639106915368960","tholin","2025-11-02T16:17:33.3310000+00:00","What’s the point of `set_driving_cell`? Does it automatically determine slew rates and delays, or do I still need to specify those manually?","",""
-"220639106915368960","tholin","2025-11-02T16:42:54.8520000+00:00","Doesn’t matter. I cannot `set_driving_cell -lib_cell gf180mcu_fd_io__bi_24t` inside my macro SDC files anyways:","/home/runner/work/discord.wafer.space/discord.wafer.space/public/assets/media/image-55734.png",""
+"220639106915368960","tholin","2025-11-02T16:42:54.8520000+00:00","Doesn’t matter. I cannot `set_driving_cell -lib_cell gf180mcu_fd_io__bi_24t` inside my macro SDC files anyways:","project-template_media/image-55734.png",""
 "323371864074485771","mole99","2025-11-02T18:10:19.0380000+00:00","Do you use the LibreLane version from the template or [this branch](https://github.com/librelane/librelane/pull/806)?
 Otherwise the pad cells are not read in.","",""
-"220639106915368960","tholin","2025-11-02T18:16:37.9600000+00:00","I cannot use the LibreLane version from the template for my macros. Python error.","/home/runner/work/discord.wafer.space/discord.wafer.space/public/assets/media/image-BC7E4.png",""
+"220639106915368960","tholin","2025-11-02T18:16:37.9600000+00:00","I cannot use the LibreLane version from the template for my macros. Python error.","project-template_media/image-BC7E4.png",""
 "220639106915368960","tholin","2025-11-02T18:17:00.5980000+00:00","I mean, the PDK Version","",""
 "220639106915368960","tholin","2025-11-02T18:18:03.4310000+00:00","The error during GPL I reported before persists, so I cannot use the LibreLane version.","",""
 "220639106915368960","tholin","2025-11-02T18:21:10.1310000+00:00","But I also don’t understand what `set_driving_cell` even does. Right now my approach has been to determine values to set on `set_input_delay` , `set_clock_latency`, `set_input_transition` and `set_clock_transition` by manually interpreting the values in the liberty files for the IO pads.","",""
@@ -100,8 +100,8 @@ Otherwise the pad cells are not read in.","",""
 "220639106915368960","tholin","2025-11-02T18:24:34.0150000+00:00","I changed nothing about the config.","",""
 "220639106915368960","tholin","2025-11-02T18:24:41.0840000+00:00","Just switched LL versions.","",""
 "220639106915368960","tholin","2025-11-02T19:22:54.5390000+00:00","Yeah, I’m getting severe performance degradation in the wafer.space template LL version in two ways. The timings of the design are worse, and also the flows take forever to run. After one hour, it is still stuck in Timing Optimizations. This whole flow used to take < 15 minutes. @mole99","",""
-"220639106915368960","tholin","2025-11-03T00:24:06.3320000+00:00","@mole99 This page linked in the README of the template no longer exists.","/home/runner/work/discord.wafer.space/discord.wafer.space/public/assets/media/image-C502E.png",""
-"220639106915368960","tholin","2025-11-03T00:24:21.6870000+00:00","","/home/runner/work/discord.wafer.space/discord.wafer.space/public/assets/media/image-6E9A7.png",""
+"220639106915368960","tholin","2025-11-03T00:24:06.3320000+00:00","@mole99 This page linked in the README of the template no longer exists.","project-template_media/image-C502E.png",""
+"220639106915368960","tholin","2025-11-03T00:24:21.6870000+00:00","","project-template_media/image-6E9A7.png",""
 "323371864074485771","mole99","2025-11-03T07:16:38.1700000+00:00","The wafer.space gf180mcu PDK requires the LibreLane version in the template (or from the branch).","",""
 "323371864074485771","mole99","2025-11-03T07:17:31.9560000+00:00","The issue is still open at OpenROAD's side: https://github.com/The-OpenROAD-Project/OpenROAD/issues/8229
 However, as mentioned before, you can simply disable timing driven placement.","",""
@@ -116,8 +116,8 @@ add_pdn_stripe -grid macro -layer Metal4 -width 2.36 -offset 1.18 -spacing 0.28 
 ```
 
 It adds a power/ground pair on each side of the SRAM macro, directly above the pins. Since this uses the local coordinate system of the macro, you can move the macro around as you wish, the PDN straps will follow. As the PDN straps go all the way across the macro, connecting them to the PDN above is very easy.","","✨ (1),💯 (1)"
-"323371864074485771","mole99","2025-11-03T20:35:19.5410000+00:00","(top left)","/home/runner/work/discord.wafer.space/discord.wafer.space/public/assets/media/Bildschirmfoto_vom_2025-11-03_21-13-08-89A4F.png",""
-"323371864074485771","mole99","2025-11-03T20:35:30.9510000+00:00","(top right)","/home/runner/work/discord.wafer.space/discord.wafer.space/public/assets/media/Bildschirmfoto_vom_2025-11-03_21-13-33-4F47A.png",""
+"323371864074485771","mole99","2025-11-03T20:35:19.5410000+00:00","(top left)","project-template_media/Bildschirmfoto_vom_2025-11-03_21-13-08-89A4F.png",""
+"323371864074485771","mole99","2025-11-03T20:35:30.9510000+00:00","(top right)","project-template_media/Bildschirmfoto_vom_2025-11-03_21-13-33-4F47A.png",""
 "323371864074485771","mole99","2025-11-03T20:35:41.7230000+00:00","If you rotate the SRAM by 90 or 270 degrees, you need to use this line:
 
 ```
@@ -133,7 +133,7 @@ add_pdn_connect \
     -grid macro \
     -layers ""$::env(PDN_VERTICAL_LAYER) Metal3""
 ```","",""
-"323371864074485771","mole99","2025-11-03T20:35:48.6920000+00:00","","/home/runner/work/discord.wafer.space/discord.wafer.space/public/assets/media/Bildschirmfoto_vom_2025-11-03_21-30-41-0737D.png",""
+"323371864074485771","mole99","2025-11-03T20:35:48.6920000+00:00","","project-template_media/Bildschirmfoto_vom_2025-11-03_21-30-41-0737D.png",""
 "323371864074485771","mole99","2025-11-03T20:35:58.0500000+00:00","Now I just need to make magic DRC happy, and then I can push the the example usage of the SRAM to the template repo.","",""
 "220639106915368960","tholin","2025-11-03T20:36:05.7920000+00:00","Awesome","",""
 "220639106915368960","tholin","2025-11-03T20:36:34.4290000+00:00","I re-used my setup from GFMPW with a wrapper macro for the SRAM that just added the Metal4 strips.","",""

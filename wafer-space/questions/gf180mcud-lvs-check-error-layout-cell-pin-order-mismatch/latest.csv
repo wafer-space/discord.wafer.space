@@ -6,14 +6,14 @@ My question is it seems that the root of the problem is the pin order and number
 I attached the screen shot for the nor gate for instance. The subckt in cdl has 7 pins defined and in layout there are 9 pins. The extra two pins are VPW and VNW which were not there in earlier version. I've tried tight VPW to VSS and VNW to VDD and define gf180mcu_gnd and the VSS as the same net. These errors were still not resolved. 
 
 I was wondering has anyone met similar problem before or is there any workaround about this? 
-Many thanks in advance!","/home/runner/work/discord.wafer.space/discord.wafer.space/public/assets/media/image-1F30A.png,/home/runner/work/discord.wafer.space/discord.wafer.space/public/assets/media/get_attachment_url-8A860.png,/home/runner/work/discord.wafer.space/discord.wafer.space/public/assets/media/get_attachment_url-7FFB3.png",""
+Many thanks in advance!","gf180mcud-lvs-check-error-layout-cell-pin-order-mismatch_media/image-1F30A.png,gf180mcud-lvs-check-error-layout-cell-pin-order-mismatch_media/get_attachment_url-8A860.png,gf180mcud-lvs-check-error-layout-cell-pin-order-mismatch_media/get_attachment_url-7FFB3.png",""
 "323371864074485771","mole99","2025-10-31T09:26:33.7710000+00:00","Hi!
 
 When you say the latest gf180mcuD version, do you mean the one from open_pdks or the one from wafer.space?
 There shouldn't be any changes to the KLayout LVS setup in either of them in the recent versions.
 
 Could you find out which changes have been made to the KLayout LVS setup that cause it to fail?","",""
-"1413605821430104114","xintingjiang_36756","2025-10-31T15:48:27.5930000+00:00","Hi! We used volare to configure the gf180mcu pdk, the hash value for the pdk version is attached. It is the latest version released this Aug","/home/runner/work/discord.wafer.space/discord.wafer.space/public/assets/media/image-20977.png",""
+"1413605821430104114","xintingjiang_36756","2025-10-31T15:48:27.5930000+00:00","Hi! We used volare to configure the gf180mcu pdk, the hash value for the pdk version is attached. It is the latest version released this Aug","gf180mcud-lvs-check-error-layout-cell-pin-order-mismatch_media/image-20977.png",""
 "1413605821430104114","xintingjiang_36756","2025-10-31T17:37:44.8120000+00:00","oh for this coming up tapeout, what is the correct gf180mcu pdk version to use?","",""
 "323371864074485771","mole99","2025-10-31T18:10:13.1930000+00:00","In order to submit your design, it must pass the [gf180mcu-precheck](https://github.com/wafer-space/gf180mcu-precheck).
 You can run it locally, later it will also be available through the platform.
@@ -31,7 +31,7 @@ The fork has mostly changes around the LibreLane configuration, and we intend to
 "1413605821430104114","xintingjiang_36756","2025-11-01T19:41:06.1230000+00:00","I can open this tutorial though: https://librelane.readthedocs.io/en/latest/getting_started/newcomers/index.html","",""
 "323371864074485771","mole99","2025-11-01T19:54:27.4900000+00:00","Here you go: https://librelane.readthedocs.io/en/latest/installation/nix_installation/index.html","","👍 (1)"
 "323371864074485771","mole99","2025-11-01T19:54:53.8780000+00:00","The docs have changed recently and I still need to update the links in the template.","",""
-"1413605821430104114","xintingjiang_36756","2025-11-01T20:39:12.3740000+00:00","Thanks Leo! I am able to install librelane on my mac machine(nix based). However I ran into the errors below when I try to run ""librelane --smoke-test"" Should I ignore this and proceed with my designs?","/home/runner/work/discord.wafer.space/discord.wafer.space/public/assets/media/image-AA4D2.png",""
+"1413605821430104114","xintingjiang_36756","2025-11-01T20:39:12.3740000+00:00","Thanks Leo! I am able to install librelane on my mac machine(nix based). However I ran into the errors below when I try to run ""librelane --smoke-test"" Should I ignore this and proceed with my designs?","gf180mcud-lvs-check-error-layout-cell-pin-order-mismatch_media/image-AA4D2.png",""
 "323371864074485771","mole99","2025-11-01T20:53:08.5430000+00:00","That's really strange. Is an error shown above?
 You can try running the template, but I don't have much hope if the smoke test doesn't even work.","",""
 "1413605821430104114","xintingjiang_36756","2025-11-01T21:02:49.1550000+00:00","Yes, I also didn't expect that. I went to staight to the smke-test without changing anything after installation. So I really do not know how to fix it. Can you run the smoke-test on your end just to check?","",""
