@@ -1,6 +1,6 @@
 # tests/test_channel_classifier.py
 """Tests for channel classification logic."""
-from scripts.channel_classifier import classify_channel, ChannelType
+from scripts.channel_classifier import ChannelType, classify_channel
 
 
 def test_classify_regular_channel():

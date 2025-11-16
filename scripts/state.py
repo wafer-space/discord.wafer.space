@@ -2,14 +2,13 @@
 import json
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, Optional
+
 
 class StateManager:
     """Manages export state tracking."""
 
     def __init__(self, state_path: str = "state.json"):
-        """
-        Initialize state manager.
+        """Initialize state manager.
 
         Args:
             state_path: Path to state JSON file
@@ -18,8 +17,7 @@ class StateManager:
         self.state: dict = {}
 
     def load(self) -> dict:
-        """
-        Load state from disk.
+        """Load state from disk.
 
         Returns:
             State dictionary
@@ -29,7 +27,7 @@ class StateManager:
             return self.state
 
         try:
-            with open(self.state_path, 'r', encoding='utf-8') as f:
+            with open(self.state_path, encoding='utf-8') as f:
                 self.state = json.load(f)
         except (OSError, json.JSONDecodeError) as e:
             raise RuntimeError(f"Failed to load state from {self.state_path}: {e}") from e
@@ -51,8 +49,7 @@ class StateManager:
         timestamp: str,
         message_id: str
     ) -> None:
-        """
-        Update state for a channel.
+        """Update state for a channel.
 
         Args:
             server: Server name/ID
@@ -74,9 +71,8 @@ class StateManager:
         self,
         server: str,
         channel: str
-    ) -> Optional[dict]:
-        """
-        Get state for a channel.
+    ) -> dict | None:
+        """Get state for a channel.
 
         Args:
             server: Server name/ID
@@ -97,7 +93,7 @@ class StateManager:
         thread_id: str,
         thread_name: str,
         thread_title: str,
-        last_message_id: Optional[str] = None,
+        last_message_id: str | None = None,
         archived: bool = False
     ) -> None:
         """Update state for a specific thread.
@@ -133,7 +129,7 @@ class StateManager:
 
         self.save()
 
-    def get_thread_state(self, server: str, forum: str, thread_id: str) -> Optional[Dict]:
+    def get_thread_state(self, server: str, forum: str, thread_id: str) -> dict | None:
         """Get state for a specific thread.
 
         Args:

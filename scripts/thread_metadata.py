@@ -1,11 +1,10 @@
 """Thread metadata extraction from JSON exports."""
 import json
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from datetime import datetime, timezone, timedelta
-from typing import Dict, Optional
 
 
-def extract_thread_metadata(json_path: Path) -> Optional[Dict]:
+def extract_thread_metadata(json_path: Path) -> dict | None:
     """Extract metadata from a thread JSON export.
 
     Args:
@@ -26,7 +25,7 @@ def extract_thread_metadata(json_path: Path) -> Optional[Dict]:
 
     try:
         # Load JSON
-        with open(json_path, 'r', encoding='utf-8') as f:
+        with open(json_path, encoding='utf-8') as f:
             data = json.load(f)
 
         # Extract title from channel name

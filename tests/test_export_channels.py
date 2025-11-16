@@ -1,11 +1,10 @@
 # tests/test_export_channels.py
-import pytest
 import os
-from scripts.export_channels import (
-    get_bot_token,
-    should_include_channel,
-    format_export_command
-)
+
+import pytest
+
+from scripts.export_channels import format_export_command, get_bot_token, should_include_channel
+
 
 def test_get_bot_token_from_env():
     """Test getting bot token from environment"""

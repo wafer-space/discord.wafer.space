@@ -1,14 +1,16 @@
 # tests/test_generate_navigation.py
 import tempfile
 from pathlib import Path
+
 from scripts.generate_navigation import (
-    scan_exports,
     count_messages_from_json,
-    group_by_year,
-    generate_site_index,
+    generate_channel_index,
     generate_server_index,
-    generate_channel_index
+    generate_site_index,
+    group_by_year,
+    scan_exports,
 )
+
 
 def test_scan_exports_finds_files():
     """Test that scan_exports finds exported files"""
@@ -279,9 +281,10 @@ def test_generate_forum_index():
 
 def test_collect_forum_threads():
     """Test collecting thread metadata from forum directory."""
-    import tempfile
     import json
+    import tempfile
     from pathlib import Path
+
     from scripts.generate_navigation import collect_forum_threads
 
     with tempfile.TemporaryDirectory() as tmpdir:
@@ -316,9 +319,10 @@ def test_collect_forum_threads():
 
 def test_collect_forum_threads_multiple():
     """Test collecting metadata from multiple threads, sorted by activity."""
-    import tempfile
     import json
+    import tempfile
     from pathlib import Path
+
     from scripts.generate_navigation import collect_forum_threads
 
     with tempfile.TemporaryDirectory() as tmpdir:
@@ -366,6 +370,7 @@ def test_collect_forum_threads_empty_directory():
     """Test collecting threads from empty forum directory."""
     import tempfile
     from pathlib import Path
+
     from scripts.generate_navigation import collect_forum_threads
 
     with tempfile.TemporaryDirectory() as tmpdir:

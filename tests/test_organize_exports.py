@@ -1,12 +1,10 @@
 # tests/test_organize_exports.py
-import pytest
 import tempfile
 from pathlib import Path
-from scripts.organize_exports import (
-    get_current_month,
-    organize_exports,
-    cleanup_exports
-)
+
+import pytest
+
+from scripts.organize_exports import cleanup_exports, get_current_month, organize_exports
 
 
 def test_get_current_month():

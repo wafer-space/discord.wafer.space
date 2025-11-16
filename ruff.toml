@@ -13,7 +13,9 @@ line-length = 100
 # UP - pyupgrade (modern Python syntax)
 # B - flake8-bugbear (likely bugs)
 # S - flake8-bandit (security)
-select = ["E", "W", "F", "I", "N", "D", "UP", "B", "S"]
+# C90 - mccabe complexity
+# PLR - Pylint refactor (complexity, design)
+select = ["E", "W", "F", "I", "N", "D", "UP", "B", "S", "C90", "PLR"]
 
 # Ignore specific rules
 ignore = [
@@ -21,6 +23,14 @@ ignore = [
     "D104",  # Missing docstring in public package (too strict)
     "S603",  # subprocess without shell=True (we use subprocess intentionally)
     "S607",  # Starting a process with a partial executable path (intentional)
+    # Known complexity issues - will address in future refactoring
+    "C901",    # Function is too complex (mccabe complexity)
+    "PLR0912", # Too many branches
+    "PLR0915", # Too many statements
+    "PLR0913", # Too many arguments
+    "PLR2004", # Magic value used in comparison (consider replacing with a constant)
+    # Known security issue - Jinja2 autoescape disabled intentionally for static site generation
+    "S701",    # Using jinja2 templates with autoescape=False
 ]
 
 # Exclude generated and temporary directories
@@ -35,8 +45,8 @@ exclude = [
 ]
 
 [lint.per-file-ignores]
-# Tests don't need docstrings and can use assert
-"tests/**/*.py" = ["D", "S101"]
+# Tests don't need docstrings and can use assert, hardcoded test credentials OK
+"tests/**/*.py" = ["D", "S101", "S105", "S106"]
 
 [lint.pydocstyle]
 # Use Google-style docstrings

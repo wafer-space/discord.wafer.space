@@ -1,5 +1,6 @@
 """Tests for Jinja2 template rendering."""
 from pathlib import Path
+
 from jinja2 import Environment, FileSystemLoader
 
 

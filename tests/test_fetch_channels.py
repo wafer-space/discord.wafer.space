@@ -1,7 +1,9 @@
 # tests/test_fetch_channels.py
 """Tests for dynamic channel fetching functionality."""
-import pytest
 from unittest.mock import Mock, patch
+
+import pytest
+
 from scripts.export_channels import fetch_guild_channels
 
 

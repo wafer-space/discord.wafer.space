@@ -1,7 +1,6 @@
 # scripts/channel_classifier.py
 """Channel classification logic for forum/thread detection."""
 from enum import Enum
-from typing import Dict, List
 
 
 class ChannelType(Enum):
@@ -12,12 +11,11 @@ class ChannelType(Enum):
 
 
 def classify_channel(
-    channel: Dict[str, str],
-    forum_list: List[str],
-    all_channels: List[Dict[str, str]]
+    channel: dict[str, str],
+    forum_list: list[str],
+    all_channels: list[dict[str, str]]
 ) -> ChannelType:
-    """
-    Classify a channel as regular, forum, or thread.
+    """Classify a channel as regular, forum, or thread.
 
     Args:
         channel: Channel dict with name, id, parent_id
@@ -49,9 +47,8 @@ def classify_channel(
     return ChannelType.REGULAR
 
 
-def get_forum_name(channel: Dict[str, str]) -> str:
-    """
-    Get the forum name for a thread channel.
+def get_forum_name(channel: dict[str, str]) -> str:
+    """Get the forum name for a thread channel.
 
     Args:
         channel: Thread channel dict with parent_id
@@ -63,8 +60,7 @@ def get_forum_name(channel: Dict[str, str]) -> str:
 
 
 def sanitize_thread_name(title: str, thread_id: str = None) -> str:
-    """
-    Sanitize thread title into safe filename.
+    """Sanitize thread title into safe filename.
 
     Args:
         title: Thread title

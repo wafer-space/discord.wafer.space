@@ -1,13 +1,11 @@
 # tests/test_export_orchestration.py
 """Tests for export orchestration functionality."""
-import tempfile
 import os
+import tempfile
 from pathlib import Path
 from unittest.mock import Mock, patch
-from scripts.export_channels import (
-    run_export,
-    export_all_channels
-)
+
+from scripts.export_channels import export_all_channels, run_export
 
 
 class TestRunExport:

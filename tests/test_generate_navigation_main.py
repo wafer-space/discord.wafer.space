@@ -1,8 +1,10 @@
 # tests/test_generate_navigation_main.py
 """Tests for navigation generation main orchestration function."""
-import pytest
 import tempfile
 from pathlib import Path
+
+import pytest
+
 from scripts.generate_navigation import main, organize_data
 
 

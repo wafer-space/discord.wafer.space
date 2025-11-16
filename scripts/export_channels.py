@@ -4,15 +4,15 @@ import fnmatch
 import os
 import subprocess
 import sys
+from datetime import UTC, datetime
 from pathlib import Path
-from datetime import datetime, UTC
-from typing import List, Optional, Dict, Tuple
+
 from scripts.config import load_config
 from scripts.state import StateManager
 
+
 def get_bot_token() -> str:
-    """
-    Get Discord bot token from environment.
+    """Get Discord bot token from environment.
 
     Returns:
         Bot token string
@@ -30,11 +30,10 @@ def get_bot_token() -> str:
 
 def should_include_channel(
     channel_name: str,
-    include_patterns: List[str],
-    exclude_patterns: List[str]
+    include_patterns: list[str],
+    exclude_patterns: list[str]
 ) -> bool:
-    """
-    Check if channel should be included based on patterns.
+    """Check if channel should be included based on patterns.
 
     Args:
         channel_name: Name of the channel
@@ -64,10 +63,9 @@ def format_export_command(
     channel_id: str,
     output_path: str,
     format_type: str,
-    after_timestamp: Optional[str] = None
-) -> List[str]:
-    """
-    Format DiscordChatExporter CLI command.
+    after_timestamp: str | None = None
+) -> list[str]:
+    """Format DiscordChatExporter CLI command.
 
     Args:
         token: Discord bot token
@@ -111,11 +109,10 @@ def format_export_command(
 
 
 def run_export(
-    cmd: List[str],
+    cmd: list[str],
     timeout: int = 300
-) -> Tuple[bool, str]:
-    """
-    Run DiscordChatExporter command.
+) -> tuple[bool, str]:
+    """Run DiscordChatExporter command.
 
     Args:
         cmd: Command as list
@@ -143,9 +140,8 @@ def run_export(
         return False, f"Export failed: {str(e)}"
 
 
-def fetch_guild_channels(token: str, guild_id: str, include_threads: bool = True) -> List[Dict[str, str]]:
-    """
-    Fetch all channels from a Discord guild using DiscordChatExporter.
+def fetch_guild_channels(token: str, guild_id: str, include_threads: bool = True) -> list[dict[str, str]]:
+    """Fetch all channels from a Discord guild using DiscordChatExporter.
 
     Args:
         token: Discord bot token
@@ -219,9 +215,8 @@ def fetch_guild_channels(token: str, guild_id: str, include_threads: bool = True
         raise RuntimeError(f"Channel fetching failed: {str(e)}")
 
 
-def export_all_channels() -> Dict:
-    """
-    Main export orchestration function.
+def export_all_channels() -> dict:
+    """Main export orchestration function.
 
     Loads configuration, initializes state manager, and orchestrates
     export of all channels from all configured servers.
@@ -233,7 +228,7 @@ def export_all_channels() -> Dict:
             - total_exports: Total number of format exports completed
             - errors: List of error dicts with channel, format, and error details
     """
-    from scripts.channel_classifier import classify_channel, ChannelType, sanitize_thread_name
+    from scripts.channel_classifier import ChannelType, classify_channel, sanitize_thread_name
 
     print("Loading configuration...")
     config = load_config()

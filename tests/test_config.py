@@ -1,6 +1,7 @@
 # tests/test_config.py
 from scripts.config import load_config
 
+
 def test_load_config_returns_dict():
     """Test that load_config returns a dictionary"""
     config = load_config("config.toml")

@@ -1,9 +1,9 @@
 # scripts/generate_navigation.py
 """Generate navigation index pages from exported logs."""
 import sys
-from pathlib import Path
-from typing import List, Dict
 from datetime import datetime, timezone
+from pathlib import Path
+
 from jinja2 import Environment, FileSystemLoader
 
 # Handle imports for both direct execution and pytest
@@ -14,9 +14,8 @@ except ModuleNotFoundError:
     from config import load_config
     from thread_metadata import extract_thread_metadata
 
-def scan_exports(public_dir: Path) -> List[Dict]:
-    """
-    Scan public directory for exported files.
+def scan_exports(public_dir: Path) -> list[dict]:
+    """Scan public directory for exported files.
 
     Args:
         public_dir: Path to public directory
@@ -48,8 +47,7 @@ def scan_exports(public_dir: Path) -> List[Dict]:
     return exports
 
 def count_messages_from_json(json_path: str) -> int:
-    """
-    Count messages in JSON export file.
+    """Count messages in JSON export file.
 
     Args:
         json_path: Path to JSON file (JSONL format)
@@ -59,7 +57,7 @@ def count_messages_from_json(json_path: str) -> int:
     """
     count = 0
     try:
-        with open(json_path, 'r') as f:
+        with open(json_path) as f:
             for line in f:
                 if line.strip():
                     count += 1
@@ -68,9 +66,8 @@ def count_messages_from_json(json_path: str) -> int:
 
     return count
 
-def group_by_year(archives: List[Dict]) -> Dict[str, List[Dict]]:
-    """
-    Group archives by year.
+def group_by_year(archives: list[dict]) -> dict[str, list[dict]]:
+    """Group archives by year.
 
     Args:
         archives: List of archive dicts with 'date' field
@@ -93,12 +90,11 @@ def group_by_year(archives: List[Dict]) -> Dict[str, List[Dict]]:
     return grouped
 
 def generate_site_index(
-    config: Dict,
-    servers: List[Dict],
+    config: dict,
+    servers: list[dict],
     output_path: Path
 ) -> None:
-    """
-    Generate site index page.
+    """Generate site index page.
 
     Args:
         config: Site configuration
@@ -118,13 +114,12 @@ def generate_site_index(
     output_path.write_text(html)
 
 def generate_server_index(
-    config: Dict,
-    server: Dict,
-    channels: List[Dict],
+    config: dict,
+    server: dict,
+    channels: list[dict],
     output_path: Path
 ) -> None:
-    """
-    Generate server index page.
+    """Generate server index page.
 
     Args:
         config: Site configuration
@@ -145,14 +140,13 @@ def generate_server_index(
     output_path.write_text(html)
 
 def generate_channel_index(
-    config: Dict,
-    server: Dict,
-    channel: Dict,
-    archives: List[Dict],
+    config: dict,
+    server: dict,
+    channel: dict,
+    archives: list[dict],
     output_path: Path
 ) -> None:
-    """
-    Generate channel archive index page.
+    """Generate channel archive index page.
 
     Args:
         config: Site configuration
@@ -176,9 +170,8 @@ def generate_channel_index(
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(html)
 
-def organize_data(exports: List[Dict], public_dir: Path) -> Dict:
-    """
-    Organize exports data by server and channel with statistics.
+def organize_data(exports: list[dict], public_dir: Path) -> dict:
+    """Organize exports data by server and channel with statistics.
 
     Args:
         exports: List of export info dicts from scan_exports
@@ -236,7 +229,7 @@ def organize_data(exports: List[Dict], public_dir: Path) -> Dict:
 
     return servers_data
 
-def collect_forum_threads(forum_dir: Path) -> List[Dict]:
+def collect_forum_threads(forum_dir: Path) -> list[dict]:
     """Collect metadata for all threads in a forum directory.
 
     Args:
@@ -279,10 +272,10 @@ def collect_forum_threads(forum_dir: Path) -> List[Dict]:
 
 
 def generate_forum_index(
-    config: Dict,
-    server: Dict,
+    config: dict,
+    server: dict,
     forum_name: str,
-    threads: List[Dict],
+    threads: list[dict],
     output_path: Path,
     forum_description: str = None
 ) -> None:

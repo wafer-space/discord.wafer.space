@@ -1,7 +1,9 @@
 import json
 import tempfile
 from pathlib import Path
+
 from scripts.state import StateManager
+
 
 def test_state_manager_creates_empty_state():
     """Test that StateManager creates empty state if file doesn't exist"""

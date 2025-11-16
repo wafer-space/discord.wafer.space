@@ -2,6 +2,7 @@
 import json
 import tempfile
 from pathlib import Path
+
 from scripts.thread_metadata import extract_thread_metadata
 
 

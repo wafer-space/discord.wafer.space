@@ -2,8 +2,9 @@
 """Test Discord bot access and permissions."""
 
 import os
-import sys
 import subprocess
+import sys
+
 
 def test_bot_token():
     """Test if bot token is set and can access Discord."""

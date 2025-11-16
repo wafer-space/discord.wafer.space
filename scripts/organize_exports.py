@@ -7,14 +7,12 @@ directory, organizing them by server/channel structure with date-based naming.
 """
 import shutil
 import sys
-from pathlib import Path
 from datetime import datetime, timezone
-from typing import Dict
+from pathlib import Path
 
 
 def get_current_month() -> str:
-    """
-    Get current month in YYYY-MM format.
+    """Get current month in YYYY-MM format.
 
     Returns:
         Current month string (e.g., "2025-11")
@@ -22,9 +20,8 @@ def get_current_month() -> str:
     return datetime.now(timezone.utc).strftime('%Y-%m')
 
 
-def organize_exports(exports_dir: Path = None, public_dir: Path = None) -> Dict[str, int]:
-    """
-    Move exports from exports/ to public/ with date-based organization.
+def organize_exports(exports_dir: Path = None, public_dir: Path = None) -> dict[str, int]:
+    """Move exports from exports/ to public/ with date-based organization.
 
     Handles both regular channels and forum/thread structure:
     - Regular: exports/server/channel.html -> public/server/channel/YYYY-MM/YYYY-MM.html
@@ -168,8 +165,7 @@ def organize_exports(exports_dir: Path = None, public_dir: Path = None) -> Dict[
 
 
 def cleanup_exports(exports_dir: Path = None) -> None:
-    """
-    Remove organized files from exports directory.
+    """Remove organized files from exports directory.
 
     CAUTION: Only call this after successful organization!
 
