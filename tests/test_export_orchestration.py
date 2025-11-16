@@ -4,16 +4,22 @@
 import os
 import tempfile
 from pathlib import Path
+from typing import Any
 from unittest.mock import Mock, patch
 
 from scripts.export_channels import export_all_channels, run_export
+
+# Test constants
+EXPECTED_EXPORTS_TWO_CHANNELS = 2
+EXPECTED_EXPORTS_FOUR_FORMATS = 4
+
 
 
 class TestRunExport:
     """Tests for run_export function."""
 
     @patch("subprocess.run")
-    def test_run_export_success(self, mock_run):
+    def test_run_export_success(self, mock_run: Any) -> None:
         """Test successful export execution."""
         mock_run.return_value = Mock(returncode=0, stdout="Export completed", stderr="")
 
@@ -25,7 +31,7 @@ class TestRunExport:
         mock_run.assert_called_once()
 
     @patch("subprocess.run")
-    def test_run_export_failure(self, mock_run):
+    def test_run_export_failure(self, mock_run: Any) -> None:
         """Test failed export execution."""
         mock_run.return_value = Mock(returncode=1, stdout="", stderr="Error: Invalid token")
 
@@ -36,7 +42,7 @@ class TestRunExport:
         assert "Invalid token" in output
 
     @patch("subprocess.run")
-    def test_run_export_timeout(self, mock_run):
+    def test_run_export_timeout(self, mock_run: Any) -> None:
         """Test export timeout handling."""
         import subprocess
 
@@ -49,7 +55,7 @@ class TestRunExport:
         assert "timed out" in output
 
     @patch("subprocess.run")
-    def test_run_export_exception(self, mock_run):
+    def test_run_export_exception(self, mock_run: Any) -> None:
         """Test export exception handling."""
         mock_run.side_effect = Exception("Unknown error")
 
@@ -63,7 +69,7 @@ class TestRunExport:
 class TestExportAllChannels:
     """Tests for export_all_channels orchestration function."""
 
-    def test_export_all_channels_loads_config(self):
+    def test_export_all_channels_loads_config(self) -> None:
         """Test that export_all_channels loads configuration."""
         with tempfile.TemporaryDirectory() as tmpdir:
             # Create temporary config file
@@ -121,7 +127,7 @@ commit_author = "Test Bot"
 
             del os.environ["DISCORD_BOT_TOKEN"]
 
-    def test_export_all_channels_initializes_state_manager(self):
+    def test_export_all_channels_initializes_state_manager(self) -> None:
         """Test that state manager is initialized and loaded."""
         os.environ["DISCORD_BOT_TOKEN"] = "test_token"
 
@@ -136,19 +142,19 @@ commit_author = "Test Bot"
             with patch("scripts.export_channels.fetch_guild_channels") as mock_fetch:
                 mock_fetch.return_value = [{"name": "general", "id": "123"}]
 
-                with patch("scripts.export_channels.StateManager") as MockState:
+                with patch("scripts.export_channels.StateManager") as mock_state_class:
                     mock_state_instance = Mock()
-                    MockState.return_value = mock_state_instance
+                    mock_state_class.return_value = mock_state_instance
 
                     with patch("scripts.export_channels.Path"):
                         export_all_channels()
 
-                        MockState.assert_called_once()
+                        mock_state_class.assert_called_once()
                         mock_state_instance.load.assert_called_once()
 
         del os.environ["DISCORD_BOT_TOKEN"]
 
-    def test_export_all_channels_processes_each_server(self):
+    def test_export_all_channels_processes_each_server(self) -> None:
         """Test that all servers are processed."""
         os.environ["DISCORD_BOT_TOKEN"] = "test_token"
 
@@ -176,9 +182,9 @@ commit_author = "Test Bot"
             with patch("scripts.export_channels.fetch_guild_channels") as mock_fetch:
                 mock_fetch.return_value = []
 
-                with patch("scripts.export_channels.StateManager") as MockState:
+                with patch("scripts.export_channels.StateManager") as mock_state_class:
                     mock_state = Mock()
-                    MockState.return_value = mock_state
+                    mock_state_class.return_value = mock_state
                     mock_state.load.return_value = {}
 
                     with patch("scripts.export_channels.Path"):
@@ -189,7 +195,7 @@ commit_author = "Test Bot"
 
         del os.environ["DISCORD_BOT_TOKEN"]
 
-    def test_export_all_channels_filters_channels_by_pattern(self):
+    def test_export_all_channels_filters_channels_by_pattern(self) -> None:
         """Test that channels are filtered by include/exclude patterns."""
         os.environ["DISCORD_BOT_TOKEN"] = "test_token"
 
@@ -216,9 +222,9 @@ commit_author = "Test Bot"
                     {"name": "private-chat", "id": "333"},
                 ]
 
-                with patch("scripts.export_channels.StateManager") as MockState:
+                with patch("scripts.export_channels.StateManager") as mock_state_class:
                     mock_state = Mock()
-                    MockState.return_value = mock_state
+                    mock_state_class.return_value = mock_state
                     mock_state.load.return_value = {}
                     mock_state.get_channel_state.return_value = None
 
@@ -230,11 +236,11 @@ commit_author = "Test Bot"
 
                             # Should export general and announcements, skip private-chat
                             # 2 channels * 1 format = 2 exports
-                            assert summary["total_exports"] == 2
+                            assert summary["total_exports"] == EXPECTED_EXPORTS_TWO_CHANNELS
 
         del os.environ["DISCORD_BOT_TOKEN"]
 
-    def test_export_all_channels_exports_all_formats(self):
+    def test_export_all_channels_exports_all_formats(self) -> None:
         """Test that all configured formats are exported."""
         os.environ["DISCORD_BOT_TOKEN"] = "test_token"
 
@@ -256,9 +262,9 @@ commit_author = "Test Bot"
             with patch("scripts.export_channels.fetch_guild_channels") as mock_fetch:
                 mock_fetch.return_value = [{"name": "general", "id": "123"}]
 
-                with patch("scripts.export_channels.StateManager") as MockState:
+                with patch("scripts.export_channels.StateManager") as mock_state_class:
                     mock_state = Mock()
-                    MockState.return_value = mock_state
+                    mock_state_class.return_value = mock_state
                     mock_state.load.return_value = {}
                     mock_state.get_channel_state.return_value = None
 
@@ -269,11 +275,11 @@ commit_author = "Test Bot"
                             summary = export_all_channels()
 
                             # 1 channel * 4 formats = 4 exports
-                            assert summary["total_exports"] == 4
+                            assert summary["total_exports"] == EXPECTED_EXPORTS_FOUR_FORMATS
 
         del os.environ["DISCORD_BOT_TOKEN"]
 
-    def test_export_all_channels_uses_incremental_state(self):
+    def test_export_all_channels_uses_incremental_state(self) -> None:
         """Test that incremental exports use state for --after timestamp."""
         os.environ["DISCORD_BOT_TOKEN"] = "test_token"
 
@@ -295,9 +301,9 @@ commit_author = "Test Bot"
             with patch("scripts.export_channels.fetch_guild_channels") as mock_fetch:
                 mock_fetch.return_value = [{"name": "general", "id": "123"}]
 
-                with patch("scripts.export_channels.StateManager") as MockState:
+                with patch("scripts.export_channels.StateManager") as mock_state_class:
                     mock_state = Mock()
-                    MockState.return_value = mock_state
+                    mock_state_class.return_value = mock_state
                     mock_state.load.return_value = {}
                     mock_state.get_channel_state.return_value = {
                         "last_export": "2025-01-15T10:00:00Z",
@@ -320,7 +326,7 @@ commit_author = "Test Bot"
 
         del os.environ["DISCORD_BOT_TOKEN"]
 
-    def test_export_all_channels_updates_state_after_export(self):
+    def test_export_all_channels_updates_state_after_export(self) -> None:
         """Test that state is updated after successful export."""
         os.environ["DISCORD_BOT_TOKEN"] = "test_token"
 
@@ -342,9 +348,9 @@ commit_author = "Test Bot"
             with patch("scripts.export_channels.fetch_guild_channels") as mock_fetch:
                 mock_fetch.return_value = [{"name": "general", "id": "123"}]
 
-                with patch("scripts.export_channels.StateManager") as MockState:
+                with patch("scripts.export_channels.StateManager") as mock_state_class:
                     mock_state = Mock()
-                    MockState.return_value = mock_state
+                    mock_state_class.return_value = mock_state
                     mock_state.load.return_value = {}
                     mock_state.get_channel_state.return_value = None
 
@@ -361,7 +367,7 @@ commit_author = "Test Bot"
 
         del os.environ["DISCORD_BOT_TOKEN"]
 
-    def test_export_all_channels_tracks_failures(self):
+    def test_export_all_channels_tracks_failures(self) -> None:
         """Test that failed exports are tracked in summary."""
         os.environ["DISCORD_BOT_TOKEN"] = "test_token"
 
@@ -383,9 +389,9 @@ commit_author = "Test Bot"
             with patch("scripts.export_channels.fetch_guild_channels") as mock_fetch:
                 mock_fetch.return_value = [{"name": "general", "id": "123"}]
 
-                with patch("scripts.export_channels.StateManager") as MockState:
+                with patch("scripts.export_channels.StateManager") as mock_state_class:
                     mock_state = Mock()
-                    MockState.return_value = mock_state
+                    mock_state_class.return_value = mock_state
                     mock_state.load.return_value = {}
                     mock_state.get_channel_state.return_value = None
 
@@ -407,7 +413,7 @@ commit_author = "Test Bot"
 
         del os.environ["DISCORD_BOT_TOKEN"]
 
-    def test_export_all_channels_creates_exports_directory(self):
+    def test_export_all_channels_creates_exports_directory(self) -> None:
         """Test that exports directory is created."""
         os.environ["DISCORD_BOT_TOKEN"] = "test_token"
 
@@ -415,14 +421,14 @@ commit_author = "Test Bot"
             config = {"site": {}, "servers": {}, "export": {"formats": ["html"]}, "github": {}}
 
             with patch("scripts.export_channels.load_config", return_value=config):
-                with patch("scripts.export_channels.StateManager") as MockState:
+                with patch("scripts.export_channels.StateManager") as mock_state_class:
                     mock_state = Mock()
-                    MockState.return_value = mock_state
+                    mock_state_class.return_value = mock_state
                     mock_state.load.return_value = {}
 
-                    with patch("scripts.export_channels.Path") as MockPath:
+                    with patch("scripts.export_channels.Path") as mock_path_class:
                         mock_exports_path = Mock()
-                        MockPath.return_value = mock_exports_path
+                        mock_path_class.return_value = mock_exports_path
 
                         export_all_channels()
 
@@ -431,16 +437,16 @@ commit_author = "Test Bot"
 
         del os.environ["DISCORD_BOT_TOKEN"]
 
-    def test_export_all_channels_returns_summary(self):
+    def test_export_all_channels_returns_summary(self) -> None:
         """Test that export_all_channels returns proper summary dict."""
         os.environ["DISCORD_BOT_TOKEN"] = "test_token"
 
         config = {"site": {}, "servers": {}, "export": {"formats": ["html"]}, "github": {}}
 
         with patch("scripts.export_channels.load_config", return_value=config):
-            with patch("scripts.export_channels.StateManager") as MockState:
+            with patch("scripts.export_channels.StateManager") as mock_state_class:
                 mock_state = Mock()
-                MockState.return_value = mock_state
+                mock_state_class.return_value = mock_state
                 mock_state.load.return_value = {}
 
                 with patch("scripts.export_channels.Path"):
@@ -455,7 +461,7 @@ commit_author = "Test Bot"
 
         del os.environ["DISCORD_BOT_TOKEN"]
 
-    def test_export_all_channels_handles_forums(self):
+    def test_export_all_channels_handles_forums(self) -> None:
         """Test that forum channels create directories."""
         os.environ["DISCORD_BOT_TOKEN"] = "test_token"
 
@@ -483,9 +489,9 @@ commit_author = "Test Bot"
                     {"name": "Help needed", "id": "222", "parent_id": "questions"},
                 ]
 
-                with patch("scripts.export_channels.StateManager") as MockState:
+                with patch("scripts.export_channels.StateManager") as mock_state_class:
                     mock_state = Mock()
-                    MockState.return_value = mock_state
+                    mock_state_class.return_value = mock_state
                     mock_state.load.return_value = {}
                     mock_state.get_channel_state.return_value = None
                     mock_state.get_thread_state.return_value = None
@@ -497,14 +503,14 @@ commit_author = "Test Bot"
                             summary = export_all_channels()
 
                             # Should export 2 threads (not the forum parent)
-                            assert summary["total_exports"] == 2
+                            assert summary["total_exports"] == EXPECTED_EXPORTS_TWO_CHANNELS
 
                             # Should create questions directory
                             # Check mkdir was called for forum directory
 
         del os.environ["DISCORD_BOT_TOKEN"]
 
-    def test_export_all_channels_tracks_thread_state(self):
+    def test_export_all_channels_tracks_thread_state(self) -> None:
         """Test that thread exports update state."""
         os.environ["DISCORD_BOT_TOKEN"] = "test_token"
 
@@ -542,9 +548,9 @@ commit_author = "Test Bot"
                             mock_path.return_value = exports_dir
 
                             # Mock StateManager
-                            with patch("scripts.export_channels.StateManager") as MockState:
+                            with patch("scripts.export_channels.StateManager") as mock_state_class:
                                 mock_state = Mock()
-                                MockState.return_value = mock_state
+                                mock_state_class.return_value = mock_state
                                 mock_state.get_channel_state.return_value = None
                                 mock_state.get_thread_state.return_value = None
 
@@ -556,11 +562,13 @@ commit_author = "Test Bot"
                                 call_args = mock_state.update_thread_state.call_args
                                 assert call_args[1]["server"] == "test-server"
                                 assert call_args[1]["forum"] == "questions"
-                                assert call_args[1]["thread_id"] == "111"
+                                # ThreadInfo is passed as thread_info parameter
+                                thread_info = call_args[1]["thread_info"]
+                                assert thread_info.thread_id == "111"
 
         del os.environ["DISCORD_BOT_TOKEN"]
 
-    def test_export_all_channels_uses_incremental_for_threads(self):
+    def test_export_all_channels_uses_incremental_for_threads(self) -> None:
         """Test that thread exports use --after for incremental updates."""
         import json
 
@@ -640,8 +648,8 @@ commit_author = "Test Bot"
                                     # Run export
                                     export_all_channels()
 
-                                    # Verify --after was used in format_export_command
-                                    # Check that format_export_command was called with after_timestamp
+                                    # Verify --after was used
+                                    # Check format_export_command called with timestamp
                                     calls = mock_format.call_args_list
                                     assert len(calls) > 0
                                     # Find the call for the thread

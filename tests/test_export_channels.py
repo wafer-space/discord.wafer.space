@@ -6,7 +6,7 @@ import pytest
 from scripts.export_channels import format_export_command, get_bot_token, should_include_channel
 
 
-def test_get_bot_token_from_env():
+def test_get_bot_token_from_env() -> None:
     """Test getting bot token from environment"""
     os.environ["DISCORD_BOT_TOKEN"] = "test_token_123"
     token = get_bot_token()
@@ -14,7 +14,7 @@ def test_get_bot_token_from_env():
     del os.environ["DISCORD_BOT_TOKEN"]
 
 
-def test_get_bot_token_raises_if_not_set():
+def test_get_bot_token_raises_if_not_set() -> None:
     """Test that missing token raises error"""
     if "DISCORD_BOT_TOKEN" in os.environ:
         del os.environ["DISCORD_BOT_TOKEN"]
@@ -23,7 +23,7 @@ def test_get_bot_token_raises_if_not_set():
         get_bot_token()
 
 
-def test_should_include_channel_with_wildcard():
+def test_should_include_channel_with_wildcard() -> None:
     """Test channel inclusion with wildcard pattern"""
     include = ["*"]
     exclude = ["admin", "private-*"]
@@ -32,7 +32,7 @@ def test_should_include_channel_with_wildcard():
     assert should_include_channel("announcements", include, exclude)
 
 
-def test_should_include_channel_excludes_patterns():
+def test_should_include_channel_excludes_patterns() -> None:
     """Test channel exclusion patterns"""
     include = ["*"]
     exclude = ["admin", "private-*"]
@@ -42,7 +42,7 @@ def test_should_include_channel_excludes_patterns():
     assert not should_include_channel("private-logs", include, exclude)
 
 
-def test_should_include_channel_specific_includes():
+def test_should_include_channel_specific_includes() -> None:
     """Test specific channel inclusion"""
     include: list[str] = ["general", "announcements"]
     exclude: list[str] = []
@@ -52,7 +52,7 @@ def test_should_include_channel_specific_includes():
     assert not should_include_channel("random", include, exclude)
 
 
-def test_format_export_command():
+def test_format_export_command() -> None:
     """Test export command formatting"""
     cmd = format_export_command(
         token="test_token",
@@ -78,7 +78,7 @@ def test_format_export_command():
     assert cmd == expected
 
 
-def test_format_export_command_with_after():
+def test_format_export_command_with_after() -> None:
     """Test export command with --after flag"""
     cmd = format_export_command(
         token="test_token",
@@ -92,7 +92,7 @@ def test_format_export_command_with_after():
     assert "2025-01-15T14:00:00Z" in cmd
 
 
-def test_format_export_command_invalid_format():
+def test_format_export_command_invalid_format() -> None:
     """Test that invalid format_type raises ValueError"""
     with pytest.raises(ValueError, match="Invalid format_type"):
         format_export_command(
@@ -104,7 +104,7 @@ def test_format_export_command_invalid_format():
         )
 
 
-def test_format_export_command_invalid_channel_id():
+def test_format_export_command_invalid_channel_id() -> None:
     """Test that non-numeric channel_id raises ValueError"""
     with pytest.raises(ValueError, match="Invalid channel_id"):
         format_export_command(

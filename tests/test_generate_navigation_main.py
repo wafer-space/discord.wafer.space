@@ -8,8 +8,14 @@ import pytest
 
 from scripts.generate_navigation import main, organize_data
 
+# Test constants
+EXPECTED_ARCHIVE_COUNT_TWO = 2
+EXPECTED_ARCHIVE_COUNT_ONE = 1
+EXPECTED_MESSAGE_COUNT_FIVE = 5
 
-def test_organize_data_groups_by_server_and_channel():
+
+
+def test_organize_data_groups_by_server_and_channel() -> None:
     """Test that organize_data groups exports by server and channel"""
     exports = [
         {
@@ -60,14 +66,15 @@ def test_organize_data_groups_by_server_and_channel():
         assert "announcements" in servers_data["server2"]["channels"]
 
         # Verify archives
-        assert len(servers_data["server1"]["channels"]["general"]["archives"]) == 2
+        general_archives = servers_data["server1"]["channels"]["general"]["archives"]
+        assert len(general_archives) == EXPECTED_ARCHIVE_COUNT_TWO
         assert len(servers_data["server1"]["channels"]["chat"]["archives"]) == 1
 
         # Verify message counts
-        assert servers_data["server1"]["channels"]["general"]["archives"][0]["message_count"] == 5
+        assert general_archives[0]["message_count"] == EXPECTED_MESSAGE_COUNT_FIVE
 
 
-def test_organize_data_calculates_stats():
+def test_organize_data_calculates_stats() -> None:
     """Test that organize_data calculates channel and server stats"""
     exports = [
         {
@@ -98,13 +105,13 @@ def test_organize_data_calculates_stats():
         servers_data = organize_data(exports, public_dir)
 
         # Verify stats
-        assert servers_data["server1"]["channel_count"] == 2
+        assert servers_data["server1"]["channel_count"] == EXPECTED_ARCHIVE_COUNT_TWO
         assert "last_updated" in servers_data["server1"]
         assert servers_data["server1"]["channels"]["general"]["archive_count"] == 1
         assert servers_data["server1"]["channels"]["general"]["message_count"] == 1
 
 
-def test_organize_data_sorts_archives():
+def test_organize_data_sorts_archives() -> None:
     """Test that organize_data sorts archives reverse chronologically"""
     exports = [
         {
@@ -147,7 +154,7 @@ def test_organize_data_sorts_archives():
         assert archives[2]["date"] == "2025-01"
 
 
-def test_organize_data_handles_empty_exports():
+def test_organize_data_handles_empty_exports() -> None:
     """Test that organize_data handles empty exports list"""
     with tempfile.TemporaryDirectory() as tmpdir:
         public_dir = Path(tmpdir) / "public"
@@ -158,7 +165,7 @@ def test_organize_data_handles_empty_exports():
         assert servers_data == {}
 
 
-def test_organize_data_uses_display_names():
+def test_organize_data_uses_display_names() -> None:
     """Test that organize_data creates display names from server names"""
     exports = [
         {
@@ -184,7 +191,9 @@ def test_organize_data_uses_display_names():
         assert servers_data["wafer-space"]["display_name"] == "Wafer Space"
 
 
-def test_main_integration(monkeypatch, capsys):
+def test_main_integration(
+    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
     """Test main function integration (without actual file generation)"""
     with tempfile.TemporaryDirectory() as tmpdir:
         # Change to temp directory for testing
@@ -232,7 +241,9 @@ base_url = "https://test.example.com"
         assert "Generating site index" in captured.out
 
 
-def test_main_exits_if_no_public_directory(monkeypatch, capsys):
+def test_main_exits_if_no_public_directory(
+    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
     """Test that main exits gracefully if public/ doesn't exist"""
     with tempfile.TemporaryDirectory() as tmpdir:
         monkeypatch.chdir(tmpdir)
@@ -256,7 +267,9 @@ base_url = "https://test.com"
         assert "ERROR: public/ directory not found" in captured.out
 
 
-def test_main_handles_no_exports_gracefully(monkeypatch, capsys):
+def test_main_handles_no_exports_gracefully(
+    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
     """Test that main handles case with no exports gracefully"""
     with tempfile.TemporaryDirectory() as tmpdir:
         monkeypatch.chdir(tmpdir)
@@ -281,7 +294,9 @@ base_url = "https://test.com"
         assert "WARNING: No exports found" in captured.out
 
 
-def test_main_with_error_handling(monkeypatch, capsys):
+def test_main_with_error_handling(
+    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
     """Test that main handles errors with proper error messages"""
     with tempfile.TemporaryDirectory() as tmpdir:
         monkeypatch.chdir(tmpdir)

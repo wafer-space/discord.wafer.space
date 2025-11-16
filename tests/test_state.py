@@ -2,10 +2,10 @@ import json
 import tempfile
 from pathlib import Path
 
-from scripts.state import StateManager
+from scripts.state import StateManager, ThreadInfo
 
 
-def test_state_manager_creates_empty_state():
+def test_state_manager_creates_empty_state() -> None:
     """Test that StateManager creates empty state if file doesn't exist"""
     with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
         state_path = f.name
@@ -21,7 +21,7 @@ def test_state_manager_creates_empty_state():
         Path(state_path).unlink()
 
 
-def test_state_manager_loads_existing_state():
+def test_state_manager_loads_existing_state() -> None:
     """Test that StateManager loads existing state"""
     initial_state = {
         "wafer-space": {
@@ -40,7 +40,7 @@ def test_state_manager_loads_existing_state():
     Path(state_path).unlink()
 
 
-def test_state_manager_updates_channel_state():
+def test_state_manager_updates_channel_state() -> None:
     """Test updating state for a channel"""
     with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
         json.dump({}, f)  # Write empty JSON object
@@ -61,7 +61,7 @@ def test_state_manager_updates_channel_state():
     Path(state_path).unlink()
 
 
-def test_state_manager_saves_state():
+def test_state_manager_saves_state() -> None:
     """Test that state is persisted to disk"""
     with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
         json.dump({}, f)  # Write empty JSON object
@@ -80,7 +80,7 @@ def test_state_manager_saves_state():
     Path(state_path).unlink()
 
 
-def test_state_manager_updates_thread_state():
+def test_state_manager_updates_thread_state() -> None:
     """Test that thread state is updated correctly."""
     with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
         f.write("{}")
@@ -91,14 +91,17 @@ def test_state_manager_updates_thread_state():
         manager.load()
 
         # Update thread state
-        manager.update_thread_state(
-            server="test-server",
-            forum="questions",
+        thread_info = ThreadInfo(
             thread_id="123456",
             thread_name="how-to-start",
             thread_title="How to start?",
             last_message_id="999",
             archived=False,
+        )
+        manager.update_thread_state(
+            server="test-server",
+            forum="questions",
+            thread_info=thread_info,
         )
 
         # Verify thread state was saved
@@ -114,7 +117,7 @@ def test_state_manager_updates_thread_state():
         Path(state_file).unlink()
 
 
-def test_state_manager_gets_thread_state():
+def test_state_manager_gets_thread_state() -> None:
     """Test retrieving thread state."""
     with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
         state_data = {
@@ -142,14 +145,15 @@ def test_state_manager_gets_thread_state():
         manager.load()
         state = manager.get_thread_state("test-server", "questions", "123456")
 
-        assert state["name"] == "how-to-start"  # type: ignore[index]
-        assert state["title"] == "How to start?"  # type: ignore[index]
-        assert state["last_message_id"] == "999"  # type: ignore[index]
+        assert state is not None
+        assert state["name"] == "how-to-start"
+        assert state["title"] == "How to start?"
+        assert state["last_message_id"] == "999"
     finally:
         Path(state_file).unlink()
 
 
-def test_state_manager_thread_state_returns_none_if_missing():
+def test_state_manager_thread_state_returns_none_if_missing() -> None:
     """Test that get_thread_state returns None for non-existent threads."""
     with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
         f.write("{}")
@@ -165,7 +169,7 @@ def test_state_manager_thread_state_returns_none_if_missing():
         Path(state_file).unlink()
 
 
-def test_state_manager_updates_forum_index_timestamp():
+def test_state_manager_updates_forum_index_timestamp() -> None:
     """Test updating forum index update timestamp."""
     with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
         f.write("{}")

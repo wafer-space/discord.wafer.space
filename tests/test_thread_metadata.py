@@ -6,8 +6,12 @@ from pathlib import Path
 
 from scripts.thread_metadata import extract_thread_metadata
 
+# Test constants
+EXPECTED_REPLY_COUNT = 3
 
-def test_extract_thread_metadata_basic():
+
+
+def test_extract_thread_metadata_basic() -> None:
     """Test basic thread metadata extraction."""
     # Create temp JSON file with thread data
     thread_json = {
@@ -27,15 +31,16 @@ def test_extract_thread_metadata_basic():
     try:
         metadata = extract_thread_metadata(temp_path)
 
-        assert metadata["title"] == "How do I start?"  # type: ignore[index]
-        assert metadata["reply_count"] == 3  # type: ignore[index]
-        assert metadata["last_activity"] == "2025-11-10"  # type: ignore[index]
-        assert metadata["archived"] is False  # type: ignore[index]
+        assert metadata is not None
+        assert metadata["title"] == "How do I start?"
+        assert metadata["reply_count"] == EXPECTED_REPLY_COUNT
+        assert metadata["last_activity"] == "2025-11-10"
+        assert metadata["archived"] is False
     finally:
         temp_path.unlink()
 
 
-def test_extract_thread_metadata_empty_messages():
+def test_extract_thread_metadata_empty_messages() -> None:
     """Test metadata extraction with no messages."""
     thread_json = {"channel": {"name": "Empty Thread"}, "messages": []}
 
@@ -46,14 +51,15 @@ def test_extract_thread_metadata_empty_messages():
     try:
         metadata = extract_thread_metadata(temp_path)
 
-        assert metadata["title"] == "Empty Thread"  # type: ignore[index]
-        assert metadata["reply_count"] == 0  # type: ignore[index]
-        assert metadata["last_activity"] is None  # type: ignore[index]
+        assert metadata is not None
+        assert metadata["title"] == "Empty Thread"
+        assert metadata["reply_count"] == 0
+        assert metadata["last_activity"] is None
     finally:
         temp_path.unlink()
 
 
-def test_extract_thread_metadata_archived():
+def test_extract_thread_metadata_archived() -> None:
     """Test metadata extraction for archived thread."""
     # Thread with old messages (>6 months = archived)
     thread_json = {
@@ -68,19 +74,20 @@ def test_extract_thread_metadata_archived():
     try:
         metadata = extract_thread_metadata(temp_path)
 
-        assert metadata["archived"] is True  # type: ignore[index]
+        assert metadata is not None
+        assert metadata["archived"] is True
     finally:
         temp_path.unlink()
 
 
-def test_extract_thread_metadata_missing_file():
+def test_extract_thread_metadata_missing_file() -> None:
     """Test handling of missing JSON file."""
     result = extract_thread_metadata(Path("/nonexistent/file.json"))
 
     assert result is None
 
 
-def test_extract_thread_metadata_invalid_json():
+def test_extract_thread_metadata_invalid_json() -> None:
     """Test handling of invalid JSON."""
     with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
         f.write("not valid json {")

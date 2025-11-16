@@ -10,6 +10,7 @@ import shutil
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Any
 
 
 def get_current_month() -> str:
@@ -21,7 +22,209 @@ def get_current_month() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m")
 
 
-def organize_exports(exports_dir: Path = None, public_dir: Path = None) -> dict[str, int]:  # type: ignore[assignment]
+def _update_latest_symlink(target_dir: Path, extension: str, current_month: str) -> None:
+    """Create or update 'latest' symlink to current month's file.
+
+    Args:
+        target_dir: Directory containing the symlink
+        extension: File extension (e.g., '.html')
+        current_month: Current month string (YYYY-MM)
+    """
+    latest_link = target_dir / f"latest{extension}"
+    if latest_link.exists() or latest_link.is_symlink():
+        latest_link.unlink()
+    latest_link.symlink_to(f"{current_month}/{current_month}{extension}")
+
+
+def _copy_to_month_directory(
+    source_file: Path, target_dir: Path, current_month: str
+) -> tuple[Path, bool]:
+    """Copy file to month-based directory structure.
+
+    Args:
+        source_file: Source file to copy
+        target_dir: Target directory (channel or thread dir)
+        current_month: Current month string (YYYY-MM)
+
+    Returns:
+        Tuple of (destination_path, success)
+    """
+    extension = source_file.suffix
+    month_dir = target_dir / current_month
+    month_dir.mkdir(parents=True, exist_ok=True)
+
+    dest_file = month_dir / f"{current_month}{extension}"
+    try:
+        shutil.copy2(source_file, dest_file)
+        _update_latest_symlink(target_dir, extension, current_month)
+        return dest_file, True
+    except Exception:
+        return dest_file, False
+
+
+def _organize_thread_file(
+    thread_file: Path,
+    forum_name: str,
+    public_forum_dir: Path,
+    server_context: tuple[str, str, Path],  # (server_name, current_month, public_dir)
+) -> tuple[str | None, str | None]:
+    """Organize a single thread file.
+
+    Args:
+        thread_file: Thread file to organize
+        forum_name: Forum name
+        public_forum_dir: Public directory for forum
+        server_context: Tuple of (server_name, current_month, public_dir)
+
+    Returns:
+        Tuple of (channel_key, error_msg) - one will be None
+    """
+    server_name, current_month, public_dir = server_context
+    thread_name = thread_file.stem
+    extension = thread_file.suffix
+
+    # Skip non-export files
+    if extension not in [".html", ".txt", ".json", ".csv"]:
+        return None, None
+
+    public_thread_dir = public_forum_dir / thread_name
+    dest_file, success = _copy_to_month_directory(thread_file, public_thread_dir, current_month)
+
+    if success:
+        channel_key = f"{server_name}/{forum_name}/{thread_name}"
+        rel_path = dest_file.relative_to(public_dir)
+        print(f"  ✓ {forum_name}/{thread_name}{extension} → {rel_path}")
+        return channel_key, None
+    else:
+        return None, f"Failed to organize {thread_file.name}"
+
+
+def _organize_channel_file(
+    channel_file: Path,
+    public_server: Path,
+    current_month: str,
+    server_name: str,
+    public_dir: Path,
+) -> tuple[str | None, str | None]:
+    """Organize a single channel file.
+
+    Args:
+        channel_file: Channel file to organize
+        public_server: Public directory for server
+        current_month: Current month string
+        server_name: Server name
+        public_dir: Public root directory
+
+    Returns:
+        Tuple of (channel_key, error_msg) - one will be None
+    """
+    channel_name = channel_file.stem
+    ext = channel_file.suffix
+
+    # Skip non-export files
+    if ext not in [".html", ".txt", ".json", ".csv"]:
+        print(f"  ⚠ Skipping {channel_file.name} (unsupported format)")
+        return None, None
+
+    channel_dir = public_server / channel_name
+    dest_file, success = _copy_to_month_directory(channel_file, channel_dir, current_month)
+
+    if success:
+        channel_key = f"{server_name}/{channel_name}"
+        print(f"  ✓ {channel_name}{ext} → {dest_file.relative_to(public_dir)}")
+        return channel_key, None
+    else:
+        return None, f"Failed to organize {channel_file.name}"
+
+
+def _process_forum_directory(
+    forum_dir: Path,
+    server_context: tuple[str, Path, str, Path],
+) -> tuple[list[str], list[str], int]:
+    """Process all threads in a forum directory.
+
+    Args:
+        forum_dir: Forum directory path
+        server_context: Tuple of (server_name, public_server, current_month, public_dir)
+
+    Returns:
+        Tuple of (channel_keys, errors, files_organized_count)
+    """
+    server_name, public_server, current_month, public_dir = server_context
+    forum_name = forum_dir.name
+    public_forum_dir = public_server / forum_name
+    public_forum_dir.mkdir(parents=True, exist_ok=True)
+
+    channel_keys: list[str] = []
+    errors: list[str] = []
+    files_count = 0
+
+    thread_context = (server_name, current_month, public_dir)
+
+    for thread_file in forum_dir.iterdir():
+        if not thread_file.is_file():
+            continue
+
+        channel_key, error = _organize_thread_file(
+            thread_file, forum_name, public_forum_dir, thread_context
+        )
+
+        if channel_key:
+            channel_keys.append(channel_key)
+            files_count += 1
+        elif error:
+            errors.append(error)
+
+    return channel_keys, errors, files_count
+
+
+def _process_server_directory(
+    server_dir: Path,
+    public_dir: Path,
+    current_month: str,
+) -> tuple[set[str], int, list[str]]:
+    """Process all channels and forums in a server directory.
+
+    Args:
+        server_dir: Server export directory
+        public_dir: Public root directory
+        current_month: Current month string
+
+    Returns:
+        Tuple of (channels_seen, files_organized, errors)
+    """
+    server_name = server_dir.name
+    public_server = public_dir / server_name
+    channels_seen: set[str] = set()
+    files_organized = 0
+    errors: list[str] = []
+
+    server_context = (server_name, public_server, current_month, public_dir)
+
+    for item in server_dir.iterdir():
+        if item.is_dir():
+            # Forum directory - process threads
+            keys, item_errors, files_count = _process_forum_directory(item, server_context)
+            channels_seen.update(keys)
+            files_organized += files_count
+            errors.extend(item_errors)
+        elif item.is_file():
+            # Regular channel file
+            channel_key, error = _organize_channel_file(
+                item, public_server, current_month, server_name, public_dir
+            )
+            if channel_key:
+                channels_seen.add(channel_key)
+                files_organized += 1
+            elif error:
+                errors.append(error)
+
+    return channels_seen, files_organized, errors
+
+
+def organize_exports(
+    exports_dir: Path | None = None, public_dir: Path | None = None
+) -> dict[str, Any]:
     """Move exports from exports/ to public/ with date-based organization.
 
     Handles both regular channels and forum/thread structure:
@@ -57,7 +260,7 @@ def organize_exports(exports_dir: Path = None, public_dir: Path = None) -> dict[
     # Create public directory if it doesn't exist
     public_dir.mkdir(exist_ok=True)
 
-    stats = {"files_organized": 0, "channels_processed": 0, "errors": []}
+    stats: dict[str, Any] = {"files_organized": 0, "channels_processed": 0, "errors": []}
 
     current_month = get_current_month()
     channels_seen = set()
@@ -67,103 +270,22 @@ def organize_exports(exports_dir: Path = None, public_dir: Path = None) -> dict[
         if not server_dir.is_dir():
             continue
 
-        server_name = server_dir.name
-        public_server = public_dir / server_name
+        print(f"Organizing {server_dir.name}...")
 
-        print(f"Organizing {server_name}...")
+        server_channels, server_files, server_errors = _process_server_directory(
+            server_dir, public_dir, current_month
+        )
 
-        # Process all items in server directory
-        for item in server_dir.iterdir():
-            # Check if it's a forum directory (contains multiple files, no parent channel)
-            if item.is_dir():
-                # Forum directory - process threads
-                forum_name = item.name
-                public_forum_dir = public_server / forum_name
-                public_forum_dir.mkdir(parents=True, exist_ok=True)
-
-                # Process each thread in forum
-                for thread_file in item.iterdir():
-                    if thread_file.is_file():
-                        thread_name = thread_file.stem  # filename without extension
-                        extension = thread_file.suffix
-
-                        # Skip non-export files
-                        if extension not in [".html", ".txt", ".json", ".csv"]:
-                            continue
-
-                        try:
-                            # Create thread directory
-                            public_thread_dir = public_forum_dir / thread_name
-                            month_dir = public_thread_dir / current_month
-                            month_dir.mkdir(parents=True, exist_ok=True)
-
-                            # Copy file to month directory
-                            dest_file = month_dir / f"{current_month}{extension}"
-                            shutil.copy2(thread_file, dest_file)
-                            stats["files_organized"] += 1  # type: ignore[operator]
-
-                            # Create/update latest symlink
-                            latest_link = public_thread_dir / f"latest{extension}"
-                            if latest_link.exists() or latest_link.is_symlink():
-                                latest_link.unlink()
-                            latest_link.symlink_to(f"{current_month}/{current_month}{extension}")
-
-                            # Track unique channels
-                            channel_key = f"{server_name}/{forum_name}/{thread_name}"
-                            channels_seen.add(channel_key)
-
-                            print(
-                                f"  ✓ {forum_name}/{thread_name}{extension} → {dest_file.relative_to(public_dir)}"
-                            )
-
-                        except Exception as e:
-                            error_msg = f"Failed to organize {thread_file.name}: {str(e)}"
-                            stats["errors"].append(error_msg)  # type: ignore[attr-defined]
-                            print(f"  ✗ {error_msg}")
-
-            elif item.is_file():
-                # Regular channel file
-                try:
-                    channel_name = item.stem
-                    ext = item.suffix
-
-                    # Skip non-export files
-                    if ext not in [".html", ".txt", ".json", ".csv"]:
-                        print(f"  ⚠ Skipping {item.name} (unsupported format)")
-                        continue
-
-                    # Create channel directory structure
-                    channel_dir = public_server / channel_name
-                    month_dir = channel_dir / current_month
-                    month_dir.mkdir(parents=True, exist_ok=True)
-
-                    # Copy file to month directory
-                    dest_file = month_dir / f"{current_month}{ext}"
-                    shutil.copy2(item, dest_file)
-                    stats["files_organized"] += 1  # type: ignore[operator]
-
-                    # Create/update latest symlink
-                    latest_link = channel_dir / f"latest{ext}"
-                    if latest_link.exists() or latest_link.is_symlink():
-                        latest_link.unlink()
-                    latest_link.symlink_to(f"{current_month}/{current_month}{ext}")
-
-                    # Track unique channels
-                    channel_key = f"{server_name}/{channel_name}"
-                    channels_seen.add(channel_key)
-
-                    print(f"  ✓ {channel_name}{ext} → {dest_file.relative_to(public_dir)}")
-
-                except Exception as e:
-                    error_msg = f"Failed to organize {item.name}: {str(e)}"
-                    stats["errors"].append(error_msg)  # type: ignore[attr-defined]
-                    print(f"  ✗ {error_msg}")
+        channels_seen.update(server_channels)
+        stats["files_organized"] += server_files
+        for error in server_errors:
+            stats["errors"].append(error)
+            print(f"  ✗ {error}")
 
     stats["channels_processed"] = len(channels_seen)
-    return stats  # type: ignore[return-value]
+    return stats
 
-
-def cleanup_exports(exports_dir: Path = None) -> None:  # type: ignore[assignment]
+def cleanup_exports(exports_dir: Path | None = None) -> None:
     """Remove organized files from exports directory.
 
     CAUTION: Only call this after successful organization!
@@ -188,7 +310,7 @@ def cleanup_exports(exports_dir: Path = None) -> None:  # type: ignore[assignmen
                 server_dir.rmdir()
 
 
-def main():
+def main() -> None:
     """Entry point for organize script."""
     print("Discord Export Organizer")
     print("=" * 50)
@@ -204,8 +326,8 @@ def main():
         print(f"  Channels processed: {stats['channels_processed']}")
 
         if stats["errors"]:
-            print(f"\nErrors ({len(stats['errors'])}):")  # type: ignore[arg-type]
-            for error in stats["errors"][:5]:  # type: ignore[index]  # Show first 5
+            print(f"\nErrors ({len(stats['errors'])}):")
+            for error in stats["errors"][:5]:  # Show first 5
                 print(f"  - {error}")
 
         # Optional: Cleanup exports directory

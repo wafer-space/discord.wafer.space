@@ -3,6 +3,11 @@
 
 from enum import Enum
 
+# Constants
+MIN_NAME_LENGTH = 3
+MAX_THREAD_NAME_LENGTH = 100
+
+
 
 class ChannelType(Enum):
     """Channel type enumeration."""
@@ -13,7 +18,9 @@ class ChannelType(Enum):
 
 
 def classify_channel(
-    channel: dict[str, str], forum_list: list[str], all_channels: list[dict[str, str]]
+    channel: dict[str, str | None],
+    forum_list: list[str],
+    all_channels: list[dict[str, str | None]],
 ) -> ChannelType:
     """Classify a channel as regular, forum, or thread.
 
@@ -56,7 +63,7 @@ def get_forum_name(channel: dict[str, str]) -> str:
     return channel.get("parent_id", "")
 
 
-def sanitize_thread_name(title: str, thread_id: str = None) -> str:  # type: ignore[assignment]
+def sanitize_thread_name(title: str, thread_id: str | None = None) -> str:
     """Sanitize thread title into safe filename.
 
     Args:
@@ -84,10 +91,10 @@ def sanitize_thread_name(title: str, thread_id: str = None) -> str:  # type: ign
     name = name.strip("-")
 
     # Truncate to 100 characters
-    name = name[:100]
+    name = name[:MAX_THREAD_NAME_LENGTH]
 
     # If empty or too short, use thread ID
-    if len(name) < 3 and thread_id:
+    if len(name) < MIN_NAME_LENGTH and thread_id:
         name = f"thread-{thread_id}"
 
     return name

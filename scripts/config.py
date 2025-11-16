@@ -2,11 +2,12 @@
 """Configuration management for discord-wafer-space."""
 
 from pathlib import Path
+from typing import Any, cast
 
 import toml
 
 
-def load_config(config_path: str = "config.toml") -> dict:
+def load_config(config_path: str = "config.toml") -> dict[str, Any]:
     """Load configuration from TOML file.
 
     Args:
@@ -26,4 +27,4 @@ def load_config(config_path: str = "config.toml") -> dict:
     with open(path) as f:
         config = toml.load(f)
 
-    return config  # type: ignore[no-any-return]
+    return cast("dict[str, Any]", config)
