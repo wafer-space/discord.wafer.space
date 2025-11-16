@@ -3,7 +3,12 @@ import os
 
 import pytest
 
-from scripts.export_channels import format_export_command, get_bot_token, should_include_channel
+from scripts.export_channels import (
+    MediaConfig,
+    format_export_command,
+    get_bot_token,
+    should_include_channel,
+)
 
 
 def test_get_bot_token_from_env() -> None:
@@ -114,3 +119,63 @@ def test_format_export_command_invalid_channel_id() -> None:
             format_type="HtmlDark",
             after_timestamp=None,
         )
+
+
+def test_format_export_command_with_media_download() -> None:
+    """Test export command with media download enabled"""
+    media_config = MediaConfig(
+        download_media=True,
+        media_dir="public/assets/media",
+    )
+
+    cmd = format_export_command(
+        token="test_token",
+        channel_id="123456",
+        output_path="exports/test.html",
+        format_type="HtmlDark",
+        after_timestamp=None,
+        media_config=media_config,
+    )
+
+    assert "--media" in cmd
+    assert "--media-dir" in cmd
+    assert "public/assets/media" in cmd
+
+
+def test_format_export_command_with_media_reuse() -> None:
+    """Test export command with media reuse enabled"""
+    media_config = MediaConfig(
+        download_media=True,
+        media_dir="public/assets/media",
+        reuse_media=True,
+    )
+
+    cmd = format_export_command(
+        token="test_token",
+        channel_id="123456",
+        output_path="exports/test.html",
+        format_type="HtmlDark",
+        after_timestamp=None,
+        media_config=media_config,
+    )
+
+    assert "--media" in cmd
+    assert "--reuse-media" in cmd
+    assert "--media-dir" in cmd
+
+
+def test_format_export_command_without_media() -> None:
+    """Test export command without media download"""
+    media_config = MediaConfig(download_media=False)
+
+    cmd = format_export_command(
+        token="test_token",
+        channel_id="123456",
+        output_path="exports/test.html",
+        format_type="HtmlDark",
+        after_timestamp=None,
+        media_config=media_config,
+    )
+
+    assert "--media" not in cmd
+    assert "--media-dir" not in cmd

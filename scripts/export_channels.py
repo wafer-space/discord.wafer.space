@@ -39,6 +39,15 @@ class ChannelInfo:
     forum_name: str
 
 
+@dataclass
+class MediaConfig:
+    """Configuration for media download."""
+
+    download_media: bool = False
+    media_dir: str | None = None
+    reuse_media: bool = False
+
+
 def _determine_export_location(
     channel: dict[str, str | None],
     channel_type: ChannelType,
@@ -132,12 +141,20 @@ def _export_channel_formats(
     for fmt in context.config["export"]["formats"]:
         output_path = export_dir / f"{export_name}.{fmt}"
 
+        # Create media config from export settings
+        media_config = MediaConfig(
+            download_media=context.config["export"].get("download_media", False),
+            media_dir=context.config["export"].get("media_dir"),
+            reuse_media=context.config["export"].get("reuse_media", False),
+        )
+
         cmd = format_export_command(
             token=context.token,
             channel_id=channel_info.channel_id,
             output_path=str(output_path),
             format_type=format_map[fmt],
             after_timestamp=after_timestamp,
+            media_config=media_config,
         )
 
         success, output = run_export(cmd)
@@ -310,12 +327,13 @@ def should_include_channel(
     return False
 
 
-def format_export_command(
+def format_export_command(  # noqa: PLR0913
     token: str,
     channel_id: str,
     output_path: str,
     format_type: str,
     after_timestamp: str | None = None,
+    media_config: MediaConfig | None = None,
 ) -> list[str]:
     """Format DiscordChatExporter CLI command.
 
@@ -325,6 +343,7 @@ def format_export_command(
         output_path: Output file path
         format_type: Export format (HtmlDark, HtmlLight, PlainText, Json, Csv)
         after_timestamp: Optional timestamp for incremental export
+        media_config: Media download configuration
 
     Returns:
         Command as list of arguments
@@ -359,6 +378,16 @@ def format_export_command(
 
     if after_timestamp:
         cmd.extend(["--after", after_timestamp])
+
+    # Add media download flags if enabled
+    if media_config and media_config.download_media:
+        cmd.append("--media")
+
+        if media_config.media_dir:
+            cmd.extend(["--media-dir", media_config.media_dir])
+
+        if media_config.reuse_media:
+            cmd.append("--reuse-media")
 
     return cmd
 
@@ -516,6 +545,13 @@ def export_all_channels() -> dict[str, Any]:
     # Create exports directory
     exports_dir = Path("exports")
     exports_dir.mkdir(exist_ok=True)
+
+    # Create media directory if media download is enabled
+    if config["export"].get("download_media", False):
+        media_dir = config["export"].get("media_dir")
+        if media_dir:
+            Path(media_dir).mkdir(parents=True, exist_ok=True)
+            print(f"Media downloads enabled - storing in {media_dir}")
 
     print("\nStarting exports...")
 
