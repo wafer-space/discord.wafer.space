@@ -8,7 +8,7 @@ import sys
 
 def test_bot_token():
     """Test if bot token is set and can access Discord."""
-    token = os.environ.get('DISCORD_BOT_TOKEN')
+    token = os.environ.get("DISCORD_BOT_TOKEN")
 
     if not token:
         print("❌ ERROR: DISCORD_BOT_TOKEN environment variable not set")
@@ -19,9 +19,11 @@ def test_bot_token():
     print(f"✓ Bot token found (length: {len(token)})")
 
     # Test token format
-    parts = token.split('.')
+    parts = token.split(".")
     if len(parts) != 3:
-        print(f"❌ ERROR: Token format incorrect. Expected 3 parts separated by '.', got {len(parts)}")
+        print(
+            f"❌ ERROR: Token format incorrect. Expected 3 parts separated by '.', got {len(parts)}"
+        )
         print("   Format should be: base64.hmac.signature")
         return False
 
@@ -31,10 +33,10 @@ def test_bot_token():
     print("\nTesting Discord API access...")
     try:
         result = subprocess.run(
-            ['bin/discord-exporter/DiscordChatExporter.Cli', 'guilds', '-t', token],
+            ["bin/discord-exporter/DiscordChatExporter.Cli", "guilds", "-t", token],
             capture_output=True,
             text=True,
-            timeout=30
+            timeout=30,
         )
 
         if result.returncode != 0:
@@ -43,7 +45,7 @@ def test_bot_token():
             print(f"Error: {result.stderr}")
             return False
 
-        guilds = [line for line in result.stdout.strip().split('\n') if line.strip()]
+        guilds = [line for line in result.stdout.strip().split("\n") if line.strip()]
         print("✓ Successfully accessed Discord API")
         print(f"\nFound {len(guilds)} servers:")
         for guild in guilds:
@@ -58,17 +60,25 @@ def test_bot_token():
         print(f"❌ ERROR: {e}")
         return False
 
+
 def test_server_access(guild_id):
     """Test if bot can access specific server."""
-    token = os.environ.get('DISCORD_BOT_TOKEN')
+    token = os.environ.get("DISCORD_BOT_TOKEN")
 
     print(f"\nTesting access to server {guild_id}...")
     try:
         result = subprocess.run(
-            ['bin/discord-exporter/DiscordChatExporter.Cli', 'channels', '-t', token, '-g', guild_id],
+            [
+                "bin/discord-exporter/DiscordChatExporter.Cli",
+                "channels",
+                "-t",
+                token,
+                "-g",
+                guild_id,
+            ],
             capture_output=True,
             text=True,
-            timeout=30
+            timeout=30,
         )
 
         if result.returncode != 0:
@@ -81,7 +91,7 @@ def test_server_access(guild_id):
             print("  3. Server ID is incorrect")
             return False
 
-        channels = [line for line in result.stdout.strip().split('\n') if line.strip()]
+        channels = [line for line in result.stdout.strip().split("\n") if line.strip()]
         print("✓ Successfully accessed server")
         print(f"\nFound {len(channels)} channels:")
         for channel in channels[:10]:  # Show first 10
@@ -94,6 +104,7 @@ def test_server_access(guild_id):
     except Exception as e:
         print(f"❌ ERROR: {e}")
         return False
+
 
 def main():
     """Run all diagnostics."""
@@ -122,6 +133,7 @@ def main():
     print("\n" + "=" * 60)
     print("✓ ALL TESTS PASSED")
     print("\nYour bot is properly configured and can access the server!")
+
 
 if __name__ == "__main__":
     main()

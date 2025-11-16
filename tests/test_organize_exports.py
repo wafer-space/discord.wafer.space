@@ -12,9 +12,9 @@ def test_get_current_month():
     result = get_current_month()
     # Should match YYYY-MM pattern
     assert len(result) == 7
-    assert result[4] == '-'
+    assert result[4] == "-"
     # Should be valid date
-    year, month = result.split('-')
+    year, month = result.split("-")
     assert year.isdigit() and len(year) == 4
     assert month.isdigit() and 1 <= int(month) <= 12
 
@@ -38,9 +38,9 @@ def test_organize_exports_creates_directory_structure():
         stats = organize_exports(exports, public)
 
         # Check statistics
-        assert stats['files_organized'] == 4
-        assert stats['channels_processed'] == 1
-        assert len(stats['errors']) == 0
+        assert stats["files_organized"] == 4
+        assert stats["channels_processed"] == 1
+        assert len(stats["errors"]) == 0
 
         # Check directory structure (now with month subdirectories)
         current_month = get_current_month()
@@ -101,8 +101,8 @@ def test_organize_exports_multiple_servers():
         stats = organize_exports(exports, public)
 
         # Check statistics
-        assert stats['files_organized'] == 3
-        assert stats['channels_processed'] == 3  # 2 from server1, 1 from server2
+        assert stats["files_organized"] == 3
+        assert stats["channels_processed"] == 3  # 2 from server1, 1 from server2
 
         # Check both servers exist in public
         assert (public / "server-one").exists()
@@ -186,8 +186,8 @@ def test_organize_exports_skips_invalid_extensions():
         stats = organize_exports(exports, public)
 
         # Should only organize the html file
-        assert stats['files_organized'] == 1
-        assert stats['channels_processed'] == 1
+        assert stats["files_organized"] == 1
+        assert stats["channels_processed"] == 1
 
 
 def test_organize_exports_handles_errors_gracefully():
@@ -207,8 +207,8 @@ def test_organize_exports_handles_errors_gracefully():
         # This test verifies the error handling structure exists.
 
         stats = organize_exports(exports, public)
-        assert 'errors' in stats
-        assert isinstance(stats['errors'], list)
+        assert "errors" in stats
+        assert isinstance(stats["errors"], list)
 
 
 def test_cleanup_exports_removes_organized_files():
@@ -301,8 +301,22 @@ def test_organize_exports_handles_forum_structure():
         # Should organize files by month
         current_month = get_current_month()
         assert (public / "test-server" / "questions" / "how-to-start" / current_month).exists()
-        assert (public / "test-server" / "questions" / "how-to-start" / current_month / f"{current_month}.html").exists()
-        assert (public / "test-server" / "questions" / "how-to-start" / current_month / f"{current_month}.json").exists()
+        assert (
+            public
+            / "test-server"
+            / "questions"
+            / "how-to-start"
+            / current_month
+            / f"{current_month}.html"
+        ).exists()
+        assert (
+            public
+            / "test-server"
+            / "questions"
+            / "how-to-start"
+            / current_month
+            / f"{current_month}.json"
+        ).exists()
 
 
 def test_organize_exports_mixed_regular_and_forum():
@@ -327,5 +341,14 @@ def test_organize_exports_mixed_regular_and_forum():
 
         # Should have both regular and forum (both in month subdirectories)
         current_month = get_current_month()
-        assert (public / "test-server" / "general" / current_month / f"{current_month}.html").exists()
-        assert (public / "test-server" / "questions" / "thread-1" / current_month / f"{current_month}.html").exists()
+        assert (
+            public / "test-server" / "general" / current_month / f"{current_month}.html"
+        ).exists()
+        assert (
+            public
+            / "test-server"
+            / "questions"
+            / "thread-1"
+            / current_month
+            / f"{current_month}.html"
+        ).exists()

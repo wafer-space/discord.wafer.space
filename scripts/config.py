@@ -1,5 +1,6 @@
 # scripts/config.py
 """Configuration management for discord-wafer-space."""
+
 from pathlib import Path
 
 import toml
