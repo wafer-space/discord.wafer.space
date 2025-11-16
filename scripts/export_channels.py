@@ -142,9 +142,14 @@ def _export_channel_formats(
         output_path = export_dir / f"{export_name}.{fmt}"
 
         # Create media config from export settings
+        # Store media alongside each channel: export_dir/channel_name_media/
+        media_dir = None
+        if context.config["export"].get("download_media", False):
+            media_dir = str(export_dir / f"{export_name}_media")
+
         media_config = MediaConfig(
             download_media=context.config["export"].get("download_media", False),
-            media_dir=context.config["export"].get("media_dir"),
+            media_dir=media_dir,
             reuse_media=context.config["export"].get("reuse_media", False),
         )
 
@@ -546,12 +551,9 @@ def export_all_channels() -> dict[str, Any]:
     exports_dir = Path("exports")
     exports_dir.mkdir(exist_ok=True)
 
-    # Create media directory if media download is enabled
+    # Media downloads enabled - assets stored per-channel in {channel_name}_media/
     if config["export"].get("download_media", False):
-        media_dir = config["export"].get("media_dir")
-        if media_dir:
-            Path(media_dir).mkdir(parents=True, exist_ok=True)
-            print(f"Media downloads enabled - storing in {media_dir}")
+        print("Media downloads enabled - assets will be stored per-channel")
 
     print("\nStarting exports...")
 
