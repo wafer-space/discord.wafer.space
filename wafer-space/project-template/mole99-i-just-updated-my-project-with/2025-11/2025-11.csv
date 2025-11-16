@@ -5,7 +5,7 @@ For now, the best way forward with GPL is to set `PL_TIME_DRIVEN: False`.
 
 Could you post your STA error? Even better if you could share your repository with the latest changes. Is it still https://github.com/AvalonSemiconductors/ws-submission-2025?","",""
 "220639106915368960","tholin","2025-10-17T07:42:50.4170000+00:00","I updated the repo","",""
-"220639106915368960","tholin","2025-10-17T07:44:47.6120000+00:00","","https://cdn.discordapp.com/attachments/1428383834310705192/1428649935066234900/image.png?ex=691b7b2f&is=691a29af&hm=1d14306eb7b433f132c1a3c103ee3954d8079174027fccd2c2f91cfaf15bd13f&",""
+"220639106915368960","tholin","2025-10-17T07:44:47.6120000+00:00","","/home/runner/work/discord.wafer.space/discord.wafer.space/public/assets/media/image-73A55.png",""
 "323371864074485771","mole99","2025-10-17T08:35:32.6040000+00:00","Thanks for uploading the changes to your repo. I was able to reproduce the failure and trace it back to my latest changes to the `pdk_compat` code in LibreLane. `pdk_compat` migrates old PDK variables to newer formats, however, for gf180mcu a number of variables were simply overwritten instead of checking whether they already existed. This makes it impossible to update the PDK variables to the newer format.
 Therefore, I added some logic that checks whether the new variables already exist before setting their values.
 
@@ -54,7 +54,7 @@ CLOCK_NET: clk_pad/Y
 ```
 
 in librelane/config.yaml","",""
-"220639106915368960","tholin","2025-10-17T08:37:12.4790000+00:00","No, I have it. Did it not end up in the commit?","https://cdn.discordapp.com/attachments/1428383834310705192/1428663125598670909/image.png?ex=691b8778&is=691a35f8&hm=48a42f8a47ee1dd8d2d9be48a714c6f1ec05abf1af0d89ba525f0dd7407f9c9d&",""
+"220639106915368960","tholin","2025-10-17T08:37:12.4790000+00:00","No, I have it. Did it not end up in the commit?","/home/runner/work/discord.wafer.space/discord.wafer.space/public/assets/media/image-D5879.png",""
 "323371864074485771","mole99","2025-10-17T08:37:54.1590000+00:00","All good! I missed it while looking at the diff in GitHub.","",""
 "323371864074485771","mole99","2025-10-17T08:39:21.8850000+00:00","Regarding `SYNTH_STRATEGY`, from the LibreLane docs: ""Please note that there is no way to know which strategy is the best before trying them.""
 So it really depends on the design you implement.","",""
