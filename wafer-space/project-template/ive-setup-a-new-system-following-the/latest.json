@@ -1,0 +1,437 @@
+{
+  "guild": {
+    "id": "1361349522684510449",
+    "name": "wafer.space Community",
+    "iconUrl": "https://cdn.discordapp.com/icons/1361349522684510449/fb143eaa45770cbb40493d09b625e98b.png?size=512"
+  },
+  "channel": {
+    "id": "1435507284083216394",
+    "type": "GuildPublicThread",
+    "categoryId": "1423348662318272592",
+    "category": "project-template",
+    "name": "I've setup a new system following the",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-11-16T08:09:17.128015+00:00",
+  "messages": [
+    {
+      "id": "1435533621879636008",
+      "type": "21",
+      "timestamp": "2025-11-05T07:38:06.381+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "274535015969456128",
+          "name": "greg.hashtag.9468",
+          "discriminator": "0000",
+          "nickname": "Greg",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/274535015969456128/fb1d1a9872c8ef9ce08855c75f2963a7.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1435507284083216394",
+        "channelId": "1423348662318272592",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435533626405031936",
+      "type": "Default",
+      "timestamp": "2025-11-05T07:38:07.46+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi @Greg, the KLayout DRC errors are expected and need to be fixed on our side.\n\n- DPF.4 and DCF.4 relate to dummy fill.\n- NW.2b_MV relates to min. nwell spacing and is triggered by some of the I/O and the SRAM. I think this is a faulty rule implementation.\n- DF.12 relates to the seal ring. It seems that the rule implementation might be missing a marker layer.\n\nI plan to take a closer look at these issues throughout today.\n\nCap/slew warnings are not ideal, but can be mostly ignored. They might lead to higher power consumption due to higher crossbar currents. Unfortunately, OpenROAD does not fix all of them. They could be further reduced by ECOs.\n\nThe setup violations are due to the design and the selected clock period. The example design (counter) is simply too small for this large of a core area. If your design is larger, OpenROAD will place the standard cells to distribute the wire delays more effectively. You might also need to tweak the target clock period.\n\nI will also soon update the example design to demonstrate how to properly instantiate SRAM macros and get them through the complete flow.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "274535015969456128",
+          "name": "greg.hashtag.9468",
+          "discriminator": "0000",
+          "nickname": "Greg",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/274535015969456128/fb1d1a9872c8ef9ce08855c75f2963a7.png?size=512"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435543076188979212",
+      "type": "Default",
+      "timestamp": "2025-11-05T08:15:40.464+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks! that all makes sense, I'll continue to merge my design into this template and track your upstream changes as needed. \uD83D\uDC4D",
+      "author": {
+        "id": "274535015969456128",
+        "name": "greg.hashtag.9468",
+        "discriminator": "0000",
+        "nickname": "Greg",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/274535015969456128/fb1d1a9872c8ef9ce08855c75f2963a7.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83D\uDC4D",
+          "code": "thumbsup",
+          "isAnimated": false,
+          "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+        }
+      ]
+    },
+    {
+      "id": "1435557561511186472",
+      "type": "Default",
+      "timestamp": "2025-11-05T09:13:14.034+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Perfect! Looking forward to more feedback \uD83D\uDC4D",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83D\uDC4D",
+          "code": "thumbsup",
+          "isAnimated": false,
+          "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+        }
+      ]
+    },
+    {
+      "id": "1435794261885980734",
+      "type": "Default",
+      "timestamp": "2025-11-06T00:53:47.801+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Greg - Did you have any success?",
+      "author": {
+        "id": "169786952432746498",
+        "name": "mithro_",
+        "discriminator": "0000",
+        "nickname": "Tim 'mithro' Ansell",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/169786952432746498/9679bb77da48d47c905b398d98a83780.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "274535015969456128",
+          "name": "greg.hashtag.9468",
+          "discriminator": "0000",
+          "nickname": "Greg",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/274535015969456128/fb1d1a9872c8ef9ce08855c75f2963a7.png?size=512"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435808646096490527",
+      "type": "Default",
+      "timestamp": "2025-11-06T01:50:57.264+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The flow from the template completed.\nOlof has done a new small wrapper since I did the GF180MPW1 serv project, so I'll combine that and the SRAM macro over the weekend.",
+      "author": {
+        "id": "274535015969456128",
+        "name": "greg.hashtag.9468",
+        "discriminator": "0000",
+        "nickname": "Greg",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/274535015969456128/fb1d1a9872c8ef9ce08855c75f2963a7.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435940681246969856",
+      "type": "Default",
+      "timestamp": "2025-11-06T10:35:36.897+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Greg The issues you mentioned are now fixed in the project template. The template has also been updated to include two SRAM macros, so it should be straightforward to add more.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "274535015969456128",
+              "name": "greg.hashtag.9468",
+              "discriminator": "0000",
+              "nickname": "Greg",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/274535015969456128/fb1d1a9872c8ef9ce08855c75f2963a7.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "274535015969456128",
+          "name": "greg.hashtag.9468",
+          "discriminator": "0000",
+          "nickname": "Greg",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/274535015969456128/fb1d1a9872c8ef9ce08855c75f2963a7.png?size=512"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1436311236303257725",
+      "type": "Default",
+      "timestamp": "2025-11-07T11:08:04.107+00:00",
+      "timestampEdited": "2025-11-07T11:19:37.505+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Working for me \uD83D\uDC4D  Just need a way to get data into the SRAM. A memory mapped SPI would work pretty well I think",
+      "author": {
+        "id": "274535015969456128",
+        "name": "greg.hashtag.9468",
+        "discriminator": "0000",
+        "nickname": "Greg",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/274535015969456128/fb1d1a9872c8ef9ce08855c75f2963a7.png?size=512"
+      },
+      "attachments": [
+        {
+          "id": "1436311236185948180",
+          "url": "https://cdn.discordapp.com/attachments/1435507284083216394/1436311236185948180/Screenshot_2025-11-07_at_9.30.51_pm.png?ex=691a5954&is=691907d4&hm=dbd5cd76bff21a0469cf159bc5dfc49716c93670d277507e0e70ecdc5feda30b&",
+          "fileName": "Screenshot_2025-11-07_at_9.30.51_pm.png",
+          "fileSizeBytes": 329332
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83D\uDC4D",
+          "code": "thumbsup",
+          "isAnimated": false,
+          "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+        }
+      ]
+    },
+    {
+      "id": "1436316844804935871",
+      "type": "Default",
+      "timestamp": "2025-11-07T11:30:21.278+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yes, even better with some cache \uD83D\uDE09",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83D\uDE09",
+          "code": "wink",
+          "isAnimated": false,
+          "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f609.svg"
+        }
+      ]
+    },
+    {
+      "id": "1436325461503377408",
+      "type": "Default",
+      "timestamp": "2025-11-07T12:04:35.659+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Greg - Yay! \uD83D\uDE42",
+      "author": {
+        "id": "169786952432746498",
+        "name": "mithro_",
+        "discriminator": "0000",
+        "nickname": "Tim 'mithro' Ansell",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/169786952432746498/9679bb77da48d47c905b398d98a83780.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "274535015969456128",
+          "name": "greg.hashtag.9468",
+          "discriminator": "0000",
+          "nickname": "Greg",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/274535015969456128/fb1d1a9872c8ef9ce08855c75f2963a7.png?size=512"
+        }
+      ],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83D\uDE42",
+          "code": "slight_smile",
+          "isAnimated": false,
+          "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f642.svg"
+        }
+      ]
+    }
+  ],
+  "messageCount": 10
+}

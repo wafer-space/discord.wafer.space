@@ -1,0 +1,656 @@
+{
+  "guild": {
+    "id": "1361349522684510449",
+    "name": "wafer.space Community",
+    "iconUrl": "https://cdn.discordapp.com/icons/1361349522684510449/fb143eaa45770cbb40493d09b625e98b.png?size=512"
+  },
+  "channel": {
+    "id": "1433688821479772180",
+    "type": "GuildPublicThread",
+    "categoryId": "1409660288822673408",
+    "category": "questions",
+    "name": "gf180mcuD lvs check error -- layout cell pin order mismatch",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-11-16T07:43:44.3404203+00:00",
+  "messages": [
+    {
+      "id": "1433688821479772180",
+      "type": "Default",
+      "timestamp": "2025-10-31T05:27:31.691+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi all,\n\nI running the lvs check using klayout 0.30.2 and use the latest gf180mcuD version. What is weird is that I can pass lvs check for the same design using an earlier version of the gf180mcu pdk and failed when I use the updated one. The lvs report is attached.\nMy question is it seems that the root of the problem is the pin order and number of pins do not match for std cell in .cdl file(schematic) and in .cir file(layout extracted).\nI attached the screen shot for the nor gate for instance. The subckt in cdl has 7 pins defined and in layout there are 9 pins. The extra two pins are VPW and VNW which were not there in earlier version. I've tried tight VPW to VSS and VNW to VDD and define gf180mcu_gnd and the VSS as the same net. These errors were still not resolved. \n\nI was wondering has anyone met similar problem before or is there any workaround about this? \nMany thanks in advance!",
+      "author": {
+        "id": "1413605821430104114",
+        "name": "xintingjiang_36756",
+        "discriminator": "0000",
+        "nickname": "Xinting Jiang",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1413605821430104114/079dacdd621abb17caecd8882513a32e.png?size=512"
+      },
+      "attachments": [
+        {
+          "id": "1433688822398451773",
+          "url": "https://cdn.discordapp.com/attachments/1433688821479772180/1433688822398451773/image.png?ex=691ab243&is=691960c3&hm=b7816d3d1daa31cf5772a1433b93d18947d9f2c0db1577f1bc0fd886b6230087&",
+          "fileName": "image.png",
+          "fileSizeBytes": 574415
+        },
+        {
+          "id": "1433688823178723470",
+          "url": "https://cdn.discordapp.com/attachments/1433688821479772180/1433688823178723470/get_attachment_url.png?ex=691ab244&is=691960c4&hm=e38fbe9e7a2ab526ee94a2e24e2665a305ab86dacb685faa903c2bba818b2249&",
+          "fileName": "get_attachment_url.png",
+          "fileSizeBytes": 157882
+        },
+        {
+          "id": "1433688823598022777",
+          "url": "https://cdn.discordapp.com/attachments/1433688821479772180/1433688823598022777/get_attachment_url.png?ex=691ab244&is=691960c4&hm=9d6de7ca3a08daa614778d89492e1b1f6813fd5765fbd3aada84a2b5eefa1828&",
+          "fileName": "get_attachment_url.png",
+          "fileSizeBytes": 93632
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1433748976523415605",
+      "type": "Default",
+      "timestamp": "2025-10-31T09:26:33.771+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi!\n\nWhen you say the latest gf180mcuD version, do you mean the one from open_pdks or the one from wafer.space?\nThere shouldn't be any changes to the KLayout LVS setup in either of them in the recent versions.\n\nCould you find out which changes have been made to the KLayout LVS setup that cause it to fail?",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1433845084058554579",
+      "type": "Default",
+      "timestamp": "2025-10-31T15:48:27.593+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi! We used volare to configure the gf180mcu pdk, the hash value for the pdk version is attached. It is the latest version released this Aug",
+      "author": {
+        "id": "1413605821430104114",
+        "name": "xintingjiang_36756",
+        "discriminator": "0000",
+        "nickname": "Xinting Jiang",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1413605821430104114/079dacdd621abb17caecd8882513a32e.png?size=512"
+      },
+      "attachments": [
+        {
+          "id": "1433845083853029488",
+          "url": "https://cdn.discordapp.com/attachments/1433688821479772180/1433845083853029488/image.png?ex=691a9b0b&is=6919498b&hm=fd2ddfe5ea8e90ebe3c528430f7f35f3f0a8946971e788324316714b2b487b87&",
+          "fileName": "image.png",
+          "fileSizeBytes": 202066
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1433872587028693163",
+      "type": "Default",
+      "timestamp": "2025-10-31T17:37:44.812+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "oh for this coming up tapeout, what is the correct gf180mcu pdk version to use?",
+      "author": {
+        "id": "1413605821430104114",
+        "name": "xintingjiang_36756",
+        "discriminator": "0000",
+        "nickname": "Xinting Jiang",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1413605821430104114/079dacdd621abb17caecd8882513a32e.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1433880759130783755",
+      "type": "Default",
+      "timestamp": "2025-10-31T18:10:13.193+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "In order to submit your design, it must pass the [gf180mcu-precheck](https://github.com/wafer-space/gf180mcu-precheck).\nYou can run it locally, later it will also be available through the platform.\n\nThe precheck uses the wafer.space fork of the PDK: https://github.com/wafer-space/gf180mcu\nWe use this fork for the [gf180mcu-project-template](https://github.com/wafer-space/gf180mcu-project-template).\n\nThe fork has mostly changes around the LibreLane configuration, and we intend to upstream all changes in the near future.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1433880790718222457",
+      "type": "Default",
+      "timestamp": "2025-10-31T18:10:20.724+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Please do not use volare anymore, it has been replaced by [ciel](https://github.com/fossi-foundation/ciel).",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1433881152510492702",
+      "type": "Default",
+      "timestamp": "2025-10-31T18:11:46.982+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Still, it is strange that you get this error since there haven't been any recent changes to the KLayout LVS setup. See here: https://github.com/fossi-foundation/globalfoundries-pdk-libs-gf180mcu_fd_pv/tree/main/klayout/lvs",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1433881332420968498",
+      "type": "Default",
+      "timestamp": "2025-10-31T18:12:29.876+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Can you find if there is a difference in the LVS setup between these two PDK versions?",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1433881638604898375",
+      "type": "Default",
+      "timestamp": "2025-10-31T18:13:42.876+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Finally, it looks like you are trying to create a digital design. Why not use LibreLane? It also performs LVS, but using magic and netgen.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1433890171945881651",
+      "type": "Default",
+      "timestamp": "2025-10-31T18:47:37.383+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks a lot! I think I will try LibreLane flow first.",
+      "author": {
+        "id": "1413605821430104114",
+        "name": "xintingjiang_36756",
+        "discriminator": "0000",
+        "nickname": "Xinting Jiang",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1413605821430104114/079dacdd621abb17caecd8882513a32e.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1434207426000978041",
+      "type": "Default",
+      "timestamp": "2025-11-01T15:48:16.644+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi Leo, I don't know if it was me but I cannot open the doc for nix-based installation for librelane: https://librelane.readthedocs.io/en/latest/getting_started/common/nix_installation/index.html    Is this link outdated?",
+      "author": {
+        "id": "1413605821430104114",
+        "name": "xintingjiang_36756",
+        "discriminator": "0000",
+        "nickname": "Xinting Jiang",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1413605821430104114/079dacdd621abb17caecd8882513a32e.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1434266018242498721",
+      "type": "Default",
+      "timestamp": "2025-11-01T19:41:06.123+00:00",
+      "timestampEdited": "2025-11-01T19:44:28.253+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I can open this tutorial though: https://librelane.readthedocs.io/en/latest/getting_started/newcomers/index.html",
+      "author": {
+        "id": "1413605821430104114",
+        "name": "xintingjiang_36756",
+        "discriminator": "0000",
+        "nickname": "Xinting Jiang",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1413605821430104114/079dacdd621abb17caecd8882513a32e.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1434269379419177142",
+      "type": "Default",
+      "timestamp": "2025-11-01T19:54:27.49+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Here you go: https://librelane.readthedocs.io/en/latest/installation/nix_installation/index.html",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "1413605821430104114",
+              "name": "xintingjiang_36756",
+              "discriminator": "0000",
+              "nickname": "Xinting Jiang",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/1413605821430104114/079dacdd621abb17caecd8882513a32e.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1434269490098733107",
+      "type": "Default",
+      "timestamp": "2025-11-01T19:54:53.878+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The docs have changed recently and I still need to update the links in the template.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1434280640638877737",
+      "type": "Default",
+      "timestamp": "2025-11-01T20:39:12.374+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks Leo! I am able to install librelane on my mac machine(nix based). However I ran into the errors below when I try to run \"librelane --smoke-test\" Should I ignore this and proceed with my designs?",
+      "author": {
+        "id": "1413605821430104114",
+        "name": "xintingjiang_36756",
+        "discriminator": "0000",
+        "nickname": "Xinting Jiang",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1413605821430104114/079dacdd621abb17caecd8882513a32e.png?size=512"
+      },
+      "attachments": [
+        {
+          "id": "1434280640714637373",
+          "url": "https://cdn.discordapp.com/attachments/1433688821479772180/1434280640714637373/image.png?ex=691a3670&is=6918e4f0&hm=0193a22fb1cb29202e9726f3d6a95f973ad568661c43679326df4e802574c55f&",
+          "fileName": "image.png",
+          "fileSizeBytes": 151179
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1434284147785990317",
+      "type": "Default",
+      "timestamp": "2025-11-01T20:53:08.543+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "That's really strange. Is an error shown above?\nYou can try running the template, but I don't have much hope if the smoke test doesn't even work.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1434286583049097348",
+      "type": "Default",
+      "timestamp": "2025-11-01T21:02:49.155+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yes, I also didn't expect that. I went to staight to the smke-test without changing anything after installation. So I really do not know how to fix it. Can you run the smoke-test on your end just to check?",
+      "author": {
+        "id": "1413605821430104114",
+        "name": "xintingjiang_36756",
+        "discriminator": "0000",
+        "nickname": "Xinting Jiang",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1413605821430104114/079dacdd621abb17caecd8882513a32e.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1434731280242577430",
+      "type": "Default",
+      "timestamp": "2025-11-03T02:29:53.228+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Update: I tried the smoke test again on my ubuntu machine, it passed. But on mac I still couldn't get it to work",
+      "author": {
+        "id": "1413605821430104114",
+        "name": "xintingjiang_36756",
+        "discriminator": "0000",
+        "nickname": "Xinting Jiang",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1413605821430104114/079dacdd621abb17caecd8882513a32e.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1434803135863324692",
+      "type": "Default",
+      "timestamp": "2025-11-03T07:15:24.943+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi @Xinting Jiang, can you post an issue on the [gf180mcu-project-template](github.com/wafer-space/gf180mcu-project-template) with all the information about your platform? Most importantly, is it an Intel or ARM mac?",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "1413605821430104114",
+              "name": "xintingjiang_36756",
+              "discriminator": "0000",
+              "nickname": "Xinting Jiang",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/1413605821430104114/079dacdd621abb17caecd8882513a32e.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "1413605821430104114",
+          "name": "xintingjiang_36756",
+          "discriminator": "0000",
+          "nickname": "Xinting Jiang",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1413605821430104114/079dacdd621abb17caecd8882513a32e.png?size=512"
+        }
+      ],
+      "inlineEmojis": []
+    }
+  ],
+  "messageCount": 19
+}
