@@ -457,13 +457,26 @@ def fetch_guild_channels(
         # Format: "ChannelID | Category / ChannelName" or "ChannelID | ChannelName"
         # Threads: " * ChannelID | Thread / ThreadName | Status"
         channels = []
+        current_parent_channel = None
+
         for line in result.stdout.strip().split("\n"):
             if not line or not line.strip():
                 continue
 
+            # Check if this is a thread (starts with " * ")
+            is_thread = line.lstrip().startswith("* ")
+
             channel = _parse_channel_line(line)
             if channel:
+                # If this is a thread and parent_id is "Thread", replace with actual parent
+                if is_thread and channel["parent_id"] == "Thread" and current_parent_channel:
+                    channel["parent_id"] = current_parent_channel
+
                 channels.append(channel)
+
+                # Update current parent for next threads (only for non-thread channels)
+                if not is_thread:
+                    current_parent_channel = channel["name"]
 
         return channels
 

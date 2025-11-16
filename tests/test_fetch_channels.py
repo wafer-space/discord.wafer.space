@@ -10,6 +10,7 @@ from scripts.export_channels import fetch_guild_channels
 # Test constants
 EXPECTED_TWO_CHANNELS = 2
 EXPECTED_THREE_CHANNELS = 3
+EXPECTED_FIVE_CHANNELS = 5
 
 
 def test_fetch_guild_channels_success() -> None:
@@ -98,11 +99,12 @@ def test_fetch_guild_channels_includes_threads() -> None:
         # Should include both regular channel and threads
         assert len(channels) == EXPECTED_THREE_CHANNELS
         assert channels[0] == {"name": "general", "id": "123456", "parent_id": "General"}
-        assert channels[1] == {"name": "How do I start?", "id": "789012", "parent_id": "Thread"}
+        # Threads should inherit parent channel name, not "Thread"
+        assert channels[1] == {"name": "How do I start?", "id": "789012", "parent_id": "general"}
         assert channels[2] == {
             "name": "Troubleshooting help",
             "id": "789013",
-            "parent_id": "Thread",
+            "parent_id": "general",
         }
 
 
@@ -115,3 +117,44 @@ def test_fetch_guild_channels_without_threads() -> None:
 
         assert len(channels) == 1
         assert channels[0] == {"name": "general", "id": "123456", "parent_id": "General"}
+
+
+def test_fetch_guild_channels_threads_inherit_parent_forum_name() -> None:
+    """Test that threads inherit their parent forum channel's name, not 'Thread'."""
+    with patch("subprocess.run") as mock_run:
+        mock_run.return_value = Mock(
+            returncode=0,
+            stdout="""123456 | Information / questions
+ * 789012 | Thread / How do I get started? | Active
+ * 789013 | Thread / Installation help | Archived
+234567 | Information / ideas
+ * 890123 | Thread / New feature idea | Active
+""",
+            stderr="",
+        )
+
+        channels = fetch_guild_channels("test_token", "guild123", include_threads=True)
+
+        # Should have 5 channels total (2 forums + 3 threads)
+        assert len(channels) == EXPECTED_FIVE_CHANNELS
+
+        # Regular forum channels
+        assert channels[0] == {"name": "questions", "id": "123456", "parent_id": "Information"}
+        assert channels[3] == {"name": "ideas", "id": "234567", "parent_id": "Information"}
+
+        # Threads should inherit parent forum name, NOT "Thread"
+        assert channels[1] == {
+            "name": "How do I get started?",
+            "id": "789012",
+            "parent_id": "questions",  # Should be parent forum name
+        }
+        assert channels[2] == {
+            "name": "Installation help",
+            "id": "789013",
+            "parent_id": "questions",  # Should be parent forum name
+        }
+        assert channels[4] == {
+            "name": "New feature idea",
+            "id": "890123",
+            "parent_id": "ideas",  # Should be parent forum name
+        }
