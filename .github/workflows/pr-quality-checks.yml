@@ -45,6 +45,8 @@ jobs:
           uv pip install -r requirements.txt
 
       - name: Run tests
+        env:
+          PYTHONPATH: .
         run: uv run pytest -v
 
   ruff-lint:
@@ -116,6 +118,8 @@ jobs:
           uv pip install -r requirements.txt
 
       - name: Run mypy
+        env:
+          PYTHONPATH: .
         run: uv run mypy scripts/ tests/
 
   docs-check:
@@ -150,4 +154,6 @@ jobs:
           uv pip install -r requirements.txt
 
       - name: Check docstrings
+        env:
+          PYTHONPATH: .
         run: uv run ruff check --select D101,D102,D103 scripts/
