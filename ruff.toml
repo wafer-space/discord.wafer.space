@@ -1,0 +1,50 @@
+# Ruff configuration for discord-download
+# https://docs.astral.sh/ruff/
+
+line-length = 100
+
+[lint]
+# Enable rule sets:
+# E/W - pycodestyle errors and warnings
+# F - Pyflakes
+# I - isort (import sorting)
+# N - pep8-naming
+# D - pydocstyle (docstrings)
+# UP - pyupgrade (modern Python syntax)
+# B - flake8-bugbear (likely bugs)
+# S - flake8-bandit (security)
+select = ["E", "W", "F", "I", "N", "D", "UP", "B", "S"]
+
+# Ignore specific rules
+ignore = [
+    "D100",  # Missing docstring in public module (too strict for scripts)
+    "D104",  # Missing docstring in public package (too strict)
+    "S603",  # subprocess without shell=True (we use subprocess intentionally)
+    "S607",  # Starting a process with a partial executable path (intentional)
+]
+
+# Exclude generated and temporary directories
+exclude = [
+    ".git",
+    ".venv",
+    "__pycache__",
+    "exports",
+    "public",
+    "bin",
+    ".worktrees",
+]
+
+[lint.per-file-ignores]
+# Tests don't need docstrings and can use assert
+"tests/**/*.py" = ["D", "S101"]
+
+[lint.pydocstyle]
+# Use Google-style docstrings
+convention = "google"
+
+[format]
+# Use double quotes for strings
+quote-style = "double"
+
+# Indent with 4 spaces
+indent-style = "space"
