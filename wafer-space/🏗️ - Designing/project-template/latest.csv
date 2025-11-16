@@ -37,7 +37,7 @@ Leo","","👍 (2)"
 "378788837452677120","asc9742","2025-10-11T03:01:33.4850000+00:00","@mole99 Hi Leo, I am trying to replace all 56 user pads with analog pads (gf180mcu_fd_io_asig_5p0). Got this error ""No shape in terminal analog[0\].pad/ASIG5V found on layer Metal5"". Any ideas on this issue? Attached a screenshot + the yaml and system verilog files.","https://cdn.discordapp.com/attachments/1423348662318272592/1426404321809010758/image.png?ex=691b38cb&is=6919e74b&hm=f3b1a562b85f828dbda902dd2dbca19566cfc4e160c429056920335d7c28c53c&,https://cdn.discordapp.com/attachments/1423348662318272592/1426404322081509376/config_sv_files.zip?ex=691b38cb&is=6919e74b&hm=f1a9c5b23459ca31804183a6327e9d1349dea26248696416a166c3d0dcfbbb07&",""
 "323371864074485771","mole99","2025-10-11T08:20:24.0460000+00:00","Hi @asc, there was a port missing for the bondpad BTerm in the `gf180mcu_fd_io__asig_5p0` cell.
 If you update your PDK, it should run through now.","","👍 (1)"
-"378788837452677120","asc9742","2025-10-11T16:52:17.3220000+00:00","Thank you @mole99 Ran into a new problem with the global routing. I had exchanged all user pads with analog pads, including the clk and rst pad. Could that be causing an issue?","https://cdn.discordapp.com/attachments/1423348662318272592/1426613389387497572/image.png?ex=691aaa01&is=69195881&hm=b333537ce598f257c3a2eef05ee1a3eb20b174b8dede9059fc7daa273ffc02bb&",""
+"378788837452677120","asc9742","2025-10-11T16:52:17.3220000+00:00","Thank you @mole99 Ran into a new problem with the global routing. I had exchanged all user pads with analog pads, including the clk and rst pad. Could that be causing an issue?","https://cdn.discordapp.com/attachments/1423348662318272592/1426613389387497572/image.png?ex=691b52c1&is=691a0141&hm=a0dc2ecaed1e7852fe6c5453d470778eecc372326f844027a7ecdf933066dc0a&",""
 "323371864074485771","mole99","2025-10-12T05:21:54.1300000+00:00","Yes, that will be a problem. The SDC expects at least one clock. Can you share a repository with your current state? I will take a look tomorrow.","",""
 "323371864074485771","mole99","2025-10-13T11:59:05.9030000+00:00","Started a thread.","",""
 "323371864074485771","mole99","2025-10-16T13:48:51.5630000+00:00","The [precheck](https://github.com/wafer-space/gf180mcu-precheck) has been updated to finish cleanly with the example project.
@@ -87,7 +87,7 @@ Always double check how functions are supposed to be used (the naming actually s
 "220639106915368960","tholin","2025-11-01T22:33:29.6630000+00:00","Literally nothing I do is changing the hold violations. Its refusing to budge.","",""
 "220639106915368960","tholin","2025-11-02T16:16:59.0550000+00:00","Almost got it. Commit soon. Just trying to clean up my SDC file.","",""
 "220639106915368960","tholin","2025-11-02T16:17:33.3310000+00:00","What’s the point of `set_driving_cell`? Does it automatically determine slew rates and delays, or do I still need to specify those manually?","",""
-"220639106915368960","tholin","2025-11-02T16:42:54.8520000+00:00","Doesn’t matter. I cannot `set_driving_cell -lib_cell gf180mcu_fd_io__bi_24t` inside my macro SDC files anyways:","https://cdn.discordapp.com/attachments/1423348662318272592/1434583563730419762/image.png?ex=691aa7ce&is=6919564e&hm=1235016dda08f0c6edc1e14cbcb0447552f8930adb7a1f04d2dfdff85fd02bbc&",""
+"220639106915368960","tholin","2025-11-02T16:42:54.8520000+00:00","Doesn’t matter. I cannot `set_driving_cell -lib_cell gf180mcu_fd_io__bi_24t` inside my macro SDC files anyways:","https://cdn.discordapp.com/attachments/1423348662318272592/1434583563730419762/image.png?ex=691b508e&is=6919ff0e&hm=4543e62193b9052a0b292621da102a59cf65944554c00ff5bddde291c1e6eff0&",""
 "323371864074485771","mole99","2025-11-02T18:10:19.0380000+00:00","Do you use the LibreLane version from the template or [this branch](https://github.com/librelane/librelane/pull/806)?
 Otherwise the pad cells are not read in.","",""
 "220639106915368960","tholin","2025-11-02T18:16:37.9600000+00:00","I cannot use the LibreLane version from the template for my macros. Python error.","https://cdn.discordapp.com/attachments/1423348662318272592/1434607148381376532/image.png?ex=691abdc5&is=69196c45&hm=a0e8fe4b7a64c8a49c69698d554f0d38b0a8c414213ef65d097254ea0e0c2ece&",""
@@ -171,3 +171,12 @@ Let me know if you have any questions.","","waferspace (5),👍 (2),🎉 (1)"
 "169786952432746498","mithro_","2025-11-07T12:03:41.6530000+00:00","Pinned a message.","",""
 "169786952432746498","mithro_","2025-11-07T12:04:09.3990000+00:00","@mole99 - Has performance / RAM usage changed much in the latest updates?","",""
 "323371864074485771","mole99","2025-11-07T12:26:01.5640000+00:00","RAM usage has gone down drastically during the filler generation step after I fixed a bug there. However, that was already before this update.","",""
+"840182560252624916","logic_anarchy","2025-11-16T16:49:14.6350000+00:00","Yosys will killed always by oom. I have 96MiB 
+
+NSTRAINT_NONE,nodemask=(null),cpuset=systemd-journald.service,mems_allowed=0,global_oom,task_memcg=/user.slice/user-1000.slice/user@1000.service/app.slice/tmux-spawn-41662d9d-0126-416e-9d6e-b0574b9ef2c0.scope,task=yosys-abc,pid=232210,uid=1000
+[13057.131595] Out of memory: Killed process 232210 (yosys-abc) total-vm:94061392kB, anon-rss:91007224kB, file-rss:0kB, shmem-rss:0kB, UID:1000 pgtables:184112kB oom_score_adj:100
+[13057.324704] systemd-journald[1141]: Under memory pressure, flushing caches.
+[13059.907983] oom_reaper: reaped process 232210 (yosys-abc), now anon-rss:0kB, file-rss:0kB, shmem-rss:0kB
+[13060.484258] systemd-journald[1141]: Under memory pressure, flushing caches.
+
+Someone with the  same issue?","",""
