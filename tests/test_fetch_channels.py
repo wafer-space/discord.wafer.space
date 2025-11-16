@@ -17,7 +17,7 @@ def test_fetch_guild_channels_success() -> None:
     with patch("subprocess.run") as mock_run:
         mock_run.return_value = Mock(
             returncode=0,
-            stdout="Information / announcements [123456]\nGeneral / general [789012]\n",
+            stdout="123456 | Information / announcements\n789012 | General / general\n",
             stderr="",
         )
 
@@ -32,7 +32,7 @@ def test_fetch_guild_channels_without_category() -> None:
     """Test channel fetching for channels without categories."""
     with patch("subprocess.run") as mock_run:
         mock_run.return_value = Mock(
-            returncode=0, stdout="general [123456]\nannouncements [789012]\n", stderr=""
+            returncode=0, stdout="123456 | general\n789012 | announcements\n", stderr=""
         )
 
         channels = fetch_guild_channels("test_token", "guild123")
@@ -86,9 +86,9 @@ def test_fetch_guild_channels_includes_threads() -> None:
     with patch("subprocess.run") as mock_run:
         mock_run.return_value = Mock(
             returncode=0,
-            stdout="""General / general [123456]
-Questions / How do I start? [789012]
-Questions / Troubleshooting help [789013]
+            stdout="""123456 | General / general
+ * 789012 | Thread / How do I start? | Active
+ * 789013 | Thread / Troubleshooting help | Archived
 """,
             stderr="",
         )
@@ -98,18 +98,18 @@ Questions / Troubleshooting help [789013]
         # Should include both regular channel and threads
         assert len(channels) == EXPECTED_THREE_CHANNELS
         assert channels[0] == {"name": "general", "id": "123456", "parent_id": "General"}
-        assert channels[1] == {"name": "How do I start?", "id": "789012", "parent_id": "Questions"}
+        assert channels[1] == {"name": "How do I start?", "id": "789012", "parent_id": "Thread"}
         assert channels[2] == {
             "name": "Troubleshooting help",
             "id": "789013",
-            "parent_id": "Questions",
+            "parent_id": "Thread",
         }
 
 
 def test_fetch_guild_channels_without_threads() -> None:
     """Test that threads are excluded when include_threads=False."""
     with patch("subprocess.run") as mock_run:
-        mock_run.return_value = Mock(returncode=0, stdout="General / general [123456]\n", stderr="")
+        mock_run.return_value = Mock(returncode=0, stdout="123456 | General / general\n", stderr="")
 
         channels = fetch_guild_channels("test_token", "guild123", include_threads=False)
 

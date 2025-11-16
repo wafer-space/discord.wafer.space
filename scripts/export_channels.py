@@ -414,27 +414,35 @@ def fetch_guild_channels(
             raise RuntimeError(f"Failed to fetch channels: {result.stderr or result.stdout}")
 
         # Parse output - DiscordChatExporter outputs one channel per line
-        # Format: "Category / ChannelName [ChannelID]" or "ChannelName [ChannelID]"
+        # Format: "ChannelID | Category / ChannelName" or "ChannelID | ChannelName"
+        # Threads: " * ChannelID | Thread / ThreadName | Status"
         channels = []
         for line in result.stdout.strip().split("\n"):
             if not line or not line.strip():
                 continue
 
-            # Extract channel ID from brackets
-            if "[" in line and "]" in line:
-                channel_id = line.split("[")[-1].split("]")[0].strip()
+            # Remove thread indicator if present
+            line = line.lstrip(" *").strip()
 
-                # Extract channel name (after last / or whole line before [)
-                name_part = line.split("[")[0].strip()
+            # Split by pipe to get channel ID and name
+            if "|" in line:
+                parts = line.split("|")
+                if len(parts) < 2:
+                    continue
+
+                channel_id = parts[0].strip()
+                name_part = parts[1].strip()
+
+                # For threads, there may be a third part (status), ignore it
+                # Extract category and channel name from the name part
                 parent_id = None
-
                 if "/" in name_part:
-                    parts = name_part.split("/")
-                    if len(parts) == CHANNEL_PATH_PARTS:
-                        parent_id = parts[0].strip()
-                        channel_name = parts[1].strip()
+                    name_parts = name_part.split("/")
+                    if len(name_parts) >= CHANNEL_PATH_PARTS:
+                        parent_id = name_parts[0].strip()
+                        channel_name = name_parts[1].strip()
                     else:
-                        channel_name = parts[-1].strip()
+                        channel_name = name_parts[-1].strip()
                 else:
                     channel_name = name_part
 
