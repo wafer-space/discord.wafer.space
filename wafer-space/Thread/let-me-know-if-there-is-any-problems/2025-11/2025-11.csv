@@ -1,0 +1,23 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"323371864074485771","mole99","2025-10-11T08:08:45.9210000+00:00","","",""
+"323371864074485771","mole99","2025-10-11T08:08:46.9610000+00:00","Thanks for sharing the repository! I'm currently trying to build the project.
+
+Just to confirm, I first need to implement the `example_project` by going into `example_project` and running `make project`, right?
+
+Ciel will then fetch the PDK that is marked supported by LibreLane. However I get stuck at GlobalPlacement:
+
+```
+Iter   |    Area   | Removed | Inserted |   Pins
+|           | Buffers | Buffers  | Remaining
+-------------------------------------------------------
+0 |     +0.0% |       0 |        0 |       468
+46 |     +0.0% |       0 |        0 |       422
+92 |     +0.0% |       0 |        0 |       376
+[CRITICAL RSZ-2008] buffering pin _545_/ZN: wire step options empty
+```
+
+Could it be that you implemented the `example_project` with a different version of LibreLane than in the nix-shell of this repository?
+If so - that would be great! Then I would have another reproducible for [#8229](https://github.com/The-OpenROAD-Project/OpenROAD/issues/8229), which is not related to the I/O pads.","",""
+"220639106915368960","tholin","2025-10-11T12:09:25.3600000+00:00","I did have to switch librelane versions because of this issue in Global Placement!","",""
+"220639106915368960","tholin","2025-10-11T12:11:00.9720000+00:00","I have to switch to the regular release of LL rather than the fork used for the template.","",""
+"323371864074485771","mole99","2025-10-11T13:03:03.1050000+00:00","That's good to know! It might really be a regression in OpenROAD, then.","",""

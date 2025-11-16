@@ -1,0 +1,66 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 🏗️ - Designing / project-template / I've setup a new system following the
+==============================================================
+
+[11/05/2025 07:38] mole99
+
+
+
+[11/05/2025 07:38] mole99
+Hi @Greg, the KLayout DRC errors are expected and need to be fixed on our side.
+
+- DPF.4 and DCF.4 relate to dummy fill.
+- NW.2b_MV relates to min. nwell spacing and is triggered by some of the I/O and the SRAM. I think this is a faulty rule implementation.
+- DF.12 relates to the seal ring. It seems that the rule implementation might be missing a marker layer.
+
+I plan to take a closer look at these issues throughout today.
+
+Cap/slew warnings are not ideal, but can be mostly ignored. They might lead to higher power consumption due to higher crossbar currents. Unfortunately, OpenROAD does not fix all of them. They could be further reduced by ECOs.
+
+The setup violations are due to the design and the selected clock period. The example design (counter) is simply too small for this large of a core area. If your design is larger, OpenROAD will place the standard cells to distribute the wire delays more effectively. You might also need to tweak the target clock period.
+
+I will also soon update the example design to demonstrate how to properly instantiate SRAM macros and get them through the complete flow.
+
+
+[11/05/2025 08:15] greg.hashtag.9468
+Thanks! that all makes sense, I'll continue to merge my design into this template and track your upstream changes as needed. 👍
+
+
+[11/05/2025 09:13] mole99
+Perfect! Looking forward to more feedback 👍
+
+
+[11/06/2025 00:53] mithro_
+@Greg - Did you have any success?
+
+
+[11/06/2025 01:50] greg.hashtag.9468
+The flow from the template completed.
+Olof has done a new small wrapper since I did the GF180MPW1 serv project, so I'll combine that and the SRAM macro over the weekend.
+
+
+[11/06/2025 10:35] mole99
+@Greg The issues you mentioned are now fixed in the project template. The template has also been updated to include two SRAM macros, so it should be straightforward to add more.
+
+{Reactions}
+👍
+
+[11/07/2025 11:08] greg.hashtag.9468
+Working for me 👍  Just need a way to get data into the SRAM. A memory mapped SPI would work pretty well I think
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1435507284083216394/1436311236185948180/Screenshot_2025-11-07_at_9.30.51_pm.png?ex=691a5954&is=691907d4&hm=dbd5cd76bff21a0469cf159bc5dfc49716c93670d277507e0e70ecdc5feda30b&
+
+
+[11/07/2025 11:30] mole99
+Yes, even better with some cache 😉
+
+
+[11/07/2025 12:04] mithro_
+@Greg - Yay! 🙂
+
+
+==============================================================
+Exported 10 message(s)
+==============================================================

@@ -1,0 +1,2279 @@
+{
+  "guild": {
+    "id": "1361349522684510449",
+    "name": "wafer.space Community",
+    "iconUrl": "https://cdn.discordapp.com/icons/1361349522684510449/fb143eaa45770cbb40493d09b625e98b.png?size=512"
+  },
+  "channel": {
+    "id": "1435007091634081833",
+    "type": "GuildPublicThread",
+    "categoryId": "1423348662318272592",
+    "category": "project-template",
+    "name": "Magic errors",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-11-16T05:54:40.0770343+00:00",
+  "messages": [
+    {
+      "id": "1435007106859405472",
+      "type": "Default",
+      "timestamp": "2025-11-03T20:45:55.418+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Tim Edwards I have another question. During DRC I get a lot of:\n\n```                                                  \nError while reading cell \"chip_top\" (byte position 97630252): Warning: cell \"Metal4_fill_cell\" placed on top of itself.  Ignoring the extra one.                                                              \nError while reading cell \"chip_top\" (byte position 97630316): Warning: cell \"Metal1_fill_cell\" placed on top of itself.  Ignoring the extra one.                                                              \nError while reading cell \"chip_top\" (byte position 97630380): Warning: cell \"Metal4_fill_cell\" placed on top of itself.  Ignoring the extra one.                                                              \nError while reading cell \"chip_top\" (byte position 97630628): Warning: cell \"Metal1_fill_cell\" placed on top of itself.  Ignoring the extra one.                                                              \nError while reading cell \"chip_top\" (byte position 97630876): Warning: cell \"Metal3_fill_cell\" placed on top of itself.  Ignoring the extra one.                                                              \nError while reading cell \"chip_top\" (byte position 97630980): Warning: cell \"Metal4_fill_cell\" placed on top of itself.  Ignoring the extra one.\n```\n\nHowever, having checked the layout, I don't think I have any cells placed on top of themselves. Could it be because KLayout creates arrays for the filler cells?",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1365118310701600900",
+          "name": "rtimothyedwards_19428",
+          "discriminator": "0000",
+          "nickname": "Tim Edwards",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1365118310701600900/6bcc8e61db497b620550682309ace5d5.png?size=512"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435009484731846666",
+      "type": "Default",
+      "timestamp": "2025-11-03T20:55:22.347+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Related to the SRAM, I get the following during DRC:\n\n```\n...\n1570000 uses\n1575000 uses\n1580000 uses\n[21:39:22] ERROR    Error while reading cell \"chip_top\" (byte position 120711644): cell power_route_01_a_512x8m81 was used but not defined.\n[21:39:22] ERROR    Error while reading cell \"chip_top\" (byte position 120711644): cell M1_PSUB4310591302014_512x8m81 was used but not defined.\n[21:39:22] ERROR    Error while reading cell \"chip_top\" (byte position 120711644): cell G_ring_512x8m81 was used but not defined.\n...\n```",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435009519888498821",
+      "type": "Default",
+      "timestamp": "2025-11-03T20:55:30.729+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "But then underneath the cells are read in:\n\n```\n...\nCell power_route_01_a_512x8m81 read from path /home/leo/Repositories/gf180mcu-project-template/gf180mcu/gf180mcuD/libs.ref/gf180mcu_fd_ip_sram/mag\n...\n```",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435009640013234197",
+      "type": "Default",
+      "timestamp": "2025-11-03T20:55:59.369+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "And then further down I get:\n\n```\nProcessing timestamp mismatches.\nTimestamp mismatches found in these cells: M1_NACTIVE_02_512x8m81, M1_NWELL_01_512x8m81, M1_PACTIVE$10_512x8m81, M1_PACTIVE$11_512x8m81, M1_POLY2$$204150828_512x8m81, M1_POLY24310591302019_512x8m81,        \nM1_POLY24310591302031_512x8m81, M2_M1$$204138540_512x8m81, M2_M1$$204139564_512x8m81, M2_M1$$204140588_512x8m81, M2_M1$$204141612_512x8m81, M2_M1$$204220460_512x8m81, M2_M1$$204221484_512x8m81,             \nM2_M1$$204222508_512x8m81, M3_M2$$204142636_512x8m81, M3_M2$$204143660_512x8m81, M3_M2$$204144684_512x8m81, M3_M2$$204145708_512x8m81, M3_M2$$204146732_512x8m81, M3_M2$$204147756_512x8m81,                  \nnmos_1p2_01_R270_512x8m81, nmos_1p2_02_R90_512x8m81, nmos_5p04310591302099_512x8m81, nmos_5p043105913020111_512x8m81, pmos_1p2_01_R90_512x8m81, pmos_1p2_02_R90_512x8m81, pmos_5p043105913020101_512x8m81,\n...\n```\n\nCould I have made a mistake when updating the PDK from open_pdks? I'm not even sure if I touched the SRAM at all.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435009967827456066",
+      "type": "Default",
+      "timestamp": "2025-11-03T20:57:17.526+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Blackboxing the SRAM cells did not go well, I got 634802 DRC errors...\n\nI'm using this to read in the mag views of the SRAMs:\n\n```\n# Read in maglef views in order to blackbox cells\nif { [info exists ::env(MAGIC_DRC_MAGLEFS)] } {\n    foreach {maglef} $::env(MAGIC_DRC_MAGLEFS) {\n        puts \"Loading maglef view: $maglef\"\n        load $maglef\n    }\n}\n```\n\nBut I'm also reading the GDS afterwards. Does the GDS perhaps overwrite the mag view?",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435012010059366400",
+      "type": "Default",
+      "timestamp": "2025-11-03T21:05:24.432+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I get a lot of those errors coming out of klayout.  And I have also noticed that it is extraordinarily easy in klayout to accidentally drop two instances in the same place, and klayout does not detect it or report it, and it is impossible to see unless you move one of those instances and then you see there's still the same subcell still sitting there.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1365118310701600900/6bcc8e61db497b620550682309ace5d5.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435012726559604777",
+      "type": "Default",
+      "timestamp": "2025-11-03T21:08:15.259+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "When magic places a cell, it checks if there is already a cell with the same name in the same position and orientation.  So while it's possible that there is a mistake in that code, I don't believe so.  I think it's pretty solid.  When magic reports that there are duplicates, then it has already _deleted_ the instance that it thought was a duplicate.  So if those instances were _not_ duplicates, then the layout would be missing instances.  But I've never observed missing cells in files read from klayout, although I have seen a lot of messages about duplicate cells.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1365118310701600900/6bcc8e61db497b620550682309ace5d5.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435013576564805654",
+      "type": "Default",
+      "timestamp": "2025-11-03T21:11:37.916+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "There is some possibility that array bounds are not being checked.  Do you have an example on hand to share?",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1365118310701600900/6bcc8e61db497b620550682309ace5d5.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "323371864074485771",
+              "name": "mole99",
+              "discriminator": "0000",
+              "nickname": "mole99",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435014714546458685",
+      "type": "Default",
+      "timestamp": "2025-11-03T21:16:09.232+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Actually, that looks like it may be a real problem.  And one which might clear LVS, because if you had an array of 2x10 contacts and overlaid it with an array of 10x2 contacts, then if you remove one of those instances, you'd still get a valid contact.  I will push a correction and you can see if that fixes the problem.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1365118310701600900/6bcc8e61db497b620550682309ace5d5.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435016713727901816",
+      "type": "Default",
+      "timestamp": "2025-11-03T21:24:05.874+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yes, let me prepare a file for you.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435017172924633109",
+      "type": "Default",
+      "timestamp": "2025-11-03T21:25:55.355+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "GDS will overwrite the maglef view if you don't use `gds noduplicates true`",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1365118310701600900/6bcc8e61db497b620550682309ace5d5.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435017330798235699",
+      "type": "Default",
+      "timestamp": "2025-11-03T21:26:32.995+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "https://github.com/user-attachments/files/23318341/chip_top.gds.gz",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435017536168005684",
+      "type": "Reply",
+      "timestamp": "2025-11-03T21:27:21.959+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Very good point, but actually I'm doing that already:\n\n```\n# Enable gds noduplicates to ignore cells\n# that have been previously loaded as maglef\ngds noduplicates true\ngds readonly true\n\n# Flatten cells\nif { [info exists ::env(MAGIC_GDS_FLATGLOB)] } {\n    foreach {gds_flatglob} $::env(MAGIC_GDS_FLATGLOB) {\n        gds flatglob $gds_flatglob\n    }\n}\n```",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1365118310701600900",
+          "name": "rtimothyedwards_19428",
+          "discriminator": "0000",
+          "nickname": "Tim Edwards",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1365118310701600900/6bcc8e61db497b620550682309ace5d5.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1435017172924633109",
+        "channelId": "1435007091634081833",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435017655424647321",
+      "type": "Default",
+      "timestamp": "2025-11-03T21:27:50.392+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "https://github.com/librelane/librelane/blob/756b12498458c32ee290e66da01b5792f0ecd9a3/librelane/scripts/magic/drc.tcl",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435017812338016357",
+      "type": "Default",
+      "timestamp": "2025-11-03T21:28:27.803+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "`used but not defined` errors will occur if the source file doesn't define cells in bottom-up order.  You might need to use `gds ordering true` before reading in.  However, I'm not sure that there is any obvious consequence beyond the error message as long as the cell is defined later in the file.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1365118310701600900/6bcc8e61db497b620550682309ace5d5.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435018353713483787",
+      "type": "Reply",
+      "timestamp": "2025-11-03T21:30:36.877+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks, will give this a try!",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1365118310701600900",
+          "name": "rtimothyedwards_19428",
+          "discriminator": "0000",
+          "nickname": "Tim Edwards",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1365118310701600900/6bcc8e61db497b620550682309ace5d5.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1435017812338016357",
+        "channelId": "1435007091634081833",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435018465881751572",
+      "type": "Default",
+      "timestamp": "2025-11-03T21:31:03.62+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It should be fine to set `gds noduplicates true` after reading in the mag, right?",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435018479781548062",
+      "type": "Default",
+      "timestamp": "2025-11-03T21:31:06.934+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I'm getting \"https://github.com/user-attachments/files/23318341/chip_top.gds.gz\" not found.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1365118310701600900/6bcc8e61db497b620550682309ace5d5.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435018602695622716",
+      "type": "Default",
+      "timestamp": "2025-11-03T21:31:36.239+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Ah, wait a sec",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435018786259337287",
+      "type": "Default",
+      "timestamp": "2025-11-03T21:32:20.004+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Shouldn't matter but yes, set `noduplicates` after reading in the maglef layouts.  Probably best for me to just look at the layout myself with the abstract SRAM view and see what it looks like and what DRC errors are getting reported.  I assume that will be in the same chip_top layout?",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1365118310701600900/6bcc8e61db497b620550682309ace5d5.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435018917230936135",
+      "type": "Reply",
+      "timestamp": "2025-11-03T21:32:51.23+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Sent it on FOSSi Chat",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "reference": {
+        "messageId": "1435018602695622716",
+        "channelId": "1435007091634081833",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435018958368542810",
+      "type": "Default",
+      "timestamp": "2025-11-03T21:33:01.038+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yes, all the errors come from this design.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435026887071240222",
+      "type": "Default",
+      "timestamp": "2025-11-03T22:04:31.388+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The duplicate cells appear to be actual duplicate cells.  I can't confirm this in klayout because if I select COMP_fill_cell and try to move it, it moves all of the cells together---I can't figure out how to move a single instance (or in this case, the 2 x 4 array).  Klayout presents it as a single cell in chip_top and I don't understand how it is representing it.  However it is representing the complex array of arrays is hiding the fact that duplicate instances are on top of each other.  It is certainly the case that magic is detecting these, removing the duplicates, and I still see in magic the same fill cell layout that I see in klayout.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1365118310701600900/6bcc8e61db497b620550682309ace5d5.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435029337907794030",
+      "type": "Default",
+      "timestamp": "2025-11-03T22:14:15.713+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The issue with the DRC errors is that the \"maglef\" view of the SRAM is essentially designed to cover all layers up to metal2.  The fill generator is looking inside the SRAM, finding ample room to place fill cells on active, poly, metal1, and metal2, and that collides with the abstract view, which assumes that even fill is forbidden from the area (which is likely preferred?).\n\nThe two solutions are (1) Create an abstract view of the SRAM containing a *detailed* obstruction map of the interior (that is, not using `lef write -hide`).  That will be a huge LEF file, but it will be accurate with respect to the metal layers.  I'm not sure it will properly represent diffusion and poly.  The better solution is (2) do not create fill patterns inside the area of the SRAMs.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1365118310701600900/6bcc8e61db497b620550682309ace5d5.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435032259244593277",
+      "type": "Default",
+      "timestamp": "2025-11-03T22:25:52.214+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Most of the DRC errors, however, come from the combination of fill poly over fill diff, which I handled in IHP by creating an extra plane for the fill poly.  Without doing that, the only way to keep the poly-fill-on-diff-fill structures from raising DRC errors is to flatten both the Poly2_fill_cell* and COMP_fill_cell* cells.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1365118310701600900/6bcc8e61db497b620550682309ace5d5.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435268570840825959",
+      "type": "Default",
+      "timestamp": "2025-11-04T14:04:53.289+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "1. I'll have to look into the duplicate cell issue on KLayout's side. I tried to resolve the array through the KLayout GUI and `explode` the cell instance array through scripting, but neither method managed to separate the filler cells.\n  At least it's not a blocking issue.\n\n2. The maglef covering up the layers makes a lot of sense! Thanks for the hint.\n  I would rather not prevent fill inside the SRAMs since this PDK only allows to restrict filler generation on all metal layers.\n  I removed the `-hide` argument from open_pdks. The resulting maglefs are 10MB in total (not ideal), but now the fill is correctly inserted.\n\n3. Yes, I already flatten comp and poly2 fill cells. That's not an issue on my side:\n  ```\n  MAGIC_GDS_FLATGLOB:\n  # COMP and Poly2 filler cells need to be \n  # flattened to form a \"filltrans\" layer\n  - \"COMP_fill_cell\"\n  - \"Poly2_fill_cell\"\n  ```",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435268603133034506",
+      "type": "Default",
+      "timestamp": "2025-11-04T14:05:00.988+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hold on tight! The reason I still got DRC errors, even after setting `MAGIC_DRC_MAGLEFS` in LibreLane was that I hadn't loaded the maglef views. I had loaded the mag views \uD83E\uDD26‍♂️\n\nBy loading the maglef views, all the DRC errors are resolved. Well, actually, not all of them. By using the maglefs from the current PDK I still got some Metal3 spacing errors in the SRAM periphery. Using the no `-hide` maglefs resolved all of the DRC errors within the SRAM macro.\nCould you run magic DRC on the PDK maglefs on your end to confirm my suspicion?\n\nStill, the question is whether we really want to distribute 10MB maglefs for the SRAMs just to avoid checking the DRC rules inside it?\nEven if we don't implement the 5V/3.3V SRAM rules, it probably makes more sense to use the `SramCore` layer to skip these DRC checks in the area.\nThis way I don't need to update the wafer.space precheck every time a new SRAM is generated, and users could generate their own SRAMs.\nEven if we don't implement the 5V/3.3V SRAM rules in magic, in the worst case violations should get caught by KLayout.\nHow difficult would it be to disable specific rules in a certain layer through the magic tech file?",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83E\uDD26",
+          "code": "person_facepalming",
+          "isAnimated": false,
+          "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f926.svg"
+        }
+      ]
+    },
+    {
+      "id": "1435286264763908299",
+      "type": "Default",
+      "timestamp": "2025-11-04T15:15:11.849+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Another solution would be to pre-fill the SRAMs and put those in the PDK.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1365118310701600900/6bcc8e61db497b620550682309ace5d5.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435289114630033458",
+      "type": "Reply",
+      "timestamp": "2025-11-04T15:26:31.31+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "But that doesn't fix the issue of the DRC errors in new SRAM macros. I would still have to create a maglef view for each and update the precheck.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1365118310701600900",
+          "name": "rtimothyedwards_19428",
+          "discriminator": "0000",
+          "nickname": "Tim Edwards",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1365118310701600900/6bcc8e61db497b620550682309ace5d5.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1435286264763908299",
+        "channelId": "1435007091634081833",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435289806279282709",
+      "type": "Default",
+      "timestamp": "2025-11-04T15:29:16.212+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Also filler generation seems to work fine:",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435289814315434207",
+      "type": "Default",
+      "timestamp": "2025-11-04T15:29:18.128+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@mole99 :  If you edit the tech file and change all the DRC metal width rules from, e.g., \"width *m2,rm2\" to \"width allm2,obsm2\" then the spacing errors in the SRAM maglef view go away.  I'm not sure why I did not have the \"obsm\" layers in the basic width rule---I feel like I may have done that on purpose, as in there may be other abstract views where there are too-narrow shapes of obstruction metal.  That happens when laying down an obstruction plane and then making cut-outs in the obstruction layer for pins.  It might be a better choice to just eliminate pins from the LEF view that are smaller than the metal minimum width rule.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1365118310701600900/6bcc8e61db497b620550682309ace5d5.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "323371864074485771",
+              "name": "mole99",
+              "discriminator": "0000",
+              "nickname": "mole99",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "323371864074485771",
+          "name": "mole99",
+          "discriminator": "0000",
+          "nickname": "mole99",
+          "color": null,
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1423020172595298314",
+              "name": "Mod",
+              "color": null,
+              "position": 1
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435289911862493258",
+      "type": "Reply",
+      "timestamp": "2025-11-04T15:29:41.385+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [
+        {
+          "id": "1435289911891726386",
+          "url": "https://cdn.discordapp.com/attachments/1435007091634081833/1435289911891726386/Bildschirmfoto_vom_2025-11-04_14-45-41.png?ex=691a96a5&is=69194525&hm=92bfc5f5938af2fa27c3bf48868d09c3aa4a5ae610363e715b7a47ae1fa0b413&",
+          "fileName": "Bildschirmfoto_vom_2025-11-04_14-45-41.png",
+          "fileSizeBytes": 47040
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "reference": {
+        "messageId": "1435289806279282709",
+        "channelId": "1435007091634081833",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435290523979223080",
+      "type": "Default",
+      "timestamp": "2025-11-04T15:32:07.325+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I'm not sure why you're against blocking fill inside the SRAM, though.  There's a trivial amount of fill there.  It will not significantly affect overall chip density.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1365118310701600900/6bcc8e61db497b620550682309ace5d5.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435291078738841782",
+      "type": "Default",
+      "timestamp": "2025-11-04T15:34:19.59+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "That is true for the first Metal layers, but not so much for Metal4 and Metal5. And since I don't want to invent new fill block layers for the PDK, generating the fill is fine. As long as the minimum distances are met, that is.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435291984058122260",
+      "type": "Default",
+      "timestamp": "2025-11-04T15:37:55.435+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Ideally, we would implement the 3.3V/5V SRAM rules, but the amount of work is not to be underestimated.\nThat's why I think the second best solution is to disable the five or so DRC rules in the `SramCore` layer.\nThis is essentially what we already do with the maglef view, but it works on all SRAMs with the `SramCore` layer without the need to read in the maglef.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435292219480473751",
+      "type": "Default",
+      "timestamp": "2025-11-04T15:38:51.564+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The SRAM does not have any layout on any layer above metal3.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1365118310701600900/6bcc8e61db497b620550682309ace5d5.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435292506744164525",
+      "type": "Default",
+      "timestamp": "2025-11-04T15:40:00.053+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yes, that's why it is mostly empty except for some routing. PMNDMY, however, would block all metal fill.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435292588247879720",
+      "type": "Default",
+      "timestamp": "2025-11-04T15:40:19.485+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "There are no layers for blocking fill on certain metal layers.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435292709840490626",
+      "type": "Default",
+      "timestamp": "2025-11-04T15:40:48.475+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I use the obstruction layers from the LEF views for that.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1365118310701600900/6bcc8e61db497b620550682309ace5d5.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435292762525143071",
+      "type": "Default",
+      "timestamp": "2025-11-04T15:41:01.036+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "\\* In the PDK documentation, that is.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435294784901091340",
+      "type": "Default",
+      "timestamp": "2025-11-04T15:49:03.208+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I think maybe pre-filling the SRAM plus getting rid of the errors in the maglef view would be the best solution.  I have to figure out what's going on with the pins appearing in the middle of the maglef view.  There doesn't seem to be any obvious reason why they're there.  The underlying reason is that magic doesn't want to block pins that may not be on the periphery, or which may be intended to be in the middle of the cell and contacted from the top.  But the locations of these pins is a bit weird.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1365118310701600900/6bcc8e61db497b620550682309ace5d5.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435332930162528276",
+      "type": "Default",
+      "timestamp": "2025-11-04T18:20:37.747+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "After spending some time deving into why the interior pins were so randomly placed (or rather randomly selected from the geometry that exists there), I finally figured out that they are not generated by magic at all.  Magic is using the original GF LEF view to annotate its own LEF output to make sure that it captures all of the pins.  The tiny thin pin sliver in the 64x8 SRAM that was showing up as a DRC error in the LEF view is here in the original GF LEF:\n```\n    PORT\n      LAYER Metal3 ;\n        RECT 118.435 30.885 206.985 30.995 ;\n    END\n```\nSo it might be worthwhile just to find all the errors (which I don't think are that many---There is only the one error in the 64x8 SRAM) and eliminate those port entries from the upstream repository LEF views.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1365118310701600900/6bcc8e61db497b620550682309ace5d5.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435333196358094949",
+      "type": "Default",
+      "timestamp": "2025-11-04T18:21:41.213+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Wow, that really is a thin pin!",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435333333746974853",
+      "type": "Reply",
+      "timestamp": "2025-11-04T18:22:13.969+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I would really rather avoid pre-filling the SRAM \uD83D\uDE2C\n\nFor now, the maglef without the `-hide` option works well, and 10MB more isn't the end of the world (ciel can even deduplicate the PDK variants).\nIdeally, magic could also run directly on the GDS of the SRAM. Initially, by ignoring the 5V/3.3V SRAM rules, and later maybe even by implementing them.\nHow would the first part be implemented, i.e. how would certain rules be ignored in the `SramCore` layer?",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1365118310701600900",
+          "name": "rtimothyedwards_19428",
+          "discriminator": "0000",
+          "nickname": "Tim Edwards",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1365118310701600900/6bcc8e61db497b620550682309ace5d5.png?size=512"
+        }
+      ],
+      "reference": {
+        "messageId": "1435294784901091340",
+        "channelId": "1435007091634081833",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83D\uDE2C",
+          "code": "grimacing",
+          "isAnimated": false,
+          "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f62c.svg"
+        }
+      ]
+    },
+    {
+      "id": "1435333479247384577",
+      "type": "Default",
+      "timestamp": "2025-11-04T18:22:48.659+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "For example, rule [PL.5a](https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_07_08.html) has a [S.PL.5a_MV](https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_11_1.html) counterpart. This means that we can ignore PL.5a inside `SramCore`.\n\nPL.5a is implemented as follows:\n\n```\n spacing allpolynonfet alldifflvnonfet 100 corner_ok allfets \\\n    \"Poly spacing to diffusion < %d (PL.5a)\"\n spacing allpolynonfet alldiffmvnonfet 300 corner_ok allfets \\\n    \"Poly spacing to MV diffusion < %d (PL.5a)\n```\n\nCan I just remove all poly that is inside `SramCore` from allpolynonfet? How would I do that?",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435335238480822302",
+      "type": "Default",
+      "timestamp": "2025-11-04T18:29:48.093+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You can't base DRC rules on specific cells in magic;  it just doesn't work.\nThe only way to implement special rules for SRAM is to create an entire alternative set of layers that exist only in SRAM, which is extremely messy.  I did something like that in sky130 to implement a special kind of local interconnect that is inside SRAM, but that was necessary because the local interconnect was part of the abstract views.  At least the GF SRAM cells appear to satisfy normal DRC rules for the metal layers, so the abstract view is DRC clean (apart from weird port entries in GF's own LEF views).",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1365118310701600900/6bcc8e61db497b620550682309ace5d5.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435336154668077197",
+      "type": "Default",
+      "timestamp": "2025-11-04T18:33:26.529+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I really don't like the idea of generating a detailed LEF view of the SRAM.  It's really abusing the concept of the abstract view.  It would be easier just to run a few commands in magic to erase layers with the DRC errors.  But let me take a few minutes to see how easy or hard it would be to create some special layers for the SRAM cells. . .  Maybe there are not that many layers involved in the errors?",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1365118310701600900/6bcc8e61db497b620550682309ace5d5.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435343652649177300",
+      "type": "Default",
+      "timestamp": "2025-11-04T19:03:14.187+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Oh, it seems we've been talking past each other all this time! \uD83D\uDE04\n\nI absolutely agree, the DRC shouldn't be based on cells. That's why the PDK provides the `SramCore` layer (108/5). The foundry SRAMs use this layer to mark the SRAM bit cells.\n\nYes, I would rather not generate a detailed abstract view. But this is the only way we can generate the fill afterwards. It would be possible to clean up the detailed views slightly by replacing the the bitcell array with an obstruction.\n\nIdeally, magic could use the GDS directly. I assume people want to create their own SRAM macros for educational purposes, or, in the case of Staf's generator, to generate new SRAM configurations.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83D\uDE04",
+          "code": "smile",
+          "isAnimated": false,
+          "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f604.svg"
+        }
+      ]
+    },
+    {
+      "id": "1435344233090387998",
+      "type": "Default",
+      "timestamp": "2025-11-04T19:05:32.575+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I think I will just go with the \"messy\" approach, which will require additional layers for SRAM pdiff, ndiff, and contacts.  Four extra layers---Not too bad.  There are a couple of other import errors (layers getting mapped wrong) that I need to look at, but there are only a couple of those.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1365118310701600900/6bcc8e61db497b620550682309ace5d5.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f44d.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "323371864074485771",
+              "name": "mole99",
+              "discriminator": "0000",
+              "nickname": "mole99",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435369713818669186",
+      "type": "Default",
+      "timestamp": "2025-11-04T20:46:47.654+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "An interesting challenge would be to try to reverse-engineer the 3.3V SRAM from the rules.  The sets of rules are very similar between 3.3V and 5.0V, and the differences are notable.  Worth taking a stab at.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1365118310701600900/6bcc8e61db497b620550682309ace5d5.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435382931064492103",
+      "type": "Default",
+      "timestamp": "2025-11-04T21:39:18.891+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I got it down to 30 errors in the SRAM macro, none of them in the core.  Now trying to figure out how to flatten things on input to get rid of those last 30.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1365118310701600900/6bcc8e61db497b620550682309ace5d5.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435399913721692171",
+      "type": "Default",
+      "timestamp": "2025-11-04T22:46:47.872+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You will need to update open_pdks and rebuild the GF180MCU PDK, but the SRAM blocks read into magic now with no DRC errors.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1365118310701600900/6bcc8e61db497b620550682309ace5d5.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435399971233992786",
+      "type": "Default",
+      "timestamp": "2025-11-04T22:47:01.584+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "open_pdks version 1.0.553.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1365118310701600900/6bcc8e61db497b620550682309ace5d5.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435581860229939243",
+      "type": "Default",
+      "timestamp": "2025-11-05T10:49:47.3+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You're incredible, Tim!\nI'll update the template with the latest open_pdks and try to get an SRAM through the flow.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435609192705556520",
+      "type": "Default",
+      "timestamp": "2025-11-05T12:38:23.87+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "After applying the flatglobs from [here](https://github.com/RTimothyEdwards/open_pdks/blob/master/gf180mcu/custom/scripts/gds_import_sram.tcl), magic DRC is almost clean: I get a single CO.1 MV Diffusion contact width < 0.23um (CO.1 + 2 * CO.6) error.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435609255993413642",
+      "type": "Default",
+      "timestamp": "2025-11-05T12:38:38.959+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "This is were the violations is located.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [
+        {
+          "id": "1435609255691550720",
+          "url": "https://cdn.discordapp.com/attachments/1435007091634081833/1435609255691550720/Bildschirmfoto_vom_2025-11-05_13-37-03.png?ex=691a6e8e&is=69191d0e&hm=b093d0ef795ae6230b67c54de5512c7fc3051bd052e68da78b0d0fbbc63651e9&",
+          "fileName": "Bildschirmfoto_vom_2025-11-05_13-37-03.png",
+          "fileSizeBytes": 115462
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435609319977783318",
+      "type": "Default",
+      "timestamp": "2025-11-05T12:38:54.214+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Let me know if I should send you the layout.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435649159699894413",
+      "type": "Default",
+      "timestamp": "2025-11-05T15:17:12.744+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@mole99 :  No, I know what that error is. . . But I fixed it.  I think the problem might be that you still have the original layout for the SRAM in your chip.  The new PDK makes a tiny change to the GDS of the SRAM layout and removes one contact which is too close to (and offset from) the contact array next to it.  Removing that one contact is the easiest way to resolve the issue.  But you will need to update the SRAM cell in the layout.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1365118310701600900/6bcc8e61db497b620550682309ace5d5.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "323371864074485771",
+          "name": "mole99",
+          "discriminator": "0000",
+          "nickname": "mole99",
+          "color": null,
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1423020172595298314",
+              "name": "Mod",
+              "color": null,
+              "position": 1
+            }
+          ],
+          "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435650418737807451",
+      "type": "Default",
+      "timestamp": "2025-11-05T15:22:12.922+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Duh! You're absolutely right! I only updated the magic tech file in the wafer.space PDK fork.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435650897941237791",
+      "type": "Default",
+      "timestamp": "2025-11-05T15:24:07.173+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "BTW, I ran magic with valgrind overnight doing a complete DRC in magic on your chip_top.  In the morning it had maxed out my memory (64GB) and worked its way into swap.  Valgrind is identifying *megabytes* of memory leaks, but not *gigabytes* and I'm still trying to figure out just what could be so terribly memory-inefficient.  A full chip with fill is a lot of data, but. . . 60+GB??",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1365118310701600900/6bcc8e61db497b620550682309ace5d5.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435651579410649148",
+      "type": "Default",
+      "timestamp": "2025-11-05T15:26:49.648+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Magic's database format is known to be not particularly efficient;  each tile has four pointers to other tiles, so for a 64-bit system that's 32 bytes per tile, and since the tiles tesselate the entire plane, then even blank space is broken up into multiple tiles.  It adds up pretty quickly.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1365118310701600900/6bcc8e61db497b620550682309ace5d5.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435651984886599731",
+      "type": "Default",
+      "timestamp": "2025-11-05T15:28:26.321+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Oh, wow \uD83D\uDE2F\nMy PC has 64GB of memory too, but I haven't noticed it filling up yet.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83D\uDE2F",
+          "code": "hushed",
+          "isAnimated": false,
+          "imageUrl": "https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f62f.svg"
+        }
+      ]
+    },
+    {
+      "id": "1435652216093409350",
+      "type": "Default",
+      "timestamp": "2025-11-05T15:29:21.445+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The flow should reach magic DRC again soon. I'll take a look at the memory usage then.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435663937453559850",
+      "type": "Default",
+      "timestamp": "2025-11-05T16:15:56.035+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "My best guess:  In order to nail down all of the DRC rules, I have created a DRC CIF style with 64 layers.  All of those layers are created and maintained for the duration of the DRC check (and possibly not cleared afterward, but that's not the immediate problem).  They do not cover the whole chip, but they cover a pretty large area because they have to incorporate the effective distance of every rule.  Some rules like \"bloat-all\" can in theory reach across the entire chip and so cannot be clipped to the DRC region being checked, so these layers may span a large portion of the chip.  Vast memory grabs may be the inevitable result of trying to find a way to check every single DRC rule in the deck.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1365118310701600900/6bcc8e61db497b620550682309ace5d5.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435678655912087572",
+      "type": "Default",
+      "timestamp": "2025-11-05T17:14:25.189+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "That sounds like a good guess.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435678739743641761",
+      "type": "Default",
+      "timestamp": "2025-11-05T17:14:45.176+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "So, during the flow magic used a maximum of ~37.8GB. This was with the example chip implemented using the wafer.space template.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435690186611626094",
+      "type": "Default",
+      "timestamp": "2025-11-05T18:00:14.322+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I was using much more memory because valgrind was tracking it all, which is a lot of overhead.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1365118310701600900/6bcc8e61db497b620550682309ace5d5.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435691454054793339",
+      "type": "Default",
+      "timestamp": "2025-11-05T18:05:16.504+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Makes sense :)",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435803890112266310",
+      "type": "Default",
+      "timestamp": "2025-11-06T01:32:03.349+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Is this chip design in an available open source repository?  It makes a good test case.  I'm trying to use it to track down the (apparently massive) memory leaks in magic.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/1365118310701600900/6bcc8e61db497b620550682309ace5d5.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1435989217896435803",
+      "type": "Default",
+      "timestamp": "2025-11-06T13:48:28.936+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It is generated using the [gf180mcu-project-template](https://github.com/wafer-space/gf180mcu-project-template). However, there's no layout in the repository, so you will need to build it yourself or I can give it to you. Alternatively, I can update the CI to include the final layout as an artifact, then you can download it from the latest run.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "https://cdn.discordapp.com/avatars/323371864074485771/3c7c17f3225f6e56f4dccd83f14383f2.png?size=512"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    }
+  ],
+  "messageCount": 70
+}

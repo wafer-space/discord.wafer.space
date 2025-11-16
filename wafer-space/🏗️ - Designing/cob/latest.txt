@@ -1,0 +1,2962 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 🏗️ - Designing / cob
+Topic: Channel for discussing chip-on-board packaging options for wafer.space bare die.
+==============================================================
+
+[08/21/2025 17:05] mithro_
+
+
+{Reactions}
+👍 (2)
+
+[08/21/2025 19:06] tholin
+Essentially, my goal for my next gf180 tapeout is it to ditch caravel and build a headless setup for my multi-project dies while also providing at least one analog output pin. In other words, I need a custom padring. And I heard there are people here already making progress towards such a thing.
+
+
+[08/22/2025 06:28] mole99
+You can create a custom padring using the [leo/padring](https://github.com/librelane/librelane/tree/leo/padring) (experimental) branch in LibreLane. I had a setup for gf180mcu lying around somewhere, will have to see if I can find it again.
+
+
+[08/23/2025 18:10] anfroholic
+Is the padring you're referring to for wirebonding, or a wscp layout?
+
+
+[08/23/2025 18:54] mole99
+We focus on wire bonding. GF180MCU would also support solder bumps, but for that you need the MetalTop option afaik.
+
+{Reactions}
+👍
+
+[09/08/2025 16:49] mithro_
+I just found
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1414653946504548492/201417154417279.png?ex=691aa967&is=691957e7&hm=4292aef6c04df41a269bf922f5697f3e848a373b84915e038c7180eade1cde55&
+
+
+[09/11/2025 01:13] mithro_
+@Tim Edwards - Lots of discussion about padrings and such is happening here.
+
+
+[09/12/2025 18:40] tholin
+I designed and ordered a PCB layout to let me test COB, even though I don't have a wire bonder yet.
+But I'm increasingly ready to experiment!
+
+
+[09/12/2025 20:33] mithro_
+@Tholin - Have you uploaded your PCB layout somewhere?
+
+
+[09/12/2025 20:41] tholin
+Not yet
+
+
+[09/12/2025 21:30] tholin
+Going to wait at least until the board house has reviewed the layout and declared it manufacturable
+
+
+[09/13/2025 16:47] tholin
+Alright, no complaints so far and its mid-production. Hold on.
+
+
+[09/13/2025 16:47] tholin
+https://cdn.discordapp.com/attachments/1355137289390391538/1416096601876987904/image.png?ex=68c6ebbb&is=68c59a3b&hm=fbb99a124cca8622f7dba83653df52c0276cb52851cbb75dda48164c1b6f1fc5
+
+{Embed}
+https://cdn.discordapp.com/attachments/1355137289390391538/1416096601876987904/image.png?ex=68c6ebbb&is=68c59a3b&hm=fbb99a124cca8622f7dba83653df52c0276cb52851cbb75dda48164c1b6f1fc5
+https://media.discordapp.net/attachments/1355137289390391538/1416096601876987904/image.png?ex=691aa2fb&is=6919517b&hm=b5b91221f659a93fe76c9ed77d6d3df40bd4f6c060026aedf6997a6d6705e815&
+
+
+[09/13/2025 16:47] tholin
+Here's a preview
+
+
+[09/13/2025 17:10] urish
+Nice!
+
+
+[09/13/2025 17:56] mithro_
+@Tholin - Where are you getting it manufactured?
+
+
+[09/13/2025 18:22] tholin
+JLCPCB
+
+
+[09/13/2025 18:22] tholin
+I selected ENIG so all the pads are gold-plated. Hopefully that will be enough.
+
+
+[09/13/2025 18:22] tholin
+Its not actually too terribly expensive.
+
+
+[09/13/2025 18:25] tholin
+JLC quotes $120 for 100 4-layer PCBs up to 100mm by 100mm with ENIG, which comes down to just $1.20 per board.
+
+
+[09/13/2025 18:27] 246tnt
+But where do you get them wire bonded ?
+
+
+[09/13/2025 18:34] mithro_
+FWIW - I finally got a contact at JLCPCB, will see if I can get to someone who can help with getting wire bonding offered.
+
+{Reactions}
+👍 (2)
+
+[09/13/2025 18:52] tholin
+I am trying to obtain a wire bonder of my own
+
+
+[09/13/2025 18:52] tholin
+https://github.com/AvalonSemiconductors/gf180mcu_cob/tree/main/COB_test_board
+
+{Embed}
+https://github.com/AvalonSemiconductors/gf180mcu_cob/tree/main/COB_test_board
+gf180mcu_cob/COB_test_board at main · AvalonSemiconductors/gf180mc...
+Experimenting with Chip On Board setups for GF180MCU chips, most importantly gf180 Caravel. - AvalonSemiconductors/gf180mcu_cob
+https://images-ext-1.discordapp.net/external/1O8t8zpyIfzhh7Fh7pksvNwi4Uv_VSle-58aLPM2EJE/https/opengraph.githubassets.com/ad2929317a40fb8dd24759fcee6dd5e893ce3e042d5265884e1c99e272dd1125/AvalonSemiconductors/gf180mcu_cob
+
+
+[09/13/2025 18:57] tholin
+Based on the RISC-V core on my multi-project die
+
+
+[09/13/2025 18:57] tholin
+Outside of the COB, the rest of the PCB is as simple and bodge-able as possible.
+
+
+[09/13/2025 18:57] tholin
+Just in case
+
+
+[09/13/2025 19:42] urish
+Have you ever tried working with a wire bonder?
+
+
+[09/13/2025 19:42] urish
+@stuart and Matt did in the past, and it was... pretty challenging
+
+
+[09/13/2025 21:56] tholin
+Well, practice makes perfect, right?
+
+
+[09/14/2025 00:31] polyfractal
+can confirm they are pretty hateful machines 😅
+
+
+[09/14/2025 00:32] polyfractal
+fun while working, very frustrating when not
+
+
+[09/19/2025 19:03] mithro_
+
+
+
+[09/19/2025 19:03] mithro_
+@Andrew Wingate was playing with some castellated edge boards.
+
+
+[09/19/2025 19:07] urish
+Nice! One power domain?
+
+
+[09/19/2025 19:22] 246tnt
+What's the pitch on those ?   1.27 mm ? or 1 mm ?
+
+
+[09/19/2025 19:23] mithro_
+I think 1mm but have to wait for what @Andrew Wingate says
+
+
+[09/19/2025 19:43] anfroholic
+Yes, the pitch is 1mm as shown. 
+I hadn't realized how large the ring for the bonding wires was so there's a lot more room than I had thought. 
+
+All this is a bit of an exploration into what's the best form factor for:
+- ease of use
+- easiest for the wire bonders themselves
+- if you want many of them
+
+I am open to suggestions.
+
+
+[09/19/2025 19:54] tholin
+tbh that COB footprint I made could be scaled down. The power/ground rings can be closer to the die, I think.
+
+
+[09/19/2025 19:59] anfroholic
+Sounds great. Thank you for the baseline. I am just playing around a bit.
+
+
+[09/19/2025 20:00] 246tnt
+@Andrew Wingate Also see https://discord.com/channels/1361349522684510449/1418540236148838461 thread which has the pad frame and how it should be bonded out.
+
+
+[09/19/2025 20:00] anfroholic
+This whole panel is 100mm on a side. 
+and from what I've seen should fit in the wire bonding machines I've seen.
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1418688156592771292/image.png?ex=691a2d4e&is=6918dbce&hm=dff63909b551c8c07ce6f914f84b4a4daf94056a668700c0ca99cee215a2e4b2&
+
+
+[09/19/2025 20:02] 246tnt
+@Tim 'mithro' Ansell What's the die thickness ? Are they going through thinning ?
+
+
+[09/19/2025 20:05] anfroholic
+I am seeing 64 pins? 
+Is that what we should be shooting for. 
+I was under the assumption there were no hard standards and was shooting for something that could cover most use cases while being easy for people to work with. 
+There were also some suggestions for this same kind of thing but with .1" spacing and the ability to breadboard. 
+
+Is there interest in that variation as well?
+
+
+[09/19/2025 20:06] mithro_
+Not currently planned as it is quite expensive in very low volume.
+
+
+[09/19/2025 20:07] 246tnt
+So around 750um then ?
+
+
+[09/19/2025 20:07] mithro_
+I don't think people can access that thread?
+
+
+[09/19/2025 20:07] anfroholic
+I can see it
+
+
+[09/19/2025 20:08] urish
+Same
+
+
+[09/19/2025 20:08] mithro_
+Maybe just my phone being weird?
+
+
+[09/19/2025 20:08] 246tnt
+@Tim 'mithro' Ansell why not ? It's in #general in this discord.
+
+
+[09/19/2025 20:09] mithro_
+@Tholin - I would definitely like to have some DIP style templates. I believe @ReJ aka Renaldas Zioma needs that for the z80?
+
+{Reactions}
+👍
+
+[09/19/2025 20:10] mithro_
+Just seems to be some weirdness of the phone client, working now. Sorry.
+
+
+[09/19/2025 20:11] tholin
+The current COB footprint is too large to fit a DIP footprint
+
+
+[09/19/2025 20:11] tholin
+I’ll need to make a new one
+
+
+[09/19/2025 20:11] tholin
+But as it stands, I can’t even test the current one
+
+
+[09/19/2025 20:11] tholin
+Still do not own a wire bonder and won’t for a few more months
+
+
+[09/19/2025 20:25] tholin
+But, theoretically, should be possible. After all, the dies are of the right dimension to fit inside one of those ceramic DIP carriers.
+
+
+[09/19/2025 20:30] 246tnt
+@Tim 'mithro' Ansell So you want one pad frame but different breakout options ?
+
+
+[09/19/2025 20:31] anfroholic
+Just for reference, this is what it looks like currently.
+
+
+[09/19/2025 20:31] anfroholic
+
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1418696021793308672/image.png?ex=691a34a1&is=6918e321&hm=d0210204a3291128e7199fba9c0ef98eab1abe200857f8f14ce006f2477486a7&
+
+
+[09/19/2025 20:32] 246tnt
+That's definitely not bondable. Wires can't be at more than 45 deg.
+
+
+[09/19/2025 20:32] 246tnt
+Ah wait, nm, that footprint is not the die itself, forget it.
+
+
+[09/19/2025 20:33] anfroholic
+I was more making a visual model than anything concrete, just trying to engage some conversation and see if there are opinions so I may gather a consensus of sorts.
+
+
+[09/19/2025 20:37] tholin
+Okay, I don’t think it needs to be scaled down much to fit routing to the pins
+
+{Reactions}
+👍
+
+[09/19/2025 20:45] mithro_
+@tnt - I think there are missing traces from the bond pads to the edge pads?
+
+
+[09/19/2025 20:46] anfroholic
+correct, there are no traces on anything
+
+
+[09/19/2025 20:47] mithro_
+Eventually, multiple standard templates for everything and it being someone else's problem 😛
+
+
+[09/19/2025 20:48] mithro_
+But in the short term, one or two pad frames and one or two breakouts.
+
+
+[09/19/2025 21:12] tholin
+For reference, this is what it looks like inside an actual DIP-40 ceramic carrier.
+https://www.spectrum-semi.com/sites/default/files/pdfs/CSB04079.pdf
+
+
+[09/19/2025 21:20] tholin
+Relevant section. I believe I can design a COB footprint based on these dimensions. I also have diagrams for DIP-48 and DIP-64 carriers to reference if more pads are needed.
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1418708444491284511/image.png?ex=691a4033&is=6918eeb3&hm=9692e281312a11e25240c63fbc2ae00281593c6952c5bda9c3142b014e4fe8f7&
+
+{Reactions}
+💜
+
+[09/21/2025 18:48] tholin
+Done!
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1419394972062453770/image.png?ex=691a1c94&is=6918cb14&hm=df94020efef53b64ff514225b8ee1159a9314c304fe61182afa1bbc5ba61631b&
+
+{Reactions}
+blobclap (4)
+
+[09/21/2025 21:28] tholin
+Well, that works!
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1419435113862795455/image.png?ex=691a41f6&is=6918f076&hm=de07c4866c701c1b1aa4f6cbd2235b388977edfc88fc6b9c7cbe7fc7ac5cce53&
+
+{Reactions}
+🎉 (3)
+
+[09/23/2025 00:28] mithro_
+@Tholin - Cool! What size is that?
+
+
+[09/23/2025 00:29] mithro_
+@Tholin - What design rules does that end up being?
+
+
+[09/23/2025 07:37] tholin
+Its JLCPCB’s two-layer PCB rules
+
+
+[09/23/2025 07:38] tholin
+Its basically just a DIP-40 carrier, but on PCB
+
+
+[09/23/2025 20:30] mithro_
+@Tholin - Link to repo?
+
+
+[09/23/2025 20:32] tholin
+https://github.com/AvalonSemiconductors/gf180mcu_cob
+
+{Embed}
+https://github.com/AvalonSemiconductors/gf180mcu_cob
+GitHub - AvalonSemiconductors/gf180mcu_cob: Experimenting with Chip...
+Experimenting with Chip On Board setups for GF180MCU chips, most importantly gf180 Caravel. - AvalonSemiconductors/gf180mcu_cob
+https://images-ext-1.discordapp.net/external/FPRHCh_CsSoLF5UiQq2csqkB7o_uvOXf_KSoATBjVAI/https/opengraph.githubassets.com/2d8c33ef08a11e7093d429a9dc238dd6db4ace3d769298ce1c0a321e6c3768ca/AvalonSemiconductors/gf180mcu_cob
+
+
+[09/23/2025 20:37] mithro_
+Awesome, thanks!
+
+
+[09/23/2025 22:30] mithro_
+I wonder if you could "drop" the chip in a cut out to make the whole thing flatter, bond wires shorter.....
+
+
+[09/24/2025 01:22] algofoogle
+4-layer PCB, and a die-shaped hole milled out of the top substrate, you mean?
+
+
+[09/24/2025 01:55] mithro_
+@algofoogle (Anton Maurovic) - yeah, something like that
+
+
+[09/24/2025 04:47] urish
+How would that work with the epad?
+
+
+[09/24/2025 04:59] mithro_
+@urish - You mean the backside silicon connection? I believe you can still have pads in the hole.
+
+{Reactions}
+👍
+
+[09/24/2025 05:02] algofoogle
+Is the back of the die electrically connected, though? I don’t think it was in the Efabless runs (or at least not intentionally); @Tim Edwards ?
+
+
+[09/24/2025 05:03] mole99
+No, it should be not. The epad refers to QFN packaging and is also wire bonded.
+
+
+[09/24/2025 05:05] algofoogle
+Btw, I think the hole I was talking about is called a “PCB Cavity”, and there are different ways to do it and different options supported.
+
+https://www.pcbway.com/blog/PCB_Basic_Information/What_is_Cavity_PCB_0882350d.html
+
+Related: die embedding
+
+https://www.pcbway.com/blog/Engineering_Technical/Use_Embedded_Components_To_Improve_PCB_Performance_And_Reduce_Size.html
+
+
+[09/24/2025 05:33] mithro_
+Yeah PCB Cavity is proper name.
+
+
+[09/24/2025 05:36] mithro_
+They have an picture on that last page like this
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1420282609371451545/2014522151016245.png?ex=691a0b81&is=6918ba01&hm=08e2f91c38a90ad3f6ad93659f2eb696c0ccdf903edfcbc65a6626925ee36d37&
+
+
+[09/25/2025 01:18] polyfractal
+oooh that's interesting re: image sensors, since it'd provide some protection to the bond wires without encapsulation
+
+
+[09/25/2025 19:40] mithro_
+BTW - People here might be interested in the discussions in #die-sorter as well.
+
+
+[09/26/2025 07:14] jwbowen
+*(sorry, I was just directed here by someone chatting about garage phabs and just wanted to say I'm a fan of your videos! I'll go back to being a normal person now)*
+
+{Reactions}
+❤️
+
+[09/26/2025 17:15] polyfractal
+Started a thread.
+
+
+[10/02/2025 20:28] _mwelling_
+ah I have not been paying attention here 🙂
+
+
+[10/04/2025 18:58] anfroholic
+Another option could be mezzanine connectors (similar to the Raspberry pi compute module)
+The connectors are sub $0.10 each.
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1424108533573619853/20230127_YXT-YXT-BB10-50S-02_C2763969_front.jpg?ex=691a1eed&is=6918cd6d&hm=0793724b42341a428d613a1e9ce249ed3b4de953a7975aa92921f6c1b41b430e&
+
+
+[10/04/2025 19:00] urish
+We're planning to use those in Tiny Tapeout
+
+
+[10/04/2025 19:01] mithro_
+@Andrew Wingate - My understanding was those connectors tend to be hugely expensive in anything but 100k units (which is why everyone ends up using PCIe or other similar connectors) but maybe things have changed?
+
+
+[10/04/2025 19:01] anfroholic
+https://www.lcsc.com/product-detail/C2763968.html
+Nah, they seem to be available and cheap
+
+{Embed}
+https://www.lcsc.com/product-detail/C2763968.html
+YXT-BB10-40S-02 | YXT | Price | In Stock | LCSC Electronics
+YXT-BB10-40S-02 by YXT - In-stock components at LCSC. Price from $0.0571. Free access YXT-BB10-40S-02 datasheet, Package, pinout diagrams, and BOM tools.
+https://images-ext-1.discordapp.net/external/ai_KR_D9H1uSFFa5OmMxJ2_uVU7B5Sj-PHKZOJw7bUM/https/assets.lcsc.com/images/lcsc/900x900/20230127_YXT-YXT-BB10-40S-02_C2763968_front.jpg
+
+
+[10/04/2025 19:02] urish
+
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1424109412477440040/image.png?ex=691a1fbe&is=6918ce3e&hm=2f7229c2be6c5dda97658b87eb8ecab7ee5fd8f85826bd178e7f1f9784eaae0d&
+
+{Reactions}
+💜 👀
+
+[10/04/2025 19:18] mithro_
+Cool! Maybe we should offer that as a COB optoin then?
+
+
+[10/04/2025 19:19] mithro_
+@urish - You going to annoy @carlfk by making the board size/shape change again? So he has to redo the mounting for tt.fpgas.online ? 😛
+
+{Reactions}
+😂
+
+[10/04/2025 19:19] urish
+What exactly are you referring to with "that"?
+
+
+[10/04/2025 19:20] urish
+yes, we figured out the current 2x2x20 DIP headers is pretty bad UX
+
+
+[10/04/2025 19:23] anfroholic
+> So he has to *[tell @Andrew Wingate]* to redo the mounting for tt.fpgas.online
+ftfy 😝
+
+{Reactions}
+🤣
+
+[10/04/2025 19:25] anfroholic
+Carl has a rack of tiny tapeout boards connected to raspberry pis and cameras that are accessible to play with remotely. 
+Every version of TTO boards you all have released has a different layout for the mounting holes
+
+
+[10/04/2025 19:26] urish
+I was asking about
+> Cool! Maybe we should offer **that** as a COB optoin then?
+
+
+[10/04/2025 19:28] anfroholic
+To have the dies mounted to a PCB and have a mezzanine connector on the back opposed to castellated or dip options. 
+What form factor works best for people to use? What would they like (and at what scale?)
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1424116049372119142/image.png?ex=691a25ec&is=6918d46c&hm=68243b059c373d40117a71c4f0489d411cf04ba3199f00385bac11af4de11eda&
+https://cdn.discordapp.com/attachments/1408134567491145728/1424116049795747910/image.png?ex=691a25ed&is=6918d46d&hm=a63e794f8a0ab83a2bf37d8fb393e12cf7369cd10703bb49b5cd938552c18f16&
+
+{Reactions}
+👍
+
+[10/04/2025 19:29] anfroholic
+These mezzanine connectors can be hand soldered as well, they're available and inexpensive, so think it sounds viable
+
+{Reactions}
+👍
+
+[10/04/2025 20:12] mithro_
+@Andrew Wingate - I think we just need to create some options and give them a go
+
+
+[10/05/2025 10:01] anfroholic
+Example of a mezzanine connected COB
+This would probably be the one I'd choose. Example has 40 pins, but there's room for a lot more.
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1424335698357653514/image.png?ex=691a49bd&is=6918f83d&hm=3d3f9547c94f1ad564f326d9cbec746ca76bc8414245b6f83b05b5d261ec96a3&
+
+
+[10/05/2025 10:04] urish
+Looks nice - though, having the connector exactly in the middle means that you have better chances of inserting it in the wrong orientation
+
+
+[10/05/2025 10:06] anfroholic
+That's why I put the pin1 designator 😜 
+But good call. Not sure how the best way to do that would be. Even if it's offset still doesn't help.
+
+
+[10/05/2025 10:08] urish
+yes, pin1 helps but it requires you to pay extra attension
+
+
+[10/05/2025 10:09] urish
+I imagine most carrier boards will have some rect marked where you insert the daugtherboard.
+
+
+[10/05/2025 10:09] urish
+So if you tried to insert it wrong orientation, the offset would cause these not to match (and in some cases, the daugther board might get of of the host board boundaries)
+
+
+[10/05/2025 10:10] urish
+so it's not full-proof either, but it gives you another cue that you did something wrong.
+
+
+[10/05/2025 10:10] urish
+If this wasn't BOM sensitive, I'd suggest just using two smaller connectors (20+30?), then this would be pretty much foolproof
+
+
+[10/05/2025 10:10] anfroholic
+I was thinking that. 
+I could also make a footprint that already contains all that so people don't need to reinvent. 
+I also thought maybe knocking a corner off, or a hole
+
+
+[10/05/2025 10:11] urish
+Yep, corner could also help here
+
+
+[10/05/2025 10:12] urish
+I think there are also keyed connnectors, but they are probably more expensive
+
+
+[10/05/2025 10:13] anfroholic
+If we do put it way over to the side there could  be a warning message that says something
+*DANGER*
+
+
+[10/05/2025 10:13] anfroholic
+only shows when it's reversed
+
+
+[10/05/2025 10:14] aedancullen
+do it like Intel Edison
+corner/side connector placement and maybe throw a single M2 hole on the opposite corner or something
+
+
+[10/05/2025 10:17] anfroholic
+Something like this maybe?
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1424339709370433607/image.png?ex=691a4d79&is=6918fbf9&hm=03360115dc456e459208a8051faa770a8d7bc0b8ece7a31a2ec8927a5030af04&
+
+
+[10/05/2025 11:01] 246tnt
+I would definitely like to see such a connector for the default pad frame of the example project and that would include the decoupling caps and separate io/core voltage on the power pins.
+
+And yes, if it's in the middle it can be inserted backward but then same for a QFN that can be soldered at wrong orientation or a DIP inserted backward ... when it's on the edge the routing of sigcal can become a pain. You could actually just notch the PCB (or put a couple of hole) and put a pin header on the main board to prevent wrong orientation while keeping it in the center.
+
+{Reactions}
+💜
+
+[10/05/2025 13:35] anfroholic
+I  think we can find something much more elegant, but I love the idea!!
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1424389555552911392/image.png?ex=691a7be5&is=69192a65&hm=701ba5f33fc0448f760009d836bba9336b917ef2c0916e89f470af6d0af5a80d&
+
+
+[10/05/2025 13:43] tholin
+I should maybe prepare a padring config template that's designed to work with my 40-pin COB footprint
+
+
+[10/05/2025 13:44] anfroholic
+Also does anyone have a suggestion for the number of pins? 
+50p would fit fine. There's not really any extra cost for extra even if they're unused.
+
+
+[10/05/2025 13:44] anfroholic
+I guess maybe wait?? Tim was saying there may be a couple version of padrings?
+
+
+[10/05/2025 14:15] 246tnt
+@Andrew Wingate Default pad frame needs more than 50 pins 🙂
+
+
+[10/05/2025 14:20] anfroholic
+There's a fairly significant jump going to 60 pins. Is that adequate?
+
+
+[10/05/2025 14:22] 246tnt
+Significant jump of what ?
+
+
+[10/05/2025 14:22] anfroholic
+price and availability
+
+
+[10/05/2025 14:22] 246tnt
+2x30 ? 🙂 or 2x40 ...
+
+
+[10/05/2025 14:23] anfroholic
+So, 60 is the target?
+
+
+[10/05/2025 14:23] 246tnt
+or 30 + 40 will also prevent wrong way insertion ...
+
+
+[10/05/2025 14:24] 246tnt
+Actually ideally it'd be like 70 ( well don't think there is anything between 60 and 70 ) so you can put a couple more ground pins in there and double up the power ...
+
+
+[10/05/2025 14:26] anfroholic
+The price and availability is pretty flat up to 50 pins, so if there are 2, 90 is also probably fine?
+
+
+[10/05/2025 14:26] 246tnt
+Sure more is never an issue 😅
+
+{Reactions}
+😂
+
+[10/05/2025 14:27] anfroholic
+Then depending on what Tim wants to do he has some high pin count for some of the less complex COB if desired
+
+
+[10/05/2025 14:29] anfroholic
+Can you point me to where I can find the default pad frame?
+
+
+[10/05/2025 14:31] 246tnt
+https://docs.google.com/spreadsheets/d/1sZCpz6yy-bHGaV2BVG4IZOLBWn--WIddM9pkCQm_Vyc/edit?usp=sharing
+
+{Embed}
+https://docs.google.com/spreadsheets/d/1sZCpz6yy-bHGaV2BVG4IZOLBWn--WIddM9pkCQm_Vyc/edit?usp=sharing
+TT GF180 padframe
+https://images-ext-1.discordapp.net/external/24tYFgCi2ECP_IRJwJGkmh4WxsY8R2zweSTOALuyyWc/https/lh7-us.googleusercontent.com/docs/AHkbwyK1jnSVNz6DnsGqNg7VFR4YLdD0IIGVeneBpArh3T-NLCawitcS7d2rNd5xsxVN-Wt5WlyziE0oSor5pwp1GPsvLI5SO45Y_JuMKdFZWABYmHZXivS2%3Dw1200-h630-p
+
+{Reactions}
+💜
+
+[10/05/2025 14:32] 246tnt
+That's the TT padframe that was picked as the default pad frame for the user project ( except all the "names" are irrelevant, just that signal pins are signal pins and power/ground pins are power/ground pins ).
+
+
+[10/05/2025 14:53] anfroholic
+@tnt Something more like this then?
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1424409207968632832/image.png?ex=691a8e33&is=69193cb3&hm=f3889c9626670a68ee3d2bd1633328490f8fc1d32f954c80d0d95125433632b9&
+
+
+[10/05/2025 14:55] 246tnt
+Yup.
+
+{Reactions}
+💜
+
+[10/05/2025 14:57] tholin
+Do I create a COB footprint based on this padring from a DIP-64 ceramic carrier?
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1424410251771510938/image.png?ex=691a8f2c&is=69193dac&hm=9bc08f72967bebe286ea226260fc4a2f47772d9429d5352db5ea367335f03eeb&
+
+
+[10/05/2025 14:58] tholin
+Pro: would be compatible with real DIP carriers
+Con: requires awkward padring setup on the die
+
+
+[10/05/2025 15:29] xobs
+I thought it was generally not advisable to use multiple of those kinds of connectors because then SMT alignment becomes an issue, and the tolerance for alignment gets very tight.
+
+
+[10/05/2025 15:34] anfroholic
+That is a valid concern
+
+
+[10/05/2025 19:27] mithro_
+I don't think you should underestimate SMT alignment issues with multiple connectors.
+
+
+[10/05/2025 19:29] mithro_
+Well, it is 1c per wire bond and you need one wire bond per pad at least. So 80 pins doubles the cost from 40 pins.
+
+
+[10/05/2025 19:31] mithro_
+Frequently people seem to double bond power stuff.
+
+
+[10/05/2025 20:49] algofoogle
+Supporting customers at Efabless, 64 pins on Caravel and even OpenFrame was always a bit limiting. That’s why I was excited when 74 was described for the TT default padframe
+
+
+[10/06/2025 09:12] mithro_
+@algofoogle (Anton Maurovic) - I've pondered a bit about how people are using all these pins
+
+
+[10/06/2025 09:19] 246tnt
+@Tim 'mithro' Ansell When you want to test things, you often try to export internal signals to have some visibility and you can quickly run out that way.
+
+
+[10/06/2025 09:22] 246tnt
+In the pad frame above, only 56 are actual user IO, rest is power/ground ( multiple rails, multiple bond per rail ).
+
+
+[10/06/2025 09:23] mithro_
+I think that is why we need to create a decent internal logic analyser / oscilloscope
+
+
+[10/06/2025 09:26] 246tnt
+Both of these need memory ... which is huge on-chip ...
+
+
+[10/06/2025 09:31] mithro_
+Yeah, having better memory options/solutions would help with that.
+
+
+[10/06/2025 09:31] mithro_
+And better connectivity like high speed USB and such
+
+
+[10/06/2025 09:33] mithro_
+However, we are not there yet with such things.
+
+
+[10/07/2025 14:11] anfroholic
+@tnt I've been playing in my mind with the number of pins you're looking for and how to best accomplish that. 
+On one hand we just have the sheer number of pins and I am not sure how  many wire bonds @Tim 'mithro' Ansell is wanting to let people have. 
+
+That said, the picture here has 78pins and there is some room for some other things as well--and/or instead. 
+Instead could also just be testpoints. They don't need to be brought down to the main PCB board and can remain on the COB 
+
+Another idea, is to have some solderable jumpers or 0R resistors that can bridge a pin from the COB to the pcb. 
+
+And finally if something like the solderable jumper is a viable option, is there some way to have the same effect on the die itself with a MUX or the like. I am trying to wrap my head around the actual utility here. There are *user_pins* and *power_pins* I can understand the desire for more pins, but don't know what that means in practice and if it could/should be more *shared_pins* 
+
+Thanks
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1425123433942876273/image.png?ex=691a8460&is=691932e0&hm=5b73f8c5d605e726cebb5abc7548df3970412445b82f6cf19610edec9276aee4&
+https://cdn.discordapp.com/attachments/1408134567491145728/1425123434333081700/image.png?ex=691a8460&is=691932e0&hm=bf901b2029507e5294603f404cb528672ef8dfe763bb552115e12e3921334e18&
+
+
+[10/07/2025 17:01] rebelmike
+I asked in the discord of another product (tinyclunx) that uses two of these connectors about alignment issues, this was the reply FWIW:
+"As in the 2 DF40 Hirose connectors being misaligned/slightly rotated?
+So far, have not seen anything liek this. Have got fabrication done at the local SMT, Elecrow and JLCPCB. All have been perfect over more than 100 units. These connectors seem to self align with solder surface tension. I could see them moving to the right spot when hand placing them and reflowing.
+PS: these connectors are used in very high volume products so am sure they've been optimized for self alignment. Must have ENIG plating for this pitch to help."
+
+
+[10/07/2025 17:10] 246tnt
+@Andrew Wingate Of those 74 bond pads it's important to note only 56 are "user io". The other being power and if you include decaps on board that means you could probably get by with only say 1 power pin per rail on the breakout and maybe 4 gnd pads. So that's "only" 63 external castellated pins.
+
+{Reactions}
+👍
+
+[10/07/2025 17:12] 246tnt
+The chips needs several bond pads for power because the rings inside the chip are not that good of a conductor, a PCB trace is much better to move power around and feed it at several place around the die. But to connect to the "mother board" you don't necessarely need multiple castellated pins.
+
+
+[10/07/2025 17:14] anfroholic
+I see, thank you. I think I am understanding a bit better now. 
+Any ideas on how many decoupling caps? I am assuming a few .1uF?
+
+
+[10/07/2025 17:16] 246tnt
+I'd go with a couple of 1uf for each rail.
+
+{Reactions}
+👍
+
+[10/07/2025 23:25] anfroholic
+I put together a few numbers so we can get a feel for the cost to put dies on COB to present to you all and @Tim 'mithro' Ansell 
+
+**COB Cost Breakdown**
+```
+| Item              | Price (1k COB) | Each     | Notes / Link |
+|-------------------|----------------|----------|---------------|
+| **PCB**           | $45.00         | $0.0450  | PCB cost is always needed — assumed 6×6 grid @ qty 30 panels |
+| **Wire Bond**     | $500.00        | $0.5000  | For 50 wirebonds |
+| **Castellated**   | $100.00        | $0.1000  | Extra cost on top of other PCB cost |
+| **70p Mezzanine** | $291.20        | $0.2912  | [LCSC C19089236](https://www.lcsc.com/product-detail/C19089236.html) |
+| **60p Mezzanine** | $247.40        | $0.2474  | [LCSC C294544](https://www.lcsc.com/product-detail/C294544.html) |
+| **50p Mezzanine** | $83.20         | $0.0832  | [LCSC C2763977](https://www.lcsc.com/product-detail/C2763977.html) |
+| **1µF Decap**     | $11.60         | $0.0116  | Assume 4 per COB |
+| **Assembly Fees** | $50.00         | $0.0500  | 1¢ per component |
+```
+The general idea is that COB will be panelized in ~100mmx100mm panels. Some components can be put on the pcb before (or after) the die like connectors--mezzanine most likely--and decoupling caps reducing the number of pins that may need to connect to the motherboard like TinyTapeout and @tnt with high pinout demands would like. 
+
+Please let me know if there are any other variations anyone would be looking for and/or interested. 
+DIP like @Tholin has been working on are still available too, but didn't really have a place on this sheet I don't think
+link to spreadsheet https://docs.google.com/spreadsheets/d/17oUlsN1SRM1lt5fsIiS17jE1C9ZgoKSnC5zECYs8Bc4/edit?gid=0#gid=0
+
+{Embed}
+https://docs.google.com/spreadsheets/d/17oUlsN1SRM1lt5fsIiS17jE1C9ZgoKSnC5zECYs8Bc4/edit?gid=0
+COB pricing guide
+https://images-ext-1.discordapp.net/external/OrBrcmWphlFtfE1l_NExcq8Yxx6StFohKxlE8QOIh6o/https/lh7-us.googleusercontent.com/docs/AHkbwyLueD11P7e3Qq3ejfpAVGchDojQSX_4lNMBhmhnC_I447slLMiM87fnWlbZny7X14JDy3nU18UmWoqpI2JBJJ0xS2-SOz51Ueyw_PXPhBUGL4ZhvEQ%3Dw1200-h630-p
+
+
+[10/08/2025 16:36] asc9742
+Hi, nice to meet you all. My name is Andrew and my team and I are very excited to start work on porting the MOSbius chip (mosbius.org) to GF180 with the wafer.space project. I have just now started working on this project so please forgive my ignorance in the following questions.
+1) I recall from a previous email chain that @Tim 'mithro' Ansell had kindly let us know that we can use our own padframe. Is that still true for the COB option ($8500), or is there a default padframe we would need to follow? 
+2) If we can use our own padframe, I’m assuming we would also need to design the wire bond as well?
+3) For the default padframe that @tnt mentioned above with the 56 “user io” bond pads, can that be generated with the following template? https://github.com/wafer-space/gf180mcu-project-template
+4) Would the template also generate a seal ring? We had an issue with the 2025 Chipathon where a seal ring was not generated with the padframe. I believe GF will end up adding the seal ring for us.
+Apologies for the many questions. I would greatly appreciate your time and help clearing these questions up for us. Thank you.
+
+{Embed}
+https://github.com/wafer-space/gf180mcu-project-template
+GitHub - wafer-space/gf180mcu-project-template: Project template fo...
+Project template for wafer.space MPW runs using the gf180mcu PDK - wafer-space/gf180mcu-project-template
+https://images-ext-1.discordapp.net/external/zZD-huNuWJ7MU8BVbsMjVu6ldn_p-97496UP0hxWqlI/https/opengraph.githubassets.com/c6ca5521b5625899dd9ebc42a4860adfd14870b4ec8bb444c13c9897d93ae783/wafer-space/gf180mcu-project-template
+
+
+[10/08/2025 16:43] 246tnt
+@asc for (3), yes, the default padframe in that template is the one I was talking about.
+
+{Reactions}
+❤️
+
+[10/08/2025 17:23] asc9742
+@tnt are all the "user" type pads a single type of pad (Analog, digital, bidirectional, etc) ? I noticed that the pads have different "TT Function"s but I'm assuming that is specific only to the TT padframe?
+
+
+[10/08/2025 17:24] 246tnt
+The "TT" function is just for TT. In the template above they have some type defined, but you can pick/change to whichever you need for your needs.
+
+{Reactions}
+👍
+
+[10/08/2025 17:25] asc9742
+I see, thank you
+
+
+[10/08/2025 18:18] mole99
+@asc 1) Yes, the CoB option for $8500 uses the default padring. You can change the I/O pad types, put you shouldn't change the number of pads, as this would change the position of the bondpads.
+
+{Reactions}
+❤️
+
+[10/08/2025 21:30] asc9742
+Hi all, is the config.yaml file the only file I would need to alter to generate a custom padframe? Also, of the 74 pads, are all of them fair game to customize?
+
+
+[10/09/2025 04:17] peterkinget
+Hi Everyone, 
+
+We just got into the wafer.space design, so excuse me if I ask questions that have been answered. Looked around a bit but I am left with the following question. 
+
+I was talking to @asc and he mentioned that you are developing a template with 74 pads; ( 20 + 17 ) x 2
+
+The reticle is sqrt(20) so about 4.5mm on the side (although maybe the reticle is rectangular). In any case 20 pads on 4 mm would mean 200um center-to-center pitch. That sounds large. Obviously we do not need to push is to 50um which likely might not work for COB, but what is the guideline for the COB?
+
+What is the center-to-center pitch on the PCB pads?
+
+74 pads would work for out MOSbius chip (https://mosbius.org) , but more pins can always be put to very good use for our application ... 
+
+Finally, we would like a version which is dual in line style so we can put it in a breadboard. You can see our current PCB (with a chip in a package) attached.  
+
+@Tim 'mithro' Ansell  So how would we go about this? Do all the designs in the run use the same # pins and positions for the COB at 8,500. Or if we do the designwork of the PCB, can we make our own, or does that come at a higher cost?
+
+Many thanks! Looking forward to be part of this exciting opportunity for cheap 'packaged' silicon. For those that have paid for chip packaging they probably realize that silicon cost is one thing, packaging is a whole other painful expense ... 
+
+-- Peter Kinget
+
+
+[10/09/2025 07:41] mole99
+Hi Peter,
+
+Yes, there is the default template which has 74 pads, 54 of which are used for signals. 
+The $8,500 USD option with CoB packaging can only be used with this exact padframe, since the setup cost is shared across all designs.
+
+While you should not change the position of any pads, you can change the pad types. For example, all of the 54 pads could be used for analog. The remaining 20 pads are used for power and ground and should not be changed, since they will be connected to the power/ground rings of the CoB footprint on the PCB.
+
+If you do your own packaging, you could fit more pads into the padframe, or remove the padframe completely - this is up to you.
+
+I believe there are different daughter boards in development in the #cob channel.
+
+- Leo
+
+@Tim 'mithro' Ansell would it be possible for someone to design their own padframe and choose the CoB option? What would the additional cost be?
+
+{Reactions}
+💜
+
+[10/09/2025 08:07] mithro_
+I'm open to potentially having more options around pad frames / PCBs if we can make them come in within the required budget.
+
+{Reactions}
+👍
+
+[10/09/2025 17:30] asc9742
+@mole99 The padframe template seems to have 56 user pads and 18 power/ground pads instead of the 20power/ground you mentioned. Can you confirm the correct number?
+
+Is there some sort of guide I can follow to switch out the different IO types? I am getting lost in what needs to be done in the system verilog and yaml files to generate a custom padframe.
+
+Looking at the system verilog files, it seens that the BIDIR pads are actaully digital pin cells "gf180mcu_fd_io__bi_24t".
+Is it possible to use the analog pin cells "gf180mcu_fd_io__asig_5p0" instead?
+
+Thank you, Andrew
+
+{Reactions}
+👍
+
+[10/09/2025 17:35] mole99
+You're absolutely right! I only counted the INPUT and BIDIR pads in the template, but we also have a clock and reset. So, 56 user pads and 18 power/grounds pads is right.
+
+
+[10/09/2025 17:36] mole99
+Basically, you just instantiate a different pad type in the Verilog and swap out the instance name in the LibreLane config.yaml
+Let me know if you encounter any issues.
+
+
+[10/09/2025 17:37] mole99
+Yes, the bidir pads are digital input/output pads. You can swap them against the analog pad you mentioned.
+
+
+[10/09/2025 17:38] asc9742
+Sounds good, thank you
+
+{Reactions}
+👍
+
+[10/09/2025 17:54] peterkinget
+How do we go about this. Given the time constrains we will start with the standard for now, but for MOSbius we need pins, pins, pins ... So it would be great if you could take a stab at trying to increase the # of pins. 
+
+Also we need analog pads, i.e.  only ESD and no buffers or other active components in the pads. 
+
+Finally our need for VDD/VSS pads is less since we are operating at lower frequencies so we can worry a bit less about bondwire inductance.
+
+
+[10/09/2025 17:55] peterkinget
+What is the pad type for a basic analog pad: only ESD and no active components like buffers etc.
+
+
+[10/09/2025 18:01] peterkinget
+Thank you, Leo. There are 74 pads. Fully understood that location should not change, so that the bonding setup is the same for all. I can assign the type of the pads as I see fit. But I have to assign 20 to VDD/VSS. Can I change the location of those 20 pads or they are fixed?
+
+
+[10/09/2025 18:02] 246tnt
+They're fixed.
+
+
+[10/09/2025 18:02] 246tnt
+The idea is those power pads will get bonded to the various power rails in the "common" bonding setup.
+
+{Reactions}
+👍
+
+[10/09/2025 18:04] 246tnt
+The analog pads don't have buffer no. Just ESD diodes to both the `DVDD` and `DVSS` ( which are IO voltages )
+
+
+[10/09/2025 18:06] asc9742
+@peterkinget  I will try to use the template to generate the analog pads from the Chipathon for the design. (https://gf180mcu-pdk.readthedocs.io/en/latest/IPs/IO/gf180mcu_fd_io/datasheet.html) They only have double diode protection. No buffers.
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1425907364074229790/image.png?ex=691a12b7&is=6918c137&hm=298916d113aa77c862a28e816dde1de5c7fca75736802bb37108c3c57f5a9e75&
+
+
+[10/09/2025 18:09] 246tnt
+Of course if you have your own packaging provider, you can do whatever you want and just get dies 🙂  I guess you had to have the other mosbius chips packaged somehow 😅
+
+
+[10/09/2025 18:13] asc9742
+@tnt we cant say no to 1.5$ per chip for packaging 😆
+
+{Reactions}
+😁
+
+[10/09/2025 21:28] mithro_
+@asc / @peterkinget - I'm hoping that the stuff behind the $1.5 per chip packaging will be available generally in the future for any bare die packaging through the PCBA houses, then you can choose how much you want to pay, like $0.10 for 6 wire bonds and a $0.04 PCB or $5.00 for 400 wire bonds and $1.00 PCB.
+
+
+[10/09/2025 21:28] mithro_
+And then wafer.space can ignore packaging stuff 🙂
+
+
+[10/09/2025 21:29] mithro_
+The general costs are the PCB and ~$0.01 per bond.
+
+
+[10/09/2025 21:31] mithro_
+If you can create a PCB design + padframe which is open source and under the budget amount and the PCBA house is happy with, then I'm willing to try and make it happen and publish as an example/template for others to reuse.
+
+
+[10/09/2025 21:32] mithro_
+The people in this channel are probably the best people to help you figure out if you can make it work l.
+
+
+[10/09/2025 22:47] asc9742
+Sounds good. We may give that a try. Given the time constraint, this might be a project for a future run.
+
+
+[10/09/2025 23:47] dshadoff
+Are the bare dies really that resilient to feed into pick-and-place ?  I always understood that they were very sensitive and needed special tools for handling the dies without damaging them
+
+
+[10/09/2025 23:48] dshadoff
+(If we are talking about places like JLC doing mounting in the future)
+
+
+[10/10/2025 14:42] anfroholic
+While they're talking about having a company like JLC do the wire bonding, I wouldn't call it pick and place. It's wire bonding and is just being performed by JLC
+
+
+[10/10/2025 14:46] anfroholic
+So I have been going around and around about this. 
+
+**70pin Mezzanine:** I really think that version would be great, but I am concerned about users being able to get their own components for the mating side. Availability seems very low for this size
+
+**Castellated:** This is another viable option, but this means that users must either supply the COB to a PCBA at the time of assembly, or try to solder this chip on their motherboard themselves. This is doable but ~70 pin castellated solders gets old fast. 
+
+**2row 1.27 headers:** This is my latest iteration. This option has all the pins broken out (76) so users can do whatever they like. The picture on the right can probably be wave soldered, reducing the cost as much as possible because things add up fast when there's a lot of pins. 
+
+Personally, I would like to see the 50pin mezzanine connector version stay on the smallest footprint version for anyone wanting to use these in application (not sure if there are any) but that option allows a PCBA to assemble an entire board and user does not need to supply anything, then can just plug in themselves easily. This decision is based on price and availability as well. 
+
+@asc, I don't know what where you'd land on desires here, but an option as well for you would be the 50pin mezzanine and a bunch of testpad/breakout type areas where you could attach a probe for any pin that is not part of the 50 on the connector. 
+
+*We don't know the variability granted by the wirebonders. Ideally the PCB portion could be anything and as long as the pads are all in the same positions, granting @asc and others more pins taken from the power rails needed for @tnt*
+
+Opinions/ suggestions anyone?
+@Tim 'mithro' Ansell
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1426219400008040593/image.png?ex=691a8c92&is=69193b12&hm=4bd9591d83b5bdb7a9af348588238b513f7cca515bc40aea8a9bb91eff382dab&
+
+
+[10/10/2025 15:06] 246tnt
+I'd definitely avoid 1.27 headers, they're a pain.
+
+
+[10/10/2025 15:08] 246tnt
+I prefer mezzanine, HCTL seems to have quite a few 70~100 pin options if using 2 conectors is not acceptable.
+Also instead of castellated, you can do just plain LGA with just 0.5 mm pitch pads on the bottom to be reflowed on a host PCB.
+
+{Reactions}
+💜
+
+[10/10/2025 15:19] dshadoff
+Thanks. I asked because there was a point in the CrowdSupply talk where Mithro said it might be possible to supply the chips (as wafer slices) as tape spools, which made me wonder about how fragile (or robust) they might be.
+
+{Reactions}
+👍
+
+[10/10/2025 15:31] anfroholic
+Thanks.  While they're *available* from a couple suppliers availability seems low. Wafer.space will be able to purchase whatever because the qty is there given this will be spread across multiple projects, it does not seem places like lcsc stock very many. 
+
+Ill try drawing up an lga later tonight hopefully. 
+
+There seems fo be a fair amount of pushback on the 2 connectors regarding tolerances. But like I said above,  hopefully the wire bonders will allow different pcbs as long as the pads stay the same, Ill draw you whatever you want if you're willing to risk it!
+
+
+[10/11/2025 01:10] anfroholic
+@tnt, I think we may have a winner here. 
+Originally, I dismissed LGA as something that's hard to work with, but everything is pretty relative here and this actually seems like a really viable option. Depending on how the sizes of everything work out someone could even put this on  some other daughterboard that does whatever they want. 
+As shown there's 100 pins (not including the large pads in the middle) I figure sprinkling grounds all over for the analog and differential pins is a huge bonus. 
+Let me know what you think and I think I can start to harden this design. 
+@Tim 'mithro' Ansell thoughts?
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1426376335428812900/image.png?ex=691a75fb&is=6919247b&hm=cc7d3516e24408d995d66c111add4027864cd54fb885b7ab041e71b33087306e&
+
+
+[10/11/2025 01:11] anfroholic
+also of note, the way this is layed out gives an effective pin pitch of 1.13mm so it's not even that super small.
+
+
+[10/11/2025 01:14] mithro_
+@Andrew Wingate - I think we probably want these options uploaded and listed somewhere.
+
+
+[10/11/2025 01:16] anfroholic
+Agreed, but nothing is even real at the moment. There isn't even a schematic. I've just been dropping footprints in the editor. The pictures have been the only real thing.
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1426377936134738071/image.png?ex=691a7778&is=691925f8&hm=7f1fe91218f9773607c95190a86321c4cc0a7b8dbe01ffe53e5d7f3f0845da85&
+
+
+[10/11/2025 01:22] mithro_
+Well, I created https://github.com/wafer-space/chip-on-board-wire-bonded-pcbs
+
+{Embed}
+https://github.com/wafer-space/chip-on-board-wire-bonded-pcbs
+GitHub - wafer-space/chip-on-board-wire-bonded-pcbs: Wire bonded ch...
+Wire bonded chip on board PCB designs. Contribute to wafer-space/chip-on-board-wire-bonded-pcbs development by creating an account on GitHub.
+https://images-ext-1.discordapp.net/external/mXl3BJTdpYEu5hSTcJyMIibYSrT0yRwkbsv6dleOrSo/https/opengraph.githubassets.com/cbf0bc246cde3c1b1f1ad1bcec52b9d691425b05efe51769ab0964f6e33d4ba2/wafer-space/chip-on-board-wire-bonded-pcbs
+
+
+[10/11/2025 01:46] anfroholic
+I have uploaded my working files,
+But more importantly probably, I have compiled all the different designs and notes here: https://github.com/wafer-space/chip-on-board-wire-bonded-pcbs/tree/main/scratch
+
+{Embed}
+https://github.com/wafer-space/chip-on-board-wire-bonded-pcbs/tree/main/scratch
+chip-on-board-wire-bonded-pcbs/scratch at main · wafer-space/chip-...
+Wire bonded chip on board PCB designs. Contribute to wafer-space/chip-on-board-wire-bonded-pcbs development by creating an account on GitHub.
+https://images-ext-1.discordapp.net/external/6nTjuxumLnuNILmzNaS-rurw0TSUFRs3nbPn8wHc3eg/https/opengraph.githubassets.com/beb804be4e5fddedc87aa2c3bb6dc41900cb51c50d011bd187c9a15ffbd839e2/wafer-space/chip-on-board-wire-bonded-pcbs
+
+
+[10/11/2025 01:46] mithro_
+Probably should add a "Work in progress" warning?
+
+{Reactions}
+👍
+
+[10/11/2025 03:04] asc9742
+@Andrew Wingate thank you for working on this. Just to confirm, with the new 100 pin LGA design, which of the 74 pads would we be able to customize? Is it still the same where we cannot touch the location of the 18 power/ground pads?
+
+
+[10/11/2025 06:22] 246tnt
+@Andrew Wingate Looks good.  I would definitely do a test solder ( make some empty board  and carrier and actually test reflow ) before making thousands, but it looks nice.
+
+
+[10/11/2025 06:23] 246tnt
+Maybe just notch a corner 🙂
+
+
+[10/11/2025 12:20] anfroholic
+@asc I would like to defer to @tnt a bit here and ask what/where do you need nets tied in the COB
+I am referring to https://docs.google.com/spreadsheets/d/1sZCpz6yy-bHGaV2BVG4IZOLBWn--WIddM9pkCQm_Vyc/edit?gid=0#gid=0
+
+I would assume that we want `GND IO` to be the ground pour and have these all tied together on the COB. 
+I am assuming that the rest were tied mostly because you were shooting for a QFN 64 so just tied them all to EPAD. Does this need to remain the case? I am counting 6 wirebonds to `GND IO` can the rest of the pads be on their own nets? @asc this would leave you (74-6) 68 pins to do with as you wish.
+
+{Embed}
+https://docs.google.com/spreadsheets/d/1sZCpz6yy-bHGaV2BVG4IZOLBWn--WIddM9pkCQm_Vyc/edit?gid=0
+TT GF180 padframe
+https://images-ext-1.discordapp.net/external/vh0TfJS_gBbq6pidHX-hx-OuoBSfaw8qL23PfgirwL4/https/lh7-us.googleusercontent.com/docs/AHkbwyLZBNZ-aqRPRew1BVD8_BLI2xms5r-bASRg7NUwaV67yxg4OJ5N_H0T_M4f249pcLQojNdGqSrfx64Fv14PFFHC0X7uKUam_Dkmlh8Zzd3R9dP7CT4a%3Dw1200-h630-p
+
+
+[10/11/2025 12:23] anfroholic
+Yeah I was hoping as soon as possible to just get some made and do some testing. 
+I will see what I can come up with for pin1 marking. I am planning on V-scoring all these and that makes notches more interesting. 
+maybe a plated through hole with a sizable annular ring? That should stand out. 
+or now that I'm thinking about it, just a plated shape with no mask over it. It will be a bright gold spot
+
+
+[10/11/2025 12:35] anfroholic
+I kinda like this
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1426548876931895459/image.png?ex=691a6dec&is=69191c6c&hm=e59cb98c6cb701c7072bc282ea002834260fb4c895fb7a2a64731b90a2cef09f&
+
+{Reactions}
+❤️ (4)
+
+[10/11/2025 12:50] anfroholic
+I am imagining `GND_IO` to be laid out like this? 
+Is that too many? Should I try reducing the pitch some?
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1426552541189242941/image.png?ex=691a7155&is=69191fd5&hm=e6c4f94ad4d92bfd2b083a4569792ff27ad75ca05ef8af180587a1e35f8681ab&
+
+{Reactions}
+❤️
+
+[10/11/2025 16:10] asc9742
+68 pins would be great.
+
+{Reactions}
+👍
+
+[10/12/2025 07:20] 246tnt
+@Andrew Wingate Anything marked GND should be wired together with as big traces/planes as possible 🙂
+The power pins I was originally thinking of wiring them together on the breakout and bypass them there, but in the case of the LGA, if we can put the bottom pads of power close enough to where they get bonded on the top, it's probably fine to not treat them differently.  I maybe  would use 0.8 mm PCB too. Not sure if JLC offers ViP plated over ?
+
+
+[10/12/2025 07:25] ewenmcneill
+Looks like JLC can do POFV (Plated Over Filled Via), and on 6+ layer boards it looks like they'll do it at no extra cost since 2024 -- https://jlcpcb.com/blog/Free-Via-in-Pad-on-6-20-Layer-PCBs-with-POFV  (and  https://jlcpcb.com/blog/jlcpcb-free-via-in-pad)
+
+{Embed}
+https://jlcpcb.com/blog/Free-Via-in-Pad-on-6-20-Layer-PCBs-with-POFV
+Free Via-in-Pad on 6-20 Layer PCBs with POFV
+JLCPCB via-in-pad on 6- 20 layer PCBs are upgraded to POFV (Plated Over Filled Via) for free and will continue to be the free default for all upcoming high layer count boards.
+https://images-ext-1.discordapp.net/external/nax-wylXkowNI0GU4rMDYQhmynsinGqH6CT3q7ZVYps/https/jlcpcb.com/logo-og.png
+
+
+[10/12/2025 18:44] anfroholic
+I've been planning to use .8mm this whole time. 
+@asc  it looks like 10 pins will be used for GND this will leave (74-10) 64 pins to use as you see fit. 
+Thank you @tnt , I will try to get something drawn today sometime maybe and hopefully get something off to manufacture in the next few days.
+
+
+[10/12/2025 19:15] anfroholic
+@tnt Does this look ok for a bonding ring layout?
+It looks like you wanted to keep the power inputs in the corner pads so I kept that. The power pins will be broken out individualy and you can link/bypass them on the motherboard. I will try to get those pads as close to--if not directly under--the vias for power. 
+Is there anything else you'd like to see
+The pin spacing (21 on each side and 16 on top/bottom) have been preserved
+-# the bondwire layout has obviously not been updated
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1427011851123953875/image.png?ex=691a22d9&is=6918d159&hm=9829d7bc67d8a6739ff4402a7ddb52047813e175fc3dab606170afa8d2f2d3fb&
+https://cdn.discordapp.com/attachments/1408134567491145728/1427011851450974309/image.png?ex=691a22d9&is=6918d159&hm=a881e5d3f6a675659189875bbdd22409bcf8e3d3aa515c267ad757f2c4ef4988&
+
+
+[10/12/2025 19:18] anfroholic
+@Tim 'mithro' Ansell would you like to add anything in here. 
+Previous discussions have revolved around keeping as many pins available for project specific needs over tying some nets together such as VDD.
+
+
+[10/12/2025 19:25] 246tnt
+@Andrew Wingate The pwr aux are actually in the middle of the left/right side, not at the corners.
+
+
+[10/12/2025 19:26] anfroholic
+Dangit, I had it there for previous revisions.
+
+
+[10/12/2025 19:31] tholin
+I'd check if it was possible to bring the pads in closer without violating the 45 degree limit. I feel like this could be smaller.
+
+
+[10/12/2025 19:34] anfroholic
+Thanks @Tholin 
+I thought about that, but decided against hoping I could squeeze half the vias under the bond wires for the inner ring io's
+
+Is there a huge reason to try to shrink it down much further?
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1427016667900153959/image.png?ex=691a2756&is=6918d5d6&hm=c971b04ee91871eecedb2b58e52601e7d1c710e31bdf32820f1c202bc777bb02&
+
+
+[10/12/2025 19:35] anfroholic
+*this is still the old padring shown
+
+
+[10/12/2025 19:36] anfroholic
+although I guess it would anyways. Sure, I can shrink it a bit
+
+
+[10/12/2025 20:09] 246tnt
+If the wires are too long they can have too much slack and end up touching.
+
+
+[10/12/2025 20:24] anfroholic
+Alright, I think I got it. 
+Whatever is going on in that top left corner threw me for a loop every time. 
+@tnt and @Tholin do you see any problems if I start moving forward with this?
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1427029137843032144/image.png?ex=691a32f3&is=6918e173&hm=a57e91d543d88839b52ccdf4828f6dc509d09a30d209ae8b69c642092fe34587&
+https://cdn.discordapp.com/attachments/1408134567491145728/1427029138337828936/image.png?ex=691a32f3&is=6918e173&hm=edd69d96567da82e1d3274df2d952be4ec759c1ac9fd05e1e2df4963bc772b59&
+
+{Reactions}
+👍
+
+[10/12/2025 20:25] tholin
+I'd do what I did and check your work by using a comment layer to map out the bond wires.
+
+
+[10/12/2025 20:26] anfroholic
+Yeah, just wanted to check overall layout before going that far. the two bottom left wires have been placed and are within 45deg
+Thank you again
+
+
+[10/12/2025 20:27] anfroholic
+@tnt Is there somewhere I can find the pitch for the bond pads?
+
+
+[10/12/2025 20:30] 246tnt
+@mole99 do you have a GDS handy ?
+
+
+[10/12/2025 20:30] 246tnt
+In theory they're equally spaced, so just dividing the die size by number of pins should be close enough.
+
+
+[10/12/2025 20:31] 246tnt
+Note that the 45 deg rule is also not strictly required for the corner ones.
+
+{Reactions}
+💜
+
+[10/12/2025 20:32] anfroholic
+Ok, I'll go with that. 
+Afterall, I think this is more of a map for manually placing the bond points. 
+Thank you
+
+
+[10/12/2025 21:20] anfroholic
+@tnt @Tholin 
+Thanks again. 
+I think this is the final rev
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1427043331040346112/image.png?ex=691a402b&is=6918eeab&hm=8f3fdc7b6f1a064d3b6e10d0a984c8b2f5d6405e52b533191e9daabc24b50d08&
+https://cdn.discordapp.com/attachments/1408134567491145728/1427043331917086761/image.png?ex=691a402b&is=6918eeab&hm=9d44f38878bb12af6e6c0a9388955404fe56839cb07c2d5c82c56bff9471038f&
+
+
+[10/12/2025 21:21] tholin
+How big is it?
+
+
+[10/12/2025 21:22] anfroholic
+
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1427043760663040160/image.png?ex=691a4091&is=6918ef11&hm=7349836209827d7b99619729b7a763c4886fb7015352d1ae265ccbe08c1582ac&
+
+
+[10/12/2025 21:24] tholin
+That is pretty small!
+
+
+[10/12/2025 21:24] anfroholic
+too  small?
+
+
+[10/12/2025 21:25] tholin
+No
+
+{Reactions}
+💜
+
+[10/12/2025 21:25] anfroholic
+We're well within JLC's capabilities as far as PCBs go
+
+
+[10/12/2025 21:31] anfroholic
+New vs old. 
+I think this will look really nice
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1427045973347008512/image.png?ex=691a42a1&is=6918f121&hm=021499bdac9e426fcf9ad192944745c4c42b383b1a6ba38984cc7810a358b633&
+
+{Reactions}
+🤩
+
+[10/12/2025 21:33] tholin
+This might fit onto a DIP-40 compatible carrier.
+
+
+[10/12/2025 21:34] anfroholic
+not quite. I checked that already...
+
+
+[10/12/2025 21:36] anfroholic
+LGA is 16mm and space in DIP is only 12mm
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1427047370046046229/image.png?ex=691a43ee&is=6918f26e&hm=13f59a9c29ccfaef218a78b03429d0a370a86fa46686b27bab84683057d01441&
+https://cdn.discordapp.com/attachments/1408134567491145728/1427047370507681952/image.png?ex=691a43ee&is=6918f26e&hm=dcf3368789749cfef79d4c593e3bbbc5cb2de3dbc56eaf27d0a67a67c1d73770&
+
+
+[10/12/2025 21:37] anfroholic
+I don't think trying to squeeze lga by that much is worth it. 
+Things become very small
+
+
+[10/12/2025 21:43] anfroholic
+oh, you probably thought just the padring. 
+it might 🙂
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1427049134564835408/image.png?ex=691a4592&is=6918f412&hm=e1e93958eb1a921e7028c0832f3e7454c4de370dec6fd082d901fc54fc61ed02&
+
+
+[10/12/2025 21:46] tholin
+Would require some intense routing on a 4-layer PCB, but doable
+
+
+[10/12/2025 21:46] tholin
+Assuming supporting components are required
+
+
+[10/12/2025 21:46] anfroholic
+You wouldn't be using all the pins then either, so that would save a bunch of space for traces. 
+Still not sure how things will land on different formats. Is the pattern more important? or what makes one something *new* that they consider it different
+
+
+[10/12/2025 21:47] anfroholic
+There are 32 pins that go out the top and bottom. That's close to satisfying the 40
+
+
+[10/12/2025 22:44] asc9742
+@Andrew Wingate final is 64 customizable pins and 10 unchanged ground pins? I’m assuming the ground pin locations are identical to the 10 ground pins locations already in the template (from the TT padframe spreadsheet)?
+
+
+[10/12/2025 22:45] anfroholic
+That is correct.
+
+
+[10/12/2025 22:45] anfroholic
+Hope that works for you all
+
+
+[10/12/2025 22:46] anfroholic
+We can get a final sign-off from @Tim 'mithro' Ansell, but I feel pretty confident.
+
+
+[10/12/2025 22:58] algofoogle
+This is a nice step up from the original Caravel and OpenFrame, which offered 38 (technically 40) and 44 signal pins respectively... so now we'd get at least 54 signal pins, and each of them as customisable pads.
+
+
+[10/12/2025 22:58] algofoogle
+Great work @Andrew Wingate and team 🙂
+
+{Reactions}
+waferspace
+
+[10/12/2025 23:06] peterkinget
+Great work.
+
+I would still like to suggest to have more signal pins. I am not sure why you are using so many VSS pins. Now I might be missing something in terms of the limitations w.r.t. COB bonding, but 10 GNDs out of 74 is a lot, in particular for those of us who are not going after high speed or RF designs (which are going to be challenging in GF180MCU anyway). 
+
+We need 68 pins (and preferrably more) for MOSbius. But I do not think we are unique in the "need for pins". I did a quick area estimate planning exercise yesterday -- see below -- and we have tons and tons of spare area and could put in a lot of functions, but just need more pins ... That is in part due the nature of our MOSbius design, but is true for many designs by starting designers where you want a good number of pins for debug. We saw the same in the chipathon. 
+
+Can we set up a zoom call to discuss. I am on pacific time but can accommodate times the work for US or EU. 
+
+Many thanks.
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1427069922176929893/Screenshot_2025-10-11_at_8.48.51_PM.png?ex=691a58ef&is=6919076f&hm=4e4d51ee5d6dd30cbdcecdd86b2157697bcf2b770049e6a4df74c1da39eab0c0&
+
+
+[10/12/2025 23:08] peterkinget
+Have you considered putting the chip footprint on the PCB under a 45 deg angle (see e.g. the arduino nano board), that often simplifies the routing. If it is allowed by the COB packaging process.
+
+
+[10/12/2025 23:12] anfroholic
+I thought about that as well. The main argument that came to mind was what the wirebonders would think of it. 
+I think there are still a lot of negotiations happening, so I'm not sure what they feel a *new design* would consist of, whether it be changing orientation, number of pins while still sharing locations from default, different spacing on a panelized PCB.
+
+
+[10/12/2025 23:14] anfroholic
+Another option for those like @Tholin would be to create a board that can just accept the LGA and do whatever you like there. 
+This particular design kinda makes me feel yucky, but not entirely sure why, but figured I'd share
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1427071889821667349/image.png?ex=691a5ac4&is=69190944&hm=968ea25fd4355c6b647622947394bd6c4a0520d8e1691785d504a4fff71c5377&
+
+
+[10/12/2025 23:27] anfroholic
+> Can we set up a zoom call to discuss. I am on pacific time but can accommodate times the work for US or EU. 
+I'm not sure who outside @tnt wants to speak for the default padframe. 
+I personally don't have any opinions but would offer to be present if you all think I would add anything.
+
+
+[10/12/2025 23:57] anfroholic
+Also I've been following the recommendations laid out by STMicro on LGA patterns and am opting for non solder mask defined (NSMD) pads for reliability and feel there shouldn't be a lot of rework done on these chips (you're getting 1000 anyways)
+https://www.st.com/resource/en/application_note/an5886-guidelines-for-design-and-board-assembly-of-land-grid-array-packages-stmicroelectronics.pdf
+
+
+[10/13/2025 00:04] mithro_
+@Andrew Wingate / @peterkinget / @tnt / @asc / @Tholin 
+
+I have a couple of random thoughts (not in any particular order):
+ * *Ultimately* my thoughts don't really matter, the only ones who really do are the PCBA house & the customers. If the result is under budget, actually can be manufactured and makes people happy then it is perfectly fine by me.
+ * In terms of PCBA negotiation, PCB Way is the furthest along, then Seeed and JLCPCB the furthest behind. We should make sure the PCBs are manufacturable at PCB Way as P0.
+ * I'm happy to have multiple PCBs and pad frame designs -- 4-6 is fine, >10 is probably too many.
+ * I really want to have at least one option which is DIP for breadboard compatible usage.
+ * I have square & symmetrical designs, just gives one another way to screw things up.
+ * The **only** silicon we have today uses either Mehdi/OpenFASoC or the caravel padframe. Hence to test the cob wire bonding before we get back Run 1 silicon we need some designs which are compatible with that. I think we **do** really need to test this whole process before Run 1 gets back.
+ * I believe @stuart is the only person who has actually done cob wire bonding before (as part of the Tiny Tapeout test) we should ask him for advice and thoughts.
+
+
+[10/13/2025 00:05] mithro_
+There are also design rules from one house found @ https://drive.google.com/file/d/1touEQHWAOTon_98TdiVLKKqsQ8RJJ1tP/view?usp=sharing
+
+
+[10/13/2025 00:19] anfroholic
+> design rules from one house found
+Awesome, thanks. Giving that a read. Seems I'm out of spec in a couple areas
+
+> I'm happy to have multiple PCBs and pad frame designs -- 4-6 is fine, >10 is probably too many.
+- @peterkinget  Personally I would like to keep my just one LGA pattern but would be happy to create a bond pad version for you all. Let me know what you have in mind and I can try. 
+- In this case I can connect some nets back up if you'd like @tnt? 
+
+> [...] We should make sure the PCBs are manufacturable at PCB Way as P0.
+I just glossed over capabilities. I tried to keep everything very loose. Seems we're still on point
+
+> The only silicon we have today uses either Mehdi/OpenFASoC or the caravel padframe [...] we need some designs which are compatible with that.
+Is the TT frame compatible?
+
+
+[10/13/2025 00:25] mithro_
+@Andrew Wingate - Afraid I have no idea, would have to ask @tnt on the frame compatibility.
+
+{Reactions}
+👍
+
+[10/13/2025 01:17] anfroholic
+Fiducials added and ground landings moved to adhere to design constraints
+edit: I also changed pin #s to harmonize with TT pin #s
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1427103002472480768/image.png?ex=691a77be&is=6919263e&hm=4ff54d1bc890704b30511589a08af9ef3c283c96fdd9f07978c2c231b0e21b7d&
+https://cdn.discordapp.com/attachments/1408134567491145728/1427103003156156550/image.png?ex=691a77be&is=6919263e&hm=f549535e4c94d639c16fb3202badf58cff134b9ed41145261e7e5094663173be&
+
+
+[10/13/2025 05:01] peterkinget
+Thanks, @Andrew Wingate, what timezone are you in? It would be great to connect in a webmeeting. 
+
+Your design looks nice. Where do you think you are out of spec? 
+
+How big are your bondpads on the chip? They seem bigger than my 100um pads at a 200um pitch. I left a 1.5mm spacing around the die to statisfy the 1.5 x die thickness clearance (die are typically way thinner than 1 mm, don't know if the dies are backlapped in GF180); then I placed a row of 200x100 bondfingers (PCB side) at a 200um pitch on top. Not sure if the PCB house can support that, but it seemed to satisfy the requirements in the doc that @Tim 'mithro' Ansell shared above. If the PCB can support, then we can have straight wires, or am I missing something?
+
+Why are some of your bondfingers bigger?
+
+What CAD are you using for the PCB design? I attach a PDF export of an Altium webpage https://resources.altium.com/p/pcb-design-rules-chip-board-layout?utm_source=chatgpt.com. That tool seems to have a nice COB built in tool. In any case, notice how they rotate the pads to be aligned with the bondwire. This is also clearly visible on the picture that is on the wafer.space front page. Have you considered doing that or are there reasons why you can not?
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1427159165863985222/image.png?ex=691aac0c&is=69195a8c&hm=a729706ec1f13d733cba55d5c4b1fe8e71faae1f6e81f3bee955819d763f0d5b&
+https://cdn.discordapp.com/attachments/1408134567491145728/1427159166052470784/PCB_Design_Rules_for_Chip-on-Board_Layout.pdf?ex=691aac0c&is=69195a8c&hm=895f8197ad1ab50be0dfe9f521949433fd60039f51b219d13b27cb4c895175a3&
+
+{Embed}
+https://resources.altium.com/p/pcb-design-rules-chip-board-layout?utm_source=chatgpt.com.
+PCB Design Rules for Chip-on-Board Layout
+There is one simple type of packaging that is not really packaging in the conventional sense: chip-on-board.
+https://images-ext-1.discordapp.net/external/J4kQvfwg1DcfwXsF6hGDw554i_FzywbUt0K9HtMhRaQ/https/resources.altium.com/sites/default/files/blogs/PCB%2520Design%2520Rules%2520for%2520Chip-on-Board%2520Layout-83727.jpg
+
+
+[10/13/2025 05:17] anfroholic
+>  what timezone are you in? 
+I'm in Chicago - UTC-6. And you?
+
+> Your design looks nice. Where do you think you are out of spec? 
+The minimum distance to a pad based on the height of the die. (just a couple of the ground wires.)
+
+> How big are your bondpads on the chip? They seem bigger than my 100um pads at a 200um pitch.
+If you're talking about what you see above, those are **not** the real pad sizes. they're just drawings for reference. 
+I also am not well versed enough to answer some of the other questions, you'll have to ask someone else. 
+
+> Why are some of your bondfingers bigger?
+In an effort to get some more pads broken out for you all, I talked to tnt about breaking some nets up so you could use them for your purposes. In that we wanted to keep the traces as short as possible so there is a via directly in those. 
+I feel I will be going back and changing that portion as it's less necessary now. We'll see. Long story short is they don't have to be. 
+
+> What CAD are you using for the PCB design?
+I'm using KiCad
+
+> Altium webpage [...] seems to have a nice COB built in tool. In any case, notice how they rotate the pads to be aligned with the bondwire. Have you considered doing that or are there reasons why you can not?
+This would be kindof a pain in Kicad and I don't think this is necessary. You're welcome to design your own. 
+
+It seems like you have the same layout as the TT layout with 74 bonds.  
+https://docs.google.com/spreadsheets/d/1sZCpz6yy-bHGaV2BVG4IZOLBWn--WIddM9pkCQm_Vyc/edit?gid=0#gid=0
+
+If you want to make your own pin map, I will make a version for you.
+
+
+[10/13/2025 07:02] mole99
+
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1427189768638173214/chip_top.gds.gz?ex=691a1fcc&is=6918ce4c&hm=079969187adff78523916b9f4ff013f0150c5d602a6eb942f27f8e3827dac6a5&
+
+
+[10/13/2025 07:02] mole99
+This is generated using the project template. The pad positions are fixed, the signal pad types can be changed.
+
+
+[10/13/2025 18:32] saladchap
+Not sure how realistic this timing is but I'm going to be in Shenzhen next month (7-20th) and will be visiting my friend's cob factory for some TT projects and tests, would be happy to take other boards and dies too.
+
+They only do aluminium bonding, not gold wires - and can do either black or colourless transparent glob top
+
+
+[10/13/2025 18:33] saladchap
+https://youtu.be/XJmWoBJjvlI?si=Bj2e63CKN8ztEQ2d
+
+Here's a video with more about what we did last year
+
+{Embed}
+Zero To ASIC Course
+https://www.youtube.com/watch?v=XJmWoBJjvlI
+Chip on Board! Wirebonding ASICs
+For the full photo gallery, see the link at the end of my blog post: https://www.zerotoasiccourse.com/post/cob/
+
+Tiny Tapeout Store: https://store.tinytapeout.com/
+
+00:00 Intro 
+00:45 Stuart is our CMO 
+01:38 Visit to Shenzhen 
+02:25 PCB by Tamas 
+04:55 Bare dies 
+06:18 Wirebonder 
+09:18 Bonding 
+10:41 After bonding 
+12:11 Epoxy 
+17:14 Shop
+https://images-ext-1.discordapp.net/external/GK6fgFr9LFaO6in_YIRFZrZQHKeeysrgEm-xsbovESw/https/i.ytimg.com/vi/XJmWoBJjvlI/maxresdefault.jpg
+
+
+[10/13/2025 18:35] saladchap
+One thing to consider is making sure there's nothing too big / tall near the bonding area so the machine head has enough clearance. The cob process has to be done after smta afaik as the bonds wouldn't survive the reflow oven temps - they had to do some creative programming to get around the headers on the boards we took last time
+
+
+[10/13/2025 18:39] 246tnt
+"The cob process has to be done after smta afaik as the bonds wouldn't survive the reflow oven temps" 
+Oh well that would kind of kill the LGA or castellated pad idea and only leave mezzanine connects as the only option if you can't reflow after wire bonding ....
+
+
+[10/13/2025 19:17] anfroholic
+Yeah, that would really be a problem lol.
+
+
+[10/14/2025 00:45] mithro_
+I thought that the wire bonds were pretty protected after the covering blob was done?
+
+
+[10/14/2025 00:46] anfroholic
+I've been trying to track that down as well. My google-foo has been poor.
+
+
+[10/14/2025 00:47] mithro_
+This is also why I think we need to try and do some experiments / runs ASAP.
+
+
+[10/14/2025 00:47] anfroholic
+It's covered in epoxy which should hold up to the heat just fine
+
+
+[10/14/2025 02:55] peterkinget
+I am on Pacific time, feel free to suggest some times and I will try to accommodate.
+
+
+[10/14/2025 03:02] anfroholic
+Typically later in my evenings work the best. Some time around now some other day would be fine. 
+If you're up for it, I would like to leave this semi-public and let others here join in if they'd like to join in. 
+Tonight does not work for me. Tomorrow I will be out of town. I think I'm pretty free for the rest of the week, so let me know what works for you with that. 
+Others please let us know if these times work for you.
+
+
+[10/14/2025 03:02] peterkinget
+Rest of week should work for me; wednesday best.
+
+
+[10/14/2025 03:03] anfroholic
+Ok, let's tentatively shoot for Wed evening!
+
+
+[10/14/2025 03:08] peterkinget
+How about 8:15pm Pacific 10/15 -- here is a meeting room: https://columbiauniversity.zoom.us/j/98265793354?pwd=sXsJvzRF9rmJt1YTb6MCpkd0PXew7E.1
+
+{Embed}
+https://columbiauniversity.zoom.us/j/98265793354?pwd=sXsJvzRF9rmJt1YTb6MCpkd0PXew7E.1
+Join our Cloud HD Video Meeting
+Zoom is the leader in modern enterprise cloud communications.
+https://images-ext-1.discordapp.net/external/yi1uCfOE_f35l85wC-JY39SRgArpX9RHL3AbrWraOfk/https/st3.zoom.us/static/6.3.44637/image/thumb_for_launch.png
+
+{Reactions}
+👍 (2)
+
+[10/14/2025 04:32] anfroholic
+I asked the reddit and got a response that you could reflow. There are wire bonds in many (most) regular packages. 
+
+Their response in the post https://www.reddit.com/r/AskElectronics/comments/1o61zzx/boards_with_wire_bonded_die_and_epoxy_coating_can/
+> es, it can. This is a pretty common setup for cheap products where all the high integration stuff is located on a module. A lot of the handheld NES games do that.
+> 
+> This is also not that different from the ICs. It is also epoxy coated wire bonded die.
+
+{Embed}
+https://www.reddit.com/r/AskElectronics/comments/1o61zzx/boards_with_wire_bonded_die_and_epoxy_coating_can/
+From the AskElectronics community on Reddit
+Explore this post and more from the AskElectronics community
+https://images-ext-1.discordapp.net/external/D5lN7Bgejg8HJ3uIXJ7zRul3smRXG2scX5PSG-yANMg/https/share.redd.it/preview/post/1o61zzx
+
+
+[10/14/2025 05:01] anfroholic
+Looked into it a bit. Found this, but doesn't seem like it's reflowed after..
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1427521658213761054/9641va0igo621.webp?ex=691aac25&is=69195aa5&hm=48da8efcd6be2f8b893754e3470007588c312aa8fbd11f87e2a5ee96de34efcf&
+
+
+[10/14/2025 05:24] anfroholic
+While I have not been able to find anything specifically, There are a ton of BGA that seem to follow the pattern we're looking for. 
+
+Found these people and if somewhere did have something suitable, these guys would probably know
+https://dm.henkel-dam.com/is/content/henkel/COST_EFFECTIVE_AND_RELIABLE_MATERIALS_FOR_WIREBOND_PACKAGING
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1427527560249741385/image.png?ex=691ab1a4&is=69196024&hm=86ebbaecbb69e50ac403bde2d638b8026f99ed8f4e22bdef3d8531ae36844c24&
+https://cdn.discordapp.com/attachments/1408134567491145728/1427527561205780520/image.png?ex=691ab1a4&is=69196024&hm=3aa0da1de4aaa267005d5683c6cb782331f63f3f90ccb484769c068ccc95b064&
+
+
+[10/14/2025 05:25] algofoogle
+Also, are all epoxies equal? For example, does the clear epoxy have the same qualities as the “usual” black COB epoxy?
+
+
+[10/14/2025 05:27] anfroholic
+There are a ton of varieties in the pdf I just posted.  
+Page 22 has a bunch of COB style encapsulants. BGA is also listed so I would assume it's suitable for LGA as well
+
+{Reactions}
+👍
+
+[10/14/2025 07:48] saladchap
+I did a bit more looking and seems like gold wire bonds may be more resilient than aluminium - I don't have experience with gold wire bonds but have seen alu bonds fail after glob top then going through the reflow oven
+
+
+[10/14/2025 08:05] 246tnt
+The plastic encapsulation of "normal" packages ( like QFN and such ) might also provide a lot more protection than whatever the COB process uses, so that could be a difference too
+
+
+[10/14/2025 08:07] urish
+Shall we try to find some packaging expert to consult?
+
+
+[10/14/2025 08:08] anfroholic
+If you know someone, I'm sure we'd love to hear what they have to say
+
+
+[10/14/2025 08:08] urish
+I don't know, but we can try to find (LinkedIn is a good starting point)
+
+{Reactions}
+💜
+
+[10/14/2025 08:15] anfroholic
+I want to say that we'll be fine here 
+And the reason this is not seen much in industry has more to do with the fact that low pressure molding has an extremely lower cycle time that is more in line with what packagers are used to and are willing to put up with. They also don't need additional processes like baking or UV treating. 
+Like, if we weren't in the situation we're in and the packagers were willing to work with our quantities we would have a QFN or similar package.
+
+
+[10/14/2025 08:28] anfroholic
+another example
+https://www.qptechnologies.com/services/ic-assembly/encapsulation-options/
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1427573827298394142/qp_053-1024x729.jpg?ex=691a33fb&is=6918e27b&hm=e7fc8b3e5c77ea1244d489ecc9aa0782daaf2a1ecb2e1ee143cf0beb2ee568b9&
+
+{Embed}
+https://www.qptechnologies.com/services/ic-assembly/encapsulation-options/
+Encapsulation Options - IC Assembly | Services QP Technologies
+QP Technologies offers several encapsulation options of your devices, providing the level of protection and/or accessibility that you need.
+https://images-ext-1.discordapp.net/external/6g4mxsLtTAMFaYRbpLVj-Q1p_qMhCmUQj-zrI3ZFtoM/https/www.qptechnologies.com/wp-content/uploads/2020/10/qp_053-1024x729.jpg
+
+
+[10/14/2025 08:29] 246tnt
+Semi-related is I wonder how pick and place machine deal with glob top parts ... like would those LGA module work fine or would the top not be flat enough for vacuum pickup and proper placement ...
+
+
+[10/14/2025 08:36] anfroholic
+The biggest tip i have i think would be alright
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1427575721227845734/20251014_033439.jpg?ex=691a35bf&is=6918e43f&hm=60027f891f137d2826ccd70208b7dc834aa40a15958b2247a9609da0de9a8948&
+
+
+[10/14/2025 08:42] 246tnt
+It also needs to sit flatish in it or it would screw up when it places it I think.
+
+
+[10/14/2025 08:48] anfroholic
+All the encapsulations I've come across seem to self level pretty well. 
+I think it should be alright
+
+
+[10/14/2025 15:05] ddddbbbb
+Hi all, here's a few pieces of information on COB mfg in case it's useful to the recent discussions going on. It took us over a year to establish a flow that didn't break most of our assemblies :( This was a combination of company negotiation time and lots of surprise temperature incompatibilities. 
+* You will likely find wirebond/COB houses and SMT assembly houses who will each want to do their process first on a bare PCB. I have set up prototyping runs in both situations, and only once found a company that could do both (at higher cost than the two phases individually, unfortunately). I have not gone back to that company because initial project setup took months and over 150 emails. Then that sales engineer retired and I loathed the idea of explaining our assembly to another person. I think they contracted out the COB portion but at least they were responsible for ensuring order of operations.
+* Advantages to SMT going first: get the high temperature steps out of the way. We were using transparent epoxy that swelled in high temperature, ripping off bondwires. As others have already mentioned, opaque epoxies can generally withstand high solder temperatures.
+* Advantages to COB going first: wirebond heads work easiest when the bonding surface is flat and there's nothing for the bond head to crash in to. Also they are often attached via vacuum chuck which cannot seal if there are parts on the backside of the board. Custom chucks can be fabricated to enable vacuum seal, at increased NRE cost.
+* We had some designs packaged QFN but the hassle and cost wasn't ultimately worth it. Packages were not bonded correctly in some cases, with no way to inspect the bonds' correctness via microscope.
+* COB houses will often require PCBs with ENEPIG or soft bondable gold surface finishes which increase PCB cost and mfg time significantly. Some COB houses are fine with more widely available ENIG but with more risk to yield.
+
+{Reactions}
+👍
+
+[10/15/2025 01:06] mithro_
+The current plan is that the PCBA house is also doing the wire bonding.
+
+{Reactions}
+👍 (2)
+
+[10/15/2025 01:08] anfroholic
+That would likely solve the availability problems if we end up going with some kind of connector. They would likely offer to stock them hopefully.
+
+
+[10/15/2025 04:09] mithro_
+But the 150 email nightmare problem is what I'm hoping we can solve
+
+
+[10/15/2025 04:10] mithro_
+But also why I want to get something actually bonded and such
+
+
+[10/15/2025 04:12] mithro_
+But I would also guess we are okay with a higher failure rate than industry as well
+
+
+[10/15/2025 14:46] dshadoff
+Probably good to set a numerical target on that
+
+
+[10/15/2025 16:02] ddddbbbb
+To clarify, the yield risk of ENIG is number of parts successfully assembled --in contrast to flip chip bumps, it's pretty obvious under a microscope if a wirebond doesn't want to stick to its pad. As long as the assembly house notices the failed bond before covering it in epoxy, "low yield" should mean some wasted dice and otherwise a very high percentage of functional assemblies that are shipped back (assuming anything else on the board is assembled perfectly).
+
+
+[10/15/2025 22:07] mithro_
+@dshadoff - I would say somewhere between 1% and 10% of whole parts.
+
+
+[10/15/2025 22:09] mithro_
+@dshadoff - Like you if you want 1,000 pieces and I send the board house 1,100 and then you get 100 failures, that seems fine to me.
+
+{Reactions}
+💜
+
+[10/15/2025 22:50] dshadoff
+fair enough.  Just wanted people thinking about the number.
+
+
+[10/16/2025 04:51] anfroholic
+Hey @tnt 
+I just had a meeting with @peterkinget and @asc and they were telling me about their needs. 
+I have changed the padframe layout a bit and wanted to run it past you. 
+The intent here is for anyone using the 74 pad layout can customize it to their needs, but the actual wirebond layout will remain unchanged between versions. 
+The example here I have your GND pins all tied together and we can also tie together VDD and other nets too if you'd like. 
+
+@peterkinget I have uploaded the latest versions. The newest padframe footprint is also here. 
+https://github.com/wafer-space/chip-on-board-wire-bonded-pcbs
+https://github.com/wafer-space/chip-on-board-wire-bonded-pcbs/tree/main/scratch/footprints
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1428244011612639323/image.png?ex=691aa9e3&is=69195863&hm=d096367f9b532e3f45ced0465d8753555b320b4d84afb39d621c7b3ea6f00687&
+
+{Embed}
+https://github.com/wafer-space/chip-on-board-wire-bonded-pcbs
+GitHub - wafer-space/chip-on-board-wire-bonded-pcbs: Wire bonded ch...
+Wire bonded chip on board PCB designs. Contribute to wafer-space/chip-on-board-wire-bonded-pcbs development by creating an account on GitHub.
+https://images-ext-1.discordapp.net/external/esG7K_u71l3msKBfQ8Zg4cD0DfzXLA__z7yXkaNCmoY/https/opengraph.githubassets.com/5e0b211e03020458325a37d91b86b450c9a2750a213379717c1572cff0bbe3ef/wafer-space/chip-on-board-wire-bonded-pcbs
+
+{Embed}
+https://github.com/wafer-space/chip-on-board-wire-bonded-pcbs/tree/main/scratch/footprints
+chip-on-board-wire-bonded-pcbs/scratch/footprints at main · wafer-...
+Wire bonded chip on board PCB designs. Contribute to wafer-space/chip-on-board-wire-bonded-pcbs development by creating an account on GitHub.
+https://images-ext-1.discordapp.net/external/esG7K_u71l3msKBfQ8Zg4cD0DfzXLA__z7yXkaNCmoY/https/opengraph.githubassets.com/5e0b211e03020458325a37d91b86b450c9a2750a213379717c1572cff0bbe3ef/wafer-space/chip-on-board-wire-bonded-pcbs
+
+
+[10/16/2025 04:53] peterkinget
+Thanks! We make a pcb rough design and share in the coming days.
+
+{Reactions}
+👍 (2)
+
+[10/16/2025 05:11] algofoogle
+This is nice @Andrew Wingate 🙂
+
+{Reactions}
+💜
+
+[10/16/2025 05:28] 246tnt
+@Andrew Wingate Sure looks fine.  It's a bit confusing to have the waferspace logo not in the pad 1 corner  though no ?
+
+
+[10/16/2025 05:34] anfroholic
+You are correct. It's an artifact from before I was following your pinout. 
+I had never made a design that didn't have pin 1 at the top before.
+
+
+[10/16/2025 05:35] 246tnt
+Fee free to rotate the die footprint if you want the pin 1 on the top 😁
+
+
+[10/16/2025 05:35] anfroholic
+Haha, sounds good thanks
+
+
+[10/16/2025 05:35] 246tnt
+I think we just used that pin numbering / orientation because the original IHP script in ORFS was using it and so this is what we ended up with.
+
+
+[10/16/2025 05:36] anfroholic
+I understand
+
+
+[10/18/2025 01:12] anfroholic
+@Tim 'mithro' Ansell I figured CS was about to be bugging you for an update so I made this. 
+Then I checked my email. Let me know if there's some other kind of content I can drum up. 
+-# this is meant to look pretty and is not real, but is very close to what the real one could look like.
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1428913610863808644/image.png?ex=691a7680&is=69192500&hm=d1a5ab949e6d126781b9e4f50739911f47874854f55d83033aa916fbdd4601cc&
+
+
+[10/18/2025 04:09] peterkinget
+Hi @Andrew Wingate, @Tim 'mithro' Ansell , we made a quick design of the DIL version. (Thanks to @asc and Xianglin Pun)
+
+Not routed but we wanted to figure out the size. There are 37 pins across now, but we will likely reduce to 34. The vertical dimension might grow a bit in steps of 100mil  if we face routing contention at the bottom and top. 
+
+Let us know what you think. This would be great for our purpose since we can plug it right in the breadboard or custom PCB with headers without needing a motherboard and reflow solder oven. 
+
+We are happy to share the design once it is done.
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1428958264258859088/image_3.png?ex=691aa016&is=69194e96&hm=2421d76555c3c8792e260c123a230ac3559ae3bc3ab78f162bb15aa697f411e1&
+https://cdn.discordapp.com/attachments/1408134567491145728/1428958264757846057/image_2.png?ex=691aa017&is=69194e97&hm=2ec9510f4b69086905dc1e85353c8a6b8a28c602e8b8b75c33a3949060e87796&
+https://cdn.discordapp.com/attachments/1408134567491145728/1428958265386995712/image_1.png?ex=691aa017&is=69194e97&hm=93970d59472ef2e7beb95415093a82310c66715562170b1d86ee6d271c29afa8&
+
+
+[10/18/2025 04:13] anfroholic
+Thanks! I know that Tim is wanting a breadboard version so it's good to see one mocked up!
+
+
+[10/18/2025 11:28] anfroholic
+70 pin Mezzanine COB
+I have a pretty strong feeling this will be one that makes it to the end. 
+If you want a motherboard *stick it on there*
+If you want a DIP package *stick it on there*
+If you want a breadboardable *stick it on there*
+If you want a test board *stick it on there*
+If you need revisions *stick it on there*, revise, then *stick it on there*
+If you want other people to design motherboards for you, send them one so they can *stick it on there*
+If you're worried about wirebond failures *stick it on there* and test without worries
+
+Side benefits, PCBA house does not need to stock these for you and/or you do not need to ship them to them when you need more motherboards
+
+The extra cost will probably be < $0.30 but may be washed out if the wirebond house only has to deal with a single format. 
+If half a run wants COB that's 20k. Setup costs trend towards zero, and 1k chips almost perfectly fit on a 7" reel making a PCB changeout also low/no cost. 
+@db mentioned above that some of the wirebonders use a vacuum chuck to hold the parts. If we think we want to move the bottom traces into an inner layer and accommodate some decoupling we may want to consider that now before tooling is made (even if we never do)
+
+Is there anything I missed? 
+@tnt @Tim 'mithro' Ansell @peterkinget @Tholin @asc
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1429068741500735508/image.png?ex=691a5e3a&is=69190cba&hm=bb1398abdf2770b2d0233d907309d4e3c074835126b20043df119ae65c8b4f14&
+https://cdn.discordapp.com/attachments/1408134567491145728/1429068741831950467/image.png?ex=691a5e3a&is=69190cba&hm=da454c5588404730207797145b2dfb0b4c89eea813708fbedf20c6aa3f844409&
+
+
+[10/18/2025 12:47] jianxunzhu_54325
+Nice, is the mezzanine connector polarized? It appears symmetric and could be connected both ways?
+
+
+[10/18/2025 12:50] jianxunzhu_54325
+If there are retention strength concerns maybe we can design a 3D printed bracket for it.
+
+
+[10/18/2025 12:51] anfroholic
+It is symmetric, but there are multiple pin 1 markers. 
+These connectors are quite strong it's the same ones that hold on the Raspberry Pi compute modules. Also these COB are fairly small. I don't think I would worry. 
+But thank you for your input, I plan to create some tests to be sure.
+
+
+[10/18/2025 12:54] 246tnt
+@Andrew Wingate Looks good.  One comment (both for LGA and mezzanine), the tracks could probably be thicker for the power pins, there does looks like there is space.   I think there should also be space for decoupling in the corners on the top to put a few 1u 0201 there.
+
+
+[10/18/2025 12:56] anfroholic
+Ah, I hadn't considered putting them further out. That could work. 
+Also yes, power pins could be widened. 
+Thank you
+
+
+[10/18/2025 12:59] anfroholic
+@tnt  Do you have an idea on how many? I see 8 pins that have power
+
+
+[10/18/2025 13:04] jianxunzhu_54325
+Could you share the part number of the connector? Thanks
+
+
+[10/18/2025 13:04] anfroholic
+https://www.lcsc.com/product-detail/C19089236.html
+
+{Embed}
+https://www.lcsc.com/product-detail/C19089236.html
+HC-PBB40C-70DP-0.4V-02 | HCTL | Price | In Stock | LCSC Electronics
+HC-PBB40C-70DP-0.4V-02 by HCTL - In-stock components at LCSC. Price from $0.2912. Free access HC-PBB40C-70DP-0.4V-02 datasheet, Package, pinout diagrams, and BOM tools.
+https://images-ext-1.discordapp.net/external/q7bu181o9QFtHZJ2LNs0sryPmzaAmp5xq7-JHlbtQvQ/https/assets.lcsc.com/images/lcsc/900x900/20231206_HCTL-HC-PBB40C-70DP-0-4V-02_C19089236_front.jpg
+
+
+[10/18/2025 14:05] anfroholic
+@tnt power traces thickened and 8 decaps added. 
+I also wrote some notes for others if they want to add some kind of components. If bonders want some kind of vacuum chuck, they can provision for components to sit here.
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1429108195153940491/image.png?ex=691a82f9&is=69193179&hm=b4024d4eda1f66094c5789f656f05ee19583eee471fe6b46ea36f65201fca33c&
+https://cdn.discordapp.com/attachments/1408134567491145728/1429108195552657438/image.png?ex=691a82f9&is=69193179&hm=de4f4fc0c030c76e170373c01fe55b74542fb721420c4fd227691856054e5554&
+
+{Reactions}
+👌 👍
+
+[10/18/2025 14:08] urish
+No notch?
+
+
+[10/18/2025 14:09] anfroholic
+The plan is to have these all v-cut.  That makes notches a little more tricky. 
+There are qty(2) pin 1 markers
+
+{Reactions}
+👍
+
+[10/18/2025 14:09] urish
+Started a thread.
+
+
+[10/18/2025 14:10] urish
+What if you just drill at the edge?
+
+
+[10/18/2025 14:10] urish
+As in adding a large via
+
+
+[10/18/2025 14:11] anfroholic
+We could... I kinda like the golden rocket
+
+
+[10/18/2025 14:11] urish
+You can have both
+
+
+[10/18/2025 14:12] urish
+I was thinking about drilling out just the part that doesn't have the solder mask
+
+
+[10/18/2025 14:13] anfroholic
+The window in the rocket? 
+It's too small.
+
+
+[10/18/2025 14:13] anfroholic
+This entire thing is itty bitty
+
+
+[10/18/2025 14:14] anfroholic
+The vias are the smallest drill without being charged more
+
+
+[10/19/2025 00:30] anfroholic
+*The following is my opinion alone*
+
+Based on notes like above about 150 emails between @db and their wirebonder, this is something we want to avoid. And given the most I’ve seen for passing bond layouts has been glorified napkin sketches. We don’t want to be doing this all the time. 
+The overall layout here has 74 bondpads and 70 pins that can be brought through the mezzanine connector. 
+Again, it’s my suspicion, but keeping things the same will pay in dividends. 
+I think the process looks something like this. 
+
+### COB PCB 
+PCB houses already deal with variety, I don’t see why this would be different. The current layout is a 7x6 grid (42) dies per panel. 25 panels is 1050 COB. We will likely share a few basic designs and all most would do is change the silkscreen to their liking. 
+From @Tim 'mithro' Ansell side, he is looking at purchasing 10s of thousands of these connectors making for happy conversations with suppliers. With Crowd Supply’s connections with Mouser, there may be a way to get them to stock the mating components. 
+
+### Glue and Die Placement
+All the die are the same size. If there is a mechanical solution for adding the glue (I believe there is) having the same layout for everything will make them very happy. Cost is inversely proportional to happy. Furthermore, from my estimation, roughly 1k die fit on a 7” reel and the die can likely be placed by standard pick and place machinery, further increasing happiness.
+
+
+[10/19/2025 00:30] anfroholic
+### Wirebonding itself
+**Wirebonding:** Like I said above, it seems like wirebonds are identified by napkin sketches. Even moving 1 pad creates 74 unhappys. I am going to go out and and say that in the beginning at least it’s going to be cheaper for someone who only wants 50pins and a 50pin mezzanine ($0.20 cheaper per connector) to actually get all 74 wirebonds even if they remain unused. 
+**Vacuum Chuck** @db  had mentioned above they may—likely—use a vacuum chuck. For our needs they will likely need to create a custom harness, decreasing hundreds of happy every time there is something new. In the design I have allocated a space we can keep clear for any number of components that can fit that area. *Stack height can  be changed on motherboard side if needed*
+
+### Goober
+Once the wirebonding is completed, the dies need to be protected. There are machines that can place the epoxy. Again, if all the panels are the same, there is no setup cost, increasing happiness. 
+@Matt Venn shared a table in one of his recent videos about where all the cost is compared across different quantities. If there is an LGA version, I suggest it *still* use the same layout. If @Tim 'mithro' Ansell  can get the throughput enough that he’s making runs every week—which would be super cool!!—I bet the cost for this would drop below $0.50 or even less for some variations. 
+Enough happiness to go around.
+
+
+[10/20/2025 03:44] anfroholic
+Just to keep the creative juices flowing, I made a couple examples of motherboards. While I think it would be a squeeze to fit this on a dip with all the pins, if there were less I see no problem working with the .3" space.  70pin DIP does not seem like anything anyone would want anyways. 
+
+Both have 35 pins on each side. Since we cannot know what the pinout will be from the die, we can't really pour grounds, but would be simple enough for someone to change if they did want it. (I also feel like someone would want to label pins as well?)
+
+One is castellated, one is meant to plug into a breadboard and has .5" spacing between .1" headers
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1429676570074681425/image.png?ex=691a9a10&is=69194890&hm=3d9163337b53a0241369c415b152b57124f3d193a71ed6f704da9df0496995de&
+https://cdn.discordapp.com/attachments/1408134567491145728/1429676570569605160/image.png?ex=691a9a10&is=69194890&hm=ce148ad31b615e325222df4b8c849b49ccf8987e0e6265b4965f56aadfe1d055&
+
+
+[10/20/2025 06:44] mole99
+@Andrew Wingate looks great!
+
+"Since we cannot know what the pinout will be from the die, we can't really pour grounds"
+
+Does that mean the current plan is to give each pad a separate pin?
+I thought, the ring in the image above was a ground ring?
+Sorry if this has already been answered :)
+
+{Reactions}
+💜
+
+[10/20/2025 06:52] anfroholic
+No worries. 
+Judging only from the TT layout and the MOSbius layouts they're both using the *standard* 74 pads on the die.
+MOSbius wants access to as many pins as possible, while TT wants many more ground pads--and some decoupling.
+Correct me if I'm wrong, but users can choose to use any pad in any way they wish on the die?
+Finally, *personally.* I think that using a mezzanine connector will be a good choice for us all going forward. That leaves 70pins that can make it down to a motherboard. The two projects I've listed here are incompatible and don't necessarily even share the same GND pins on the die let alone what makes it down to the motherboard. 
+I imagine, eventually there will be some conventions which will allow for some standards, but does not seem that we're there
+
+
+[10/20/2025 06:55] anfroholic
+> Does that mean the current plan is to give each pad a separate pin?
+I think the disconnect may be: 
+Yes, there are 74pads on the COB. But some COB will be unique--but hopefully only on pin/pad signal and routing
+
+
+[10/20/2025 06:56] 246tnt
+ATM the only way to accomodate both is to have different "breakout" ( bonding -> connector ) PCBs.  The dimensions of the PCB, connector position and wirebonding plan will be the same but actual traces on the PCB will be different.
+
+{Reactions}
+💜
+
+[10/20/2025 07:02] mole99
+Thanks for the explanation. So I understand that MOSbius will use a separate "breakout" PCB compared to the default one (TT).
+This means that they will have to modify any of the motherboards they want to use anyway, in order to pour grounds.
+But then, why don't develop the motherboards for the default "breakout" PCB in mind?
+
+
+[10/20/2025 07:04] anfroholic
+Correct. I posted the current TT version here https://discord.com/channels/1361349522684510449/1408134567491145728/1429108195506257983
+And @xianglin_pu created a derivative version here https://discord.com/channels/1361349522684510449/1429068742108909638/1429520076536811622
+
+{Reactions}
+👍
+
+[10/20/2025 07:05] anfroholic
+Also the TT version has 8 1uF decoupling caps
+
+
+[10/20/2025 07:06] anfroholic
+With the intent to future-proof I have outlined an area people can put components and *hopefully* not interfere with the wirebonders.
+
+
+[10/20/2025 07:12] mole99
+Right! But what I meant, in the example motherboards you posted above, why don't you just pour the grounds for the default breakout PCB? For any non-default breakout PCBs, the ground pours will have to be modified anyways?
+This way it would be just a bit easier to go the default route, but it shouldn't make any difference for any non-default projects.
+
+
+[10/20/2025 07:18] anfroholic
+I guess, there just is no default breakout yet. I may be naive, but I don't think that either are exactly generic. 
+
+MOSbius is probably closer, choosing to break out more pins instead of ground, but this isn't necessarily true for someone wanting super highspeed differential signals? 
+So I just don't know, and in my not knowing I decided not to make a choice 😉 
+
+If anyone wants to suggest a default, I am more than willing to listen. Even if it's allocating certain specific pins to GND?
+These questions are also why I've been rapid firing different examples and configurations.
+
+
+[10/20/2025 07:19] anfroholic
+In the end, these are pretty generic, and I see people wanting to customize them at least a little bit anyways. Even if it's just to put the project name and version on it.
+
+
+[10/20/2025 07:21] 246tnt
+MOSBius doesn't care about separating IO GND and Core GND because they use neither ... all their pins are analog logic so there is no IO current, they use none of the digital pad at all afaiu.
+
+{Reactions}
+💜
+
+[10/20/2025 07:23] mole99
+Well, the choice we had made was the TT padring, since TT has to be fabricated anyway and is reasonably generic as a default padring.
+It will not be possible to find a pinout that matches every application.
+
+
+[10/20/2025 07:23] 246tnt
+It's true that TT has probably more than strictly necessary, but I'd rather err on the side of caution. It's also because of the way TT work, our "in-chip" PDN has more resistance than a "normal" chip would have, so one way of compensating for that is to feed it externally at more points.
+
+
+[10/20/2025 07:24] mole99
+So when it comes to digital designs, the TT padring is a good default.
+
+
+[10/20/2025 07:26] anfroholic
+I am probably getting a little lost with language. 
+When you say "padring" you're only referring to the pads on the die itself?
+Or how/where/what signal/power goes to each pad?
+
+
+[10/20/2025 07:27] anfroholic
+-# forgive my ignorance
+
+
+[10/20/2025 07:28] mole99
+
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1429733118075736125/image.png?ex=691a25fa&is=6918d47a&hm=aac76753844f6d44ffe7702d00942616cfec26125202afd38f7b73f65cf2edeb&
+
+
+[10/20/2025 07:29] mole99
+The padring is really the ring around your design, which defines the type and placement of the pads.
+
+
+[10/20/2025 07:29] mole99
+We've chosen the TT padring as a reasonable default padring.
+
+
+[10/20/2025 07:30] anfroholic
+Ok, yes. I am also suggesting that *all* projects use this padring as default. Anything not this is not default
+
+
+[10/20/2025 07:30] mole99
+Therefore, it would be great if the default "breakout" PCB and motherboards could be optimized for that.
+
+
+[10/20/2025 07:31] anfroholic
+I'm all for that too, but am not skilled enough to understand these choices fully
+
+
+[10/20/2025 07:32] 246tnt
+Some numbers I got was 500 mA per bond wire ( for 25u Al wedge bonded) _fusing_ current, so you'd want to stay way away from that, say half.   I don't know the short circuit current of the IO but on IHP for instance it's 32 mA, so you'd want like 1 power wire for like ... 8 IOs or so to survive the user shorting all. So for the default frame that has 54 user IO, you'd want at least 6 GND IOs.
+
+{Reactions}
+💜 (2)
+
+[10/20/2025 07:32] mole99
+Well, yes, they should use the same pad positions and power/ground pads if they want to use the default bonding setup :)
+The signal pad types can actually be changed and it is still compatible.
+
+{Reactions}
+💜
+
+[10/20/2025 07:34] mole99
+That's why I suggested to pour the ground planes for the default "breakout" board, as this is what most people will be using.
+If you use a non-default "breakout" board, you need to change the ground pours anyway.
+
+{Reactions}
+👍 (2)
+
+[10/20/2025 07:35] mole99
+Great work on the PCBs by the way. I'm really looking forward to seeing all of this coming together!
+
+{Reactions}
+💜
+
+[10/20/2025 07:36] anfroholic
+Thanks, please don't hesitate to make suggestions. I often share things before they're pretty to get feedback
+
+{Reactions}
+🙌
+
+[10/20/2025 07:42] anfroholic
+@tnt and  @mole99 
+I would like to document this somehow. 
+In the TT layout there is `VDD IO` `PWR Aux` and `VDD Core` These are not tied together on the COB PCB how should they be labeled?
+
+
+[10/20/2025 07:42] anfroholic
+https://docs.google.com/spreadsheets/d/1pI2BAEWEexXcXN3vah3SR85zPIV6eAXPGXc2bcvoSGU/edit?gid=0#gid=0
+
+
+[10/20/2025 07:43] anfroholic
+I made a copy of your document to figure some stuff out when I was trying to make the first PCB
+
+
+[10/20/2025 07:44] anfroholic
+sorry, wasn't shared, it is now
+
+
+[10/20/2025 07:47] 246tnt
+@Andrew Wingate They should not be wired together, they might be at different voltages.
+
+
+[10/20/2025 07:48] 246tnt
+VDD IO / VDD Aux / VDD Core.  ( The IO and Core one directly map to the main rings. The "Aux" is meant as bias voltage / aux power for analog stuff ... )
+
+
+[10/20/2025 07:49] anfroholic
+> rings
+I do not have those rings on the current COB PCB. Should they be added (or at least tie them together on an inner layer?)
+
+
+[10/20/2025 07:51] mole99
+As for the naming: At the moment there are no separate IO and Core domain since we don't have the pads for that yet (actually we have them, but they are untested).
+
+So for the default wafer.space pinout, all GNDs should be "GND IO/Core" and VDD should be "VDD IO/Core" (even for Aux).
+
+This will change in the future once we have separate domains.
+
+
+[10/20/2025 07:51] anfroholic
+*they* being only `VDD IO` to the other `VDD IO` pins?
+
+
+[10/20/2025 07:52] mole99
+Oh, if we already do power rings for IO/Core then we can think about keeping the naming 🤔
+
+
+[10/20/2025 07:52] anfroholic
+I guess what I'm asking is do we tie them together on the COB, if not, then maybe find different words?
+
+{Reactions}
+👍
+
+[10/20/2025 07:53] anfroholic
+*they currently are not tied*
+
+
+[10/20/2025 07:55] mole99
+@tnt should there be power rings on the breakout for TT?
+
+
+[10/20/2025 07:59] 246tnt
+I don't think that's really necessary. Traces to the pins are thick, and short decoupling is near.
+
+{Reactions}
+💜
+
+[10/20/2025 08:02] anfroholic
+Just call them out as 
+`VDD{i}`
+
+
+[10/20/2025 08:03] 246tnt
+They should be tied together on any mother board since you don't want to feed different voltages to them.
+
+
+[10/20/2025 08:03] 246tnt
+Like feeding different voltage to VDD IO and VDD Core is fine, but feeding different voltage to different VDD IO pin is a sure way to obliterate the chip.
+
+
+[10/20/2025 08:05] anfroholic
+I am imagining the default layout also comes with decaps as well. 
+But trying to be forward-looking do you have a suggestion for naming convention?
+
+
+[10/20/2025 08:05] anfroholic
+I'm also content to not change anything and if someone cares enough they can look closer
+
+
+[10/20/2025 08:06] 246tnt
+Well what I said above  GND/VDD  IO/Core/Aux.
+
+{Reactions}
+👍
+
+[10/20/2025 08:07] 246tnt
+It's true that for the current pads, some are technically tied internally ATM, but in the future they should be split so might as well start with that naming now IMHO.
+
+{Reactions}
+👍 (2)
+
+[10/20/2025 08:42] anfroholic
+@Tim 'mithro' Ansell There has been significant discussion on what the defaults should be. I have tried to compile the latest/best information I have here
+https://github.com/wafer-space/chip-on-board-wire-bonded-pcbs
+Please let me know if there's anything you think should be added.
+
+{Embed}
+https://github.com/wafer-space/chip-on-board-wire-bonded-pcbs
+GitHub - wafer-space/chip-on-board-wire-bonded-pcbs: Wire bonded ch...
+Wire bonded chip on board PCB designs. Contribute to wafer-space/chip-on-board-wire-bonded-pcbs development by creating an account on GitHub.
+https://images-ext-1.discordapp.net/external/-xHoDCsTCX7rvA6tBWQppxZ45koOSIFbuDatSnOuQ5s/https/opengraph.githubassets.com/84e07b71f2b7b27d639f29d9fc61e436ae4880ca10f6aa1797aa4f5ef1c62e29/wafer-space/chip-on-board-wire-bonded-pcbs
+
+
+[10/20/2025 08:51] mithro_
+What's the thinking behind the mezzanine connectors rather then bonding directly?
+
+
+[10/20/2025 08:52] mithro_
+I'm also not seeing info on the connectors in that repo?
+
+
+[10/20/2025 08:52] mithro_
+@Andrew Wingate -^
+
+
+[10/20/2025 09:01] anfroholic
+I have laid out some of the case here: https://discord.com/channels/1361349522684510449/1408134567491145728/1429068742108909638
+and here: https://discord.com/channels/1361349522684510449/1408134567491145728/1429265501145534516
+
+A lot of it is logistical. The LGA package can ride along with this as well with no changes. 
+Some back of the envelope math expecting 1000 pcs is:
+
+panelized mezzanine cob pcbs would need 25 panels (a stack <20mm high)
+panelized castellated board from [here](https://discord.com/channels/1361349522684510449/1408134567491145728/1429676570972393594) would need 70 pcbs (a stack ~60mm high) 
+And the last breadboard version would be **170** pcb panels (a stack ~**275mm** high)
+
+We still should see what the wirebonders have to say, but logistically, if we can keep the panels small we get a lot of gains and think they'd be more willing to work with us. 
+Also having a standard that's easily customizable and approachable has some benefits of themselves. 
+
+Also, good call on the links. I am/was still unsure to lock this in, but sounds good.
+
+
+[10/20/2025 09:05] mithro_
+@Andrew Wingate - No reason not to put as much information there even if we remove it later.
+
+
+[10/20/2025 09:06] anfroholic
+Are you going to want all that in the CS update?
+
+
+[10/20/2025 09:07] mithro_
+Say I want the DIP packaging, it seems like I now have to pay for 2 * connectors which adds ~$0.60 to the cost of packaging?
+
+
+[10/20/2025 09:10] anfroholic
+That sounds true on the surface, but may be washed out by wirebonders pricing. 
+If they have a standard setup and they just crank through these, I bet we can get a significant reduction in the $0.01/wire cost
+
+
+[10/20/2025 09:12] anfroholic
+*connector links added to git repo*
+
+
+[10/20/2025 09:17] anfroholic
+Also I don't know where $0.60 is coming from? 
+Any reasonable qty is <$0.35 for the mating connector. The first connector is included in your COB cost. 
+https://www.lcsc.com/product-image/C19089262.html
+
+{Embed}
+https://www.lcsc.com/product-image/C19089262.html
+HCTL HC-PBB40C-70DS-0.4V-2.0-02 Pinout Diagram & Footprint Diagram ...
+View HCTL HC-PBB40C-70DS-0.4V-2.0-02 Pinout Diagram and Footprint Diagram at LCSC Electronics. Access precise pin configurations and footprint designs for your electronic components.
+
+
+[10/20/2025 09:23] mithro_
+$0.30 for connector on the COB side and $0.30 for the mating connector on the DIP package side?
+
+
+[10/20/2025 09:25] anfroholic
+But you have a fixed cost ($1,500) for bonding. The one already fits into that equation.
+
+
+[10/20/2025 09:29] anfroholic
+Furthermore, if there is a true standard, I believe the wirebonders could be more willing to support the people who only want some minimum like (5 panels/ ~250 COB) making it actually cheaper for them
+
+
+[10/20/2025 09:30] mithro_
+Each 1,000 unit run is pretty much a seperate run as far as the wire bonders are concerned.
+
+
+[10/20/2025 09:31] mithro_
+It's $1.50 USD per part - with $0.60 going to connectors?
+
+
+[10/20/2025 09:36] 246tnt
+I thought the idea was just to ship the modules to customer, so the mating connectors and the board to put them on would be their responsability so to speak.
+
+
+[10/20/2025 09:38] anfroholic
+That as well
+
+
+[10/20/2025 09:40] mithro_
+I'm thinking of the person who wants DIP ICs
+
+
+[10/20/2025 09:46] anfroholic
+Furthermore, if someone didn't need as many pins, they could drop down to the 50pin mezzanine connectors dropping the overall cost of connectors by $0.50. 
+I feel very confident in saying that the cost in the end would be comparable (if not less) adding the mezzanine connectors.
+
+
+[10/20/2025 09:47] anfroholic
+hell, you could even just add the dip pcbs with opposing connectors for the same cost giving the benefit of all worlds
+
+
+[10/20/2025 10:29] mithro_
+Ultimately, I'll do whatever people ask for / want
+
+
+[10/20/2025 10:30] anfroholic
+Of course
+
+
+[10/20/2025 10:45] anfroholic
+@Tim 'mithro' Ansell You can use these when talking to the wirebonders
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1429782541270908978/image.png?ex=691a5401&is=69190281&hm=d7b05aff41f26d908d6f59f350c7fddacf03ff260259b574a95a5888e98b40a6&
+https://cdn.discordapp.com/attachments/1408134567491145728/1429782541782487240/image.png?ex=691a5402&is=69190282&hm=f631bbd517cc2b5a34f747f31ff725638430a3dd1e9f5c44ccee23cc6dc671e0&
+
+
+[10/20/2025 11:43] 246tnt
+There might be a min distance for vscoring between edge of connector and edge of board for the blade to go through.
+
+
+[10/20/2025 11:44] anfroholic
+It's .4mm and is already added in
+
+{Reactions}
+👍
+
+[10/20/2025 11:44] 246tnt
+Oh wow, they're much better than I though.
+
+
+[10/20/2025 11:45] anfroholic
+Oh you said connector. The v-score is done before PNP at any rate. 
+All clearances have been accounted for though
+
+{Reactions}
+👍
+
+[10/21/2025 09:42] anfroholic
+https://www.youtube.com/watch?v=JzdelpyRW9E
+Wirebonding machine working
+
+{Embed}
+Minder-Hightech Guangzhou
+https://www.youtube.com/watch?v=JzdelpyRW9E
+Automatic gold wire bonder / Gold wire bonding mahcine
+Installation and commissioning of Wire Bonding Machine completed !
+For More Information, Please Contact Our Engineer:
+【Minder Hu】
+WeChat/Whatsup: 15813334038
+Email: 
+minder@minder-hightech.com
+shunyu.hu@163.com
+https://images-ext-1.discordapp.net/external/nHzeUXtDwy-HIiEGpMROiPPBV5VMZvP6aEZptcjsHtw/https/i.ytimg.com/vi/JzdelpyRW9E/maxresdefault.jpg
+
+{Reactions}
+🤯
+
+[10/23/2025 08:54] anfroholic
+@tnt and @mole99 
+I'm designing all the symbols in kicad  
+I have the COB `Wirebond pads -> Mezzanine`
+And then will be making a default `Mezzanine -> Motherboard`
+My question is regarding naming conventions for the user pins. 
+Ideally whatever the pins are called in HDL or wherever the original name comes from would be used or whatever label they contain as generic from the [default template](https://github.com/wafer-space/gf180mcu-project-template) . 
+*I assume this has the 74pad default?*
+Can I get a convention please
+-# I also understand there will be a TT specific version but would like to make the generic first
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1430841776205336708/image.png?ex=691a39ff&is=6918e87f&hm=95400a70b6739ad49311edb1014a3c1fb3c82800ecc3d1f058a5fd986f408981&
+
+{Embed}
+https://github.com/wafer-space/gf180mcu-project-template
+GitHub - wafer-space/gf180mcu-project-template: Project template fo...
+Project template for wafer.space MPW runs using the gf180mcu PDK - wafer-space/gf180mcu-project-template
+https://images-ext-1.discordapp.net/external/0AJHP67-vehs01SugxtPF4_o0453RuL1DiArw6Gca9M/https/opengraph.githubassets.com/e39cf96759f48fac867143a1150e879e48e94613b21c5017feb52567471009c2/wafer-space/gf180mcu-project-template
+
+
+[10/23/2025 09:00] anfroholic
+I see the convention starts at index 0 here
+https://github.com/wafer-space/gf180mcu-project-template/blob/main/librelane/config.yaml
+
+{Embed}
+https://github.com/wafer-space/gf180mcu-project-template/blob/main/librelane/config.yaml
+gf180mcu-project-template/librelane/config.yaml at main · wafer-sp...
+Project template for wafer.space MPW runs using the gf180mcu PDK - wafer-space/gf180mcu-project-template
+https://images-ext-1.discordapp.net/external/0AJHP67-vehs01SugxtPF4_o0453RuL1DiArw6Gca9M/https/opengraph.githubassets.com/e39cf96759f48fac867143a1150e879e48e94613b21c5017feb52567471009c2/wafer-space/gf180mcu-project-template
+
+
+[10/23/2025 09:34] 246tnt
+Yes it starts at 0 and is usually called pad not pin and 0 is bottom left to match gds orientation
+
+{Reactions}
+👍
+
+[10/23/2025 09:42] anfroholic
+Cool, thanks. So this is what will eventually filter down to the motherboard connector
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1430853772858626100/image.png?ex=691a452b&is=6918f3ab&hm=2b69a713aea4afa4a2aaca1fcccd019913768d5868033639153846c09c59ff9d&
+
+
+[10/23/2025 09:53] mole99
+Looks good to me, the power/ground pads all match up. The naming is different in the template with pad_0 is clk_PAD, pad_1 rst_n_PAD and pad_3 bidir_PAD[0] ...
+But it wouldn't make sense to use that naming as you are free to change the signal pads in any way you like, and this way is more generic 👍
+
+
+[10/23/2025 09:55] anfroholic
+Thanks,
+I guess I'm having trouble separating TT specific pin specifiers and what anyone else will do with them. 
+I'll make a TT version that has 
+```
+ctrl_ena
+ctrl_sel_inc
+ctrl_sel_rst_n
+analog[0]
+analog[1]
+analog[2]
+ui[7]
+u_rst_n
+u_clk
+```
+and so on. 
+But to keep them generic, this is appropriate?
+
+
+[10/23/2025 10:49] mole99
+To keep them generic for the project template, your previous symbol with pad_0 to pad_69 is fine.
+
+{Reactions}
+💜
+
+[10/24/2025 03:53] anfroholic
+Ok, made some much more pretty symbols for the COB components. 
+That was not fun trying to unwind the pin numbers and nets.
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1431128538211160084/image.png?ex=691a9c50&is=69194ad0&hm=87a6ccef8358dc9a873a1f33616b22a783c9143a35e75582dcbee1024189c3e3&
+
+
+[10/24/2025 04:09] anfroholic
+I don't like that the ground pins are not spaced well. 
+I am going to do some pin shuffling. I plan to move one of the grounds from the pink pin to the green location. 
+
+@mole99 or @tnt Are there any changes you'd like to see?
+
+Also KiCad allows to have aliased pin names. So I'm going to do that for the TT pins and it all can remain the same symbol. It also allows you to have different electrical properties so I'll fill those in for the people who want to do ERC
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1431132353606058085/image.png?ex=691a9fde&is=69194e5e&hm=dd7d71fa6f1cfe07433e47d2384cc5897c7447c700a3aaa79d6a0538fa55b552&
+
+
+[10/24/2025 05:10] anfroholic
+Not sure if people know about this other project @Tim 'mithro' Ansell helped to bring us. He helped bring Kicanvas. 
+I have created a link to see these designs in your browser [here](https://kicanvas.org/?github=https%3A%2F%2Fgithub.com%2Fwafer-space%2Fchip-on-board-wire-bonded-pcbs%2Ftree%2Fmain%2Fscratch%2Fmezzanine%2Fmezzanine) 
+Thanks Tim, I've used this on a number of occasions!
+
+
+[10/24/2025 06:30] mole99
+I would prefer the symbol on the right, as it resembles the actual positions of the pads in the padring. What is the reason or benefit of the symbol on the left? Too many options might also be confusing.
+Pin aliases sound great for the TT symbol!
+
+
+[10/24/2025 06:53] anfroholic
+The one on the left is the mezzanine connector, these are how the signals make it down to the motherboard.  
+I will likely change it a bit then when I get the pin mapping sorted and we can see what we like.
+
+
+[10/24/2025 07:07] mole99
+Thanks for the clarification, that makes sense :)
+
+
+[10/25/2025 05:39] anfroholic
+@mole99 The one on the far left would be for someone that wants to design a motherboard for TT COB
+The one on the right is wild west and the one in the middle is the exact same as the one on the right, but is using pin alias names. 
+Let me know if you want a different arrangement of the one on the left, but all 3 are electrically identical.
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1431517498637029497/image.png?ex=691a0c4f&is=6918bacf&hm=c4c76a5ef114d710eb2050fc536e6f6a74ac90b26c5e5d6794d2c38b463bffde&
+
+
+[10/25/2025 13:37] anfroholic
+I've also updated the example motherboards with the new footprints/pin mappings.
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1431637886041853972/image.png?ex=691a7c6e&is=69192aee&hm=c66308034c6683268e129831336e3161f9b87c404237e54ea7ab82b773523dff&
+
+
+[10/25/2025 13:42] anfroholic
+There are some open questions regarding what pins we decide to break out like if we only keep 2 grounds and combine all the power pins on their respective nets we save like 10 pins. 
+Keeping it on the COB itself there are some tight spots (I can do much better, just wanted something now) or we can move to 4layer boards.
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1431639061138898994/image.png?ex=691a7d86&is=69192c06&hm=a04132a825da72e61231d191a38817a4063bdeaed170b510d7c0a9712894010d&
+
+
+[10/25/2025 13:48] 246tnt
+For me the power rails could be shorted on the mother board.
+
+
+[10/25/2025 13:49] 246tnt
+Actually it would even be better they are
+
+
+[10/25/2025 13:49] anfroholic
+VDD_IO, VDD_VORE and PWR_AUX?
+
+
+[10/25/2025 13:50] anfroholic
+in the example above each respective is shorted, but all are broken out as well adding to 70pins
+*current schematic*
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1431641036979179772/image.png?ex=691a7f5d&is=69192ddd&hm=bf5ce67086a839b0220c3f1682f42738fbbd388494ef9d61e48091a3e759a1fe&
+
+
+[10/25/2025 13:51] anfroholic
+I feel like people will want to make neat boards for TT, but don't know what the demand is, or if these are what anyone would even be looking at.
+
+
+[10/25/2025 13:53] anfroholic
+coincidentally LCSC has just added another even cheaper connector of the same size
+https://www.lcsc.com/product-detail/C49451471.html
+
+{Embed}
+https://www.lcsc.com/product-detail/C49451471.html
+GY972P070 | CHIN-BAN | Price | In Stock | LCSC Electronics
+GY972P070 by CHIN-BAN - In-stock components at LCSC. Price from $0.1681. Free access GY972P070 datasheet, Package, pinout diagrams, and BOM tools.
+
+
+[10/26/2025 10:15] anfroholic
+@tnt and @mole99 
+I'm working to get some padframe/ cob/ wirebonding standards that will be offered compiled for an upcomming update. 
+Obviously there is the 74pad version with the 70pin mezzanine. I think that's been pretty solidified. 
+
+I am looking for anything else, and what we think people would want. @Tholin you seem to be the only other one who has expressed interest in another--that being a dip version. Is this what you want? Would you be opposed to having a dip version that looks like these versions above, where the actual dip layout is in fact a carrier? https://discord.com/channels/1361349522684510449/1408134567491145728/1431637886314352834
+
+If we're looking for some other version that would be lower cost, what would you all think of a 50pin mezzanine, this could have 55pads or so? The cost difference from 40pin to 50pin is basically 0, so real difference is offers from wirebonder. 
+
+Sharing the source and production files will already be done. But also have a relationship to Mouser through CS so if we wanted them to stock panels of DIP carrier boards that fit our *to be determined standard* I'm sure this is something that can happen if we think there will be some kind of demand. 
+
+@mole99 I'm pretty sure there are some other files somewhere that map the [config](https://github.com/wafer-space/gf180mcu-project-template/blob/main/librelane/config.yaml) to the actual pad locations. Having another padframe obviously has some overhead, do you want to speak for a second standard?
+
+@Tim 'mithro' Ansell your opinions as well?
+
+{Embed}
+https://github.com/wafer-space/gf180mcu-project-template/blob/main/librelane/config.yaml
+gf180mcu-project-template/librelane/config.yaml at main · wafer-sp...
+Project template for wafer.space MPW runs using the gf180mcu PDK - wafer-space/gf180mcu-project-template
+https://images-ext-1.discordapp.net/external/sWIccZpBMgexYgyCYnE66GNmurwkUKllaCx2EuWTBLc/https/opengraph.githubassets.com/cec885349de45a92a98e5d3430bbe2816c71798db4bfdc8322fd5988eff045b2/wafer-space/gf180mcu-project-template
+
+
+[10/26/2025 15:57] anfroholic
+Still a little curious about wirebonder capabilities/ input medium. 
+I found this one by [yamaha](https://www.yamaha-robotics.com/en/products/process/utc-5000super)
+work area:
+Width: 20– 95 mm (20–93 mm when carrier type)
+Length: 95～300mm
+https://www.youtube.com/watch?v=-43dpkL5N7w
+
+{Embed}
+https://www.yamaha-robotics.com/en/products/process/utc-5000super
+UTC-5000Super | Product Information | Yamaha Robotics Co., Ltd.
+The UTC-5000Super is the culmination of a series of high-speed wire bonders. Yamaha Robotics is a turn key provider in the field of semiconductor back-end processing and electronic component mounting.
+https://images-ext-1.discordapp.net/external/WDJ_ulJ41FfmekPFQ1b5uM0mdNcd7-awPGGoIki7a6Q/%3Ftext%3D%25E5%2585%25B1%25E9%2580%259Aog%25E7%2594%25BB%25E5%2583%258F/http/placehold.jp/1600x900.png
+
+{Embed}
+ヤマハロボティクス 公式チャンネル
+https://www.youtube.com/watch?v=-43dpkL5N7w
+【Shinkawa】UTC-5000Super（Wire Bonder）
+Sales company）SHINKAWA LTD.
+Products）UTC-5000Super（Wire Bonder）
+Overview）
+High-speed wire bonder with advanced features. Upgraded model for gold wire bonding. Machine performance and functions improved!
+https://images-ext-1.discordapp.net/external/Ffe-zPBxEHfw-pXfWEzYhxS_2SyvTsEdpmttnSrxvXs/https/i.ytimg.com/vi/-43dpkL5N7w/maxresdefault.jpg
+
+
+[10/27/2025 07:30] mole99
+Started a thread.
+
+
+[10/31/2025 08:59] mole99
+Poor Man's Intro to Bonding: https://youtu.be/_xRH6R4bn-4?si=Rb_vWIx_BTgcD5vM
+
+{Embed}
+KiCad
+https://www.youtube.com/watch?v=_xRH6R4bn-4
+Poor Man's Intro to Bonding | Stephan Bökelmann @ Kicon 2025
+Most integrated circuits come safely packaged in epoxy, but not everyone has that luxury. Sometimes, we need to handle bare dies and bond them ourselves. In this talk, I will give a short introduction to the wirebonding process for prototype chips and share some of the unexpected challenges I faced before finally getting my first chip to work.
+
+...
+https://images-ext-1.discordapp.net/external/J-xQCeBXwtIOyWHOh0NPzlUQUGn8hjmqjNYFlTl_1UY/https/i.ytimg.com/vi/_xRH6R4bn-4/maxresdefault.jpg
+
+{Reactions}
+💜
+
+[11/01/2025 19:18] markemer
+NIST lets you rent dicing saws and wire bonders by the hour. So does RPI in Troy, NY.
+
+{Reactions}
+👍
+
+[11/04/2025 00:02] mithro_
+@Andrew Wingate / @carlfk -^
+
+
+[11/04/2025 00:18] dnaltews
+So the <https://github.com/wafer-space/chip-on-board-wire-bonded-pcbs> repository talks about "default" designs that must share the wirebonding layout, PCB size (14mm x 16mm), connector location (if present).  Is the implication here that the crowd supply run will allow one to provide their own design that fits those constraints or is it expected that there will be one specific layout selected to be used by all COB orders?
+
+
+[11/04/2025 00:34] mithro_
+@Quinton - The expectation is that a number of designs will be selected as supported by the crowd supply run.
+
+
+[11/04/2025 01:13] anfroholic
+I did see that. Where is NIST?
+
+
+[11/04/2025 01:14] mithro_
+No idea 🙂
+
+
+[11/07/2025 11:41] mole99
+@Tim 'mithro' Ansell @Andrew Wingate Could you please tell me what the minimum spacing between the bondpads is for CoB packaging? The bondpads are 60µm x 60µm.
+
+
+[11/07/2025 11:42] anfroholic
+Are you talking about the PCB? Or the die?
+
+
+[11/07/2025 11:42] mole99
+About the die.
+
+
+[11/07/2025 11:46] anfroholic
+I really have no idea other than the document Tim sent me. 
+https://drive.google.com/file/d/1touEQHWAOTon_98TdiVLKKqsQ8RJJ1tP/view
+Looks like 15µm between pads
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1436320815305068554/image.png?ex=691a623f&is=691910bf&hm=ac7046e8153987f7fd23873548419ebc1bf34ea024c2f6753bbf611e3525f473&
+
+{Embed}
+https://drive.google.com/file/d/1touEQHWAOTon_98TdiVLKKqsQ8RJJ1tP/view
+Design Rule SCMicro .pdf
+
+
+[11/07/2025 11:49] mole99
+Thanks! That's much better than I had expected.
+@Tim 'mithro' Ansell can you confirm?
+
+{Reactions}
+👍
+
+[11/07/2025 11:52] mithro_
+Weren't you going to bed? 😛
+
+{Reactions}
+😭
+
+[11/07/2025 11:53] mithro_
+I don't have any actual specs from the Chinese vendors at the moment -- the more spacing we can get the better I think? 
+
+@stuart - What are the requirements for your vendor?
+
+
+[11/09/2025 03:39] mithro_
+https://www.youtube.com/watch?v=_xRH6R4bn-4
+
+{Embed}
+KiCad
+https://www.youtube.com/watch?v=_xRH6R4bn-4
+Poor Man's Intro to Bonding | Stephan Bökelmann @ Kicon 2025
+Most integrated circuits come safely packaged in epoxy, but not everyone has that luxury. Sometimes, we need to handle bare dies and bond them ourselves. In this talk, I will give a short introduction to the wirebonding process for prototype chips and share some of the unexpected challenges I faced before finally getting my first chip to work.
+
+...
+https://images-ext-1.discordapp.net/external/J-xQCeBXwtIOyWHOh0NPzlUQUGn8hjmqjNYFlTl_1UY/https/i.ytimg.com/vi/_xRH6R4bn-4/maxresdefault.jpg
+
+
+[11/09/2025 03:51] mithro_
+Seems like the full talk can be found at https://www.youtube.com/watch?v=dNBwY7L6niI (with worse audio it seems)
+
+{Embed}
+Open Skunkforce e.V.
+https://www.youtube.com/watch?v=dNBwY7L6niI
+Poor mans intro to Wire-Bonding | Stephan Bökelmann @ Kicon 2025
+Most integrated circuits come safely packaged in epoxy, but not everyone has that luxury. Sometimes, we need to handle bare dies and bond them ourselves. In this talk, I will give a short introduction to the wirebonding process for prototype chips and share some of the unexpected challenges I faced before finally getting my first chip to work.
+
+...
+https://images-ext-1.discordapp.net/external/7qfZzDd3zu_dQI5K__L4803HSfMJVkPaAfZsiUY05Lo/https/i.ytimg.com/vi/dNBwY7L6niI/maxresdefault.jpg
+
+
+[11/13/2025 10:02] mattvenn
+@stuart 's doing some TT COB today, and I wanted to share this lovely photo!
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1438469140938756229/cob.jpg?ex=691a4a08&is=6918f888&hm=a799ba666c73b591fe4a2f3da0fdc7bbbe444ca33b23e35fa7a20826163188a3&
+
+{Reactions}
+❤️ (5) 😍 (2)
+
+[11/13/2025 13:04] ddddbbbb
+looks nice! is that by manual wirebonder or programmed?
+
+
+[11/13/2025 15:30] saladchap
+Programmed, we'll be sharing some more photos and info about the process soon 🦋
+
+
+[11/13/2025 15:32] saladchap
+
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408134567491145728/1438552043034906650/IMG_20251113_161143348.jpg?ex=691a973e&is=691945be&hm=907ef14cec9def568f5232c23acff155f86f86f8ad64b92dd4e6256ebfeda5f8&
+
+
+[11/13/2025 15:32] saladchap
+Here's one post-glob
+
+
+[11/13/2025 15:57] ddddbbbb
+programmed is the dream. I've assembled a lot of parts with a west-bond but someday I hope to find an affordable programmable bonder
+
+
+[11/13/2025 16:28] tholin
+Yes, please share! I need to learn more about wire bonding if I wanna be able to bond my own chips one day soon.
+
+
+[11/14/2025 21:41] mithro_
+Who's padring and die is that?
+
+
+[11/14/2025 21:47] 246tnt
+@Tim 'mithro' Ansell It's TT08, sky130 default pad ring.
+
+
+[11/14/2025 22:08] mithro_
+I guess I actually ment the cob ring
+
+
+[11/15/2025 07:14] 246tnt
+Ah, it was done by @htamas  ( https://github.com/htfab/breakout-tt08-cob )
+
+
+==============================================================
+Exported 487 message(s)
+==============================================================

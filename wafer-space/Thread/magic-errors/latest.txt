@@ -1,0 +1,425 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 🏗️ - Designing / project-template / Magic errors
+==============================================================
+
+[11/03/2025 20:45] mole99
+@Tim Edwards I have another question. During DRC I get a lot of:
+
+```                                                  
+Error while reading cell "chip_top" (byte position 97630252): Warning: cell "Metal4_fill_cell" placed on top of itself.  Ignoring the extra one.                                                              
+Error while reading cell "chip_top" (byte position 97630316): Warning: cell "Metal1_fill_cell" placed on top of itself.  Ignoring the extra one.                                                              
+Error while reading cell "chip_top" (byte position 97630380): Warning: cell "Metal4_fill_cell" placed on top of itself.  Ignoring the extra one.                                                              
+Error while reading cell "chip_top" (byte position 97630628): Warning: cell "Metal1_fill_cell" placed on top of itself.  Ignoring the extra one.                                                              
+Error while reading cell "chip_top" (byte position 97630876): Warning: cell "Metal3_fill_cell" placed on top of itself.  Ignoring the extra one.                                                              
+Error while reading cell "chip_top" (byte position 97630980): Warning: cell "Metal4_fill_cell" placed on top of itself.  Ignoring the extra one.
+```
+
+However, having checked the layout, I don't think I have any cells placed on top of themselves. Could it be because KLayout creates arrays for the filler cells?
+
+
+[11/03/2025 20:55] mole99
+Related to the SRAM, I get the following during DRC:
+
+```
+...
+1570000 uses
+1575000 uses
+1580000 uses
+[21:39:22] ERROR    Error while reading cell "chip_top" (byte position 120711644): cell power_route_01_a_512x8m81 was used but not defined.
+[21:39:22] ERROR    Error while reading cell "chip_top" (byte position 120711644): cell M1_PSUB4310591302014_512x8m81 was used but not defined.
+[21:39:22] ERROR    Error while reading cell "chip_top" (byte position 120711644): cell G_ring_512x8m81 was used but not defined.
+...
+```
+
+
+[11/03/2025 20:55] mole99
+But then underneath the cells are read in:
+
+```
+...
+Cell power_route_01_a_512x8m81 read from path /home/leo/Repositories/gf180mcu-project-template/gf180mcu/gf180mcuD/libs.ref/gf180mcu_fd_ip_sram/mag
+...
+```
+
+
+[11/03/2025 20:55] mole99
+And then further down I get:
+
+```
+Processing timestamp mismatches.
+Timestamp mismatches found in these cells: M1_NACTIVE_02_512x8m81, M1_NWELL_01_512x8m81, M1_PACTIVE$10_512x8m81, M1_PACTIVE$11_512x8m81, M1_POLY2$$204150828_512x8m81, M1_POLY24310591302019_512x8m81,        
+M1_POLY24310591302031_512x8m81, M2_M1$$204138540_512x8m81, M2_M1$$204139564_512x8m81, M2_M1$$204140588_512x8m81, M2_M1$$204141612_512x8m81, M2_M1$$204220460_512x8m81, M2_M1$$204221484_512x8m81,             
+M2_M1$$204222508_512x8m81, M3_M2$$204142636_512x8m81, M3_M2$$204143660_512x8m81, M3_M2$$204144684_512x8m81, M3_M2$$204145708_512x8m81, M3_M2$$204146732_512x8m81, M3_M2$$204147756_512x8m81,                  
+nmos_1p2_01_R270_512x8m81, nmos_1p2_02_R90_512x8m81, nmos_5p04310591302099_512x8m81, nmos_5p043105913020111_512x8m81, pmos_1p2_01_R90_512x8m81, pmos_1p2_02_R90_512x8m81, pmos_5p043105913020101_512x8m81,
+...
+```
+
+Could I have made a mistake when updating the PDK from open_pdks? I'm not even sure if I touched the SRAM at all.
+
+
+[11/03/2025 20:57] mole99
+Blackboxing the SRAM cells did not go well, I got 634802 DRC errors...
+
+I'm using this to read in the mag views of the SRAMs:
+
+```
+# Read in maglef views in order to blackbox cells
+if { [info exists ::env(MAGIC_DRC_MAGLEFS)] } {
+    foreach {maglef} $::env(MAGIC_DRC_MAGLEFS) {
+        puts "Loading maglef view: $maglef"
+        load $maglef
+    }
+}
+```
+
+But I'm also reading the GDS afterwards. Does the GDS perhaps overwrite the mag view?
+
+
+[11/03/2025 21:05] rtimothyedwards_19428
+I get a lot of those errors coming out of klayout.  And I have also noticed that it is extraordinarily easy in klayout to accidentally drop two instances in the same place, and klayout does not detect it or report it, and it is impossible to see unless you move one of those instances and then you see there's still the same subcell still sitting there.
+
+
+[11/03/2025 21:08] rtimothyedwards_19428
+When magic places a cell, it checks if there is already a cell with the same name in the same position and orientation.  So while it's possible that there is a mistake in that code, I don't believe so.  I think it's pretty solid.  When magic reports that there are duplicates, then it has already _deleted_ the instance that it thought was a duplicate.  So if those instances were _not_ duplicates, then the layout would be missing instances.  But I've never observed missing cells in files read from klayout, although I have seen a lot of messages about duplicate cells.
+
+
+[11/03/2025 21:11] rtimothyedwards_19428
+There is some possibility that array bounds are not being checked.  Do you have an example on hand to share?
+
+{Reactions}
+👍
+
+[11/03/2025 21:16] rtimothyedwards_19428
+Actually, that looks like it may be a real problem.  And one which might clear LVS, because if you had an array of 2x10 contacts and overlaid it with an array of 10x2 contacts, then if you remove one of those instances, you'd still get a valid contact.  I will push a correction and you can see if that fixes the problem.
+
+
+[11/03/2025 21:24] mole99
+Yes, let me prepare a file for you.
+
+
+[11/03/2025 21:25] rtimothyedwards_19428
+GDS will overwrite the maglef view if you don't use `gds noduplicates true`
+
+
+[11/03/2025 21:26] mole99
+https://github.com/user-attachments/files/23318341/chip_top.gds.gz
+
+
+[11/03/2025 21:27] mole99
+Very good point, but actually I'm doing that already:
+
+```
+# Enable gds noduplicates to ignore cells
+# that have been previously loaded as maglef
+gds noduplicates true
+gds readonly true
+
+# Flatten cells
+if { [info exists ::env(MAGIC_GDS_FLATGLOB)] } {
+    foreach {gds_flatglob} $::env(MAGIC_GDS_FLATGLOB) {
+        gds flatglob $gds_flatglob
+    }
+}
+```
+
+
+[11/03/2025 21:27] mole99
+https://github.com/librelane/librelane/blob/756b12498458c32ee290e66da01b5792f0ecd9a3/librelane/scripts/magic/drc.tcl
+
+
+[11/03/2025 21:28] rtimothyedwards_19428
+`used but not defined` errors will occur if the source file doesn't define cells in bottom-up order.  You might need to use `gds ordering true` before reading in.  However, I'm not sure that there is any obvious consequence beyond the error message as long as the cell is defined later in the file.
+
+
+[11/03/2025 21:30] mole99
+Thanks, will give this a try!
+
+
+[11/03/2025 21:31] mole99
+It should be fine to set `gds noduplicates true` after reading in the mag, right?
+
+
+[11/03/2025 21:31] rtimothyedwards_19428
+I'm getting "https://github.com/user-attachments/files/23318341/chip_top.gds.gz" not found.
+
+
+[11/03/2025 21:31] mole99
+Ah, wait a sec
+
+
+[11/03/2025 21:32] rtimothyedwards_19428
+Shouldn't matter but yes, set `noduplicates` after reading in the maglef layouts.  Probably best for me to just look at the layout myself with the abstract SRAM view and see what it looks like and what DRC errors are getting reported.  I assume that will be in the same chip_top layout?
+
+
+[11/03/2025 21:32] mole99
+Sent it on FOSSi Chat
+
+
+[11/03/2025 21:33] mole99
+Yes, all the errors come from this design.
+
+
+[11/03/2025 22:04] rtimothyedwards_19428
+The duplicate cells appear to be actual duplicate cells.  I can't confirm this in klayout because if I select COMP_fill_cell and try to move it, it moves all of the cells together---I can't figure out how to move a single instance (or in this case, the 2 x 4 array).  Klayout presents it as a single cell in chip_top and I don't understand how it is representing it.  However it is representing the complex array of arrays is hiding the fact that duplicate instances are on top of each other.  It is certainly the case that magic is detecting these, removing the duplicates, and I still see in magic the same fill cell layout that I see in klayout.
+
+
+[11/03/2025 22:14] rtimothyedwards_19428
+The issue with the DRC errors is that the "maglef" view of the SRAM is essentially designed to cover all layers up to metal2.  The fill generator is looking inside the SRAM, finding ample room to place fill cells on active, poly, metal1, and metal2, and that collides with the abstract view, which assumes that even fill is forbidden from the area (which is likely preferred?).
+
+The two solutions are (1) Create an abstract view of the SRAM containing a *detailed* obstruction map of the interior (that is, not using `lef write -hide`).  That will be a huge LEF file, but it will be accurate with respect to the metal layers.  I'm not sure it will properly represent diffusion and poly.  The better solution is (2) do not create fill patterns inside the area of the SRAMs.
+
+
+[11/03/2025 22:25] rtimothyedwards_19428
+Most of the DRC errors, however, come from the combination of fill poly over fill diff, which I handled in IHP by creating an extra plane for the fill poly.  Without doing that, the only way to keep the poly-fill-on-diff-fill structures from raising DRC errors is to flatten both the Poly2_fill_cell* and COMP_fill_cell* cells.
+
+
+[11/04/2025 14:04] mole99
+1. I'll have to look into the duplicate cell issue on KLayout's side. I tried to resolve the array through the KLayout GUI and `explode` the cell instance array through scripting, but neither method managed to separate the filler cells.
+  At least it's not a blocking issue.
+
+2. The maglef covering up the layers makes a lot of sense! Thanks for the hint.
+  I would rather not prevent fill inside the SRAMs since this PDK only allows to restrict filler generation on all metal layers.
+  I removed the `-hide` argument from open_pdks. The resulting maglefs are 10MB in total (not ideal), but now the fill is correctly inserted.
+
+3. Yes, I already flatten comp and poly2 fill cells. That's not an issue on my side:
+  ```
+  MAGIC_GDS_FLATGLOB:
+  # COMP and Poly2 filler cells need to be 
+  # flattened to form a "filltrans" layer
+  - "COMP_fill_cell"
+  - "Poly2_fill_cell"
+  ```
+
+
+[11/04/2025 14:05] mole99
+Hold on tight! The reason I still got DRC errors, even after setting `MAGIC_DRC_MAGLEFS` in LibreLane was that I hadn't loaded the maglef views. I had loaded the mag views 🤦‍♂️
+
+By loading the maglef views, all the DRC errors are resolved. Well, actually, not all of them. By using the maglefs from the current PDK I still got some Metal3 spacing errors in the SRAM periphery. Using the no `-hide` maglefs resolved all of the DRC errors within the SRAM macro.
+Could you run magic DRC on the PDK maglefs on your end to confirm my suspicion?
+
+Still, the question is whether we really want to distribute 10MB maglefs for the SRAMs just to avoid checking the DRC rules inside it?
+Even if we don't implement the 5V/3.3V SRAM rules, it probably makes more sense to use the `SramCore` layer to skip these DRC checks in the area.
+This way I don't need to update the wafer.space precheck every time a new SRAM is generated, and users could generate their own SRAMs.
+Even if we don't implement the 5V/3.3V SRAM rules in magic, in the worst case violations should get caught by KLayout.
+How difficult would it be to disable specific rules in a certain layer through the magic tech file?
+
+
+[11/04/2025 15:15] rtimothyedwards_19428
+Another solution would be to pre-fill the SRAMs and put those in the PDK.
+
+
+[11/04/2025 15:26] mole99
+But that doesn't fix the issue of the DRC errors in new SRAM macros. I would still have to create a maglef view for each and update the precheck.
+
+
+[11/04/2025 15:29] mole99
+Also filler generation seems to work fine:
+
+
+[11/04/2025 15:29] rtimothyedwards_19428
+@mole99 :  If you edit the tech file and change all the DRC metal width rules from, e.g., "width *m2,rm2" to "width allm2,obsm2" then the spacing errors in the SRAM maglef view go away.  I'm not sure why I did not have the "obsm" layers in the basic width rule---I feel like I may have done that on purpose, as in there may be other abstract views where there are too-narrow shapes of obstruction metal.  That happens when laying down an obstruction plane and then making cut-outs in the obstruction layer for pins.  It might be a better choice to just eliminate pins from the LEF view that are smaller than the metal minimum width rule.
+
+{Reactions}
+👍
+
+[11/04/2025 15:29] mole99
+
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1435007091634081833/1435289911891726386/Bildschirmfoto_vom_2025-11-04_14-45-41.png?ex=691a96a5&is=69194525&hm=92bfc5f5938af2fa27c3bf48868d09c3aa4a5ae610363e715b7a47ae1fa0b413&
+
+
+[11/04/2025 15:32] rtimothyedwards_19428
+I'm not sure why you're against blocking fill inside the SRAM, though.  There's a trivial amount of fill there.  It will not significantly affect overall chip density.
+
+
+[11/04/2025 15:34] mole99
+That is true for the first Metal layers, but not so much for Metal4 and Metal5. And since I don't want to invent new fill block layers for the PDK, generating the fill is fine. As long as the minimum distances are met, that is.
+
+
+[11/04/2025 15:37] mole99
+Ideally, we would implement the 3.3V/5V SRAM rules, but the amount of work is not to be underestimated.
+That's why I think the second best solution is to disable the five or so DRC rules in the `SramCore` layer.
+This is essentially what we already do with the maglef view, but it works on all SRAMs with the `SramCore` layer without the need to read in the maglef.
+
+
+[11/04/2025 15:38] rtimothyedwards_19428
+The SRAM does not have any layout on any layer above metal3.
+
+
+[11/04/2025 15:40] mole99
+Yes, that's why it is mostly empty except for some routing. PMNDMY, however, would block all metal fill.
+
+
+[11/04/2025 15:40] mole99
+There are no layers for blocking fill on certain metal layers.
+
+
+[11/04/2025 15:40] rtimothyedwards_19428
+I use the obstruction layers from the LEF views for that.
+
+
+[11/04/2025 15:41] mole99
+\* In the PDK documentation, that is.
+
+
+[11/04/2025 15:49] rtimothyedwards_19428
+I think maybe pre-filling the SRAM plus getting rid of the errors in the maglef view would be the best solution.  I have to figure out what's going on with the pins appearing in the middle of the maglef view.  There doesn't seem to be any obvious reason why they're there.  The underlying reason is that magic doesn't want to block pins that may not be on the periphery, or which may be intended to be in the middle of the cell and contacted from the top.  But the locations of these pins is a bit weird.
+
+
+[11/04/2025 18:20] rtimothyedwards_19428
+After spending some time deving into why the interior pins were so randomly placed (or rather randomly selected from the geometry that exists there), I finally figured out that they are not generated by magic at all.  Magic is using the original GF LEF view to annotate its own LEF output to make sure that it captures all of the pins.  The tiny thin pin sliver in the 64x8 SRAM that was showing up as a DRC error in the LEF view is here in the original GF LEF:
+```
+    PORT
+      LAYER Metal3 ;
+        RECT 118.435 30.885 206.985 30.995 ;
+    END
+```
+So it might be worthwhile just to find all the errors (which I don't think are that many---There is only the one error in the 64x8 SRAM) and eliminate those port entries from the upstream repository LEF views.
+
+
+[11/04/2025 18:21] mole99
+Wow, that really is a thin pin!
+
+
+[11/04/2025 18:22] mole99
+I would really rather avoid pre-filling the SRAM 😬
+
+For now, the maglef without the `-hide` option works well, and 10MB more isn't the end of the world (ciel can even deduplicate the PDK variants).
+Ideally, magic could also run directly on the GDS of the SRAM. Initially, by ignoring the 5V/3.3V SRAM rules, and later maybe even by implementing them.
+How would the first part be implemented, i.e. how would certain rules be ignored in the `SramCore` layer?
+
+
+[11/04/2025 18:22] mole99
+For example, rule [PL.5a](https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_07_08.html) has a [S.PL.5a_MV](https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_11_1.html) counterpart. This means that we can ignore PL.5a inside `SramCore`.
+
+PL.5a is implemented as follows:
+
+```
+ spacing allpolynonfet alldifflvnonfet 100 corner_ok allfets \
+    "Poly spacing to diffusion < %d (PL.5a)"
+ spacing allpolynonfet alldiffmvnonfet 300 corner_ok allfets \
+    "Poly spacing to MV diffusion < %d (PL.5a)
+```
+
+Can I just remove all poly that is inside `SramCore` from allpolynonfet? How would I do that?
+
+
+[11/04/2025 18:29] rtimothyedwards_19428
+You can't base DRC rules on specific cells in magic;  it just doesn't work.
+The only way to implement special rules for SRAM is to create an entire alternative set of layers that exist only in SRAM, which is extremely messy.  I did something like that in sky130 to implement a special kind of local interconnect that is inside SRAM, but that was necessary because the local interconnect was part of the abstract views.  At least the GF SRAM cells appear to satisfy normal DRC rules for the metal layers, so the abstract view is DRC clean (apart from weird port entries in GF's own LEF views).
+
+
+[11/04/2025 18:33] rtimothyedwards_19428
+I really don't like the idea of generating a detailed LEF view of the SRAM.  It's really abusing the concept of the abstract view.  It would be easier just to run a few commands in magic to erase layers with the DRC errors.  But let me take a few minutes to see how easy or hard it would be to create some special layers for the SRAM cells. . .  Maybe there are not that many layers involved in the errors?
+
+
+[11/04/2025 19:03] mole99
+Oh, it seems we've been talking past each other all this time! 😄
+
+I absolutely agree, the DRC shouldn't be based on cells. That's why the PDK provides the `SramCore` layer (108/5). The foundry SRAMs use this layer to mark the SRAM bit cells.
+
+Yes, I would rather not generate a detailed abstract view. But this is the only way we can generate the fill afterwards. It would be possible to clean up the detailed views slightly by replacing the the bitcell array with an obstruction.
+
+Ideally, magic could use the GDS directly. I assume people want to create their own SRAM macros for educational purposes, or, in the case of Staf's generator, to generate new SRAM configurations.
+
+
+[11/04/2025 19:05] rtimothyedwards_19428
+I think I will just go with the "messy" approach, which will require additional layers for SRAM pdiff, ndiff, and contacts.  Four extra layers---Not too bad.  There are a couple of other import errors (layers getting mapped wrong) that I need to look at, but there are only a couple of those.
+
+{Reactions}
+👍
+
+[11/04/2025 20:46] rtimothyedwards_19428
+An interesting challenge would be to try to reverse-engineer the 3.3V SRAM from the rules.  The sets of rules are very similar between 3.3V and 5.0V, and the differences are notable.  Worth taking a stab at.
+
+
+[11/04/2025 21:39] rtimothyedwards_19428
+I got it down to 30 errors in the SRAM macro, none of them in the core.  Now trying to figure out how to flatten things on input to get rid of those last 30.
+
+
+[11/04/2025 22:46] rtimothyedwards_19428
+You will need to update open_pdks and rebuild the GF180MCU PDK, but the SRAM blocks read into magic now with no DRC errors.
+
+
+[11/04/2025 22:47] rtimothyedwards_19428
+open_pdks version 1.0.553.
+
+
+[11/05/2025 10:49] mole99
+You're incredible, Tim!
+I'll update the template with the latest open_pdks and try to get an SRAM through the flow.
+
+
+[11/05/2025 12:38] mole99
+After applying the flatglobs from [here](https://github.com/RTimothyEdwards/open_pdks/blob/master/gf180mcu/custom/scripts/gds_import_sram.tcl), magic DRC is almost clean: I get a single CO.1 MV Diffusion contact width < 0.23um (CO.1 + 2 * CO.6) error.
+
+
+[11/05/2025 12:38] mole99
+This is were the violations is located.
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1435007091634081833/1435609255691550720/Bildschirmfoto_vom_2025-11-05_13-37-03.png?ex=691a6e8e&is=69191d0e&hm=b093d0ef795ae6230b67c54de5512c7fc3051bd052e68da78b0d0fbbc63651e9&
+
+
+[11/05/2025 12:38] mole99
+Let me know if I should send you the layout.
+
+
+[11/05/2025 15:17] rtimothyedwards_19428
+@mole99 :  No, I know what that error is. . . But I fixed it.  I think the problem might be that you still have the original layout for the SRAM in your chip.  The new PDK makes a tiny change to the GDS of the SRAM layout and removes one contact which is too close to (and offset from) the contact array next to it.  Removing that one contact is the easiest way to resolve the issue.  But you will need to update the SRAM cell in the layout.
+
+
+[11/05/2025 15:22] mole99
+Duh! You're absolutely right! I only updated the magic tech file in the wafer.space PDK fork.
+
+
+[11/05/2025 15:24] rtimothyedwards_19428
+BTW, I ran magic with valgrind overnight doing a complete DRC in magic on your chip_top.  In the morning it had maxed out my memory (64GB) and worked its way into swap.  Valgrind is identifying *megabytes* of memory leaks, but not *gigabytes* and I'm still trying to figure out just what could be so terribly memory-inefficient.  A full chip with fill is a lot of data, but. . . 60+GB??
+
+
+[11/05/2025 15:26] rtimothyedwards_19428
+Magic's database format is known to be not particularly efficient;  each tile has four pointers to other tiles, so for a 64-bit system that's 32 bytes per tile, and since the tiles tesselate the entire plane, then even blank space is broken up into multiple tiles.  It adds up pretty quickly.
+
+
+[11/05/2025 15:28] mole99
+Oh, wow 😯
+My PC has 64GB of memory too, but I haven't noticed it filling up yet.
+
+
+[11/05/2025 15:29] mole99
+The flow should reach magic DRC again soon. I'll take a look at the memory usage then.
+
+
+[11/05/2025 16:15] rtimothyedwards_19428
+My best guess:  In order to nail down all of the DRC rules, I have created a DRC CIF style with 64 layers.  All of those layers are created and maintained for the duration of the DRC check (and possibly not cleared afterward, but that's not the immediate problem).  They do not cover the whole chip, but they cover a pretty large area because they have to incorporate the effective distance of every rule.  Some rules like "bloat-all" can in theory reach across the entire chip and so cannot be clipped to the DRC region being checked, so these layers may span a large portion of the chip.  Vast memory grabs may be the inevitable result of trying to find a way to check every single DRC rule in the deck.
+
+
+[11/05/2025 17:14] mole99
+That sounds like a good guess.
+
+
+[11/05/2025 17:14] mole99
+So, during the flow magic used a maximum of ~37.8GB. This was with the example chip implemented using the wafer.space template.
+
+
+[11/05/2025 18:00] rtimothyedwards_19428
+I was using much more memory because valgrind was tracking it all, which is a lot of overhead.
+
+
+[11/05/2025 18:05] mole99
+Makes sense :)
+
+
+[11/06/2025 01:32] rtimothyedwards_19428
+Is this chip design in an available open source repository?  It makes a good test case.  I'm trying to use it to track down the (apparently massive) memory leaks in magic.
+
+
+[11/06/2025 13:48] mole99
+It is generated using the [gf180mcu-project-template](https://github.com/wafer-space/gf180mcu-project-template). However, there's no layout in the repository, so you will need to build it yourself or I can give it to you. Alternatively, I can update the CI to include the final layout as an artifact, then you can download it from the latest run.
+
+
+==============================================================
+Exported 70 message(s)
+==============================================================

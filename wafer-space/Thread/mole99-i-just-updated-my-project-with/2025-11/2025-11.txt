@@ -1,0 +1,110 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 🏗️ - Designing / project-template / @mole99 I just updated my project with
+==============================================================
+
+[10/16/2025 14:35] mole99
+
+
+
+[10/16/2025 14:35] mole99
+Yes, I rebased leo/gf180mcu on top of the latest dev branch. The OpenROAD version, however, is still the same, so I wouldn't expect any changes regarding GPL.
+For now, the best way forward with GPL is to set `PL_TIME_DRIVEN: False`.
+
+Could you post your STA error? Even better if you could share your repository with the latest changes. Is it still https://github.com/AvalonSemiconductors/ws-submission-2025?
+
+
+[10/17/2025 07:42] tholin
+I updated the repo
+
+
+[10/17/2025 07:44] tholin
+
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1428383834310705192/1428649935066234900/image.png?ex=691a29af&is=6918d82f&hm=0f38e852039c6fd5fdb198eaf46decf992d7b519fc55b0652340e6a06297225f&
+
+
+[10/17/2025 08:35] mole99
+Thanks for uploading the changes to your repo. I was able to reproduce the failure and trace it back to my latest changes to the `pdk_compat` code in LibreLane. `pdk_compat` migrates old PDK variables to newer formats, however, for gf180mcu a number of variables were simply overwritten instead of checking whether they already existed. This makes it impossible to update the PDK variables to the newer format.
+Therefore, I added some logic that checks whether the new variables already exist before setting their values.
+
+This worked fine, except for `SYNTH_CLK_DRIVING_CELL`, which it is not a new variable, but its format changed. As this variables already existed in the PDK in the old format, it was not set to the new value, which led to the issue you saw.
+
+As the project template uses a custom SDC file, this issue did not appear there.
+
+
+[10/17/2025 08:35] mole99
+I've updated the leo/gf180mcu branch as well as the template project. With the latest changes and this config.yaml I was able to build your project:
+
+```
+meta:
+  version: 2
+  flow: Classic
+  substituting_steps:
+    KLayout.DRC: null
+    Checker.KLayoutDRC: null
+
+# DO CHANGE
+DESIGN_NAME: user_project_example
+VERILOG_FILES: dir::src/user_project_example.v
+CLOCK_PERIOD: 20
+DIE_AREA: [0, 0, 250, 250]
+RUN_MAGIC_DRC: true
+# Valid values are AREA 0-3 and DELAY 0-4
+# DELAY 4 = fastest, but largest area
+# AREA 3 = slowest, but smallest area
+SYNTH_STRATEGY: DELAY 0
+
+# DO NOT CHANGE
+RUN_CTS: true
+MAX_FANOUT_CONSTRAINT: 4
+CLOCK_PORT: clk_i
+VDD_NETS: ["VDD"]
+GND_NETS: ["VSS"]
+VERILOG_POWER_DEFINE: "USE_POWER_PINS"
+RT_MAX_LAYER: Metal4
+FP_PIN_ORDER_CFG: dir::pin_order.cfg
+FP_PDN_MULTILAYER: false
+FP_SIZING: absolute
+PL_TIME_DRIVEN: False
+```
+
+
+[10/17/2025 08:35] mole99
+Note that if you wish to use KLayout DRC in LibreLane, you need the PDK fork of wafer.space, since the changes haven't been upstreamed yet.
+
+
+[10/17/2025 08:36] mole99
+Btw. in your update from upstream you missed:
+
+```
+CLOCK_NET: clk_pad/Y
+```
+
+in librelane/config.yaml
+
+
+[10/17/2025 08:37] tholin
+No, I have it. Did it not end up in the commit?
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1428383834310705192/1428663125598670909/image.png?ex=691a35f8&is=6918e478&hm=d928965a510c71da84832194ce1cadad601b6f69a1ad6dc4f3223e0f0ff81bfb&
+
+
+[10/17/2025 08:37] mole99
+All good! I missed it while looking at the diff in GitHub.
+
+
+[10/17/2025 08:39] mole99
+Regarding `SYNTH_STRATEGY`, from the LibreLane docs: "Please note that there is no way to know which strategy is the best before trying them."
+So it really depends on the design you implement.
+
+
+[10/17/2025 08:50] tholin
+I find DELAY does work to enhance max clock rate greatly, though the difference in DELAY 3 and DELAY 4 is negligible.
+
+
+==============================================================
+Exported 12 message(s)
+==============================================================

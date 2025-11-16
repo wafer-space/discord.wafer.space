@@ -1,0 +1,531 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 🏗️ - Designing / project-template
+==============================================================
+
+[10/02/2025 16:40] mole99
+📢 Major update to the [gf180mcu-project-template](https://github.com/wafer-space/gf180mcu-project-template)! 
+
+The example design now runs through the complete flow, including:
+
+- Sealring insertion
+- Filler generation
+
+... and is DRC and LVS clean, according to the open source PDK.
+
+There is now also a [cocotb](https://www.cocotb.org/) testbench available in the repository. We use the newly released cocotb 2.0.0.
+You can run RTL as well as GL simulations, after implementing the design.
+
+To ensure your design will be accepted for tapeout, you will be able to run the [gf180mcu-precheck](https://github.com/wafer-space/gf180mcu-precheck).
+At the moment it is still a work in progress.
+
+Further updates will follow, but you can use the current state as a stable basis for implementing your design.
+If you encounter any issues, please report them so that we can improve both the template and the PDK.
+
+PS: Special thanks to @Tim Edwards for his help in solving the uncovered PDK and tool-related issues.
+
+Leo
+
+{Reactions}
+👍 (2)
+
+[10/02/2025 16:45] rtimothyedwards_19428
+Tim Edwards has only barely begun to address all the issues that have surfaced over the past few weeks. . .
+
+
+[10/02/2025 16:48] tholin
+Its that bad?
+
+
+[10/02/2025 16:48] mole99
+Haha, I also have to upstream a number of LibreLane related patches 😄
+
+
+[10/02/2025 16:51] mole99
+Also I forgot to mention that it is now possible to adjust the padring directly from the LibreLane configuration file.
+
+
+[10/02/2025 17:09] h.tamas
+Started a thread.
+
+
+[10/02/2025 18:04] rtimothyedwards_19428
+@Tholin :  Well, it means there's a lot to do if we want people to have successful tapeouts.
+
+
+[10/02/2025 18:10] tholin
+Bad time for me to be designing analog layouts?
+
+
+[10/02/2025 18:15] rtimothyedwards_19428
+@Tholin :  Great time for you to be designing analog layouts!  That will help flush out a lot of issues.  Make sure that you spot-check designs against the documented rules occasionally and let me know about anything that looks wrong.  Feel free to post a layout to me if you want me to double-check it for issues.
+
+
+[10/02/2025 18:16] mithro_
+See what @Tim Edwards said! 🙂
+
+
+[10/02/2025 18:20] tholin
+Alright, sounds good.
+
+
+[10/02/2025 18:20] tholin
+I'll keep going.
+
+
+[10/04/2025 01:11] xintingjiang_36756
+I'm curious what is the current problem of this template, is this made the nov gf180 mpw shuttle
+
+
+[10/04/2025 01:23] mithro_
+@Xinting Jiang - It should be usable but just keep it up to date as you go.
+
+{Reactions}
+👍
+
+[10/04/2025 07:35] mole99
+Exactly. You can already get started with your design, just make sure to keep it up to date with the upstream template.
+
+{Reactions}
+👍
+
+[10/11/2025 03:01] asc9742
+@mole99 Hi Leo, I am trying to replace all 56 user pads with analog pads (gf180mcu_fd_io_asig_5p0). Got this error "No shape in terminal analog[0\].pad/ASIG5V found on layer Metal5". Any ideas on this issue? Attached a screenshot + the yaml and system verilog files.
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1423348662318272592/1426404321809010758/image.png?ex=691a900b&is=69193e8b&hm=eb99f9814907804c3a34b321942954d1684b7902b2f561dde3092c09f1af4fab&
+https://cdn.discordapp.com/attachments/1423348662318272592/1426404322081509376/config_sv_files.zip?ex=691a900b&is=69193e8b&hm=58db42791f4ce4eb13312dca9268b3f40aae811c8537dda297c1ffcd2422170e&
+
+
+[10/11/2025 08:20] mole99
+Hi @asc, there was a port missing for the bondpad BTerm in the `gf180mcu_fd_io__asig_5p0` cell.
+If you update your PDK, it should run through now.
+
+{Reactions}
+👍
+
+[10/11/2025 16:52] asc9742
+Thank you @mole99 Ran into a new problem with the global routing. I had exchanged all user pads with analog pads, including the clk and rst pad. Could that be causing an issue?
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1423348662318272592/1426613389387497572/image.png?ex=691aaa01&is=69195881&hm=b333537ce598f257c3a2eef05ee1a3eb20b174b8dede9059fc7daa273ffc02bb&
+
+
+[10/12/2025 05:21] mole99
+Yes, that will be a problem. The SDC expects at least one clock. Can you share a repository with your current state? I will take a look tomorrow.
+
+
+[10/13/2025 11:59] mole99
+Started a thread.
+
+
+[10/16/2025 13:48] mole99
+The [precheck](https://github.com/wafer-space/gf180mcu-precheck) has been updated to finish cleanly with the example project.
+The precheck is your gateway to fabrication and will need to be completed via the online platform (coming soon).
+You can, of course, run it locally to more easily debug failures.
+
+If you are working on a design, please give it a try and let us know how it goes (SRAMs should still throw errors, that's being worked on next).
+Most importantly: please let us know if you can "cheat" your way through the precheck 😉
+
+
+[10/16/2025 14:07] tholin
+@mole99 I just updated my project with the changes from the template and since one of the commits reads "Update LibreLane", I tried running LL on example_project again to see if the error during GLB is gone. Instead, it now fails even earlier during STA.
+
+
+[10/16/2025 14:35] mole99
+Started a thread.
+
+
+[10/16/2025 20:46] jalf_47390
+@mole99 Is there any ESD protection in the IO pins in the template or is it required to be added? If it is in there already, what did you include? Same for all pins differences between them?
+
+
+[10/17/2025 04:56] mole99
+Started a thread.
+
+
+[10/20/2025 01:08] polyfractal
+how much memory does the `make librelane` step need (roughly)? I fired up an old linux laptop to play around with everything and it crashed after eating 16gb RAM + 4gb swap 🙂  Curious if I should just increase swap and let it run, or if it really needs like 32 or 64gb?
+
+
+[10/20/2025 03:58] polyfractal
+more swap did the trick 🙂
+
+{Reactions}
+waferspace 👍
+
+[10/20/2025 06:32] mole99
+It depends on your design 😁
+Yesterday, I implemented the example template on my laptop, which also has 16 GB of RAM, and it had to use swap as well.
+
+The step that uses the most memory atm is most likely the filler generation.
+There you can easily trade off memory consumption by changing the number of tiles (threads) and their size.
+I will add some LibreLane configuration variables so that this can be easily tweaked directly from the config.
+In the meantime, you can pass the `--jobs` argument to LibreLane to limit the global thread limit across all steps.
+
+{Reactions}
+👍
+
+[10/20/2025 07:40] mole99
+Never mind, none of that will be necessary anymore 😅
+
+I've just fixed an embarrassing bug in the filler generation script: https://github.com/wafer-space/gf180mcu/commit/57a5725eb4a722cb148ff8cf84c5f22ce0be8d64
+Now, filler generation uses only a fraction of the memory and completes much faster.
+Always double check how functions are supposed to be used (the naming actually said it all 😄).
+
+{Embed}
+https://github.com/wafer-space/gf180mcu/commit/57a5725eb4a722cb148ff8cf84c5f22ce0be8d64
+bugfix!: specify the tile margin as just the tile margin without th...
+…tile size
+
+Signed-off-by: Leo Moser <leomoser99@gmail.com>
+https://images-ext-1.discordapp.net/external/PfWEq_Askb94GnK4cqhs2JLj90kvWikJ8Bj2Lk4Fx_8/https/opengraph.githubassets.com/de60d88739d9da884892ce5c22633740ed4197004d5f96d705742c7eb667c87b/wafer-space/gf180mcu/commit/57a5725eb4a722cb148ff8cf84c5f22ce0be8d64
+
+
+[10/20/2025 07:42] mole99
+📢 Please update your project templates and pull the latest changes from the PDK!
+
+
+[10/20/2025 13:51] polyfractal
+awesome, thanks @mole99!
+
+{Reactions}
+👌
+
+[10/20/2025 22:17] mattvenn
+when will the submission system be open?
+
+{Reactions}
+💜
+
+[10/21/2025 06:22] mole99
+That's for @Tim 'mithro' Ansell to say.
+
+
+[10/21/2025 08:53] mithro_
+@Matt Venn - Hopefully in the next week.
+
+
+[10/26/2025 19:54] tholin
+That's quite a lot of VDD and VSS pads on the template. Like 10 each. That seems a bit excessive. What is the max current per pad?
+
+
+[10/27/2025 02:50] mithro_
+
+
+
+[10/27/2025 02:51] mithro_
+@Tholin - That was from @tnt in the #cob channel.
+
+
+[10/27/2025 08:12] tholin
+Ah, I see. Thank you.
+
+
+[11/01/2025 19:17] tholin
+Getting some *extreme* hold violations when integrating a macro into chip_top that is not present when hardening the macro itself. Checking the logs, the worst slack is simply from the reset pad.
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1423348662318272592/1434260033318682695/image.png?ex=691a233f&is=6918d1bf&hm=c4177bc878b55823bf90c1f30449e485355f106e56eb197ecc998055039df1a5&
+
+
+[11/01/2025 19:21] markemer
+Is that in ns? If so, oof. And could it be a bad capacitance extraction on the pads themselves?
+
+
+[11/01/2025 19:28] 246tnt
+That's probably because the macro has its own clock tree. So the clock that its internal FF sees is delayed by many ns compared to the clock on its input pin.
+
+
+[11/01/2025 19:29] 246tnt
+If the CTS inside your top level project isn't setup to feed the macro an "early clock" (i.e. from the root of its clock tree instead of a leaf), that could explain why you see so many hold violations.
+
+
+[11/01/2025 19:30] 246tnt
+(Just a theory of course ... can't do more than theorize without more data)
+
+
+[11/01/2025 19:45] tholin
+
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1423348662318272592/1434267229360357427/image.png?ex=691a29f2&is=6918d872&hm=a261efac1c429fe2d23dacbab6cd5eddb107ec3adbea50feddd3d5a98ff48564&
+
+
+[11/01/2025 19:45] tholin
+I don't have a repo for this yet
+
+
+[11/01/2025 19:46] tholin
+There is no CTS in the top level
+
+
+[11/01/2025 19:46] tholin
+Actually, there is no standard cells in the top level
+
+
+[11/01/2025 19:46] tholin
+Just macros
+
+
+[11/01/2025 20:56] tholin
+I guess this calls for a custom SDC file. I started by copying the SDC file provided by efabless for user project macros and will progressively modify it.
+
+
+[11/01/2025 22:33] tholin
+Literally nothing I do is changing the hold violations. Its refusing to budge.
+
+
+[11/02/2025 16:16] tholin
+Almost got it. Commit soon. Just trying to clean up my SDC file.
+
+
+[11/02/2025 16:17] tholin
+What’s the point of `set_driving_cell`? Does it automatically determine slew rates and delays, or do I still need to specify those manually?
+
+
+[11/02/2025 16:42] tholin
+Doesn’t matter. I cannot `set_driving_cell -lib_cell gf180mcu_fd_io__bi_24t` inside my macro SDC files anyways:
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1423348662318272592/1434583563730419762/image.png?ex=691aa7ce&is=6919564e&hm=1235016dda08f0c6edc1e14cbcb0447552f8930adb7a1f04d2dfdff85fd02bbc&
+
+
+[11/02/2025 18:10] mole99
+Do you use the LibreLane version from the template or [this branch](https://github.com/librelane/librelane/pull/806)?
+Otherwise the pad cells are not read in.
+
+
+[11/02/2025 18:16] tholin
+I cannot use the LibreLane version from the template for my macros. Python error.
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1423348662318272592/1434607148381376532/image.png?ex=691a1505&is=6918c385&hm=46218f074174b04e6e21ace44d11e40ef457932a327bdb729e23607ef52de045&
+
+
+[11/02/2025 18:17] tholin
+I mean, the PDK Version
+
+
+[11/02/2025 18:18] tholin
+The error during GPL I reported before persists, so I cannot use the LibreLane version.
+
+
+[11/02/2025 18:21] tholin
+But I also don’t understand what `set_driving_cell` even does. Right now my approach has been to determine values to set on `set_input_delay` , `set_clock_latency`, `set_input_transition` and `set_clock_transition` by manually interpreting the values in the liberty files for the IO pads.
+
+
+[11/02/2025 18:21] tholin
+Except when it comes to the internal bus inside the chip, where I have to rely on STA for numbers.
+
+
+[11/02/2025 18:23] tholin
+Actually, it seems fine now, at least on this one macro, but there is still a big difference in behavior.
+
+
+[11/02/2025 18:24] tholin
+I just got to `Stage 37 - Resizer Timing Optimizations (Post-Clock Tree Synthesis)` on this CPU macro and on Iteration 0 its starting with a TNS of **-5042** compared to main librelane, where I got -250.
+
+
+[11/02/2025 18:24] tholin
+I changed nothing about the config.
+
+
+[11/02/2025 18:24] tholin
+Just switched LL versions.
+
+
+[11/02/2025 19:22] tholin
+Yeah, I’m getting severe performance degradation in the wafer.space template LL version in two ways. The timings of the design are worse, and also the flows take forever to run. After one hour, it is still stuck in Timing Optimizations. This whole flow used to take < 15 minutes. @mole99
+
+
+[11/03/2025 00:24] tholin
+@mole99 This page linked in the README of the template no longer exists.
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1423348662318272592/1434699626002382878/image.png?ex=691a6b26&is=691919a6&hm=735566206f178244574d76b721e8765fd231a3784be9de0c2c782e591b2195af&
+
+
+[11/03/2025 00:24] tholin
+
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1423348662318272592/1434699690364112947/image.png?ex=691a6b35&is=691919b5&hm=8fdb70ebf98cb275d53d40d7e7e1f549d95985475169861428b2dfd6a2843251&
+
+
+[11/03/2025 07:16] mole99
+The wafer.space gf180mcu PDK requires the LibreLane version in the template (or from the branch).
+
+
+[11/03/2025 07:17] mole99
+The issue is still open at OpenROAD's side: https://github.com/The-OpenROAD-Project/OpenROAD/issues/8229
+However, as mentioned before, you can simply disable timing driven placement.
+
+
+[11/03/2025 07:18] mole99
+`set_driving_cell` automates exactly that. It takes the values directly from the LIB.
+
+
+[11/03/2025 07:19] mole99
+Thanks for reminding me. The LibreLane docs have recently been updated.
+
+
+[11/03/2025 08:12] tholin
+Thank you. I could find 0 information about this command online.
+
+
+[11/03/2025 08:23] 246tnt
+https://github.com/The-OpenROAD-Project/OpenSTA/blob/master/doc/OpenSTA.pdf
+
+{Embed}
+https://github.com/The-OpenROAD-Project/OpenSTA/blob/master/doc/OpenSTA.pdf
+OpenSTA/doc/OpenSTA.pdf at master · The-OpenROAD-Project/OpenSTA
+OpenSTA engine. Contribute to The-OpenROAD-Project/OpenSTA development by creating an account on GitHub.
+https://images-ext-1.discordapp.net/external/_eyLuFTAWtx9abjjggp8_0xwUb22APR9TFTVLIBMnH4/https/opengraph.githubassets.com/5baf52725c7a5bba0580560e9253de414bda7cc3e3e4375c7bfd1305e3447c82/The-OpenROAD-Project/OpenSTA
+
+
+[11/03/2025 20:35] mole99
+This is the ✨ magic ✨ line for the `gf180mcu_fd_ip_sram__sram512x8m8wm1` SRAM:
+
+```
+add_pdn_stripe -grid macro -layer Metal4 -width 2.36 -offset 1.18 -spacing 0.28 -pitch 426.86 -starts_with GROUND -number_of_straps 2
+```
+
+It adds a power/ground pair on each side of the SRAM macro, directly above the pins. Since this uses the local coordinate system of the macro, you can move the macro around as you wish, the PDN straps will follow. As the PDN straps go all the way across the macro, connecting them to the PDN above is very easy.
+
+{Reactions}
+✨ 💯
+
+[11/03/2025 20:35] mole99
+(top left)
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1423348662318272592/1435004439437115454/Bildschirmfoto_vom_2025-11-03_21-13-08.png?ex=691a3587&is=6918e407&hm=597b0ca38198eb2f10641f6b51f4cf421bbe6a921509dc7dabd117679ef6cafe&
+
+
+[11/03/2025 20:35] mole99
+(top right)
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1423348662318272592/1435004487117832322/Bildschirmfoto_vom_2025-11-03_21-13-33.png?ex=691a3592&is=6918e412&hm=3e0740a6cd6cb9878fe8d997fde5ddb049f0a682db6294e7c1d9a111d884abc6&
+
+
+[11/03/2025 20:35] mole99
+If you rotate the SRAM by 90 or 270 degrees, you need to use this line:
+
+```
+add_pdn_stripe -grid sram_macros_WE -layer Metal4 -width 2.36 -offset 1.18 -spacing 0.28 -pitch 479.88 -starts_with GROUND -number_of_straps 2
+```
+
+Unfortunately, the connection to VSS is not as good on the right side. It is better to use the first orientation.
+
+Don't forget the PDN connect:
+
+```
+add_pdn_connect \
+    -grid macro \
+    -layers "$::env(PDN_VERTICAL_LAYER) Metal3"
+```
+
+
+[11/03/2025 20:35] mole99
+
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1423348662318272592/1435004561549955103/Bildschirmfoto_vom_2025-11-03_21-30-41.png?ex=691a35a4&is=6918e424&hm=91b3df02b8713caead095c23f23c7f889ec12e4d5cd7adbc891e36754202e8a9&
+
+
+[11/03/2025 20:35] mole99
+Now I just need to make magic DRC happy, and then I can push the the example usage of the SRAM to the template repo.
+
+
+[11/03/2025 20:36] tholin
+Awesome
+
+
+[11/03/2025 20:36] tholin
+I re-used my setup from GFMPW with a wrapper macro for the SRAM that just added the Metal4 strips.
+
+
+[11/03/2025 20:36] tholin
+Which is not optimal
+
+
+[11/03/2025 20:37] mole99
+Well, if I remember correctly, Efabless used your solution too :)
+
+
+[11/03/2025 20:37] tholin
+Yeah. That’s where I got it from.
+
+{Reactions}
+👍
+
+[11/03/2025 20:45] mole99
+Started a thread.
+
+
+[11/05/2025 05:53] greg.hashtag.9468
+I've setup a new system following the readme. And then just run the stock template as a sanity check, it does complete. But I'm seeing KLayout DRC errors. (along with timing/cap/slew warnings at some corners)
+```
+...
+    "DM4.8": 0,
+    "DF.12": 3,
+    "NW.2b_MV": 16,
+    "DPF.4": 38,
+    "DCF.4": 48,
+    "total": 105
+}
+```
+Is this expected? Or does it indicate something I should debug with my environment first?
+
+
+[11/05/2025 07:38] mole99
+Started a thread.
+
+
+[11/06/2025 10:32] mole99 (pinned)
+📢 It's update time!
+
+The project template has been updated with support for the foundry SRAMs!
+Two SRAMs of type `sram512x8m8wm1` are instantiated in `chip_core` and placed inside the chip in two different orientations (north and east).
+If you add more SRAMs, make sure to update the LibreLane config (`librelane/config.yaml`) and the PDN configuration (`librelane/pdn_cfg.tcl`).
+
+In addition, an issue has been fixed with filler generation, the way how the KLayout DRC deck was invoked (connectivity rules), and an error in the seal ring generator. With these changes the template is now DRC clean for both the magic and KLayout DRC deck.
+Furthermore, the design is LVS clean and the there are no setup and hold violations for this example.
+
+Please update your projects to the latest template, and don't forget to update the PDK as well (`make clone-pdk`).
+Let me know if you have any questions.
+
+{Reactions}
+waferspace (5) 👍 (2) 🎉
+
+[11/06/2025 22:46] tholin
+Updated my AS2650v2 wafer.space port to use the new method for instantiating SRAMs.
+
+{Reactions}
+💜
+
+[11/06/2025 22:46] tholin
+Works!
+
+
+[11/07/2025 05:46] mole99
+Great to hear 👏🏻
+
+
+[11/07/2025 12:03] mithro_
+Pinned a message.
+
+
+[11/07/2025 12:04] mithro_
+@mole99 - Has performance / RAM usage changed much in the latest updates?
+
+
+[11/07/2025 12:26] mole99
+RAM usage has gone down drastically during the filler generation step after I fixed a bug there. However, that was already before this update.
+
+
+==============================================================
+Exported 93 message(s)
+==============================================================

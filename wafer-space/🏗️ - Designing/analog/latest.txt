@@ -1,0 +1,152 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 🏗️ - Designing / analog
+==============================================================
+
+[08/21/2025 17:07] mithro_
+@Tim Edwards, @Tholin had some questions / thoughts about analog stuff on GF180MCU.
+
+
+[08/21/2025 17:15] tholin
+Not really questions as much as I just wanna mess around and find out with some analog circuits on my next GF180 tapeout.
+
+
+[08/21/2025 18:06] rtimothyedwards_19428
+Sure, analog IP is yet another need for GF180MCU.  I would take a look at what's being produced for Chipathon.  I have been running my own track so I haven't been looking at what the analog groups have been doing, but for the record, you can find the Chipathon discussions on fossi-chat.org under the "Chipathon 2025" channel, or on github at https://github.com/sscs-ose/sscs-chipathon-2025/issues.
+
+
+[08/22/2025 05:05] mithro_
+There is a bunch of interesting information in the Chipathon page @ https://github.com/sscs-ose/sscs-chipathon-2025/tree/main/resources/Integration
+
+{Embed}
+https://github.com/sscs-ose/sscs-chipathon-2025/tree/main/resources/Integration
+sscs-chipathon-2025/resources/Integration at main · sscs-ose/sscs-...
+Blocks & Bots: An Open Chip Playground augmented with LLMs. Please check: https://sscs.ieee.org/technical-committees/tc-ose/sscs-pico-design-contest/ - sscs-ose/sscs-chipathon-2025
+https://images-ext-1.discordapp.net/external/18uvpW6hPYZBcQO4GLlyUmrV9jHJM_yjkvlo0Cd0zIo/https/opengraph.githubassets.com/10a47e6077228f1ed712207334b7648b1af880ace4e90918c7c73c740074d162/sscs-ose/sscs-chipathon-2025
+
+{Reactions}
+👍
+
+[08/22/2025 14:11] rtimothyedwards_19428
+@Tim 'mithro' Ansell :  If nothing else, Chipathon 2025 is surfacing a number of issues in the GF180MCU open PDK that needed to be addressed, and they are getting fixed, which will definitely benefit you and wafer.space for the first shuttle run.
+
+
+[08/22/2025 16:20] mithro_
+Yeap! You know I'm a big believer that quality is related to the number of users.
+
+
+[09/22/2025 12:52] tholin
+I tried doing analog for the first time and its going quite well, actually.
+
+{Attachments}
+https://cdn.discordapp.com/attachments/1408135265427394661/1419667700971737181/image.png?ex=691a71d4&is=69192054&hm=33decbc6a4e89df5c7538ffe8b015cc515407d89ce4ce98e92c22d8d9145ae41&
+
+
+[09/22/2025 12:59] 246tnt
+At 5V with that much headroom, I'd hope so 😅
+
+{Reactions}
+💯
+
+[09/22/2025 13:08] tholin
+The opamps I can build here are not nearly rail-to-rail and have some nasty nonlinearities on the output the more you move away from 2.5V in either direction.
+
+{Reactions}
+💯
+
+[09/22/2025 13:39] tholin
+As for why I need a sine/cosine wave generator: I am trying to generate the chroma component of a color NTSC signal. Because why do something the easy way when you can loose your sanity doing it the hard way?
+
+{Reactions}
+👌 (2) 👍
+
+[10/09/2025 01:59] mrmadbrain
+ooh, so it's basically close to a 3.58 mhz bandpass filter? :3
+
+
+[10/09/2025 04:25] peterkinget
+If you are looking for example projects and designs, mostly in analog, take a look at https://vlsidesignlab.org. The site has several years of project websites and videos of the VLSI design lab class at Columbia University where students design a chip in the spring, it gets fabricated in summer, and they test it in fall. There is quite a bit of design information available, and there is a search and index also. Have fun!
+
+
+[10/10/2025 14:23] mrmadbrain
+Question... Is it reasonable to try to implement an Operational Transconductance Amplifier in the target process? - something in the vein of LM13700 ( https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://www.ti.com/lit/ds/symlink/lm13700.pdf&ved=2ahUKEwiOqube6ZmQAxWEj4kEHSjgB54QFnoECBkQAQ&usg=AOvVaw3GXAglJwE-LG-Gg1gfRkxv )... if yes, I imagine it might have tighter limits on currents/voltage/wattage?
+
+
+[10/11/2025 01:02] mithro_
+@Tim Edwards - Any thoughts on @madbrain's question?
+
+
+[10/13/2025 07:46] valgamaa
+You won't have anything like the supply range of the 13700, which is over 30 volts (from memory). If that isn't an issue then there is nothing to stop you making such a circuit while also including extra circuits like a voltage-controlled input for gm control. I used a similar process for a 4MHz gm-C bandpass filter many years ago with good results, and there are many MOS 'tricks' that you can use to get significantly lower distortion than the 13700 has.
+
+
+[10/13/2025 07:50] mrmadbrain
+great to know 👍  the applications I'm looking into are boutique synthesizers so the S-curve shaped distortion is often a feature rather than a bug 😉
+
+
+[10/13/2025 08:48] valgamaa
+You won't get a tanh curve, but you will get something similar with MOS transistors. DC offsets might need some consideration and the capacitor options on-chip will be too low density to be much use. Making the circuits differential might give the headroom you will want, and with that gyrators become very simple (that's the key to most filters in CMOS) but I doubt you will want to implement standard filter responses like Butterworth etc. I half-wondered if it might be synthesiser-related when I saw mention of the 13700!
+
+
+[10/13/2025 09:18] mrmadbrain
+yeah typically for synthesizers the more common filter types are state variable (SVF) and moog-style 4 pole ladder... often deliberately non-linear so that the response doesn't blow up when you crank up the Q-factor... might have to look into having the output current mirrors have a digitally controllable multiplication factor 🤔
+
+
+[10/13/2025 10:41] valgamaa
+The SSM2044-type topology would map onto this process pretty well, I think. How much experience do you have with MOS circuit design? Most of the blocks you would want for a synthesiser are a really good vehicle to cover most of the circuit topologies that make for good CMOS design. A temperature-insensitive VCO should also be quite practical in this process too.
+
+
+[10/13/2025 13:29] mrmadbrain
+I'm kindof out of my depth ngl :3 my usual gig is synths in C++ on desktop computers
+
+
+[10/13/2025 15:44] mrmadbrain
+(and reverse engineering... including some time on the CEM synthesizer chips which are really all OTA variants similar to lm13700 inside in different arrangements...)
+
+
+[10/15/2025 23:22] mithro_
+https://hackaday.com/2025/10/15/more-than-100-sub-circuit-designs-from-texas-instruments/
+
+{Embed}
+John Elliot V
+https://hackaday.com/2025/10/15/more-than-100-sub-circuit-designs-from-texas-instruments/
+More Than 100 Sub-Circuit Designs From Texas Instruments
+We were recently tipped off to quite a resource — on the Texas Instruments website, there’s a page where you can view and download a compendium of analog sub-circuits. Individual circui…
+https://images-ext-1.discordapp.net/external/bqvvmMxerxFJbilM235h8c0g_Geqtt7M3nyblhpgBIg/https/hackaday.com/wp-content/uploads/2025/10/Texas-Instruments.jpg
+
+
+[10/18/2025 22:02] mrmadbrain
+it's all op amp basic circuits for the most part?
+
+
+[10/27/2025 17:53] markemer
+That rules. My design class just built in IBM8RF but we did not build it as it was too expensive. Hilariously 8RF was either 130 or 90nm, so the stuff we're doing now. Although it was SOI.
+
+
+[11/01/2025 03:58] _.social._
+hi there. anyone down to talk about silicon production (analog chips) in older processes? i'm talking to a fab and they're telling me the kind of design that i am talking to them about could result in a bunch of crosstalk, so i'm looking for ideas on how to mitigate that. the chip carries analog audio, so this is about capacitive coupling.
+
+
+[11/04/2025 01:00] mithro_
+I would just do a tapeout with Tiny Tapeout and see if it matches expectations
+
+
+[11/04/2025 01:01] _.social._
+tiny tapeout is great, but my ultimate goal is to go into commercial production with a fab
+
+
+[11/04/2025 01:02] _.social._
+however, i resolved the crosstalk issue. i guess it was a translation problem between russian and english.
+
+
+[11/04/2025 01:02] _.social._
+they didn't mean to say it was going to create a bunch of crosstalk, they were telling me they had a solution which has low cross talk.
+
+
+[11/04/2025 01:02] _.social._
+they just didn't know how to say it 🙂
+
+
+==============================================================
+Exported 30 message(s)
+==============================================================

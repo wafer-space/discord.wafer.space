@@ -1,0 +1,24 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"323371864074485771","mole99","2025-09-24T14:47:18.4490000+00:00","","",""
+"323371864074485771","mole99","2025-09-24T14:47:19.3160000+00:00","Hm? You just need to fetch the latest PDK and give it a try.","",""
+"169786952432746498","mithro_","2025-09-24T14:48:44.7540000+00:00","I assume ""fetch the latest PDK"" is just a `make clone-pdk` followed by a `make librelane`?","",""
+"323371864074485771","mole99","2025-09-24T14:48:58.5040000+00:00","Yes, exactly","",""
+"169786952432746498","mithro_","2025-09-24T14:49:26.3390000+00:00","Changed the channel name: Issue #1 - Encountered one or more fatal errors while running Magic.","",""
+"169786952432746498","mithro_","2025-09-24T18:46:35.3500000+00:00","@mole99 - I'm afraid I'm still getting the same error. Not sure if I didn't update something correctly or if it's still broken.","",""
+"323371864074485771","mole99","2025-09-24T20:06:45.2590000+00:00","Previously the flow stopped at step 57 GDS Stream Out. Now it's stopping at step 65 Magic DRC as expected.","",""
+"169786952432746498","mithro_","2025-09-30T17:34:15.3740000+00:00","@mole99 - What are the things needed to make step 65 go green?","",""
+"323371864074485771","mole99","2025-09-30T18:10:55.8620000+00:00","Tim E. and I are actively working on it :)
+I can talk about the issues during our sync call.","",""
+"169786952432746498","mithro_","2025-09-30T19:39:35.3290000+00:00","It might be worth writing it down here so that others can play along at home 🙂","",""
+"323371864074485771","mole99","2025-10-01T07:39:02.9220000+00:00","The only remaining DRC issue is the NDRES.4 rule, which is flagged in the I/O cells.
+
+However, as this rule is not even included in the open PDK docs, I will disable it for now while Tim E. reviews it.","",""
+"169786952432746498","mithro_","2025-10-01T19:14:46.5010000+00:00","@mole99 - I assume it's a `make clone-pdk` and then close and re-enter the `nix-shell` should work?","",""
+"323371864074485771","mole99","2025-10-01T19:25:23.7130000+00:00","There have also been changes to the template, so:
+
+1. git pull the latest changes to the template
+2. make clone-pdk
+3. nix-shell
+4. make librelane
+
+Once we have upstreamed all our changes to the PDK, step 2 will no longer be necessary.","",""

@@ -1,0 +1,16 @@
+==============================================================
+Guild: wafer.space Community
+Channel: Information / questions / Constant inputs in SDC
+==============================================================
+
+[11/06/2025 22:49] tholin
+So, this would be more of a "nice to have" for my project to make the results of top-level timing analysis look a bit neater, but my die is a multi-project die, with 5 input-only pins providing project selection through a multiplexer. However, during top-level timing analysis, STA considers changes on the project select inputs in-between clock ticks. As the chip is designed to have those pads permanently bonded/wired to power or ground according to the desired selection, they should be considered constants for the purpose of timing analysis. But how do I codify this in my .sdc file?
+
+
+[11/07/2025 05:44] mole99
+You can ignore a timing path using `set_false_path`.
+
+
+==============================================================
+Exported 2 message(s)
+==============================================================

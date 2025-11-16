@@ -1,0 +1,13 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"596068704471482370","246tnt","2025-11-14T16:55:15.5320000+00:00","Is there some special trick define to use the verilog models ?
+
+```
+sim/gf180mcuD/gf180mcu_fd_sc_mcu7t5v0.v:9975: error: Net MGM_P0 is not defined in this context.
+sim/gf180mcuD/gf180mcu_fd_sc_mcu7t5v0.v:9977: error: Net MGM_D0 is not defined in this context.
+sim/gf180mcuD/gf180mcu_fd_sc_mcu7t5v0.v:9979: error: Net IQ1 is not defined in this context.
+sim/gf180mcuD/gf180mcu_fd_sc_mcu7t5v0.v:9979: error: Output port expression is not valid.
+sim/gf180mcuD/gf180mcu_fd_sc_mcu7t5v0.v:9979:      : Output port of gf180mcu_fd_sc_mcu7t5v0__udp_n_iq_ff is Q.
+```
+
+This is what I'm getting when just including `gf180mcu_fd_sc_mcu7t5v0.v` and `primitives.v` and using `-DUSE_POWER_PINS=1 -DFUNCTIONAL=1 -DUNIT_DELAY=#1` like for sky130","",""
+"596068704471482370","246tnt","2025-11-14T16:59:46.9230000+00:00","Nevermind ... the models use implicit wire definition everywhere so gotta use `default_nettype wire` ... 🤢","","👍 (1),😵‍💫 (1)"

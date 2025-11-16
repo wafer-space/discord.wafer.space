@@ -1,0 +1,35 @@
+==============================================================
+Guild: wafer.space Community
+Channel: Information / questions / Xyce for GF180MCU
+==============================================================
+
+[11/03/2025 04:13] peterkinget
+Has anyone run a transient simulation for a circuit in GF180MCU? I am building a big switch matrix using standard cell components manually assembled in subckts and arranged in rows and columns. Unclear if ngspice will be albe to simulate it. Right now even a 5 x 25 is very slow and we need to go much bigger. 
+
+We have xschem schematics. Is there a 'smooth' way to start from a netlist generated from xschem and then convert it to a xyce netlist and get it to simulate?
+
+Any worked out examples out there?
+
+
+[11/11/2025 22:40] mithro_
+@mole99 - Any idea?
+
+
+[11/12/2025 08:46] mole99
+Sorry, I haven't done any spice simulations with gf180mcu yet.
+You should be able to run a Xyce simulation from xschem: https://www.youtube.com/watch?v=fggf9DeVN5k
+There are also examples in the IHP PDK if I remember right.
+
+The only incompatibilities between Xyce and ngspice, as I understand it, are the advanced control statements that ngspice supports. If you don't use these, you should be fine.
+
+{Embed}
+Stefan Schippers
+https://www.youtube.com/watch?v=fggf9DeVN5k
+Setting up a Xyce simulation with Xschem, viewing results
+This video explains how to do a simple DC seep simulation of a transistor with Xyce, viewing the results and doing some math operations on the waveforms.
+https://images-ext-1.discordapp.net/external/7W_jDq_Tb6N2Dr90HNSXJtN6g-11vrRIDcfYW6JEPxc/https/i.ytimg.com/vi/fggf9DeVN5k/sddefault.jpg
+
+
+==============================================================
+Exported 3 message(s)
+==============================================================
