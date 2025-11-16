@@ -14,7 +14,6 @@ EXPECTED_EXPORTS_TWO_CHANNELS = 2
 EXPECTED_EXPORTS_FOUR_FORMATS = 4
 
 
-
 class TestRunExport:
     """Tests for run_export function."""
 

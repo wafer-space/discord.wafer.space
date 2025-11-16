@@ -8,7 +8,6 @@ MIN_NAME_LENGTH = 3
 MAX_THREAD_NAME_LENGTH = 100
 
 
-
 class ChannelType(Enum):
     """Channel type enumeration."""
 

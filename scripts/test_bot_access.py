@@ -10,7 +10,6 @@ EXPECTED_TOKEN_PARTS = 3
 MAX_CHANNELS_TO_SHOW = 10
 
 
-
 def test_bot_token() -> bool:
     """Test if bot token is set and can access Discord."""
     token = os.environ.get("DISCORD_BOT_TOKEN")

@@ -7,7 +7,6 @@ from scripts.channel_classifier import ChannelType, classify_channel
 TEST_MAX_THREAD_NAME_LENGTH = 100
 
 
-
 def test_classify_regular_channel() -> None:
     """Test classification of regular channel."""
     channel = {"name": "general", "id": "123", "parent_id": None}

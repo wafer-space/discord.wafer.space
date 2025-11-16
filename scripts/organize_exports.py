@@ -285,6 +285,7 @@ def organize_exports(
     stats["channels_processed"] = len(channels_seen)
     return stats
 
+
 def cleanup_exports(exports_dir: Path | None = None) -> None:
     """Remove organized files from exports directory.
 

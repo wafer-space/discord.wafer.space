@@ -14,7 +14,6 @@ EXPECTED_ARCHIVE_COUNT_ONE = 1
 EXPECTED_MESSAGE_COUNT_FIVE = 5
 
 
-
 def test_organize_data_groups_by_server_and_channel() -> None:
     """Test that organize_data groups exports by server and channel"""
     exports = [

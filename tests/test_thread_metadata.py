@@ -10,7 +10,6 @@ from scripts.thread_metadata import extract_thread_metadata
 EXPECTED_REPLY_COUNT = 3
 
 
-
 def test_extract_thread_metadata_basic() -> None:
     """Test basic thread metadata extraction."""
     # Create temp JSON file with thread data

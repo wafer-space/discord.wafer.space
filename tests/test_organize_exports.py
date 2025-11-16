@@ -14,7 +14,6 @@ EXPECTED_FILES_ORGANIZED = 4
 EXPECTED_SERVERS_PROCESSED = 3
 
 
-
 def test_get_current_month() -> None:
     """Test that get_current_month returns YYYY-MM format"""
     result = get_current_month()
