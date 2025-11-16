@@ -1,0 +1,65 @@
+# Ruff configuration for discord-download
+# https://docs.astral.sh/ruff/
+
+line-length = 100
+
+[lint]
+# Enable rule sets:
+# E/W - pycodestyle errors and warnings
+# F - Pyflakes
+# I - isort (import sorting)
+# N - pep8-naming
+# D - pydocstyle (docstrings)
+# UP - pyupgrade (modern Python syntax)
+# B - flake8-bugbear (likely bugs)
+# S - flake8-bandit (security)
+# C90 - mccabe complexity
+# PLR - Pylint refactor (complexity, design)
+select = ["E", "W", "F", "I", "N", "D", "UP", "B", "S", "C90", "PLR"]
+
+# Ignore specific rules
+ignore = [
+    "D100",  # Missing docstring in public module (too strict for scripts)
+    "D104",  # Missing docstring in public package (too strict)
+    "S603",  # subprocess without shell=True (we use subprocess intentionally)
+    "S607",  # Starting a process with a partial executable path (intentional)
+    # Known complexity issues - will address in future refactoring
+    "C901",    # Function is too complex (mccabe complexity)
+    "PLR0912", # Too many branches
+    "PLR0915", # Too many statements
+    "PLR0913", # Too many arguments
+    "PLR2004", # Magic value used in comparison (consider replacing with a constant)
+    # Known security issue - Jinja2 autoescape disabled intentionally for static site generation
+    "S701",    # Using jinja2 templates with autoescape=False
+    # Known issues - documented in docs/known-issues.md for incremental fixing
+    "B904",    # Exception chaining - within except clause, use raise ... from err
+    "E501",    # Line too long - will be fixed incrementally
+    "B007",    # Unused loop variable - will be fixed by renaming to _
+]
+
+# Exclude generated and temporary directories
+exclude = [
+    ".git",
+    ".venv",
+    "__pycache__",
+    "exports",
+    "public",
+    "bin",
+    ".worktrees",
+]
+
+[lint.per-file-ignores]
+# Tests don't need docstrings and can use assert, hardcoded test credentials OK
+# Also allow PascalCase mock variable names (N806)
+"tests/**/*.py" = ["D", "S101", "S105", "S106", "N806"]
+
+[lint.pydocstyle]
+# Use Google-style docstrings
+convention = "google"
+
+[format]
+# Use double quotes for strings
+quote-style = "double"
+
+# Indent with 4 spaces
+indent-style = "space"

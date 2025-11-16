@@ -1,12 +1,10 @@
 # tests/test_organize_exports.py
-import pytest
 import tempfile
 from pathlib import Path
-from scripts.organize_exports import (
-    get_current_month,
-    organize_exports,
-    cleanup_exports
-)
+
+import pytest
+
+from scripts.organize_exports import cleanup_exports, get_current_month, organize_exports
 
 
 def test_get_current_month():
@@ -14,9 +12,9 @@ def test_get_current_month():
     result = get_current_month()
     # Should match YYYY-MM pattern
     assert len(result) == 7
-    assert result[4] == '-'
+    assert result[4] == "-"
     # Should be valid date
-    year, month = result.split('-')
+    year, month = result.split("-")
     assert year.isdigit() and len(year) == 4
     assert month.isdigit() and 1 <= int(month) <= 12
 
@@ -24,9 +22,9 @@ def test_get_current_month():
 def test_organize_exports_creates_directory_structure():
     """Test that organize_exports creates proper directory structure"""
     with tempfile.TemporaryDirectory() as tmpdir:
-        tmpdir = Path(tmpdir)
-        exports = tmpdir / "exports"
-        public = tmpdir / "public"
+        tmpdir_path = Path(tmpdir)  # type: ignore[assignment]
+        exports = tmpdir_path / "exports"  # type: ignore[operator]
+        public = tmpdir_path / "public"  # type: ignore[operator]
 
         # Create fake export structure
         server_dir = exports / "test-server"
@@ -40,9 +38,9 @@ def test_organize_exports_creates_directory_structure():
         stats = organize_exports(exports, public)
 
         # Check statistics
-        assert stats['files_organized'] == 4
-        assert stats['channels_processed'] == 1
-        assert len(stats['errors']) == 0
+        assert stats["files_organized"] == 4  # type: ignore[arg-type]
+        assert stats["channels_processed"] == 1
+        assert len(stats["errors"]) == 0  # type: ignore[arg-type]
 
         # Check directory structure (now with month subdirectories)
         current_month = get_current_month()
@@ -59,9 +57,9 @@ def test_organize_exports_creates_directory_structure():
 def test_organize_exports_creates_latest_symlinks():
     """Test that organize_exports creates 'latest' symlinks"""
     with tempfile.TemporaryDirectory() as tmpdir:
-        tmpdir = Path(tmpdir)
-        exports = tmpdir / "exports"
-        public = tmpdir / "public"
+        tmpdir_path = Path(tmpdir)  # type: ignore[assignment]
+        exports = tmpdir_path / "exports"  # type: ignore[operator]
+        public = tmpdir_path / "public"  # type: ignore[operator]
 
         # Create fake export
         server_dir = exports / "test-server"
@@ -85,9 +83,9 @@ def test_organize_exports_creates_latest_symlinks():
 def test_organize_exports_multiple_servers():
     """Test organizing exports from multiple servers"""
     with tempfile.TemporaryDirectory() as tmpdir:
-        tmpdir = Path(tmpdir)
-        exports = tmpdir / "exports"
-        public = tmpdir / "public"
+        tmpdir_path = Path(tmpdir)  # type: ignore[assignment]
+        exports = tmpdir_path / "exports"  # type: ignore[operator]
+        public = tmpdir_path / "public"  # type: ignore[operator]
 
         # Create multiple servers
         server1 = exports / "server-one"
@@ -103,8 +101,8 @@ def test_organize_exports_multiple_servers():
         stats = organize_exports(exports, public)
 
         # Check statistics
-        assert stats['files_organized'] == 3
-        assert stats['channels_processed'] == 3  # 2 from server1, 1 from server2
+        assert stats["files_organized"] == 3
+        assert stats["channels_processed"] == 3  # 2 from server1, 1 from server2
 
         # Check both servers exist in public
         assert (public / "server-one").exists()
@@ -114,9 +112,9 @@ def test_organize_exports_multiple_servers():
 def test_organize_exports_handles_missing_exports_dir():
     """Test that organize_exports raises error if exports dir missing"""
     with tempfile.TemporaryDirectory() as tmpdir:
-        tmpdir = Path(tmpdir)
-        exports = tmpdir / "exports"
-        public = tmpdir / "public"
+        tmpdir_path = Path(tmpdir)  # type: ignore[assignment]
+        exports = tmpdir_path / "exports"  # type: ignore[operator]
+        public = tmpdir_path / "public"  # type: ignore[operator]
 
         # Don't create exports directory
         with pytest.raises(FileNotFoundError, match="Exports directory not found"):
@@ -126,9 +124,9 @@ def test_organize_exports_handles_missing_exports_dir():
 def test_organize_exports_creates_public_dir_if_missing():
     """Test that organize_exports creates public dir if it doesn't exist"""
     with tempfile.TemporaryDirectory() as tmpdir:
-        tmpdir = Path(tmpdir)
-        exports = tmpdir / "exports"
-        public = tmpdir / "public"
+        tmpdir_path = Path(tmpdir)  # type: ignore[assignment]
+        exports = tmpdir_path / "exports"  # type: ignore[operator]
+        public = tmpdir_path / "public"  # type: ignore[operator]
 
         # Create exports but not public
         server_dir = exports / "test-server"
@@ -145,9 +143,9 @@ def test_organize_exports_creates_public_dir_if_missing():
 def test_organize_exports_preserves_file_metadata():
     """Test that organize_exports preserves file timestamps"""
     with tempfile.TemporaryDirectory() as tmpdir:
-        tmpdir = Path(tmpdir)
-        exports = tmpdir / "exports"
-        public = tmpdir / "public"
+        tmpdir_path = Path(tmpdir)  # type: ignore[assignment]
+        exports = tmpdir_path / "exports"  # type: ignore[operator]
+        public = tmpdir_path / "public"  # type: ignore[operator]
 
         # Create file with specific timestamp
         server_dir = exports / "test-server"
@@ -173,9 +171,9 @@ def test_organize_exports_preserves_file_metadata():
 def test_organize_exports_skips_invalid_extensions():
     """Test that organize_exports skips files with invalid extensions"""
     with tempfile.TemporaryDirectory() as tmpdir:
-        tmpdir = Path(tmpdir)
-        exports = tmpdir / "exports"
-        public = tmpdir / "public"
+        tmpdir_path = Path(tmpdir)  # type: ignore[assignment]
+        exports = tmpdir_path / "exports"  # type: ignore[operator]
+        public = tmpdir_path / "public"  # type: ignore[operator]
 
         # Create files with valid and invalid extensions
         server_dir = exports / "test-server"
@@ -188,16 +186,16 @@ def test_organize_exports_skips_invalid_extensions():
         stats = organize_exports(exports, public)
 
         # Should only organize the html file
-        assert stats['files_organized'] == 1
-        assert stats['channels_processed'] == 1
+        assert stats["files_organized"] == 1
+        assert stats["channels_processed"] == 1
 
 
 def test_organize_exports_handles_errors_gracefully():
     """Test that organize_exports continues on individual file errors"""
     with tempfile.TemporaryDirectory() as tmpdir:
-        tmpdir = Path(tmpdir)
-        exports = tmpdir / "exports"
-        public = tmpdir / "public"
+        tmpdir_path = Path(tmpdir)  # type: ignore[assignment]
+        exports = tmpdir_path / "exports"  # type: ignore[operator]
+        public = tmpdir_path / "public"  # type: ignore[operator]
 
         # Create valid file
         server_dir = exports / "test-server"
@@ -209,15 +207,15 @@ def test_organize_exports_handles_errors_gracefully():
         # This test verifies the error handling structure exists.
 
         stats = organize_exports(exports, public)
-        assert 'errors' in stats
-        assert isinstance(stats['errors'], list)
+        assert "errors" in stats
+        assert isinstance(stats["errors"], list)
 
 
 def test_cleanup_exports_removes_organized_files():
     """Test that cleanup_exports removes files from exports directory"""
     with tempfile.TemporaryDirectory() as tmpdir:
-        tmpdir = Path(tmpdir)
-        exports = tmpdir / "exports"
+        tmpdir_path = Path(tmpdir)  # type: ignore[assignment]
+        exports = tmpdir_path / "exports"  # type: ignore[operator]
 
         # Create export files
         server_dir = exports / "test-server"
@@ -240,8 +238,8 @@ def test_cleanup_exports_removes_organized_files():
 def test_cleanup_exports_handles_missing_dir():
     """Test that cleanup_exports handles missing directory gracefully"""
     with tempfile.TemporaryDirectory() as tmpdir:
-        tmpdir = Path(tmpdir)
-        exports = tmpdir / "exports"
+        tmpdir_path = Path(tmpdir)  # type: ignore[assignment]
+        exports = tmpdir_path / "exports"  # type: ignore[operator]
 
         # Don't create directory
         # Should not raise error
@@ -251,9 +249,9 @@ def test_cleanup_exports_handles_missing_dir():
 def test_organize_exports_replaces_existing_symlinks():
     """Test that organize_exports replaces existing 'latest' symlinks"""
     with tempfile.TemporaryDirectory() as tmpdir:
-        tmpdir = Path(tmpdir)
-        exports = tmpdir / "exports"
-        public = tmpdir / "public"
+        tmpdir_path = Path(tmpdir)  # type: ignore[assignment]
+        exports = tmpdir_path / "exports"  # type: ignore[operator]
+        public = tmpdir_path / "public"  # type: ignore[operator]
 
         # Create channel directory with existing symlink
         channel_dir = public / "test-server" / "general"
@@ -279,9 +277,9 @@ def test_organize_exports_replaces_existing_symlinks():
 def test_organize_exports_handles_forum_structure():
     """Test that forum directories are organized correctly."""
     with tempfile.TemporaryDirectory() as tmpdir:
-        tmpdir = Path(tmpdir)
-        exports = tmpdir / "exports"
-        public = tmpdir / "public"
+        tmpdir_path = Path(tmpdir)  # type: ignore[assignment]
+        exports = tmpdir_path / "exports"  # type: ignore[operator]
+        public = tmpdir_path / "public"  # type: ignore[operator]
 
         # Create forum structure
         forum_dir = exports / "test-server" / "questions"
@@ -303,16 +301,30 @@ def test_organize_exports_handles_forum_structure():
         # Should organize files by month
         current_month = get_current_month()
         assert (public / "test-server" / "questions" / "how-to-start" / current_month).exists()
-        assert (public / "test-server" / "questions" / "how-to-start" / current_month / f"{current_month}.html").exists()
-        assert (public / "test-server" / "questions" / "how-to-start" / current_month / f"{current_month}.json").exists()
+        assert (
+            public
+            / "test-server"
+            / "questions"
+            / "how-to-start"
+            / current_month
+            / f"{current_month}.html"
+        ).exists()
+        assert (
+            public
+            / "test-server"
+            / "questions"
+            / "how-to-start"
+            / current_month
+            / f"{current_month}.json"
+        ).exists()
 
 
 def test_organize_exports_mixed_regular_and_forum():
     """Test organizing mix of regular channels and forums."""
     with tempfile.TemporaryDirectory() as tmpdir:
-        tmpdir = Path(tmpdir)
-        exports = tmpdir / "exports"
-        public = tmpdir / "public"
+        tmpdir_path = Path(tmpdir)  # type: ignore[assignment]
+        exports = tmpdir_path / "exports"  # type: ignore[operator]
+        public = tmpdir_path / "public"  # type: ignore[operator]
 
         # Create regular channel
         server_dir = exports / "test-server"
@@ -329,5 +341,14 @@ def test_organize_exports_mixed_regular_and_forum():
 
         # Should have both regular and forum (both in month subdirectories)
         current_month = get_current_month()
-        assert (public / "test-server" / "general" / current_month / f"{current_month}.html").exists()
-        assert (public / "test-server" / "questions" / "thread-1" / current_month / f"{current_month}.html").exists()
+        assert (
+            public / "test-server" / "general" / current_month / f"{current_month}.html"
+        ).exists()
+        assert (
+            public
+            / "test-server"
+            / "questions"
+            / "thread-1"
+            / current_month
+            / f"{current_month}.html"
+        ).exists()

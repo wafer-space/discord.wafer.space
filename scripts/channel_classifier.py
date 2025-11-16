@@ -1,23 +1,21 @@
 # scripts/channel_classifier.py
 """Channel classification logic for forum/thread detection."""
+
 from enum import Enum
-from typing import Dict, List
 
 
 class ChannelType(Enum):
     """Channel type enumeration."""
+
     REGULAR = "regular"
     FORUM = "forum"
     THREAD = "thread"
 
 
 def classify_channel(
-    channel: Dict[str, str],
-    forum_list: List[str],
-    all_channels: List[Dict[str, str]]
+    channel: dict[str, str], forum_list: list[str], all_channels: list[dict[str, str]]
 ) -> ChannelType:
-    """
-    Classify a channel as regular, forum, or thread.
+    """Classify a channel as regular, forum, or thread.
 
     Args:
         channel: Channel dict with name, id, parent_id
@@ -28,19 +26,16 @@ def classify_channel(
         ChannelType indicating channel classification
     """
     # If channel has parent_id, it's a thread
-    if channel.get('parent_id'):
+    if channel.get("parent_id"):
         return ChannelType.THREAD
 
     # If channel name is in forum list, it's a forum
-    if channel['name'] in forum_list:
+    if channel["name"] in forum_list:
         return ChannelType.FORUM
 
     # Check if any other channels have this as parent (auto-detect forum)
-    channel_name = channel['name']
-    has_threads = any(
-        ch.get('parent_id') == channel_name
-        for ch in all_channels
-    )
+    channel_name = channel["name"]
+    has_threads = any(ch.get("parent_id") == channel_name for ch in all_channels)
 
     if has_threads:
         return ChannelType.FORUM
@@ -49,9 +44,8 @@ def classify_channel(
     return ChannelType.REGULAR
 
 
-def get_forum_name(channel: Dict[str, str]) -> str:
-    """
-    Get the forum name for a thread channel.
+def get_forum_name(channel: dict[str, str]) -> str:
+    """Get the forum name for a thread channel.
 
     Args:
         channel: Thread channel dict with parent_id
@@ -59,12 +53,11 @@ def get_forum_name(channel: Dict[str, str]) -> str:
     Returns:
         Parent forum channel name, or empty string if not a thread
     """
-    return channel.get('parent_id', '')
+    return channel.get("parent_id", "")
 
 
-def sanitize_thread_name(title: str, thread_id: str = None) -> str:
-    """
-    Sanitize thread title into safe filename.
+def sanitize_thread_name(title: str, thread_id: str = None) -> str:  # type: ignore[assignment]
+    """Sanitize thread title into safe filename.
 
     Args:
         title: Thread title
@@ -79,16 +72,16 @@ def sanitize_thread_name(title: str, thread_id: str = None) -> str:
     name = title.lower()
 
     # Replace spaces with hyphens
-    name = name.replace(' ', '-')
+    name = name.replace(" ", "-")
 
     # Remove special characters except hyphens
-    name = re.sub(r'[^a-z0-9-]', '', name)
+    name = re.sub(r"[^a-z0-9-]", "", name)
 
     # Remove multiple consecutive hyphens
-    name = re.sub(r'-+', '-', name)
+    name = re.sub(r"-+", "-", name)
 
     # Remove leading/trailing hyphens
-    name = name.strip('-')
+    name = name.strip("-")
 
     # Truncate to 100 characters
     name = name[:100]

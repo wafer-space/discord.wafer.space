@@ -1,11 +1,13 @@
 # scripts/config.py
 """Configuration management for discord-wafer-space."""
-import toml
+
 from pathlib import Path
 
+import toml
+
+
 def load_config(config_path: str = "config.toml") -> dict:
-    """
-    Load configuration from TOML file.
+    """Load configuration from TOML file.
 
     Args:
         config_path: Path to config.toml file
@@ -21,7 +23,7 @@ def load_config(config_path: str = "config.toml") -> dict:
     if not path.exists():
         raise FileNotFoundError(f"Config file not found: {config_path}")
 
-    with open(path, 'r') as f:
+    with open(path) as f:
         config = toml.load(f)
 
-    return config
+    return config  # type: ignore[no-any-return]

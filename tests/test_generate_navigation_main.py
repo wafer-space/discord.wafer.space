@@ -1,18 +1,41 @@
 # tests/test_generate_navigation_main.py
 """Tests for navigation generation main orchestration function."""
-import pytest
+
 import tempfile
 from pathlib import Path
+
+import pytest
+
 from scripts.generate_navigation import main, organize_data
 
 
 def test_organize_data_groups_by_server_and_channel():
     """Test that organize_data groups exports by server and channel"""
     exports = [
-        {'server': 'server1', 'channel': 'general', 'date': '2025-01', 'path': 'server1/general/2025-01.html'},
-        {'server': 'server1', 'channel': 'general', 'date': '2025-02', 'path': 'server1/general/2025-02.html'},
-        {'server': 'server1', 'channel': 'chat', 'date': '2025-01', 'path': 'server1/chat/2025-01.html'},
-        {'server': 'server2', 'channel': 'announcements', 'date': '2025-01', 'path': 'server2/announcements/2025-01.html'},
+        {
+            "server": "server1",
+            "channel": "general",
+            "date": "2025-01",
+            "path": "server1/general/2025-01.html",
+        },
+        {
+            "server": "server1",
+            "channel": "general",
+            "date": "2025-02",
+            "path": "server1/general/2025-02.html",
+        },
+        {
+            "server": "server1",
+            "channel": "chat",
+            "date": "2025-01",
+            "path": "server1/chat/2025-01.html",
+        },
+        {
+            "server": "server2",
+            "channel": "announcements",
+            "date": "2025-01",
+            "path": "server2/announcements/2025-01.html",
+        },
     ]
 
     with tempfile.TemporaryDirectory() as tmpdir:
@@ -21,34 +44,44 @@ def test_organize_data_groups_by_server_and_channel():
 
         # Create dummy JSON files for message counting
         for export in exports:
-            json_path = public_dir / export['server'] / export['channel'] / f"{export['date']}.json"
+            json_path = public_dir / export["server"] / export["channel"] / f"{export['date']}.json"
             json_path.parent.mkdir(parents=True, exist_ok=True)
-            with open(json_path, 'w') as f:
+            with open(json_path, "w") as f:
                 for i in range(5):  # 5 messages per file
                     f.write(f'{{"id": "{i}", "content": "test"}}\n')
 
         servers_data = organize_data(exports, public_dir)
 
         # Verify structure
-        assert 'server1' in servers_data
-        assert 'server2' in servers_data
-        assert 'general' in servers_data['server1']['channels']
-        assert 'chat' in servers_data['server1']['channels']
-        assert 'announcements' in servers_data['server2']['channels']
+        assert "server1" in servers_data
+        assert "server2" in servers_data
+        assert "general" in servers_data["server1"]["channels"]
+        assert "chat" in servers_data["server1"]["channels"]
+        assert "announcements" in servers_data["server2"]["channels"]
 
         # Verify archives
-        assert len(servers_data['server1']['channels']['general']['archives']) == 2
-        assert len(servers_data['server1']['channels']['chat']['archives']) == 1
+        assert len(servers_data["server1"]["channels"]["general"]["archives"]) == 2
+        assert len(servers_data["server1"]["channels"]["chat"]["archives"]) == 1
 
         # Verify message counts
-        assert servers_data['server1']['channels']['general']['archives'][0]['message_count'] == 5
+        assert servers_data["server1"]["channels"]["general"]["archives"][0]["message_count"] == 5
 
 
 def test_organize_data_calculates_stats():
     """Test that organize_data calculates channel and server stats"""
     exports = [
-        {'server': 'server1', 'channel': 'general', 'date': '2025-01', 'path': 'server1/general/2025-01.html'},
-        {'server': 'server1', 'channel': 'chat', 'date': '2025-01', 'path': 'server1/chat/2025-01.html'},
+        {
+            "server": "server1",
+            "channel": "general",
+            "date": "2025-01",
+            "path": "server1/general/2025-01.html",
+        },
+        {
+            "server": "server1",
+            "channel": "chat",
+            "date": "2025-01",
+            "path": "server1/chat/2025-01.html",
+        },
     ]
 
     with tempfile.TemporaryDirectory() as tmpdir:
@@ -57,26 +90,41 @@ def test_organize_data_calculates_stats():
 
         # Create dummy JSON files
         for export in exports:
-            json_path = public_dir / export['server'] / export['channel'] / f"{export['date']}.json"
+            json_path = public_dir / export["server"] / export["channel"] / f"{export['date']}.json"
             json_path.parent.mkdir(parents=True, exist_ok=True)
-            with open(json_path, 'w') as f:
+            with open(json_path, "w") as f:
                 f.write('{"id": "1", "content": "test"}\n')
 
         servers_data = organize_data(exports, public_dir)
 
         # Verify stats
-        assert servers_data['server1']['channel_count'] == 2
-        assert 'last_updated' in servers_data['server1']
-        assert servers_data['server1']['channels']['general']['archive_count'] == 1
-        assert servers_data['server1']['channels']['general']['message_count'] == 1
+        assert servers_data["server1"]["channel_count"] == 2
+        assert "last_updated" in servers_data["server1"]
+        assert servers_data["server1"]["channels"]["general"]["archive_count"] == 1
+        assert servers_data["server1"]["channels"]["general"]["message_count"] == 1
 
 
 def test_organize_data_sorts_archives():
     """Test that organize_data sorts archives reverse chronologically"""
     exports = [
-        {'server': 'server1', 'channel': 'general', 'date': '2025-01', 'path': 'server1/general/2025-01.html'},
-        {'server': 'server1', 'channel': 'general', 'date': '2025-03', 'path': 'server1/general/2025-03.html'},
-        {'server': 'server1', 'channel': 'general', 'date': '2025-02', 'path': 'server1/general/2025-02.html'},
+        {
+            "server": "server1",
+            "channel": "general",
+            "date": "2025-01",
+            "path": "server1/general/2025-01.html",
+        },
+        {
+            "server": "server1",
+            "channel": "general",
+            "date": "2025-03",
+            "path": "server1/general/2025-03.html",
+        },
+        {
+            "server": "server1",
+            "channel": "general",
+            "date": "2025-02",
+            "path": "server1/general/2025-02.html",
+        },
     ]
 
     with tempfile.TemporaryDirectory() as tmpdir:
@@ -85,18 +133,18 @@ def test_organize_data_sorts_archives():
 
         # Create dummy JSON files
         for export in exports:
-            json_path = public_dir / export['server'] / export['channel'] / f"{export['date']}.json"
+            json_path = public_dir / export["server"] / export["channel"] / f"{export['date']}.json"
             json_path.parent.mkdir(parents=True, exist_ok=True)
-            with open(json_path, 'w') as f:
+            with open(json_path, "w") as f:
                 f.write('{"id": "1", "content": "test"}\n')
 
         servers_data = organize_data(exports, public_dir)
 
-        archives = servers_data['server1']['channels']['general']['archives']
+        archives = servers_data["server1"]["channels"]["general"]["archives"]
         # Should be sorted newest first: 2025-03, 2025-02, 2025-01
-        assert archives[0]['date'] == '2025-03'
-        assert archives[1]['date'] == '2025-02'
-        assert archives[2]['date'] == '2025-01'
+        assert archives[0]["date"] == "2025-03"
+        assert archives[1]["date"] == "2025-02"
+        assert archives[2]["date"] == "2025-01"
 
 
 def test_organize_data_handles_empty_exports():
@@ -113,7 +161,12 @@ def test_organize_data_handles_empty_exports():
 def test_organize_data_uses_display_names():
     """Test that organize_data creates display names from server names"""
     exports = [
-        {'server': 'wafer-space', 'channel': 'general', 'date': '2025-01', 'path': 'wafer-space/general/2025-01.html'},
+        {
+            "server": "wafer-space",
+            "channel": "general",
+            "date": "2025-01",
+            "path": "wafer-space/general/2025-01.html",
+        },
     ]
 
     with tempfile.TemporaryDirectory() as tmpdir:
@@ -128,7 +181,7 @@ def test_organize_data_uses_display_names():
         servers_data = organize_data(exports, public_dir)
 
         # Should convert wafer-space to Wafer Space
-        assert servers_data['wafer-space']['display_name'] == 'Wafer Space'
+        assert servers_data["wafer-space"]["display_name"] == "Wafer Space"
 
 
 def test_main_integration(monkeypatch, capsys):

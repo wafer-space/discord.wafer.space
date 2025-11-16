@@ -5,26 +5,24 @@
 This script moves exported files from the exports/ directory to the public/
 directory, organizing them by server/channel structure with date-based naming.
 """
+
 import shutil
 import sys
-from pathlib import Path
 from datetime import datetime, timezone
-from typing import Dict
+from pathlib import Path
 
 
 def get_current_month() -> str:
-    """
-    Get current month in YYYY-MM format.
+    """Get current month in YYYY-MM format.
 
     Returns:
         Current month string (e.g., "2025-11")
     """
-    return datetime.now(timezone.utc).strftime('%Y-%m')
+    return datetime.now(timezone.utc).strftime("%Y-%m")
 
 
-def organize_exports(exports_dir: Path = None, public_dir: Path = None) -> Dict[str, int]:
-    """
-    Move exports from exports/ to public/ with date-based organization.
+def organize_exports(exports_dir: Path = None, public_dir: Path = None) -> dict[str, int]:  # type: ignore[assignment]
+    """Move exports from exports/ to public/ with date-based organization.
 
     Handles both regular channels and forum/thread structure:
     - Regular: exports/server/channel.html -> public/server/channel/YYYY-MM/YYYY-MM.html
@@ -59,11 +57,7 @@ def organize_exports(exports_dir: Path = None, public_dir: Path = None) -> Dict[
     # Create public directory if it doesn't exist
     public_dir.mkdir(exist_ok=True)
 
-    stats = {
-        'files_organized': 0,
-        'channels_processed': 0,
-        'errors': []
-    }
+    stats = {"files_organized": 0, "channels_processed": 0, "errors": []}
 
     current_month = get_current_month()
     channels_seen = set()
@@ -94,7 +88,7 @@ def organize_exports(exports_dir: Path = None, public_dir: Path = None) -> Dict[
                         extension = thread_file.suffix
 
                         # Skip non-export files
-                        if extension not in ['.html', '.txt', '.json', '.csv']:
+                        if extension not in [".html", ".txt", ".json", ".csv"]:
                             continue
 
                         try:
@@ -106,7 +100,7 @@ def organize_exports(exports_dir: Path = None, public_dir: Path = None) -> Dict[
                             # Copy file to month directory
                             dest_file = month_dir / f"{current_month}{extension}"
                             shutil.copy2(thread_file, dest_file)
-                            stats['files_organized'] += 1
+                            stats["files_organized"] += 1  # type: ignore[operator]
 
                             # Create/update latest symlink
                             latest_link = public_thread_dir / f"latest{extension}"
@@ -118,11 +112,13 @@ def organize_exports(exports_dir: Path = None, public_dir: Path = None) -> Dict[
                             channel_key = f"{server_name}/{forum_name}/{thread_name}"
                             channels_seen.add(channel_key)
 
-                            print(f"  ✓ {forum_name}/{thread_name}{extension} → {dest_file.relative_to(public_dir)}")
+                            print(
+                                f"  ✓ {forum_name}/{thread_name}{extension} → {dest_file.relative_to(public_dir)}"
+                            )
 
                         except Exception as e:
                             error_msg = f"Failed to organize {thread_file.name}: {str(e)}"
-                            stats['errors'].append(error_msg)
+                            stats["errors"].append(error_msg)  # type: ignore[attr-defined]
                             print(f"  ✗ {error_msg}")
 
             elif item.is_file():
@@ -132,7 +128,7 @@ def organize_exports(exports_dir: Path = None, public_dir: Path = None) -> Dict[
                     ext = item.suffix
 
                     # Skip non-export files
-                    if ext not in ['.html', '.txt', '.json', '.csv']:
+                    if ext not in [".html", ".txt", ".json", ".csv"]:
                         print(f"  ⚠ Skipping {item.name} (unsupported format)")
                         continue
 
@@ -144,7 +140,7 @@ def organize_exports(exports_dir: Path = None, public_dir: Path = None) -> Dict[
                     # Copy file to month directory
                     dest_file = month_dir / f"{current_month}{ext}"
                     shutil.copy2(item, dest_file)
-                    stats['files_organized'] += 1
+                    stats["files_organized"] += 1  # type: ignore[operator]
 
                     # Create/update latest symlink
                     latest_link = channel_dir / f"latest{ext}"
@@ -160,16 +156,15 @@ def organize_exports(exports_dir: Path = None, public_dir: Path = None) -> Dict[
 
                 except Exception as e:
                     error_msg = f"Failed to organize {item.name}: {str(e)}"
-                    stats['errors'].append(error_msg)
+                    stats["errors"].append(error_msg)  # type: ignore[attr-defined]
                     print(f"  ✗ {error_msg}")
 
-    stats['channels_processed'] = len(channels_seen)
-    return stats
+    stats["channels_processed"] = len(channels_seen)
+    return stats  # type: ignore[return-value]
 
 
-def cleanup_exports(exports_dir: Path = None) -> None:
-    """
-    Remove organized files from exports directory.
+def cleanup_exports(exports_dir: Path = None) -> None:  # type: ignore[assignment]
+    """Remove organized files from exports directory.
 
     CAUTION: Only call this after successful organization!
 
@@ -208,16 +203,16 @@ def main():
         print(f"  Files organized: {stats['files_organized']}")
         print(f"  Channels processed: {stats['channels_processed']}")
 
-        if stats['errors']:
-            print(f"\nErrors ({len(stats['errors'])}):")
-            for error in stats['errors'][:5]:  # Show first 5
+        if stats["errors"]:
+            print(f"\nErrors ({len(stats['errors'])}):")  # type: ignore[arg-type]
+            for error in stats["errors"][:5]:  # type: ignore[index]  # Show first 5
                 print(f"  - {error}")
 
         # Optional: Cleanup exports directory
         # Uncomment if you want to remove organized files from exports/
         # cleanup_exports()
 
-        exit_code = 1 if stats['errors'] else 0
+        exit_code = 1 if stats["errors"] else 0
         sys.exit(exit_code)
 
     except FileNotFoundError as e:
@@ -226,6 +221,7 @@ def main():
     except Exception as e:
         print(f"\nFATAL ERROR: {e}")
         import traceback
+
         traceback.print_exc()
         sys.exit(1)
 

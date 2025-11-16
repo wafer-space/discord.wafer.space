@@ -1,18 +1,19 @@
 # scripts/export_channels.py
 """Export Discord channels using DiscordChatExporter CLI."""
+
 import fnmatch
 import os
 import subprocess
 import sys
+from datetime import UTC, datetime
 from pathlib import Path
-from datetime import datetime, UTC
-from typing import List, Optional, Dict, Tuple
+
 from scripts.config import load_config
 from scripts.state import StateManager
 
+
 def get_bot_token() -> str:
-    """
-    Get Discord bot token from environment.
+    """Get Discord bot token from environment.
 
     Returns:
         Bot token string
@@ -20,7 +21,7 @@ def get_bot_token() -> str:
     Raises:
         ValueError: If DISCORD_BOT_TOKEN not set
     """
-    token = os.environ.get('DISCORD_BOT_TOKEN')
+    token = os.environ.get("DISCORD_BOT_TOKEN")
     if not token:
         raise ValueError(
             "DISCORD_BOT_TOKEN environment variable not set. "
@@ -28,13 +29,11 @@ def get_bot_token() -> str:
         )
     return token
 
+
 def should_include_channel(
-    channel_name: str,
-    include_patterns: List[str],
-    exclude_patterns: List[str]
+    channel_name: str, include_patterns: list[str], exclude_patterns: list[str]
 ) -> bool:
-    """
-    Check if channel should be included based on patterns.
+    """Check if channel should be included based on patterns.
 
     Args:
         channel_name: Name of the channel
@@ -50,7 +49,7 @@ def should_include_channel(
             return False
 
     # Check inclusions
-    if '*' in include_patterns:
+    if "*" in include_patterns:
         return True
 
     for pattern in include_patterns:
@@ -59,15 +58,15 @@ def should_include_channel(
 
     return False
 
+
 def format_export_command(
     token: str,
     channel_id: str,
     output_path: str,
     format_type: str,
-    after_timestamp: Optional[str] = None
-) -> List[str]:
-    """
-    Format DiscordChatExporter CLI command.
+    after_timestamp: str | None = None,
+) -> list[str]:
+    """Format DiscordChatExporter CLI command.
 
     Args:
         token: Discord bot token
@@ -83,7 +82,7 @@ def format_export_command(
         ValueError: If format_type is invalid or channel_id is not numeric
     """
     # Validate format_type
-    valid_formats = {'HtmlDark', 'HtmlLight', 'PlainText', 'Json', 'Csv'}
+    valid_formats = {"HtmlDark", "HtmlLight", "PlainText", "Json", "Csv"}
     if format_type not in valid_formats:
         raise ValueError(
             f"Invalid format_type '{format_type}'. "
@@ -92,16 +91,19 @@ def format_export_command(
 
     # Validate channel_id is numeric
     if not channel_id.isdigit():
-        raise ValueError(
-            f"Invalid channel_id '{channel_id}'. Must be numeric (digits only)."
-        )
+        raise ValueError(f"Invalid channel_id '{channel_id}'. Must be numeric (digits only).")
 
     cmd = [
-        "bin/discord-exporter/DiscordChatExporter.Cli", "export",
-        "-t", token,
-        "-c", channel_id,
-        "-f", format_type,
-        "-o", output_path
+        "bin/discord-exporter/DiscordChatExporter.Cli",
+        "export",
+        "-t",
+        token,
+        "-c",
+        channel_id,
+        "-f",
+        format_type,
+        "-o",
+        output_path,
     ]
 
     if after_timestamp:
@@ -110,12 +112,8 @@ def format_export_command(
     return cmd
 
 
-def run_export(
-    cmd: List[str],
-    timeout: int = 300
-) -> Tuple[bool, str]:
-    """
-    Run DiscordChatExporter command.
+def run_export(cmd: list[str], timeout: int = 300) -> tuple[bool, str]:
+    """Run DiscordChatExporter command.
 
     Args:
         cmd: Command as list
@@ -125,12 +123,7 @@ def run_export(
         Tuple of (success, output)
     """
     try:
-        result = subprocess.run(
-            cmd,
-            capture_output=True,
-            text=True,
-            timeout=timeout
-        )
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
 
         success = result.returncode == 0
         output = result.stdout + result.stderr
@@ -143,9 +136,10 @@ def run_export(
         return False, f"Export failed: {str(e)}"
 
 
-def fetch_guild_channels(token: str, guild_id: str, include_threads: bool = True) -> List[Dict[str, str]]:
-    """
-    Fetch all channels from a Discord guild using DiscordChatExporter.
+def fetch_guild_channels(
+    token: str, guild_id: str, include_threads: bool = True
+) -> list[dict[str, str]]:
+    """Fetch all channels from a Discord guild using DiscordChatExporter.
 
     Args:
         token: Discord bot token
@@ -158,45 +152,34 @@ def fetch_guild_channels(token: str, guild_id: str, include_threads: bool = True
     Raises:
         RuntimeError: If channel fetching fails
     """
-    cmd = [
-        "bin/discord-exporter/DiscordChatExporter.Cli", "channels",
-        "-t", token,
-        "-g", guild_id
-    ]
+    cmd = ["bin/discord-exporter/DiscordChatExporter.Cli", "channels", "-t", token, "-g", guild_id]
 
     if include_threads:
         cmd.extend(["--include-threads", "All"])
 
     try:
-        result = subprocess.run(
-            cmd,
-            capture_output=True,
-            text=True,
-            timeout=30
-        )
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
 
         if result.returncode != 0:
-            raise RuntimeError(
-                f"Failed to fetch channels: {result.stderr or result.stdout}"
-            )
+            raise RuntimeError(f"Failed to fetch channels: {result.stderr or result.stdout}")
 
         # Parse output - DiscordChatExporter outputs one channel per line
         # Format: "Category / ChannelName [ChannelID]" or "ChannelName [ChannelID]"
         channels = []
-        for line in result.stdout.strip().split('\n'):
+        for line in result.stdout.strip().split("\n"):
             if not line or not line.strip():
                 continue
 
             # Extract channel ID from brackets
-            if '[' in line and ']' in line:
-                channel_id = line.split('[')[-1].split(']')[0].strip()
+            if "[" in line and "]" in line:
+                channel_id = line.split("[")[-1].split("]")[0].strip()
 
                 # Extract channel name (after last / or whole line before [)
-                name_part = line.split('[')[0].strip()
+                name_part = line.split("[")[0].strip()
                 parent_id = None
 
-                if '/' in name_part:
-                    parts = name_part.split('/')
+                if "/" in name_part:
+                    parts = name_part.split("/")
                     if len(parts) == 2:
                         parent_id = parts[0].strip()
                         channel_name = parts[1].strip()
@@ -205,13 +188,9 @@ def fetch_guild_channels(token: str, guild_id: str, include_threads: bool = True
                 else:
                     channel_name = name_part
 
-                channels.append({
-                    'name': channel_name,
-                    'id': channel_id,
-                    'parent_id': parent_id
-                })
+                channels.append({"name": channel_name, "id": channel_id, "parent_id": parent_id})
 
-        return channels
+        return channels  # type: ignore[return-value]
 
     except subprocess.TimeoutExpired:
         raise RuntimeError("Channel fetching timed out after 30 seconds")
@@ -219,9 +198,8 @@ def fetch_guild_channels(token: str, guild_id: str, include_threads: bool = True
         raise RuntimeError(f"Channel fetching failed: {str(e)}")
 
 
-def export_all_channels() -> Dict:
-    """
-    Main export orchestration function.
+def export_all_channels() -> dict:
+    """Main export orchestration function.
 
     Loads configuration, initializes state manager, and orchestrates
     export of all channels from all configured servers.
@@ -233,7 +211,7 @@ def export_all_channels() -> Dict:
             - total_exports: Total number of format exports completed
             - errors: List of error dicts with channel, format, and error details
     """
-    from scripts.channel_classifier import classify_channel, ChannelType, sanitize_thread_name
+    from scripts.channel_classifier import ChannelType, classify_channel, sanitize_thread_name
 
     print("Loading configuration...")
     config = load_config()
@@ -242,12 +220,7 @@ def export_all_channels() -> Dict:
     state_manager = StateManager()
     state_manager.load()
 
-    summary = {
-        'channels_updated': 0,
-        'channels_failed': 0,
-        'total_exports': 0,
-        'errors': []
-    }
+    summary = {"channels_updated": 0, "channels_failed": 0, "total_exports": 0, "errors": []}
 
     # Create exports directory
     exports_dir = Path("exports")
@@ -255,7 +228,7 @@ def export_all_channels() -> Dict:
 
     print("\nStarting exports...")
 
-    for server_key, server_config in config['servers'].items():
+    for server_key, server_config in config["servers"].items():
         print(f"\nProcessing server: {server_config['name']}")
 
         server_dir = exports_dir / server_key
@@ -264,31 +237,29 @@ def export_all_channels() -> Dict:
         # Fetch channels dynamically from Discord
         try:
             print("  Fetching channels from Discord...")
-            include_threads = config['export'].get('include_threads', 'all').lower() == 'all'
-            channels = fetch_guild_channels(token, server_config['guild_id'], include_threads)
+            include_threads = config["export"].get("include_threads", "all").lower() == "all"
+            channels = fetch_guild_channels(token, server_config["guild_id"], include_threads)
             print(f"  Found {len(channels)} channels")
         except RuntimeError as e:
             print(f"  ERROR: {e}")
-            summary['errors'].append({
-                'channel': 'N/A',
-                'format': 'N/A',
-                'error': f"Failed to fetch channels: {e}"
-            })
+            summary["errors"].append(  # type: ignore[attr-defined]
+                {"channel": "N/A", "format": "N/A", "error": f"Failed to fetch channels: {e}"}
+            )
             continue
 
-        include_patterns = server_config['include_channels']
-        exclude_patterns = server_config['exclude_channels']
-        forum_list = server_config.get('forum_channels', [])
+        include_patterns = server_config["include_channels"]
+        exclude_patterns = server_config["exclude_channels"]
+        forum_list = server_config.get("forum_channels", [])
 
         # Classify all channels
         channel_classifications = {}
         for channel in channels:
             channel_type = classify_channel(channel, forum_list, channels)
-            channel_classifications[channel['id']] = channel_type
+            channel_classifications[channel["id"]] = channel_type
 
         for channel in channels:
-            channel_name = channel['name']
-            channel_id = channel['id']
+            channel_name = channel["name"]
+            channel_id = channel["id"]
             channel_type = channel_classifications[channel_id]
 
             # Skip forum parent channels (only export their threads)
@@ -301,7 +272,7 @@ def export_all_channels() -> Dict:
 
             # For threads, use sanitized name and forum directory
             if channel_type == ChannelType.THREAD:
-                forum_name = channel.get('parent_id', 'unknown-forum')
+                forum_name = channel.get("parent_id", "unknown-forum")
                 thread_dir = server_dir / forum_name
                 thread_dir.mkdir(exist_ok=True)
 
@@ -325,22 +296,17 @@ def export_all_channels() -> Dict:
             if channel_type == ChannelType.THREAD:
                 # Get thread state for incremental export (forum_name already set above)
                 thread_state = state_manager.get_thread_state(server_key, forum_name, channel_id)
-                after_timestamp = thread_state['last_export'] if thread_state else None
+                after_timestamp = thread_state["last_export"] if thread_state else None
             else:
                 channel_state = state_manager.get_channel_state(server_key, channel_name)
-                after_timestamp = channel_state['last_export'] if channel_state else None
+                after_timestamp = channel_state["last_export"] if channel_state else None
 
             # Export all configured formats
-            format_map = {
-                'html': 'HtmlDark',
-                'txt': 'PlainText',
-                'json': 'Json',
-                'csv': 'Csv'
-            }
+            format_map = {"html": "HtmlDark", "txt": "PlainText", "json": "Json", "csv": "Csv"}
 
             channel_failed = False
 
-            for fmt in config['export']['formats']:
+            for fmt in config["export"]["formats"]:
                 output_path = export_dir / f"{export_name}.{fmt}"
 
                 cmd = format_export_command(
@@ -348,22 +314,20 @@ def export_all_channels() -> Dict:
                     channel_id=channel_id,
                     output_path=str(output_path),
                     format_type=format_map[fmt],
-                    after_timestamp=after_timestamp
+                    after_timestamp=after_timestamp,
                 )
 
                 success, output = run_export(cmd)
 
                 if success:
-                    summary['total_exports'] += 1
+                    summary["total_exports"] += 1  # type: ignore[operator]
                     print(f"    ✓ {fmt.upper()}")
                 else:
                     channel_failed = True
-                    summary['channels_failed'] += 1
-                    summary['errors'].append({
-                        'channel': channel_name,
-                        'format': fmt,
-                        'error': output
-                    })
+                    summary["channels_failed"] += 1  # type: ignore[operator]
+                    summary["errors"].append(  # type: ignore[attr-defined]
+                        {"channel": channel_name, "format": fmt, "error": output}
+                    )
                     print(f"    ✗ {fmt.upper()} failed")
 
             # Update state with current timestamp
@@ -378,16 +342,16 @@ def export_all_channels() -> Dict:
                         thread_name=safe_name,
                         thread_title=channel_name,
                         last_message_id=None,  # Could extract from export
-                        archived=False  # Could detect from channel data
+                        archived=False,  # Could detect from channel data
                     )
                 else:
                     state_manager.update_channel(
                         server_key,
                         channel_name,
                         datetime.now(UTC).isoformat(),
-                        "placeholder_message_id"
+                        "placeholder_message_id",
                     )
-                summary['channels_updated'] += 1
+                summary["channels_updated"] += 1  # type: ignore[operator]
 
     # Save state
     state_manager.save()
@@ -409,16 +373,17 @@ def main():
         print(f"  Channels failed: {summary['channels_failed']}")
         print(f"  Total exports: {summary['total_exports']}")
 
-        if summary['errors']:
+        if summary["errors"]:
             print(f"\nErrors ({len(summary['errors'])}):")
-            for error in summary['errors'][:5]:  # Show first 5
+            for error in summary["errors"][:5]:  # Show first 5
                 print(f"  - {error['channel']} ({error['format']}): {error['error'][:100]}")
 
-        sys.exit(0 if summary['channels_failed'] == 0 else 1)
+        sys.exit(0 if summary["channels_failed"] == 0 else 1)
 
     except Exception as e:
         print(f"\nFATAL ERROR: {e}")
         import traceback
+
         traceback.print_exc()
         sys.exit(1)
 
