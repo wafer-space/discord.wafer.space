@@ -5,8 +5,12 @@ import os
 import subprocess
 import sys
 
+# Constants
+EXPECTED_TOKEN_PARTS = 3
+MAX_CHANNELS_TO_SHOW = 10
 
-def test_bot_token():
+
+def test_bot_token() -> bool:
     """Test if bot token is set and can access Discord."""
     token = os.environ.get("DISCORD_BOT_TOKEN")
 
@@ -20,7 +24,7 @@ def test_bot_token():
 
     # Test token format
     parts = token.split(".")
-    if len(parts) != 3:
+    if len(parts) != EXPECTED_TOKEN_PARTS:
         print(
             f"❌ ERROR: Token format incorrect. Expected 3 parts separated by '.', got {len(parts)}"
         )
@@ -61,9 +65,12 @@ def test_bot_token():
         return False
 
 
-def test_server_access(guild_id):
+def test_server_access(guild_id: str) -> bool:
     """Test if bot can access specific server."""
     token = os.environ.get("DISCORD_BOT_TOKEN")
+    if not token:
+        print("❌ ERROR: DISCORD_BOT_TOKEN not set")
+        return False
 
     print(f"\nTesting access to server {guild_id}...")
     try:
@@ -72,7 +79,7 @@ def test_server_access(guild_id):
                 "bin/discord-exporter/DiscordChatExporter.Cli",
                 "channels",
                 "-t",
-                token,  # type: ignore[list-item]
+                token,
                 "-g",
                 guild_id,
             ],
@@ -94,10 +101,10 @@ def test_server_access(guild_id):
         channels = [line for line in result.stdout.strip().split("\n") if line.strip()]
         print("✓ Successfully accessed server")
         print(f"\nFound {len(channels)} channels:")
-        for channel in channels[:10]:  # Show first 10
+        for channel in channels[:MAX_CHANNELS_TO_SHOW]:  # Show first 10
             print(f"  {channel}")
-        if len(channels) > 10:
-            print(f"  ... and {len(channels) - 10} more")
+        if len(channels) > MAX_CHANNELS_TO_SHOW:
+            print(f"  ... and {len(channels) - MAX_CHANNELS_TO_SHOW} more")
 
         return True
 
@@ -106,7 +113,7 @@ def test_server_access(guild_id):
         return False
 
 
-def main():
+def main() -> None:
     """Run all diagnostics."""
     print("Discord Bot Access Diagnostics")
     print("=" * 60)

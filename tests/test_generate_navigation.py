@@ -11,8 +11,16 @@ from scripts.generate_navigation import (
     scan_exports,
 )
 
+# Test constants
+EXPECTED_ARCHIVES_IN_2025 = 2
+EXPECTED_ARCHIVES_IN_2024 = 2
+EXPECTED_REPLY_COUNT = 2
+EXPECTED_THREAD_COUNT = 2
+EXPECTED_THREE_EXPORTS = 3
+EXPECTED_THREE_MESSAGES = 3
 
-def test_scan_exports_finds_files():
+
+def test_scan_exports_finds_files() -> None:
     """Test that scan_exports finds exported files"""
     with tempfile.TemporaryDirectory() as tmpdir:
         # Create fake export structure
@@ -30,7 +38,7 @@ def test_scan_exports_finds_files():
         assert any(e["channel"] == "general" for e in exports)
 
 
-def test_scan_exports_skips_index_files():
+def test_scan_exports_skips_index_files() -> None:
     """Test that scan_exports skips index.html files"""
     with tempfile.TemporaryDirectory() as tmpdir:
         public = Path(tmpdir) / "public"
@@ -48,7 +56,7 @@ def test_scan_exports_skips_index_files():
         assert exports[0]["date"] == "2025-01"
 
 
-def test_scan_exports_multiple_channels():
+def test_scan_exports_multiple_channels() -> None:
     """Test scanning multiple channels and servers"""
     with tempfile.TemporaryDirectory() as tmpdir:
         public = Path(tmpdir) / "public"
@@ -63,7 +71,7 @@ def test_scan_exports_multiple_channels():
 
         exports = scan_exports(public)
 
-        assert len(exports) == 3
+        assert len(exports) == EXPECTED_THREE_EXPORTS
         servers = {e["server"] for e in exports}
         channels = {e["channel"] for e in exports}
         assert "server1" in servers
@@ -73,7 +81,7 @@ def test_scan_exports_multiple_channels():
         assert "chat" in channels
 
 
-def test_count_messages_from_json():
+def test_count_messages_from_json() -> None:
     """Test counting messages from JSON file"""
     with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
         # Write sample JSON lines
@@ -83,12 +91,12 @@ def test_count_messages_from_json():
         json_path = f.name
 
     count = count_messages_from_json(json_path)
-    assert count == 3
+    assert count == EXPECTED_THREE_MESSAGES
 
     Path(json_path).unlink()
 
 
-def test_count_messages_from_json_empty_lines():
+def test_count_messages_from_json_empty_lines() -> None:
     """Test counting messages ignores empty lines"""
     with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
         f.write('{"id": "1", "content": "Hello"}\n')
@@ -99,18 +107,18 @@ def test_count_messages_from_json_empty_lines():
         json_path = f.name
 
     count = count_messages_from_json(json_path)
-    assert count == 3
+    assert count == EXPECTED_THREE_MESSAGES
 
     Path(json_path).unlink()
 
 
-def test_count_messages_from_json_nonexistent():
+def test_count_messages_from_json_nonexistent() -> None:
     """Test counting messages from nonexistent file returns 0"""
     count = count_messages_from_json("/nonexistent/path/file.json")
     assert count == 0
 
 
-def test_group_by_year():
+def test_group_by_year() -> None:
     """Test grouping archives by year"""
     archives = [
         {"date": "2025-01", "message_count": 100},
@@ -123,11 +131,11 @@ def test_group_by_year():
 
     assert "2025" in grouped
     assert "2024" in grouped
-    assert len(grouped["2025"]) == 2
-    assert len(grouped["2024"]) == 2
+    assert len(grouped["2025"]) == EXPECTED_ARCHIVES_IN_2025
+    assert len(grouped["2024"]) == EXPECTED_ARCHIVES_IN_2024
 
 
-def test_group_by_year_sorted():
+def test_group_by_year_sorted() -> None:
     """Test that archives within each year are sorted reverse chronologically"""
     archives = [
         {"date": "2025-01", "message_count": 100},
@@ -143,7 +151,7 @@ def test_group_by_year_sorted():
     assert grouped["2025"][2]["date"] == "2025-01"
 
 
-def test_generate_site_index():
+def test_generate_site_index() -> None:
     """Test generating site index page"""
     with tempfile.TemporaryDirectory() as tmpdir:
         output_path = Path(tmpdir) / "public" / "index.html"
@@ -168,7 +176,7 @@ def test_generate_site_index():
         assert "5 channels" in html
 
 
-def test_generate_server_index():
+def test_generate_server_index() -> None:
     """Test generating server index page"""
     with tempfile.TemporaryDirectory() as tmpdir:
         output_path = Path(tmpdir) / "public" / "test-server" / "index.html"
@@ -187,7 +195,7 @@ def test_generate_server_index():
         assert "#general" in html
 
 
-def test_generate_channel_index():
+def test_generate_channel_index() -> None:
     """Test generating channel index page"""
     with tempfile.TemporaryDirectory() as tmpdir:
         output_path = Path(tmpdir) / "public" / "test-server" / "general" / "index.html"
@@ -212,9 +220,9 @@ def test_generate_channel_index():
         assert "2025-02" in html
 
 
-def test_generate_forum_index():
+def test_generate_forum_index() -> None:
     """Test forum index generation."""
-    from scripts.generate_navigation import generate_forum_index
+    from scripts.generate_navigation import ForumInfo, generate_forum_index
 
     # Setup
     config = {"site": {"title": "Test Site"}}
@@ -242,13 +250,13 @@ def test_generate_forum_index():
     with tempfile.TemporaryDirectory() as tmpdir:
         output_path = Path(tmpdir) / "index.html"
 
+        forum_info = ForumInfo(name="questions", description="Ask questions")
         generate_forum_index(
             config,
             server_info,
-            forum_name="questions",
-            threads=threads_data,
-            output_path=output_path,
-            forum_description="Ask questions",
+            forum_info,
+            threads_data,
+            output_path,
         )
 
         html = output_path.read_text()
@@ -262,7 +270,7 @@ def test_generate_forum_index():
         assert "10 replies" in html
 
 
-def test_collect_forum_threads():
+def test_collect_forum_threads() -> None:
     """Test collecting thread metadata from forum directory."""
     import json
     import tempfile
@@ -296,11 +304,11 @@ def test_collect_forum_threads():
         assert len(threads) == 1
         assert threads[0]["name"] == "how-to-start"
         assert threads[0]["title"] == "How to start?"
-        assert threads[0]["reply_count"] == 2
+        assert threads[0]["reply_count"] == EXPECTED_REPLY_COUNT
         assert threads[0]["last_activity"] == "2025-11-10"
 
 
-def test_collect_forum_threads_multiple():
+def test_collect_forum_threads_multiple() -> None:
     """Test collecting metadata from multiple threads, sorted by activity."""
     import json
     import tempfile
@@ -341,7 +349,7 @@ def test_collect_forum_threads_multiple():
         # Collect threads
         threads = collect_forum_threads(forum_dir)
 
-        assert len(threads) == 2
+        assert len(threads) == EXPECTED_THREAD_COUNT
         # Should be sorted by last_activity, newest first
         assert threads[0]["name"] == "new-thread"
         assert threads[0]["last_activity"] == "2025-11-10"
@@ -349,7 +357,7 @@ def test_collect_forum_threads_multiple():
         assert threads[1]["last_activity"] == "2025-01-15"
 
 
-def test_collect_forum_threads_empty_directory():
+def test_collect_forum_threads_empty_directory() -> None:
     """Test collecting threads from empty forum directory."""
     import tempfile
     from pathlib import Path

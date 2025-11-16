@@ -2,10 +2,23 @@
 """Generate navigation index pages from exported logs."""
 
 import sys
+from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader
+
+# Constants
+MIN_PATH_PARTS_FOR_CHANNEL = 3
+
+
+@dataclass
+class ForumInfo:
+    """Forum metadata for index generation."""
+
+    name: str
+    description: str | None = None
+
 
 # Handle imports for both direct execution and pytest
 try:
@@ -34,7 +47,7 @@ def scan_exports(public_dir: Path) -> list[dict]:
 
         # Parse path: public/server/channel/YYYY-MM.html
         parts = html_file.relative_to(public_dir).parts
-        if len(parts) >= 3:
+        if len(parts) >= MIN_PATH_PARTS_FOR_CHANNEL:
             server = parts[0]
             channel = parts[1]
             date = html_file.stem  # YYYY-MM
@@ -265,20 +278,18 @@ def collect_forum_threads(forum_dir: Path) -> list[dict]:
 def generate_forum_index(
     config: dict,
     server: dict,
-    forum_name: str,
+    forum_info: ForumInfo,
     threads: list[dict],
     output_path: Path,
-    forum_description: str = None,  # type: ignore[assignment]
 ) -> None:
     """Generate forum index page.
 
     Args:
         config: Site configuration
         server: Server info dict
-        forum_name: Name of the forum
+        forum_info: Forum metadata (name and description)
         threads: List of thread metadata dicts
         output_path: Where to write index.html
-        forum_description: Optional forum description
     """
     env = Environment(loader=FileSystemLoader("templates"))
     template = env.get_template("forum_index.html.j2")
@@ -286,8 +297,8 @@ def generate_forum_index(
     html = template.render(
         site=config["site"],
         server=server,
-        forum_name=forum_name.title(),  # Capitalize for display
-        forum_description=forum_description,
+        forum_name=forum_info.name.title(),  # Capitalize for display
+        forum_description=forum_info.description,
         threads=threads,
     )
 
@@ -295,7 +306,7 @@ def generate_forum_index(
     output_path.write_text(html)
 
 
-def main():
+def main() -> None:
     """Entry point for navigation generation."""
     print("Generating navigation pages...")
 
@@ -361,13 +372,13 @@ def main():
                         threads = collect_forum_threads(forum_dir)
 
                         # Generate forum index page
+                        forum_info = ForumInfo(name=forum_name, description=None)
                         generate_forum_index(
                             config,
                             server_data,
-                            forum_name,
+                            forum_info,
                             threads,
                             forum_dir / "index.html",
-                            forum_description=None,  # type: ignore[arg-type]  # Could be added to config
                         )
 
                         print(f"  ✓ Generated forum index: {forum_name} ({len(threads)} threads)")

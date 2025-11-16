@@ -7,8 +7,12 @@ import pytest
 
 from scripts.export_channels import fetch_guild_channels
 
+# Test constants
+EXPECTED_TWO_CHANNELS = 2
+EXPECTED_THREE_CHANNELS = 3
 
-def test_fetch_guild_channels_success():
+
+def test_fetch_guild_channels_success() -> None:
     """Test successful channel fetching."""
     with patch("subprocess.run") as mock_run:
         mock_run.return_value = Mock(
@@ -19,12 +23,12 @@ def test_fetch_guild_channels_success():
 
         channels = fetch_guild_channels("test_token", "guild123")
 
-        assert len(channels) == 2
+        assert len(channels) == EXPECTED_TWO_CHANNELS
         assert channels[0] == {"name": "announcements", "id": "123456", "parent_id": "Information"}
         assert channels[1] == {"name": "general", "id": "789012", "parent_id": "General"}
 
 
-def test_fetch_guild_channels_without_category():
+def test_fetch_guild_channels_without_category() -> None:
     """Test channel fetching for channels without categories."""
     with patch("subprocess.run") as mock_run:
         mock_run.return_value = Mock(
@@ -33,12 +37,12 @@ def test_fetch_guild_channels_without_category():
 
         channels = fetch_guild_channels("test_token", "guild123")
 
-        assert len(channels) == 2
+        assert len(channels) == EXPECTED_TWO_CHANNELS
         assert channels[0] == {"name": "general", "id": "123456", "parent_id": None}
         assert channels[1] == {"name": "announcements", "id": "789012", "parent_id": None}
 
 
-def test_fetch_guild_channels_empty_output():
+def test_fetch_guild_channels_empty_output() -> None:
     """Test handling of empty channel list."""
     with patch("subprocess.run") as mock_run:
         mock_run.return_value = Mock(returncode=0, stdout="", stderr="")
@@ -48,7 +52,7 @@ def test_fetch_guild_channels_empty_output():
         assert channels == []
 
 
-def test_fetch_guild_channels_command_failure():
+def test_fetch_guild_channels_command_failure() -> None:
     """Test handling of command failure."""
     with patch("subprocess.run") as mock_run:
         mock_run.return_value = Mock(returncode=1, stdout="", stderr="ERROR: Authentication failed")
@@ -57,7 +61,7 @@ def test_fetch_guild_channels_command_failure():
             fetch_guild_channels("test_token", "guild123")
 
 
-def test_fetch_guild_channels_timeout():
+def test_fetch_guild_channels_timeout() -> None:
     """Test handling of timeout."""
     with patch("subprocess.run") as mock_run:
         from subprocess import TimeoutExpired
@@ -68,7 +72,7 @@ def test_fetch_guild_channels_timeout():
             fetch_guild_channels("test_token", "guild123")
 
 
-def test_fetch_guild_channels_exception():
+def test_fetch_guild_channels_exception() -> None:
     """Test handling of unexpected exceptions."""
     with patch("subprocess.run") as mock_run:
         mock_run.side_effect = Exception("Unexpected error")
@@ -77,7 +81,7 @@ def test_fetch_guild_channels_exception():
             fetch_guild_channels("test_token", "guild123")
 
 
-def test_fetch_guild_channels_includes_threads():
+def test_fetch_guild_channels_includes_threads() -> None:
     """Test that threads are included when fetching channels."""
     with patch("subprocess.run") as mock_run:
         mock_run.return_value = Mock(
@@ -92,7 +96,7 @@ Questions / Troubleshooting help [789013]
         channels = fetch_guild_channels("test_token", "guild123", include_threads=True)
 
         # Should include both regular channel and threads
-        assert len(channels) == 3
+        assert len(channels) == EXPECTED_THREE_CHANNELS
         assert channels[0] == {"name": "general", "id": "123456", "parent_id": "General"}
         assert channels[1] == {"name": "How do I start?", "id": "789012", "parent_id": "Questions"}
         assert channels[2] == {
@@ -102,7 +106,7 @@ Questions / Troubleshooting help [789013]
         }
 
 
-def test_fetch_guild_channels_without_threads():
+def test_fetch_guild_channels_without_threads() -> None:
     """Test that threads are excluded when include_threads=False."""
     with patch("subprocess.run") as mock_run:
         mock_run.return_value = Mock(returncode=0, stdout="General / general [123456]\n", stderr="")

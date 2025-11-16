@@ -1,8 +1,21 @@
 """State management for tracking export progress."""
 
 import json
+from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Any, cast
+
+
+@dataclass
+class ThreadInfo:
+    """Thread metadata for state tracking."""
+
+    thread_id: str
+    thread_name: str
+    thread_title: str
+    last_message_id: str | None = None
+    archived: bool = False
 
 
 class StateManager:
@@ -15,9 +28,9 @@ class StateManager:
             state_path: Path to state JSON file
         """
         self.state_path = Path(state_path)
-        self.state: dict = {}
+        self.state: dict[str, Any] = {}
 
-    def load(self) -> dict:
+    def load(self) -> dict[str, Any]:
         """Load state from disk.
 
         Returns:
@@ -59,7 +72,7 @@ class StateManager:
 
         self.save()
 
-    def get_channel_state(self, server: str, channel: str) -> dict | None:
+    def get_channel_state(self, server: str, channel: str) -> dict[str, Any] | None:
         """Get state for a channel.
 
         Args:
@@ -72,28 +85,16 @@ class StateManager:
         if server not in self.state:
             return None
 
-        return self.state[server].get(channel)  # type: ignore[no-any-return]
+        result = self.state[server].get(channel)
+        return cast("dict[str, Any] | None", result)
 
-    def update_thread_state(
-        self,
-        server: str,
-        forum: str,
-        thread_id: str,
-        thread_name: str,
-        thread_title: str,
-        last_message_id: str | None = None,
-        archived: bool = False,
-    ) -> None:
+    def update_thread_state(self, server: str, forum: str, thread_info: ThreadInfo) -> None:
         """Update state for a specific thread.
 
         Args:
             server: Server name
             forum: Forum name
-            thread_id: Thread channel ID
-            thread_name: Sanitized thread name (for filesystem)
-            thread_title: Human-readable thread title
-            last_message_id: ID of last exported message
-            archived: Whether thread is archived
+            thread_info: Thread metadata
         """
         if server not in self.state:
             self.state[server] = {}
@@ -107,17 +108,17 @@ class StateManager:
         if "threads" not in self.state[server]["forums"][forum]:
             self.state[server]["forums"][forum]["threads"] = {}
 
-        self.state[server]["forums"][forum]["threads"][thread_id] = {
-            "name": thread_name,
-            "title": thread_title,
+        self.state[server]["forums"][forum]["threads"][thread_info.thread_id] = {
+            "name": thread_info.thread_name,
+            "title": thread_info.thread_title,
             "last_export": datetime.now(timezone.utc).isoformat(),
-            "last_message_id": last_message_id,
-            "archived": archived,
+            "last_message_id": thread_info.last_message_id,
+            "archived": thread_info.archived,
         }
 
         self.save()
 
-    def get_thread_state(self, server: str, forum: str, thread_id: str) -> dict | None:
+    def get_thread_state(self, server: str, forum: str, thread_id: str) -> dict[str, Any] | None:
         """Get state for a specific thread.
 
         Args:
@@ -128,13 +129,14 @@ class StateManager:
         Returns:
             Thread state dict or None if not found
         """
-        return (  # type: ignore[no-any-return]
+        result = (
             self.state.get(server, {})
             .get("forums", {})
             .get(forum, {})
             .get("threads", {})
             .get(thread_id)
         )
+        return cast("dict[str, Any] | None", result)
 
     def update_forum_index_timestamp(self, server: str, forum: str) -> None:
         """Update the last index generation timestamp for a forum.
