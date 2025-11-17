@@ -332,6 +332,7 @@ def generate_forum_index(
         site=config["site"],
         server=server,
         forum_name=forum_info.name.title(),  # Capitalize for display
+        forum_channel_name=forum_info.name,  # Original case for URLs
         forum_description=forum_info.description,
         threads=threads,
     )
