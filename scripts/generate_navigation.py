@@ -466,9 +466,16 @@ def main() -> None:
         for server_data in servers_data.values():
             print(f"Generating index for {server_data['display_name']}...")
 
-            # Sort channels alphabetically
+            server_name = server_data["name"]
+            forum_channels = get_forum_channels(state, server_name)
+
+            # Sort channels alphabetically and mark forums
             channels_list = list(server_data["channels"].values())
             channels_list.sort(key=lambda c: c["name"])
+
+            # Mark which channels are forums
+            for channel in channels_list:
+                channel["is_forum"] = channel["name"] in forum_channels
 
             # Generate server index
             generate_server_index(
@@ -476,8 +483,6 @@ def main() -> None:
             )
 
             # Generate channel indexes (skip forums - they get forum indexes instead)
-            server_name = server_data["name"]
-            forum_channels = get_forum_channels(state, server_name)
 
             for channel_data in channels_list:
                 # Skip forum channels - they get forum index pages instead
