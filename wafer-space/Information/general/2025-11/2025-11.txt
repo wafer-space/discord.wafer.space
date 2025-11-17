@@ -5546,6 +5546,58 @@ I would post a picture but it looks just like the 5V SRAM layout from a bird's-e
 Started a thread.
 
 
+[11/17/2025 10:14] 246tnt
+@mole99 How is your ground ring connected to the pads in the template ?
+
+
+[11/17/2025 10:14] 246tnt
+Maybe it didn't build properly for me locally but I'm looking at it and I can't find anywhere where it's attached.
+
+
+[11/17/2025 10:17] mole99
+LVS is clean, so it better be attached 😄 Let me check...
+
+
+[11/17/2025 10:17] 246tnt
+Could be attached through substrate ...
+
+
+[11/17/2025 10:17] mole99
+Oh, I see
+
+
+[11/17/2025 10:18] mole99
+It's only attached to the top and bottom ground pad 😅
+
+
+[11/17/2025 10:19] mole99
+The reason is, I made changes to the template and now `gf180mcu_fd_io__dvss` is used for all ground pads instead of my modified `gf180mcu_ws_io__dvss` which has pins on two metal layers.
+
+
+[11/17/2025 10:20] mole99
+I think there should be no issue with `gf180mcu_ws_io__dvss` for both horizontal and vertical I/O rows.
+
+
+[11/17/2025 10:21] mole99
+Thanks a lot for alerting me!
+
+{Reactions}
+👌
+
+[11/17/2025 10:21] 246tnt
+I hadn't see the one on top and bottom because I forgot I had added those in the padframe 😅
+
+{Reactions}
+😁
+
+[11/17/2025 10:25] 246tnt
+Although I have my rings on Metal5 / Metal4 so I'm not sure how that's going to help me 😅
+
+
+[11/17/2025 10:25] mole99
+Yeah, that's another issue 😅
+
+
 ==============================================================
-Exported 1,074 message(s)
+Exported 1,086 message(s)
 ==============================================================
