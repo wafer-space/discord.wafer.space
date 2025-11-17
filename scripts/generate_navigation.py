@@ -5,6 +5,7 @@ import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
+from urllib.parse import urlparse
 
 from jinja2 import Environment, FileSystemLoader
 
@@ -128,6 +129,24 @@ def generate_site_index(config: dict, servers: list[dict], output_path: Path) ->
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(html)
+
+
+def generate_cname_file(config: dict, output_path: Path) -> None:
+    """Generate CNAME file for GitHub Pages custom domain.
+
+    Args:
+        config: Site configuration
+        output_path: Where to write CNAME file
+    """
+    base_url = config.get("site", {}).get("base_url")
+    if not base_url:
+        return
+
+    # Extract hostname from base_url
+    parsed = urlparse(base_url)
+    if parsed.hostname:
+        output_path.write_text(f"{parsed.hostname}\n")
+        print(f"✓ Generated CNAME file for {parsed.hostname}")
 
 
 def generate_server_index(
@@ -332,6 +351,9 @@ def main() -> None:
         # Generate site index
         print("Generating site index...")
         generate_site_index(config, list(servers_data.values()), public_dir / "index.html")
+
+        # Generate CNAME file for custom domain
+        generate_cname_file(config, public_dir / "CNAME")
 
         # Generate server indexes and channel indexes
         for server_data in servers_data.values():
