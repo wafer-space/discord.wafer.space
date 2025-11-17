@@ -1,6 +1,7 @@
 # scripts/generate_navigation.py
 """Generate navigation index pages from exported logs."""
 
+import json
 import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -108,6 +109,20 @@ def group_by_year(archives: list[dict]) -> dict[str, list[dict]]:
         grouped[year].sort(key=lambda a: a["date"], reverse=True)
 
     return grouped
+
+
+def get_forum_channels(state: dict, server_name: str) -> set[str]:
+    """Get forum channel names from state.json.
+
+    Args:
+        state: State dictionary loaded from state.json
+        server_name: Server name to look up
+
+    Returns:
+        Set of forum channel names
+    """
+    forums = state.get(server_name, {}).get("forums", {})
+    return set(forums.keys())
 
 
 def generate_site_index(config: dict, servers: list[dict], output_path: Path) -> None:
@@ -337,6 +352,13 @@ def main() -> None:
             print("ERROR: public/ directory not found. Run export first.")
             sys.exit(1)
 
+        # Load state for forum channel detection
+        state_path = Path("state.json")
+        state = {}
+        if state_path.exists():
+            with open(state_path, encoding="utf-8") as f:
+                state = json.load(f)
+
         # Scan all exports
         print("Scanning exports...")
         exports = scan_exports(public_dir)
@@ -368,8 +390,15 @@ def main() -> None:
                 config, server_data, channels_list, public_dir / server_data["name"] / "index.html"
             )
 
-            # Generate channel indexes
+            # Generate channel indexes (skip forums - they get forum indexes instead)
+            server_name = server_data["name"]
+            forum_channels = get_forum_channels(state, server_name)
+
             for channel_data in channels_list:
+                # Skip forum channels - they get forum index pages instead
+                if channel_data["name"] in forum_channels:
+                    continue
+
                 generate_channel_index(
                     config,
                     server_data,
@@ -379,9 +408,6 @@ def main() -> None:
                 )
 
             # Generate forum index pages
-            server_name = server_data["name"]
-            server_config = config.get("servers", {}).get(server_name, {})
-            forum_channels = server_config.get("forum_channels", [])
 
             if forum_channels:
                 print(f"Generating forum indexes for {server_data['display_name']}...")
