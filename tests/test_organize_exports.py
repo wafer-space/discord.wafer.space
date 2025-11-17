@@ -383,11 +383,14 @@ def test_organize_exports_copies_channel_media_directory() -> None:
         # Organize exports
         organize_exports(exports, public)
 
-        # Check that media directory was copied
+        # Check that media directory was copied into month directory
+        from scripts.organize_exports import get_current_month
+        current_month = get_current_month()
+
         channel_dir = public / "test-server" / "general"
         assert channel_dir.exists()
 
-        public_media_dir = channel_dir / "general_media"
+        public_media_dir = channel_dir / current_month / "general_media"
         assert public_media_dir.exists()
         assert public_media_dir.is_dir()
 
@@ -418,11 +421,14 @@ def test_organize_exports_copies_thread_media_directory() -> None:
         # Organize exports
         organize_exports(exports, public)
 
-        # Check that media directory was copied
+        # Check that media directory was copied into month directory
+        from scripts.organize_exports import get_current_month
+        current_month = get_current_month()
+
         thread_dir = public / "test-server" / "questions" / "help-needed"
         assert thread_dir.exists()
 
-        public_media_dir = thread_dir / "help-needed_media"
+        public_media_dir = thread_dir / current_month / "help-needed_media"
         assert public_media_dir.exists()
         assert public_media_dir.is_dir()
         assert (public_media_dir / "screenshot.png").exists()
@@ -459,9 +465,12 @@ def test_organize_exports_replaces_existing_media_directory() -> None:
         exports = tmpdir_path / "exports"
         public = tmpdir_path / "public"
 
-        # Create channel directory with old media
+        from scripts.organize_exports import get_current_month
+        current_month = get_current_month()
+
+        # Create channel directory with old media in month directory
         channel_dir = public / "test-server" / "general"
-        old_media_dir = channel_dir / "general_media"
+        old_media_dir = channel_dir / current_month / "general_media"
         old_media_dir.mkdir(parents=True)
         (old_media_dir / "old-file.png").write_bytes(b"old data")
 
@@ -477,8 +486,8 @@ def test_organize_exports_replaces_existing_media_directory() -> None:
         # Organize exports
         organize_exports(exports, public)
 
-        # Old file should be gone, new file should exist
-        public_media_dir = channel_dir / "general_media"
+        # Old file should be gone, new file should exist (in month directory)
+        public_media_dir = channel_dir / current_month / "general_media"
         assert not (public_media_dir / "old-file.png").exists()
         assert (public_media_dir / "new-file.png").exists()
         assert (public_media_dir / "new-file.png").read_bytes() == b"new data"

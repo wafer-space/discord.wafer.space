@@ -116,10 +116,11 @@ def _organize_thread_file(
     dest_file, success = _copy_to_month_directory(thread_file, public_thread_dir, current_month)
 
     if success:
-        # Copy associated media directory if it exists
+        # Copy associated media directory if it exists (into month directory)
         media_dir = thread_file.parent / f"{thread_name}_media"
         if media_dir.exists():
-            if _copy_media_directory(media_dir, public_thread_dir):
+            month_dir = public_thread_dir / current_month
+            if _copy_media_directory(media_dir, month_dir):
                 print(f"    ↳ Copied media directory: {media_dir.name}")
 
         channel_key = f"{server_name}/{forum_name}/{thread_name}"
@@ -161,10 +162,11 @@ def _organize_channel_file(
     dest_file, success = _copy_to_month_directory(channel_file, channel_dir, current_month)
 
     if success:
-        # Copy associated media directory if it exists
+        # Copy associated media directory if it exists (into month directory)
         media_dir = channel_file.parent / f"{channel_name}_media"
         if media_dir.exists():
-            if _copy_media_directory(media_dir, channel_dir):
+            month_dir = channel_dir / current_month
+            if _copy_media_directory(media_dir, month_dir):
                 print(f"    ↳ Copied media directory: {media_dir.name}")
 
         channel_key = f"{server_name}/{channel_name}"
