@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ thread_title }} - {{ forum_name }} - {{ server.display_name }} - {{ site.title }}</title>
+    <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+    <header>
+        <nav class="breadcrumb">
+            <a href="/index.html">Home</a> &gt;
+            <a href="/{{ server.name }}/index.html">{{ server.display_name }}</a> &gt;
+            <a href="/{{ server.name }}/{{ forum_channel_name }}/index.html">{{ forum_name }}</a> &gt;
+            <span>{{ thread_title }}</span>
+        </nav>
+        <h1>{{ thread_title }}</h1>
+        <p class="thread-meta">Thread in {{ forum_name }} Forum</p>
+    </header>
+
+    <main>
+        <section class="archives">
+            <h2>Monthly Archives</h2>
+            {% if archives_by_year %}
+            {% for year, archives in archives_by_year.items()|sort(reverse=True) %}
+            <div class="year-group">
+                <h3>{{ year }}</h3>
+                <ul class="archive-list">
+                    {% for archive in archives %}
+                    <li>
+                        <a href="/{{ server.name }}/{{ forum_channel_name }}/{{ thread_name }}/{{ archive.date }}/{{ archive.date }}.html">
+                            {{ archive.date }}
+                        </a>
+                        {% if archive.message_count %}
+                        <span class="message-count">({{ archive.message_count }} messages)</span>
+                        {% endif %}
+                        {% if archive.formats %}
+                        <span class="formats">
+                            {% for format in archive.formats %}
+                            <a href="/{{ server.name }}/{{ forum_channel_name }}/{{ thread_name }}/{{ archive.date }}/{{ archive.date }}.{{ format }}" class="format-link">{{ format }}</a>
+                            {% endfor %}
+                        </span>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endfor %}
+            {% else %}
+            <p class="no-archives">No archives available for this thread yet.</p>
+            {% endif %}
+        </section>
+    </main>
+
+    <footer>
+        <p><a href="/{{ server.name }}/{{ forum_channel_name }}/index.html">← Back to {{ forum_name }}</a></p>
+    </footer>
+</body>
+</html>

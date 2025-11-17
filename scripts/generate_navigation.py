@@ -309,6 +309,90 @@ def collect_forum_threads(forum_dir: Path) -> list[dict]:
     return threads
 
 
+def collect_thread_archives(thread_dir: Path) -> list[dict]:
+    """Collect archive files for a thread directory.
+
+    Args:
+        thread_dir: Path to thread directory (e.g., public/server/forum/thread-name/)
+
+    Returns:
+        List of archive info dicts with date and message_count
+    """
+    archives = []
+
+    # Scan for date-based subdirectories (YYYY-MM format)
+    for date_dir in thread_dir.iterdir():
+        if not date_dir.is_dir():
+            continue
+
+        # Check if directory name looks like YYYY-MM
+        if not (len(date_dir.name) == 7 and date_dir.name[4] == "-"):
+            continue
+
+        date = date_dir.name
+
+        # Check if HTML file exists
+        html_file = date_dir / f"{date}.html"
+        if not html_file.exists():
+            continue
+
+        # Count messages from JSON file
+        json_file = date_dir / f"{date}.json"
+        message_count = count_messages_from_json(str(json_file)) if json_file.exists() else 0
+
+        # Detect available formats
+        formats = []
+        for ext in ["txt", "json", "csv"]:
+            if (date_dir / f"{date}.{ext}").exists():
+                formats.append(ext)
+
+        archives.append({"date": date, "message_count": message_count, "formats": formats})
+
+    # Sort by date (newest first)
+    archives.sort(key=lambda a: a["date"], reverse=True)
+
+    return archives
+
+
+def generate_thread_index(
+    config: dict,
+    server: dict,
+    forum_info: ForumInfo,
+    thread_name: str,
+    thread_title: str,
+    archives: list[dict],
+    output_path: Path,
+) -> None:
+    """Generate thread archive index page.
+
+    Args:
+        config: Site configuration
+        server: Server info dict
+        forum_info: Forum metadata (name for display)
+        thread_name: Thread directory name (URL-safe)
+        thread_title: Thread display title
+        archives: List of archive info dicts
+        output_path: Where to write index.html
+    """
+    env = Environment(loader=FileSystemLoader("templates"))
+    template = env.get_template("thread_index.html.j2")
+
+    archives_by_year = group_by_year(archives)
+
+    html = template.render(
+        site=config["site"],
+        server=server,
+        forum_name=forum_info.name.title(),  # Capitalize for display
+        forum_channel_name=forum_info.name,  # Original case for URLs
+        thread_name=thread_name,
+        thread_title=thread_title,
+        archives_by_year=archives_by_year,
+    )
+
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(html)
+
+
 def generate_forum_index(
     config: dict,
     server: dict,
@@ -431,6 +515,29 @@ def main() -> None:
                         )
 
                         print(f"  ✓ Generated forum index: {forum_name} ({len(threads)} threads)")
+
+                        # Generate thread index pages
+                        thread_count = 0
+                        for thread in threads:
+                            thread_dir = forum_dir / thread["name"]
+                            if thread_dir.exists() and thread_dir.is_dir():
+                                # Collect thread archives
+                                archives = collect_thread_archives(thread_dir)
+
+                                if archives:  # Only generate if there are archives
+                                    generate_thread_index(
+                                        config,
+                                        server_data,
+                                        forum_info,
+                                        thread["name"],
+                                        thread["title"],
+                                        archives,
+                                        thread_dir / "index.html",
+                                    )
+                                    thread_count += 1
+
+                        if thread_count > 0:
+                            print(f"  ✓ Generated {thread_count} thread indexes for {forum_name}")
 
         print(f"\n✓ Generated {len(servers_data)} server indexes")
         print("✓ Site index at public/index.html")
