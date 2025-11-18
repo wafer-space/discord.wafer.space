@@ -658,6 +658,45 @@ by default now since I had hold violations screw me over before.
 {Reactions}
 👍
 
+[11/18/2025 15:43] _luke_w_
+Is it expected to get some antenna violations from building the project template?
+```
+* Antenna
+Failed 𐄂
+Pin violations: 17
+Net violations: 11
+Check the report directory of OpenROAD.CheckAntennas.
+```
+
+checking the CI run here I do see the same violations: https://github.com/wafer-space/gf180mcu-project-template/actions/runs/19297076321/job/55181634117
+
+{Embed}
+https://github.com/wafer-space/gf180mcu-project-template/actions/runs/19297076321/job/55181634117
+Remove `set_driving_cell` from SDC file · wafer-space/gf180mcu-pro...
+Project template for wafer.space MPW runs using the gf180mcu PDK - Remove `set_driving_cell` from SDC file · wafer-space/gf180mcu-project-template@9b6c284
+project-template_media/gf180mcu-project-template-DF039
+
+
+[11/18/2025 15:47] 246tnt
+Yes
+
+
+[11/18/2025 15:47] _luke_w_
+Ok, thanks 🙂 are they concerning or just something to waive?
+
+
+[11/18/2025 16:08] mole99
+That is something that requires a closer look into OpenROAD and LibreLane in order to find a proper solution. For large ratios you can manually insert ECO diodes.
+
+So far, most (all?) Tiny Tapeout designs seem to work just fine, and almost all of them have some antenna violations.
+
+{Reactions}
+❤️
+
+[11/18/2025 16:09] mole99
+Search for `INSERT_ECO_DIODES` in https://librelane.readthedocs.io/en/latest/reference/step_config_vars.html
+
+
 ==============================================================
-Exported 116 message(s)
+Exported 121 message(s)
 ==============================================================

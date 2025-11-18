@@ -210,3 +210,19 @@ PL_RESIZER_HOLD_MAX_BUFFER_PCT: 100
 ```
 by default now since I had hold violations screw me over before.","","👍 (1)"
 "738396032295108721","bailey8889","2025-11-18T12:45:40.1220000+00:00","@ReJ aka Renaldas Zioma If you're just running a batch job with no editing, you probably don't need file locking. Disabling this with the magic command `locking disable` may allow you to load large designs without changing the ulimit. http://opencircuitdesign.com/magic/commandref/locking.html","","👍 (1)"
+"803213471402688522","_luke_w_","2025-11-18T15:43:17.6470000+00:00","Is it expected to get some antenna violations from building the project template?
+```
+* Antenna
+Failed 𐄂
+Pin violations: 17
+Net violations: 11
+Check the report directory of OpenROAD.CheckAntennas.
+```
+
+checking the CI run here I do see the same violations: https://github.com/wafer-space/gf180mcu-project-template/actions/runs/19297076321/job/55181634117","",""
+"596068704471482370","246tnt","2025-11-18T15:47:07.7430000+00:00","Yes","",""
+"803213471402688522","_luke_w_","2025-11-18T15:47:38.2630000+00:00","Ok, thanks 🙂 are they concerning or just something to waive?","",""
+"323371864074485771","mole99","2025-11-18T16:08:21.3440000+00:00","That is something that requires a closer look into OpenROAD and LibreLane in order to find a proper solution. For large ratios you can manually insert ECO diodes.
+
+So far, most (all?) Tiny Tapeout designs seem to work just fine, and almost all of them have some antenna violations.","","❤️ (1)"
+"323371864074485771","mole99","2025-11-18T16:09:22.2250000+00:00","Search for `INSERT_ECO_DIODES` in https://librelane.readthedocs.io/en/latest/reference/step_config_vars.html","",""
