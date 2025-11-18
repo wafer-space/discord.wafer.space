@@ -74,6 +74,16 @@ jobs:
         continue-on-error: true
         id: organize
 
+      - name: Migrate existing media to month directories
+        if: steps.organize.outcome == 'success' || steps.organize.outcome == 'failure'
+        env:
+          PYTHONPATH: .
+        run: |
+          echo "Migrating existing media files..."
+          uv run python scripts/migrate_media.py
+        continue-on-error: true
+        id: migrate
+
       - name: Run navigation generator
         if: steps.organize.outcome == 'success' || steps.organize.outcome == 'failure'
         env:
