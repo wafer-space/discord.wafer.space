@@ -5618,6 +5618,44 @@ thanks! might take you up on that once I start integrating into the project temp
 Started a thread.
 
 
+[11/18/2025 17:38] mole99
+Important notice regarding the foundry SRAM models ‼️
+
+If you're as innocent as me, you might think that the meaning of the SRAM control signals is as follows:
+
+-    CEN = Chip Enable
+-    GWEN = Global Write Enable
+-    WEN = Write Enable
+
+Far from it! The real meaning is actually:
+
+-    CEN = Chip Enable Negative
+-    GWEN = Global Write Enable Negative
+-    WEN = Write Enable Negative
+
+All of the control signals need to be negated. (I would have preferred CEB, GWEB and WEB...)
+
+Another pitfall: in order for the SRAM model to work, it needs to see a falling edge on CEN. Therefore, you cannot start the simulation with CEN low.
+
+Thank you for your attention 😄
+
+
+[11/18/2025 17:45] 246tnt
+Oh that's just mean.
+
+{Reactions}
+🥲
+
+[11/18/2025 17:54] mole99
+( @BreakingTaps )
+
+{Reactions}
+👀
+
+[11/18/2025 18:20] polyfractal
+will check my code when I get home, cheers for the note!
+
+
 ==============================================================
-Exported 1,090 message(s)
+Exported 1,094 message(s)
 ==============================================================

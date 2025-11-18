@@ -1358,3 +1358,25 @@ https://www.crowdsupply.com/wafer-space/gf180mcu-run-1/updates/tholin-feature","
 "323371864074485771","mole99","2025-11-17T15:20:05.2140000+00:00","Feel free to ask if you get stuck at any point in the process.","",""
 "384390069412429834","polyfractal","2025-11-17T15:22:26.4190000+00:00","thanks! might take you up on that once I start integrating into the project template 🙂","","👍 (1)"
 "732347216412278825","urish","2025-11-18T10:43:12.1640000+00:00","Started a thread.","",""
+"323371864074485771","mole99","2025-11-18T17:38:17.9250000+00:00","Important notice regarding the foundry SRAM models ‼️
+
+If you're as innocent as me, you might think that the meaning of the SRAM control signals is as follows:
+
+-    CEN = Chip Enable
+-    GWEN = Global Write Enable
+-    WEN = Write Enable
+
+Far from it! The real meaning is actually:
+
+-    CEN = Chip Enable Negative
+-    GWEN = Global Write Enable Negative
+-    WEN = Write Enable Negative
+
+All of the control signals need to be negated. (I would have preferred CEB, GWEB and WEB...)
+
+Another pitfall: in order for the SRAM model to work, it needs to see a falling edge on CEN. Therefore, you cannot start the simulation with CEN low.
+
+Thank you for your attention 😄","",""
+"596068704471482370","246tnt","2025-11-18T17:45:51.7950000+00:00","Oh that's just mean.","","🥲 (1)"
+"323371864074485771","mole99","2025-11-18T17:54:38.4900000+00:00","( @BreakingTaps )","","👀 (1)"
+"384390069412429834","polyfractal","2025-11-18T18:20:53.3540000+00:00","will check my code when I get home, cheers for the note!","",""
