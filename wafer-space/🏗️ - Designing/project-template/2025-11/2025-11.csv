@@ -184,7 +184,7 @@ Looking at timestamps, klayout drc was 2h 48 min of that.","",""
 "220639106915368960","tholin","2025-11-17T17:57:17.3190000+00:00","Something changed. KLayout DRC is so much slower now.","",""
 "323371864074485771","mole99","2025-11-17T18:52:44.9820000+00:00","There haven't been changes to the PDK for two weeks: https://github.com/wafer-space/gf180mcu
 Although a number of changes are coming up.","",""
-"220639106915368960","tholin","2025-11-17T21:17:26.0910000+00:00","And why are my analog signals not getting routed?","project-template_media/image-C20A2.png",""
+"220639106915368960","tholin","2025-11-17T21:17:26.0910000+00:00","And why are my analog signals not getting routed?","project-template_media/image-C20A2.png","😮 (1)"
 "220639106915368960","tholin","2025-11-17T21:31:46.2870000+00:00","I CTRL+F’d for ""analog"" in the global routing logs and found nothing. Its skipping it.","",""
 "596068704471482370","246tnt","2025-11-17T21:33:46.8780000+00:00","Are they defined any differently in your netlist ?","",""
 "220639106915368960","tholin","2025-11-17T21:35:21.6610000+00:00","No","",""
@@ -226,3 +226,34 @@ checking the CI run here I do see the same violations: https://github.com/wafer-
 
 So far, most (all?) Tiny Tapeout designs seem to work just fine, and almost all of them have some antenna violations.","","❤️ (1)"
 "323371864074485771","mole99","2025-11-18T16:09:22.2250000+00:00","Search for `INSERT_ECO_DIODES` in https://librelane.readthedocs.io/en/latest/reference/step_config_vars.html","",""
+"803213471402688522","_luke_w_","2025-11-18T17:25:23.7510000+00:00","Thanks, I guess I'll worry about that later then 😅","","😁 (1)"
+"803213471402688522","_luke_w_","2025-11-18T17:25:55.7690000+00:00","In `chip_core.sv` in the example project, why does it have `keep` attributes on the SRAM? Are they just left in from initial hacking or are they required?
+
+```
+    logic [7:0] sram_0_out;
+
+    (* keep *)
+    gf180mcu_fd_ip_sram__sram512x8m8wm1 sram_0 (
+        `ifdef USE_POWER_PINS
+        .VDD  (VDD),
+        .VSS  (VSS),
+        `endif
+
+        .CLK  (clk),
+        .CEN  (1'b1),
+        .GWEN (1'b0),
+        .WEN  (8'b0),
+        .A    ('0),
+        .D    ('0),
+        .Q    (sram_0_out)
+    );
+```","",""
+"803213471402688522","_luke_w_","2025-11-18T17:26:56.7920000+00:00","I will happily cargo cult it into my own memory wrappers, I was just curious","",""
+"323371864074485771","mole99","2025-11-18T17:28:36.3930000+00:00","The former. You should be able to remove the `(* keep *)` and since Yosys sees that the outputs of the macro are being used, it will keep it. I'll remove it the next time I push another change to the template :)","",""
+"803213471402688522","_luke_w_","2025-11-18T17:29:01.1470000+00:00","ok nice thanks, I thought that would be the case but wasn't sure if there were hidden gotchas","","👍 (1)"
+"803213471402688522","_luke_w_","2025-11-18T17:30:15.9540000+00:00","flow related question (if the answer is ""RTFM"" I can attempt to do that): in our ASIC flow at work, if I hand-instantiate a cell then the buffer width can be changed during layout but otherwise it'll remain the same cell with the same hierarchical path. Is that the case here or do I need to add `(* dont_touch keep *)` etc to my cell wrappers?","",""
+"323371864074485771","mole99","2025-11-18T17:34:17.1230000+00:00","Cell attributes are currently not retained. You can set `SYNTH_WRITE_NOATTR` to false and they should be passed on to OpenROAD.
+However, there's `RSZ_DONT_TOUCH_RX` and `RSZ_DONT_TOUCH_LIST` if you want to keep a cell or net untouched.
+I think if you just set the `(* keep *)` attribute on a stdcell, Yosys will instantiate the stdcell and OpenROAD is free to change it's buffer width.","","👍 (1)"
+"803213471402688522","_luke_w_","2025-11-18T17:34:51.4930000+00:00","nice, thanks","",""
+"803213471402688522","_luke_w_","2025-11-18T17:35:33.0960000+00:00","so it sounds like just putting `(* keep *)` on my cells is what I want; quite happy for the tools to change the drive as I don't fancy going and fixing all the transition violations myself 🙂","","👌 (1)"
