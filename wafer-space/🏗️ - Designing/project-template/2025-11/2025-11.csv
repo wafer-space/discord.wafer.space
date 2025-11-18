@@ -257,3 +257,5 @@ However, there's `RSZ_DONT_TOUCH_RX` and `RSZ_DONT_TOUCH_LIST` if you want to ke
 I think if you just set the `(* keep *)` attribute on a stdcell, Yosys will instantiate the stdcell and OpenROAD is free to change it's buffer width.","","👍 (1)"
 "803213471402688522","_luke_w_","2025-11-18T17:34:51.4930000+00:00","nice, thanks","",""
 "803213471402688522","_luke_w_","2025-11-18T17:35:33.0960000+00:00","so it sounds like just putting `(* keep *)` on my cells is what I want; quite happy for the tools to change the drive as I don't fancy going and fixing all the transition violations myself 🙂","","👌 (1)"
+"543162393413287956","h.tamas","2025-11-18T17:44:35.0370000+00:00","FYI time driven placement (enabled by default) ignores the `RSZ_DONT_TOUCH_*` setting and resizes the cells nonetheless. You can work around it by setting `PL_TIME_DRIVEN` to 0.","",""
+"323371864074485771","mole99","2025-11-18T17:47:17.3720000+00:00","Yes, that is actually a ""bug"" in LibreLane as `dont_touch` does not prevent placement. So we could actually keep the attribute throughout GPL. See here: https://github.com/librelane/librelane/issues/695","","👍 (1)"
