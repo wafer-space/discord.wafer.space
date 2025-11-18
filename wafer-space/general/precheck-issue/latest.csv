@@ -15,3 +15,11 @@ PrecheckFlow - Stage 3 - Generate ID ━━━━━━╸                      
 Error: The precheck failed with the following exception: 
 Generate ID: subprocess (1, ['/nix/store/5fq98lrmhfma10j7bv85dfi3wxs9hddi-python3-3.12.10-env/bin/python3.12', '/home/runner/work/tinytapeout-gf-0p2-staging/tinytapeout-gf-0p2-staging/gf180mcu-precheck/scripts/klayout/generate_id.py', '/home/runner/work/tinytapeout-gf-0p2-staging/tinytapeout-gf-0p2-staging/gf180mcu-precheck/runs/RUN_2025-11-18_10-40-06/1-klayout-readlayout/tt_gf_wrapper.gds', '/home/runner/work/tinytapeout-gf-0p2-staging/tinytapeout-gf-0p2-staging/gf180mcu-precheck/runs/RUN_2025-11-18_10-40-06/3-klayout-generateid/tt_gf_wrapper.gds', '--id', 'FFFFFFFF']) failed
 ```","",""
+"323371864074485771","mole99","2025-11-18T11:37:32.0980000+00:00","Hi Uri, this is an actual issue that could be reported more clearly. The chip needs an instance of `gf180mcu_ws_ip__id` somewhere in the design. It will get replaced with the QR-code that contains the ID for your design.
+You can take a look at the example design how to place it in the bottom left corner outside of the padring.","",""
+"732347216412278825","urish","2025-11-18T11:39:03.0350000+00:00","Thanks! 
+
+Cc @tnt","",""
+"732347216412278825","urish","2025-11-18T11:39:28.9370000+00:00","Does the precheck report all the issues found or only the first one?","",""
+"596068704471482370","246tnt","2025-11-18T11:42:03.7240000+00:00","@mole99 Does the instance need to be at the top level or can it be in a subcell ?","",""
+"323371864074485771","mole99","2025-11-18T11:46:56.9250000+00:00","It can be anywhere in the hierarchy. I simply get the cell from the layout context and replace its contents. Let me know if that doesn't work.","","👍 (1)"

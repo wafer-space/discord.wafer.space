@@ -22,6 +22,31 @@ Generate ID: subprocess (1, ['/nix/store/5fq98lrmhfma10j7bv85dfi3wxs9hddi-python
 ```
 
 
+[11/18/2025 11:37] mole99
+Hi Uri, this is an actual issue that could be reported more clearly. The chip needs an instance of `gf180mcu_ws_ip__id` somewhere in the design. It will get replaced with the QR-code that contains the ID for your design.
+You can take a look at the example design how to place it in the bottom left corner outside of the padring.
+
+
+[11/18/2025 11:39] urish
+Thanks! 
+
+Cc @tnt
+
+
+[11/18/2025 11:39] urish
+Does the precheck report all the issues found or only the first one?
+
+
+[11/18/2025 11:42] 246tnt
+@mole99 Does the instance need to be at the top level or can it be in a subcell ?
+
+
+[11/18/2025 11:46] mole99
+It can be anywhere in the hierarchy. I simply get the cell from the layout context and replace its contents. Let me know if that doesn't work.
+
+{Reactions}
+👍
+
 ==============================================================
-Exported 1 message(s)
+Exported 6 message(s)
 ==============================================================

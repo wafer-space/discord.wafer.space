@@ -628,6 +628,34 @@ I haven't added this to the CI yet since I though it would quicky fill up the av
 For some reason I get hold violations when I build locally (MacOS could be a problem here 😉 ), but it is fine building on github. Investigating atm.
 
 
+[11/18/2025 11:59] mole99
+The Nix flake in the template uses LibreLane's create-shell: https://github.com/librelane/librelane/blob/dev/nix/create-shell.nix
+It seems that mkShell has a `shellHook` that could be used for that. However, I'm not sure how to override this from the template.
+
+{Reactions}
+👍
+
+[11/18/2025 12:02] mole99
+Strange. There may be slight differences between the Linux and mac version of OpenROAD. If your hold violations are only just over the limit, perhaps that could make the difference.
+Make sure your clock tree is good, and you could increase the `PL_RESIZER_HOLD_SLACK_MARGIN`.
+
+
+[11/18/2025 12:21] tholin
+All of my configs contain
+```
+GRT_RESIZER_HOLD_SLACK_MARGIN: 0.1
+PL_RESIZER_HOLD_SLACK_MARGIN: 0.1
+PL_RESIZER_HOLD_MAX_BUFFER_PCT: 100
+```
+by default now since I had hold violations screw me over before.
+
+{Reactions}
+👍
+
+[11/18/2025 12:45] bailey8889
+@ReJ aka Renaldas Zioma If you're just running a batch job with no editing, you probably don't need file locking. Disabling this with the magic command `locking disable` may allow you to load large designs without changing the ulimit. http://opencircuitdesign.com/magic/commandref/locking.html
+
+
 ==============================================================
-Exported 112 message(s)
+Exported 116 message(s)
 ==============================================================
