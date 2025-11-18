@@ -596,6 +596,38 @@ Are they defined any differently in your netlist ?
 No
 
 
+[11/18/2025 11:26] rzioma
+Z80 design is finally green on github \o/
+@mole99 is there a way to download artifacts / GDS from github job for local inspection? *I feel quite dumb for asking, but I couldn't figure how to do it so far*
+
+{Attachments}
+project-template_media/image-95F6F.png
+
+{Reactions}
+🎉
+
+[11/18/2025 11:30] rzioma
+Ah, when building locally on Mac it is necessary to increase file-descriptor count otherwise Magic streamout fails `ulimit -n 1024`
+
+
+[11/18/2025 11:32] rzioma
+@mole99 I tried to add `ulimit` to flake.nix as shell hook, but failing so far even with ChatGPT *"help"* 😓
+
+
+[11/18/2025 11:43] mole99
+Hi ReJ! Congrats 👏
+Just so you know, the CI only runs the implementation, as the DRC requires too much memory. So you need to make sure to run DRC locally.
+
+Yes, there are ways to upload artifacts: https://docs.github.com/en/actions/tutorials/store-and-share-data
+I haven't added this to the CI yet since I though it would quicky fill up the available storage space. But perhaps with a compression of the artifacts and a short retention time, it could be fine?
+
+{Reactions}
+❤️
+
+[11/18/2025 11:45] rzioma
+For some reason I get hold violations when I build locally (MacOS could be a problem here 😉 ), but it is fine building on github. Investigating atm.
+
+
 ==============================================================
-Exported 107 message(s)
+Exported 112 message(s)
 ==============================================================

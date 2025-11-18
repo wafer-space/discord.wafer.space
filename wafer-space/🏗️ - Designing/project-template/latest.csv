@@ -188,3 +188,13 @@ Although a number of changes are coming up.","",""
 "220639106915368960","tholin","2025-11-17T21:31:46.2870000+00:00","I CTRL+F’d for ""analog"" in the global routing logs and found nothing. Its skipping it.","",""
 "596068704471482370","246tnt","2025-11-17T21:33:46.8780000+00:00","Are they defined any differently in your netlist ?","",""
 "220639106915368960","tholin","2025-11-17T21:35:21.6610000+00:00","No","",""
+"538398807986274304","rzioma","2025-11-18T11:26:35.7690000+00:00","Z80 design is finally green on github \o/
+@mole99 is there a way to download artifacts / GDS from github job for local inspection? *I feel quite dumb for asking, but I couldn't figure how to do it so far*","project-template_media/image-95F6F.png","🎉 (1)"
+"538398807986274304","rzioma","2025-11-18T11:30:06.2530000+00:00","Ah, when building locally on Mac it is necessary to increase file-descriptor count otherwise Magic streamout fails `ulimit -n 1024`","",""
+"538398807986274304","rzioma","2025-11-18T11:32:04.7010000+00:00","@mole99 I tried to add `ulimit` to flake.nix as shell hook, but failing so far even with ChatGPT *""help""* 😓","",""
+"323371864074485771","mole99","2025-11-18T11:43:30.1240000+00:00","Hi ReJ! Congrats 👏
+Just so you know, the CI only runs the implementation, as the DRC requires too much memory. So you need to make sure to run DRC locally.
+
+Yes, there are ways to upload artifacts: https://docs.github.com/en/actions/tutorials/store-and-share-data
+I haven't added this to the CI yet since I though it would quicky fill up the available storage space. But perhaps with a compression of the artifacts and a short retention time, it could be fine?","","❤️ (1)"
+"538398807986274304","rzioma","2025-11-18T11:45:50.2380000+00:00","For some reason I get hold violations when I build locally (MacOS could be a problem here 😉 ), but it is fine building on github. Investigating atm.","",""
