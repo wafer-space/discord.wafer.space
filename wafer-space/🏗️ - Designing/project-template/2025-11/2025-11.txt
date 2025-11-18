@@ -775,6 +775,41 @@ Yes, that is actually a "bug" in LibreLane as `dont_touch` does not prevent plac
 {Reactions}
 👍
 
+[11/18/2025 20:32] _luke_w_
+Some incredibly minor DRCs (SRAM VDD/VSS *completely unconnected* while I figure out how the hierarchical paths are escaped) but in theory here is a processor, JTAG and 4 kB of RAM. Thanks for making the template, it made it super fast to get started 😄
+
+{Attachments}
+project-template_media/image-DCA97.png
+
+{Reactions}
+❤️ (2) 🎉
+
+[11/18/2025 20:35] _luke_w_
+Also I may have mixed up the SRAM dimensions and there is only a 15 um routing channel between the two rows 🤔
+
+
+[11/18/2025 22:57] _luke_w_
+I'm guessing it's expected that the `librelane-magicdrc` makefile target crashes out during klayout/magic XOR, since klayout was skipped?
+
+
+[11/18/2025 22:59] _luke_w_
+i.e.
+
+```
+Reading /home/luke/proj/riscboy-180/librelane/runs/RUN_2025-11-18_22-06-42/56-magic-streamout/chip_top.magic.gds ..
+ERROR: In /nix/store/g3fml7j9yabcq2cmqm5yh19fxrm1h919-python3-3.12.10-env/lib/python3.12/site-packages/librelane/scripts/klayout/xor.drc: 'source': Stream has unknown format: /home/luke/proj/riscboy-180/librelane/runs/RUN_2025-11-18_22-06-42/56-magic-streamout/chip_top.magic.gds in Layout::read
+Total elapsed: 0.010s  Memory: 413.00M
+ERROR: RuntimeError: 'source': Stream has unknown format: /home/luke/proj/riscboy-180/librelane/runs/RUN_2025-11-18_22-06-42/56-magic-streamout/chip_top.magic.gds in Layout::read in Executable::execute
+  /nix/store/g3fml7j9yabcq2cmqm5yh19fxrm1h919-python3-3.12.10-env/lib/python3.12/site-packages/librelane/scripts/klayout/xor.drc:78:in `execute'
+  :/built-in-macros/drc_interpreters.lym:31:in `instance_eval'
+  :/built-in-macros/drc_interpreters.lym:31:in `execute'
+/home/luke/proj/riscboy-180/librelane/runs/RUN_2025-11-18_22-06-42/56-magic-streamout/chip_top.magic.gds
+/home/luke/proj/riscboy-180/librelane/runs/RUN_2025-11-18_22-06-42/57-klayout-streamout/chip_top.klayout.gds
+```
+
+if it's a known issue with that target then I won't bother debugging 🙂
+
+
 ==============================================================
-Exported 132 message(s)
+Exported 136 message(s)
 ==============================================================

@@ -1,0 +1,95 @@
+{
+  "guild": {
+    "id": "1361349522684510449",
+    "name": "wafer.space Community",
+    "iconUrl": "yosys-check-errors-found_media/fb143eaa45770cbb40493d09b625e98b-09FD1.png"
+  },
+  "channel": {
+    "id": "1440427510159638538",
+    "type": "GuildPublicThread",
+    "categoryId": "1409660288822673408",
+    "category": "questions",
+    "name": "Yosys  check errors found",
+    "topic": null
+  },
+  "dateRange": {
+    "after": null,
+    "before": null
+  },
+  "exportedAt": "2025-11-18T22:47:44.4651894+00:00",
+  "messages": [
+    {
+      "id": "1440427510159638538",
+      "type": "Default",
+      "timestamp": "2025-11-18T19:44:40.271+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I had this  message, failing in stage `08-checker-yosyssynthchecks`:\n\n```\n39 Yosys check errors found.\n```\n\nGrepping for `error` in my yosys synthesis log didn't show any likely-looking errors. I eventually realised that 39 was exactly the number of bidi pad data pins I'd not  yet bothered to connect (early hacking!) so my issue is solved, but next time I get this message, how do I find the actual errors? Is `yosys-synthesis.log` the wrong place to look?",
+      "author": {
+        "id": "803213471402688522",
+        "name": "_luke_w_",
+        "discriminator": "0000",
+        "nickname": "LukeW",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "yosys-check-errors-found_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1440439686526144552",
+      "type": "Default",
+      "timestamp": "2025-11-18T20:33:03.343+00:00",
+      "timestampEdited": "2025-11-18T20:42:12.56+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "They are buried in `yosys-synthesis.log` (grep for \"Executing CHECK pass\") and also seem to appear separately in `reports/pre_synth_chk.rpt` (in the same yosys-synthesis step of the flow)\n\nIt is definitely confusing that the 08-checker step produces the error but isn't the producer of that file",
+      "author": {
+        "id": "537091611323007003",
+        "name": "aedancullen",
+        "discriminator": "0000",
+        "nickname": "aedancullen",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "yosys-check-errors-found_media/fc1bc9aef8b4b153a5765fb1d45f5241-983A5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "yosys-check-errors-found_media/1f44d-27259.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "803213471402688522",
+              "name": "_luke_w_",
+              "discriminator": "0000",
+              "nickname": "LukeW",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "yosys-check-errors-found_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    }
+  ],
+  "messageCount": 2
+}
