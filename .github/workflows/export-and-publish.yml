@@ -127,6 +127,60 @@ jobs:
           user_email: 'actions@github.com'
           commit_message: 'chore: deploy updated logs'
         continue-on-error: true
+        id: deploy
+
+      - name: Wait for GitHub Pages deployment
+        if: steps.deploy.outcome == 'success'
+        run: |
+          echo "Waiting 60 seconds for GitHub Pages to deploy..."
+          sleep 60
+
+      - name: Install muffet
+        if: steps.deploy.outcome == 'success'
+        run: |
+          wget https://github.com/raviqqe/muffet/releases/download/v2.11.1/muffet_linux_amd64.tar.gz
+          tar -xzf muffet_linux_amd64.tar.gz
+          chmod +x muffet
+          ./muffet --version
+
+      - name: Run muffet link check
+        if: steps.deploy.outcome == 'success'
+        id: muffet
+        continue-on-error: true
+        run: |
+          echo "Running link check on https://discord.wafer.space..."
+          ./muffet \
+            --timeout=30 \
+            --max-connections=10 \
+            --max-connections-per-host=5 \
+            --buffer-size=16384 \
+            --exclude='mailto:' \
+            --header='User-Agent:Mozilla/5.0' \
+            https://discord.wafer.space > muffet-report.txt 2>&1 || true
+
+          # Count errors
+          TOTAL_404=$(grep -c '404' muffet-report.txt || echo 0)
+          MEDIA_404=$(grep '404' muffet-report.txt | grep -c '_media/' || echo 0)
+
+          echo "total_404=$TOTAL_404" >> $GITHUB_OUTPUT
+          echo "media_404=$MEDIA_404" >> $GITHUB_OUTPUT
+
+          echo "Link Check Results:"
+          echo "- Total 404 errors: $TOTAL_404"
+          echo "- Media file 404s: $MEDIA_404"
+
+          # Upload report as artifact
+          if [ -f muffet-report.txt ]; then
+            echo "Report saved to muffet-report.txt"
+          fi
+
+      - name: Upload muffet report
+        if: steps.muffet.outcome == 'success' || steps.muffet.outcome == 'failure'
+        uses: actions/upload-artifact@v4
+        with:
+          name: muffet-report
+          path: muffet-report.txt
+          retention-days: 30
 
       - name: Report summary
         if: always()
@@ -135,6 +189,18 @@ jobs:
           echo "- **Status**: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Export Step**: ${{ steps.export.outcome }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Organize Step**: ${{ steps.organize.outcome }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Migrate Step**: ${{ steps.migrate.outcome }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Navigation Step**: ${{ steps.navigation.outcome }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Changes Detected**: ${{ steps.check_changes.outputs.has_changes }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Deploy Step**: ${{ steps.deploy.outcome }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Link Check Results" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.muffet.outcome }}" == "success" ] || [ "${{ steps.muffet.outcome }}" == "failure" ]; then
+            echo "- **Total 404 errors**: ${{ steps.muffet.outputs.total_404 }}" >> $GITHUB_STEP_SUMMARY
+            echo "- **Media file 404s**: ${{ steps.muffet.outputs.media_404 }}" >> $GITHUB_STEP_SUMMARY
+            echo "- **Report**: Download muffet-report artifact for full details" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- Link check was skipped or did not run" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
           echo "- **Timestamp**: $(date -u +%Y-%m-%d\ %H:%M\ UTC)" >> $GITHUB_STEP_SUMMARY
