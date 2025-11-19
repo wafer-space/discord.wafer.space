@@ -203,6 +203,21 @@ def get_forum_channels(state: dict, server_name: str, public_dir: Path) -> set[s
                 if item.name in forum_names:
                     print(f"  ⚠ Warning: '{item.name}' in state as forum but is a CATEGORY (contains channels)")
                 forum_names.discard(item.name)
+
+                # Also check channels INSIDE this category
+                for child in item.iterdir():
+                    if not child.is_dir():
+                        continue
+
+                    # Build full path for channels inside categories (category/channel)
+                    full_channel_name = f"{item.name}/{child.name}"
+
+                    # If child has date archives, it's a channel (not a forum)
+                    if has_date_archives(child):
+                        if full_channel_name in forum_names:
+                            print(f"  ⚠ Warning: '{full_channel_name}' in state as forum but is a CHANNEL (has date archives)")
+                        forum_names.discard(full_channel_name)
+
                 continue
 
             # Otherwise, it's potentially a forum (has subdirectories that don't have date archives)
