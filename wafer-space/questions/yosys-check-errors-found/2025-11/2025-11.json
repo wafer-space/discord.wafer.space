@@ -16,7 +16,7 @@
     "after": null,
     "before": null
   },
-  "exportedAt": "2025-11-19T02:13:02.3995731+00:00",
+  "exportedAt": "2025-11-19T03:40:09.1381757+00:00",
   "messages": [
     {
       "id": "1440427510159638538",
@@ -111,7 +111,29 @@
       "attachments": [],
       "embeds": [],
       "stickers": [],
-      "reactions": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDE42",
+            "code": "slight_smile",
+            "isAnimated": false,
+            "imageUrl": "yosys-check-errors-found_media/1f642-83E8A.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "537091611323007003",
+              "name": "aedancullen",
+              "discriminator": "0000",
+              "nickname": "aedancullen",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "yosys-check-errors-found_media/fc1bc9aef8b4b153a5765fb1d45f5241-983A5.png"
+            }
+          ]
+        }
+      ],
       "mentions": [],
       "inlineEmojis": [
         {
@@ -122,7 +144,73 @@
           "imageUrl": "yosys-check-errors-found_media/1f605-42B43.svg"
         }
       ]
+    },
+    {
+      "id": "1440533456940437708",
+      "type": "Default",
+      "timestamp": "2025-11-19T02:45:39.952+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "had to dig in a little more because I have a check.rpt saying:\n\n```\nFound and reported 0 problems.\n```\n\nAnd a state_out.json saying:\n\n```\n        \"synthesis__check_error__count\": 1\n```\n\nSeems like the  actual source for that log lint is here:\nhttps://github.com/librelane/librelane/blob/2bf4f4a399da9d41fbef24814cd7946bf9692ead/librelane/steps/pyosys.py#L50-L92",
+      "author": {
+        "id": "803213471402688522",
+        "name": "_luke_w_",
+        "discriminator": "0000",
+        "nickname": "LukeW",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "yosys-check-errors-found_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "librelane/librelane/steps/pyosys.py at 2bf4f4a399da9d41fbef24814cd7...",
+          "url": "https://github.com/librelane/librelane/blob/2bf4f4a399da9d41fbef24814cd7946bf9692ead/librelane/steps/pyosys.py",
+          "timestamp": null,
+          "description": "ASIC implementation flow infrastructure. Contribute to librelane/librelane development by creating an account on GitHub.",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "yosys-check-errors-found_media/librelane-2ADA1",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": [],
+          "inlineEmojis": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1440533779826348216",
+      "type": "Default",
+      "timestamp": "2025-11-19T02:46:56.934+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "which got me the correct error (which should really be fatal  in yosys!)\n```\nWarning: Wire $paramod$053944574b759a0e3f2ebe9134306bd1be3bd197\\twowire_dtm_core.\\ndtmresetreq is used but has no driver.\n```",
+      "author": {
+        "id": "803213471402688522",
+        "name": "_luke_w_",
+        "discriminator": "0000",
+        "nickname": "LukeW",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "yosys-check-errors-found_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
     }
   ],
-  "messageCount": 3
+  "messageCount": 5
 }

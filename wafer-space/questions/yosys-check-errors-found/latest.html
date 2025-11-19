@@ -18,7 +18,18 @@ It is definitely confusing that the 08-checker step produces the error but isn&#
     class="chatlog__emoji "
     alt="😅"
     title="sweat_smile"
-    src="yosys-check-errors-found_media/1f605-42B43.svg"></span></div></div></div></div></div>
+    src="yosys-check-errors-found_media/1f605-42B43.svg"></span></div><div class=chatlog__reactions><div class=chatlog__reaction title=slight_smile><img class="chatlog__emoji chatlog__emoji--small" alt=🙂 src=yosys-check-errors-found_media/1f642-83E8A.svg loading=lazy> <span class=chatlog__reaction-count>1</span></div></div></div></div></div></div>
+<div class=chatlog__message-group><div id=chatlog__message-container-1440533456940437708 class=chatlog__message-container data-message-id=1440533456940437708><div class=chatlog__message><div class=chatlog__message-aside><img class=chatlog__avatar src=yosys-check-errors-found_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png alt=Avatar loading=lazy></div><div class=chatlog__message-primary><div class=chatlog__header><span class=chatlog__author title=_luke_w_ data-user-id=803213471402688522>LukeW</span> <span class=chatlog__timestamp title="Wednesday, 19 November 2025 02:45"><a href=#chatlog__message-container-1440533456940437708>11/19/2025 02:45</a></span></div><div class="chatlog__content chatlog__markdown"><span class=chatlog__markdown-preserve>had to dig in a little more because I have a check.rpt saying:
+
+<code class="chatlog__markdown-pre chatlog__markdown-pre--multiline nohighlight">Found and reported 0 problems.</code>
+
+And a state_out.json saying:
+
+<code class="chatlog__markdown-pre chatlog__markdown-pre--multiline nohighlight">        &quot;synthesis__check_error__count&quot;: 1</code>
+
+Seems like the  actual source for that log lint is here:
+<a href="https://github.com/librelane/librelane/blob/2bf4f4a399da9d41fbef24814cd7946bf9692ead/librelane/steps/pyosys.py#L50-L92">https://github.com/librelane/librelane/blob/2bf4f4a399da9d41fbef24814cd7946bf9692ead/librelane/steps/pyosys.py#L50-L92</a></span></div><div class=chatlog__embed><div class=chatlog__embed-color-pill style=background-color:rgba(30,35,39,255)></div><div class=chatlog__embed-content-container><div class=chatlog__embed-content><div class=chatlog__embed-text><div class=chatlog__embed-title><a class=chatlog__embed-title-link href=https://github.com/librelane/librelane/blob/2bf4f4a399da9d41fbef24814cd7946bf9692ead/librelane/steps/pyosys.py><div class="chatlog__markdown chatlog__markdown-preserve">librelane/librelane/steps/pyosys.py at 2bf4f4a399da9d41fbef24814cd7...</div></a></div><div class=chatlog__embed-description><div class="chatlog__markdown chatlog__markdown-preserve">ASIC implementation flow infrastructure. Contribute to librelane/librelane development by creating an account on GitHub.</div></div></div><div class=chatlog__embed-thumbnail-container><a class=chatlog__embed-thumbnail-link href=yosys-check-errors-found_media/librelane-2ADA1> <img class=chatlog__embed-thumbnail src=yosys-check-errors-found_media/librelane-2ADA1 alt=Thumbnail loading=lazy> </a></div></div></div></div></div></div></div><div id=chatlog__message-container-1440533779826348216 class=chatlog__message-container data-message-id=1440533779826348216><div class=chatlog__message><div class=chatlog__message-aside><div class=chatlog__short-timestamp title="Wednesday, 19 November 2025 02:46">02:46</div></div><div class=chatlog__message-primary><div class="chatlog__content chatlog__markdown"><span class=chatlog__markdown-preserve>which got me the correct error (which should really be fatal  in yosys!)
+<code class="chatlog__markdown-pre chatlog__markdown-pre--multiline nohighlight">Warning: Wire $paramod$053944574b759a0e3f2ebe9134306bd1be3bd197\twowire_dtm_core.\ndtmresetreq is used but has no driver.</code></span></div></div></div></div></div>
 
 </div>
-<div class=postamble><div class=postamble__entry>Exported 3 message(s)</div><div class=postamble__entry>Timezone: UTC+0</div></div>
+<div class=postamble><div class=postamble__entry>Exported 5 message(s)</div><div class=postamble__entry>Timezone: UTC+0</div></div>
