@@ -259,7 +259,7 @@ I think if you just set the `(* keep *)` attribute on a stdcell, Yosys will inst
 "803213471402688522","_luke_w_","2025-11-18T17:35:33.0960000+00:00","so it sounds like just putting `(* keep *)` on my cells is what I want; quite happy for the tools to change the drive as I don't fancy going and fixing all the transition violations myself 🙂","","👌 (1)"
 "543162393413287956","h.tamas","2025-11-18T17:44:35.0370000+00:00","FYI time driven placement (enabled by default) ignores the `RSZ_DONT_TOUCH_*` setting and resizes the cells nonetheless. You can work around it by setting `PL_TIME_DRIVEN` to 0.","",""
 "323371864074485771","mole99","2025-11-18T17:47:17.3720000+00:00","Yes, that is actually a ""bug"" in LibreLane as `dont_touch` does not prevent placement. So we could actually keep the attribute throughout GPL. See here: https://github.com/librelane/librelane/issues/695","","👍 (1)"
-"803213471402688522","_luke_w_","2025-11-18T20:32:43.7750000+00:00","Some incredibly minor DRCs (SRAM VDD/VSS *completely unconnected* while I figure out how the hierarchical paths are escaped) but in theory here is a processor, JTAG and 4 kB of RAM. Thanks for making the template, it made it super fast to get started 😄","project-template_media/image-DCA97.png","❤️ (2),🎉 (1)"
+"803213471402688522","_luke_w_","2025-11-18T20:32:43.7750000+00:00","Some incredibly minor DRCs (SRAM VDD/VSS *completely unconnected* while I figure out how the hierarchical paths are escaped) but in theory here is a processor, JTAG and 4 kB of RAM. Thanks for making the template, it made it super fast to get started 😄","project-template_media/image-DCA97.png","❤️ (2),🎉 (2)"
 "803213471402688522","_luke_w_","2025-11-18T20:35:09.0490000+00:00","Also I may have mixed up the SRAM dimensions and there is only a 15 um routing channel between the two rows 🤔","",""
 "803213471402688522","_luke_w_","2025-11-18T22:57:18.3040000+00:00","I'm guessing it's expected that the `librelane-magicdrc` makefile target crashes out during klayout/magic XOR, since klayout was skipped?","",""
 "803213471402688522","_luke_w_","2025-11-18T22:59:02.0150000+00:00","i.e.
@@ -360,8 +360,19 @@ There was some effort to integrate OpenROAD's automatic macro placer into LibreL
 "803213471402688522","_luke_w_","2025-11-19T16:42:04.7000000+00:00","It's a really interesting question, I never thought about it. I just sort of accepted the layout folks at work spent days gently massaging the RAMs into place","",""
 "384390069412429834","polyfractal","2025-11-19T17:44:04.4500000+00:00","still not 100% confident yosys didnt optimize away half the design and my laptop locked up so I'm not sure if it actually completed successfully before I had to go to work...but it did finish enough to generate an output GDS 🥳 
 
-so much unused space 😂","project-template_media/Screenshot_From_2025-11-19_08-31-14-25A7F.png,project-template_media/Screenshot_From_2025-11-19_08-30-31-7065F.png","👍 (1)"
+so much unused space 😂","project-template_media/Screenshot_From_2025-11-19_08-31-14-25A7F.png,project-template_media/Screenshot_From_2025-11-19_08-30-31-7065F.png","👍 (1),👏 (1)"
 "840182560252624916","logic_anarchy","2025-11-19T17:56:18.3340000+00:00","My custom ASIC KianV SV32 SoC is now finalized!
 RV32IMA + Zicntr/Zicsr/Zifencei/SSTC with full MMU — running uLinux, Linux, and xv6.
 With huge help from @mole99  — and thanks to 
-@Tim 'mithro' Ansell","project-template_media/G6IpKybXoAE1ATj-B5552.png,project-template_media/G6IqYgdXkAAk0MJ-1801C.png","🥳 (1)"
+@Tim 'mithro' Ansell","project-template_media/G6IpKybXoAE1ATj-B5552.png,project-template_media/G6IqYgdXkAAk0MJ-1801C.png","🥳 (2),❤️ (1)"
+"384390069412429834","polyfractal","2025-11-19T18:08:09.1670000+00:00","Started a thread.","",""
+"840182560252624916","logic_anarchy","2025-11-19T18:08:19.3200000+00:00","It will run mailine linux/uLinux/XV6 Unix or newer","project-template_media/Screenshot_from_2025-11-19_19-01-14-47AD1.png,project-template_media/Screenshot_from_2025-11-19_19-07-16-CE074.png",""
+"840182560252624916","logic_anarchy","2025-11-19T18:30:35.6820000+00:00","I’ve shared a Python script to render the chip layout from GDS. It’s pretty slow and memory-hungry, but it works. I’ll put it on my GitHub repo later.","project-template_media/ieee_export_chip-E6A12.py","❤️ (1)"
+"384390069412429834","polyfractal","2025-11-19T18:33:51.2520000+00:00","definitely will try that when I get home!","",""
+"220639106915368960","tholin","2025-11-19T18:49:58.5110000+00:00","This script generates 3D models and is multithreaded
+https://github.com/AvalonSemiconductors/gfmpw1-multi/blob/main/gds2gltf.py","","❤️ (1)"
+"840182560252624916","logic_anarchy","2025-11-19T18:54:14.7500000+00:00","Richtig geil...danke","",""
+"323371864074485771","mole99","2025-11-19T19:07:07.7950000+00:00","And here is my entry in the list of layout renderers. It simply uses KLayout (`pip install klayout`) to render the layout and can therefore load both GDS and OAS. I disabled the filler layers to make the layout stand out better.","",""
+"323371864074485771","mole99","2025-11-19T19:07:12.7140000+00:00","","project-template_media/fabulous_fpga-A6060.png",""
+"323371864074485771","mole99","2025-11-19T19:07:47.3080000+00:00","","project-template_media/lay2img-E79C6.py",""
+"323371864074485771","mole99","2025-11-19T19:08:38.9330000+00:00","You can run it as `python3 lay2img.py librelane/runs/<timestamp>/final/gds/chip_top.gds image --width 4069 --height 6144` in the root of your repository.","",""
