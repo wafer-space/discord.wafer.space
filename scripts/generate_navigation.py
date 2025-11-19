@@ -109,18 +109,106 @@ def group_by_year(archives: list[dict]) -> dict[str, list[dict]]:
     return grouped
 
 
-def get_forum_channels(state: dict, server_name: str) -> set[str]:
-    """Get forum channel names from state.json.
+def has_date_archives(directory: Path) -> bool:
+    """Check if directory contains YYYY-MM date subdirectories (channel archives).
+
+    Args:
+        directory: Path to check
+
+    Returns:
+        True if directory has YYYY-MM subdirectories, False otherwise
+    """
+    if not directory.exists() or not directory.is_dir():
+        return False
+
+    for item in directory.iterdir():
+        if item.is_dir():
+            # Check if name matches YYYY-MM format
+            if len(item.name) == YYYY_MM_FORMAT_LENGTH and item.name[4] == "-":
+                try:
+                    # Verify it's actually a valid date format
+                    year, month = item.name.split("-")
+                    if year.isdigit() and month.isdigit():
+                        return True
+                except ValueError:
+                    continue
+    return False
+
+
+def is_category(directory: Path) -> bool:
+    """Check if directory is a category (contains channels, not a forum).
+
+    A category contains subdirectories that are channels (have date archives).
+    A forum contains subdirectories that are threads (no date archives).
+
+    Args:
+        directory: Path to check
+
+    Returns:
+        True if directory is a category, False if it's a forum or channel
+    """
+    if not directory.exists() or not directory.is_dir():
+        return False
+
+    # Check if subdirectories are channels (have date archives)
+    for item in directory.iterdir():
+        if item.is_dir() and item.name not in ["assets"]:
+            # If any subdirectory has date archives, this is a category
+            if has_date_archives(item):
+                return True
+    return False
+
+
+def get_forum_channels(state: dict, server_name: str, public_dir: Path) -> set[str]:
+    """Get forum channel names with directory structure cross-checking.
+
+    Directory type detection:
+    - **Category**: Has subdirectories that are channels (with date archives)
+    - **Forum**: Has subdirectories that are threads (no top-level date archives)
+    - **Channel**: Has top-level YYYY-MM date archives
+
+    Cross-checking rules:
+    1. If directory has date archives → it's a CHANNEL, remove from forums
+    2. If directory's subdirectories have date archives → it's a CATEGORY, remove from forums
+    3. Otherwise, keep as forum if in state.json
 
     Args:
         state: State dictionary loaded from state.json
         server_name: Server name to look up
+        public_dir: Path to public directory for cross-checking
 
     Returns:
         Set of forum channel names
     """
-    forums = state.get(server_name, {}).get("forums", {})
-    return set(forums.keys())
+    # Start with forums from state.json
+    forums_from_state = state.get(server_name, {}).get("forums", {})
+    forum_names = set(forums_from_state.keys())
+
+    # Cross-check with directory structure
+    server_dir = public_dir / server_name
+    if server_dir.exists():
+        for item in server_dir.iterdir():
+            if not item.is_dir() or item.name in ["assets"]:
+                continue
+
+            # If it has date archives at top level, it's a CHANNEL
+            if has_date_archives(item):
+                if item.name in forum_names:
+                    print(f"  ⚠ Warning: '{item.name}' in state as forum but is a CHANNEL (has date archives)")
+                forum_names.discard(item.name)
+                continue
+
+            # If subdirectories have date archives, it's a CATEGORY
+            if is_category(item):
+                if item.name in forum_names:
+                    print(f"  ⚠ Warning: '{item.name}' in state as forum but is a CATEGORY (contains channels)")
+                forum_names.discard(item.name)
+                continue
+
+            # Otherwise, it's potentially a forum (has subdirectories that don't have date archives)
+            # But only include if it's in state.json (don't auto-detect new forums)
+
+    return forum_names
 
 
 def generate_site_index(config: dict, servers: list[dict], output_path: Path) -> None:
@@ -465,7 +553,7 @@ def main() -> None:  # noqa: C901, PLR0912, PLR0915  # Main orchestration functi
             print(f"Generating index for {server_data['display_name']}...")
 
             server_name = server_data["name"]
-            forum_channels = get_forum_channels(state, server_name)
+            forum_channels = get_forum_channels(state, server_name, public_dir)
 
             # Sort channels alphabetically and mark forums
             channels_list = list(server_data["channels"].values())
