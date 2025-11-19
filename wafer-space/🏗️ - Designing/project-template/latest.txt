@@ -886,6 +886,53 @@ Worked like a charm. Precheck passed!
 {Reactions}
 🥳 (2)
 
+[11/19/2025 14:55] polyfractal
+is there an additional log to get more information about librelane build failures? Trying a test build of what I have to see the end-to-end workflow, and it's failing to wire up power pins to my sram macos (deep in the bowels of my project)
+
+```
+Connecting power net VDD to i_chip_core.u_core.tta_0.lsu_fu_0.sram_512x32_0.gf180mcu_fd_ip_sram__sram512x8m8wm1_0/VDD…
+[INFO] Made 0 connections.
+[06:50:13] ERROR    The following error was encountered while running the flow:  __main__.py:189 
+    Odb.SetPowerConnections failed with the following errors:
+         add_global_connections failed to make any connections for 'i_chip_core.u_core.tta_0.lsu_fu_0.sram_512x32_0.gf180mcu_fd_ip_sram__sram512x8m8wm1_0/VDD' to VDD. 
+```
+
+I've gone through and added the conditional stuff where needed
+```
+`ifdef USE_POWER_PINS
+.VDD  (VDD),
+.VSS  (VSS),
+`endif
+```
+
+
+[11/19/2025 14:59] polyfractal
+ah... yosys is deleting my sram module (and a bunch of other stuff)
+
+`Deleting now unused module tta::sram::sram_512x32.  `
+
+{Reactions}
+👍
+
+[11/19/2025 15:00] polyfractal
+ok new question.... why? 😂  I know there's a "keep" annotation to force it, but I don't think any of this is dead code? but I have no idea how synthesizing works
+
+
+[11/19/2025 15:00] mole99
+You can find all log files and artifacts in the `librelane/runs/*` directory.
+Making the power connections in the RTL is one way, the other is to use `PDN_MACRO_CONNECTIONS`.
+
+{Reactions}
+👀
+
+[11/19/2025 15:01] polyfractal
+aha! `PDN_MACRO_CONNECTIONS` looks much more convenient
+
+
+[11/19/2025 15:01] mole99
+Yes, if Yosys removes the SRAM instances, it's because it recognises that none of the outputs are being used. Optoimizing it away 😁
+
+
 ==============================================================
-Exported 147 message(s)
+Exported 153 message(s)
 ==============================================================

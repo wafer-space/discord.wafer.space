@@ -16,7 +16,7 @@
     "after": null,
     "before": null
   },
-  "exportedAt": "2025-11-19T14:12:16.4320551+00:00",
+  "exportedAt": "2025-11-19T15:02:12.9557259+00:00",
   "messages": [
     {
       "id": "1423349035892478074",
@@ -6128,7 +6128,263 @@
         "guildId": "1361349522684510449"
       },
       "inlineEmojis": []
+    },
+    {
+      "id": "1440717107729006732",
+      "type": "Default",
+      "timestamp": "2025-11-19T14:55:25.712+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "is there an additional log to get more information about librelane build failures? Trying a test build of what I have to see the end-to-end workflow, and it's failing to wire up power pins to my sram macos (deep in the bowels of my project)\n\n```\nConnecting power net VDD to i_chip_core.u_core.tta_0.lsu_fu_0.sram_512x32_0.gf180mcu_fd_ip_sram__sram512x8m8wm1_0/VDD…\n[INFO] Made 0 connections.\n[06:50:13] ERROR    The following error was encountered while running the flow:  __main__.py:189 \n    Odb.SetPowerConnections failed with the following errors:\n         add_global_connections failed to make any connections for 'i_chip_core.u_core.tta_0.lsu_fu_0.sram_512x32_0.gf180mcu_fd_ip_sram__sram512x8m8wm1_0/VDD' to VDD. \n```\n\nI've gone through and added the conditional stuff where needed\n```\n`ifdef USE_POWER_PINS\n.VDD  (VDD),\n.VSS  (VSS),\n`endif\n```",
+      "author": {
+        "id": "384390069412429834",
+        "name": "polyfractal",
+        "discriminator": "0000",
+        "nickname": "BreakingTaps",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1440718077145780338",
+      "type": "Default",
+      "timestamp": "2025-11-19T14:59:16.839+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "ah... yosys is deleting my sram module (and a bunch of other stuff)\n\n`Deleting now unused module tta::sram::sram_512x32.  `",
+      "author": {
+        "id": "384390069412429834",
+        "name": "polyfractal",
+        "discriminator": "0000",
+        "nickname": "BreakingTaps",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "project-template_media/1f44d-27259.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "323371864074485771",
+              "name": "mole99",
+              "discriminator": "0000",
+              "nickname": "mole99",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "project-template_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1440718373267968030",
+      "type": "Default",
+      "timestamp": "2025-11-19T15:00:27.44+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "ok new question.... why? \uD83D\uDE02  I know there's a \"keep\" annotation to force it, but I don't think any of this is dead code? but I have no idea how synthesizing works",
+      "author": {
+        "id": "384390069412429834",
+        "name": "polyfractal",
+        "discriminator": "0000",
+        "nickname": "BreakingTaps",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83D\uDE02",
+          "code": "joy",
+          "isAnimated": false,
+          "imageUrl": "project-template_media/1f602-168C5.svg"
+        }
+      ]
+    },
+    {
+      "id": "1440718399096488086",
+      "type": "Reply",
+      "timestamp": "2025-11-19T15:00:33.598+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You can find all log files and artifacts in the `librelane/runs/*` directory.\nMaking the power connections in the RTL is one way, the other is to use `PDN_MACRO_CONNECTIONS`.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "project-template_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC40",
+            "code": "eyes",
+            "isAnimated": false,
+            "imageUrl": "project-template_media/1f440-6C64D.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "384390069412429834",
+              "name": "polyfractal",
+              "discriminator": "0000",
+              "nickname": "BreakingTaps",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "project-template_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "384390069412429834",
+          "name": "polyfractal",
+          "discriminator": "0000",
+          "nickname": "BreakingTaps",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "project-template_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1440717107729006732",
+        "channelId": "1423348662318272592",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1440718587252703373",
+      "type": "Default",
+      "timestamp": "2025-11-19T15:01:18.458+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "aha! `PDN_MACRO_CONNECTIONS` looks much more convenient",
+      "author": {
+        "id": "384390069412429834",
+        "name": "polyfractal",
+        "discriminator": "0000",
+        "nickname": "BreakingTaps",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1440718760406421585",
+      "type": "Reply",
+      "timestamp": "2025-11-19T15:01:59.741+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yes, if Yosys removes the SRAM instances, it's because it recognises that none of the outputs are being used. Optoimizing it away \uD83D\uDE01",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "project-template_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "384390069412429834",
+          "name": "polyfractal",
+          "discriminator": "0000",
+          "nickname": "BreakingTaps",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "project-template_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1440718373267968030",
+        "channelId": "1423348662318272592",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83D\uDE01",
+          "code": "grin",
+          "isAnimated": false,
+          "imageUrl": "project-template_media/1f601-4E9BD.svg"
+        }
+      ]
     }
   ],
-  "messageCount": 147
+  "messageCount": 153
 }
