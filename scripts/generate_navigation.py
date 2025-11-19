@@ -44,25 +44,34 @@ def scan_exports(public_dir: Path) -> list[dict]:
     exports = []
 
     for html_file in public_dir.rglob("*.html"):
-        # Skip index files
-        if html_file.name == "index.html":
+        # Skip index files and latest.html
+        if html_file.name in ("index.html", "latest.html"):
             continue
 
-        # Parse path: public/server/channel/YYYY-MM.html
+        # Parse path: public/server/[category/]channel/YYYY-MM/YYYY-MM.html
+        # The parent directory of the HTML file is the YYYY-MM month directory
         parts = html_file.relative_to(public_dir).parts
-        if len(parts) >= MIN_PATH_PARTS_FOR_CHANNEL:
+
+        # Need at least: server, channel, month, file
+        if len(parts) >= 4:
             server = parts[0]
-            channel = parts[1]
             date = html_file.stem  # YYYY-MM
 
-            exports.append(
-                {
-                    "server": server,
-                    "channel": channel,
-                    "date": date,
-                    "path": str(html_file.relative_to(public_dir)),
-                }
-            )
+            # Verify this looks like a month directory (YYYY-MM format)
+            month_dir = parts[-2]  # Parent directory of the file
+            if len(month_dir) == YYYY_MM_FORMAT_LENGTH and month_dir[4] == "-":
+                # Build full channel path (everything between server and month directory)
+                channel_parts = parts[1:-2]  # Skip server and month/file
+                channel = "/".join(channel_parts)
+
+                exports.append(
+                    {
+                        "server": server,
+                        "channel": channel,
+                        "date": date,
+                        "path": str(html_file.relative_to(public_dir)),
+                    }
+                )
 
     return exports
 
