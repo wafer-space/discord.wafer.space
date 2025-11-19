@@ -271,16 +271,25 @@ def generate_server_index(
 
 
 def generate_channel_index(
-    config: dict, server: dict, channel: dict, archives: list[dict], output_path: Path
+    config: dict,
+    server: dict,
+    channel: dict,
+    archives: list[dict],
+    output_path: Path,
+    threads: list[dict] | None = None,
 ) -> None:
     """Generate channel archive index page.
+
+    Channels can have both message archives and threads. This generates an index
+    showing both if they exist.
 
     Args:
         config: Site configuration
         server: Server info dict
         channel: Channel info dict
-        archives: List of archive info dicts
+        archives: List of archive info dicts for main channel messages
         output_path: Where to write index.html
+        threads: Optional list of thread metadata dicts for threads in this channel
     """
     env = Environment(loader=FileSystemLoader("templates"))
     template = env.get_template("channel_index.html.j2")
@@ -288,7 +297,11 @@ def generate_channel_index(
     archives_by_year = group_by_year(archives)
 
     html = template.render(
-        site=config["site"], server=server, channel=channel, archives_by_year=archives_by_year
+        site=config["site"],
+        server=server,
+        channel=channel,
+        archives_by_year=archives_by_year,
+        threads=threads or [],
     )
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -575,12 +588,17 @@ def main() -> None:  # noqa: C901, PLR0912, PLR0915  # Main orchestration functi
                 if channel_data["name"] in forum_channels:
                     continue
 
+                # Collect threads for this channel (if any)
+                channel_dir = public_dir / server_data["name"] / channel_data["name"]
+                channel_threads = collect_forum_threads(channel_dir)
+
                 generate_channel_index(
                     config,
                     server_data,
                     channel_data,
                     channel_data["archives"],
-                    public_dir / server_data["name"] / channel_data["name"] / "index.html",
+                    channel_dir / "index.html",
+                    threads=channel_threads if channel_threads else None,
                 )
 
             # Generate forum index pages

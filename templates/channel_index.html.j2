@@ -18,8 +18,9 @@
 
     <main>
         <section class="archives">
+            <h2>Channel Messages</h2>
             {% for year, archives in archives_by_year.items() %}
-            <h2>{{ year }}</h2>
+            <h3>{{ year }}</h3>
             <ul class="archive-list">
                 {% for archive in archives %}
                 <li>
@@ -35,6 +36,26 @@
             </ul>
             {% endfor %}
         </section>
+
+        {% if threads %}
+        <section class="thread-list">
+            <h2>Threads in this Channel</h2>
+            {% for thread in threads %}
+            <div class="thread-card {% if thread.archived %}archived{% endif %}">
+                <h3>
+                    <a href="/{{ server.name }}/{{ channel.name }}/{{ thread.url }}">
+                        {{ thread.title }}
+                    </a>
+                </h3>
+                <span class="meta">
+                    {% if thread.archived %}<span class="archived-badge">Archived</span> • {% endif %}
+                    {{ thread.reply_count }} replies
+                    {% if thread.last_activity %} • Last: {{ thread.last_activity }}{% endif %}
+                </span>
+            </div>
+            {% endfor %}
+        </section>
+        {% endif %}
     </main>
 
     <footer>
