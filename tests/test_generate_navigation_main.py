@@ -1,6 +1,7 @@
 # tests/test_generate_navigation_main.py
 """Tests for navigation generation main orchestration function."""
 
+import json
 import tempfile
 from pathlib import Path
 
@@ -52,8 +53,13 @@ def test_organize_data_groups_by_server_and_channel() -> None:
             json_path = public_dir / export["server"] / export["channel"] / f"{export['date']}.json"
             json_path.parent.mkdir(parents=True, exist_ok=True)
             with open(json_path, "w") as f:
-                for i in range(5):  # 5 messages per file
-                    f.write(f'{{"id": "{i}", "content": "test"}}\n')
+                # Use DiscordChatExporter JSON format
+                sample_data = {
+                    "guild": {"id": "123", "name": "Test"},
+                    "channel": {"id": "456", "name": export["channel"]},
+                    "messages": [{"id": str(i), "content": "test"} for i in range(5)]
+                }
+                json.dump(sample_data, f)
 
         servers_data = organize_data(exports, public_dir)
 
@@ -99,7 +105,13 @@ def test_organize_data_calculates_stats() -> None:
             json_path = public_dir / export["server"] / export["channel"] / f"{export['date']}.json"
             json_path.parent.mkdir(parents=True, exist_ok=True)
             with open(json_path, "w") as f:
-                f.write('{"id": "1", "content": "test"}\n')
+                # Use DiscordChatExporter JSON format
+                sample_data = {
+                    "guild": {"id": "123", "name": "Test"},
+                    "channel": {"id": "456", "name": export["channel"]},
+                    "messages": [{"id": "1", "content": "test"}]
+                }
+                json.dump(sample_data, f)
 
         servers_data = organize_data(exports, public_dir)
 

@@ -1,4 +1,5 @@
 # tests/test_generate_navigation.py
+import json
 import tempfile
 from pathlib import Path
 
@@ -82,12 +83,19 @@ def test_scan_exports_multiple_channels() -> None:
 
 
 def test_count_messages_from_json() -> None:
-    """Test counting messages from JSON file"""
+    """Test counting messages from JSON file in DiscordChatExporter format"""
+    sample_export = {
+        "guild": {"id": "123", "name": "Test"},
+        "channel": {"id": "456", "name": "test-channel"},
+        "messages": [
+            {"id": "1", "content": "Hello"},
+            {"id": "2", "content": "World"},
+            {"id": "3", "content": "Test"},
+        ]
+    }
+
     with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
-        # Write sample JSON lines
-        f.write('{"id": "1", "content": "Hello"}\n')
-        f.write('{"id": "2", "content": "World"}\n')
-        f.write('{"id": "3", "content": "Test"}\n')
+        json.dump(sample_export, f)
         json_path = f.name
 
     count = count_messages_from_json(json_path)
@@ -96,18 +104,20 @@ def test_count_messages_from_json() -> None:
     Path(json_path).unlink()
 
 
-def test_count_messages_from_json_empty_lines() -> None:
-    """Test counting messages ignores empty lines"""
+def test_count_messages_from_json_empty_messages_array() -> None:
+    """Test counting messages with empty messages array"""
+    sample_export = {
+        "guild": {"id": "123", "name": "Test"},
+        "channel": {"id": "456", "name": "test-channel"},
+        "messages": []
+    }
+
     with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
-        f.write('{"id": "1", "content": "Hello"}\n')
-        f.write("\n")
-        f.write('{"id": "2", "content": "World"}\n')
-        f.write("   \n")
-        f.write('{"id": "3", "content": "Test"}\n')
+        json.dump(sample_export, f)
         json_path = f.name
 
     count = count_messages_from_json(json_path)
-    assert count == EXPECTED_THREE_MESSAGES
+    assert count == 0
 
     Path(json_path).unlink()
 

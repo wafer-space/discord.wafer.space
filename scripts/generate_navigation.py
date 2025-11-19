@@ -71,21 +71,18 @@ def count_messages_from_json(json_path: str) -> int:
     """Count messages in JSON export file.
 
     Args:
-        json_path: Path to JSON file (JSONL format)
+        json_path: Path to JSON file (DiscordChatExporter format)
 
     Returns:
         Number of messages
     """
-    count = 0
     try:
-        with open(json_path) as f:
-            for line in f:
-                if line.strip():
-                    count += 1
-    except FileNotFoundError:
+        with open(json_path, encoding="utf-8") as f:
+            data = json.load(f)
+            messages = data.get("messages", [])
+            return len(messages)
+    except (FileNotFoundError, json.JSONDecodeError, KeyError):
         return 0
-
-    return count
 
 
 def group_by_year(archives: list[dict]) -> dict[str, list[dict]]:
