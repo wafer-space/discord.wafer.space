@@ -101,7 +101,9 @@ def test_fetch_guild_channels_includes_threads() -> None:
             stderr="",
         )
 
-        channels, channel_path_map = fetch_guild_channels("test_token", "guild123", include_threads=True)
+        channels, channel_path_map = fetch_guild_channels(
+            "test_token", "guild123", include_threads=True
+        )
 
         # Should include both regular channel and threads
         assert len(channels) == EXPECTED_THREE_CHANNELS
@@ -122,7 +124,9 @@ def test_fetch_guild_channels_without_threads() -> None:
     with patch("subprocess.run") as mock_run:
         mock_run.return_value = Mock(returncode=0, stdout="123456 | General / general\n", stderr="")
 
-        channels, channel_path_map = fetch_guild_channels("test_token", "guild123", include_threads=False)
+        channels, channel_path_map = fetch_guild_channels(
+            "test_token", "guild123", include_threads=False
+        )
 
         assert len(channels) == 1
         assert channels[0] == {"name": "general", "id": "123456", "parent_id": "General"}
@@ -143,7 +147,9 @@ def test_fetch_guild_channels_threads_inherit_parent_forum_name() -> None:
             stderr="",
         )
 
-        channels, channel_path_map = fetch_guild_channels("test_token", "guild123", include_threads=True)
+        channels, channel_path_map = fetch_guild_channels(
+            "test_token", "guild123", include_threads=True
+        )
 
         # Should have 5 channels total (2 forums + 3 threads)
         assert len(channels) == EXPECTED_FIVE_CHANNELS

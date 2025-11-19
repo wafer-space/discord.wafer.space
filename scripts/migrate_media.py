@@ -13,6 +13,9 @@ import shutil
 import sys
 from pathlib import Path
 
+# Constants
+YYYY_MM_FORMAT_LENGTH = 7  # Length of "YYYY-MM" date format
+
 
 def migrate_media_for_channel(channel_dir: Path) -> tuple[int, int]:
     """Migrate media for a single channel directory.
@@ -40,7 +43,7 @@ def migrate_media_for_channel(channel_dir: Path) -> tuple[int, int]:
             continue
 
         # Check if directory name looks like YYYY-MM
-        if not (len(month_dir.name) == 7 and month_dir.name[4] == "-"):
+        if not (len(month_dir.name) == YYYY_MM_FORMAT_LENGTH and month_dir.name[4] == "-"):
             continue
 
         # Destination: public/server/channel/YYYY-MM/{channel}_media/
@@ -64,7 +67,7 @@ def migrate_media_for_channel(channel_dir: Path) -> tuple[int, int]:
     if migrations > 0 and errors == 0:
         try:
             shutil.rmtree(source_media)
-            print(f"  ✓ Removed old media directory at channel level")
+            print("  ✓ Removed old media directory at channel level")
         except Exception as e:
             print(f"  ⚠ Could not remove old media directory: {e}")
 
@@ -97,7 +100,7 @@ def migrate_media_for_thread(thread_dir: Path) -> tuple[int, int]:
             continue
 
         # Check if directory name looks like YYYY-MM
-        if not (len(month_dir.name) == 7 and month_dir.name[4] == "-"):
+        if not (len(month_dir.name) == YYYY_MM_FORMAT_LENGTH and month_dir.name[4] == "-"):
             continue
 
         # Destination: public/server/forum/thread/YYYY-MM/{thread}_media/
@@ -127,7 +130,7 @@ def migrate_media_for_thread(thread_dir: Path) -> tuple[int, int]:
     return migrations, errors
 
 
-def main() -> None:
+def main() -> None:  # noqa: C901  # Main orchestration function
     """Entry point for media migration."""
     print("Media Migration Script")
     print("=" * 50)
@@ -155,7 +158,8 @@ def main() -> None:
 
             # Check if this is a forum (has subdirectories that are threads)
             is_forum = any(
-                d.is_dir() and not (len(d.name) == 7 and d.name[4] == "-") for d in item_dir.iterdir()
+                d.is_dir() and not (len(d.name) == YYYY_MM_FORMAT_LENGTH and d.name[4] == "-")
+                for d in item_dir.iterdir()
             )
 
             if is_forum:
@@ -164,7 +168,7 @@ def main() -> None:
                 for thread_dir in item_dir.iterdir():
                     if not thread_dir.is_dir():
                         continue
-                    if len(thread_dir.name) == 7 and thread_dir.name[4] == "-":
+                    if len(thread_dir.name) == YYYY_MM_FORMAT_LENGTH and thread_dir.name[4] == "-":
                         continue  # Skip month directories at forum level
 
                     migrations, errors = migrate_media_for_thread(thread_dir)
@@ -178,7 +182,7 @@ def main() -> None:
                 total_errors += errors
 
     print("\n" + "=" * 50)
-    print(f"Migration Summary:")
+    print("Migration Summary:")
     print(f"  Total migrations: {total_migrations}")
     print(f"  Total errors: {total_errors}")
 

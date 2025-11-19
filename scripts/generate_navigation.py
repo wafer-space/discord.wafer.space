@@ -12,6 +12,7 @@ from jinja2 import Environment, FileSystemLoader
 
 # Constants
 MIN_PATH_PARTS_FOR_CHANNEL = 3
+YYYY_MM_FORMAT_LENGTH = 7  # Length of "YYYY-MM" date format
 
 
 @dataclass
@@ -326,7 +327,7 @@ def collect_thread_archives(thread_dir: Path) -> list[dict]:
             continue
 
         # Check if directory name looks like YYYY-MM
-        if not (len(date_dir.name) == 7 and date_dir.name[4] == "-"):
+        if not (len(date_dir.name) == YYYY_MM_FORMAT_LENGTH and date_dir.name[4] == "-"):
             continue
 
         date = date_dir.name
@@ -354,7 +355,7 @@ def collect_thread_archives(thread_dir: Path) -> list[dict]:
     return archives
 
 
-def generate_thread_index(
+def generate_thread_index(  # noqa: PLR0913  # Thread index generation requires multiple contexts
     config: dict,
     server: dict,
     forum_info: ForumInfo,
@@ -425,7 +426,7 @@ def generate_forum_index(
     output_path.write_text(html)
 
 
-def main() -> None:
+def main() -> None:  # noqa: C901, PLR0912, PLR0915  # Main orchestration function
     """Entry point for navigation generation."""
     print("Generating navigation pages...")
 

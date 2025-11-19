@@ -217,7 +217,7 @@ def _update_channel_state_after_export(
         )
 
 
-def _process_single_channel(
+def _process_single_channel(  # noqa: PLR0913  # Orchestration function needs all context
     context: ChannelExportContext,
     channel: dict[str, str | None],
     channel_type: ChannelType,
@@ -470,7 +470,7 @@ def _parse_channel_line(line: str) -> dict[str, str | None] | None:
     return {"name": channel_name, "id": channel_id, "parent_id": parent_id}
 
 
-def fetch_guild_channels(
+def fetch_guild_channels(  # noqa: C901  # Complex parsing of DiscordChatExporter output
     token: str, guild_id: str, include_threads: bool = True
 ) -> tuple[list[dict[str, str | None]], dict[str, str]]:
     """Fetch all channels from a Discord guild using DiscordChatExporter.
@@ -528,7 +528,9 @@ def fetch_guild_channels(
                     # Build channel path map for hierarchical channels
                     # If channel has a parent_id (category/forum structure), store full path
                     if channel["parent_id"]:
-                        channel_path_map[channel["name"]] = f"{channel['parent_id']}/{channel['name']}"
+                        parent = channel["parent_id"]
+                        name = channel["name"]
+                        channel_path_map[name] = f"{parent}/{name}"
                     else:
                         channel_path_map[channel["name"]] = channel["name"]
 
@@ -595,7 +597,9 @@ def export_all_channels() -> dict[str, Any]:
         try:
             print("  Fetching channels from Discord...")
             include_threads = config["export"].get("include_threads", "all").lower() == "all"
-            channels, channel_path_map = fetch_guild_channels(token, server_config["guild_id"], include_threads)
+            channels, channel_path_map = fetch_guild_channels(
+                token, server_config["guild_id"], include_threads
+            )
             print(f"  Found {len(channels)} channels")
         except RuntimeError as e:
             print(f"  ERROR: {e}")
