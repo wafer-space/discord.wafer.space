@@ -290,4 +290,17 @@ CLOCK_PERIOD: 40 # 25 MHz
 I saw the warning about multiple clocks in there but hoping I can just ignore that and write a normal `.sdc` file.","",""
 "323371864074485771","mole99","2025-11-19T07:20:41.5210000+00:00","Started a thread.","",""
 "323371864074485771","mole99","2025-11-19T07:22:52.3250000+00:00","From what I know, this is only passed on to the SDC file.
-Yes, you should be able to fully customize your SDC.","",""
+Yes, you should be able to fully customize your SDC.","","👍 (1)"
+"538398807986274304","rzioma","2025-11-19T07:50:20.2110000+00:00","DRC is passing (minus some antenna violations).
+Tiny Z80 looks so lonely in there.","project-template_media/Pasted_Graphic_12-0D70E.png","blobclap (2)"
+"538398807986274304","rzioma","2025-11-19T07:55:35.9470000+00:00","@mole99  However I ran into some problems with `gf180mcu-precheck` repository. It:
+- crashes on my Ubuntu machine (*perhaps running out of memory, investigating*) during the Density check
+- fails to find qrcode library on OSX machine (*Error: Couldn't load the qrcode library.  *)","",""
+"323371864074485771","mole99","2025-11-19T07:58:33.3400000+00:00","Congrats! 👏
+You did enable the environment within the precheck, right?
+Because I specifically request the `qrcode` Python module 😅
+https://github.com/wafer-space/gf180mcu-precheck/blob/1b639dff3d87a50e0759541701c7d162e1765630/flake.nix#L47","",""
+"538398807986274304","rzioma","2025-11-19T08:03:18.2850000+00:00","ah, this might be the problem `pkgs.stdenv.isLinux`","","😆 (1)"
+"323371864074485771","mole99","2025-11-19T08:04:58.2480000+00:00","You're absolutely right! It's a leftover from a different flake, I completely overlooked it.","",""
+"323371864074485771","mole99","2025-11-19T08:05:14.7520000+00:00","Pushing a fix shortly...","","❤️ (1)"
+"323371864074485771","mole99","2025-11-19T08:09:15.9240000+00:00","@ReJ aka Renaldas Zioma You can give it another try now.","","👍 (1)"

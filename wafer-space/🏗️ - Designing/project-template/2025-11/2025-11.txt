@@ -832,7 +832,54 @@ Started a thread.
 From what I know, this is only passed on to the SDC file.
 Yes, you should be able to fully customize your SDC.
 
+{Reactions}
+👍
+
+[11/19/2025 07:50] rzioma
+DRC is passing (minus some antenna violations).
+Tiny Z80 looks so lonely in there.
+
+{Attachments}
+project-template_media/Pasted_Graphic_12-0D70E.png
+
+{Reactions}
+blobclap (2)
+
+[11/19/2025 07:55] rzioma
+@mole99  However I ran into some problems with `gf180mcu-precheck` repository. It:
+- crashes on my Ubuntu machine (*perhaps running out of memory, investigating*) during the Density check
+- fails to find qrcode library on OSX machine (*Error: Couldn't load the qrcode library.  *)
+
+
+[11/19/2025 07:58] mole99
+Congrats! 👏
+You did enable the environment within the precheck, right?
+Because I specifically request the `qrcode` Python module 😅
+https://github.com/wafer-space/gf180mcu-precheck/blob/1b639dff3d87a50e0759541701c7d162e1765630/flake.nix#L47
+
+
+[11/19/2025 08:03] rzioma
+ah, this might be the problem `pkgs.stdenv.isLinux`
+
+{Reactions}
+😆
+
+[11/19/2025 08:04] mole99
+You're absolutely right! It's a leftover from a different flake, I completely overlooked it.
+
+
+[11/19/2025 08:05] mole99
+Pushing a fix shortly...
+
+{Reactions}
+❤️
+
+[11/19/2025 08:09] mole99
+@ReJ aka Renaldas Zioma You can give it another try now.
+
+{Reactions}
+👍
 
 ==============================================================
-Exported 139 message(s)
+Exported 146 message(s)
 ==============================================================
