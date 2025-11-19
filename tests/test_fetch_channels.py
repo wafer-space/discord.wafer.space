@@ -22,11 +22,14 @@ def test_fetch_guild_channels_success() -> None:
             stderr="",
         )
 
-        channels = fetch_guild_channels("test_token", "guild123")
+        channels, channel_path_map = fetch_guild_channels("test_token", "guild123")
 
         assert len(channels) == EXPECTED_TWO_CHANNELS
         assert channels[0] == {"name": "announcements", "id": "123456", "parent_id": "Information"}
         assert channels[1] == {"name": "general", "id": "789012", "parent_id": "General"}
+        # Verify channel_path_map contains full hierarchical paths
+        assert channel_path_map["announcements"] == "Information/announcements"
+        assert channel_path_map["general"] == "General/general"
 
 
 def test_fetch_guild_channels_without_category() -> None:
@@ -36,11 +39,14 @@ def test_fetch_guild_channels_without_category() -> None:
             returncode=0, stdout="123456 | general\n789012 | announcements\n", stderr=""
         )
 
-        channels = fetch_guild_channels("test_token", "guild123")
+        channels, channel_path_map = fetch_guild_channels("test_token", "guild123")
 
         assert len(channels) == EXPECTED_TWO_CHANNELS
         assert channels[0] == {"name": "general", "id": "123456", "parent_id": None}
         assert channels[1] == {"name": "announcements", "id": "789012", "parent_id": None}
+        # Channels without categories should map to themselves
+        assert channel_path_map["general"] == "general"
+        assert channel_path_map["announcements"] == "announcements"
 
 
 def test_fetch_guild_channels_empty_output() -> None:
@@ -48,9 +54,10 @@ def test_fetch_guild_channels_empty_output() -> None:
     with patch("subprocess.run") as mock_run:
         mock_run.return_value = Mock(returncode=0, stdout="", stderr="")
 
-        channels = fetch_guild_channels("test_token", "guild123")
+        channels, channel_path_map = fetch_guild_channels("test_token", "guild123")
 
         assert channels == []
+        assert channel_path_map == {}
 
 
 def test_fetch_guild_channels_command_failure() -> None:
@@ -94,7 +101,7 @@ def test_fetch_guild_channels_includes_threads() -> None:
             stderr="",
         )
 
-        channels = fetch_guild_channels("test_token", "guild123", include_threads=True)
+        channels, channel_path_map = fetch_guild_channels("test_token", "guild123", include_threads=True)
 
         # Should include both regular channel and threads
         assert len(channels) == EXPECTED_THREE_CHANNELS
@@ -106,6 +113,8 @@ def test_fetch_guild_channels_includes_threads() -> None:
             "id": "789013",
             "parent_id": "general",
         }
+        # Verify channel_path_map for forum
+        assert channel_path_map["general"] == "General/general"
 
 
 def test_fetch_guild_channels_without_threads() -> None:
@@ -113,10 +122,11 @@ def test_fetch_guild_channels_without_threads() -> None:
     with patch("subprocess.run") as mock_run:
         mock_run.return_value = Mock(returncode=0, stdout="123456 | General / general\n", stderr="")
 
-        channels = fetch_guild_channels("test_token", "guild123", include_threads=False)
+        channels, channel_path_map = fetch_guild_channels("test_token", "guild123", include_threads=False)
 
         assert len(channels) == 1
         assert channels[0] == {"name": "general", "id": "123456", "parent_id": "General"}
+        assert channel_path_map["general"] == "General/general"
 
 
 def test_fetch_guild_channels_threads_inherit_parent_forum_name() -> None:
@@ -133,7 +143,7 @@ def test_fetch_guild_channels_threads_inherit_parent_forum_name() -> None:
             stderr="",
         )
 
-        channels = fetch_guild_channels("test_token", "guild123", include_threads=True)
+        channels, channel_path_map = fetch_guild_channels("test_token", "guild123", include_threads=True)
 
         # Should have 5 channels total (2 forums + 3 threads)
         assert len(channels) == EXPECTED_FIVE_CHANNELS
@@ -158,3 +168,6 @@ def test_fetch_guild_channels_threads_inherit_parent_forum_name() -> None:
             "id": "890123",
             "parent_id": "ideas",  # Should be parent forum name
         }
+        # Verify channel_path_map for forums
+        assert channel_path_map["questions"] == "Information/questions"
+        assert channel_path_map["ideas"] == "Information/ideas"

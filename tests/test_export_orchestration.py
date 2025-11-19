@@ -114,7 +114,7 @@ commit_author = "Test Bot"
                 }
 
                 with patch("scripts.export_channels.fetch_guild_channels") as mock_fetch:
-                    mock_fetch.return_value = []
+                    mock_fetch.return_value = ([], {})
 
                     with patch("scripts.export_channels.StateManager"):
                         with patch("scripts.export_channels.Path"):
@@ -139,7 +139,7 @@ commit_author = "Test Bot"
             }
 
             with patch("scripts.export_channels.fetch_guild_channels") as mock_fetch:
-                mock_fetch.return_value = [{"name": "general", "id": "123"}]
+                mock_fetch.return_value = ([{"name": "general", "id": "123"}], {})
 
                 with patch("scripts.export_channels.StateManager") as mock_state_class:
                     mock_state_instance = Mock()
@@ -179,7 +179,7 @@ commit_author = "Test Bot"
 
         with patch("scripts.export_channels.load_config", return_value=config):
             with patch("scripts.export_channels.fetch_guild_channels") as mock_fetch:
-                mock_fetch.return_value = []
+                mock_fetch.return_value = ([], {})
 
                 with patch("scripts.export_channels.StateManager") as mock_state_class:
                     mock_state = Mock()
@@ -215,11 +215,11 @@ commit_author = "Test Bot"
         with patch("scripts.export_channels.load_config", return_value=config):
             with patch("scripts.export_channels.fetch_guild_channels") as mock_fetch:
                 # Return 3 channels: 2 will pass filter, 1 will be excluded
-                mock_fetch.return_value = [
+                mock_fetch.return_value = ([
                     {"name": "general", "id": "111"},
                     {"name": "announcements", "id": "222"},
                     {"name": "private-chat", "id": "333"},
-                ]
+                ], {})
 
                 with patch("scripts.export_channels.StateManager") as mock_state_class:
                     mock_state = Mock()
@@ -259,7 +259,7 @@ commit_author = "Test Bot"
 
         with patch("scripts.export_channels.load_config", return_value=config):
             with patch("scripts.export_channels.fetch_guild_channels") as mock_fetch:
-                mock_fetch.return_value = [{"name": "general", "id": "123"}]
+                mock_fetch.return_value = ([{"name": "general", "id": "123"}], {})
 
                 with patch("scripts.export_channels.StateManager") as mock_state_class:
                     mock_state = Mock()
@@ -298,7 +298,7 @@ commit_author = "Test Bot"
 
         with patch("scripts.export_channels.load_config", return_value=config):
             with patch("scripts.export_channels.fetch_guild_channels") as mock_fetch:
-                mock_fetch.return_value = [{"name": "general", "id": "123"}]
+                mock_fetch.return_value = ([{"name": "general", "id": "123"}], {})
 
                 with patch("scripts.export_channels.StateManager") as mock_state_class:
                     mock_state = Mock()
@@ -345,7 +345,7 @@ commit_author = "Test Bot"
 
         with patch("scripts.export_channels.load_config", return_value=config):
             with patch("scripts.export_channels.fetch_guild_channels") as mock_fetch:
-                mock_fetch.return_value = [{"name": "general", "id": "123"}]
+                mock_fetch.return_value = ([{"name": "general", "id": "123"}], {})
 
                 with patch("scripts.export_channels.StateManager") as mock_state_class:
                     mock_state = Mock()
@@ -386,7 +386,7 @@ commit_author = "Test Bot"
 
         with patch("scripts.export_channels.load_config", return_value=config):
             with patch("scripts.export_channels.fetch_guild_channels") as mock_fetch:
-                mock_fetch.return_value = [{"name": "general", "id": "123"}]
+                mock_fetch.return_value = ([{"name": "general", "id": "123"}], {})
 
                 with patch("scripts.export_channels.StateManager") as mock_state_class:
                     mock_state = Mock()
@@ -482,11 +482,11 @@ commit_author = "Test Bot"
         with patch("scripts.export_channels.load_config", return_value=config):
             with patch("scripts.export_channels.fetch_guild_channels") as mock_fetch:
                 # Return forum channel and threads
-                mock_fetch.return_value = [
+                mock_fetch.return_value = ([
                     {"name": "questions", "id": "999", "parent_id": None},
                     {"name": "How to start?", "id": "111", "parent_id": "questions"},
                     {"name": "Help needed", "id": "222", "parent_id": "questions"},
-                ]
+                ], {})
 
                 with patch("scripts.export_channels.StateManager") as mock_state_class:
                     mock_state = Mock()
@@ -534,10 +534,10 @@ commit_author = "Test Bot"
                     with tempfile.TemporaryDirectory() as tmpdir:
                         with patch("scripts.export_channels.Path") as mock_path:
                             # Setup mocks
-                            mock_fetch.return_value = [
+                            mock_fetch.return_value = ([
                                 {"name": "questions", "id": "999", "parent_id": None},
                                 {"name": "How to start?", "id": "111", "parent_id": "questions"},
-                            ]
+                            ], {})
 
                             mock_run.return_value = (True, "")
 
@@ -626,14 +626,14 @@ commit_author = "Test Bot"
                                 mock_state.get_channel_state.return_value = None
                                 mock_state_class.return_value = mock_state
 
-                                mock_fetch.return_value = [
+                                mock_fetch.return_value = ([
                                     {"name": "questions", "id": "999", "parent_id": None},
                                     {
                                         "name": "How to start?",
                                         "id": "111",
                                         "parent_id": "questions",
                                     },
-                                ]
+                                ], {})
 
                                 mock_format.return_value = [
                                     "test",

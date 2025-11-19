@@ -53,6 +53,7 @@ def _determine_export_location(
     channel_type: ChannelType,
     channel_id: str,
     server_dir: Path,
+    channel_path_map: dict[str, str],
 ) -> tuple[str, Path, str]:
     """Determine export location and name based on channel type.
 
@@ -61,22 +62,29 @@ def _determine_export_location(
         channel_type: Type of channel
         channel_id: Channel ID
         server_dir: Server export directory
+        channel_path_map: Dict mapping channel names to their full hierarchical paths
 
     Returns:
         Tuple of (safe_name, export_dir, forum_name)
     """
     if channel_type == ChannelType.THREAD:
         forum_name_raw = channel.get("parent_id")
-        forum_name: str = forum_name_raw if forum_name_raw else "unknown-forum"
-        thread_dir = server_dir / forum_name
-        thread_dir.mkdir(exist_ok=True)
+        forum_name_simple: str = forum_name_raw if forum_name_raw else "unknown-forum"
+
+        # Look up the full hierarchical path for the forum
+        # If forum is "cob" inside "🏗️ - Designing", path_map will have "cob" -> "🏗️ - Designing/cob"
+        forum_full_path = channel_path_map.get(forum_name_simple, forum_name_simple)
+
+        thread_dir = server_dir / forum_full_path
+        thread_dir.mkdir(parents=True, exist_ok=True)
 
         # Sanitize thread name for filename
         channel_name_raw = channel.get("name")
         safe_name = sanitize_thread_name(
             channel_name_raw if channel_name_raw else "unknown", channel_id
         )
-        return safe_name, thread_dir, forum_name
+        # Return forum_full_path as the forum_name for proper state tracking
+        return safe_name, thread_dir, forum_full_path
     else:
         # Regular channel
         channel_name_raw = channel.get("name")
@@ -215,6 +223,7 @@ def _process_single_channel(
     channel_type: ChannelType,
     server_dir: Path,
     filters: tuple[list[str], list[str]],  # (include_patterns, exclude_patterns)
+    channel_path_map: dict[str, str],
 ) -> tuple[int, int, int, list[dict[str, str]]]:
     """Process and export a single channel.
 
@@ -224,6 +233,7 @@ def _process_single_channel(
         channel_type: Type of channel
         server_dir: Server export directory
         filters: Tuple of (include_patterns, exclude_patterns) for filtering
+        channel_path_map: Dict mapping channel names to their full hierarchical paths
 
     Returns:
         Tuple of (total_exports, channels_updated, channels_failed, errors)
@@ -248,7 +258,7 @@ def _process_single_channel(
 
     # Determine export location based on channel type
     safe_name, export_dir, forum_name = _determine_export_location(
-        channel, channel_type, channel_id, server_dir
+        channel, channel_type, channel_id, server_dir, channel_path_map
     )
     export_name = safe_name
 
@@ -462,7 +472,7 @@ def _parse_channel_line(line: str) -> dict[str, str | None] | None:
 
 def fetch_guild_channels(
     token: str, guild_id: str, include_threads: bool = True
-) -> list[dict[str, str | None]]:
+) -> tuple[list[dict[str, str | None]], dict[str, str]]:
     """Fetch all channels from a Discord guild using DiscordChatExporter.
 
     Args:
@@ -471,7 +481,9 @@ def fetch_guild_channels(
         include_threads: Whether to include threads (default: True)
 
     Returns:
-        List of channel dicts with 'name', 'id', and 'parent_id' keys
+        Tuple of:
+            - List of channel dicts with 'name', 'id', and 'parent_id' keys
+            - Dict mapping channel names to their full hierarchical paths
 
     Raises:
         RuntimeError: If channel fetching fails
@@ -491,6 +503,7 @@ def fetch_guild_channels(
         # Format: "ChannelID | Category / ChannelName" or "ChannelID | ChannelName"
         # Threads: " * ChannelID | Thread / ThreadName | Status"
         channels = []
+        channel_path_map: dict[str, str] = {}  # Maps channel name to full path
         current_parent_channel = None
 
         for line in result.stdout.strip().split("\n"):
@@ -512,7 +525,14 @@ def fetch_guild_channels(
                 if not is_thread:
                     current_parent_channel = channel["name"]
 
-        return channels
+                    # Build channel path map for hierarchical channels
+                    # If channel has a parent_id (category/forum structure), store full path
+                    if channel["parent_id"]:
+                        channel_path_map[channel["name"]] = f"{channel['parent_id']}/{channel['name']}"
+                    else:
+                        channel_path_map[channel["name"]] = channel["name"]
+
+        return channels, channel_path_map
 
     except subprocess.TimeoutExpired as e:
         raise RuntimeError("Channel fetching timed out after 30 seconds") from e
@@ -575,7 +595,7 @@ def export_all_channels() -> dict[str, Any]:
         try:
             print("  Fetching channels from Discord...")
             include_threads = config["export"].get("include_threads", "all").lower() == "all"
-            channels = fetch_guild_channels(token, server_config["guild_id"], include_threads)
+            channels, channel_path_map = fetch_guild_channels(token, server_config["guild_id"], include_threads)
             print(f"  Found {len(channels)} channels")
         except RuntimeError as e:
             print(f"  ERROR: {e}")
@@ -607,7 +627,7 @@ def export_all_channels() -> dict[str, Any]:
             channel_type = channel_classifications[chan_id]
 
             exports, updated, failed, errors = _process_single_channel(
-                context, channel, channel_type, server_dir, filters
+                context, channel, channel_type, server_dir, filters, channel_path_map
             )
 
             summary["total_exports"] += exports

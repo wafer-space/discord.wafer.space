@@ -34,20 +34,23 @@ def test_load_config_export_formats() -> None:
 
 
 def test_load_config_forum_channels() -> None:
-    """Test that forum_channels are loaded from config."""
+    """Test that forum_channels key is optional (forums are auto-detected)."""
     config = load_config()
 
     assert "servers" in config
     for _, server_config in config["servers"].items():
-        # Should have forum_channels list
-        assert "forum_channels" in server_config
-        assert isinstance(server_config["forum_channels"], list)
+        # forum_channels is now optional since forums are auto-detected
+        # If present, it should be a list
+        if "forum_channels" in server_config:
+            assert isinstance(server_config["forum_channels"], list)
 
 
 def test_load_config_forum_channels_values() -> None:
-    """Test specific forum channel values."""
+    """Test that servers can exist without manual forum channel configuration."""
     config = load_config()
 
     wafer_space = config["servers"]["wafer-space"]
-    assert "questions" in wafer_space["forum_channels"]
-    assert "ideas" in wafer_space["forum_channels"]
+    # Forum channels are now auto-detected, so this key is optional
+    # The config should work without manual forum_channels specification
+    assert "guild_id" in wafer_space
+    assert "name" in wafer_space
