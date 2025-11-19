@@ -37,9 +37,9 @@
             {% endfor %}
         </section>
 
-        {% if threads %}
         <section class="thread-list">
             <h2>Threads in this Channel</h2>
+            {% if threads %}
             {% for thread in threads %}
             <div class="thread-card {% if thread.archived %}archived{% endif %}">
                 <h3>
@@ -54,8 +54,10 @@
                 </span>
             </div>
             {% endfor %}
+            {% else %}
+            <p class="no-threads">No threads in this channel yet.</p>
+            {% endif %}
         </section>
-        {% endif %}
     </main>
 
     <footer>
