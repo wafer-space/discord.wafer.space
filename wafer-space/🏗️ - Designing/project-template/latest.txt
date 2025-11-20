@@ -1261,6 +1261,33 @@ How we can do the same here, excluding gf180mcu_fd_sc_mcu7t5v0__oai21_1  @mole99
 https://discordapp.com/channels/1009193568256135208/1438584424554827788
 
 
+[11/20/2025 17:11] mole99
+📢 Since the last announcement, a number of important changes have been made to both the PDK and the template.
+
+### PDK
+
+1. [#3](https://github.com/wafer-space/gf180mcu/pull/3): The seal ring generator has been updated.
+    - Now actually includes the glass cut.
+    - Pplus does not overlap comp, as required by DRC.
+2. [#3](https://github.com/wafer-space/gf180mcu/pull/3): Filler generation has been updated to ensure 10um spacing to the seal ring. (This was only a problem for smaller slot sizes).
+
+### Template
+
+1. The core ring now [connects to all vss pads again](https://github.com/wafer-space/gf180mcu-project-template/commit/c119e25b04b1dc3619bcd66cb508f901fd976410). (thanks @tnt!)
+2. [#22](https://github.com/wafer-space/gf180mcu-project-template/pull/22): Magic has been updated with fix that significantly reduces peak memory usage.
+3. [#21](https://github.com/wafer-space/gf180mcu-project-template/pull/21): The `render-image` Make target renders the GDS layout.
+4. [#21](https://github.com/wafer-space/gf180mcu-project-template/pull/21): The CI has been updated.
+    - Commands in the nix shell are now only executed once. (thanks @Egor Lukyanchenko!)
+    - Create a summary and upload artifacts (gds and image) ([Example](https://github.com/wafer-space/gf180mcu-project-template/actions/runs/19543720582))
+5. [#23](https://github.com/wafer-space/gf180mcu-project-template/pull/23): Workaround for a PDN issue.
+6. [#24](https://github.com/wafer-space/gf180mcu-project-template/pull/24): Fix antenna violations using `DRT_ANTENNA_REPAIR_ITERS` (disable if any issues occur).
+7. The [PDK version](https://github.com/wafer-space/gf180mcu-project-template/commit/b20168925c46fdd292e6084f31bfd8d312379d7e) has been pinned.
+
+Please update your repository in line with the template and clone the latest PDK.
+
+{Reactions}
+❤️
+
 ==============================================================
-Exported 214 message(s)
+Exported 215 message(s)
 ==============================================================
