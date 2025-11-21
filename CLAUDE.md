@@ -174,8 +174,20 @@ discord-download/
 Automated hourly exports with deployment:
 - Triggers: Hourly cron, manual dispatch, push to master
 - Steps: Export → Organize → Navigate → Commit state.json → Deploy to gh-pages
-- All steps use `continue-on-error: true` for robustness
 - State persisted by committing `state.json` back to master branch
+
+### Error Handling Policy
+
+**CRITICAL**: This project enforces honest error reporting in GitHub Actions workflows.
+
+**NEVER** use the following error suppression mechanisms:
+- `continue-on-error: true` in workflow steps
+- `|| true` to mask command failures
+- Any other mechanism that hides real failures
+
+**Rationale**: Workflows should fail visibly when there are real problems. Masking errors with `continue-on-error` or `|| true` creates a false sense of success and prevents discovery of underlying issues.
+
+**Instead**: Fix the root causes of failures so workflows pass legitimately. If certain failures are expected and acceptable, modify the scripts to handle them gracefully and exit with success codes when appropriate.
 
 ## Key Technical Details
 
