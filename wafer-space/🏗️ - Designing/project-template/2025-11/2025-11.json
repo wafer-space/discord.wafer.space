@@ -13,19 +13,19 @@
     "topic": null
   },
   "dateRange": {
-    "after": "2025-11-21T18:55:27.111+00:00",
+    "after": "2025-11-21T19:44:38.976+00:00",
     "before": null
   },
-  "exportedAt": "2025-11-21T19:44:36.2980043+00:00",
+  "exportedAt": "2025-11-21T20:51:28.7980708+00:00",
   "messages": [
     {
-      "id": "1441505073581789215",
+      "id": "1441515202679144510",
       "type": "Default",
-      "timestamp": "2025-11-21T19:06:31.411+00:00",
+      "timestamp": "2025-11-21T19:46:46.376+00:00",
       "timestampEdited": null,
       "callEndedTimestamp": null,
       "isPinned": false,
-      "content": "Does anyone know which step in the (template) flow is responsible for adding buffers on a high fanout net? I have a reset net with a fanout of ~1k and in my powered  netlist `./25-openroad-globalplacementskipio/chip_top.pnl.v` still has the reset synchroniser output going directly to all ~1k loads without buffering. This makes the following STAs meaningless because the reset net has like a 100 ns rise time",
+      "content": "ah, somewhat answered my own questions:\n\n1. the buffers are added in the `repairdesignpostgpl` step\n2. my issue with insane violations was actually because removing the clock variables from your `.yaml` and just defining clocks in your `.sdc` completely skips CTS, so I had like a 450 ns clock rise/fall, and all the flop timings are derated according to slew",
       "author": {
         "id": "803213471402688522",
         "name": "_luke_w_",
@@ -42,7 +42,107 @@
       "reactions": [],
       "mentions": [],
       "inlineEmojis": []
+    },
+    {
+      "id": "1441526234793119836",
+      "type": "Default",
+      "timestamp": "2025-11-21T20:30:36.637+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Does anyone have a design which currently fails precheck quickly?",
+      "author": {
+        "id": "169786952432746498",
+        "name": "mithro_",
+        "discriminator": "0000",
+        "nickname": "Tim 'mithro' Ansell",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441526427546554539",
+      "type": "Default",
+      "timestamp": "2025-11-21T20:31:22.593+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I need some test cases for the manufacturability checking testing",
+      "author": {
+        "id": "169786952432746498",
+        "name": "mithro_",
+        "discriminator": "0000",
+        "nickname": "Tim 'mithro' Ansell",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441526545578594385",
+      "type": "Default",
+      "timestamp": "2025-11-21T20:31:50.734+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "What if you just run precheck against a corrupted GDSII file so it fails just loading?",
+      "author": {
+        "id": "220639106915368960",
+        "name": "tholin",
+        "discriminator": "0000",
+        "nickname": "Tholin",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/a0ed32047bb13e92c0bce95b00e20a81-6B527.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441528156736458862",
+      "type": "Default",
+      "timestamp": "2025-11-21T20:38:14.864+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yeah, I can do those ones pretty easy, I'm other an otherwise compliant design that just has DRC violations.",
+      "author": {
+        "id": "169786952432746498",
+        "name": "mithro_",
+        "discriminator": "0000",
+        "nickname": "Tim 'mithro' Ansell",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
     }
   ],
-  "messageCount": 1
+  "messageCount": 5
 }
