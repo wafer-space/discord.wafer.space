@@ -109,6 +109,8 @@ jobs:
           git commit -m "chore: update export state
 
           Updated by GitHub Actions on $(date -u +%Y-%m-%d\ %H:%M\ UTC)"
+          # Pull with rebase to handle concurrent workflow updates
+          git pull --rebase origin master
           git push origin HEAD:master
 
       - name: Deploy to GitHub Pages
