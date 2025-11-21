@@ -407,12 +407,12 @@ def format_export_command(  # noqa: PLR0913
     return cmd
 
 
-def run_export(cmd: list[str], timeout: int = 300) -> tuple[bool, str]:
+def run_export(cmd: list[str], timeout: int = 900) -> tuple[bool, str]:
     """Run DiscordChatExporter command.
 
     Args:
         cmd: Command as list
-        timeout: Timeout in seconds
+        timeout: Timeout in seconds (default: 900 = 15 minutes for large channels)
 
     Returns:
         Tuple of (success, output)
