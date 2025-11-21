@@ -661,8 +661,12 @@ def main() -> None:
 
         if summary["errors"]:
             print(f"\nErrors ({len(summary['errors'])}):")
-            for error in summary["errors"][:5]:  # Show first 5
-                print(f"  - {error['channel']} ({error['format']}): {error['error'][:100]}")
+            for error in summary["errors"]:  # Show all errors
+                # Print full error message, with continuation lines indented
+                error_lines = error['error'].splitlines()
+                print(f"  - {error['channel']} ({error['format']}):")
+                for line in error_lines:
+                    print(f"    {line}")
 
         sys.exit(0 if summary["channels_failed"] == 0 else 1)
 
