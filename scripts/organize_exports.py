@@ -36,6 +36,25 @@ def _update_latest_symlink(target_dir: Path, extension: str, current_month: str)
     latest_link.symlink_to(f"{current_month}/{current_month}{extension}")
 
 
+def _update_media_symlink(target_dir: Path, media_name: str, current_month: str) -> None:
+    """Create or update media directory symlink to current month's media.
+
+    Args:
+        target_dir: Channel/thread directory containing the symlink
+        media_name: Media directory name (e.g., 'channel_media')
+        current_month: Current month string (YYYY-MM)
+    """
+    media_link = target_dir / media_name
+    if media_link.exists() or media_link.is_symlink():
+        if media_link.is_symlink():
+            media_link.unlink()
+        elif media_link.is_dir():
+            shutil.rmtree(media_link)
+        else:
+            media_link.unlink()
+    media_link.symlink_to(f"{current_month}/{media_name}")
+
+
 def _copy_media_directory(source_media_dir: Path, target_dir: Path) -> bool:
     """Copy media directory to target location.
 
@@ -122,6 +141,8 @@ def _organize_thread_file(
             month_dir = public_thread_dir / current_month
             if _copy_media_directory(media_dir, month_dir):
                 print(f"    ↳ Copied media directory: {media_dir.name}")
+                # Create symlink from thread root to latest month's media
+                _update_media_symlink(public_thread_dir, media_dir.name, current_month)
 
         channel_key = f"{server_name}/{forum_name}/{thread_name}"
         rel_path = dest_file.relative_to(public_dir)
@@ -168,6 +189,8 @@ def _organize_channel_file(
             month_dir = channel_dir / current_month
             if _copy_media_directory(media_dir, month_dir):
                 print(f"    ↳ Copied media directory: {media_dir.name}")
+                # Create symlink from channel root to latest month's media
+                _update_media_symlink(channel_dir, media_dir.name, current_month)
 
         channel_key = f"{server_name}/{channel_name}"
         print(f"  ✓ {channel_name}{ext} → {dest_file.relative_to(public_dir)}")
