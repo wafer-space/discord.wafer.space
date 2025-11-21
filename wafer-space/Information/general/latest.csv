@@ -1435,4 +1435,61 @@ https://www.crowdsupply.com/wafer-space/gf180mcu-run-1/updates/mosbius","","👍
 "596068704471482370","246tnt","2025-11-20T17:02:29.7490000+00:00","not ideal, but if that works, at least it'll narrow the issue.","",""
 "738396032295108721","bailey8889","2025-11-20T19:02:08.3740000+00:00","@Tholin So I can see the connections in the system verilog. What about the synthesized gate level verilog? Can you see the analog connections there?","",""
 "220639106915368960","tholin","2025-11-20T19:07:53.1340000+00:00","Yes","",""
-"220639106915368960","tholin","2025-11-20T19:08:17.3370000+00:00","The connections are even still present in the netlist post route.","",""
+"220639106915368960","tholin","2025-11-20T19:08:17.3370000+00:00","The connections are even still present in the netlist post route.","","👍 (1)"
+"596068704471482370","246tnt","2025-11-21T06:51:58.1750000+00:00","I know a lot of people do retro stuff so they probably disagree, but I find that having the default settings of librelane be 5V instead of 3.3V is a bit annoying 😅","","👍 (1)"
+"323371864074485771","mole99","2025-11-21T09:41:33.4740000+00:00","I feel you. Including the libs for KianV was some work. But I would argue that the foundry-provided stdcells shouldn't really be used at 3.3V, as they are really bad for that 😄
+Once we have a confirmed working 3.3V stdcell library, we can discuss setting it as the default for gf180mcu.","",""
+"596068704471482370","246tnt","2025-11-21T09:51:42.2470000+00:00","They're really not _that_ bad at 3.3V.  I wouldn't use them at 1.8V even if they have specs for that, but at 3.3V they're a bit slower but still very much usable.","",""
+"596068704471482370","246tnt","2025-11-21T09:52:47.9690000+00:00","Will the first run include foundry biased wafers ( ss / sf / fs / ff ) with test structures for new standard cells to allow proper validation ?","",""
+"220639106915368960","tholin","2025-11-21T09:59:37.7540000+00:00","When I run nix-shell in the template and then magic, I expected magic to load the gf180mcuD PDK, but it instead loads with sky130A.
+I cannot figure out how to get it to gracefully load the gf180mcuD PDK, so I keep having to go back to iic-osic-tools for analog layout.","",""
+"323371864074485771","mole99","2025-11-21T10:01:25.5330000+00:00","I didn't know the foundry could create biased wafers on purpose. I thought that just happens due to process variations, and the wafers are sorted afterwards based on the measurements of the test structures?
+
+As for your question, I don't think so. First, we would need to pick a stdcell library (or more) to characterize. There is Tholin's library, for example, and the FlexCell library. I tried to PnR Staf's FlexCell library, but I had to stop at routing due to some issues. Also someone need to do the work of creating a chip with these libraries for characterization. @Tim 'mithro' Ansell no one is working on that atm, correct?","",""
+"323371864074485771","mole99","2025-11-21T10:02:08.9360000+00:00","Did you export `PDK_ROOT` and `PDK` and pass the rcfile to magic?","",""
+"596068704471482370","246tnt","2025-11-21T10:03:12.0820000+00:00","@mole99 I didn't know either, I only learned about that recently. I guess they can tweak parameters and then validate using their own test structure that they hit the target and where that wafer ends up 🤷","","👏 (1)"
+"220639106915368960","tholin","2025-11-21T10:03:59.7910000+00:00","magic crashes","",""
+"220639106915368960","tholin","2025-11-21T10:04:22.7800000+00:00","No, -d OGL is what crashes it, my bad","",""
+"220639106915368960","tholin","2025-11-21T10:06:37.4610000+00:00","We also have the problem of no 3.3V-optimized IO pads. I will create some eventually as part of my SCL, but not in less than two weeks. Next shuttle. Actually, I’ve had to pause work on my SCL so I can participate in this shuttle and have something ready in time. Sorry.","",""
+"323371864074485771","mole99","2025-11-21T10:07:44.3650000+00:00","Don't be sorry, that's super exciting work 👏
+Yeah, 3.3V I/Os would also be great!","",""
+"323371864074485771","mole99","2025-11-21T10:10:14.9380000+00:00","```
+magic: ## Open magic with the gf180mcuD PDK
+    PDK_ROOT=${PDK_ROOT} PDK=${PDK} magic -rcfile ${PDK_ROOT}/${PDK}/libs.tech/magic/gf180mcuD.magicrc
+.PHONY: magic
+```
+
+This should work.","",""
+"220639106915368960","tholin","2025-11-21T10:12:28.8810000+00:00","I am cheating a bit. I took `gf180mcu_fd_io__bi_24t`, flattened some of it and just deleted the DUALGATE layer. Next step would’ve been to go through and shrink the transistor lengths, since the 3.3V transistors have a way shorter minimum length. Note that this produces a 3.3V only pad, not a pad with separate core and IO voltage supporting both.","","👌 (1)"
+"220639106915368960","tholin","2025-11-21T10:13:04.6380000+00:00","The biggest struggle and time-sink would be characterization.","",""
+"596068704471482370","246tnt","2025-11-21T10:13:07.5280000+00:00","TBH for IO pads, I intend to keep the 5V rated ones since 5V compat is good to keep for TT. Although I'd switch to the split core/io voltage ones of course.  And speed wise they're only about 30% slower.","","👍 (1)"
+"220639106915368960","tholin","2025-11-21T10:13:10.4340000+00:00","I don’t think I can rely on lctime anymore.","",""
+"220639106915368960","tholin","2025-11-21T10:13:36.9470000+00:00","I like using lctime because I’ve read most of its code and understand it, but its limited and simplistic.","",""
+"323371864074485771","mole99","2025-11-21T10:14:39.3260000+00:00","Well, there's some talks about performance optimizations at least: https://codeberg.org/librecell/lctime/issues/38","",""
+"169786952432746498","mithro_","2025-11-21T11:26:49.9390000+00:00","You ***can*** overdope and over expose and do things like that.","",""
+"169786952432746498","mithro_","2025-11-21T11:28:17.6900000+00:00","I was trying to convince Mehdi's group to do the same thing as their SKY130 test tile for GF180MCU -> https://github.com/google/skywater-pdk-sky130-raw-data/tree/main/docs/sky130-testtile-open","",""
+"220639106915368960","tholin","2025-11-21T11:57:45.1120000+00:00","I wonder if the issue LibreLane has with the analog pads is that they have no separate pins for the pad and signal input. All the IO pads have a separate PAD pin in their definition, except the analog pads, which just have ASIG5V.","",""
+"220639106915368960","tholin","2025-11-21T11:57:49.7160000+00:00","I’m gonna experiment.","","👍 (1)"
+"220639106915368960","tholin","2025-11-21T13:24:51.6890000+00:00","Update: works","",""
+"220639106915368960","tholin","2025-11-21T13:25:07.9180000+00:00","I will let this flow finish, though, to ensure there is no LVS errors left.","",""
+"220639106915368960","tholin","2025-11-21T13:25:54.5630000+00:00","But it appears that gf180mcu_fd_io__asig_5p0 has some broken port definitions.","",""
+"596068704471482370","246tnt","2025-11-21T13:32:59.5690000+00:00","Or OpenRoad has a bug that's triggered by whatever they're using 🙂","",""
+"596068704471482370","246tnt","2025-11-21T13:33:42.6700000+00:00","Because looking at the LEF I didn't really see anything wrong about it 🤷","",""
+"220639106915368960","tholin","2025-11-21T13:35:54.9930000+00:00","The mag has some weird stuff going on","general_media/image-5528B.png",""
+"220639106915368960","tholin","2025-11-21T13:36:14.1240000+00:00","The ports that are missing the `signal bidirectional`are actually duplicates of ports that do have those parameters.","",""
+"220639106915368960","tholin","2025-11-21T13:36:20.1090000+00:00","Idk","",""
+"220639106915368960","tholin","2025-11-21T13:36:37.6400000+00:00","Removing the broken-looking ones fixed it","",""
+"596068704471482370","246tnt","2025-11-21T13:36:39.7860000+00:00","The mag shouldn't be used by OpenRoad at all.","",""
+"220639106915368960","tholin","2025-11-21T13:36:55.6220000+00:00","Yeah, but I generated the lef and GDSII from that mag","",""
+"220639106915368960","tholin","2025-11-21T13:38:25.7490000+00:00","Oh, I also added a PAD port","",""
+"220639106915368960","tholin","2025-11-21T13:38:48.8380000+00:00","And updated the verilog and lib to reflect this","",""
+"738396032295108721","bailey8889","2025-11-21T13:40:39.0500000+00:00","@Tholin if you added a PAD port to the analog io cell, wouldn't that short with the ASIG5V port?","",""
+"220639106915368960","tholin","2025-11-21T13:41:36.5220000+00:00","Yes","",""
+"220639106915368960","tholin","2025-11-21T13:41:44.1170000+00:00","PAD and ASIG5V are still one and the same","",""
+"220639106915368960","tholin","2025-11-21T13:42:00.1950000+00:00","But *somehow* it makes a difference having both names assigned to it.","",""
+"596068704471482370","246tnt","2025-11-21T13:51:21.2310000+00:00","Is your current ""built"" GDS somewhere ? 
+(The repo doesn't use github action so I can't just download what it looks like there 😅 )","",""
+"220639106915368960","tholin","2025-11-21T13:51:46.1750000+00:00","No","",""
+"220639106915368960","tholin","2025-11-21T13:51:49.0410000+00:00","Its still building","",""
+"220639106915368960","tholin","2025-11-21T13:52:20.5970000+00:00","A github actions pipeline would fail at this time anyways because I *know* it has KLayout DRC errors in the DACs.","",""
+"220639106915368960","tholin","2025-11-21T13:52:37.9590000+00:00","I need to flatten them. It sees errors that aren’t there if you take in context from higher up in the hierarchy.","",""

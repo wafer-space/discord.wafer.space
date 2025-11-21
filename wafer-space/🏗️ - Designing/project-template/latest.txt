@@ -1304,6 +1304,130 @@ Does the template have a CHANGELOG file or something? Seems like this would be g
 @mole99 - BTW Did you see that I made the `git describe` version number work?
 
 
+[11/21/2025 06:04] mole99
+Yes, the template uses `leo/gf180mcu` as well.
+Unfortunately, I still need to rebase from time to time, so any commit hashes that you reference might break.
+
+
+[11/21/2025 06:10] 246tnt
+@mole99 I meant the nix environment of the `leo/gf180mcu`.  Digging a bit I think the magic version is different.
+
+
+[11/21/2025 06:11] rzioma
+@mole99 it might be a red herring, but I think I started getting KLayout DRC violations when running a **precheck**. This started after merging the latest template changes.
+
+I get 12 drc errors and if I read it correctly (`drc.klayout.lyrdb` file) errors are in **sealring**
+
+{Attachments}
+project-template_media/image-52BB2.png
+
+
+[11/21/2025 06:13] mole99
+Right! I override the magic version in the template. There is no change in functionality, but it reduces peak RAM usage.
+I can update nix-eda as a whole in the `leo/gf180mcu` branch once the latest Yosys hang is fixed.
+
+
+[11/21/2025 06:15] mole99
+ReJ, yes that is expected. Sorry! I still need to sync the precheck with the latest changes to the template. I started a run yesterday but didn't get to push the changes yet.
+
+
+[11/21/2025 06:16] mole99
+Yes, we can use versions and a changelog for the template from now on.
+
+
+[11/21/2025 06:17] mole99
+I would prefer tags in the format `x.y.z`, like in the gf180mcu repository.
+I'll update the tag.
+
+
+[11/21/2025 06:18] mithro_
+with `git-describe` you get `v0.0-<commits>-<hash>` which some people map to `v0.0.<commits>`
+
+
+[11/21/2025 06:19] mithro_
+But I don't really care that enough, do what you prefer 🙂
+
+
+[11/21/2025 06:20] mole99
+Yes, `git-describe` is really neat 😁 
+I'm generally following the conventions in LibreLane to keep things simple.
+
+
+[11/21/2025 06:20] rzioma
+no worries! Happy to hear it is expected
+
+{Reactions}
+👍
+
+[11/21/2025 06:30] rzioma
+Random piece of information, template project also works fine with gf180mcu_fd_sc_mcu**9t**5v0
+
+{Reactions}
+👌
+
+[11/21/2025 10:39] mole99
+You could give this PR a try: https://github.com/wafer-space/gf180mcu-precheck/pull/3
+
+{Embed}
+https://github.com/wafer-space/gf180mcu-precheck/pull/3
+chore: update precheck to match template by mole99 · Pull Request ...
+Update PDK_TAG to 1.1.0
+Pin nix-eda to 5.9.0 and override magic to 8.3.576
+
+
+[11/21/2025 14:28] 246tnt
+Antenna check is taking forever 😥  It's been an hour and I think it's still at Metal1.
+
+
+[11/21/2025 14:32] tholin
+I mean, you do have a lot of Metal1 in the layout if the whole core area has a standard cell grid in it.
+
+
+[11/21/2025 14:33] tholin
+My flows are faster than average, I believe, because I only have macros in the top-level and no cell grids.
+
+
+[11/21/2025 14:33] 246tnt
+Well the top level of TT doesn't have any cell grid 😅
+
+
+[11/21/2025 14:34] 246tnt
+and this test sample is only maybe ... 15~20% filled.
+
+
+[11/21/2025 14:37] tholin
+That’s probably already denser than my chip.
+
+
+[11/21/2025 14:38] tholin
+But antenna check takes a few seconds for me, so something seems wrong there.
+
+
+[11/21/2025 14:42] 246tnt
+Are you talking about KLayout.Antenna or OpenROAD.CheckAntennas step ?
+
+
+[11/21/2025 14:43] tholin
+Both, I guess.
+
+
+[11/21/2025 14:43] tholin
+A step getting stuck for that long would be quite memorable and I don’t remember anything other than STA and DRC taking forever.
+
+
+[11/21/2025 14:44] 246tnt
+Well https://github.com/AvalonSemiconductors/ws-submission-2025/blob/main/librelane/config.yaml#L6
+It's disabled in your default config so you'd have to enable it to see it.
+
+
+[11/21/2025 15:00] tholin
+I just pushed to the repo
+
+
+[11/21/2025 15:00] tholin
+Has my analog pad fixes now
+
+
 ==============================================================
-Exported 219 message(s)
+Exported 245 message(s)
 ==============================================================

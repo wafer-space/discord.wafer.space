@@ -431,3 +431,36 @@ Please update your repository in line with the template and clone the latest PDK
 "596068704471482370","246tnt","2025-11-20T21:08:51.2550000+00:00","@mole99 Is the environment of the leo/gf180 branch of libre lane good ? That's what I'm using since TT is not based at all on the template .","",""
 "169786952432746498","mithro_","2025-11-20T22:08:50.9050000+00:00","Does the template have a CHANGELOG file or something? Seems like this would be great to include in that.","",""
 "169786952432746498","mithro_","2025-11-20T22:09:25.9880000+00:00","@mole99 - BTW Did you see that I made the `git describe` version number work?","",""
+"323371864074485771","mole99","2025-11-21T06:04:39.9270000+00:00","Yes, the template uses `leo/gf180mcu` as well.
+Unfortunately, I still need to rebase from time to time, so any commit hashes that you reference might break.","",""
+"596068704471482370","246tnt","2025-11-21T06:10:16.7160000+00:00","@mole99 I meant the nix environment of the `leo/gf180mcu`.  Digging a bit I think the magic version is different.","",""
+"538398807986274304","rzioma","2025-11-21T06:11:48.4840000+00:00","@mole99 it might be a red herring, but I think I started getting KLayout DRC violations when running a **precheck**. This started after merging the latest template changes.
+
+I get 12 drc errors and if I read it correctly (`drc.klayout.lyrdb` file) errors are in **sealring**","project-template_media/image-52BB2.png",""
+"323371864074485771","mole99","2025-11-21T06:13:49.3840000+00:00","Right! I override the magic version in the template. There is no change in functionality, but it reduces peak RAM usage.
+I can update nix-eda as a whole in the `leo/gf180mcu` branch once the latest Yosys hang is fixed.","",""
+"323371864074485771","mole99","2025-11-21T06:15:59.8460000+00:00","ReJ, yes that is expected. Sorry! I still need to sync the precheck with the latest changes to the template. I started a run yesterday but didn't get to push the changes yet.","",""
+"323371864074485771","mole99","2025-11-21T06:16:22.1050000+00:00","Yes, we can use versions and a changelog for the template from now on.","",""
+"323371864074485771","mole99","2025-11-21T06:17:14.0910000+00:00","I would prefer tags in the format `x.y.z`, like in the gf180mcu repository.
+I'll update the tag.","",""
+"169786952432746498","mithro_","2025-11-21T06:18:23.3230000+00:00","with `git-describe` you get `v0.0-<commits>-<hash>` which some people map to `v0.0.<commits>`","",""
+"169786952432746498","mithro_","2025-11-21T06:19:33.3500000+00:00","But I don't really care that enough, do what you prefer 🙂","",""
+"323371864074485771","mole99","2025-11-21T06:20:23.8980000+00:00","Yes, `git-describe` is really neat 😁 
+I'm generally following the conventions in LibreLane to keep things simple.","",""
+"538398807986274304","rzioma","2025-11-21T06:20:52.4260000+00:00","no worries! Happy to hear it is expected","","👍 (1)"
+"538398807986274304","rzioma","2025-11-21T06:30:40.4230000+00:00","Random piece of information, template project also works fine with gf180mcu_fd_sc_mcu**9t**5v0","","👌 (1)"
+"323371864074485771","mole99","2025-11-21T10:39:07.4640000+00:00","You could give this PR a try: https://github.com/wafer-space/gf180mcu-precheck/pull/3","",""
+"596068704471482370","246tnt","2025-11-21T14:28:47.7230000+00:00","Antenna check is taking forever 😥  It's been an hour and I think it's still at Metal1.","",""
+"220639106915368960","tholin","2025-11-21T14:32:38.0180000+00:00","I mean, you do have a lot of Metal1 in the layout if the whole core area has a standard cell grid in it.","",""
+"220639106915368960","tholin","2025-11-21T14:33:04.6580000+00:00","My flows are faster than average, I believe, because I only have macros in the top-level and no cell grids.","",""
+"596068704471482370","246tnt","2025-11-21T14:33:49.6350000+00:00","Well the top level of TT doesn't have any cell grid 😅","",""
+"596068704471482370","246tnt","2025-11-21T14:34:26.2440000+00:00","and this test sample is only maybe ... 15~20% filled.","",""
+"220639106915368960","tholin","2025-11-21T14:37:31.1340000+00:00","That’s probably already denser than my chip.","",""
+"220639106915368960","tholin","2025-11-21T14:38:02.6050000+00:00","But antenna check takes a few seconds for me, so something seems wrong there.","",""
+"596068704471482370","246tnt","2025-11-21T14:42:09.9210000+00:00","Are you talking about KLayout.Antenna or OpenROAD.CheckAntennas step ?","",""
+"220639106915368960","tholin","2025-11-21T14:43:24.7660000+00:00","Both, I guess.","",""
+"220639106915368960","tholin","2025-11-21T14:43:47.9050000+00:00","A step getting stuck for that long would be quite memorable and I don’t remember anything other than STA and DRC taking forever.","",""
+"596068704471482370","246tnt","2025-11-21T14:44:17.5290000+00:00","Well https://github.com/AvalonSemiconductors/ws-submission-2025/blob/main/librelane/config.yaml#L6
+It's disabled in your default config so you'd have to enable it to see it.","",""
+"220639106915368960","tholin","2025-11-21T15:00:16.6930000+00:00","I just pushed to the repo","",""
+"220639106915368960","tholin","2025-11-21T15:00:32.2900000+00:00","Has my analog pad fixes now","",""

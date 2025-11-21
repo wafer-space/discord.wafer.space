@@ -2335,7 +2335,7 @@ https://cdn.discordapp.com/attachments/1299769089220284467/1417488167581515857/i
 
 {Embed}
 https://cdn.discordapp.com/attachments/1299769089220284467/1417488167581515857/image.png?ex=68caaa3a&is=68c958ba&hm=c03bbb239d8e5bb97ab8df647c00f7970b70be0423f2ef314d7568e0cb7af515&
-general_media/image-3A130.png
+general_media/image-04A90.png
 
 
 [09/16/2025 12:42] tholin
@@ -5912,7 +5912,226 @@ Yes
 [11/20/2025 19:08] tholin
 The connections are even still present in the netlist post route.
 
+{Reactions}
+👍
+
+[11/21/2025 06:51] 246tnt
+I know a lot of people do retro stuff so they probably disagree, but I find that having the default settings of librelane be 5V instead of 3.3V is a bit annoying 😅
+
+{Reactions}
+👍
+
+[11/21/2025 09:41] mole99
+I feel you. Including the libs for KianV was some work. But I would argue that the foundry-provided stdcells shouldn't really be used at 3.3V, as they are really bad for that 😄
+Once we have a confirmed working 3.3V stdcell library, we can discuss setting it as the default for gf180mcu.
+
+
+[11/21/2025 09:51] 246tnt
+They're really not _that_ bad at 3.3V.  I wouldn't use them at 1.8V even if they have specs for that, but at 3.3V they're a bit slower but still very much usable.
+
+
+[11/21/2025 09:52] 246tnt
+Will the first run include foundry biased wafers ( ss / sf / fs / ff ) with test structures for new standard cells to allow proper validation ?
+
+
+[11/21/2025 09:59] tholin
+When I run nix-shell in the template and then magic, I expected magic to load the gf180mcuD PDK, but it instead loads with sky130A.
+I cannot figure out how to get it to gracefully load the gf180mcuD PDK, so I keep having to go back to iic-osic-tools for analog layout.
+
+
+[11/21/2025 10:01] mole99
+I didn't know the foundry could create biased wafers on purpose. I thought that just happens due to process variations, and the wafers are sorted afterwards based on the measurements of the test structures?
+
+As for your question, I don't think so. First, we would need to pick a stdcell library (or more) to characterize. There is Tholin's library, for example, and the FlexCell library. I tried to PnR Staf's FlexCell library, but I had to stop at routing due to some issues. Also someone need to do the work of creating a chip with these libraries for characterization. @Tim 'mithro' Ansell no one is working on that atm, correct?
+
+
+[11/21/2025 10:02] mole99
+Did you export `PDK_ROOT` and `PDK` and pass the rcfile to magic?
+
+
+[11/21/2025 10:03] 246tnt
+@mole99 I didn't know either, I only learned about that recently. I guess they can tweak parameters and then validate using their own test structure that they hit the target and where that wafer ends up 🤷
+
+{Reactions}
+👏
+
+[11/21/2025 10:03] tholin
+magic crashes
+
+
+[11/21/2025 10:04] tholin
+No, -d OGL is what crashes it, my bad
+
+
+[11/21/2025 10:06] tholin
+We also have the problem of no 3.3V-optimized IO pads. I will create some eventually as part of my SCL, but not in less than two weeks. Next shuttle. Actually, I’ve had to pause work on my SCL so I can participate in this shuttle and have something ready in time. Sorry.
+
+
+[11/21/2025 10:07] mole99
+Don't be sorry, that's super exciting work 👏
+Yeah, 3.3V I/Os would also be great!
+
+
+[11/21/2025 10:10] mole99
+```
+magic: ## Open magic with the gf180mcuD PDK
+    PDK_ROOT=${PDK_ROOT} PDK=${PDK} magic -rcfile ${PDK_ROOT}/${PDK}/libs.tech/magic/gf180mcuD.magicrc
+.PHONY: magic
+```
+
+This should work.
+
+
+[11/21/2025 10:12] tholin
+I am cheating a bit. I took `gf180mcu_fd_io__bi_24t`, flattened some of it and just deleted the DUALGATE layer. Next step would’ve been to go through and shrink the transistor lengths, since the 3.3V transistors have a way shorter minimum length. Note that this produces a 3.3V only pad, not a pad with separate core and IO voltage supporting both.
+
+{Reactions}
+👌
+
+[11/21/2025 10:13] tholin
+The biggest struggle and time-sink would be characterization.
+
+
+[11/21/2025 10:13] 246tnt
+TBH for IO pads, I intend to keep the 5V rated ones since 5V compat is good to keep for TT. Although I'd switch to the split core/io voltage ones of course.  And speed wise they're only about 30% slower.
+
+{Reactions}
+👍
+
+[11/21/2025 10:13] tholin
+I don’t think I can rely on lctime anymore.
+
+
+[11/21/2025 10:13] tholin
+I like using lctime because I’ve read most of its code and understand it, but its limited and simplistic.
+
+
+[11/21/2025 10:14] mole99
+Well, there's some talks about performance optimizations at least: https://codeberg.org/librecell/lctime/issues/38
+
+{Embed}
+https://codeberg.org/librecell/lctime/issues/38
+Potential performance improvement
+I had a discussion with Holger from NGSpice about how we could improve the speed for characterization, and got the following feedback: "For standard cell characterisation, where we have lots of very similar simulations, where each simulation takes relatively few time and the simulation setup and ...
+general_media/summary-card-2D162
+
+
+[11/21/2025 11:26] mithro_
+You ***can*** overdope and over expose and do things like that.
+
+
+[11/21/2025 11:28] mithro_
+I was trying to convince Mehdi's group to do the same thing as their SKY130 test tile for GF180MCU -> https://github.com/google/skywater-pdk-sky130-raw-data/tree/main/docs/sky130-testtile-open
+
+{Embed}
+https://github.com/google/skywater-pdk-sky130-raw-data/tree/main/docs/sky130-testtile-open
+skywater-pdk-sky130-raw-data/docs/sky130-testtile-open at main · g...
+Raw data collected about the SKY130 process technology. - google/skywater-pdk-sky130-raw-data
+general_media/6331cc72-d873-4a7c-b52c-65abe3dd645f-11FAE
+
+
+[11/21/2025 11:57] tholin
+I wonder if the issue LibreLane has with the analog pads is that they have no separate pins for the pad and signal input. All the IO pads have a separate PAD pin in their definition, except the analog pads, which just have ASIG5V.
+
+
+[11/21/2025 11:57] tholin
+I’m gonna experiment.
+
+{Reactions}
+👍
+
+[11/21/2025 13:24] tholin
+Update: works
+
+
+[11/21/2025 13:25] tholin
+I will let this flow finish, though, to ensure there is no LVS errors left.
+
+
+[11/21/2025 13:25] tholin
+But it appears that gf180mcu_fd_io__asig_5p0 has some broken port definitions.
+
+
+[11/21/2025 13:32] 246tnt
+Or OpenRoad has a bug that's triggered by whatever they're using 🙂
+
+
+[11/21/2025 13:33] 246tnt
+Because looking at the LEF I didn't really see anything wrong about it 🤷
+
+
+[11/21/2025 13:35] tholin
+The mag has some weird stuff going on
+
+{Attachments}
+general_media/image-5528B.png
+
+
+[11/21/2025 13:36] tholin
+The ports that are missing the `signal bidirectional`are actually duplicates of ports that do have those parameters.
+
+
+[11/21/2025 13:36] tholin
+Idk
+
+
+[11/21/2025 13:36] tholin
+Removing the broken-looking ones fixed it
+
+
+[11/21/2025 13:36] 246tnt
+The mag shouldn't be used by OpenRoad at all.
+
+
+[11/21/2025 13:36] tholin
+Yeah, but I generated the lef and GDSII from that mag
+
+
+[11/21/2025 13:38] tholin
+Oh, I also added a PAD port
+
+
+[11/21/2025 13:38] tholin
+And updated the verilog and lib to reflect this
+
+
+[11/21/2025 13:40] bailey8889
+@Tholin if you added a PAD port to the analog io cell, wouldn't that short with the ASIG5V port?
+
+
+[11/21/2025 13:41] tholin
+Yes
+
+
+[11/21/2025 13:41] tholin
+PAD and ASIG5V are still one and the same
+
+
+[11/21/2025 13:42] tholin
+But *somehow* it makes a difference having both names assigned to it.
+
+
+[11/21/2025 13:51] 246tnt
+Is your current "built" GDS somewhere ? 
+(The repo doesn't use github action so I can't just download what it looks like there 😅 )
+
+
+[11/21/2025 13:51] tholin
+No
+
+
+[11/21/2025 13:51] tholin
+Its still building
+
+
+[11/21/2025 13:52] tholin
+A github actions pipeline would fail at this time anyways because I *know* it has KLayout DRC errors in the DACs.
+
+
+[11/21/2025 13:52] tholin
+I need to flatten them. It sees errors that aren’t there if you take in context from higher up in the hierarchy.
+
 
 ==============================================================
-Exported 1,146 message(s)
+Exported 1,191 message(s)
 ==============================================================
