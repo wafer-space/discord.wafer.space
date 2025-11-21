@@ -2,81 +2,72 @@
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / cob
 Topic: Channel for discussing chip-on-board packaging options for wafer.space bare die.
-After: 11/21/2025 15:19
+After: 11/21/2025 16:50
 ==============================================================
 
-[11/21/2025 16:37] rzioma
-Hello, I am really late to the party, just finished reading the channel contents. On the plus side Z80 is all dandy and passing prechecks without violations.
+[11/21/2025 16:54] rzioma
+OK, I think I understood what you are saying. Ceramic unlike PCB enforces a very strict wiring between the padring and DIP pins.
 
-Similar to @Tholin I am interested in the DIP PCB.
-
-DIP is for Z80. That means only 40 pins all digital 5V. Classical DIP40.
-
-My preferences:
-1) first would be **small LGN** pcb as long as it can be soldered onto DIP PCB without destroying the wirebonding.
-2) second would be binding chip directly to **DIP40 PCB** where I can route GND **(to pin 29)** and VDD** (to pin 11 of the DIP40)**.
-
-Mezzanine - while very flexible I am worried that it would make the final package look "weird" and too high, also I still not sure what would that mean to the final cost. So for Z80 I would say it as a Plan C.
-
-**Just to clarify, is LGN option still on the table?**
+So you have to match the pin locations to the original chip essentially.
 
 
-[11/21/2025 16:38] tholin
-On a PCB, you can route any pad on the COB footprint to any pin on the headers - that’s no problem.
-I am trying to keep compatibility with DIP-40 ceramic carriers where those connections are fixed.
+[11/21/2025 16:55] tholin
+Yes. And now I can’t use the mezzanine breakout because it assumes that the ground pads are in specific locations.
 
 
-[11/21/2025 16:38] tholin
-So I had to move around some VDD/VSS pads
+[11/21/2025 16:55] rzioma
+Yes, makes sense.
 
 
-[11/21/2025 16:39] tholin
-And can thus no longer use the mezzanine breakout as it makes assumptions about the locations of the ground pads and wires them all to a ground plane.
-
-
-[11/21/2025 16:39] tholin
-So, I’m also interested in other options.
-
-
-[11/21/2025 16:40] rzioma
-Just to clarify VDD/VSS pads - you had to move them on the chip ring layout or outside (on PCB)?
-
-
-[11/21/2025 16:40] tholin
-The chip ring layout
+[11/21/2025 16:56] tholin
+This could technically be solved by creating a "dumb" version of that breakout that just routes each pad to a pin on the mezzanine without making any assumptions, with the PCB ground plane unconnected to any chip pads and routed to a spare mezzanine pin. This I *could* use for prototyping, as long as I also still get raw dies for my ceramic carrier experiments!
 
 {Reactions}
 👍
 
-[11/21/2025 16:47] rzioma
-I looked at your reference to DIP-40 ceramic carrier and I wonder how did they managed to put Z80 in ceramic back in the day, because they have VDD/GND not on 40/20 pins.
-
-Did they have special ceramic packages for them? (unfortunately I don't have Z80 in ceramic for inspection)
+[11/21/2025 16:57] tholin
+But ultimately, I resigned myself to coming up with my own solution.
 
 
-[11/21/2025 16:48] tholin
-The ceramic carrier makes no assumptions about the location of the power pins. It simply breaks the 40 pins out to 40 bonding pads.
+[11/21/2025 17:13] rzioma
+For LGN option, I also wonder, if it would be possible to have a narrower LGN board? (while keeping bonding pattern in the same way as “normal” LGN if it reduced the price / headache. Some internal pads would simply left unconnected for some pads)
 
 
-[11/21/2025 16:49] tholin
-There is a metal plane at the base of the cavity, but you have to bond it to the ground pin yourself by running a wire from the carrier’s bond bad to the plane.
+[11/21/2025 17:13] rzioma
+Sorry for extremely crude art
 
 
-[11/21/2025 16:49] tholin
-At least, that is how I understand it.
+[11/21/2025 17:13] rzioma
 
-
-[11/21/2025 16:49] tholin
-But I still had to customize my die’s padring since I am replicating existing chips and thus need specific ground/power connections.
-
-
-[11/21/2025 16:50] rzioma
-There is that track on the top for the ground. I guess you are talking about that one.
 
 {Attachments}
-cob_media/s-l1600-62-95AF6.png
+cob_media/image0-00B42.jpg
+
+
+[11/21/2025 17:17] rzioma
+The reasoning here is that it might not fit on DIP otherwise.
+
+Classic DIP has less than 14 mm on the top and “fake” PCB DIPs might have protruding pins from below
+
+
+[11/21/2025 17:17] rzioma
+
+
+{Attachments}
+cob_media/image0-A27F5.jpg
+
+
+[11/21/2025 17:20] rzioma
+Also for “inspiration” here is Z80 slightly weird pinout
+
+
+[11/21/2025 17:22] rzioma
+
+
+{Attachments}
+cob_media/image0-74D11.jpg
 
 
 ==============================================================
-Exported 13 message(s)
+Exported 12 message(s)
 ==============================================================
