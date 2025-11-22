@@ -13,10 +13,59 @@
     "topic": "Channel for discussing chip-on-board packaging options for wafer.space bare die."
   },
   "dateRange": {
-    "after": "2025-11-22T09:43:33.394+00:00",
+    "after": "2025-11-22T10:45:09.482+00:00",
     "before": null
   },
-  "exportedAt": "2025-11-22T10:45:07.5515047+00:00",
-  "messages": [],
-  "messageCount": 0
+  "exportedAt": "2025-11-22T11:40:06.0164784+00:00",
+  "messages": [
+    {
+      "id": "1441750156478382232",
+      "type": "Reply",
+      "timestamp": "2025-11-22T11:20:23.727+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi ReJ! I'm not sure what you mean by \"future proof\". Do you mean in regards to code changes to the template?\n\nThe easier way is to change it in the RTL, as you only need to connect your signals to the bidir vector. However, it may be confusing to keep track of all the signals in bidir.\n\nThat's why I think the better apporach would be to make another `generate` loop that instantiates the pads for the address bus and give it a better name than `bidir`, e.g. `addr_bus`. You would then need to reduce the number of bidir pins accordingly.\nFinally, you can add the `addr_bus\\\\[x\\\\].pad` instances to the yaml (and remove some of the bidir instances).\n\nUnfortunately, when the upstream template changes, this approach may lead to more conflicts.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "mole99",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "cob_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "538398807986274304",
+          "name": "rzioma",
+          "discriminator": "0000",
+          "nickname": "ReJ aka Renaldas Zioma",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "cob_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1441709551840923782",
+        "channelId": "1408134567491145728",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    }
+  ],
+  "messageCount": 1
 }
