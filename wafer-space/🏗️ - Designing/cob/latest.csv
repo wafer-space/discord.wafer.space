@@ -1,2 +1,8 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
-"538398807986274304","rzioma","2025-11-22T12:55:41.0990000+00:00","TBH, I am mostly worried that if touch something in `config.yaml` the pad's physical locations will change 😓  maybe an unfound fear","",""
+"803213471402688522","_luke_w_","2025-11-22T13:19:37.1260000+00:00","I did update my pad config (here https://github.com/Wren6991/RISCBoy-180/blob/b3dc3bb41600123395ae37ca25f37694c35ff448/librelane/config.yaml#L150-L260) and left in lots of comments for the fixed locations of the VDD/VSS pads. Still quite paranoid and it's on my list of things to re-check before submission, but I thought this was less painful overall because I can use the correct pad names in IO constraints etc.","",""
+"803213471402688522","_luke_w_","2025-11-22T13:19:59.0010000+00:00","Are there any automated checks for VDD/VSS locations remaining compatible with the COB breakout?","","❤️ (1)"
+"323371864074485771","mole99","2025-11-22T13:47:45.2150000+00:00","As long as you keep the same number of pads on each side, you will be fine :)
+All of the I/O pads in gf180mcu are the same width. So, when LibreLane places them equidistant from each other, you will always get the same bondpad loactions.","",""
+"323371864074485771","mole99","2025-11-22T13:50:38.4680000+00:00","There aren't any checks for that yet.
+
+I could add one based on the XOR of the pad layer. However, this would probably only be for the second shuttle, as it requires information from the online platform on whether the user has selected the CoB option or not.","",""

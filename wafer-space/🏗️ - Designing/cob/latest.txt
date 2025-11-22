@@ -2,13 +2,36 @@
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / cob
 Topic: Channel for discussing chip-on-board packaging options for wafer.space bare die.
-After: 11/22/2025 11:40
+After: 11/22/2025 13:03
 ==============================================================
 
-[11/22/2025 12:55] rzioma
-TBH, I am mostly worried that if touch something in `config.yaml` the pad's physical locations will change 😓  maybe an unfound fear
+[11/22/2025 13:19] _luke_w_
+I did update my pad config (here https://github.com/Wren6991/RISCBoy-180/blob/b3dc3bb41600123395ae37ca25f37694c35ff448/librelane/config.yaml#L150-L260) and left in lots of comments for the fixed locations of the VDD/VSS pads. Still quite paranoid and it's on my list of things to re-check before submission, but I thought this was less painful overall because I can use the correct pad names in IO constraints etc.
+
+{Embed}
+https://github.com/Wren6991/RISCBoy-180/blob/b3dc3bb41600123395ae37ca25f37694c35ff448/librelane/config.yaml
+RISCBoy-180/librelane/config.yaml at b3dc3bb41600123395ae37ca25f376...
+Games console SoC for GF180MCU process. Contribute to Wren6991/RISCBoy-180 development by creating an account on GitHub.
+cob_media/RISCBoy-180-7CAE8
+
+
+[11/22/2025 13:19] _luke_w_
+Are there any automated checks for VDD/VSS locations remaining compatible with the COB breakout?
+
+{Reactions}
+❤️
+
+[11/22/2025 13:47] mole99
+As long as you keep the same number of pads on each side, you will be fine :)
+All of the I/O pads in gf180mcu are the same width. So, when LibreLane places them equidistant from each other, you will always get the same bondpad loactions.
+
+
+[11/22/2025 13:50] mole99
+There aren't any checks for that yet.
+
+I could add one based on the XOR of the pad layer. However, this would probably only be for the second shuttle, as it requires information from the online platform on whether the user has selected the CoB option or not.
 
 
 ==============================================================
-Exported 1 message(s)
+Exported 4 message(s)
 ==============================================================
