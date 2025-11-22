@@ -13,60 +13,51 @@
     "topic": "Channel for discussing chip-on-board packaging options for wafer.space bare die."
   },
   "dateRange": {
-    "after": "2025-11-22T13:03:33.016+00:00",
+    "after": "2025-11-22T13:51:48.318+00:00",
     "before": null
   },
-  "exportedAt": "2025-11-22T13:51:43.2324368+00:00",
+  "exportedAt": "2025-11-22T14:42:23.8346534+00:00",
   "messages": [
     {
-      "id": "1441780160008294410",
+      "id": "1441789001848848596",
       "type": "Default",
-      "timestamp": "2025-11-22T13:19:37.126+00:00",
+      "timestamp": "2025-11-22T13:54:45.185+00:00",
       "timestampEdited": null,
       "callEndedTimestamp": null,
       "isPinned": false,
-      "content": "I did update my pad config (here https://github.com/Wren6991/RISCBoy-180/blob/b3dc3bb41600123395ae37ca25f37694c35ff448/librelane/config.yaml#L150-L260) and left in lots of comments for the fixed locations of the VDD/VSS pads. Still quite paranoid and it's on my list of things to re-check before submission, but I thought this was less painful overall because I can use the correct pad names in IO constraints etc.",
+      "content": "If you mean checking whether there are actual VDD/VSS cells at these locations. This would require checking the cells themselves, which would be impratical. Someone could do a custom design which uses a different kind of power/ground cells.",
       "author": {
-        "id": "803213471402688522",
-        "name": "_luke_w_",
+        "id": "323371864074485771",
+        "name": "mole99",
         "discriminator": "0000",
-        "nickname": "LukeW",
+        "nickname": "mole99",
         "color": null,
         "isBot": false,
-        "roles": [],
-        "avatarUrl": "cob_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "cob_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
       },
       "attachments": [],
-      "embeds": [
-        {
-          "title": "RISCBoy-180/librelane/config.yaml at b3dc3bb41600123395ae37ca25f376...",
-          "url": "https://github.com/Wren6991/RISCBoy-180/blob/b3dc3bb41600123395ae37ca25f37694c35ff448/librelane/config.yaml",
-          "timestamp": null,
-          "description": "Games console SoC for GF180MCU process. Contribute to Wren6991/RISCBoy-180 development by creating an account on GitHub.",
-          "color": "#1E2327",
-          "thumbnail": {
-            "url": "cob_media/RISCBoy-180-7CAE8",
-            "width": 1200,
-            "height": 600
-          },
-          "images": [],
-          "fields": [],
-          "inlineEmojis": []
-        }
-      ],
+      "embeds": [],
       "stickers": [],
       "reactions": [],
       "mentions": [],
       "inlineEmojis": []
     },
     {
-      "id": "1441780251758821480",
+      "id": "1441792274525847714",
       "type": "Default",
-      "timestamp": "2025-11-22T13:19:59.001+00:00",
+      "timestamp": "2025-11-22T14:07:45.452+00:00",
       "timestampEdited": null,
       "callEndedTimestamp": null,
       "isPinned": false,
-      "content": "Are there any automated checks for VDD/VSS locations remaining compatible with the COB breakout?",
+      "content": "Ok, I'll do a \"manual DRC\" for this run \uD83D\uDE04",
       "author": {
         "id": "803213471402688522",
         "name": "_luke_w_",
@@ -84,124 +75,36 @@
         {
           "emoji": {
             "id": "",
-            "name": "❤️",
-            "code": "heart",
+            "name": "\uD83D\uDC4C",
+            "code": "ok_hand",
             "isAnimated": false,
-            "imageUrl": "cob_media/2764-A3D25.svg"
+            "imageUrl": "cob_media/1f44c-59547.svg"
           },
           "count": 1,
           "users": [
             {
-              "id": "538398807986274304",
-              "name": "rzioma",
+              "id": "323371864074485771",
+              "name": "mole99",
               "discriminator": "0000",
-              "nickname": "ReJ aka Renaldas Zioma",
+              "nickname": "mole99",
               "color": null,
               "isBot": false,
-              "avatarUrl": "cob_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+              "avatarUrl": "cob_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
             }
           ]
         }
       ],
       "mentions": [],
-      "inlineEmojis": []
-    },
-    {
-      "id": "1441787240367001732",
-      "type": "Reply",
-      "timestamp": "2025-11-22T13:47:45.215+00:00",
-      "timestampEdited": null,
-      "callEndedTimestamp": null,
-      "isPinned": false,
-      "content": "As long as you keep the same number of pads on each side, you will be fine :)\nAll of the I/O pads in gf180mcu are the same width. So, when LibreLane places them equidistant from each other, you will always get the same bondpad loactions.",
-      "author": {
-        "id": "323371864074485771",
-        "name": "mole99",
-        "discriminator": "0000",
-        "nickname": "mole99",
-        "color": null,
-        "isBot": false,
-        "roles": [
-          {
-            "id": "1423020172595298314",
-            "name": "Mod",
-            "color": null,
-            "position": 1
-          }
-        ],
-        "avatarUrl": "cob_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
-      },
-      "attachments": [],
-      "embeds": [],
-      "stickers": [],
-      "reactions": [],
-      "mentions": [
+      "inlineEmojis": [
         {
-          "id": "538398807986274304",
-          "name": "rzioma",
-          "discriminator": "0000",
-          "nickname": "ReJ aka Renaldas Zioma",
-          "color": null,
-          "isBot": false,
-          "roles": [],
-          "avatarUrl": "cob_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+          "id": "",
+          "name": "\uD83D\uDE04",
+          "code": "smile",
+          "isAnimated": false,
+          "imageUrl": "cob_media/1f604-BF863.svg"
         }
-      ],
-      "reference": {
-        "messageId": "1441774136874762350",
-        "channelId": "1408134567491145728",
-        "guildId": "1361349522684510449"
-      },
-      "inlineEmojis": []
-    },
-    {
-      "id": "1441787967042490440",
-      "type": "Reply",
-      "timestamp": "2025-11-22T13:50:38.468+00:00",
-      "timestampEdited": null,
-      "callEndedTimestamp": null,
-      "isPinned": false,
-      "content": "There aren't any checks for that yet.\n\nI could add one based on the XOR of the pad layer. However, this would probably only be for the second shuttle, as it requires information from the online platform on whether the user has selected the CoB option or not.",
-      "author": {
-        "id": "323371864074485771",
-        "name": "mole99",
-        "discriminator": "0000",
-        "nickname": "mole99",
-        "color": null,
-        "isBot": false,
-        "roles": [
-          {
-            "id": "1423020172595298314",
-            "name": "Mod",
-            "color": null,
-            "position": 1
-          }
-        ],
-        "avatarUrl": "cob_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
-      },
-      "attachments": [],
-      "embeds": [],
-      "stickers": [],
-      "reactions": [],
-      "mentions": [
-        {
-          "id": "803213471402688522",
-          "name": "_luke_w_",
-          "discriminator": "0000",
-          "nickname": "LukeW",
-          "color": null,
-          "isBot": false,
-          "roles": [],
-          "avatarUrl": "cob_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
-        }
-      ],
-      "reference": {
-        "messageId": "1441780251758821480",
-        "channelId": "1408134567491145728",
-        "guildId": "1361349522684510449"
-      },
-      "inlineEmojis": []
+      ]
     }
   ],
-  "messageCount": 4
+  "messageCount": 2
 }
