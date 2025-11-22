@@ -2,18 +2,11 @@
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / cob
 Topic: Channel for discussing chip-on-board packaging options for wafer.space bare die.
-After: 11/22/2025 10:45
+After: 11/22/2025 11:40
 ==============================================================
 
-[11/22/2025 11:20] mole99
-Hi ReJ! I'm not sure what you mean by "future proof". Do you mean in regards to code changes to the template?
-
-The easier way is to change it in the RTL, as you only need to connect your signals to the bidir vector. However, it may be confusing to keep track of all the signals in bidir.
-
-That's why I think the better apporach would be to make another `generate` loop that instantiates the pads for the address bus and give it a better name than `bidir`, e.g. `addr_bus`. You would then need to reduce the number of bidir pins accordingly.
-Finally, you can add the `addr_bus\\[x\\].pad` instances to the yaml (and remove some of the bidir instances).
-
-Unfortunately, when the upstream template changes, this approach may lead to more conflicts.
+[11/22/2025 12:55] rzioma
+TBH, I am mostly worried that if touch something in `config.yaml` the pad's physical locations will change 😓  maybe an unfound fear
 
 
 ==============================================================
