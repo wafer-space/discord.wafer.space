@@ -13,64 +13,58 @@
     "topic": null
   },
   "dateRange": {
-    "after": "2025-11-22T19:44:19.991+00:00",
+    "after": "2025-11-22T20:51:00.787+00:00",
     "before": null
   },
-  "exportedAt": "2025-11-22T20:50:55.113079+00:00",
+  "exportedAt": "2025-11-22T21:46:42.9829492+00:00",
   "messages": [
     {
-      "id": "1441878065776169080",
-      "type": "Default",
-      "timestamp": "2025-11-22T19:48:39.68+00:00",
+      "id": "1441899103134023742",
+      "type": "Reply",
+      "timestamp": "2025-11-22T21:12:15.377+00:00",
       "timestampEdited": null,
       "callEndedTimestamp": null,
       "isPinned": false,
-      "content": "@Tholin :  The magic tech file _does_ implement rule V1.3d;  where do you see it not flagging the rule?  (Note that the DRC documentation has no rule\"V1.3d\", only \"V1.3\".  The \"d\" seems to have been invented by Mabrains when they make the klayout DRC deck.)",
+      "content": "Actually there is something suspicious in my CTS report:\n\n```\nTotal number of Clock Roots: 6.\n```\n\nI have four defined clocks with two gates on one of those clocks. If I rebuild with the ICG cells removed, I get\n\n```\nTotal number of Clock Roots: 4.\n```\nIs Triton treating each gate as a new root? Normally ICGs are just buffers for CTS purposes, and you'd explicitly define a root if you wanted a root",
       "author": {
-        "id": "1365118310701600900",
-        "name": "rtimothyedwards_19428",
+        "id": "803213471402688522",
+        "name": "_luke_w_",
         "discriminator": "0000",
-        "nickname": "Tim Edwards",
+        "nickname": "LukeW",
         "color": null,
         "isBot": false,
         "roles": [],
-        "avatarUrl": "project-template_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+        "avatarUrl": "project-template_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
       },
       "attachments": [],
       "embeds": [],
       "stickers": [],
       "reactions": [],
-      "mentions": [
-        {
-          "id": "220639106915368960",
-          "name": "tholin",
-          "discriminator": "0000",
-          "nickname": "Tholin",
-          "color": null,
-          "isBot": false,
-          "roles": [],
-          "avatarUrl": "project-template_media/a0ed32047bb13e92c0bce95b00e20a81-6B527.png"
-        }
-      ],
+      "mentions": [],
+      "reference": {
+        "messageId": "1441888604631863320",
+        "channelId": "1423348662318272592",
+        "guildId": "1361349522684510449"
+      },
       "inlineEmojis": []
     },
     {
-      "id": "1441878313898479748",
+      "id": "1441899248940748922",
       "type": "Default",
-      "timestamp": "2025-11-22T19:49:38.837+00:00",
+      "timestamp": "2025-11-22T21:12:50.14+00:00",
       "timestampEdited": null,
       "callEndedTimestamp": null,
       "isPinned": false,
-      "content": "https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_07_08.html",
+      "content": "re: DRC, I assumed these were checks that GF provided, but I guess they are \"implemented\" based on written rules that GF publishes? What happens if we submit a design that validates fine but doesn't meet GF's internal checks?",
       "author": {
-        "id": "596068704471482370",
-        "name": "246tnt",
+        "id": "384390069412429834",
+        "name": "polyfractal",
         "discriminator": "0000",
-        "nickname": "tnt",
+        "nickname": "BreakingTaps",
         "color": null,
         "isBot": false,
         "roles": [],
-        "avatarUrl": "project-template_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+        "avatarUrl": "project-template_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
       },
       "attachments": [],
       "embeds": [],
@@ -80,22 +74,22 @@
       "inlineEmojis": []
     },
     {
-      "id": "1441878385478598778",
+      "id": "1441899333422419969",
       "type": "Default",
-      "timestamp": "2025-11-22T19:49:55.903+00:00",
+      "timestamp": "2025-11-22T21:13:10.282+00:00",
       "timestampEdited": null,
       "callEndedTimestamp": null,
       "isPinned": false,
-      "content": "AFAICT it's just the gate over comp that needs to be covered.",
+      "content": "or do they just YOLO it and you get back a bad wafer?",
       "author": {
-        "id": "596068704471482370",
-        "name": "246tnt",
+        "id": "384390069412429834",
+        "name": "polyfractal",
         "discriminator": "0000",
-        "nickname": "tnt",
+        "nickname": "BreakingTaps",
         "color": null,
         "isBot": false,
         "roles": [],
-        "avatarUrl": "project-template_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+        "avatarUrl": "project-template_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
       },
       "attachments": [],
       "embeds": [],
@@ -105,138 +99,13 @@
       "inlineEmojis": []
     },
     {
-      "id": "1441878911112974346",
+      "id": "1441899457011515402",
       "type": "Default",
-      "timestamp": "2025-11-22T19:52:01.224+00:00",
+      "timestamp": "2025-11-22T21:13:39.748+00:00",
       "timestampEdited": null,
       "callEndedTimestamp": null,
       "isPinned": false,
-      "content": "@tnt : Thanks, I missed PL.11.  But PL.12 suggests that the diffusion as well as the gate must be covered.",
-      "author": {
-        "id": "1365118310701600900",
-        "name": "rtimothyedwards_19428",
-        "discriminator": "0000",
-        "nickname": "Tim Edwards",
-        "color": null,
-        "isBot": false,
-        "roles": [],
-        "avatarUrl": "project-template_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
-      },
-      "attachments": [],
-      "embeds": [],
-      "stickers": [],
-      "reactions": [],
-      "mentions": [],
-      "inlineEmojis": []
-    },
-    {
-      "id": "1441879301623386236",
-      "type": "Default",
-      "timestamp": "2025-11-22T19:53:34.329+00:00",
-      "timestampEdited": null,
-      "callEndedTimestamp": null,
-      "isPinned": false,
-      "content": "Rule PL.12 might be intended to prevent mixing 5V and 6V devices in the same circuit.",
-      "author": {
-        "id": "1365118310701600900",
-        "name": "rtimothyedwards_19428",
-        "discriminator": "0000",
-        "nickname": "Tim Edwards",
-        "color": null,
-        "isBot": false,
-        "roles": [],
-        "avatarUrl": "project-template_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
-      },
-      "attachments": [],
-      "embeds": [],
-      "stickers": [],
-      "reactions": [],
-      "mentions": [],
-      "inlineEmojis": []
-    },
-    {
-      "id": "1441879307382161440",
-      "type": "Default",
-      "timestamp": "2025-11-22T19:53:35.702+00:00",
-      "timestampEdited": null,
-      "callEndedTimestamp": null,
-      "isPinned": false,
-      "content": "At least the klayout DRC only checks the gate.",
-      "author": {
-        "id": "596068704471482370",
-        "name": "246tnt",
-        "discriminator": "0000",
-        "nickname": "tnt",
-        "color": null,
-        "isBot": false,
-        "roles": [],
-        "avatarUrl": "project-template_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
-      },
-      "attachments": [],
-      "embeds": [],
-      "stickers": [],
-      "reactions": [],
-      "mentions": [],
-      "inlineEmojis": []
-    },
-    {
-      "id": "1441879378484133948",
-      "type": "Default",
-      "timestamp": "2025-11-22T19:53:52.654+00:00",
-      "timestampEdited": null,
-      "callEndedTimestamp": null,
-      "isPinned": false,
-      "content": "But GF might flag PL.12.",
-      "author": {
-        "id": "1365118310701600900",
-        "name": "rtimothyedwards_19428",
-        "discriminator": "0000",
-        "nickname": "Tim Edwards",
-        "color": null,
-        "isBot": false,
-        "roles": [],
-        "avatarUrl": "project-template_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
-      },
-      "attachments": [],
-      "embeds": [],
-      "stickers": [],
-      "reactions": [],
-      "mentions": [],
-      "inlineEmojis": []
-    },
-    {
-      "id": "1441879984317661277",
-      "type": "Default",
-      "timestamp": "2025-11-22T19:56:17.096+00:00",
-      "timestampEdited": null,
-      "callEndedTimestamp": null,
-      "isPinned": false,
-      "content": "Yes. Without exactly a drawing for what PL.12 means, I'm not sure tbh.",
-      "author": {
-        "id": "596068704471482370",
-        "name": "246tnt",
-        "discriminator": "0000",
-        "nickname": "tnt",
-        "color": null,
-        "isBot": false,
-        "roles": [],
-        "avatarUrl": "project-template_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
-      },
-      "attachments": [],
-      "embeds": [],
-      "stickers": [],
-      "reactions": [],
-      "mentions": [],
-      "inlineEmojis": []
-    },
-    {
-      "id": "1441880247715758160",
-      "type": "Default",
-      "timestamp": "2025-11-22T19:57:19.895+00:00",
-      "timestampEdited": null,
-      "callEndedTimestamp": null,
-      "isPinned": false,
-      "content": "I like also how there is a drawing for PL.19 but then no PL.19 rule \uD83D\uDE05",
+      "content": "GF definitely didn't provide the decks for KLayout and Magic \uD83D\uDE05",
       "author": {
         "id": "596068704471482370",
         "name": "246tnt",
@@ -263,143 +132,13 @@
       ]
     },
     {
-      "id": "1441880397335101626",
+      "id": "1441899602952458512",
       "type": "Default",
-      "timestamp": "2025-11-22T19:57:55.567+00:00",
+      "timestamp": "2025-11-22T21:14:14.543+00:00",
       "timestampEdited": null,
       "callEndedTimestamp": null,
       "isPinned": false,
-      "content": "I'll start counting the issues in the rules and illustrations, and get back to you next week.",
-      "author": {
-        "id": "1365118310701600900",
-        "name": "rtimothyedwards_19428",
-        "discriminator": "0000",
-        "nickname": "Tim Edwards",
-        "color": null,
-        "isBot": false,
-        "roles": [],
-        "avatarUrl": "project-template_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
-      },
-      "attachments": [],
-      "embeds": [],
-      "stickers": [],
-      "reactions": [
-        {
-          "emoji": {
-            "id": "",
-            "name": "\uD83E\uDD23",
-            "code": "rofl",
-            "isAnimated": false,
-            "imageUrl": "project-template_media/1f923-5854E.svg"
-          },
-          "count": 1,
-          "users": [
-            {
-              "id": "596068704471482370",
-              "name": "246tnt",
-              "discriminator": "0000",
-              "nickname": "tnt",
-              "color": null,
-              "isBot": false,
-              "avatarUrl": "project-template_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
-            }
-          ]
-        }
-      ],
-      "mentions": [],
-      "inlineEmojis": []
-    },
-    {
-      "id": "1441881926397984999",
-      "type": "Default",
-      "timestamp": "2025-11-22T20:04:00.124+00:00",
-      "timestampEdited": null,
-      "callEndedTimestamp": null,
-      "isPinned": false,
-      "content": "It occurs to me that there must (?) also be \"cap_nmos_05v0\", \"cap_pmos_05v0\", \"cap_nmos_05v0_b\", and \"cap_pmos_05v0_b\" devices, but the devices themselves are just modeled as ideal capacitors (?!) and the models have no restriction on length and width.  Also, moscap-connected transistors in the SRAM are just transistors in the netlist.  Maybe the moscap device should just be quietly removed from the PDK. . .",
-      "author": {
-        "id": "1365118310701600900",
-        "name": "rtimothyedwards_19428",
-        "discriminator": "0000",
-        "nickname": "Tim Edwards",
-        "color": null,
-        "isBot": false,
-        "roles": [],
-        "avatarUrl": "project-template_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
-      },
-      "attachments": [],
-      "embeds": [],
-      "stickers": [],
-      "reactions": [],
-      "mentions": [],
-      "inlineEmojis": []
-    },
-    {
-      "id": "1441887955172987030",
-      "type": "Default",
-      "timestamp": "2025-11-22T20:27:57.496+00:00",
-      "timestampEdited": null,
-      "callEndedTimestamp": null,
-      "isPinned": false,
-      "content": "@tnt :  Okay, I have reworked the GF tech file for magic, and pushed the change.  There is also a pending commit to add the 3.3V SRAM library to the open_pdks installation of GF180MCU, so it will all be mirrored to github by tomorrow.",
-      "author": {
-        "id": "1365118310701600900",
-        "name": "rtimothyedwards_19428",
-        "discriminator": "0000",
-        "nickname": "Tim Edwards",
-        "color": null,
-        "isBot": false,
-        "roles": [],
-        "avatarUrl": "project-template_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
-      },
-      "attachments": [],
-      "embeds": [],
-      "stickers": [],
-      "reactions": [
-        {
-          "emoji": {
-            "id": "",
-            "name": "\uD83D\uDC4C",
-            "code": "ok_hand",
-            "isAnimated": false,
-            "imageUrl": "project-template_media/1f44c-59547.svg"
-          },
-          "count": 1,
-          "users": [
-            {
-              "id": "596068704471482370",
-              "name": "246tnt",
-              "discriminator": "0000",
-              "nickname": "tnt",
-              "color": null,
-              "isBot": false,
-              "avatarUrl": "project-template_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
-            }
-          ]
-        }
-      ],
-      "mentions": [
-        {
-          "id": "596068704471482370",
-          "name": "246tnt",
-          "discriminator": "0000",
-          "nickname": "tnt",
-          "color": null,
-          "isBot": false,
-          "roles": [],
-          "avatarUrl": "project-template_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
-        }
-      ],
-      "inlineEmojis": []
-    },
-    {
-      "id": "1441888106092695653",
-      "type": "Default",
-      "timestamp": "2025-11-22T20:28:33.478+00:00",
-      "timestampEdited": null,
-      "callEndedTimestamp": null,
-      "isPinned": false,
-      "content": "Oh wow, that was fast \uD83D\uDE05",
+      "content": "If it's the same as for Sky130, the fab runs their own deck and comes backs with a list of violations that need fixing.",
       "author": {
         "id": "596068704471482370",
         "name": "246tnt",
@@ -409,6 +148,56 @@
         "isBot": false,
         "roles": [],
         "avatarUrl": "project-template_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441899950345551924",
+      "type": "Default",
+      "timestamp": "2025-11-22T21:15:37.368+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "They usually only bother reporting the MR ( Manufacturing Rule ), i.e. the rules that would actually prevent manufacturing the thing at all.  There are also a bunch of rules that are not MR. i.e. they would affect the performance or function, but are not manufacturing risk, so they don't care so much, it's sort of your problem.",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441900452584362145",
+      "type": "Default",
+      "timestamp": "2025-11-22T21:17:37.111+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "\uD83D\uDC4D  makes sense, thanks",
+      "author": {
+        "id": "384390069412429834",
+        "name": "polyfractal",
+        "discriminator": "0000",
+        "nickname": "BreakingTaps",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
       },
       "attachments": [],
       "embeds": [],
@@ -418,88 +207,13 @@
       "inlineEmojis": [
         {
           "id": "",
-          "name": "\uD83D\uDE05",
-          "code": "sweat_smile",
+          "name": "\uD83D\uDC4D",
+          "code": "thumbsup",
           "isAnimated": false,
-          "imageUrl": "project-template_media/1f605-42B43.svg"
+          "imageUrl": "project-template_media/1f44d-27259.svg"
         }
       ]
-    },
-    {
-      "id": "1441888119971512362",
-      "type": "Default",
-      "timestamp": "2025-11-22T20:28:36.787+00:00",
-      "timestampEdited": null,
-      "callEndedTimestamp": null,
-      "isPinned": false,
-      "content": "Thanks !",
-      "author": {
-        "id": "596068704471482370",
-        "name": "246tnt",
-        "discriminator": "0000",
-        "nickname": "tnt",
-        "color": null,
-        "isBot": false,
-        "roles": [],
-        "avatarUrl": "project-template_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
-      },
-      "attachments": [],
-      "embeds": [],
-      "stickers": [],
-      "reactions": [],
-      "mentions": [],
-      "inlineEmojis": []
-    },
-    {
-      "id": "1441888604631863320",
-      "type": "Default",
-      "timestamp": "2025-11-22T20:30:32.339+00:00",
-      "timestampEdited": "2025-11-22T20:34:45.425+00:00",
-      "callEndedTimestamp": null,
-      "isPinned": false,
-      "content": "Is anyone else using clock gates (ICGs) in their designs? I'm getting ~2ns SRAM address hold violations with CPU on a gated clock and SRAM on an ungated version of the same clock. I saw TritonCTS had a `-balance_levels` switch (off by default, enabled by `CTS_BALANCE_LEVELS: True`), but it didn't seem to help with overall clock skew:\n\n> -balance_levels Attempt to keep a similar number of levels in the clock tree across non-register cells (e.g., clock-gate or inverter). The default value is False, and the allowed values are bool.",
-      "author": {
-        "id": "803213471402688522",
-        "name": "_luke_w_",
-        "discriminator": "0000",
-        "nickname": "LukeW",
-        "color": null,
-        "isBot": false,
-        "roles": [],
-        "avatarUrl": "project-template_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
-      },
-      "attachments": [],
-      "embeds": [],
-      "stickers": [],
-      "reactions": [],
-      "mentions": [],
-      "inlineEmojis": []
-    },
-    {
-      "id": "1441889551462305905",
-      "type": "Default",
-      "timestamp": "2025-11-22T20:34:18.081+00:00",
-      "timestampEdited": "2025-11-22T20:36:00.286+00:00",
-      "callEndedTimestamp": null,
-      "isPinned": false,
-      "content": "Related note: based on a tip in the Caravel report I found I could reduce overall clock skew by about 40% (2.8 -> 1.7 ns in post-CTS STA) by forcing Triton to always use the largest available clock buffer. Is there any reason not to make this the default? If you're tight on timing then it may even save area overall as you should need fewer fixups and resizes\n\n```\n# Force use of chonky bois to reduce clock skew (default list is 2, 4, 8)\nCTS_CLK_BUFFERS:\n  - \"gf180mcu_fd_sc_mcu7t5v0__clkbuf_16\"\n```",
-      "author": {
-        "id": "803213471402688522",
-        "name": "_luke_w_",
-        "discriminator": "0000",
-        "nickname": "LukeW",
-        "color": null,
-        "isBot": false,
-        "roles": [],
-        "avatarUrl": "project-template_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
-      },
-      "attachments": [],
-      "embeds": [],
-      "stickers": [],
-      "reactions": [],
-      "mentions": [],
-      "inlineEmojis": []
     }
   ],
-  "messageCount": 16
+  "messageCount": 7
 }

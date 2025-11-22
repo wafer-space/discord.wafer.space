@@ -1,85 +1,48 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / project-template
-After: 11/22/2025 19:44
+After: 11/22/2025 20:51
 ==============================================================
 
-[11/22/2025 19:48] rtimothyedwards_19428
-@Tholin :  The magic tech file _does_ implement rule V1.3d;  where do you see it not flagging the rule?  (Note that the DRC documentation has no rule"V1.3d", only "V1.3".  The "d" seems to have been invented by Mabrains when they make the klayout DRC deck.)
-
-
-[11/22/2025 19:49] 246tnt
-https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_07_08.html
-
-
-[11/22/2025 19:49] 246tnt
-AFAICT it's just the gate over comp that needs to be covered.
-
-
-[11/22/2025 19:52] rtimothyedwards_19428
-@tnt : Thanks, I missed PL.11.  But PL.12 suggests that the diffusion as well as the gate must be covered.
-
-
-[11/22/2025 19:53] rtimothyedwards_19428
-Rule PL.12 might be intended to prevent mixing 5V and 6V devices in the same circuit.
-
-
-[11/22/2025 19:53] 246tnt
-At least the klayout DRC only checks the gate.
-
-
-[11/22/2025 19:53] rtimothyedwards_19428
-But GF might flag PL.12.
-
-
-[11/22/2025 19:56] 246tnt
-Yes. Without exactly a drawing for what PL.12 means, I'm not sure tbh.
-
-
-[11/22/2025 19:57] 246tnt
-I like also how there is a drawing for PL.19 but then no PL.19 rule 😅
-
-
-[11/22/2025 19:57] rtimothyedwards_19428
-I'll start counting the issues in the rules and illustrations, and get back to you next week.
-
-{Reactions}
-🤣
-
-[11/22/2025 20:04] rtimothyedwards_19428
-It occurs to me that there must (?) also be "cap_nmos_05v0", "cap_pmos_05v0", "cap_nmos_05v0_b", and "cap_pmos_05v0_b" devices, but the devices themselves are just modeled as ideal capacitors (?!) and the models have no restriction on length and width.  Also, moscap-connected transistors in the SRAM are just transistors in the netlist.  Maybe the moscap device should just be quietly removed from the PDK. . .
-
-
-[11/22/2025 20:27] rtimothyedwards_19428
-@tnt :  Okay, I have reworked the GF tech file for magic, and pushed the change.  There is also a pending commit to add the 3.3V SRAM library to the open_pdks installation of GF180MCU, so it will all be mirrored to github by tomorrow.
-
-{Reactions}
-👌
-
-[11/22/2025 20:28] 246tnt
-Oh wow, that was fast 😅
-
-
-[11/22/2025 20:28] 246tnt
-Thanks !
-
-
-[11/22/2025 20:30] _luke_w_
-Is anyone else using clock gates (ICGs) in their designs? I'm getting ~2ns SRAM address hold violations with CPU on a gated clock and SRAM on an ungated version of the same clock. I saw TritonCTS had a `-balance_levels` switch (off by default, enabled by `CTS_BALANCE_LEVELS: True`), but it didn't seem to help with overall clock skew:
-
-> -balance_levels Attempt to keep a similar number of levels in the clock tree across non-register cells (e.g., clock-gate or inverter). The default value is False, and the allowed values are bool.
-
-
-[11/22/2025 20:34] _luke_w_
-Related note: based on a tip in the Caravel report I found I could reduce overall clock skew by about 40% (2.8 -> 1.7 ns in post-CTS STA) by forcing Triton to always use the largest available clock buffer. Is there any reason not to make this the default? If you're tight on timing then it may even save area overall as you should need fewer fixups and resizes
+[11/22/2025 21:12] _luke_w_
+Actually there is something suspicious in my CTS report:
 
 ```
-# Force use of chonky bois to reduce clock skew (default list is 2, 4, 8)
-CTS_CLK_BUFFERS:
-  - "gf180mcu_fd_sc_mcu7t5v0__clkbuf_16"
+Total number of Clock Roots: 6.
 ```
+
+I have four defined clocks with two gates on one of those clocks. If I rebuild with the ICG cells removed, I get
+
+```
+Total number of Clock Roots: 4.
+```
+Is Triton treating each gate as a new root? Normally ICGs are just buffers for CTS purposes, and you'd explicitly define a root if you wanted a root
+
+
+[11/22/2025 21:12] polyfractal
+re: DRC, I assumed these were checks that GF provided, but I guess they are "implemented" based on written rules that GF publishes? What happens if we submit a design that validates fine but doesn't meet GF's internal checks?
+
+
+[11/22/2025 21:13] polyfractal
+or do they just YOLO it and you get back a bad wafer?
+
+
+[11/22/2025 21:13] 246tnt
+GF definitely didn't provide the decks for KLayout and Magic 😅
+
+
+[11/22/2025 21:14] 246tnt
+If it's the same as for Sky130, the fab runs their own deck and comes backs with a list of violations that need fixing.
+
+
+[11/22/2025 21:15] 246tnt
+They usually only bother reporting the MR ( Manufacturing Rule ), i.e. the rules that would actually prevent manufacturing the thing at all.  There are also a bunch of rules that are not MR. i.e. they would affect the performance or function, but are not manufacturing risk, so they don't care so much, it's sort of your problem.
+
+
+[11/22/2025 21:17] polyfractal
+👍  makes sense, thanks
 
 
 ==============================================================
-Exported 16 message(s)
+Exported 7 message(s)
 ==============================================================
