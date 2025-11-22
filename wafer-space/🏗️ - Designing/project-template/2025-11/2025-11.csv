@@ -1,19 +1,1 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
-"803213471402688522","_luke_w_","2025-11-22T21:12:15.3770000+00:00","Actually there is something suspicious in my CTS report:
-
-```
-Total number of Clock Roots: 6.
-```
-
-I have four defined clocks with two gates on one of those clocks. If I rebuild with the ICG cells removed, I get
-
-```
-Total number of Clock Roots: 4.
-```
-Is Triton treating each gate as a new root? Normally ICGs are just buffers for CTS purposes, and you'd explicitly define a root if you wanted a root","",""
-"384390069412429834","polyfractal","2025-11-22T21:12:50.1400000+00:00","re: DRC, I assumed these were checks that GF provided, but I guess they are ""implemented"" based on written rules that GF publishes? What happens if we submit a design that validates fine but doesn't meet GF's internal checks?","",""
-"384390069412429834","polyfractal","2025-11-22T21:13:10.2820000+00:00","or do they just YOLO it and you get back a bad wafer?","",""
-"596068704471482370","246tnt","2025-11-22T21:13:39.7480000+00:00","GF definitely didn't provide the decks for KLayout and Magic 😅","",""
-"596068704471482370","246tnt","2025-11-22T21:14:14.5430000+00:00","If it's the same as for Sky130, the fab runs their own deck and comes backs with a list of violations that need fixing.","",""
-"596068704471482370","246tnt","2025-11-22T21:15:37.3680000+00:00","They usually only bother reporting the MR ( Manufacturing Rule ), i.e. the rules that would actually prevent manufacturing the thing at all.  There are also a bunch of rules that are not MR. i.e. they would affect the performance or function, but are not manufacturing risk, so they don't care so much, it's sort of your problem.","",""
-"384390069412429834","polyfractal","2025-11-22T21:17:37.1110000+00:00","👍  makes sense, thanks","",""
