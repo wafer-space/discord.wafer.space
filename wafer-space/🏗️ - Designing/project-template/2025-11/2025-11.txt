@@ -1,9 +1,44 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / project-template
-After: 11/22/2025 15:46
+After: 11/22/2025 16:53
 ==============================================================
 
+[11/22/2025 17:20] tholin
+Is there a way for me to run the KLayout DRC checks on a GDSII file without running the full chip_top flow? I just want to know if my DACs still have DRC errors without waiting 4+ hours for DRC to run on the full chip.
+
+
+[11/22/2025 17:22] 246tnt
+`klayout -b -zz -r ${PDK_ROOT}/gf180mcuD/libs.tech/klayout/tech/drc/gf180mcu.drc -rd input=your.gds -rd report=drc.klayout.lyrdb -rd feol=True -rd beol=True -rd dummy=True -rd offgrid=True -rd conn_drc=True -rd wedge=True -rd run_mode=deep -rd thr=16`
+
+
+[11/22/2025 17:23] 246tnt
+That's the command run by the pre-check.
+
+
+[11/22/2025 17:30] tholin
+Its so annoying to me that I can spend days putting something together in magic until its DRC clean, and then KLayout comes in "Actshually, there is 107 DRC errors"
+
+
+[11/22/2025 17:39] 246tnt
+I think that's pretty much the deal of being on this first run is that you're beta testing stuff ...
+
+
+[11/22/2025 17:43] 246tnt
+Although I'm looking at some of the error in KLayout and ... they might be false positive.
+
+
+[11/22/2025 17:44] tholin
+I have tons of DRC errors for this. So uhm. Is it too long? Too short? What is the limit?
+
+{Attachments}
+project-template_media/image-F7AF9.png
+
+
+[11/22/2025 17:45] tholin
+Am I about to have to dive into some source code just to know what this is about?
+
+
 ==============================================================
-Exported 0 message(s)
+Exported 8 message(s)
 ==============================================================

@@ -1,5 +1,1 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
-"220639106915368960","tholin","2025-11-22T15:53:15.3600000+00:00","The duplicate rlabels/ports are indeed a problem. If I don’t remove them, not only does routing fail, but the DRT has a chance of crashing.","",""
-"220639106915368960","tholin","2025-11-22T15:54:47.4590000+00:00","I tried doing a diff of the .lef file with and without the duplicate labels and the coordinates of all the ASIG5V pins change slightly. Current theory: the duplicate ports are not exact duplicates, but slightly shifted downwards. If the lef is then written with -pinonly,  only these shifted duplicates are exported, which occupy illegal positions.","",""
-"738396032295108721","bailey8889","2025-11-22T16:18:35.7290000+00:00","If you're using magic for lef generation, be sure that the bounding box `FIXED_BBOX` is set.","",""
-"220639106915368960","tholin","2025-11-22T16:19:33.3640000+00:00","It is","",""
