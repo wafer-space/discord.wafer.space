@@ -1,44 +1,126 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / project-template
-After: 11/22/2025 16:53
+After: 11/22/2025 17:45
 ==============================================================
 
-[11/22/2025 17:20] tholin
-Is there a way for me to run the KLayout DRC checks on a GDSII file without running the full chip_top flow? I just want to know if my DACs still have DRC errors without waiting 4+ hours for DRC to run on the full chip.
-
-
-[11/22/2025 17:22] 246tnt
-`klayout -b -zz -r ${PDK_ROOT}/gf180mcuD/libs.tech/klayout/tech/drc/gf180mcu.drc -rd input=your.gds -rd report=drc.klayout.lyrdb -rd feol=True -rd beol=True -rd dummy=True -rd offgrid=True -rd conn_drc=True -rd wedge=True -rd run_mode=deep -rd thr=16`
-
-
-[11/22/2025 17:23] 246tnt
-That's the command run by the pre-check.
-
-
-[11/22/2025 17:30] tholin
-Its so annoying to me that I can spend days putting something together in magic until its DRC clean, and then KLayout comes in "Actshually, there is 107 DRC errors"
-
-
-[11/22/2025 17:39] 246tnt
-I think that's pretty much the deal of being on this first run is that you're beta testing stuff ...
-
-
-[11/22/2025 17:43] 246tnt
-Although I'm looking at some of the error in KLayout and ... they might be false positive.
-
-
-[11/22/2025 17:44] tholin
-I have tons of DRC errors for this. So uhm. Is it too long? Too short? What is the limit?
+[11/22/2025 17:46] tholin
+No errors in magic
 
 {Attachments}
-project-template_media/image-F7AF9.png
+project-template_media/image-DC49F.png
 
 
-[11/22/2025 17:45] tholin
-Am I about to have to dive into some source code just to know what this is about?
+[11/22/2025 17:47] 246tnt
+Yes, looking at that now. I think there is a missing marker layer.
+
+
+[11/22/2025 17:47] 246tnt
+5V and 6V transistors have no difference except the channel length.
+
+
+[11/22/2025 17:48] tholin
+What is the marker layer?
+
+
+[11/22/2025 17:48] 246tnt
+And there is a marker layer (purely informational, doesn't mean anything for manufacturing) to tell klayout that a given transistor is meant to be 5V and not 6V.
+
+
+[11/22/2025 17:48] 246tnt
+v5_xtor
+
+
+[11/22/2025 17:50] 246tnt
+112/1
+
+
+[11/22/2025 17:50] tholin
+`string MASKHINTS_V5_XTOR` does not have an effect. Will actually have to draw this in KLayout.
+
+
+[11/22/2025 17:51] 246tnt
+Yeah, MASKHINTS only works if support for maskhints for that particular layer is in the tech file.
+
+
+[11/22/2025 17:51] 246tnt
+@Tim Edwards it seems `magic` isn't creating that layer at all, I see no support for writing it in the tech file ?
+
+
+[11/22/2025 17:51] tholin
+But also, these are supposed to be 6V devices
+
+
+[11/22/2025 17:52] tholin
+But also, magic extracts them as 5V?
+
+
+[11/22/2025 17:52] tholin
+There is weird things going on here
+
+
+[11/22/2025 17:59] tholin
+Oh no, the transistors are indeed too small for 6V devices - and magic doesn’t see a problem with that.
+
+
+[11/22/2025 17:59] tholin
+In other words, I’d like to report a bug...
+
+
+[11/22/2025 18:08] 246tnt
+I'm guessing the `mv` devices (which are the ones used in your design) are meant to be the 5V one and the `hv` would be the 6V ones.
+
+
+[11/22/2025 18:10] 246tnt
+Ah no, I think magic doesn't differentiate between 5V and 6V devices at all.
+
+
+[11/22/2025 18:10] 246tnt
+both are `mvnfet` / `mvpfet` and it's just whatever length you use that will dictate which one it is ...
+
+
+[11/22/2025 18:17] tholin
+hv is 10V
+
+
+[11/22/2025 18:18] tholin
+GF180mcu has LV, MV 5V, MV 6V, Native Vt, HV LDMOS
+
+
+[11/22/2025 18:18] tholin
+Which are 3.3V, 5V, 6V, 6V and 10V respectively.
+
+
+[11/22/2025 18:20] tholin
+Here is another DRC error that I’m seeing a lot of in KLayout but that isn’t represented in magic.
+
+{Attachments}
+project-template_media/image-C4F8A.png
+
+
+[11/22/2025 18:20] tholin
+Even though it totally could be.
+
+
+[11/22/2025 18:25] 246tnt
+I think there are also drc not checked by klayout because anything wider than 30u must be slitted and it didn't spot that.
+
+
+[11/22/2025 18:42] 246tnt
+@mole99 I think the KLayout deck has issues.
+
+
+[11/22/2025 18:42] 246tnt
+"M3.2b : Space to wide Metal3 (length & width > 10um) : 0.3µm"
+
+{Attachments}
+project-template_media/2025-11-22_551x273_scrot-95CE6.png
+
+
+[11/22/2025 18:43] 246tnt
+That's a 0.28u trace ... hardly "wide Metal3".
 
 
 ==============================================================
-Exported 8 message(s)
+Exported 27 message(s)
 ==============================================================
