@@ -13,85 +13,83 @@
     "topic": null
   },
   "dateRange": {
-    "after": "2025-11-22T14:20:01.893+00:00",
+    "after": "2025-11-22T15:21:14.756+00:00",
     "before": null
   },
-  "exportedAt": "2025-11-22T15:20:33.2746224+00:00",
+  "exportedAt": "2025-11-22T16:26:37.5578025+00:00",
   "messages": [
     {
-      "id": "1441803316819660911",
-      "type": "Default",
-      "timestamp": "2025-11-22T14:51:38.14+00:00",
-      "timestampEdited": null,
-      "callEndedTimestamp": null,
-      "isPinned": false,
-      "content": "Okay, my modified analog pads do connect now, but also have a ton of DRC errors.",
-      "author": {
-        "id": "220639106915368960",
-        "name": "tholin",
-        "discriminator": "0000",
-        "nickname": "Tholin",
-        "color": null,
-        "isBot": false,
-        "roles": [],
-        "avatarUrl": "general_media/a0ed32047bb13e92c0bce95b00e20a81-6B527.png"
-      },
-      "attachments": [],
-      "embeds": [],
-      "stickers": [],
-      "reactions": [],
-      "mentions": [],
-      "inlineEmojis": []
-    },
-    {
-      "id": "1441803350369636382",
-      "type": "Default",
-      "timestamp": "2025-11-22T14:51:46.139+00:00",
-      "timestampEdited": null,
-      "callEndedTimestamp": null,
-      "isPinned": false,
-      "content": "Imma see if I can’t be a bit smarter about this.",
-      "author": {
-        "id": "220639106915368960",
-        "name": "tholin",
-        "discriminator": "0000",
-        "nickname": "Tholin",
-        "color": null,
-        "isBot": false,
-        "roles": [],
-        "avatarUrl": "general_media/a0ed32047bb13e92c0bce95b00e20a81-6B527.png"
-      },
-      "attachments": [],
-      "embeds": [],
-      "stickers": [],
-      "reactions": [],
-      "mentions": [],
-      "inlineEmojis": []
-    },
-    {
-      "id": "1441808094760931440",
+      "id": "1441818824084029482",
       "type": "Reply",
-      "timestamp": "2025-11-22T15:10:37.29+00:00",
+      "timestamp": "2025-11-22T15:53:15.36+00:00",
       "timestampEdited": null,
       "callEndedTimestamp": null,
       "isPinned": false,
-      "content": "Didn't the PULP team open source their artwork generator recently? I thought they did but I can't find it on their website",
+      "content": "The duplicate rlabels/ports are indeed a problem. If I don’t remove them, not only does routing fail, but the DRT has a chance of crashing.",
       "author": {
-        "id": "492702620759228416",
-        "name": "mattvenn",
+        "id": "220639106915368960",
+        "name": "tholin",
         "discriminator": "0000",
-        "nickname": "Matt Venn",
+        "nickname": "Tholin",
         "color": null,
         "isBot": false,
-        "roles": [
-          {
-            "id": "1423020172595298314",
-            "name": "Mod",
-            "color": null,
-            "position": 1
-          }
-        ],
-        "avatarUrl": "general_media/aa8560ba40f1f3d339d044dee6970630-97A62.png"
+        "roles": [],
+        "avatarUrl": "general_media/a0ed32047bb13e92c0bce95b00e20a81-6B527.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "reference": {
+        "messageId": "1441421873614426223",
+        "channelId": "1361349523724570941",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441819210375364788",
+      "type": "Default",
+      "timestamp": "2025-11-22T15:54:47.459+00:00",
+      "timestampEdited": "2025-11-22T15:54:59.085+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I tried doing a diff of the .lef file with and without the duplicate labels and the coordinates of all the ASIG5V pins change slightly. Current theory: the duplicate ports are not exact duplicates, but slightly shifted downwards. If the lef is then written with -pinonly,  only these shifted duplicates are exported, which occupy illegal positions.",
+      "author": {
+        "id": "220639106915368960",
+        "name": "tholin",
+        "discriminator": "0000",
+        "nickname": "Tholin",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/a0ed32047bb13e92c0bce95b00e20a81-6B527.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441825200973942825",
+      "type": "Reply",
+      "timestamp": "2025-11-22T16:18:35.729+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "If you're using magic for lef generation, be sure that the bounding box `FIXED_BBOX` is set.",
+      "author": {
+        "id": "738396032295108721",
+        "name": "bailey8889",
+        "discriminator": "0000",
+        "nickname": "bailey",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/0-EB806.png"
       },
       "attachments": [],
       "embeds": [],
@@ -110,12 +108,37 @@
         }
       ],
       "reference": {
-        "messageId": "1441460450725331107",
+        "messageId": "1441819210375364788",
         "channelId": "1361349523724570941",
         "guildId": "1361349522684510449"
       },
       "inlineEmojis": []
+    },
+    {
+      "id": "1441825442712654067",
+      "type": "Default",
+      "timestamp": "2025-11-22T16:19:33.364+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It is",
+      "author": {
+        "id": "220639106915368960",
+        "name": "tholin",
+        "discriminator": "0000",
+        "nickname": "Tholin",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/a0ed32047bb13e92c0bce95b00e20a81-6B527.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
     }
   ],
-  "messageCount": 3
+  "messageCount": 4
 }

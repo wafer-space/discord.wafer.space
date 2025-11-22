@@ -1,21 +1,25 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: Information / general
-After: 11/22/2025 14:20
+After: 11/22/2025 15:21
 ==============================================================
 
-[11/22/2025 14:51] tholin
-Okay, my modified analog pads do connect now, but also have a ton of DRC errors.
+[11/22/2025 15:53] tholin
+The duplicate rlabels/ports are indeed a problem. If I don’t remove them, not only does routing fail, but the DRT has a chance of crashing.
 
 
-[11/22/2025 14:51] tholin
-Imma see if I can’t be a bit smarter about this.
+[11/22/2025 15:54] tholin
+I tried doing a diff of the .lef file with and without the duplicate labels and the coordinates of all the ASIG5V pins change slightly. Current theory: the duplicate ports are not exact duplicates, but slightly shifted downwards. If the lef is then written with -pinonly,  only these shifted duplicates are exported, which occupy illegal positions.
 
 
-[11/22/2025 15:10] mattvenn
-Didn't the PULP team open source their artwork generator recently? I thought they did but I can't find it on their website
+[11/22/2025 16:18] bailey8889
+If you're using magic for lef generation, be sure that the bounding box `FIXED_BBOX` is set.
+
+
+[11/22/2025 16:19] tholin
+It is
 
 
 ==============================================================
-Exported 3 message(s)
+Exported 4 message(s)
 ==============================================================
