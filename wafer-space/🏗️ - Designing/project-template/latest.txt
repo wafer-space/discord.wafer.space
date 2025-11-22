@@ -1,50 +1,85 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / project-template
-After: 11/22/2025 18:57
+After: 11/22/2025 19:44
 ==============================================================
 
-[11/22/2025 19:01] rtimothyedwards_19428
-@Tholin :  Sorry, I was not following this conversation until Sylvain flagged me.
-I keep trying to remind people that the magic DRC deck for GF180MCU was designed in a hurry for what was a digital-only tapeout from Efabless.  I made a "good first pass" at the analog rules and layers but there were no analog designs to validate it with.  I have made some corrections since then, but it is more or less in the same state.  I suppose the same goes for the klayout deck---No real validation in practice.
+[11/22/2025 19:48] rtimothyedwards_19428
+@Tholin :  The magic tech file _does_ implement rule V1.3d;  where do you see it not flagging the rule?  (Note that the DRC documentation has no rule"V1.3d", only "V1.3".  The "d" seems to have been invented by Mabrains when they make the klayout DRC deck.)
 
 
-[11/22/2025 19:11] rtimothyedwards_19428
-@Tholin :  I found the GF handling of "5V" devices to be awkward and looked for some method to be consistent.  It has never seemed reasonable to me that the same device can be either "5V" or "6V", and requires a marker layer to specify the _intent_ of it.  But mostly the issue of the way it is currently implemented in magic comes from early on struggling with what was _meant_ by a 5V or 6V transistor, along with largely unreadable documentation trying (badly) to explain it.  There were no 5V devices in the device model files originally.  I added those to the model files recently.  I could certainly redo the magic tech file to separate the 5V and 6V transistor types (now that there is a device model for each of them) and use the V5_XTOR ("FET5VDEF" in the magic techfile) to distinguish them (and apply the device length rules separately for each of them).
+[11/22/2025 19:49] 246tnt
+https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_07_08.html
 
 
-[11/22/2025 19:13] 246tnt
-IMHO it's fine to only have `mv` to represent 5V/6V , but the `V5_XTOR` layer still need to be generated if length is too small to be 6V to comply with the DRC requirement ...  I'm not sure if that's something doable in the magic tech file ?
+[11/22/2025 19:49] 246tnt
+AFAICT it's just the gate over comp that needs to be covered.
 
 
-[11/22/2025 19:13] rtimothyedwards_19428
-So it's not so much a bug as an implementation decision.  Given that (at the time I implemented it) there was only one device model, I just had magic extract that one device model and discarded the information from the V5_XTOR mask.  Either way, it's the same device, same model (my 5V model is just a copy of the 6V model, with a restriction on device length applied to the 6V model).
+[11/22/2025 19:52] rtimothyedwards_19428
+@tnt : Thanks, I missed PL.11.  But PL.12 suggests that the diffusion as well as the gate must be covered.
 
 
-[11/22/2025 19:15] rtimothyedwards_19428
-@tnt :  It can be done.  I assume the purpose is to have magic-generated GDS pass DRC in klayout?
+[11/22/2025 19:53] rtimothyedwards_19428
+Rule PL.12 might be intended to prevent mixing 5V and 6V devices in the same circuit.
 
 
-[11/22/2025 19:15] 246tnt
-Yes. But also potentially any DRC GF themselves are running since this is in the design manual.
+[11/22/2025 19:53] 246tnt
+At least the klayout DRC only checks the gate.
 
 
-[11/22/2025 19:16] rtimothyedwards_19428
-But I think that just implementing, say, "mvpfet" = 5V pfet and "hvpfet" = 6V pfet would be more consistent with the PDK overall.
+[11/22/2025 19:53] rtimothyedwards_19428
+But GF might flag PL.12.
 
 
-[11/22/2025 19:16] 246tnt
-Sure, I have no strong opinion on that.
+[11/22/2025 19:56] 246tnt
+Yes. Without exactly a drawing for what PL.12 means, I'm not sure tbh.
 
 
-[11/22/2025 19:17] 246tnt
-The 10V one are `ld` if I read the tech file correctly.
+[11/22/2025 19:57] 246tnt
+I like also how there is a drawing for PL.19 but then no PL.19 rule 😅
 
 
-[11/22/2025 19:34] rtimothyedwards_19428
-Are there any published rules for V5_XTOR?  I can't find any in the open PDK documentation.  In the vendor libraries, it appears to cover entire cells, although I would assume it is only meaningful over the gate of the device.
+[11/22/2025 19:57] rtimothyedwards_19428
+I'll start counting the issues in the rules and illustrations, and get back to you next week.
+
+{Reactions}
+🤣
+
+[11/22/2025 20:04] rtimothyedwards_19428
+It occurs to me that there must (?) also be "cap_nmos_05v0", "cap_pmos_05v0", "cap_nmos_05v0_b", and "cap_pmos_05v0_b" devices, but the devices themselves are just modeled as ideal capacitors (?!) and the models have no restriction on length and width.  Also, moscap-connected transistors in the SRAM are just transistors in the netlist.  Maybe the moscap device should just be quietly removed from the PDK. . .
+
+
+[11/22/2025 20:27] rtimothyedwards_19428
+@tnt :  Okay, I have reworked the GF tech file for magic, and pushed the change.  There is also a pending commit to add the 3.3V SRAM library to the open_pdks installation of GF180MCU, so it will all be mirrored to github by tomorrow.
+
+{Reactions}
+👌
+
+[11/22/2025 20:28] 246tnt
+Oh wow, that was fast 😅
+
+
+[11/22/2025 20:28] 246tnt
+Thanks !
+
+
+[11/22/2025 20:30] _luke_w_
+Is anyone else using clock gates (ICGs) in their designs? I'm getting ~2ns SRAM address hold violations with CPU on a gated clock and SRAM on an ungated version of the same clock. I saw TritonCTS had a `-balance_levels` switch (off by default, enabled by `CTS_BALANCE_LEVELS: True`), but it didn't seem to help with overall clock skew:
+
+> -balance_levels Attempt to keep a similar number of levels in the clock tree across non-register cells (e.g., clock-gate or inverter). The default value is False, and the allowed values are bool.
+
+
+[11/22/2025 20:34] _luke_w_
+Related note: based on a tip in the Caravel report I found I could reduce overall clock skew by about 40% (2.8 -> 1.7 ns in post-CTS STA) by forcing Triton to always use the largest available clock buffer. Is there any reason not to make this the default? If you're tight on timing then it may even save area overall as you should need fewer fixups and resizes
+
+```
+# Force use of chonky bois to reduce clock skew (default list is 2, 4, 8)
+CTS_CLK_BUFFERS:
+  - "gf180mcu_fd_sc_mcu7t5v0__clkbuf_16"
+```
 
 
 ==============================================================
-Exported 10 message(s)
+Exported 16 message(s)
 ==============================================================

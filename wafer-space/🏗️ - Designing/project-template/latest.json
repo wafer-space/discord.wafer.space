@@ -13,19 +13,19 @@
     "topic": null
   },
   "dateRange": {
-    "after": "2025-11-22T18:57:44.049+00:00",
+    "after": "2025-11-22T19:44:19.991+00:00",
     "before": null
   },
-  "exportedAt": "2025-11-22T19:44:15.7018701+00:00",
+  "exportedAt": "2025-11-22T20:50:55.113079+00:00",
   "messages": [
     {
-      "id": "1441866121195163861",
+      "id": "1441878065776169080",
       "type": "Default",
-      "timestamp": "2025-11-22T19:01:11.87+00:00",
+      "timestamp": "2025-11-22T19:48:39.68+00:00",
       "timestampEdited": null,
       "callEndedTimestamp": null,
       "isPinned": false,
-      "content": "@Tholin :  Sorry, I was not following this conversation until Sylvain flagged me.\nI keep trying to remind people that the magic DRC deck for GF180MCU was designed in a hurry for what was a digital-only tapeout from Efabless.  I made a \"good first pass\" at the analog rules and layers but there were no analog designs to validate it with.  I have made some corrections since then, but it is more or less in the same state.  I suppose the same goes for the klayout deck---No real validation in practice.",
+      "content": "@Tholin :  The magic tech file _does_ implement rule V1.3d;  where do you see it not flagging the rule?  (Note that the DRC documentation has no rule\"V1.3d\", only \"V1.3\".  The \"d\" seems to have been invented by Mabrains when they make the klayout DRC deck.)",
       "author": {
         "id": "1365118310701600900",
         "name": "rtimothyedwards_19428",
@@ -55,49 +55,13 @@
       "inlineEmojis": []
     },
     {
-      "id": "1441868660208701582",
+      "id": "1441878313898479748",
       "type": "Default",
-      "timestamp": "2025-11-22T19:11:17.218+00:00",
+      "timestamp": "2025-11-22T19:49:38.837+00:00",
       "timestampEdited": null,
       "callEndedTimestamp": null,
       "isPinned": false,
-      "content": "@Tholin :  I found the GF handling of \"5V\" devices to be awkward and looked for some method to be consistent.  It has never seemed reasonable to me that the same device can be either \"5V\" or \"6V\", and requires a marker layer to specify the _intent_ of it.  But mostly the issue of the way it is currently implemented in magic comes from early on struggling with what was _meant_ by a 5V or 6V transistor, along with largely unreadable documentation trying (badly) to explain it.  There were no 5V devices in the device model files originally.  I added those to the model files recently.  I could certainly redo the magic tech file to separate the 5V and 6V transistor types (now that there is a device model for each of them) and use the V5_XTOR (\"FET5VDEF\" in the magic techfile) to distinguish them (and apply the device length rules separately for each of them).",
-      "author": {
-        "id": "1365118310701600900",
-        "name": "rtimothyedwards_19428",
-        "discriminator": "0000",
-        "nickname": "Tim Edwards",
-        "color": null,
-        "isBot": false,
-        "roles": [],
-        "avatarUrl": "project-template_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
-      },
-      "attachments": [],
-      "embeds": [],
-      "stickers": [],
-      "reactions": [],
-      "mentions": [
-        {
-          "id": "220639106915368960",
-          "name": "tholin",
-          "discriminator": "0000",
-          "nickname": "Tholin",
-          "color": null,
-          "isBot": false,
-          "roles": [],
-          "avatarUrl": "project-template_media/a0ed32047bb13e92c0bce95b00e20a81-6B527.png"
-        }
-      ],
-      "inlineEmojis": []
-    },
-    {
-      "id": "1441869215614369853",
-      "type": "Default",
-      "timestamp": "2025-11-22T19:13:29.637+00:00",
-      "timestampEdited": null,
-      "callEndedTimestamp": null,
-      "isPinned": false,
-      "content": "IMHO it's fine to only have `mv` to represent 5V/6V , but the `V5_XTOR` layer still need to be generated if length is too small to be 6V to comply with the DRC requirement ...  I'm not sure if that's something doable in the magic tech file ?",
+      "content": "https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_07_08.html",
       "author": {
         "id": "596068704471482370",
         "name": "246tnt",
@@ -116,54 +80,38 @@
       "inlineEmojis": []
     },
     {
-      "id": "1441869284392435864",
-      "type": "Reply",
-      "timestamp": "2025-11-22T19:13:46.035+00:00",
+      "id": "1441878385478598778",
+      "type": "Default",
+      "timestamp": "2025-11-22T19:49:55.903+00:00",
       "timestampEdited": null,
       "callEndedTimestamp": null,
       "isPinned": false,
-      "content": "So it's not so much a bug as an implementation decision.  Given that (at the time I implemented it) there was only one device model, I just had magic extract that one device model and discarded the information from the V5_XTOR mask.  Either way, it's the same device, same model (my 5V model is just a copy of the 6V model, with a restriction on device length applied to the 6V model).",
+      "content": "AFAICT it's just the gate over comp that needs to be covered.",
       "author": {
-        "id": "1365118310701600900",
-        "name": "rtimothyedwards_19428",
+        "id": "596068704471482370",
+        "name": "246tnt",
         "discriminator": "0000",
-        "nickname": "Tim Edwards",
+        "nickname": "tnt",
         "color": null,
         "isBot": false,
         "roles": [],
-        "avatarUrl": "project-template_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+        "avatarUrl": "project-template_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
       },
       "attachments": [],
       "embeds": [],
       "stickers": [],
       "reactions": [],
-      "mentions": [
-        {
-          "id": "220639106915368960",
-          "name": "tholin",
-          "discriminator": "0000",
-          "nickname": "Tholin",
-          "color": null,
-          "isBot": false,
-          "roles": [],
-          "avatarUrl": "project-template_media/a0ed32047bb13e92c0bce95b00e20a81-6B527.png"
-        }
-      ],
-      "reference": {
-        "messageId": "1441850470187536434",
-        "channelId": "1423348662318272592",
-        "guildId": "1361349522684510449"
-      },
+      "mentions": [],
       "inlineEmojis": []
     },
     {
-      "id": "1441869633022853200",
+      "id": "1441878911112974346",
       "type": "Default",
-      "timestamp": "2025-11-22T19:15:09.155+00:00",
+      "timestamp": "2025-11-22T19:52:01.224+00:00",
       "timestampEdited": null,
       "callEndedTimestamp": null,
       "isPinned": false,
-      "content": "@tnt :  It can be done.  I assume the purpose is to have magic-generated GDS pass DRC in klayout?",
+      "content": "@tnt : Thanks, I missed PL.11.  But PL.12 suggests that the diffusion as well as the gate must be covered.",
       "author": {
         "id": "1365118310701600900",
         "name": "rtimothyedwards_19428",
@@ -178,6 +126,258 @@
       "embeds": [],
       "stickers": [],
       "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441879301623386236",
+      "type": "Default",
+      "timestamp": "2025-11-22T19:53:34.329+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Rule PL.12 might be intended to prevent mixing 5V and 6V devices in the same circuit.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441879307382161440",
+      "type": "Default",
+      "timestamp": "2025-11-22T19:53:35.702+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "At least the klayout DRC only checks the gate.",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441879378484133948",
+      "type": "Default",
+      "timestamp": "2025-11-22T19:53:52.654+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "But GF might flag PL.12.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441879984317661277",
+      "type": "Default",
+      "timestamp": "2025-11-22T19:56:17.096+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yes. Without exactly a drawing for what PL.12 means, I'm not sure tbh.",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441880247715758160",
+      "type": "Default",
+      "timestamp": "2025-11-22T19:57:19.895+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I like also how there is a drawing for PL.19 but then no PL.19 rule \uD83D\uDE05",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83D\uDE05",
+          "code": "sweat_smile",
+          "isAnimated": false,
+          "imageUrl": "project-template_media/1f605-42B43.svg"
+        }
+      ]
+    },
+    {
+      "id": "1441880397335101626",
+      "type": "Default",
+      "timestamp": "2025-11-22T19:57:55.567+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I'll start counting the issues in the rules and illustrations, and get back to you next week.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83E\uDD23",
+            "code": "rofl",
+            "isAnimated": false,
+            "imageUrl": "project-template_media/1f923-5854E.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "596068704471482370",
+              "name": "246tnt",
+              "discriminator": "0000",
+              "nickname": "tnt",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "project-template_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441881926397984999",
+      "type": "Default",
+      "timestamp": "2025-11-22T20:04:00.124+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It occurs to me that there must (?) also be \"cap_nmos_05v0\", \"cap_pmos_05v0\", \"cap_nmos_05v0_b\", and \"cap_pmos_05v0_b\" devices, but the devices themselves are just modeled as ideal capacitors (?!) and the models have no restriction on length and width.  Also, moscap-connected transistors in the SRAM are just transistors in the netlist.  Maybe the moscap device should just be quietly removed from the PDK. . .",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441887955172987030",
+      "type": "Default",
+      "timestamp": "2025-11-22T20:27:57.496+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@tnt :  Okay, I have reworked the GF tech file for magic, and pushed the change.  There is also a pending commit to add the 3.3V SRAM library to the open_pdks installation of GF180MCU, so it will all be mirrored to github by tomorrow.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4C",
+            "code": "ok_hand",
+            "isAnimated": false,
+            "imageUrl": "project-template_media/1f44c-59547.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "596068704471482370",
+              "name": "246tnt",
+              "discriminator": "0000",
+              "nickname": "tnt",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "project-template_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+            }
+          ]
+        }
+      ],
       "mentions": [
         {
           "id": "596068704471482370",
@@ -193,13 +393,46 @@
       "inlineEmojis": []
     },
     {
-      "id": "1441869809917755453",
+      "id": "1441888106092695653",
       "type": "Default",
-      "timestamp": "2025-11-22T19:15:51.33+00:00",
+      "timestamp": "2025-11-22T20:28:33.478+00:00",
       "timestampEdited": null,
       "callEndedTimestamp": null,
       "isPinned": false,
-      "content": "Yes. But also potentially any DRC GF themselves are running since this is in the design manual.",
+      "content": "Oh wow, that was fast \uD83D\uDE05",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83D\uDE05",
+          "code": "sweat_smile",
+          "isAnimated": false,
+          "imageUrl": "project-template_media/1f605-42B43.svg"
+        }
+      ]
+    },
+    {
+      "id": "1441888119971512362",
+      "type": "Default",
+      "timestamp": "2025-11-22T20:28:36.787+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks !",
       "author": {
         "id": "596068704471482370",
         "name": "246tnt",
@@ -218,22 +451,22 @@
       "inlineEmojis": []
     },
     {
-      "id": "1441869864212893887",
+      "id": "1441888604631863320",
       "type": "Default",
-      "timestamp": "2025-11-22T19:16:04.275+00:00",
-      "timestampEdited": null,
+      "timestamp": "2025-11-22T20:30:32.339+00:00",
+      "timestampEdited": "2025-11-22T20:34:45.425+00:00",
       "callEndedTimestamp": null,
       "isPinned": false,
-      "content": "But I think that just implementing, say, \"mvpfet\" = 5V pfet and \"hvpfet\" = 6V pfet would be more consistent with the PDK overall.",
+      "content": "Is anyone else using clock gates (ICGs) in their designs? I'm getting ~2ns SRAM address hold violations with CPU on a gated clock and SRAM on an ungated version of the same clock. I saw TritonCTS had a `-balance_levels` switch (off by default, enabled by `CTS_BALANCE_LEVELS: True`), but it didn't seem to help with overall clock skew:\n\n> -balance_levels Attempt to keep a similar number of levels in the clock tree across non-register cells (e.g., clock-gate or inverter). The default value is False, and the allowed values are bool.",
       "author": {
-        "id": "1365118310701600900",
-        "name": "rtimothyedwards_19428",
+        "id": "803213471402688522",
+        "name": "_luke_w_",
         "discriminator": "0000",
-        "nickname": "Tim Edwards",
+        "nickname": "LukeW",
         "color": null,
         "isBot": false,
         "roles": [],
-        "avatarUrl": "project-template_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+        "avatarUrl": "project-template_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
       },
       "attachments": [],
       "embeds": [],
@@ -243,72 +476,22 @@
       "inlineEmojis": []
     },
     {
-      "id": "1441870016361271500",
+      "id": "1441889551462305905",
       "type": "Default",
-      "timestamp": "2025-11-22T19:16:40.55+00:00",
-      "timestampEdited": null,
+      "timestamp": "2025-11-22T20:34:18.081+00:00",
+      "timestampEdited": "2025-11-22T20:36:00.286+00:00",
       "callEndedTimestamp": null,
       "isPinned": false,
-      "content": "Sure, I have no strong opinion on that.",
+      "content": "Related note: based on a tip in the Caravel report I found I could reduce overall clock skew by about 40% (2.8 -> 1.7 ns in post-CTS STA) by forcing Triton to always use the largest available clock buffer. Is there any reason not to make this the default? If you're tight on timing then it may even save area overall as you should need fewer fixups and resizes\n\n```\n# Force use of chonky bois to reduce clock skew (default list is 2, 4, 8)\nCTS_CLK_BUFFERS:\n  - \"gf180mcu_fd_sc_mcu7t5v0__clkbuf_16\"\n```",
       "author": {
-        "id": "596068704471482370",
-        "name": "246tnt",
+        "id": "803213471402688522",
+        "name": "_luke_w_",
         "discriminator": "0000",
-        "nickname": "tnt",
+        "nickname": "LukeW",
         "color": null,
         "isBot": false,
         "roles": [],
-        "avatarUrl": "project-template_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
-      },
-      "attachments": [],
-      "embeds": [],
-      "stickers": [],
-      "reactions": [],
-      "mentions": [],
-      "inlineEmojis": []
-    },
-    {
-      "id": "1441870158426800349",
-      "type": "Default",
-      "timestamp": "2025-11-22T19:17:14.421+00:00",
-      "timestampEdited": null,
-      "callEndedTimestamp": null,
-      "isPinned": false,
-      "content": "The 10V one are `ld` if I read the tech file correctly.",
-      "author": {
-        "id": "596068704471482370",
-        "name": "246tnt",
-        "discriminator": "0000",
-        "nickname": "tnt",
-        "color": null,
-        "isBot": false,
-        "roles": [],
-        "avatarUrl": "project-template_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
-      },
-      "attachments": [],
-      "embeds": [],
-      "stickers": [],
-      "reactions": [],
-      "mentions": [],
-      "inlineEmojis": []
-    },
-    {
-      "id": "1441874492967092356",
-      "type": "Default",
-      "timestamp": "2025-11-22T19:34:27.856+00:00",
-      "timestampEdited": null,
-      "callEndedTimestamp": null,
-      "isPinned": false,
-      "content": "Are there any published rules for V5_XTOR?  I can't find any in the open PDK documentation.  In the vendor libraries, it appears to cover entire cells, although I would assume it is only meaningful over the gate of the device.",
-      "author": {
-        "id": "1365118310701600900",
-        "name": "rtimothyedwards_19428",
-        "discriminator": "0000",
-        "nickname": "Tim Edwards",
-        "color": null,
-        "isBot": false,
-        "roles": [],
-        "avatarUrl": "project-template_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+        "avatarUrl": "project-template_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
       },
       "attachments": [],
       "embeds": [],
@@ -318,5 +501,5 @@
       "inlineEmojis": []
     }
   ],
-  "messageCount": 10
+  "messageCount": 16
 }
