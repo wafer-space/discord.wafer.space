@@ -1,1 +1,55 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
+"538398807986274304","rzioma","2025-11-23T10:52:20.0760000+00:00","Please excuse my ASCII art, but I am struggling to map the names from the https://github.com/wafer-space/gf180mcu-project-template to the https://github.com/wafer-space/chip-on-board-wire-bonded-pcbs","",""
+"538398807986274304","rzioma","2025-11-23T10:52:55.8270000+00:00","```
+                              52  50  48  46  44  42  40  38
+                            53| 51| 49| 47| 45| 43| 41| 39| 37
+                            | | | | | | | | | | | | | | | | |
+                     ,------v-v-v-v-v-v-v-v---v-v-v-v-v-v-v-v-------.
+                     |      a a b b b b b b G b b b b b b b b       |
+               54 -->|i_0   1 0 3 3 3 3 3 3 N 3 3 3 3 2 2 2 2   VDD |+-- 36
+               55 -->|i_1       9 8 7 6 5 4 D 3 2 1 0 9 8 7 6   GND |--- 35
+               56 ---|GND                                       VDD |+-- 34
+               57 --+|VDD                                       GND |--- 33
+               58 -->|i_2                                       b_25|<-> 32
+               59 -->|i_3                                       b_24|<-> 31
+               60 -->|i_4                                       b_23|<-> 30
+               61 -->|i_5                   |                   b_22|<-> 29
+               62 ---|GND                 WAFER                 b_21|<-> 28
+               63 --+|VDD                -SPACE-                b_20|<-> 27
+               64 -->|i_6                 GF180                 GND |--- 26
+               65 -->|i_7                   |                   VDD |+-- 25
+               66 -->|i_8                                       b_19|<-> 24
+               67 -->|i_9                                       b_18|<-> 23
+               68 -->|i_10                                      b_17|<-> 22
+               69 -->|i_11                                      b_16|<-> 21
+               70 ---|GND                                       b_15|<-> 20
+               71 --+|VDD                                       b_14|<-> 19
+               72 ---|GND   c r b b b b b b G b b b b b b b b   GND |--- 18
+               73 --+|VDD   l s 0 1 2 3 4 5 N 6 7 8 9 1 1 1 1   VDD |+-- 17
+                     |      k t             D         0 1 2 3       |
+                     `------^-^-^-^-^-^-^-^---^-^-^-^-^-^-^-^-------'
+                            | | | | | | | | | | | | | | | | |
+                            0 | 2 | 4 | 6 | 8 | 10| 12| 14| 16
+                              1   3   5   7   9  11  13  15
+```
+
+Is this reasonable?","",""
+"538398807986274304","rzioma","2025-11-23T10:55:59.0870000+00:00","`i_0` .. `i_11` input_PADs
+`b_0` .. `b_39` bidir_PADs
+`a_0`, `a_1` analog_PADs
+based on the template default configuration","",""
+"538398807986274304","rzioma","2025-11-23T10:56:48.7790000+00:00","@Andrew Wingate , @mole99 could you please validate if I didn't screw up the orientation here?","",""
+"596068704471482370","246tnt","2025-11-23T11:00:14.2680000+00:00","pad 0 is what you called pad 20 on the drawing above. But the position of power pads seems to match at least.","",""
+"756011607603019777","anfroholic","2025-11-23T11:01:05.4130000+00:00","You unfortunately did. You made the same mistake I did when I was originally trying to unwind all this. 
+I will continue to push that something similar to what you have here should be the standard, but the way it is now is that pin 0 is at the bottom left and then goes counterclockwise. 
+I have a spreadsheet here that may help you to unwind it. 
+https://docs.google.com/spreadsheets/d/1pI2BAEWEexXcXN3vah3SR85zPIV6eAXPGXc2bcvoSGU/edit?gid=0#gid=0
+My brain thinks it's backwards as well","cob_media/image-BEB7E.png","🙏 (1)"
+"538398807986274304","rzioma","2025-11-23T11:06:37.7570000+00:00","fixing","",""
+"538398807986274304","rzioma","2025-11-23T11:13:42.7310000+00:00","","cob_media/image-4C30C.png",""
+"538398807986274304","rzioma","2025-11-23T11:14:25.5570000+00:00","@Andrew Wingate thanks for adding template pin names in that spreadsheet! That's very helpful!","",""
+"756011607603019777","anfroholic","2025-11-23T11:15:02.2540000+00:00","I'm trying to but things are still backwards..... ugh...","",""
+"756011607603019777","anfroholic","2025-11-23T11:27:50.8800000+00:00","@tnt can you look at my spreadsheet and tell me if I got this right? 
+I am pretty sure I have east and west correct, but not sure if north and south line up. 
+https://docs.google.com/spreadsheets/d/1pI2BAEWEexXcXN3vah3SR85zPIV6eAXPGXc2bcvoSGU/edit?gid=0#gid=0","",""
+"756011607603019777","anfroholic","2025-11-23T11:28:39.8320000+00:00","I'm trying to match them up from the pad instance names from the template https://github.com/wafer-space/gf180mcu-project-template/blob/main/librelane/config.yaml","",""
