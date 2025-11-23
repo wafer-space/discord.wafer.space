@@ -5,77 +5,9 @@ Topic: Welcome to [wafer.space](https://wafer.space/) -
 documentation at [wafer.space github](https://github.com/wafer-space) - 
 buy at [buy.wafer.space](https://buy.wafer.space) - 
 archives at [discord.wafer.space](https://discord.wafer.space/)
-After: 11/23/2025 20:25
+After: 11/23/2025 21:20
 ==============================================================
 
-[11/23/2025 20:26] 246tnt
-`ports` are external pads, so if you're running that on the top level, the ports are the actual pads since the top level include the IO cells.
-
-
-[11/23/2025 20:26] 246tnt
-And it's glob.
-
-
-[11/23/2025 20:27] tholin
-Thanks
-
-
-[11/23/2025 20:27] tholin
-Actually, because I thought it was regex, it was still trying to do timing analysis on the design select pins, which I thought I had disabled.
-
-
-[11/23/2025 20:28] 246tnt
-You can try to grab the pins on the IO cells `[ get_pins "*pad/OE" ]` or something.
-
-
-[11/23/2025 20:28] tholin
-I just looked at the very top of the STA log and then turned that into `set_false_path -from [get_ports {design_sel_*}]`
-
-{Attachments}
-general_media/image-983D7.png
-
-
-[11/23/2025 20:28] tholin
-I’m just matching everything to do with design selection
-
-
-[11/23/2025 21:07] _luke_w_
-If these are digital paths, something I find useful is to insert an anchor buffer in the RTL:
-
-```
-module falsepath_anchor (
-    input  wire i,
-    output wire z
-);
-
-`ifdef GF180MCU
-
-(* keep *)
-gf180mcu_fd_sc_mcu9t5v0__clkbuf_1 magic_falsepath_anchor_u (
-    .I (i),
-    .Z (z)
-);
-
-`else
-
-assign z = i;
-
-`endif
-
-endmodule
-
-```
-
-and then just glob them out in the `.sdc`:
-
-```
-# Apply RTL-inserted false path constraints (setup/hold only, still constrain slew)
-set_false_path -setup -hold -through [get_pins *.magic_falsepath_anchor_u/Z]
-```
-
-It's dirty but it makes the constraints a bit less fragile because you don't have to update them when hierarchy changes. Also I think paths through PD/PU can pretty much universally be falsepathed as the slew on the pad due to pulls is so slow.
-
-
 ==============================================================
-Exported 8 message(s)
+Exported 0 message(s)
 ==============================================================
