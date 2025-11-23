@@ -1,9 +1,42 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
-"220639106915368960","tholin","2025-11-23T20:16:00.1780000+00:00","STA is really annoying me right now. Its reporting setup violations in the 100ns violations because an active design might change the output-enable or pull resistors or something on a IO pad, which triggers a change in the pad’s outputs to the core area, which kicks of timing paths through unrelated designs, which may also change output enables which changes pad outputs which triggers changes through the designs etc. etc. and so on. It ""bounces"" like that for up to 5 times before coming to a stop.","",""
-"220639106915368960","tholin","2025-11-23T20:16:40.7770000+00:00","I need STA to disregard ANY timing paths that cross macro boundaries except the multiplexer.","",""
-"220639106915368960","tholin","2025-11-23T20:17:00.4760000+00:00","Only one of these will ever be active at a time and it doesn’t get that.","",""
-"220639106915368960","tholin","2025-11-23T20:17:56.6290000+00:00","I could disable STA or STA checker entirely since the setup timing analysis results are largely meaningless anyway in my use case (every design has its own fmax), but I’d like the flow to fail on hold violations.","",""
-"220639106915368960","tholin","2025-11-23T20:18:21.6490000+00:00","I’d like to ignore just setup violations, but still fail on hold violations.","",""
-"220639106915368960","tholin","2025-11-23T20:20:27.1480000+00:00","I tried `set_false_path -from [get_ports {io_oe_.*}]` and so on, but no luck.","",""
-"220639106915368960","tholin","2025-11-23T20:20:32.0400000+00:00","Or is it `set_false_path -from [get_ports {io_oe_*}]`?","",""
-"220639106915368960","tholin","2025-11-23T20:20:35.7810000+00:00","Glob or regex?","",""
+"596068704471482370","246tnt","2025-11-23T20:26:24.8600000+00:00","`ports` are external pads, so if you're running that on the top level, the ports are the actual pads since the top level include the IO cells.","",""
+"596068704471482370","246tnt","2025-11-23T20:26:45.1860000+00:00","And it's glob.","",""
+"220639106915368960","tholin","2025-11-23T20:27:10.5540000+00:00","Thanks","",""
+"220639106915368960","tholin","2025-11-23T20:27:57.7160000+00:00","Actually, because I thought it was regex, it was still trying to do timing analysis on the design select pins, which I thought I had disabled.","",""
+"596068704471482370","246tnt","2025-11-23T20:28:22.0460000+00:00","You can try to grab the pins on the IO cells `[ get_pins ""*pad/OE"" ]` or something.","",""
+"220639106915368960","tholin","2025-11-23T20:28:28.6910000+00:00","I just looked at the very top of the STA log and then turned that into `set_false_path -from [get_ports {design_sel_*}]`","general_media/image-983D7.png",""
+"220639106915368960","tholin","2025-11-23T20:28:59.4960000+00:00","I’m just matching everything to do with design selection","",""
+"803213471402688522","_luke_w_","2025-11-23T21:07:40.9730000+00:00","If these are digital paths, something I find useful is to insert an anchor buffer in the RTL:
+
+```
+module falsepath_anchor (
+    input  wire i,
+    output wire z
+);
+
+`ifdef GF180MCU
+
+(* keep *)
+gf180mcu_fd_sc_mcu9t5v0__clkbuf_1 magic_falsepath_anchor_u (
+    .I (i),
+    .Z (z)
+);
+
+`else
+
+assign z = i;
+
+`endif
+
+endmodule
+
+```
+
+and then just glob them out in the `.sdc`:
+
+```
+# Apply RTL-inserted false path constraints (setup/hold only, still constrain slew)
+set_false_path -setup -hold -through [get_pins *.magic_falsepath_anchor_u/Z]
+```
+
+It's dirty but it makes the constraints a bit less fragile because you don't have to update them when hierarchy changes. Also I think paths through PD/PU can pretty much universally be falsepathed as the slew on the pad due to pulls is so slow.","",""
