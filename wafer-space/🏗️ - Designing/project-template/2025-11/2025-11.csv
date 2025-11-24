@@ -1,5 +1,3 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
-"384390069412429834","polyfractal","2025-11-24T16:14:24.1230000+00:00","very silly newbie question: does part of the librelane build process spit out the max frequency the chip is expected to run at? or is there some other way to tell?","",""
-"323371864074485771","mole99","2025-11-24T16:26:22.1590000+00:00","Yes, you can find the report in the console or inside `54-openroad-stapostpnr/summary.rpt`. 
-It contains a list of all corners and whether there are any setup violations for the target frequency. If there is a setup violation at a corner, it means that you will not be able to run the chip at the target frequency at that particular corner (PVT - Process, Voltage and Temperature). Using the setup worst slack, you can calculate the maximum frequency for each corner, which could even be above the target frequency.","",""
-"538398807986274304","rzioma","2025-11-24T16:34:33.4750000+00:00","There is also `54-openroad-stapostpnr\nom_tt_025C_3v30\clock.rpt` (and actually for each corner) which tells you `fmax` for that corner.","",""
+"384390069412429834","polyfractal","2025-11-24T17:15:06.5290000+00:00","thanks!","",""
+"384390069412429834","polyfractal","2025-11-24T17:20:57.6060000+00:00","aha, and found the target frequency in the yaml. cheers!","",""
