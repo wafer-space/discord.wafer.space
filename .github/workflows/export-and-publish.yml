@@ -143,39 +143,83 @@ jobs:
         if: steps.deploy.outcome == 'success'
         id: muffet
         run: |
-          echo "Running link check on https://discord.wafer.space..."
+          set +e  # Don't exit on error - we want to capture muffet's output regardless
+
+          echo "========================================="
+          echo "Running muffet link check on https://discord.wafer.space..."
+          echo "========================================="
+
+          # Run muffet, capturing output to both console (via tee) and file
+          # This ensures full output is visible in GitHub Actions logs
           ./muffet \
             --timeout=30 \
             --max-connections=10 \
             --max-connections-per-host=5 \
             --buffer-size=16384 \
-            --exclude='mailto:' \
-            --header='User-Agent:Mozilla/5.0' \
-            https://discord.wafer.space > muffet-report.txt 2>&1
+            --exclude=".*mailto:.*" \
+            --exclude=".*linkedin\.com.*" \
+            --exclude=".*hawaii\.edu.*" \
+            --exclude=".*github\.com.*" \
+            --exclude=".*discord\.com.*" \
+            --header="User-Agent:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" \
+            --header="Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7" \
+            --header="Accept-Language:en-US,en;q=0.9" \
+            --header="Accept-Encoding:gzip, deflate, br" \
+            --header="Cache-Control:no-cache" \
+            --header="Pragma:no-cache" \
+            --header="Sec-Ch-Ua:\"Chromium\";v=\"122\", \"Not(A:Brand\";v=\"24\", \"Google Chrome\";v=\"122\"" \
+            --header="Sec-Ch-Ua-Mobile:?0" \
+            --header="Sec-Ch-Ua-Platform:\"Windows\"" \
+            --header="Sec-Fetch-Dest:document" \
+            --header="Sec-Fetch-Mode:navigate" \
+            --header="Sec-Fetch-Site:none" \
+            --header="Sec-Fetch-User:?1" \
+            --header="Upgrade-Insecure-Requests:1" \
+            https://discord.wafer.space 2>&1 | tee muffet-report.txt
 
-          # Count errors
-          TOTAL_404=$(grep -c '404' muffet-report.txt || echo 0)
-          MEDIA_404=$(grep '404' muffet-report.txt | grep -c '_media/' || echo 0)
+          MUFFET_EXIT=${PIPESTATUS[0]}
+
+          echo ""
+          echo "========================================="
+          echo "Muffet completed with exit code: $MUFFET_EXIT"
+          echo "========================================="
+
+          # Count errors - use '|| true' to avoid capturing extra output from '|| echo 0'
+          # grep -c outputs the count even when 0, but exits with code 1 when no matches
+          TOTAL_404=$(grep -c '404' muffet-report.txt || true)
+          MEDIA_404=$(grep '404' muffet-report.txt | grep -c '_media/' || true)
+
+          # Ensure we have valid numbers (empty string becomes 0)
+          TOTAL_404=${TOTAL_404:-0}
+          MEDIA_404=${MEDIA_404:-0}
 
           echo "total_404=$TOTAL_404" >> $GITHUB_OUTPUT
           echo "media_404=$MEDIA_404" >> $GITHUB_OUTPUT
+          echo "muffet_exit=$MUFFET_EXIT" >> $GITHUB_OUTPUT
 
-          echo "Link Check Results:"
+          echo ""
+          echo "========================================="
+          echo "Link Check Summary:"
           echo "- Total 404 errors: $TOTAL_404"
           echo "- Media file 404s: $MEDIA_404"
+          echo "- Report saved to: muffet-report.txt"
+          echo "========================================="
 
-          # Upload report as artifact
-          if [ -f muffet-report.txt ]; then
-            echo "Report saved to muffet-report.txt"
+          # Fail the step if muffet itself failed (not just found broken links)
+          if [ "$MUFFET_EXIT" -ne 0 ]; then
+            echo ""
+            echo "::error::Muffet link checker failed with exit code $MUFFET_EXIT"
+            exit 1
           fi
 
       - name: Upload muffet report
-        if: steps.muffet.outcome == 'success' || steps.muffet.outcome == 'failure'
+        if: always() && steps.deploy.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: muffet-report
           path: muffet-report.txt
           retention-days: 30
+          if-no-files-found: warn
 
       - name: Report summary
         if: always()
@@ -190,12 +234,20 @@ jobs:
           echo "- **Deploy Step**: ${{ steps.deploy.outcome }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "## Link Check Results" >> $GITHUB_STEP_SUMMARY
-          if [ "${{ steps.muffet.outcome }}" == "success" ] || [ "${{ steps.muffet.outcome }}" == "failure" ]; then
+          if [ "${{ steps.muffet.outcome }}" == "success" ]; then
+            echo "- **Muffet Status**: ✅ Passed" >> $GITHUB_STEP_SUMMARY
             echo "- **Total 404 errors**: ${{ steps.muffet.outputs.total_404 }}" >> $GITHUB_STEP_SUMMARY
             echo "- **Media file 404s**: ${{ steps.muffet.outputs.media_404 }}" >> $GITHUB_STEP_SUMMARY
             echo "- **Report**: Download muffet-report artifact for full details" >> $GITHUB_STEP_SUMMARY
+          elif [ "${{ steps.muffet.outcome }}" == "failure" ]; then
+            echo "- **Muffet Status**: ❌ Failed (exit code: ${{ steps.muffet.outputs.muffet_exit }})" >> $GITHUB_STEP_SUMMARY
+            echo "- **Total 404 errors**: ${{ steps.muffet.outputs.total_404 }}" >> $GITHUB_STEP_SUMMARY
+            echo "- **Media file 404s**: ${{ steps.muffet.outputs.media_404 }}" >> $GITHUB_STEP_SUMMARY
+            echo "- **Report**: Download muffet-report artifact for full details" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "⚠️ **Link check failed - review the muffet-report artifact and logs**" >> $GITHUB_STEP_SUMMARY
           else
-            echo "- Link check was skipped or did not run" >> $GITHUB_STEP_SUMMARY
+            echo "- Link check was skipped (deploy did not run or no changes detected)" >> $GITHUB_STEP_SUMMARY
           fi
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "- **Timestamp**: $(date -u +%Y-%m-%d\ %H:%M\ UTC)" >> $GITHUB_STEP_SUMMARY
