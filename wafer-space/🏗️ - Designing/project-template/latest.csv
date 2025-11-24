@@ -1,11 +1,1 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
-"803213471402688522","_luke_w_","2025-11-24T12:06:14.0170000+00:00","Is it possible to get librelane installed as an editable package (like a submodule of my repo) but still use the rest of the `nix-shell` setup? I wanted to look at adding a yosys extraction for mux + flop -> scan flop but librelane is quite hardcoded.","",""
-"220639106915368960","tholin","2025-11-24T12:10:35.0130000+00:00","I have a similar complaint. nix-shell currently pulls binaries, but I’d actually like the option to have everything be built from source.","",""
-"596068704471482370","246tnt","2025-11-24T12:22:33.0930000+00:00","@Tholin you can just remove the cachex entry I think. Then it will be everything from source.","",""
-"323371864074485771","mole99","2025-11-24T12:36:35.8850000+00:00","You can clone the [leo/gf180mcu](https://github.com/librelane/librelane/tree/leo/gf180mcu) branch (same one used for wafer.space). Next, you can make any changes inside the repo and then start LibreLane with `nix-shell`. 
-That's basically the same step as in: https://librelane.readthedocs.io/en/latest/installation/nix_installation/installation_linux.html#cloning-librelane
-You can also apply patches in the in the Nix flake of the template, but it's a bit finicky.","",""
-"323371864074485771","mole99","2025-11-24T12:37:35.2250000+00:00","That's what Nix is for. It builds all the binaries for you. In the case of the wafer.space template we point to a specific branch of LibreLane and the binaries are already cached.","",""
-"803213471402688522","_luke_w_","2025-11-24T12:56:05.9910000+00:00","ah, so the shell I get from running `nix-shell` in that branch of the librelane repo is a suitable environment for running the makefile in the project template? If so then got it, thanks","",""
-"803213471402688522","_luke_w_","2025-11-24T12:57:09.3610000+00:00","I probably would move to putting patches in the flake (should just be a few lines to add a flag to pass an extraction file) but I need to develop the patch 🙂","","👍 (1)"
-"323371864074485771","mole99","2025-11-24T13:05:14.8600000+00:00","Yes. The project template uses that branch with an override to get a newer magic version. But it should also work with the magic version specified in LibreLane.","",""
