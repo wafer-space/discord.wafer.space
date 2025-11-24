@@ -151,7 +151,10 @@ jobs:
 
           # Run muffet, capturing output to both console (via tee) and file
           # This ensures full output is visible in GitHub Actions logs
+          # --verbose shows successful results too, so we can distinguish between
+          # "muffet ran and found no errors" vs "muffet failed to run"
           ./muffet \
+            --verbose \
             --timeout=30 \
             --max-connections=10 \
             --max-connections-per-host=5 \
@@ -184,15 +187,19 @@ jobs:
           echo "Muffet completed with exit code: $MUFFET_EXIT"
           echo "========================================="
 
-          # Count errors - use '|| true' to avoid capturing extra output from '|| echo 0'
+          # Count results - use '|| true' to avoid capturing extra output from '|| echo 0'
           # grep -c outputs the count even when 0, but exits with code 1 when no matches
+          # With --verbose, each URL checked gets a line, so we can count total URLs
+          TOTAL_URLS=$(wc -l < muffet-report.txt || true)
           TOTAL_404=$(grep -c '404' muffet-report.txt || true)
           MEDIA_404=$(grep '404' muffet-report.txt | grep -c '_media/' || true)
 
           # Ensure we have valid numbers (empty string becomes 0)
+          TOTAL_URLS=${TOTAL_URLS:-0}
           TOTAL_404=${TOTAL_404:-0}
           MEDIA_404=${MEDIA_404:-0}
 
+          echo "total_urls=$TOTAL_URLS" >> $GITHUB_OUTPUT
           echo "total_404=$TOTAL_404" >> $GITHUB_OUTPUT
           echo "media_404=$MEDIA_404" >> $GITHUB_OUTPUT
           echo "muffet_exit=$MUFFET_EXIT" >> $GITHUB_OUTPUT
@@ -200,6 +207,7 @@ jobs:
           echo ""
           echo "========================================="
           echo "Link Check Summary:"
+          echo "- URLs checked: $TOTAL_URLS"
           echo "- Total 404 errors: $TOTAL_404"
           echo "- Media file 404s: $MEDIA_404"
           echo "- Report saved to: muffet-report.txt"
@@ -236,11 +244,13 @@ jobs:
           echo "## Link Check Results" >> $GITHUB_STEP_SUMMARY
           if [ "${{ steps.muffet.outcome }}" == "success" ]; then
             echo "- **Muffet Status**: ✅ Passed" >> $GITHUB_STEP_SUMMARY
+            echo "- **URLs checked**: ${{ steps.muffet.outputs.total_urls }}" >> $GITHUB_STEP_SUMMARY
             echo "- **Total 404 errors**: ${{ steps.muffet.outputs.total_404 }}" >> $GITHUB_STEP_SUMMARY
             echo "- **Media file 404s**: ${{ steps.muffet.outputs.media_404 }}" >> $GITHUB_STEP_SUMMARY
             echo "- **Report**: Download muffet-report artifact for full details" >> $GITHUB_STEP_SUMMARY
           elif [ "${{ steps.muffet.outcome }}" == "failure" ]; then
             echo "- **Muffet Status**: ❌ Failed (exit code: ${{ steps.muffet.outputs.muffet_exit }})" >> $GITHUB_STEP_SUMMARY
+            echo "- **URLs checked**: ${{ steps.muffet.outputs.total_urls }}" >> $GITHUB_STEP_SUMMARY
             echo "- **Total 404 errors**: ${{ steps.muffet.outputs.total_404 }}" >> $GITHUB_STEP_SUMMARY
             echo "- **Media file 404s**: ${{ steps.muffet.outputs.media_404 }}" >> $GITHUB_STEP_SUMMARY
             echo "- **Report**: Download muffet-report artifact for full details" >> $GITHUB_STEP_SUMMARY
