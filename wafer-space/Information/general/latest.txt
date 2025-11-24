@@ -5,19 +5,21 @@ Topic: Welcome to [wafer.space](https://wafer.space/) -
 documentation at [wafer.space github](https://github.com/wafer-space) - 
 buy at [buy.wafer.space](https://buy.wafer.space) - 
 archives at [discord.wafer.space](https://discord.wafer.space/)
-After: 11/24/2025 14:25
+After: 11/24/2025 15:28
 ==============================================================
 
-[11/24/2025 14:27] mithro_
-IPv4 should now work in theory.
+[11/24/2025 15:34] bailey8889
+@Tim Edwards just out of curiosity, why do you recommend biasing the level-down shifter (a normally 5V inverter powered at 3.3V) at 5V?
 
-{Reactions}
-✅
 
-[11/24/2025 14:53] rtimothyedwards_19428
-I made a level shifter for the I/O cells here:  https://github.com/RTimothyEdwards/gf180mcu_ocd_io/; specifically, see https://github.com/RTimothyEdwards/gf180mcu_ocd_io/blob/main/magic/lvlshift_up.mag.  However, this was designed to fit in the existing I/O cells, not the standard cells, so it's not pitch-matched to any standard cell library.  To level-shift down, I generally just use a 5V inverter powered at 3.3V, although if you want it matched to a standard cell library, then the 5V rail should bias the nwell (which will be connected to other 5V standard cell nwells) and the 3.3V supply to the inverter should be a separate pin.
+[11/24/2025 15:36] 246tnt
+@bailey Well if you powered it at 5V , it would output 5V ... that wouldn't be much of a level shifter.
+
+
+[11/24/2025 15:37] 246tnt
+If you make an inverter out of 5V transistors but feed them 3.3V, they will wistand the 5V swing input but only output 3.3V on the output, hence shifting down from 5V -> 3.3V domain.
 
 
 ==============================================================
-Exported 2 message(s)
+Exported 3 message(s)
 ==============================================================
