@@ -2,9 +2,869 @@
 Guild: wafer.space Community
 Channel: Information / tinytapeout
 Topic: Current shuttle - Tiny Tapeout GF 0p2 - [discord](https://discord.com/channels/1009193568256135208/1422290927816540402) - [webpage](https://app.tinytapeout.com/shuttles/ttgf0p2)
-After: 11/25/2025 02:11
 ==============================================================
 
+[08/26/2025 05:24] urish
+❤️
+
+
+[08/26/2025 13:41] algofoogle
+🤩
+
+
+[09/16/2025 21:39] urish
+Early experimentation on GF180 Tiny Tapeout GitHub action:
+
+https://github.com/urish/tt-gf180-factory-test/actions/runs/17778063270
+
+{Embed}
+https://github.com/urish/tt-gf180-factory-test/actions/runs/17778063270
+chore: adapt for gf180mcu · urish/tt-gf180-factory-test@aca8bfd
+Factory test project for Tiny Tapeout GF shuttles. Contribute to urish/tt-gf180-factory-test development by creating an account on GitHub.
+tinytapeout_media/tt-gf180-factory-test-6BFE9
+
+{Reactions}
+👍 (2) 🎉 👏 (3) ❤️
+
+[09/16/2025 22:24] mithro_
+@urish - Awesome work.
+
+
+[09/17/2025 14:13] algofoogle
+Great stuff  @urish 🙂 For fun I ran it on one of my old designs, and it worked: https://github.com/algofoogle/tt-gf180-toy/actions/runs/17800061560 -- I was surprised that the flow seems to define `USE_POWER_PINS` (and since my code was originally written to support Caravel, it's sensitive to those defines and gives a linter warning, though safe to ignore I guess).
+
+
+[09/17/2025 14:14] algofoogle
+I was thinking about using Magic's `plot` to render GDS instead of the existing renderer used by the TT actions. Maybe it will look better for IHP and GF's standard cells -- I will give it a try soon.
+
+{Reactions}
+👍
+
+[09/29/2025 18:28] urish
+The verilog project template is ready!
+
+https://github.com/TinyTapeout/ttgf-verilog-template/
+
+One caveat: the "precheck" part will fail, and that's expected. We'll fix it over the next week or two.
+
+{Embed}
+https://github.com/TinyTapeout/ttgf-verilog-template/
+GitHub - TinyTapeout/ttgf-verilog-template: Submission template for...
+Submission template for Tiny Tapeout GF180 (wafer.space) shuttles - Verilog HDL Projects - TinyTapeout/ttgf-verilog-template
+tinytapeout_media/1df1e918-07ad-4314-a3e0-26b497370dd1-D3AC8
+
+{Reactions}
+🎉 (4) 👀
+
+[09/29/2025 21:52] mithro_
+@urish - Should I promote that to people yet?
+
+
+[09/30/2025 04:28] urish
+Everyone should be able to use the template as-is right now, but we're thinking to only open submission for people who submitted to a Tiny Tapeout shuttle in the past (our past experience shows that this is a good way to get higher quality submissions)
+
+{Reactions}
+👀
+
+[09/30/2025 05:06] mithro_
+@urish - BTW Have you ever tested what happens if someone shorts VDD to GND together aggressively?
+
+
+[09/30/2025 05:07] mithro_
+@urish - The power gating should stop it from causing any problem.
+
+
+[09/30/2025 05:11] urish
+Yes, it should stop it.
+
+
+[09/30/2025 05:12] urish
+But the current shuttle won't be power gated
+
+
+[09/30/2025 05:25] h_thoreson_71412
+I did one past TT, kinda have been digging around Discord looking for ideas to work on for the next run. Is there anything I can try to do with this that would be helpful?
+
+
+[09/30/2025 05:37] urish
+Started a thread.
+
+
+[09/30/2025 06:21] 246tnt
+@Tim 'mithro' Ansell The power gate stops it as long as you don't enable that particular design 😅   If you do enable it, you will get potentially damaging high currents.
+
+
+[09/30/2025 06:22] mithro_
+But have you actually tested such a thing?
+
+
+[09/30/2025 06:22] 246tnt
+No.
+
+
+[09/30/2025 06:23] 246tnt
+We had one design that had a short but it was through `li` in sky130 so it ended up drawing way more than expected and more than we recommend, but it was only ~ 15 mA which is still very much in the "chip will survive" zone.
+
+
+[09/30/2025 06:25] 246tnt
+I had a power gate test design that was meant to test high current usage in TT07 but I made a mistake in the layout so it wasn't able to generate very high current. There is a fixed version in TT08 but given I just got the chips yesterday, I'll wait a bit before trying to burn those 😅
+
+
+[09/30/2025 06:29] urish
+We do have a way to mark dangerous projects post silicon, so users get warned before enabling them through the commander app
+
+
+[09/30/2025 07:20] algofoogle
+Will you be taking custom GDS on this run, or just digital LibreLane generated stuff?
+
+
+[09/30/2025 07:47] 246tnt
+Only LibreLane stuff. Without power gating it's a bit risky to accept random GDS 😅
+
+
+[09/30/2025 07:55] urish
+If you manually add a power gate yourself we can consider including it
+
+
+[09/30/2025 07:55] urish
+Or if might just wait for the next shuttle
+
+
+[09/30/2025 09:30] algofoogle
+Yeah makes sense, I figured that would be the case. I think I will try an assortment of digital and analog/mixed stuff in GF180 and see whichever shuttles I can get onto, whenever 🙂
+
+
+[09/30/2025 17:31] mithro_
+BTW It's GF180MCU not GF180 🙂 -- Going to keep saying that because if successful we'll end up with multiple GF180 technologies.
+
+{Reactions}
+❤️
+
+[11/03/2025 23:56] mithro_
+Is there a way to reference / link / connect the https://discord.com/channels/1009193568256135208/1422290927816540402 channel from here?
+
+
+[11/04/2025 05:21] urish
+A link (as you posted) is the way I know
+
+
+[11/04/2025 05:21] urish
+You can pin the message to make it easier for others to find
+
+
+[11/04/2025 07:32] xobs
+This is what people see when they can’t access that channel. I think a bot is the way to go, and people I know tend to use Fletcher to teleport messages between channels and servers. I haven’t managed that particular bot myself before, though.
+
+{Attachments}
+tinytapeout_media/IMG_0825-7E011.png
+
+
+[11/04/2025 20:29] anfroholic (pinned)
+Join the Tiny Tapeout Server and see [#ttgf0p2-tapeout](https://discord.com/channels/1009193568256135208/1422290927816540402)
+for the first [wafer.space](https://wafer.space/) run
+
+https://discord.gg/dbzGmXNFJ9
+
+{Embed}
+https://wafer.space/
+wafer.space - Budget silicon manufacturing.
+Create integrated circuits without breaking the bank!
+
+{Reactions}
+🎉 (3)
+
+[11/04/2025 20:30] anfroholic
+Pinned a message.
+
+
+[11/05/2025 02:46] mithro_
+Thanks!
+
+
+[11/07/2025 05:24] urish (pinned)
+If you have previously submitted to any Tiny Tapeout shuttle (including TTSKY25b) and want to add your own project to this test shuttle:
+
+1. Use this template: <https://github.com/TinyTapeout/ttgf-verilog-template>
+2. Submit through this link: <https://app.tinytapeout.com/projects/create?shuttle=ttgf0p2>
+
+This is a test shuttle, so there's a chance the silicon won't work, and it's likely that we won't ship the silicon to everyone who submitted a design.
+
+
+[11/07/2025 05:30] anfroholic
+Are you sure the submission link is correct?
+
+
+[11/07/2025 05:35] urish
+Yes, once the current shuttle (SKY 25B) is over, this banner will be replaced with the deadline for the GF0p2 shuttle
+
+
+[11/07/2025 05:35] anfroholic
+Ah, ok. I get it, but it is confusing.
+
+{Reactions}
+👍
+
+[11/08/2025 01:39] mithro_
+FYI - See here @proppy
+
+{Reactions}
+👀
+
+[11/08/2025 01:39] mithro_
+Pinned a message.
+
+
+[11/12/2025 09:07] urish
+Just published a Wokwi project template for TTGF0p2: 
+
+https://github.com/TinyTapeout/ttgf-wokwi-template
+
+{Embed}
+https://github.com/TinyTapeout/ttgf-wokwi-template
+GitHub - TinyTapeout/ttgf-wokwi-template: Submission template for T...
+Submission template for Tiny Tapeout GF180MCU (GlobalFoundries) shuttles - Wokwi Projects - TinyTapeout/ttgf-wokwi-template
+tinytapeout_media/c5c4b68d-072e-4c88-a96e-5cfad49dc522-C4139
+
+{Reactions}
+👍 (4)
+
+[11/13/2025 21:41] mithro_
+@urish - Could we get your Tiny Tapeout bot to post here for the GF shuttle too?
+
+{Reactions}
+❤️
+
+[11/14/2025 04:53] urish
+Good idea, will look into this
+
+
+[11/14/2025 04:55] urish
+Do you want it to go to this channel? Since it sometimes gets really spammy.
+
+We can also have a dedicated channel like in the TT discord
+
+{Reactions}
+❤️
+
+[11/14/2025 21:34] mithro_
+I'm okay with it getting reasonably spammy
+
+{Reactions}
+👍 (2)
+
+[11/15/2025 20:02] urish
+Sent you DM with instructions
+
+{Reactions}
+❤️
+
+[11/16/2025 06:33] TTBot#6027
+New tapeout: @urish submitted Chip ROM (https://github.com/TinyTapeout/tt-chip-rom)
+
+{Embed}
+https://github.com/TinyTapeout/tt-chip-rom
+GitHub - TinyTapeout/tt-chip-rom: ROM slot for Tiny Tapeout Chips
+ROM slot for Tiny Tapeout Chips. Contribute to TinyTapeout/tt-chip-rom development by creating an account on GitHub.
+tinytapeout_media/tt-chip-rom-A517B
+
+{Reactions}
+🎉 (4)
+
+[11/16/2025 06:34] urish
+It works!
+
+{Reactions}
+👍 (4)
+
+[11/18/2025 10:45] TTBot#6027
+New tapeout: @htamas submitted Simon's Caterpillar (https://github.com/htfab/ttgf0p2-caterpillar)
+
+{Embed}
+https://github.com/htfab/ttgf0p2-caterpillar
+GitHub - htfab/ttgf0p2-caterpillar
+Contribute to htfab/ttgf0p2-caterpillar development by creating an account on GitHub.
+tinytapeout_media/ttgf0p2-caterpillar-90400
+
+{Reactions}
+game_dancing
+
+[11/19/2025 10:33] TTBot#6027
+New tapeout: Louis Ledoux, Cochard Pierre submitted Silly-Faust (https://github.com/Bynaryman/ttgf0p2-faust-mlir-silicon)
+
+{Embed}
+https://github.com/Bynaryman/ttgf0p2-faust-mlir-silicon
+GitHub - Bynaryman/ttgf0p2-faust-mlir-silicon: trial faust to silicon.
+trial faust to silicon. Contribute to Bynaryman/ttgf0p2-faust-mlir-silicon development by creating an account on GitHub.
+tinytapeout_media/ttgf0p2-faust-mlir-silicon-36E7B
+
+{Reactions}
+blobclap
+
+[11/19/2025 21:09] TTBot#6027
+New tapeout: @htamas submitted Cell mux (https://github.com/htfab/ttgf0p2-cells)
+
+{Embed}
+https://github.com/htfab/ttgf0p2-cells
+GitHub - htfab/ttgf0p2-cells
+Contribute to htfab/ttgf0p2-cells development by creating an account on GitHub.
+tinytapeout_media/ttgf0p2-cells-116C0
+
+{Reactions}
+🦠
+
+[11/19/2025 22:00] TTBot#6027
+New tapeout: Zedulo submitted Zedulo TestChip1 (https://github.com/ZeduloTech/ttgf-zed_tc1)
+
+{Embed}
+https://github.com/ZeduloTech/ttgf-zed_tc1
+GitHub - ZeduloTech/ttgf-zed_tc1: Zedulo Testchip 1 with TT on gf180
+Zedulo Testchip 1 with TT on gf180. Contribute to ZeduloTech/ttgf-zed_tc1 development by creating an account on GitHub.
+tinytapeout_media/ttgf-zed_tc1-D1D21
+
+
+[11/20/2025 03:55] TTBot#6027
+New tapeout: @Essen submitted 2x2 MAC Systolic array with DFT (https://github.com/Essenceia/Systolic_MAC_with_DFT)
+
+{Embed}
+https://github.com/Essenceia/Systolic_MAC_with_DFT
+GitHub - Essenceia/Systolic_MAC_with_DFT: GF180 ASIC tapeout of a 2...
+GF180 ASIC tapeout of a 2x2 MAC with DFT infrastructure - Essenceia/Systolic_MAC_with_DFT
+tinytapeout_media/Systolic_MAC_with_DFT-1E09B
+
+
+[11/20/2025 07:56] TTBot#6027
+New tapeout: @Dingyu (Eric) Zhou submitted SCµM-BLE-RX (https://github.com/ZDYnb/ttgf-BLE_Receiver)
+
+{Embed}
+https://github.com/ZDYnb/ttgf-BLE_Receiver
+GitHub - ZDYnb/ttgf-BLE_Receiver
+Contribute to ZDYnb/ttgf-BLE_Receiver development by creating an account on GitHub.
+tinytapeout_media/ttgf-BLE_Receiver-2C008
+
+{Reactions}
+🅱️ 🇱 🇪
+
+[11/20/2025 11:14] TTBot#6027
+New tapeout: Hirosh Dabui submitted KianV uLinux SoC (https://github.com/TinyTapeout/KianV-RV32IMA-RISC-V-uLinux-SoC)
+
+{Embed}
+https://github.com/TinyTapeout/KianV-RV32IMA-RISC-V-uLinux-SoC
+GitHub - TinyTapeout/KianV-RV32IMA-RISC-V-uLinux-SoC: RISC-V ASIC t...
+RISC-V ASIC that can boot Linux. Contribute to TinyTapeout/KianV-RV32IMA-RISC-V-uLinux-SoC development by creating an account on GitHub.
+tinytapeout_media/KianV-RV32IMA-RISC-V-uLinux-SoC-F57F1
+
+
+[11/20/2025 14:55] TTBot#6027
+New tapeout: Martin Schoeberl submitted Wildcat RISC-V (https://github.com/schoeberl/ttgf-wildcat)
+
+{Embed}
+https://github.com/schoeberl/ttgf-wildcat
+GitHub - schoeberl/ttgf-wildcat: The Wildcat RISC-V on the TT GF Te...
+The Wildcat RISC-V on the TT GF Test Shuttle. Contribute to schoeberl/ttgf-wildcat development by creating an account on GitHub.
+tinytapeout_media/ttgf-wildcat-E5097
+
+
+[11/20/2025 15:24] TTBot#6027
+New tapeout: @Matt Venn submitted VGA clock (https://github.com/mattvenn/GF180-VGA-clock-waferspace)
+
+{Embed}
+https://github.com/mattvenn/GF180-VGA-clock-waferspace
+GitHub - mattvenn/GF180-VGA-clock-waferspace
+Contribute to mattvenn/GF180-VGA-clock-waferspace development by creating an account on GitHub.
+tinytapeout_media/6f35dc11-d1a0-4525-baa1-5a148b736a9a-05743
+
+{Reactions}
+❤️ (2)
+
+[11/20/2025 18:15] anfroholic
+You all are filling up!! 
+Well done!! :waferspace:
+
+
+[11/20/2025 18:16] anfroholic
+
+
+{Attachments}
+tinytapeout_media/image-83665.png
+
+{Reactions}
+❤️ (2)
+
+[11/20/2025 22:01] mithro_
+@Essen - BTW Have you seen the adder work Teo and Anton did?
+
+
+[11/20/2025 22:01] mithro_
+https://www.youtube.com/watch?v=P7wjB2DKAIA
+
+{Embed}
+Zero To ASIC Course
+https://www.youtube.com/watch?v=P7wjB2DKAIA
+Livestream - Teodor-Dumitru Ene - Open-Source Hardware Addition on ...
+Teo will present his work on open source adders, with some time for Q&A at the end.
+
+The presentation slides - https://bit.ly/3MYTlCf
+Teo's Twitter - https://twitter.com/td_ene
+Teo's main repository - https://github.com/tdene/synth_opt_adders
+Colab notebook - https://colab.research.google.com/drive/1bqAWs2To8suxx5acmCYp10iWlKI-Qsn4
+tinytapeout_media/maxresdefault-2A59F.jpg
+
+
+[11/20/2025 22:02] mithro_
+Sadly Nvidia stole Teo 🙁
+
+
+[11/21/2025 04:27] TTBot#6027
+New tapeout: @Sam E submitted 7-Segment Digital Desk Clock (https://github.com/sellicott/digital_clock_gf0p2)
+
+{Embed}
+https://github.com/sellicott/digital_clock_gf0p2
+GitHub - sellicott/digital_clock_gf0p2: Hardening of digital clock ...
+Hardening of digital clock project for gf0p2 tapeout  - GitHub - sellicott/digital_clock_gf0p2: Hardening of digital clock project for gf0p2 tapeout
+tinytapeout_media/digital_clock_gf0p2-ED248
+
+
+[11/21/2025 04:51] essen__
+Hi @Tim 'mithro' Ansell, thanks for the link.  
+This sounds exactly up my alley, and is even more so since I wasn't aware of this work. 🙂
+
+
+[11/21/2025 05:45] mithro_
+Also https://github.com/antonblanchard/vlsiffra
+
+{Embed}
+https://github.com/antonblanchard/vlsiffra
+GitHub - antonblanchard/vlsiffra: Create fast and efficient standar...
+Create fast and efficient standard cell based adders, multipliers and multiply-adders. - antonblanchard/vlsiffra
+tinytapeout_media/vlsiffra-87666
+
+{Reactions}
+🎉 👍 👀
+
+[11/21/2025 14:02] TTBot#6027
+New tapeout: @ReJ aka Renaldas Zioma submitted VGA Drop (audio/visual demo) (https://github.com/rejunity/tt08-vga-drop)
+
+{Embed}
+https://github.com/rejunity/tt08-vga-drop
+GitHub - rejunity/tt08-vga-drop: "The Drop" ASIC 640x480 60Hz audio...
+"The Drop" ASIC 640x480 60Hz audio visual demo. Contribute to rejunity/tt08-vga-drop development by creating an account on GitHub.
+tinytapeout_media/c9824ade-105a-4bf3-a607-dc0c22d82fb9-EA5C3
+
+{Reactions}
+👏
+
+[11/21/2025 14:13] rzioma
+This was a challenging one! After initial conversion to gf180mcu the max clock frequency was 16 MHz 😰 😰  😰 way below VGA 25.2 MHz pixel clock!
+
+- with great help 🙏 of @htamas the cell library got switched from 7 track (gf180mcu_fd_sc_mcu7t) to** 9 track** (gf180mcu_fd_sc_mcu9t) larger, but faster cells,
+- plus some opportunistic pipelining and demo went to almost 50 MHz! 🚀
+
+{Reactions}
+🚀 👍 jawdrop
+
+[11/22/2025 01:46] TTBot#6027
+New tapeout: @a1k0n submitted VGA Nyan Cat (https://github.com/a1k0n/ttgf0p2-a1k0n-nyan)
+
+{Embed}
+https://github.com/a1k0n/ttgf0p2-a1k0n-nyan
+GitHub - a1k0n/ttgf0p2-a1k0n-nyan: tiny tapeout GlobalFoundries 0.2...
+tiny tapeout GlobalFoundries 0.2 VGA Nyan Cat. Contribute to a1k0n/ttgf0p2-a1k0n-nyan development by creating an account on GitHub.
+tinytapeout_media/fd2b34b3-d4a3-4d26-a55e-f4cf00600f67-523B8
+
+{Reactions}
+😸 (2) nyancat (2)
+
+[11/22/2025 16:17] essen__
+Started a thread.
+
+
+[11/22/2025 17:10] TTBot#6027
+New tapeout: @proppy submitted megabytebeat (https://github.com/proppy/ttgf-megabytebeat)
+
+{Embed}
+https://github.com/proppy/ttgf-megabytebeat
+GitHub - proppy/ttgf-megabytebeat
+Contribute to proppy/ttgf-megabytebeat development by creating an account on GitHub.
+tinytapeout_media/ttgf-megabytebeat-88D31
+
+
+[11/22/2025 17:40] TTBot#6027
+New tapeout: @javier submitted MarcoPolo (https://github.com/javiBajoCero/ttgf-verilog-template)
+
+{Embed}
+https://github.com/javiBajoCero/ttgf-verilog-template
+GitHub - javiBajoCero/ttgf-verilog-template: Submission template fo...
+Submission template for Tiny Tapeout GF180 (wafer.space) shuttles - Verilog HDL Projects - javiBajoCero/ttgf-verilog-template
+tinytapeout_media/ttgf-verilog-template-FE695
+
+
+[11/22/2025 20:02] TTBot#6027
+New tapeout: @KerCrafter submitted LEDs Racer (https://github.com/KerCrafter/FPGA-LEDs-Racer)
+
+{Embed}
+https://github.com/KerCrafter/FPGA-LEDs-Racer
+GitHub - KerCrafter/FPGA-LEDs-Racer: Funny electronic game with WS2...
+Funny electronic game with WS2812B LEDs. Contribute to KerCrafter/FPGA-LEDs-Racer development by creating an account on GitHub.
+tinytapeout_media/FPGA-LEDs-Racer-CAA7F
+
+
+[11/22/2025 23:59] TTBot#6027
+New tapeout: Noritsuna Imamura submitted CAN Controller for Rocket (https://github.com/noritsuna/ttgf0p2-tt_um_noritsuna_CAN_CTRL)
+
+{Embed}
+https://github.com/noritsuna/ttgf0p2-tt_um_noritsuna_CAN_CTRL
+GitHub - noritsuna/ttgf0p2-tt_um_noritsuna_CAN_CTRL: CAN Controller...
+CAN Controller for Rocket. Contribute to noritsuna/ttgf0p2-tt_um_noritsuna_CAN_CTRL development by creating an account on GitHub.
+tinytapeout_media/ttgf0p2-tt_um_noritsuna_CAN_CTRL-D0813
+
+{Reactions}
+💜
+
+[11/23/2025 03:19] TTBot#6027
+New tapeout: @algofoogle (Anton Maurovic) submitted raybox-zero TTGF0p2 edition (https://github.com/algofoogle/ttgf0p2-raybox-zero)
+
+{Embed}
+https://github.com/algofoogle/ttgf0p2-raybox-zero
+GitHub - algofoogle/ttgf0p2-raybox-zero: raybox-zero hardening for ...
+raybox-zero hardening for Tiny Tapeout experimental gf180mcuD PDK - algofoogle/ttgf0p2-raybox-zero
+tinytapeout_media/ec1fc956-1a47-44fa-b0ae-b7d0a7832614-9A253
+
+{Reactions}
+🚪 (2)
+
+[11/23/2025 15:18] TTBot#6027
+New tapeout: @thomasflummer submitted Linear Timecode (LTC) generator (https://github.com/flummer/tt-um-flummer-ltc)
+
+{Embed}
+https://github.com/flummer/tt-um-flummer-ltc
+GitHub - flummer/tt-um-flummer-ltc
+Contribute to flummer/tt-um-flummer-ltc development by creating an account on GitHub.
+tinytapeout_media/tt-um-flummer-ltc-0FDDE
+
+
+[11/23/2025 15:30] rebelmike
+I’m seeing LVS errors on a complex TT design. Anyone have any ideas how that could happen? https://github.com/MichaelBell/ttgf0p2-tinyQV/actions/runs/19612193943
+
+{Embed}
+https://github.com/MichaelBell/ttgf0p2-tinyQV/actions/runs/19612193943
+Fix build · MichaelBell/ttgf0p2-tinyQV@025a474
+TinyQV for TT gf180 run 0.2. Contribute to MichaelBell/ttgf0p2-tinyQV development by creating an account on GitHub.
+tinytapeout_media/ttgf0p2-tinyQV-22F6D
+
+
+[11/23/2025 18:40] bailey8889
+Started a thread.
+
+
+[11/23/2025 19:39] TTBot#6027
+New tapeout: Darryl Miles project from Eric Smith submitted Example of Bad Synchronizer (https://github.com/dlmiles/ttgf25a-bad-synchronizer)
+
+{Embed}
+https://github.com/dlmiles/ttgf25a-bad-synchronizer
+GitHub - dlmiles/ttgf25a-bad-synchronizer
+Contribute to dlmiles/ttgf25a-bad-synchronizer development by creating an account on GitHub.
+tinytapeout_media/5dad3ae2-9e72-440a-b628-b1ce0615c3e2-0236C
+
+
+[11/24/2025 01:48] TTBot#6027
+New tapeout: Yimin Gao and Ceylan Morgul submitted One Bit PUF (https://github.com/Capulus123/ttihp03-multi-bit-puf)
+
+{Embed}
+https://github.com/Capulus123/ttihp03-multi-bit-puf
+GitHub - Capulus123/ttihp03-multi-bit-puf
+Contribute to Capulus123/ttihp03-multi-bit-puf development by creating an account on GitHub.
+tinytapeout_media/ttihp03-multi-bit-puf-DD588
+
+
+[11/24/2025 04:14] TTBot#6027
+New tapeout: @algofoogle (Anton Maurovic) submitted Ring osc on VGA (https://github.com/algofoogle/ttgf0p2-vga-ring-osc)
+
+{Embed}
+https://github.com/algofoogle/ttgf0p2-vga-ring-osc
+GitHub - algofoogle/ttgf0p2-vga-ring-osc: Ring oscillator VGA displ...
+Ring oscillator VGA display visualisation on Tiny Tapeout gf180mcuD - algofoogle/ttgf0p2-vga-ring-osc
+tinytapeout_media/d0ff1937-67a0-40e6-ac4b-bac615b8c950-96F6A
+
+{Reactions}
+❤️
+
+[11/24/2025 06:10] TTBot#6027
+New tapeout: @Ken Pettit submitted LISA 8-Bit Microcontroller (https://github.com/kdp1965/ttgf-um-lisa)
+
+{Embed}
+https://github.com/kdp1965/ttgf-um-lisa
+GitHub - kdp1965/ttgf-um-lisa
+Contribute to kdp1965/ttgf-um-lisa development by creating an account on GitHub.
+tinytapeout_media/46e24deb-7e3a-4879-9b39-96b13e000f04-D675D
+
+
+[11/24/2025 06:29] TTBot#6027
+New tapeout: @GregariousMatt submitted Notre Dame - Lockpick Game TT Example (https://github.com/mmorri22/lockpick)
+
+{Embed}
+https://github.com/mmorri22/lockpick
+GitHub - mmorri22/lockpick: RTL Example for use in TinyTapeout wafe...
+RTL Example for use in TinyTapeout wafer.space Experimental Run - mmorri22/lockpick
+tinytapeout_media/lockpick-AC604
+
+
+[11/24/2025 07:32] TTBot#6027
+New tapeout: kinako71-2 submitted Simple RISC-V (https://github.com/kinako71-2/TTGF0p2)
+
+{Embed}
+https://github.com/kinako71-2/TTGF0p2
+GitHub - kinako71-2/TTGF0p2
+Contribute to kinako71-2/TTGF0p2 development by creating an account on GitHub.
+tinytapeout_media/TTGF0p2-37619
+
+
+[11/24/2025 10:14] urish
+@Tim 'mithro' Ansell are you submitting a design?
+
+
+[11/24/2025 10:29] mithro_
+@urish - Nope!
+
+
+[11/24/2025 10:29] urish
+What stops you from doing so?
+
+
+[11/24/2025 10:34] TTBot#6027
+New tapeout: Matthew Morrison submitted Notre Dame - CSE 30342 - DIC - Advanced FSM Final Project Example (https://github.com/mmorri22/tt_um_mmorri22_cse_30342)
+
+{Embed}
+https://github.com/mmorri22/tt_um_mmorri22_cse_30342
+GitHub - mmorri22/tt_um_mmorri22_cse_30342: Final Project Example f...
+Final Project Example for CSE 30342 Digital Integrated Circuits - mmorri22/tt_um_mmorri22_cse_30342
+tinytapeout_media/tt_um_mmorri22_cse_30342-43C8F
+
+
+[11/24/2025 11:48] TTBot#6027
+New tapeout: @Susumu Yamazaki (ZACKY) submitted PVTMonitorSuite (https://github.com/zacky1972/ttgf0p2-PVTMonitorSuite)
+
+{Embed}
+https://github.com/zacky1972/ttgf0p2-PVTMonitorSuite
+GitHub - zacky1972/ttgf0p2-PVTMonitorSuite: PVTMonitorSuite: A full...
+PVTMonitorSuite: A fully digital, modular suite for measuring gate delays, flip-flop timings, and clock skew under varying process, voltage, and temperature conditions. - zacky1972/ttgf0p2-PVTMonit...
+tinytapeout_media/ttgf0p2-PVTMonitorSuite-21CD2
+
+
+[11/24/2025 12:13] TTBot#6027
+New tapeout: Sophus Andreassen submitted Dog Battle Game (https://github.com/jorgenkraghjakobsen/tt_gf_dog_fight)
+
+{Embed}
+https://github.com/jorgenkraghjakobsen/tt_gf_dog_fight
+GitHub - jorgenkraghjakobsen/tt_gf_dog_fight
+Contribute to jorgenkraghjakobsen/tt_gf_dog_fight development by creating an account on GitHub.
+tinytapeout_media/tt_gf_dog_fight-0E5C5
+
+
+[11/24/2025 12:20] anfroholic
+Fantastic job tinytapeout team!!
+Nearly full!
+
+{Attachments}
+tinytapeout_media/image-E62C4.png
+
+{Reactions}
+ttlogo (2) 🎉
+
+[11/24/2025 12:36] TTBot#6027
+New tapeout: @Pawel submitted Frequency Counter SSD1306 OLED (https://github.com/embelon/ttgf-frequency-counter-oled)
+
+{Embed}
+https://github.com/embelon/ttgf-frequency-counter-oled
+GitHub - embelon/ttgf-frequency-counter-oled: Simple Frequency Coun...
+Simple Frequency Counter with SSD1306 based OLED. Contribute to embelon/ttgf-frequency-counter-oled development by creating an account on GitHub.
+tinytapeout_media/ttgf-frequency-counter-oled-40BAA
+
+
+[11/24/2025 12:58] urish
+Started a thread.
+
+
+[11/24/2025 15:20] TTBot#6027
+New tapeout: @Ken Pettit submitted WokwiPWM (https://github.com/kdp1965/ttgf-um-wokwi-pwm)
+
+{Embed}
+https://github.com/kdp1965/ttgf-um-wokwi-pwm
+GitHub - kdp1965/ttgf-um-wokwi-pwm
+Contribute to kdp1965/ttgf-um-wokwi-pwm development by creating an account on GitHub.
+tinytapeout_media/5912d2df-d3ce-4ab9-8949-5c59fd56c8d7-7957F
+
+
+[11/24/2025 16:38] TTBot#6027
+New tapeout: @kbeckmann submitted Flame demo (https://github.com/kbeckmann/ttgf0p2-kbeckmann-flame)
+
+{Embed}
+https://github.com/kbeckmann/ttgf0p2-kbeckmann-flame
+GitHub - kbeckmann/ttgf0p2-kbeckmann-flame: Flame demo ported to tt...
+Flame demo ported to ttgf0p2. Contribute to kbeckmann/ttgf0p2-kbeckmann-flame development by creating an account on GitHub.
+tinytapeout_media/ttgf0p2-kbeckmann-flame-CE799
+
+{Reactions}
+🔥 (2)
+
+[11/24/2025 17:55] TTBot#6027
+New tapeout: @urish submitted 2048 sliding tile puzzle game (VGA) (https://github.com/urish/tt-2048-game)
+
+{Embed}
+https://github.com/urish/tt-2048-game
+GitHub - urish/tt-2048-game: 2048 sliding tile puzzle video game fo...
+2048 sliding tile puzzle video game for Tiny Tapeout - urish/tt-2048-game
+tinytapeout_media/e92a6b0f-405a-4822-824b-0b2d634efee2-0830D
+
+{Reactions}
+❤️
+
+[11/24/2025 19:01] TTBot#6027
+New tapeout: James Ashie Kotey submitted Super-Simple-SPI-CPU (https://github.com/Sheffield-Chip-Design-Team/SPI-CPU-Final)
+
+{Embed}
+https://github.com/Sheffield-Chip-Design-Team/SPI-CPU-Final
+GitHub - Sheffield-Chip-Design-Team/SPI-CPU-Final
+Contribute to Sheffield-Chip-Design-Team/SPI-CPU-Final development by creating an account on GitHub.
+tinytapeout_media/SPI-CPU-Final-E00E4
+
+
+[11/24/2025 19:16] TTBot#6027
+New tapeout: @urish submitted USB CDC (Serial) Device (https://github.com/urish/tt-usbcdc-device)
+
+{Embed}
+https://github.com/urish/tt-usbcdc-device
+GitHub - urish/tt-usbcdc-device: USB CDC IP hardened for Tiny Tapeout
+USB CDC IP hardened for Tiny Tapeout. Contribute to urish/tt-usbcdc-device development by creating an account on GitHub.
+tinytapeout_media/48d940ec-c304-4513-828d-bc3ba3f8c542-CEF8C
+
+
+[11/24/2025 19:25] TTBot#6027
+New tapeout: @htamas submitted Video mode tester (https://github.com/htfab/ttgf0p2-vga-tester)
+
+{Embed}
+https://github.com/htfab/ttgf0p2-vga-tester
+GitHub - htfab/ttgf0p2-vga-tester
+Contribute to htfab/ttgf0p2-vga-tester development by creating an account on GitHub.
+tinytapeout_media/ttgf0p2-vga-tester-D3F2F
+
+
+[11/24/2025 19:46] urish
+15 minutes and 8 tiles left...
+
+
+[11/24/2025 19:48] TTBot#6027
+New tapeout: Darryl Miles project from Eric Smith submitted DDR throughput and flop aperature test (https://github.com/dlmiles/ttgf25a-ddr-throughput-test)
+
+{Embed}
+https://github.com/dlmiles/ttgf25a-ddr-throughput-test
+GitHub - dlmiles/ttgf25a-ddr-throughput-test
+Contribute to dlmiles/ttgf25a-ddr-throughput-test development by creating an account on GitHub.
+tinytapeout_media/ttgf25a-ddr-throughput-test-A0166
+
+
+[11/24/2025 19:49] TTBot#6027
+New tapeout: Darryl Miles project from Eric Smith submitted GF180MCU loopback tile with input skew measurement (https://github.com/dlmiles/ttgf25a-loopback-with-skew)
+
+{Embed}
+https://github.com/dlmiles/ttgf25a-loopback-with-skew
+GitHub - dlmiles/ttgf25a-loopback-with-skew
+Contribute to dlmiles/ttgf25a-loopback-with-skew development by creating an account on GitHub.
+tinytapeout_media/ttgf25a-loopback-with-skew-98DCD
+
+
+[11/24/2025 19:50] urish
+10 minutes and 2 tiles left...
+
+
+[11/24/2025 19:51] TTBot#6027
+New tapeout: @TheZoq2 submitted Quickscope (https://github.com/TheZoq2/tt-um-thezoq2-quickscope)
+
+{Embed}
+https://github.com/TheZoq2/tt-um-thezoq2-quickscope
+GitHub - TheZoq2/tt-um-thezoq2-quickscope
+Contribute to TheZoq2/tt-um-thezoq2-quickscope development by creating an account on GitHub.
+tinytapeout_media/tt-um-thezoq2-quickscope-A0D4B
+
+
+[11/24/2025 19:52] thezoq2
+Oh damn, then my 4x2 extension certainly wont work lmao
+
+
+[11/24/2025 19:53] thezoq2
+Then we'll go with a 16 sample logic analyzer
+
+
+[11/24/2025 19:53] TTBot#6027
+New tapeout: @Ken Pettit submitted easy PAL (https://github.com/kdp1965/ttgf-um-easy-PAL)
+
+{Embed}
+https://github.com/kdp1965/ttgf-um-easy-PAL
+GitHub - kdp1965/ttgf-um-easy-PAL
+Contribute to kdp1965/ttgf-um-easy-PAL development by creating an account on GitHub.
+tinytapeout_media/eac27c88-3dfc-4313-8f44-af2e5dbf8ee7-6957A
+
+
+[11/24/2025 19:55] TTBot#6027
+New tapeout: @htamas submitted ROTFPGA v2 (https://github.com/htfab/ttgf0p2-rotfpga)
+
+{Embed}
+https://github.com/htfab/ttgf0p2-rotfpga
+GitHub - htfab/ttgf0p2-rotfpga
+Contribute to htfab/ttgf0p2-rotfpga development by creating an account on GitHub.
+tinytapeout_media/ttgf0p2-rotfpga-9762C
+
+
+[11/24/2025 19:56] urish
+4 minutes and no tiles left!
+
+
+[11/24/2025 19:58] tholin
+Damn. I was gonna speedrun it, but people beat me to it!
+
+
+[11/24/2025 19:59] urish
+What did you have in mind?
+
+
+[11/24/2025 20:08] tholin
+https://github.com/AvalonSemiconductors/tt_um_as_scrapcpu
+
+{Embed}
+https://github.com/AvalonSemiconductors/tt_um_as_scrapcpu
+GitHub - AvalonSemiconductors/tt_um_as_scrapcpu: ScrapCPU on TT GF180
+ScrapCPU on TT GF180. Contribute to AvalonSemiconductors/tt_um_as_scrapcpu development by creating an account on GitHub.
+tinytapeout_media/tt_um_as_scrapcpu-F0BD4
+
+
+[11/24/2025 20:12] urish
+Would have been nice to have your 6-bit MCU 🙂
+
+
+[11/24/2025 20:12] tholin
+Its also on one of the cadence shuttles.
+
+
+[11/24/2025 20:13] urish
+Probably ttcad25a?
+
+
+[11/24/2025 20:13] urish
+Fab out is next month, so I've heard
+
+
+[11/24/2025 20:41] tholin
+Very good. I will finally know if my SCL works.
+
+
+[11/24/2025 22:24] anfroholic
+💯
+
+{Attachments}
+tinytapeout_media/image-67C51.png
+
+{Reactions}
+👏
+
 ==============================================================
-Exported 0 message(s)
+Exported 117 message(s)
 ==============================================================
