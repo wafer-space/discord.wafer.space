@@ -491,3 +491,133 @@ def test_organize_exports_replaces_existing_media_directory() -> None:
         assert not (public_media_dir / "old-file.png").exists()
         assert (public_media_dir / "new-file.png").exists()
         assert (public_media_dir / "new-file.png").read_bytes() == b"new data"
+
+
+def test_organize_exports_merges_json_messages() -> None:
+    """Test that JSON exports are merged, preserving historical messages."""
+    import json
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        tmpdir_path = Path(tmpdir)
+        exports = tmpdir_path / "exports"
+        public = tmpdir_path / "public"
+
+        from scripts.organize_exports import get_current_month
+
+        current_month = get_current_month()
+
+        # Create existing public directory with historical JSON
+        channel_dir = public / "test-server" / "general"
+        month_dir = channel_dir / current_month
+        month_dir.mkdir(parents=True)
+
+        existing_json = {
+            "guild": {"id": "123", "name": "Test Server"},
+            "channel": {"id": "456", "name": "general"},
+            "dateRange": {"after": None, "before": None},
+            "messages": [
+                {"id": "1000", "content": "First message", "timestamp": "2025-01-01T00:00:00"},
+                {"id": "1001", "content": "Second message", "timestamp": "2025-01-02T00:00:00"},
+            ],
+            "messageCount": 2,
+        }
+        (month_dir / f"{current_month}.json").write_text(json.dumps(existing_json))
+
+        # Create new incremental export with only new messages
+        server_dir = exports / "test-server"
+        server_dir.mkdir(parents=True)
+
+        new_json = {
+            "guild": {"id": "123", "name": "Test Server"},
+            "channel": {"id": "456", "name": "general"},
+            "dateRange": {"after": "2025-01-02T00:00:00", "before": None},
+            "messages": [
+                {"id": "1002", "content": "Third message (new)", "timestamp": "2025-01-03T00:00:00"},
+            ],
+            "messageCount": 1,
+        }
+        (server_dir / "general.json").write_text(json.dumps(new_json))
+
+        # Also need HTML for the test to proceed (organize_exports expects it)
+        (server_dir / "general.html").write_text("<html>test</html>")
+
+        # Organize exports - should merge JSON
+        stats = organize_exports(exports, public)
+
+        # Read merged JSON
+        merged_file = month_dir / f"{current_month}.json"
+        assert merged_file.exists()
+
+        merged_data = json.loads(merged_file.read_text())
+
+        # Should have all 3 messages
+        assert merged_data["messageCount"] == 3
+        assert len(merged_data["messages"]) == 3
+
+        # Messages should be sorted by ID
+        message_ids = [msg["id"] for msg in merged_data["messages"]]
+        assert message_ids == ["1000", "1001", "1002"]
+
+        # Should include content from both old and new
+        contents = [msg["content"] for msg in merged_data["messages"]]
+        assert "First message" in contents
+        assert "Second message" in contents
+        assert "Third message (new)" in contents
+
+        # dateRange should be updated to full history
+        assert merged_data["dateRange"]["after"] is None
+
+
+def test_organize_exports_json_deduplicates_by_id() -> None:
+    """Test that JSON merge deduplicates messages by ID."""
+    import json
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        tmpdir_path = Path(tmpdir)
+        exports = tmpdir_path / "exports"
+        public = tmpdir_path / "public"
+
+        from scripts.organize_exports import get_current_month
+
+        current_month = get_current_month()
+
+        # Create existing JSON with messages
+        channel_dir = public / "test-server" / "general"
+        month_dir = channel_dir / current_month
+        month_dir.mkdir(parents=True)
+
+        existing_json = {
+            "messages": [
+                {"id": "1000", "content": "Original content"},
+                {"id": "1001", "content": "Another message"},
+            ],
+            "messageCount": 2,
+        }
+        (month_dir / f"{current_month}.json").write_text(json.dumps(existing_json))
+
+        # Create new export with overlapping message (edited)
+        server_dir = exports / "test-server"
+        server_dir.mkdir(parents=True)
+
+        new_json = {
+            "messages": [
+                {"id": "1000", "content": "Updated content"},  # Same ID, updated content
+                {"id": "1002", "content": "Brand new message"},
+            ],
+            "messageCount": 2,
+        }
+        (server_dir / "general.json").write_text(json.dumps(new_json))
+
+        # Organize exports
+        organize_exports(exports, public)
+
+        # Read merged result
+        merged_data = json.loads((month_dir / f"{current_month}.json").read_text())
+
+        # Should have 3 unique messages
+        assert merged_data["messageCount"] == 3
+        assert len(merged_data["messages"]) == 3
+
+        # Message 1000 should have updated content (new version wins)
+        msg_1000 = next(m for m in merged_data["messages"] if m["id"] == "1000")
+        assert msg_1000["content"] == "Updated content"

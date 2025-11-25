@@ -54,6 +54,22 @@ jobs:
           chmod +x bin/discord-exporter/DiscordChatExporter.Cli
           rm DiscordChatExporter.Cli.linux-x64.zip
 
+      - name: Fetch existing gh-pages content
+        run: |
+          # Fetch gh-pages content into public/ so we can merge with existing data
+          # This is essential for incremental JSON merging to preserve historical messages
+          echo "Fetching existing gh-pages content into public/..."
+          git fetch origin gh-pages:gh-pages 2>/dev/null || echo "No gh-pages branch yet"
+          if git rev-parse --verify gh-pages >/dev/null 2>&1; then
+            git worktree add public gh-pages
+            # Remove .git reference so peaceiris/actions-gh-pages can work properly
+            rm -f public/.git
+            echo "✓ Fetched $(find public -type f | wc -l) files from gh-pages"
+          else
+            echo "No existing gh-pages branch - starting fresh"
+            mkdir -p public
+          fi
+
       - name: Run export script
         env:
           DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}

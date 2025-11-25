@@ -6,6 +6,7 @@ This script moves exported files from the exports/ directory to the public/
 directory, organizing them by server/channel structure with date-based naming.
 """
 
+import json
 import shutil
 import sys
 from datetime import datetime, timezone
@@ -55,6 +56,78 @@ def _update_media_symlink(target_dir: Path, media_name: str, current_month: str)
     media_link.symlink_to(f"{current_month}/{media_name}")
 
 
+def _merge_json_exports(source_file: Path, dest_file: Path) -> bool:
+    """Merge new JSON export with existing archive.
+
+    Combines messages from both files, deduplicating by message ID.
+    Preserves the most recent metadata (guild, channel info) from source.
+
+    Args:
+        source_file: New incremental export
+        dest_file: Existing archive file
+
+    Returns:
+        True if merge succeeded, False otherwise
+    """
+    try:
+        # Load new export
+        with open(source_file, encoding="utf-8") as f:
+            new_data = json.load(f)
+
+        # If destination doesn't exist, just copy source
+        if not dest_file.exists():
+            with open(dest_file, "w", encoding="utf-8") as f:
+                json.dump(new_data, f, indent=2)
+            return True
+
+        # Load existing archive
+        with open(dest_file, encoding="utf-8") as f:
+            existing_data = json.load(f)
+
+        # Get messages from both, defaulting to empty lists
+        existing_messages = existing_data.get("messages", [])
+        new_messages = new_data.get("messages", [])
+
+        # Create a dict of messages by ID for deduplication
+        # Existing messages first, then new messages override
+        messages_by_id: dict[str, Any] = {}
+        for msg in existing_messages:
+            msg_id = msg.get("id")
+            if msg_id:
+                messages_by_id[msg_id] = msg
+
+        for msg in new_messages:
+            msg_id = msg.get("id")
+            if msg_id:
+                messages_by_id[msg_id] = msg
+
+        # Sort messages by ID (Discord snowflake IDs are chronologically sortable)
+        sorted_messages = sorted(messages_by_id.values(), key=lambda m: int(m.get("id", 0)))
+
+        # Use new export as base (has latest metadata), but with merged messages
+        merged_data = new_data.copy()
+        merged_data["messages"] = sorted_messages
+        merged_data["messageCount"] = len(sorted_messages)
+
+        # Update dateRange to cover full history
+        if existing_data.get("dateRange", {}).get("after") is None:
+            # Existing had full history (no after filter)
+            merged_data["dateRange"] = {"after": None, "before": None}
+        elif new_data.get("dateRange", {}).get("after") is not None:
+            # Both are incremental - keep the earlier 'after' or None
+            merged_data["dateRange"]["after"] = None  # Now we have full history
+
+        # Write merged result
+        with open(dest_file, "w", encoding="utf-8") as f:
+            json.dump(merged_data, f, indent=2)
+
+        return True
+
+    except Exception as e:
+        print(f"    ⚠ JSON merge failed: {e}")
+        return False
+
+
 def _copy_media_directory(source_media_dir: Path, target_dir: Path) -> bool:
     """Copy media directory to target location.
 
@@ -85,6 +158,9 @@ def _copy_to_month_directory(
 ) -> tuple[Path, bool]:
     """Copy file to month-based directory structure.
 
+    For JSON files, merges with existing archive to preserve historical messages.
+    For other formats, copies the file (replacing existing).
+
     Args:
         source_file: Source file to copy
         target_dir: Target directory (channel or thread dir)
@@ -99,9 +175,17 @@ def _copy_to_month_directory(
 
     dest_file = month_dir / f"{current_month}{extension}"
     try:
-        shutil.copy2(source_file, dest_file)
-        _update_latest_symlink(target_dir, extension, current_month)
-        return dest_file, True
+        if extension == ".json":
+            # Merge JSON exports to preserve historical messages
+            success = _merge_json_exports(source_file, dest_file)
+            if success:
+                _update_latest_symlink(target_dir, extension, current_month)
+            return dest_file, success
+        else:
+            # For non-JSON formats, just copy (HTML/TXT/CSV)
+            shutil.copy2(source_file, dest_file)
+            _update_latest_symlink(target_dir, extension, current_month)
+            return dest_file, True
     except Exception:
         return dest_file, False
 
