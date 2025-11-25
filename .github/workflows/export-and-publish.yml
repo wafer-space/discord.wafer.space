@@ -59,6 +59,10 @@ jobs:
           # Fetch gh-pages content into public/ so we can merge with existing data
           # This is essential for incremental JSON merging to preserve historical messages
           echo "Fetching existing gh-pages content into public/..."
+
+          # Clean up any existing public directory first
+          rm -rf public
+
           git fetch origin gh-pages:gh-pages 2>/dev/null || echo "No gh-pages branch yet"
           if git rev-parse --verify gh-pages >/dev/null 2>&1; then
             git worktree add public gh-pages
