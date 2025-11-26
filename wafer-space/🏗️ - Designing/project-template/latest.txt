@@ -1,9 +1,86 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / project-template
-After: 11/26/2025 19:01
+After: 11/26/2025 19:50
 ==============================================================
 
+[11/26/2025 19:50] _luke_w_
+Oh interesting. Do you have the address changing every cycle, on a posedge?
+
+
+[11/26/2025 20:00] polyfractal
+yep. I'm using it for both instruction memory and generic SRAM. so most (all?) of the tests are probably incrementing the address each cycle to fetch a new instruction. the few tests that check branching also jump around but don't hold the same address over multiple clocks. and the general sram tests are just random accesses as well
+
+
+[11/26/2025 20:01] _luke_w_
+Huhhhh
+
+
+[11/26/2025 20:01] polyfractal
+I do have a somewhat mystery clock delay at the beginning of the core bootup, which I attributed to my own jank code. will have to check when I get home but iirc it's two cycles before things start looking correct
+
+
+[11/26/2025 20:01] _luke_w_
+and you're using the RAM model in both gate sim and behavioural RTL sim?
+
+
+[11/26/2025 20:02] polyfractal
+emmm, maybe? I'm using Spade HDL (transpiles to verilog), so copied/pasted the macro verilog into the spade setup so it can reference for tests. 
+
+Not sure if that's gate sim or behavioural? probably behavioural (cocotb tests)
+
+
+[11/26/2025 20:03] _luke_w_
+yeah, behavioural. Ok thanks, that's useful information, I need to look at my sims a bit more 🙂 definitely some weird stuff going on in that model
+
+{Reactions}
+👍
+
+[11/26/2025 20:04] polyfractal
+i'm praying it's not toooooo terribly off, otherwise my chip is totally not gonna work 😅
+
+
+[11/26/2025 20:04] _luke_w_
+gate sim would be a simulation of the synthesised (or post-place etc) netlist instead of your (transpiled) source code
+
+
+[11/26/2025 20:04] polyfractal
+aha
+
+
+[11/26/2025 20:04] polyfractal
+i should probably figure out how to add some basic tests for that...
+
+
+[11/26/2025 20:05] _luke_w_
+There is already some setup for it in the template's cocotb harness, if you look through where this variable is used in `chip_top_tb.py`:
+```
+gl = os.getenv("GL", False)
+```
+
+
+[11/26/2025 20:06] _luke_w_
+in theory just set that flag. in practice, dragons abound
+
+{Reactions}
+😁
+
+[11/26/2025 20:07] polyfractal
+ooh interesting. so theoretically the same cocotb tests would run and should match the behavioural testing pre-synth? will try it out when i get home
+
+
+[11/26/2025 20:08] _luke_w_
+that is the theory. you can have new issues in gate sim like Xs propagating in places they didn't before, but the netlist should be equivalent to your RTL
+
+
+[11/26/2025 20:09] polyfractal
+rad! that would make me a lot more confident, especially if I can get it run before the payment deadline 😅
+
+
+[11/26/2025 20:09] polyfractal
+cheers for the info!
+
+
 ==============================================================
-Exported 0 message(s)
+Exported 17 message(s)
 ==============================================================
