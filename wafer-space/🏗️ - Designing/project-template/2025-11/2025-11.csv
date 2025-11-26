@@ -1,28 +1,20 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
-"220639106915368960","tholin","2025-11-26T11:57:51.8340000+00:00","I need 5V support","","👍 (1)"
-"323371864074485771","mole99","2025-11-26T11:59:55.2940000+00:00","You should be able to change it via: `STD_CELL_LIBRARY: gf180mcu_fd_sc_mcu9t5v0`. But there have been no changes to the 9t library.","",""
-"596068704471482370","246tnt","2025-11-26T12:07:14.4540000+00:00","Several people hardened TT projects with 9t without issues.","",""
-"803213471402688522","_luke_w_","2025-11-26T12:29:43.2160000+00:00","...so by omission you're saying there *have* been changes to the 7t library? I'm using 9t, do I need those changes?","",""
-"803213471402688522","_luke_w_","2025-11-26T12:33:02.9290000+00:00","The thing I came here to post was: there are several bugs in the vendor RAM model that seem to be simulation related and not functional details of the RAM macro. What's our policy on patching the models? In particular:
+"323371864074485771","mole99","2025-11-26T13:48:58.1030000+00:00","📢 Project Template Update!
 
-* It drops the first access because it fails to correctly initialise `cen_dly` and `cen_flag_dly`; can be fixed by just using `always_comb` to get a time=0 evaluation
-* It registers its inputs on a 100 ps delayed version of the clock, making it unsuitable for RTL simulations which just have an NBA delay on the input for the next cycle","",""
-"323371864074485771","mole99","2025-11-26T12:43:35.3020000+00:00","No, there have been no changes to the 7t or 9t library :) I only mentioned this because Tholin wrote: ""I heard there is a way to use the 9-track cells **now**?"" It already worked before.","",""
-"803213471402688522","_luke_w_","2025-11-26T12:44:05.5830000+00:00","ah. phew, ok","",""
-"803213471402688522","_luke_w_","2025-11-26T12:44:11.8410000+00:00","heart rate returning to normal","","😁 (1)"
-"323371864074485771","mole99","2025-11-26T12:45:51.4000000+00:00","I think it would be great to fix those issues. Preferably in the FOSSi upstream repository.","",""
-"323371864074485771","mole99","2025-11-26T12:46:37.3720000+00:00","Let me just quickly check where open_pdks gets the SRAM sources from, I don't see a FOSSi fork for that.","",""
-"803213471402688522","_luke_w_","2025-11-26T12:47:15.9480000+00:00","Ok sure, added to my list of post-tapeout tasks 🙂 actually I'm curious, is anyone else using the vendor RAM models for RTL sims? I have a behavioural model in my RAM wrapper which I was using until now, but I wanted to run RTL sims with all my manually-instantiated cells enabled so that pulled in the vendor model.","","👌 (1)"
-"323371864074485771","mole99","2025-11-26T12:47:15.9710000+00:00","Aha, it's still the original google repo: https://github.com/RTimothyEdwards/open_pdks/blob/486fb8633c3d95ae475a5ccd68d0066c25919bb5/gf180mcu/Makefile.in#L184","",""
-"220639106915368960","tholin","2025-11-26T12:47:42.7650000+00:00","The analog IO pads are still broken and cannot be used with LibreLane, but the fix is easy. Should be possible to upstream.","",""
-"323371864074485771","mole99","2025-11-26T12:48:31.1260000+00:00","Yes, I did use it for some very simple tests.","",""
-"803213471402688522","_luke_w_","2025-11-26T12:49:13.6070000+00:00","Huh. And were you driving the inputs from posedge flops or did you have some behavioural delay and/or negedge stuff going on?","",""
-"323371864074485771","mole99","2025-11-26T12:54:27.5510000+00:00","There are two things going on in my case:
+Version [1.1.2](https://github.com/wafer-space/gf180mcu-project-template/releases/tag/1.1.2) has been tagged. Notable updates include:
 
-I was testing the FPGA fabric in my chip and to prevent logic loops during configuration I added delays to it.
-In the testbench I was waiting two clock cycles before I read the output. I don't remember if the two clock cycles were really necessary, but I was simply happy to get the correct data out again. 😆 
-I didn't have time to take a closer look since then.","",""
-"803213471402688522","_luke_w_","2025-11-26T12:54:51.1680000+00:00","One of the issues I think I saw (not fully diagnosed) is a read where the address changes on the posedge can give you the data from the address after the posedge","",""
-"803213471402688522","_luke_w_","2025-11-26T12:55:05.0030000+00:00","ah ok if the address is stable over the edge then you won't see issues","",""
-"803213471402688522","_luke_w_","2025-11-26T12:55:48.5280000+00:00","I'm always nervous about patching vendor models but this one does seem quite broken","","👌 (1)"
-"323371864074485771","mole99","2025-11-26T13:03:03.1160000+00:00","Started a thread.","",""
+- Support for different slot sizes ◻️◽▫️
+  - This will likely be an option for future shuttles. For the first shuttle, however, smaller slot sizes are still experimental.
+  - You can try this out by setting the `SLOT` variable. See the [README](https://github.com/wafer-space/gf180mcu-project-template?tab=readme-ov-file#choosing-a-different-slot-size) for more information.
+  - The CI now also runs for all slot sizes in the upstream repo `wafer-space/gf180mcu-project-template`: https://github.com/wafer-space/gf180mcu-project-template/actions/runs/19697592187
+- Better SRAM power connections ⚡
+  - `pdn_cfg.tcl`: better connectivity for the SRAM orientations. Please make sure to update your PDN config!
+- The PDK has been updated to 1.1.2
+  - NP.12 and PP.12 reimplemented
+  - Wide metal check fixed
+
+Please update your projects and PDKs.
+The latest precheck tag is [1.0.1](https://github.com/wafer-space/gf180mcu-precheck/releases/tag/1.0.1).","","🎉 (1)"
+"323371864074485771","mole99","2025-11-26T13:49:12.9740000+00:00","Pinned a message.","",""
+"596068704471482370","246tnt","2025-11-26T13:56:32.6790000+00:00","Will quarter slots be 1/4 of the price ? 😅","",""
+"323371864074485771","mole99","2025-11-26T14:02:59.5190000+00:00","I assume the cost of packaging will not go down by much. However, regarding the area, that's for @Tim 'mithro' Ansell to say.","",""
