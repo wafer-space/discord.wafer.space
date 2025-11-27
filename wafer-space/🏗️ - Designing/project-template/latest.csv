@@ -1,6 +1,48 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
-"840182560252624916","logic_anarchy","2025-11-27T17:34:02.3960000+00:00","Do we need a power-on reset chip?","",""
-"803213471402688522","_luke_w_","2025-11-27T17:34:46.1100000+00:00","A PoR would be nice for future tapeouts. I'm just treating my reset input pad as a PoR.","",""
-"840182560252624916","logic_anarchy","2025-11-27T17:35:51.9860000+00:00","sonst macht das alles kein Sinn im Chip","",""
-"803213471402688522","_luke_w_","2025-11-27T17:38:18.4210000+00:00","tristating all of your outputs when held in reset is pretty common and not just a PoR thing. For example it lets you drive other signals into those PCB traces on your board when you're debugging. If you have two chips on a bidirectional bus and they **both** enable their outputs at reset then that creates drive contention. Etc","",""
-"803213471402688522","_luke_w_","2025-11-27T17:39:34.1000000+00:00","on a real board your chip may be held in reset for some time with its clock stopped while power rails are sequenced","",""
+"323371864074485771","mole99","2025-11-27T17:56:14.3750000+00:00","Quick question: instead of a synchronizer, Hirosh could use an async apply and sync remove circuit for the reset. The ouput of this circuit gates the bidir OE and also goes into his circuit. So when you apply the reset, the bidir pads are immediately in a safe state. If you remove the reset, his circuit still works as before. Did I understand this correctly?","",""
+"803213471402688522","_luke_w_","2025-11-27T17:57:50.5400000+00:00","Yep that seems like it would work","","👍 (1)"
+"803213471402688522","_luke_w_","2025-11-27T17:58:07.3360000+00:00","so you have an async reset, which is derived from the reset pad input with an async reset synchroniser","","👌 (1)"
+"803213471402688522","_luke_w_","2025-11-27T17:58:42.9390000+00:00","that resets the pads and also goes into another synchroniser which generates the sync reset used for your digital logic","",""
+"803213471402688522","_luke_w_","2025-11-27T17:59:11.0730000+00:00","something like that would work. I don't think he necessarily needs to make any changes but for a ""production"" chip it's certainly unusual to drive outputs at start of day","",""
+"323371864074485771","mole99","2025-11-27T18:00:06.4850000+00:00","Why do you need another synchronizer afterwards? The reset signal is then already asynchronously removed.","",""
+"803213471402688522","_luke_w_","2025-11-27T18:01:12.0880000+00:00","depends how your resets are constrained but if you allow async transitions to propagate to a sync reset net then that usually needs a timing exception","",""
+"803213471402688522","_luke_w_","2025-11-27T18:01:25.4330000+00:00","even if it is async apply, sync remove","",""
+"323371864074485771","mole99","2025-11-27T18:01:35.1130000+00:00","I see, thanks!","",""
+"323371864074485771","mole99","2025-11-27T18:01:40.3370000+00:00","And another one: Without a PoR the outputs can still be in an unknown state during power up, right? Holding the reset low doesn't help in that case, as the input pads could be doing anything?","",""
+"803213471402688522","_luke_w_","2025-11-27T18:03:18.9120000+00:00","I don't have a simple answer to that and don't fully understand it myself. There's a question there about how the pads behave during ramp-up, and how the logic cells behave at much less than nominal voltage","",""
+"803213471402688522","_luke_w_","2025-11-27T18:03:55.9820000+00:00","If you have an async path from the reset that disables the pads then any spurious enable during power supply ramp will at least be a short-lived transient","",""
+"323371864074485771","mole99","2025-11-27T18:04:29.3050000+00:00","""It's complicated"" is what I thought as well 😄","",""
+"803213471402688522","_luke_w_","2025-11-27T18:04:54.6460000+00:00","my answer as a digital designer is values other than 1 and 0 don't exist and can't hurt me","","😄 (1),❤️ (1)"
+"323371864074485771","mole99","2025-11-27T18:06:46.7630000+00:00","Thanks for all the tips. It's great to have so many people with different experiences around. There's something for everyone to learn 👏","",""
+"803213471402688522","_luke_w_","2025-11-27T18:09:07.6210000+00:00","yeah this project has been a huge learning curve for me. Thanks for all the help, hope I'm not too annoying with flagging issues","",""
+"323371864074485771","mole99","2025-11-27T18:10:47.1620000+00:00","On the contrary, it is greatly appreciated!","",""
+"840182560252624916","logic_anarchy","2025-11-27T18:10:51.5700000+00:00","@LukeW thank you","",""
+"840182560252624916","logic_anarchy","2025-11-27T18:10:56.2420000+00:00","","project-template_media/image-1022A.png",""
+"840182560252624916","logic_anarchy","2025-11-27T18:11:07.7350000+00:00","","project-template_media/image-0447D.png",""
+"840182560252624916","logic_anarchy","2025-11-27T18:11:20.5640000+00:00","@mole99 thank you 🙂","",""
+"323371864074485771","mole99","2025-11-27T18:11:58.8040000+00:00","Now only the synchronizer to the core is missing 👍","",""
+"803213471402688522","_luke_w_","2025-11-27T18:12:15.0250000+00:00","Functionally looks good, might look funny in STA though. I would add a false path between the synchroniser output and the pad OE signals","",""
+"840182560252624916","logic_anarchy","2025-11-27T18:13:22.8620000+00:00","is inside the soc","","👌 (1)"
+"840182560252624916","logic_anarchy","2025-11-27T18:17:14.4740000+00:00","Could I use (* async_reg=""true"" *) reg [1:0] ff;","",""
+"840182560252624916","logic_anarchy","2025-11-27T18:23:37.4850000+00:00","Maybe @LukeW Do you have an example to set false path. I think I need it for 2 signals 😉","",""
+"840182560252624916","logic_anarchy","2025-11-27T18:24:14.4340000+00:00","https://github.com/Wren6991/RISCBoy-180/blob/bb4540d8b1ee8493448395a5b010c80b37377010/librelane/chip_top.sdc","",""
+"803213471402688522","_luke_w_","2025-11-27T18:27:07.4910000+00:00","Most of them come from this wildcard:
+
+```tcl
+# Apply RTL-inserted false path constraints (setup/hold only, still constrain slew)
+set_false_path -setup -hold -through [get_pins *.magic_falsepath_anchor_u/Z]
+```
+
+And then there is an RTL module that inserts magic buffers for the constraints:
+
+https://github.com/Wren6991/RISCBoy-180/blob/bb4540d8b1ee8493448395a5b010c80b37377010/hdl/cells/falsepath_anchor.v","",""
+"803213471402688522","_luke_w_","2025-11-27T18:31:07.7720000+00:00","You can also do it directly in the sdc, something like `set_false_path -setup -hold -from sync_reg_name_here/Q -to *_PAD/OE` but it's a bit cumbersome in this flow because flops don't have predictable names unless you instantiate them yourself","","🎉 (1)"
+"840182560252624916","logic_anarchy","2025-11-27T18:51:13.0420000+00:00","Hi-z","project-template_media/image-1B123.png",""
+"323371864074485771","mole99","2025-11-27T18:54:37.3810000+00:00","⚙️ Update to the precheck, version [1.2.1](https://github.com/wafer-space/gf180mcu-precheck/releases/tag/1.2.1).
+
+- Zero area polygons are checked.
+- The layout origin and size are checked depending on the selected slot size, the default is `1x1`.
+- Ensure that `PDK_ROOT` and `PDK` are set.","",""
+"323371864074485771","mole99","2025-11-27T18:54:51.4740000+00:00","Pinned a message.","",""
+"732347216412278825","urish","2025-11-27T19:00:48.7790000+00:00","will try in on ttgf0p2","",""
+"732347216412278825","urish","2025-11-27T19:01:13.6180000+00:00","https://github.com/TinyTapeout/tinytapeout-gf-0p2/actions/runs/19745733739","",""
