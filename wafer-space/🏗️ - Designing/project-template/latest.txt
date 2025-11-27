@@ -1,106 +1,183 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / project-template
-After: 11/27/2025 14:06
+After: 11/27/2025 14:55
 ==============================================================
 
-[11/27/2025 14:24] _luke_w_
-I'm getting a couple of hundred klayout DRCs in the standard cell region. They're all `CO.6a (i) Metal1 (< 0.34um) end-of-line overlap contact`. Only other mention I found on this discord was https://discord.com/channels/1361349522684510449/1424739011846471740/1424745841952030860. Any ideas what could be causing that? I'm using 9-track cells if that helps
-
-
-[11/27/2025 14:25] _luke_w_
-I have to confess I've not merged the project template for about a week and a half, so I could be missing some updates
-
-
-[11/27/2025 14:29] _luke_w_
-here is one point it flagged between 33/0 and 34/0 (presumably m1 and contact). 1 box = 20 nm
+[11/27/2025 14:56] _luke_w_
+circled it here. from: https://gf180mcu-pdk.readthedocs.io/en/latest/digital/standard_cells/gf180mcu_fd_sc_mcu9t5v0/cells/icgtp/gf180mcu_fd_sc_mcu9t5v0__icgtp_1.html
 
 {Attachments}
-project-template_media/image-2BF79.png
+project-template_media/image-90D97.png
 
 
-[11/27/2025 14:31] 246tnt
-https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_07_13.html
+[11/27/2025 14:57] _luke_w_
+it's clean with magic DRC (apart from all the overlapping filler cells)
 
 
-[11/27/2025 14:31] 246tnt
-I'm trying to understand the rule but ... it's not super clear TBH 😅
+[11/27/2025 15:03] _luke_w_
+Yeah I clicked through all 200 CO.6a warnings and they're all the same spot in the `icgtp_1`. I also have four `PL.3a : Space on COMP/Field: 0.24µm` which are just for the four orientations of the same cell. Inclined to waive given it's a foundry cell...
 
 
-[11/27/2025 14:32] 246tnt
-Can you zoom out a bit ? Does the line "end" there ?
+[11/27/2025 15:03] 246tnt
+Yes, so for me that's valid and the KLayout DRC is an error.
 
+{Reactions}
+👍
 
-[11/27/2025 14:32] tholin
-I know this rule!
-
-
-[11/27/2025 14:32] tholin
-It needs some metal right here
+[11/27/2025 15:04] _luke_w_
+The points flagged by PL.3a are across this neck on 30/0 in the `icgtp_1` cell:
 
 {Attachments}
-project-template_media/image-E2FAB.png
+project-template_media/image-5D744.png
 
 
-[11/27/2025 14:33] tholin
-There is a separate contact overlap minimum for traces that are exactly the minimum-width and at the end of their line.
+[11/27/2025 15:06] _luke_w_
+My pattern recognition monkey brain is telling me this is just the two-gate poly on the left-hand side of the cell in my picture
 
 
-[11/27/2025 14:33] 246tnt
-Well KLayout seems convinced it does, but I'm not sure it's not an error in the KLayout deck.
-For me I see that as falling in the CO.6b case.
-
-
-[11/27/2025 14:35] tholin
-When a trace terminates at a contact, then the edge opposite to where the trace extends is the "end of line"
+[11/27/2025 15:08] _luke_w_
+Oh that's definitely a bug right? It's treating it as multiple polygons and saying they violate spacing
 
 {Attachments}
-project-template_media/image-C2731.png
+project-template_media/image-9873B.png
 
 
-[11/27/2025 14:36] tholin
-In these cases, additional overlap is needed
+[11/27/2025 15:10] 246tnt
+Yeah, that seems weird to me too. How wide is the neck down ?
 
 
-[11/27/2025 14:36] tholin
-Which is only partially true for the example shown here, but it seems its still covered by the rule.
+[11/27/2025 15:11] _luke_w_
+in x it's about 0.22 um
 
 
-[11/27/2025 14:37] tholin
-For now, I suggest adding the affected standard cells to the exclude lists.
+[11/27/2025 15:12] _luke_w_
+I wonder if it's actually flagging the y distance between the two horizontals, since it's a spacing rule
 
 
-[11/27/2025 14:38] 246tnt
-OTOH that cell library was made by GF so when there is doubt, I tend to suspect the KLayout deck more.
+[11/27/2025 15:12] _luke_w_
+(the y distance is around 0.10 um)
 
 
-[11/27/2025 14:38] tholin
-Actually, the overlap shown here is *tiny.* I doubt this would pass even magic DRC.
+[11/27/2025 15:14] 246tnt
+I looked at the cell, it all seems good to me.
 
 
-[11/27/2025 14:39] 246tnt
-CO.6b rule is specially for that case that says if the overlap is less than 40 nm you can "compensate" by having a bigger overlap on the adjacent sides.
+[11/27/2025 15:16] _luke_w_
+nice, thank you
 
 
-[11/27/2025 14:39] 246tnt
-But I agree that excluding the affected cell is the easiest thing to do given the time constraints.
+[11/27/2025 15:16] _luke_w_
+I think I'm DRC clean then (for now)
 
 
-[11/27/2025 14:52] _luke_w_
-This is a zoom-out of the same region. It doesn't end, just necks down
+[11/27/2025 15:17] _luke_w_
+is it possible to waive a specific cell for the klayout checks? (in librelane)
+
+
+[11/27/2025 15:18] mole99
+Thanks for the investigation, that makes things easy for me 😁
+
+The easiest path forward is to exclude this cell from synthesis and PnR. Does `_icgtp_2` (if it exists) have the same issues?
+
+
+[11/27/2025 15:20] _luke_w_
+1 and 2 both have the metal neck around the via. 4 does not
+
+
+[11/27/2025 15:20] _luke_w_
+they all seem to have the same kink in the poly
+
+
+[11/27/2025 15:20] _luke_w_
+I'd rather not remove clock gating as it would hurt QoR quite a bit given this cell library lacks DFFEs
+
+
+[11/27/2025 15:21] _luke_w_
+also I think the map file for lighter is buried deep inside librelane or openroad somewhere
+
+
+[11/27/2025 15:22] trev5514
+Has anyone used Slang and gotten the power ports to work? It looks like yosys-slang doesn't support inout ports?
+
+
+[11/27/2025 15:24] mole99
+It does support them, but I think you need to keep the hierarchy, if I recall correctly. See here: https://github.com/mole99/greyhound-ihp/blob/2a2cf3e284a2f2486b71e48212d01458f55e8a0e/config.yaml#L103
+
+{Reactions}
+👍
+
+[11/27/2025 15:27] trev5514
+Looks like that worked, thanks!
+
+{Reactions}
+👌
+
+[11/27/2025 15:28] mole99
+Alright, I absolutely get your point. The problem with waiving is, there is currently no way to ignore a cell in KLayout with the current setup afaik.
+In the worst case I can take a manual look at the submission and waive those errors.
+Ideally, I would find the time to fix them before the tapeout, unfortunately time is currently rare.
+
+
+[11/27/2025 15:29] mole99
+Could you open an issue detailing both issues (collecting the info from above)?
+
+
+[11/27/2025 15:39] _luke_w_
+ok, in that case is there a way to add a `grep -v` or so to the log lint in librelane?
+
+
+[11/27/2025 15:40] _luke_w_
+Separately I get magic DRC errors for overlapping identical filler cells (I think other people have seen this) and this is harmless afaict but prevents me from running `make copy-final`
+
+
+[11/27/2025 15:42] logic_anarchy
+What causes  icgtp?
+
+
+[11/27/2025 15:42] _luke_w_
+either clock gating inference or manual instantiation (I have both)
+
+
+[11/27/2025 15:43] logic_anarchy
+hmm
+
+
+[11/27/2025 15:43] mole99
+LibreLane counts the DRC errors in the `.lydrb` that was produced by KLayout. So I don't think that would help. You would need a filter inside of that function.
+
+
+[11/27/2025 15:44] _luke_w_
+how have people waived DRCs on past tapeouts?
+
+
+[11/27/2025 15:44] _luke_w_
+(I'm filing an issue with all of the pictures)
+
+{Reactions}
+👍
+
+[11/27/2025 15:45] mole99
+I don't think that's the issue. The default template should also have these overlap issues, but they should be ignored by LibreLane afaik.
+If you get any DRC violations, LibreLane won't create the `final` folder.
+
+
+[11/27/2025 15:46] logic_anarchy
+These are my primitives for GF180.
 
 {Attachments}
-project-template_media/image-BD91D.png
+project-template_media/image-3DC8F.png
 
 
-[11/27/2025 14:53] _luke_w_
-actually this looks like it is inside of one of the std cells 🤔
+[11/27/2025 15:48] _luke_w_
+ohhh you're right, I actually have some new magic DRCs:
 
-
-[11/27/2025 14:54] _luke_w_
-yeah, it's an icgtp_1
+```
+Poly overlap of contact < 0.065um (CO.3)
+MV N-Diffusion overlap of contact < 0.065um (CO.4)
+```
 
 
 ==============================================================
-Exported 21 message(s)
+Exported 36 message(s)
 ==============================================================
