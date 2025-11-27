@@ -1,83 +1,29 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / project-template
-After: 11/27/2025 15:56
+After: 11/27/2025 17:00
 ==============================================================
 
-[11/27/2025 16:03] _luke_w_
-You won't have any clock gating cells  if you don't explicitly enable it. Also you got lucky and your `dffrnq` (flop with async reset) are all drive=1.
-
-{Reactions}
-😮
-
-[11/27/2025 16:31] logic_anarchy
-Oh, I was using some negedge resetn signals. I’ve removed them now.
+[11/27/2025 17:34] logic_anarchy
+Do we need a power-on reset chip?
 
 
-[11/27/2025 16:34] logic_anarchy
-stage 06
-
-{Attachments}
-project-template_media/image-2606E.png
+[11/27/2025 17:34] _luke_w_
+A PoR would be nice for future tapeouts. I'm just treating my reset input pad as a PoR.
 
 
-[11/27/2025 16:38] _luke_w_
-I wrote up those DRC issues with some pictures: https://github.com/wafer-space/gf180mcu-project-template/issues/34
-
-{Embed}
-https://github.com/wafer-space/gf180mcu-project-template/issues/34
-9-track foundry standard cells are not clean with KLayout or Magic ...
-KLayout violations The clock gating cell icgtp_1 is flagged with the following by klayout: CO.6a : (i) Metal1 (&lt; 0.34um) end-of-line overlap contact (Applies to all &lt; 0.34µm wide metal lines,...
-project-template_media/34-64502
+[11/27/2025 17:35] logic_anarchy
+sonst macht das alles kein Sinn im Chip
 
 
-[11/27/2025 16:39] tholin
-Last time, I brought you the neverending LVS run, today, I bring you the Synthesis run from hell:
-
-{Attachments}
-project-template_media/image-5B673.png
+[11/27/2025 17:38] _luke_w_
+tristating all of your outputs when held in reset is pretty common and not just a PoR thing. For example it lets you drive other signals into those PCB traces on your board when you're debugging. If you have two chips on a bidirectional bus and they **both** enable their outputs at reset then that creates drive contention. Etc
 
 
-[11/27/2025 16:39] _luke_w_
-if you have no async reset in your design then how do you know that resetting your chip puts all the pads into tristate?
-
-
-[11/27/2025 16:40] _luke_w_
-is this still a gate ROM? I found ABC was thinking incredibly hard about my 256-byte ROM and it helped to have a pipestage after it
-
-
-[11/27/2025 16:40] tholin
-No, this is something different.
-
-
-[11/27/2025 16:40] tholin
-What does ABC even stand for?
-
-
-[11/27/2025 16:42] 246tnt
-https://people.eecs.berkeley.edu/~alanmi/abc/
-
-
-[11/27/2025 16:42] 246tnt
-That's a logic mapper used by yosyis.
-
-
-[11/27/2025 16:50] logic_anarchy
-https://gf180mcu-pdk.readthedocs.io/en/latest/IPs/IO/gf180mcu_fd_io/tri_state_2.html
-
-
-[11/27/2025 16:53] _luke_w_
-yes that's a tristate buffer?
-
-
-[11/27/2025 16:54] _luke_w_
-is there an async path from your reset input to OE or do you have to clock the chip to stop it from driving its outputs in reset?
-
-
-[11/27/2025 16:58] logic_anarchy
-I wrote a DM
+[11/27/2025 17:39] _luke_w_
+on a real board your chip may be held in reset for some time with its clock stopped while power rails are sequenced
 
 
 ==============================================================
-Exported 15 message(s)
+Exported 5 message(s)
 ==============================================================
