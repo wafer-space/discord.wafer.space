@@ -1,1 +1,26 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
+"274535015969456128","greg.hashtag.9468","2025-11-28T03:57:53.2950000+00:00","When using the slang frontend, I'm seeing errors, this line in config.yaml suggested this was a tested option. Maybe I'm the first to try it 😅 
+```
+# Enable plugin for better SystemVerilog support
+USE_SLANG: True
+```
+
+The error seems to be slang's handling of the VDD/VSS connecting in the netlist it passes through to yosys. Not liking the `inout` type.
+```
+use_slang
+6. Executing SLANG frontend.
+src/chip_core.sv:12:17: error: direction 'InOut' on inlined port connection unsupported
+inout  wire VDD,
+^
+src/chip_core.sv:13:17: error: direction 'InOut' on inlined port connection unsupported
+inout  wire VSS,
+^
+src/chip_core.sv:32:39: error: direction 'InOut' on inlined port connection unsupported
+inout  wire [NUM_ANALOG_PADS-1:0] analog  // Analog
+^
+ERROR: Compilation failed 
+```","",""
+"274535015969456128","greg.hashtag.9468","2025-11-28T03:59:50.9510000+00:00","I was seeing this with a custom design that's using some systemverilog feature to carry arrays of signals into a module. Which plain yosys does not understand.
+But I have confirmed the issue with the vanilla template.","",""
+"803213471402688522","_luke_w_","2025-11-28T04:07:50.7840000+00:00","apparently there is a workaround: https://discord.com/channels/1361349522684510449/1423348662318272592/1443623510667821167","","👍 (1)"
+"274535015969456128","greg.hashtag.9468","2025-11-28T04:09:07.5270000+00:00","Ahh, I should have searched this channel before asking :doh:","",""
