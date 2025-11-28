@@ -1,5 +1,42 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
-"805909190333038612","trev5514","2025-11-28T05:58:02.6910000+00:00","Has anyone used Fault with this template? I've never used it before and hoping for an easy integration, any tips would be welcome!","",""
-"323371864074485771","mole99","2025-11-28T07:06:37.9640000+00:00","It is probably more advisable to create a macro with DFT support and integrate this macro into the chip.
+"805909190333038612","trev5514","2025-11-28T07:34:01.1790000+00:00","Thanks I'll look into that!","",""
+"805909190333038612","trev5514","2025-11-28T07:35:08.8050000+00:00","Has anyone seen this?
 
-The successor to Fault is Difetto: https://github.com/donn/difetto/tree/main","",""
+`XOR: missing required input 'mag_gds'`
+
+I get it at the end of a run during the KLayout vs. Magic XOR step.","",""
+"596068704471482370","246tnt","2025-11-28T07:36:28.7680000+00:00","Did you disable the magic streamout step by any chance ?","",""
+"805909190333038612","trev5514","2025-11-28T07:39:13.9460000+00:00","I pulled a fresh template earlier today and haven't changed the config except for macros and to use SLANG.","",""
+"805909190333038612","trev5514","2025-11-28T07:43:09.9900000+00:00","```tcl
+meta:
+  version: 3
+  flow: Chip
+  substituting_steps:
+    # Disable KLayout DRC
+    #KLayout.DRC: null
+    #Checker.KLayoutDRC: null
+
+    # Disable KLayout antenna check
+    KLayout.Antenna: null
+    Checker.KLayoutAntenna: null
+
+    # Disable KLayout density check
+    #KLayout.Density: null
+    #Checker.KLayoutDensity: null
+
+    # Save time during development
+    # Enable for sign-off
+    #OpenROAD.IRDropReport: null
+    #Magic.DRC: null
+    #Checker.MagicDRC: null
+    #KLayout.XOR: null
+    #Netgen.LVS: null
+    #Checker.LVS: null
+
+PRIMARY_GDSII_STREAMOUT_TOOL: klayout
+```
+
+This is some relevant lines from the config.yaml.","",""
+"323371864074485771","mole99","2025-11-28T07:48:36.2980000+00:00","Are you using macOS by any chance?
+@LukeW Didn't you encounter this error as well?","",""
+"596068704471482370","246tnt","2025-11-28T07:51:16.4960000+00:00","In the `runs` directory, do you see it running magic stream out ?","",""

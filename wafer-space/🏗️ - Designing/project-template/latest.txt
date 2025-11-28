@@ -1,19 +1,71 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / project-template
-After: 11/28/2025 05:56
+After: 11/28/2025 07:08
 ==============================================================
 
-[11/28/2025 05:58] trev5514
-Has anyone used Fault with this template? I've never used it before and hoping for an easy integration, any tips would be welcome!
+[11/28/2025 07:34] trev5514
+Thanks I'll look into that!
 
 
-[11/28/2025 07:06] mole99
-It is probably more advisable to create a macro with DFT support and integrate this macro into the chip.
+[11/28/2025 07:35] trev5514
+Has anyone seen this?
 
-The successor to Fault is Difetto: https://github.com/donn/difetto/tree/main
+`XOR: missing required input 'mag_gds'`
+
+I get it at the end of a run during the KLayout vs. Magic XOR step.
+
+
+[11/28/2025 07:36] 246tnt
+Did you disable the magic streamout step by any chance ?
+
+
+[11/28/2025 07:39] trev5514
+I pulled a fresh template earlier today and haven't changed the config except for macros and to use SLANG.
+
+
+[11/28/2025 07:43] trev5514
+```tcl
+meta:
+  version: 3
+  flow: Chip
+  substituting_steps:
+    # Disable KLayout DRC
+    #KLayout.DRC: null
+    #Checker.KLayoutDRC: null
+
+    # Disable KLayout antenna check
+    KLayout.Antenna: null
+    Checker.KLayoutAntenna: null
+
+    # Disable KLayout density check
+    #KLayout.Density: null
+    #Checker.KLayoutDensity: null
+
+    # Save time during development
+    # Enable for sign-off
+    #OpenROAD.IRDropReport: null
+    #Magic.DRC: null
+    #Checker.MagicDRC: null
+    #KLayout.XOR: null
+    #Netgen.LVS: null
+    #Checker.LVS: null
+
+PRIMARY_GDSII_STREAMOUT_TOOL: klayout
+```
+
+This is some relevant lines from the config.yaml.
+
+
+[11/28/2025 07:48] mole99
+Are you using macOS by any chance?
+@LukeW Didn't you encounter this error as well?
+
+
+[11/28/2025 07:51] 246tnt
+In the `runs` directory, do you see it running magic stream out ?
 
 
 ==============================================================
-Exported 2 message(s)
+Exported 7 message(s)
 ==============================================================
