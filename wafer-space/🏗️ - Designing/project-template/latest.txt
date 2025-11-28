@@ -1,48 +1,17 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / project-template
-After: 11/28/2025 03:46
+After: 11/28/2025 05:00
 ==============================================================
 
-[11/28/2025 03:57] greg.hashtag.9468
-When using the slang frontend, I'm seeing errors, this line in config.yaml suggested this was a tested option. Maybe I'm the first to try it 😅 
+[11/28/2025 05:18] greg.hashtag.9468
+New error, but this time I'm pretty sure it's related to my RTL 
 ```
-# Enable plugin for better SystemVerilog support
-USE_SLANG: True
-```
-
-The error seems to be slang's handling of the VDD/VSS connecting in the netlist it passes through to yosys. Not liking the `inout` type.
-```
-use_slang
 6. Executing SLANG frontend.
-src/chip_core.sv:12:17: error: direction 'InOut' on inlined port connection unsupported
-inout  wire VDD,
-^
-src/chip_core.sv:13:17: error: direction 'InOut' on inlined port connection unsupported
-inout  wire VSS,
-^
-src/chip_core.sv:32:39: error: direction 'InOut' on inlined port connection unsupported
-inout  wire [NUM_ANALOG_PADS-1:0] analog  // Analog
-^
-ERROR: Compilation failed 
+ERROR: Assert `count_id(cell->name) == 0' failed in kernel/rtlil.cc:2624.
 ```
 
 
-[11/28/2025 03:59] greg.hashtag.9468
-I was seeing this with a custom design that's using some systemverilog feature to carry arrays of signals into a module. Which plain yosys does not understand.
-But I have confirmed the issue with the vanilla template.
-
-
-[11/28/2025 04:07] _luke_w_
-apparently there is a workaround: https://discord.com/channels/1361349522684510449/1423348662318272592/1443623510667821167
-
-{Reactions}
-👍
-
-[11/28/2025 04:09] greg.hashtag.9468
-Ahh, I should have searched this channel before asking :doh:
-
-
 ==============================================================
-Exported 4 message(s)
+Exported 1 message(s)
 ==============================================================
