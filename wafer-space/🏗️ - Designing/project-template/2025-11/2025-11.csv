@@ -1,42 +1,15 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
-"805909190333038612","trev5514","2025-11-28T07:34:01.1790000+00:00","Thanks I'll look into that!","",""
-"805909190333038612","trev5514","2025-11-28T07:35:08.8050000+00:00","Has anyone seen this?
+"805909190333038612","trev5514","2025-11-28T07:57:52.2970000+00:00","Yes, I am on a mac.","",""
+"805909190333038612","trev5514","2025-11-28T08:00:43.7630000+00:00","Yes... Interestingly the log shows:
 
-`XOR: missing required input 'mag_gds'`
+Up at the top (not sure if this is important just caught my eye):
+`Using NULL graphics device.`
 
-I get it at the end of a run during the KLayout vs. Magic XOR step.","",""
-"596068704471482370","246tnt","2025-11-28T07:36:28.7680000+00:00","Did you disable the magic streamout step by any chance ?","",""
-"805909190333038612","trev5514","2025-11-28T07:39:13.9460000+00:00","I pulled a fresh template earlier today and haven't changed the config except for macros and to use SLANG.","",""
-"805909190333038612","trev5514","2025-11-28T07:43:09.9900000+00:00","```tcl
-meta:
-  version: 3
-  flow: Chip
-  substituting_steps:
-    # Disable KLayout DRC
-    #KLayout.DRC: null
-    #Checker.KLayoutDRC: null
+Then at the bottom:
+`Cannot open .../librelane/runs/RUN_2025-11-28_00-08-28/73-magic-streamout/chip_top.magic.gds to write GDS-II stream output`
 
-    # Disable KLayout antenna check
-    KLayout.Antenna: null
-    Checker.KLayoutAntenna: null
-
-    # Disable KLayout density check
-    #KLayout.Density: null
-    #Checker.KLayoutDensity: null
-
-    # Save time during development
-    # Enable for sign-off
-    #OpenROAD.IRDropReport: null
-    #Magic.DRC: null
-    #Checker.MagicDRC: null
-    #KLayout.XOR: null
-    #Netgen.LVS: null
-    #Checker.LVS: null
-
-PRIMARY_GDSII_STREAMOUT_TOOL: klayout
-```
-
-This is some relevant lines from the config.yaml.","",""
-"323371864074485771","mole99","2025-11-28T07:48:36.2980000+00:00","Are you using macOS by any chance?
-@LukeW Didn't you encounter this error as well?","",""
-"596068704471482370","246tnt","2025-11-28T07:51:16.4960000+00:00","In the `runs` directory, do you see it running magic stream out ?","",""
+I only have a `chip_top.mag` , no .magic.gds.","",""
+"596068704471482370","246tnt","2025-11-28T08:06:38.3580000+00:00","NULL is normal, just means it's running in console, no GUI output.","",""
+"596068704471482370","246tnt","2025-11-28T08:06:44.5580000+00:00","The bottom one is not normal 🙂","",""
+"323371864074485771","mole99","2025-11-28T08:21:16.6020000+00:00","Now I remember, you likely reached the limit of max open file handlers!
+You can try to increase it with `ulimit`. A proper fix would be for LibreLane to tell magic it doesn't have to lock the files. It's on my list...","",""

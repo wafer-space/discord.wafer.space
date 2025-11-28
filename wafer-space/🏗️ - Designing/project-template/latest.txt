@@ -1,71 +1,38 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / project-template
-After: 11/28/2025 07:08
+After: 11/28/2025 07:55
 ==============================================================
 
-[11/28/2025 07:34] trev5514
-Thanks I'll look into that!
+[11/28/2025 07:57] trev5514
+Yes, I am on a mac.
 
 
-[11/28/2025 07:35] trev5514
-Has anyone seen this?
+[11/28/2025 08:00] trev5514
+Yes... Interestingly the log shows:
 
-`XOR: missing required input 'mag_gds'`
+Up at the top (not sure if this is important just caught my eye):
+`Using NULL graphics device.`
 
-I get it at the end of a run during the KLayout vs. Magic XOR step.
+Then at the bottom:
+`Cannot open .../librelane/runs/RUN_2025-11-28_00-08-28/73-magic-streamout/chip_top.magic.gds to write GDS-II stream output`
 
-
-[11/28/2025 07:36] 246tnt
-Did you disable the magic streamout step by any chance ?
-
-
-[11/28/2025 07:39] trev5514
-I pulled a fresh template earlier today and haven't changed the config except for macros and to use SLANG.
+I only have a `chip_top.mag` , no .magic.gds.
 
 
-[11/28/2025 07:43] trev5514
-```tcl
-meta:
-  version: 3
-  flow: Chip
-  substituting_steps:
-    # Disable KLayout DRC
-    #KLayout.DRC: null
-    #Checker.KLayoutDRC: null
-
-    # Disable KLayout antenna check
-    KLayout.Antenna: null
-    Checker.KLayoutAntenna: null
-
-    # Disable KLayout density check
-    #KLayout.Density: null
-    #Checker.KLayoutDensity: null
-
-    # Save time during development
-    # Enable for sign-off
-    #OpenROAD.IRDropReport: null
-    #Magic.DRC: null
-    #Checker.MagicDRC: null
-    #KLayout.XOR: null
-    #Netgen.LVS: null
-    #Checker.LVS: null
-
-PRIMARY_GDSII_STREAMOUT_TOOL: klayout
-```
-
-This is some relevant lines from the config.yaml.
+[11/28/2025 08:06] 246tnt
+NULL is normal, just means it's running in console, no GUI output.
 
 
-[11/28/2025 07:48] mole99
-Are you using macOS by any chance?
-@LukeW Didn't you encounter this error as well?
+[11/28/2025 08:06] 246tnt
+The bottom one is not normal 🙂
 
 
-[11/28/2025 07:51] 246tnt
-In the `runs` directory, do you see it running magic stream out ?
+[11/28/2025 08:21] mole99
+Now I remember, you likely reached the limit of max open file handlers!
+You can try to increase it with `ulimit`. A proper fix would be for LibreLane to tell magic it doesn't have to lock the files. It's on my list...
 
 
 ==============================================================
-Exported 7 message(s)
+Exported 5 message(s)
 ==============================================================
