@@ -1,24 +1,31 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / project-template
-After: 11/28/2025 14:05
+After: 11/28/2025 14:55
 ==============================================================
 
-[11/28/2025 14:41] mole99
-For now, it might be the best path forward to use a Linux machine to build the complete ASIC.
-Unfortunately, there seem to be a number of differences between the Linux and macOS versions of the tools.
+[11/28/2025 14:57] mole99
+Yes, he created an issue: https://github.com/KLayout/klayout/issues/2231
 
 
-[11/28/2025 14:46] _luke_w_
-The issue I had was on Ubuntu 24 LTS. I was getting a zero bytes magic GDS because magic failed to open some of the IP mag files. I found my soft open file limit was 1024 and increasing it with `ulimit -Sn 4096` solved that particular issue.
-
-On MacOS I have a different issue which is that I get actual XORs between KLayout and Magic GDS. I didn't diagnose that, I just stopped using MacOS for now (it also tends to crash in the detailed router).
+[11/28/2025 15:06] polyfractal
+this'll do, thanks! I assume the cells used in a macro are counted in the instance stdcell count? was trying to get a sense for how many transistors/cells were in my logic but not the sram macros. Not really important, just curious 🙂
 
 
-[11/28/2025 14:48] 246tnt
-Possibly related is someone on sky130 had klayout on MacOS hallucinate DRC violations that weren't there ( and don't show up when running klayout on linux ).
+[11/28/2025 15:07] _luke_w_
+I think the SRAM macros are just counted as whole macros, so they don't appear in the cell instance counts there. They're usually custom layout, not standard cells
+
+{Reactions}
+❤️
+
+[11/28/2025 15:08] _luke_w_
+for a rough transistor count estimate just multiply the number of SRAM bits by 6
+
+
+[11/28/2025 15:10] polyfractal
+oh awesome, that's perfect. cheers
 
 
 ==============================================================
-Exported 3 message(s)
+Exported 5 message(s)
 ==============================================================
