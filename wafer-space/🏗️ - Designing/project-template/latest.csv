@@ -1,4 +1,63 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
-"754661674145022032","noritsunaimamura","2025-11-27T23:02:55.7740000+00:00","Update to the precheck, version 1.2.1.
-All Green!
-https://github.com/ishi-kai/ISHI-KAI_Multiple_Projects_WaferSapce-GF180-1/raw/main/images/precheck_6th_OK.png","",""
+"220639106915368960","tholin","2025-11-28T00:03:23.7710000+00:00","Is there a ""routing keep-out"" layer I can define in KLayout?","",""
+"543162393413287956","h.tamas","2025-11-28T00:12:49.3330000+00:00","You can add a macro with an empty .gds and a .lef file with an `OBS` block containing a rectangle on the right metal layer. I don't think klayout can write .lef files but they are easy to write by hand.","",""
+"543162393413287956","h.tamas","2025-11-28T00:17:13.2900000+00:00","```
+VERSION 5.7 ;
+  NOWIREEXTENSIONATPIN ON ;
+  DIVIDERCHAR ""/"" ;
+  BUSBITCHARS ""[]"" ;
+MACRO whatever
+  CLASS COVER ;
+  FOREIGN whatever ;
+  ORIGIN 0.000 0.000 ;
+  SIZE 100.000 BY 100.000 ;
+  OBS
+    LAYER Metal2 ;
+    RECT 25.000 25.000 75.000 75.000 ;
+  END
+END whatever
+END LIBRARY
+```","",""
+"738396032295108721","bailey8889","2025-11-28T00:24:52.5610000+00:00","@Tholin you may already be aware, but I believe you can also specify obstruction areas in the openlane config file.","","👍 (1)"
+"220639106915368960","tholin","2025-11-28T00:48:13.1240000+00:00","Sorry, let me rephrase: how can I block *just* routing while leaving the PDN free to do what it wants?","","👍 (1)"
+"384390069412429834","polyfractal","2025-11-28T01:00:49.4610000+00:00","is there somewhere in the flow that lists overall stats like total transistors, etc?","",""
+"803213471402688522","_luke_w_","2025-11-28T01:08:20.7540000+00:00","Every step in a run should have a `state_out.json`. Have a look at the `metrics` key in the JSON file, maybe that has what you're looking for?","",""
+"803213471402688522","_luke_w_","2025-11-28T01:09:14.1390000+00:00","```
+        ""design__instance__count__stdcell"": 116005,
+        ""design__instance__area__stdcell"": 2878000,
+        ""design__instance__count__macros"": 28,
+        ""design__instance__area__macros"": 5360940,
+        ""design__instance__count__padcells"": 1136,
+        ""design__instance__area__padcells"": 5271000,
+        ""design__instance__count__cover"": 0,
+        ""design__instance__area__cover"": 0,
+        ""design__instance__utilization"": 0.63858,
+        ""design__instance__utilization__stdcell"": 0.381646,
+        ""design__rows"": 3408,
+        ""design__rows:GF018hv5v_green_sc9"": 3408,
+        ""design__sites"": 2496942,
+        ""design__sites:GF018hv5v_green_sc9"": 2496942,
+        ""design__instance__count__class:macro"": 28,
+        ""design__instance__area__class:macro"": 5360940,
+        ""design__instance__count__class:input_pad"": 3,
+        ""design__instance__area__class:input_pad"": 78750,
+        ""design__instance__count__class:input_output_pad"": 53,
+        ""design__instance__area__class:input_output_pad"": 1391250,
+        ""design__instance__count__class:power_pad"": 18,
+        ""design__instance__area__class:power_pad"": 472500,
+        ""design__instance__count__class:tie_cell"": 383,
+        ""design__instance__area__class:tie_cell"": 4323.92,
+        ""design__instance__count__class:buffer"": 2135,
+        ""design__instance__area__class:buffer"": 42671.9,
+        ""design__instance__count__class:inverter"": 7722,
+        ""design__instance__area__class:inverter"": 89255.6,
+        ""design__instance__count__class:clock_gate_cell"": 613,
+        ""design__instance__area__class:clock_gate_cell"": 50137.1,
+        ""design__instance__count__class:sequential_cell"": 7291,
+        ""design__instance__area__class:sequential_cell"": 568677,
+        ""design__instance__count__class:multi_input_combinational_cell"": 48145,
+        ""design__instance__area__class:multi_input_combinational_cell"": 912403,
+```
+
+Maybe more detail than you wanted 🙂","",""
+"803213471402688522","_luke_w_","2025-11-28T01:11:43.2060000+00:00","Doesn't go down to transistor count unfortunately because the design flow is working with bigger units than transistors. If you wanted a transistor count you could write some script to scrape the transistors from the std cell spice netlist `gf180mcu/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/spice/gf180mcu_fd_sc_mcu7t5v0.spice` and then multiply by instance counts scraped from your netlist","",""
