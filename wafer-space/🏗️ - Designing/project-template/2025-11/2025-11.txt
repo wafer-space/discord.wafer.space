@@ -1,9 +1,43 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / project-template
-After: 11/29/2025 15:54
+After: 11/29/2025 17:00
 ==============================================================
 
+[11/29/2025 17:03] trev5514
+My understanding is that a hold violation will make the chip non functional, setup timing means it just can't operate at the set clock speed at those corners. I'd say it depends on your chips use case. If you expect the chip to never deviate from normal operation (no power supply issues) or in hot/cold temps then yes you can ignore them if you choose. However those corners cover cases when you say get a power supply surge/drop or the chip get's really hot/cold so they are very important if you don't assume ideal.
+
+{Reactions}
+👍
+
+[11/29/2025 17:09] polyfractal
+makes sense! I'll focus on Holds. Probably easiest to just drop the clock rate, doesn't particularly matter anyway for a demo chip.
+
+i just found some docs on OpenLane which look helpful for improving my background knowledge too, and some config values to tweak: https://openlane2.readthedocs.io/en/latest/usage/timing_closure/index.html
+
+
+[11/29/2025 17:10] logic_anarchy
+Leo taught me that you should eliminate all hold violations in the different voltage domains, and that this is very important. Setup violations are a different matter — you can always deal with those later by adjusting the clock frequency.
+
+
+[11/29/2025 17:13] polyfractal
+noted! is there a shortlist of "ways to fix" that I should be aware of (other than what's at that openlane page)? I'm so new to this I don't really know what knobs are available 🫠
+
+
+[11/29/2025 17:14] logic_anarchy
+You won’t believe it, I’m a newbie too.
+
+{Reactions}
+😀 😮
+
+[11/29/2025 17:15] logic_anarchy
+but Leo has helped me a lot.
+
+
+[11/29/2025 17:15] logic_anarchy
+And luke
+
+
 ==============================================================
-Exported 0 message(s)
+Exported 7 message(s)
 ==============================================================
