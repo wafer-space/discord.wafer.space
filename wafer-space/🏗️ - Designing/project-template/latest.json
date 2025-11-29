@@ -16,7 +16,7 @@
     "after": null,
     "before": null
   },
-  "exportedAt": "2025-11-29T20:59:51.555363+00:00",
+  "exportedAt": "2025-11-29T21:54:13.0175038+00:00",
   "messages": [
     {
       "id": "1423349035892478074",
@@ -23935,7 +23935,139 @@
       "reactions": [],
       "mentions": [],
       "inlineEmojis": []
+    },
+    {
+      "id": "1444432848244183101",
+      "type": "Default",
+      "timestamp": "2025-11-29T21:00:27.286+00:00",
+      "timestampEdited": "2025-11-29T21:00:45.82+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "(hmm I do see that the clock line initially has to wind all the way from bottom left up through a bunch of sram blocks. Can probably re-configure everything so the logic is down in the clock corner)",
+      "author": {
+        "id": "384390069412429834",
+        "name": "polyfractal",
+        "discriminator": "0000",
+        "nickname": "BreakingTaps",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+      },
+      "attachments": [
+        {
+          "id": "1444432848005103839",
+          "url": "project-template_media/image-D6548.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 312714
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1444436170066100396",
+      "type": "Default",
+      "timestamp": "2025-11-29T21:13:39.27+00:00",
+      "timestampEdited": "2025-11-29T21:16:50.686+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I meant to ask this a while ago but forgot is anyone using cocotb tb with SRAM and passing? I'm using verilator and I get quite a few complaints.\n\n```\ngf180mcu_fd_ip_sram__sram512x8m8wm1.v:132:28: Unsupported: minimum/typical/maximum delay expressions. Using the typical delay\n  132 |   specparam Tcyc = 55600 : 55600 : 55600;\n      |       \n```\n\nThis is a typical error. I got this weeks ago and replaced the entire sram section with those with a:\n\n```verilog\n`ifndef VERILATOR\n  specparam Tcyc = 55600 : 55600 : 55600;\n...\n`endif\n``` \n\nThen outside the specify block I did:\n\n```verilog\n`ifdef VERILATOR\n  parameter Tcyc = 8183;\n  parameter Tckh = 4000;\n  parameter Tckl = 4000;\n...\n`endif\n```\n\nIs there a better way? Since now it's failing all github deployments automatically since it's using the repo direct and not my local changes.",
+      "author": {
+        "id": "805909190333038612",
+        "name": "trev5514",
+        "discriminator": "0000",
+        "nickname": "Trevor Peyton",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/2-ADBB4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1444439967647400008",
+      "type": "Default",
+      "timestamp": "2025-11-29T21:28:44.684+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Is LVS of the foundry io pads able to pass using the netgen LVS script from the project template?\nThe netgen script we have is causing issues with the pads (see questions channel \"Running LVS for padframe\")",
+      "author": {
+        "id": "378788837452677120",
+        "name": "asc9742",
+        "discriminator": "0000",
+        "nickname": "asc",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/3-FB033.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1444442881359216772",
+      "type": "Default",
+      "timestamp": "2025-11-29T21:40:19.367+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I know you can pass parameters to verilog modules during instantiation, but is it possible to then use those parameters inside the module to do conditional compilation?",
+      "author": {
+        "id": "220639106915368960",
+        "name": "tholin",
+        "discriminator": "0000",
+        "nickname": "Tholin",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/a0ed32047bb13e92c0bce95b00e20a81-6B527.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1444442940104773642",
+      "type": "Default",
+      "timestamp": "2025-11-29T21:40:33.373+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I need to `ifdef exclude some stuff in a module, but only during one specific instantiation of it.",
+      "author": {
+        "id": "220639106915368960",
+        "name": "tholin",
+        "discriminator": "0000",
+        "nickname": "Tholin",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/a0ed32047bb13e92c0bce95b00e20a81-6B527.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
     }
   ],
-  "messageCount": 638
+  "messageCount": 643
 }

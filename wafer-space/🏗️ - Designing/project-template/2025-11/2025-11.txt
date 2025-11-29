@@ -1,24 +1,61 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / project-template
-After: 11/29/2025 19:51
+After: 11/29/2025 20:59
 ==============================================================
 
-[11/29/2025 20:39] polyfractal
-these docs are great, giving them a thorough read-through now. Project template request as complete newbie: I see the docs are linked for nix install, but I _totally_ missed that it also included more general documentation about the build process. 😅  maybe a subsection heading that's basically "If you have questions about build output read these docs" ?
-
-followup questions: how do i judge if the clock tree is balanced? Just visually, seeing if it branches somewhat-nicely?
-
-ditto to how should I check timing paths?
-
-
-[11/29/2025 20:41] polyfractal
-here's where I'm at currently. Pretty substantially bad on the ss cases but I think trending towards ok everywhere else?
+[11/29/2025 21:00] polyfractal
+(hmm I do see that the clock line initially has to wind all the way from bottom left up through a bunch of sram blocks. Can probably re-configure everything so the logic is down in the clock corner)
 
 {Attachments}
-project-template_media/Screenshot_From_2025-11-29_12-20-42-C101E.png
+project-template_media/image-D6548.png
+
+
+[11/29/2025 21:13] trev5514
+I meant to ask this a while ago but forgot is anyone using cocotb tb with SRAM and passing? I'm using verilator and I get quite a few complaints.
+
+```
+gf180mcu_fd_ip_sram__sram512x8m8wm1.v:132:28: Unsupported: minimum/typical/maximum delay expressions. Using the typical delay
+  132 |   specparam Tcyc = 55600 : 55600 : 55600;
+      |       
+```
+
+This is a typical error. I got this weeks ago and replaced the entire sram section with those with a:
+
+```verilog
+`ifndef VERILATOR
+  specparam Tcyc = 55600 : 55600 : 55600;
+...
+`endif
+``` 
+
+Then outside the specify block I did:
+
+```verilog
+`ifdef VERILATOR
+  parameter Tcyc = 8183;
+  parameter Tckh = 4000;
+  parameter Tckl = 4000;
+...
+`endif
+```
+
+Is there a better way? Since now it's failing all github deployments automatically since it's using the repo direct and not my local changes.
+
+
+[11/29/2025 21:28] asc9742
+Is LVS of the foundry io pads able to pass using the netgen LVS script from the project template?
+The netgen script we have is causing issues with the pads (see questions channel "Running LVS for padframe")
+
+
+[11/29/2025 21:40] tholin
+I know you can pass parameters to verilog modules during instantiation, but is it possible to then use those parameters inside the module to do conditional compilation?
+
+
+[11/29/2025 21:40] tholin
+I need to `ifdef exclude some stuff in a module, but only during one specific instantiation of it.
 
 
 ==============================================================
-Exported 2 message(s)
+Exported 5 message(s)
 ==============================================================
