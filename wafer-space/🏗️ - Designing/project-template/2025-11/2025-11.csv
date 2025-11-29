@@ -1,35 +1,23 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
-"384390069412429834","polyfractal","2025-11-29T21:00:27.2860000+00:00","(hmm I do see that the clock line initially has to wind all the way from bottom left up through a bunch of sram blocks. Can probably re-configure everything so the logic is down in the clock corner)","project-template_media/image-D6548.png",""
-"805909190333038612","trev5514","2025-11-29T21:13:39.2700000+00:00","I meant to ask this a while ago but forgot is anyone using cocotb tb with SRAM and passing? I'm using verilator and I get quite a few complaints.
-
+"738396032295108721","bailey8889","2025-11-29T22:03:28.8110000+00:00","Try `gds flatglob`ing these cells before reading the gds in magic
 ```
-gf180mcu_fd_ip_sram__sram512x8m8wm1.v:132:28: Unsupported: minimum/typical/maximum delay expressions. Using the typical delay
-  132 |   specparam Tcyc = 55600 : 55600 : 55600;
-      |       
-```
-
-This is a typical error. I got this weeks ago and replaced the entire sram section with those with a:
-
-```verilog
-`ifndef VERILATOR
-  specparam Tcyc = 55600 : 55600 : 55600;
-...
-`endif
-``` 
-
-Then outside the specify block I did:
-
-```verilog
-`ifdef VERILATOR
-  parameter Tcyc = 8183;
-  parameter Tckh = 4000;
-  parameter Tckl = 4000;
-...
-`endif
-```
-
-Is there a better way? Since now it's failing all github deployments automatically since it's using the repo direct and not my local changes.","",""
-"378788837452677120","asc9742","2025-11-29T21:28:44.6840000+00:00","Is LVS of the foundry io pads able to pass using the netgen LVS script from the project template?
-The netgen script we have is causing issues with the pads (see questions channel ""Running LVS for padframe"")","",""
-"220639106915368960","tholin","2025-11-29T21:40:19.3670000+00:00","I know you can pass parameters to verilog modules during instantiation, but is it possible to then use those parameters inside the module to do conditional compilation?","",""
-"220639106915368960","tholin","2025-11-29T21:40:33.3730000+00:00","I need to `ifdef exclude some stuff in a module, but only during one specific instantiation of it.","",""
+*Bondpad*
+*CLAMP_COR*
+*FILL*
+*METAL_RAIL*
+*NMOS_*
+*POWER_RAIL_COR*
+*_BASE*
+*comp018green*  
+*diode_nd2ps_06v0_*[A-Z]*
+*diode_pd2nw_06v0_*[A-Z]*
+*mim_*_*[A-Z]*  
+*moscap_*
+*nmos_*_*[A-Z]* 
+*nmos_4T_metal_stack*
+*nmos_clamp_*   
+*pmos_6p0_esd_* 
+*power_via*     
+*ppolyf_u_*[A-Z]*
+*top_route*     
+```","",""
