@@ -1,1 +1,14 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
+"384390069412429834","polyfractal","2025-11-29T02:32:28.6510000+00:00","some dumb pad questions 🙃  :
+
+- we can reconfigure input vs bidirectional pads to suit our design, right? should we leave VDD/VSS alone?
+- what's the actual difference between input and bidir? bidir just has extra stuff for sourcing output current or something? (i.e. why would you prefer input over bidir set to input)
+- what should I do with unused pins? Set to bidir and bidir_ie = 0 ""ignore pad"" ?","",""
+"803213471402688522","_luke_w_","2025-11-29T02:38:03.6730000+00:00","* yes, all pads are the same size (the two bidi types, the input-only, and the power pads) so changing pad types does not change the pad coordinates
+* VDD/VSS need to be left alone to stay bond-compatible with the COBs; you can move them around if you don't rely on the default COB setup
+* One case you'd prefer input is for a global reset input, because you don't want that to spuriously enable its output driver during power-up. Pretty much everything else can be bidi
+* Tying off A = IE = OE = 0 is one option, you could also put a small hardcoded UART that prints a rude message","",""
+"384390069412429834","polyfractal","2025-11-29T02:42:48.3260000+00:00","awesome, thanks!
+
+And lol at the rude message 😄","",""
+"274535015969456128","greg.hashtag.9468","2025-11-29T02:45:30.5580000+00:00","Or any message. Spare chips could then be used to advertise ""BreakingTaps!\r\n"" at 9600bps. 😎","","😎 (1)"

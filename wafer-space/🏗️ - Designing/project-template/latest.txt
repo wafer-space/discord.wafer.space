@@ -1,9 +1,36 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / project-template
-After: 11/28/2025 23:54
+After: 11/29/2025 02:20
 ==============================================================
 
+[11/29/2025 02:32] polyfractal
+some dumb pad questions 🙃  :
+
+- we can reconfigure input vs bidirectional pads to suit our design, right? should we leave VDD/VSS alone?
+- what's the actual difference between input and bidir? bidir just has extra stuff for sourcing output current or something? (i.e. why would you prefer input over bidir set to input)
+- what should I do with unused pins? Set to bidir and bidir_ie = 0 "ignore pad" ?
+
+
+[11/29/2025 02:38] _luke_w_
+* yes, all pads are the same size (the two bidi types, the input-only, and the power pads) so changing pad types does not change the pad coordinates
+* VDD/VSS need to be left alone to stay bond-compatible with the COBs; you can move them around if you don't rely on the default COB setup
+* One case you'd prefer input is for a global reset input, because you don't want that to spuriously enable its output driver during power-up. Pretty much everything else can be bidi
+* Tying off A = IE = OE = 0 is one option, you could also put a small hardcoded UART that prints a rude message
+
+
+[11/29/2025 02:42] polyfractal
+awesome, thanks!
+
+And lol at the rude message 😄
+
+
+[11/29/2025 02:45] greg.hashtag.9468
+Or any message. Spare chips could then be used to advertise "BreakingTaps!\r\n" at 9600bps. 😎
+
+{Reactions}
+😎
+
 ==============================================================
-Exported 0 message(s)
+Exported 4 message(s)
 ==============================================================
