@@ -1,5 +1,8 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
-"220639106915368960","tholin","2025-11-29T17:59:37.5120000+00:00","It turns out the C64 SID has two built-in ADCs, which I am trying to replicate in my recreation of it as well. Interestingly, they are implemented using just digital logic cells because they’re not true ADCs and are more like....resistance to digital converters. Each ADC pin requires a capacitor and resistor (usually a potentiometer) connected to it. The chip runs a loop of pulling those pins low for a bit, before tri-state-inputing them and running a timer until they register a logic one.","",""
-"220639106915368960","tholin","2025-11-29T18:00:03.5800000+00:00","Obviously, this depends on the RC circuit’s time constant.","",""
-"220639106915368960","tholin","2025-11-29T18:00:38.6090000+00:00","Fixing the resistor to measure the capacitance also works.","",""
-"220639106915368960","tholin","2025-11-29T18:01:07.3080000+00:00","Maybe someone here will find this trick useful.","",""
+"538398807986274304","rzioma","2025-11-29T19:35:49.3540000+00:00","That mechanism is similar readout mechanism for potentiometers in paddle controllers - in Atari Pokey chip and Atari 2600 TIA chip.
+That is definitely cool to have, but imho it is very rare that someone is using paddle controllers with C64, maybe it is used for something else as well, but I think not related to SID/C64s audio capabilities.","",""
+"323371864074485771","mole99","2025-11-29T19:41:34.5570000+00:00","Please check out the LibreLane docs: https://librelane.readthedocs.io/en/latest/
+LibreLane is the successor to OpenLane 2, so the docs should be more up to date :)","",""
+"323371864074485771","mole99","2025-11-29T19:42:30.6700000+00:00","First thing would be to look at the clock tree in OpenROAD GUI to see if it's reasonably balanced.
+If that's the case, then increasing the hold slack margin should mostly resolve the hold violations.
+If there are still some remaining, taking a closer look at the timing paths can be helpful.","",""
