@@ -1,2 +1,15 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
-"691780627338625077","rebelmike","2025-11-30T13:31:09.8170000+00:00","I noticed the project template SDC file has `set_input_delay -min 0 -clock $clocks $clk_core_input_ports` which sets the hold time on the inputs to zero.  I think that's may be why you've had to turn up the hold slack margin, because it means a bunch of buffering is required on the inputs which is a bit difficult for the flow to get right.","","😮 (1)"
+"323371864074485771","mole99","2025-11-30T14:04:40.3320000+00:00","Make sure to also check that the actual timing of the clock tree in the ""Clock Tree Viewer"".
+
+This shows the example template where the design is quite sparse so there's a lot of routing between the clock buffers and after SPEF extraction the tree isn't as balanced as it should be (that's why I had to increase the hold margin).","project-template_media/Bildschirmfoto_vom_2025-11-30_14-50-47-CC69A.png","👍 (1)"
+"323371864074485771","mole99","2025-11-30T14:07:44.1830000+00:00","For a detailed report on the timing paths, take a look at `librelane/runs/<timestamp>/54-openroad-stapostpnr/<corner>/` and open `min.rpt`/`max.rpt` for hold/setup checks.","",""
+"840182560252624916","logic_anarchy","2025-11-30T14:11:06.2980000+00:00","Have you implemented PIO and SIO?","",""
+"538398807986274304","rzioma","2025-11-30T14:17:56.5550000+00:00","Well, I looked at a bunch of Z80 computers from back in the day… and I couldn’t find almost a single one that would use Zilog’s PIO/SIO.
+
+So I am actually thinking to focus on ZX Spectrum like machine repairs and put ULA (graphics) and AY (audio) instead.","","😮 (1)"
+"538398807986274304","rzioma","2025-11-30T14:18:40.6900000+00:00","If I am missing some, let me know plz!","",""
+"840182560252624916","logic_anarchy","2025-11-30T14:18:53.2070000+00:00","I have no idea 🙂","",""
+"538398807986274304","rzioma","2025-11-30T14:19:56.9250000+00:00","Plus 16KB of RAM if I go full slot.","","😮 (1)"
+"384390069412429834","polyfractal","2025-11-30T14:46:56.6740000+00:00","aha, didn't know that little widget existed in the gui, cheers! Didn't see the timing report tab either. looking through the violators now, looks like my ALU is popping up in the list which is interesting. didn't think I had anything particularly expensive in there but will give examine it closer.
+
+thanks for all th ehelp!","",""
