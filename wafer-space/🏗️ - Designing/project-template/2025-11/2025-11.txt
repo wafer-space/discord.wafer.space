@@ -1,29 +1,129 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / project-template
-After: 11/29/2025 22:55
+After: 11/29/2025 23:55
 ==============================================================
 
-[11/29/2025 23:07] trev5514
-Do you mean like this?
+[11/30/2025 00:28] logic_anarchy
+Dear @LukeW , @mole99 
 
-https://stackoverflow.com/questions/52061466/verilog-conditional-hardware-based-on-parameter-value
+The previous code corrupted the entire netlist for the control signals. I checked your riscvboy-180 implementation and saw that your anchor tricky style approach works for synthesis.  Can I  simply declare rst_pad as a false path in sdc?
 
-{Embed}
-https://stackoverflow.com/questions/52061466/verilog-conditional-hardware-based-on-parameter-value
-Verilog conditional hardware based on parameter value
-Is it possible to create conditional hardware in Verilog depending on the value of a parameter? Something like this
+{Attachments}
+project-template_media/image-5D7D1.png
 
-module test #(
- parameter param = 1
-)(
-  input wire clk
-);
 
-reg[3:0] counter = 0;
-project-template_media/apple-touch-icon%402-3834B.png
+[11/30/2025 00:31] logic_anarchy
+
+
+{Attachments}
+project-template_media/message-723E6.txt
+
+
+[11/30/2025 00:53] rebelmike
+Would an `if` inside a `generate` block do what you need?
+
+
+[11/30/2025 00:54] tholin
+Yes
+
+
+[11/30/2025 01:50] logic_anarchy
+During gate-level simulation I found that **CEN has to remain high for one clock cycle**. I had previously hardwired it to 0, but I’ve now combined it with `reset_n`, so the SRAM is operational.
+
+{Attachments}
+project-template_media/image-1AA63.png
+
+
+[11/30/2025 01:50] logic_anarchy
+
+
+{Attachments}
+project-template_media/image-638B3.png
+
+
+[11/30/2025 01:51] _luke_w_
+I am fairly certain the `cen_fell` thing is a bug in the RAM model where they don't initialise all of their variables
+
+
+[11/30/2025 01:51] logic_anarchy
+
+
+{Attachments}
+project-template_media/image-A2BF5.png
+
+
+[11/30/2025 01:52] _luke_w_
+ah maybe I had a separate issue which is the model doesn't accept the first access if you start up with CSn high
+
+
+[11/30/2025 01:53] _luke_w_
+I haven't looked at the schematic for the SRAM but that would be a super weird requirement 🤔
+
+
+[11/30/2025 01:53] logic_anarchy
+My caches are working!
+
+{Reactions}
+👍
+
+[11/30/2025 01:53] _luke_w_
+yes IMO it's ok to falsepath the reset pad input since it's synchronised before use
+
+{Reactions}
+❤️
+
+[11/30/2025 01:54] logic_anarchy
+I was able to boot from flash, copy the code into SDRAM, and execute it via micron sdram model.
+
+
+[11/30/2025 01:54] _luke_w_
+nice
+
+{Reactions}
+❤️
+
+[11/30/2025 01:55] logic_anarchy
+
+
+{Attachments}
+project-template_media/image-B7C8B.png
+
+
+[11/30/2025 01:55] _luke_w_
+@mole99 those 0.5 x 0.5 slots are so cute 🥺  think they would be a great gate-golf target
+
+
+[11/30/2025 01:55] logic_anarchy
+I got the model from you Luke 2022 🙂
+
+{Reactions}
+👍
+
+[11/30/2025 01:56] _luke_w_
+how did we choose the number of VDD/VSS pins? seems to  have like 75% the IOs of the 1x1 but < 50% the power and ground pins
+
+
+[11/30/2025 02:02] trev5514
+FYI for my application, SRAM should remain on once started, I added a small prime latch where on reset, it toggles the CEN for a cycle to ensure it's always started.
+
+
+[11/30/2025 02:03] logic_anarchy
+that was my fix!
+
+{Attachments}
+project-template_media/image-F0EB1.png
+
+{Reactions}
+👍
+
+[11/30/2025 02:32] logic_anarchy
+Does anyone have a simple SD card Verilog model for iverilog? I only need SPI support, then I could try booting xv6 Unix.
+
+{Attachments}
+project-template_media/image-A6D2A.png
 
 
 ==============================================================
-Exported 1 message(s)
+Exported 21 message(s)
 ==============================================================
