@@ -1,140 +1,143 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / project-template
-After: 11/30/2025 23:57
+After: 12/01/2025 02:43
 ==============================================================
 
-[12/01/2025 00:29] _luke_w_
-The `.sdc` in the template has this at the end:
+[12/01/2025 03:21] polyfractal
+I've been working through the synth strategies and haven't seen any real correlation unfortunately. 🙁  `AREA 3` seems to be working best/fastest for my design so far
+
+
+[12/01/2025 03:24] rebelmike
+Yeah I was hoping it would fix it as I only needed a couple of ns, but it didn’t seem to
+
+
+[12/01/2025 03:24] _luke_w_
+If you add this to your Makefile:
 
 ```
-if { [info exists ::env(OPENLANE_SDC_IDEAL_CLOCKS)] && $::env(OPENLANE_SDC_IDEAL_CLOCKS) } {
-    unset_propagated_clock [all_clocks]
-} else {
-    set_propagated_clock [all_clocks]
-}
+librelane-explore: ## Run synthesis exploration
+    librelane librelane/config.yaml --pdk ${PDK} --pdk-root ${PDK_ROOT} --manual-pdk --last-run --flow SynthesisExploration
+.PHONY: librelane-explore
 ```
 
-However I've instrumented this and that variable is never set in any stages, which is probably why I have multi-hundred-ns clock slew times in pre-CTS STA. @mole99 do you know what's up with that? librelane sets it here: https://github.com/librelane/librelane/blob/774d6e6f221ccf21bd499e9b8ccba4afeffff4fd/librelane/steps/openroad.py#L725-L728
+And then run `make librelane-explore` it will try all 9 strategies and tell you which is best (though it's just synthesis timing)
 
-{Embed}
-https://github.com/librelane/librelane/blob/774d6e6f221ccf21bd499e9b8ccba4afeffff4fd/librelane/steps/openroad.py
-librelane/librelane/steps/openroad.py at 774d6e6f221ccf21bd499e9b8c...
-ASIC implementation flow infrastructure, successor to OpenLane - librelane/librelane
-project-template_media/librelane-02AD5
+{Reactions}
+😮 (2) 🙏 (2)
 
-
-[12/01/2025 00:36] _luke_w_
-(context for suddenly caring about pre-CTS STA is I wanted to try enabling the resizer earlier in the flow to help with some stubborn setup paths)
+[12/01/2025 03:24] polyfractal
+likewise 😭  got it down to about 3ns but just can't seem to improve from there. might need to just drop the clock at this point
 
 
-[12/01/2025 01:15] _luke_w_
-I have a dumb workaround:
-
-```tcl
-set clk_pins [get_pins  -of_objects [get_net -of_objects [get_pins i_chip_core.clkroot_sys_u.magic_clkroot_anchor_u/Z]]]
-set clk_loads [llength $clk_pins]
-puts "clk_sys has $clk_loads directly connected pins"
-
-if { [expr $clk_loads > 10] } {
-    puts "Setting all clocks to ideal!"
-    unset_propagated_clock [all_clocks]
-} else {
-    puts "Setting all clocks to non-ideal"
-    set_propagated_clock [all_clocks]
-}
-```
-
-This prints the right messages in the right phases (ideal until after CTS), but even with `unset_propagated_clock [all_clocks]` my early STAs still have enormous clock rise/fall times. Is this just a me problem or do other people's pre-CTS STAs also have huge setup violations due to clock slew?
+[12/01/2025 03:32] polyfractal
+been pretty surprised by timing in general. For a while I assumed reducing density would help the optimizer spread out, insert buffers more easily, etc. but cranking up the density (in addition to more margins) helped a lot
 
 
-[12/01/2025 01:33] rebelmike
-I thought that was just how it was pre-CTS. I guess there should be some option to tell STA to ignore the load on the clock pin?
+[12/01/2025 03:33] _luke_w_
+What's your density set to at the moment?
 
 
-[12/01/2025 01:35] _luke_w_
-yeah, that is what the `unset_propagated_clock` is supposed to do:
-
-{Attachments}
-project-template_media/image-74793.png
-
-
-[12/01/2025 01:35] _luke_w_
-
-
-{Attachments}
-project-template_media/image-DB48B.png
-
-
-[12/01/2025 01:37] _luke_w_
-(from OpenSTA docs). Ok so it's not just me, it's other people too 😅 right now there isn't really any usable timing information in the early STA which I imagine is part of the reason the early resizer step has been turned off
-
-
-[12/01/2025 01:49] rebelmike
-Ah no, hold on - I think it is working.  I have massive slew but it's on my rst_n net, not my clock net:
-
-
-[12/01/2025 01:50] rebelmike
-```                      0.150000    0.000000    0.000000   clock clk_PAD (rise edge)
-                                  0.000000    0.000000   clock network delay (ideal)
-                      0.150000    0.000000    0.000000 ^ i_chip_core.tt.i_peripherals.i_simple_peri16.i_spi_ctrl.rstn_gf180mcu_fd_sc_mcu7t5v0__dffq_1_Q/CLK (gf180mcu_fd_sc_mcu7t5v0__dffq_1)
-   832    4.638381  110.209221   63.362564   63.362564 ^ i_chip_core.tt.i_peripherals.i_simple_peri16.i_spi_ctrl.rstn_gf180mcu_fd_sc_mcu7t5v0__dffq_1_Q/Q (gf180mcu_fd_sc_mcu7t5v0__dffq_1)
-                                                         i_chip_core.tt.i_peripherals.i_simple_peri16.i_spi_ctrl.rstn (net)
-                    110.209221    0.000000   63.362564 ^ i_chip_core.tt.i_peripherals.i_simple_peri19.ay8913.noise_generator.reset_gf180mcu_fd_sc_mcu7t5v0__clkinv_1_ZN/I (gf180mcu_fd_sc_mcu7t5v0__clkinv_1)
-   164    0.691456    3.280350   53.123268  116.485832 v i_chip_core.tt.i_peripherals.i_simple_peri19.ay8913.noise_generator.reset_gf180mcu_fd_sc_mcu7t5v0__clkinv_1_ZN/ZN (gf180mcu_fd_sc_mcu7t5v0__clkinv_1)
-                                                         i_chip_core.tt.i_peripherals.i_simple_peri19.ay8913.noise_generator.reset (net)
-```
+[12/01/2025 03:37] polyfractal
+between 45 and 55 is yielding best results so far (still -3ns in some corners though)
 
 {Reactions}
 👍
 
-[12/01/2025 01:50] _luke_w_
-huhhhh ok, thanks for the datapoint
+[12/01/2025 04:27] _luke_w_
+There's a step disabled by default which I found helped a little:
 
-
-[12/01/2025 01:50] rebelmike
-That's from 12-openroad-staprepnr
-
-
-[12/01/2025 02:05] _luke_w_
-...it's possible this was just me being dumb. There is a whole bunch of other tcl that librelane runs during STA and it might handle ideal clocks there. But yeah I also see the slow unbuffered reset
-
-
-[12/01/2025 02:05] _luke_w_
-normally there is a command like `set_ideal_network` which you can use to do the same thing for resets but I don't think OpenSTA supports it
-
-
-[12/01/2025 02:14] rebelmike
-I'm so used to being extremely area constrained on TT that I completely forgot until now that you can set the synth strategy to trade area for speed!
-
-
-[12/01/2025 02:29] _luke_w_
-Here is an ugly trick to get it to ignore reset timing pre-CTS (relies on the name of a manual flop instances in my reset synchronisers):
-
-```tcl
-set main_clk_pin [get_pins i_chip_core.clkroot_sys_u.magic_clkroot_anchor_u/Z]
-set rst_pins [get_pins i_chip_core.*sync*flop2/Q]
-
-set clk_pins [get_pins  -of_objects [get_net -of_objects ${main_clk_pin}]]
-set clk_loads [llength ${clk_pins}]
-puts "clk_sys has ${clk_loads} directly connected pins"
-
-if { [expr $clk_loads > 10] } {
-    puts "Setting all clocks to ideal!"
-    unset_propagated_clock [all_clocks]
-    puts "Case analysing reset nets:"
-    foreach pin ${rst_pins} {puts [sta::get_full_name ${pin}]}
-    set_case_analysis 1 ${rst_pins}
-} else {
-    puts "Setting all clocks to non-ideal"
-    set_propagated_clock [all_clocks]
-    unset_case_analysis ${rst_pins}
-}
+```
+RUN_POST_GRT_RESIZER_TIMING: True
 ```
 
-Seems to work for me. Might give better placement as the datapath delays are actually realistic.
+
+[12/01/2025 04:29] _luke_w_
+from: https://github.com/librelane/librelane/blob/774d6e6f221ccf21bd499e9b8ccba4afeffff4fd/librelane/flows/classic.py#L156-L161
+
+{Embed}
+https://github.com/librelane/librelane/blob/774d6e6f221ccf21bd499e9b8ccba4afeffff4fd/librelane/flows/classic.py
+librelane/librelane/flows/classic.py at 774d6e6f221ccf21bd499e9b8cc...
+ASIC implementation flow infrastructure, successor to OpenLane - librelane/librelane
+project-template_media/librelane-02AD5
+
+
+[12/01/2025 04:31] polyfractal
+ooh, will try that on my next run!
+
+
+[12/01/2025 04:34] polyfractal
+if/when I do another shuttle, I think I'll just write a quick optimizer to churn through config options for like a week. beats doing it by hand 😅
+
+
+[12/01/2025 04:36] _luke_w_
+yeah, I mean it should be possible to do this stuff methodically, but this flow does things in weird places
+
+
+[12/01/2025 04:36] _luke_w_
+like it doesn't do any gate sizing until after detailed placement
+
+
+[12/01/2025 04:36] _luke_w_
+but I am also just trying random shit to make my design meet timing at this point
+
+{Reactions}
+this
+
+[12/01/2025 04:37] _luke_w_
+I have had one run that I think I could make pass with some manual netlist changes but I don't really want to do that
+
+
+[12/01/2025 04:38] polyfractal
+i'm very nearly read to call it with my best -3ns case, and just slap a big heatsink on it 😄 looked fine in the normal corners, just the hot ones were bad
+
+
+[12/01/2025 04:39] polyfractal
+how would you go about doing this btw? not sure I'd know what to tweak even if I wanted to
+
+
+[12/01/2025 04:40] _luke_w_
+You can run `librelane` with a `--last-run --from (some pass)` argument to make it restart a run from part way. Since I'm pressed for time I'd probably just edit the netlist with a text editor and re-run from there
+
+
+[12/01/2025 04:41] _luke_w_
+I just need some gate upsizing on some gates that are consistently on the critical path on my processor
+
+
+[12/01/2025 04:41] _luke_w_
+I think there is a "more proper" way of doing this in LibreLane, by adding an ECO pass
+
+
+[12/01/2025 04:43] _luke_w_
+At work our synth and pnr flows are just TCL and my understanding is they'll do pretty much the same thing: write a list of ECO scripts applied at a given point in the flow to apply a manual (but repeatable) fix. That's normally for slightly more esoteric stuff though, not just making the gates the right size on the critical path 😅
+
+{Reactions}
+😁
+
+[12/01/2025 04:44] polyfractal
+interesting, thanks! is there a way for librelane to tell you the critical path? Or is that just based on your knowledge of how the processor works?
+
+
+[12/01/2025 04:44] _luke_w_
+Yeah, just from reading the `max.rpt` from the final STA
+
+
+[12/01/2025 04:45] polyfractal
+oh gotcha, roger
+
+
+[12/01/2025 04:45] _luke_w_
+the reports are a bit inscrutable partly because this flow doesn't correctly attribute flops to their original names in the source code
+
+
+[12/01/2025 04:45] _luke_w_
+but you can usually make educated guesses
+
+
+[12/01/2025 04:46] polyfractal
+yeah it feels like reading tea leaves 🙁  I'm using a transpiled HDL which makes everything even more inscrutable too
 
 
 ==============================================================
-Exported 15 message(s)
+Exported 27 message(s)
 ==============================================================
