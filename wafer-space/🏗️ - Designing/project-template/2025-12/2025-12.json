@@ -13,10 +13,10 @@
     "topic": null
   },
   "dateRange": {
-    "after": "2025-11-30T22:57:15.892+00:00",
+    "after": null,
     "before": null
   },
-  "exportedAt": "2025-11-30T23:57:05.3534362+00:00",
+  "exportedAt": "2025-12-01T02:43:30.3127116+00:00",
   "messages": [
     {
       "id": "1444828491215278272",
@@ -42,7 +42,460 @@
       "reactions": [],
       "mentions": [],
       "inlineEmojis": []
+    },
+    {
+      "id": "1444847805414903958",
+      "type": "Default",
+      "timestamp": "2025-12-01T00:29:20.785+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The `.sdc` in the template has this at the end:\n\n```\nif { [info exists ::env(OPENLANE_SDC_IDEAL_CLOCKS)] && $::env(OPENLANE_SDC_IDEAL_CLOCKS) } {\n    unset_propagated_clock [all_clocks]\n} else {\n    set_propagated_clock [all_clocks]\n}\n```\n\nHowever I've instrumented this and that variable is never set in any stages, which is probably why I have multi-hundred-ns clock slew times in pre-CTS STA. @mole99 do you know what's up with that? librelane sets it here: https://github.com/librelane/librelane/blob/774d6e6f221ccf21bd499e9b8ccba4afeffff4fd/librelane/steps/openroad.py#L725-L728",
+      "author": {
+        "id": "803213471402688522",
+        "name": "_luke_w_",
+        "discriminator": "0000",
+        "nickname": "LukeW",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "librelane/librelane/steps/openroad.py at 774d6e6f221ccf21bd499e9b8c...",
+          "url": "https://github.com/librelane/librelane/blob/774d6e6f221ccf21bd499e9b8ccba4afeffff4fd/librelane/steps/openroad.py",
+          "timestamp": null,
+          "description": "ASIC implementation flow infrastructure, successor to OpenLane - librelane/librelane",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "project-template_media/librelane-02AD5",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": [],
+          "inlineEmojis": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "323371864074485771",
+          "name": "mole99",
+          "discriminator": "0000",
+          "nickname": "mole99",
+          "color": null,
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1423020172595298314",
+              "name": "Mod",
+              "color": null,
+              "position": 1
+            }
+          ],
+          "avatarUrl": "project-template_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1444849547678322730",
+      "type": "Default",
+      "timestamp": "2025-12-01T00:36:16.173+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "(context for suddenly caring about pre-CTS STA is I wanted to try enabling the resizer earlier in the flow to help with some stubborn setup paths)",
+      "author": {
+        "id": "803213471402688522",
+        "name": "_luke_w_",
+        "discriminator": "0000",
+        "nickname": "LukeW",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1444859528121417748",
+      "type": "Default",
+      "timestamp": "2025-12-01T01:15:55.696+00:00",
+      "timestampEdited": "2025-12-01T01:16:07.056+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I have a dumb workaround:\n\n```tcl\nset clk_pins [get_pins  -of_objects [get_net -of_objects [get_pins i_chip_core.clkroot_sys_u.magic_clkroot_anchor_u/Z]]]\nset clk_loads [llength $clk_pins]\nputs \"clk_sys has $clk_loads directly connected pins\"\n\nif { [expr $clk_loads > 10] } {\n    puts \"Setting all clocks to ideal!\"\n    unset_propagated_clock [all_clocks]\n} else {\n    puts \"Setting all clocks to non-ideal\"\n    set_propagated_clock [all_clocks]\n}\n```\n\nThis prints the right messages in the right phases (ideal until after CTS), but even with `unset_propagated_clock [all_clocks]` my early STAs still have enormous clock rise/fall times. Is this just a me problem or do other people's pre-CTS STAs also have huge setup violations due to clock slew?",
+      "author": {
+        "id": "803213471402688522",
+        "name": "_luke_w_",
+        "discriminator": "0000",
+        "nickname": "LukeW",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1444864017532453016",
+      "type": "Default",
+      "timestamp": "2025-12-01T01:33:46.055+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I thought that was just how it was pre-CTS. I guess there should be some option to tell STA to ignore the load on the clock pin?",
+      "author": {
+        "id": "691780627338625077",
+        "name": "rebelmike",
+        "discriminator": "0000",
+        "nickname": "RebelMike",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1444864478826074132",
+      "type": "Default",
+      "timestamp": "2025-12-01T01:35:36.036+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "yeah, that is what the `unset_propagated_clock` is supposed to do:",
+      "author": {
+        "id": "803213471402688522",
+        "name": "_luke_w_",
+        "discriminator": "0000",
+        "nickname": "LukeW",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+      },
+      "attachments": [
+        {
+          "id": "1444864478402318477",
+          "url": "project-template_media/image-74793.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 77763
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1444864554528931840",
+      "type": "Default",
+      "timestamp": "2025-12-01T01:35:54.085+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "",
+      "author": {
+        "id": "803213471402688522",
+        "name": "_luke_w_",
+        "discriminator": "0000",
+        "nickname": "LukeW",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+      },
+      "attachments": [
+        {
+          "id": "1444864554331934860",
+          "url": "project-template_media/image-DB48B.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 39344
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1444864832372346992",
+      "type": "Default",
+      "timestamp": "2025-12-01T01:37:00.328+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "(from OpenSTA docs). Ok so it's not just me, it's other people too \ud83d\ude05 right now there isn't really any usable timing information in the early STA which I imagine is part of the reason the early resizer step has been turned off",
+      "author": {
+        "id": "803213471402688522",
+        "name": "_luke_w_",
+        "discriminator": "0000",
+        "nickname": "LukeW",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\ud83d\ude05",
+          "code": "sweat_smile",
+          "isAnimated": false,
+          "imageUrl": "project-template_media/1f605-42B43.svg"
+        }
+      ]
+    },
+    {
+      "id": "1444868068408033364",
+      "type": "Default",
+      "timestamp": "2025-12-01T01:49:51.859+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Ah no, hold on - I think it is working.  I have massive slew but it's on my rst_n net, not my clock net:",
+      "author": {
+        "id": "691780627338625077",
+        "name": "rebelmike",
+        "discriminator": "0000",
+        "nickname": "RebelMike",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1444868139585372352",
+      "type": "Default",
+      "timestamp": "2025-12-01T01:50:08.829+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "```                      0.150000    0.000000    0.000000   clock clk_PAD (rise edge)\n                                  0.000000    0.000000   clock network delay (ideal)\n                      0.150000    0.000000    0.000000 ^ i_chip_core.tt.i_peripherals.i_simple_peri16.i_spi_ctrl.rstn_gf180mcu_fd_sc_mcu7t5v0__dffq_1_Q/CLK (gf180mcu_fd_sc_mcu7t5v0__dffq_1)\n   832    4.638381  110.209221   63.362564   63.362564 ^ i_chip_core.tt.i_peripherals.i_simple_peri16.i_spi_ctrl.rstn_gf180mcu_fd_sc_mcu7t5v0__dffq_1_Q/Q (gf180mcu_fd_sc_mcu7t5v0__dffq_1)\n                                                         i_chip_core.tt.i_peripherals.i_simple_peri16.i_spi_ctrl.rstn (net)\n                    110.209221    0.000000   63.362564 ^ i_chip_core.tt.i_peripherals.i_simple_peri19.ay8913.noise_generator.reset_gf180mcu_fd_sc_mcu7t5v0__clkinv_1_ZN/I (gf180mcu_fd_sc_mcu7t5v0__clkinv_1)\n   164    0.691456    3.280350   53.123268  116.485832 v i_chip_core.tt.i_peripherals.i_simple_peri19.ay8913.noise_generator.reset_gf180mcu_fd_sc_mcu7t5v0__clkinv_1_ZN/ZN (gf180mcu_fd_sc_mcu7t5v0__clkinv_1)\n                                                         i_chip_core.tt.i_peripherals.i_simple_peri19.ay8913.noise_generator.reset (net)\n```",
+      "author": {
+        "id": "691780627338625077",
+        "name": "rebelmike",
+        "discriminator": "0000",
+        "nickname": "RebelMike",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\ud83d\udc4d",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "project-template_media/1f44d-27259.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "803213471402688522",
+              "name": "_luke_w_",
+              "discriminator": "0000",
+              "nickname": "LukeW",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "project-template_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1444868261891280969",
+      "type": "Default",
+      "timestamp": "2025-12-01T01:50:37.989+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "huhhhh ok, thanks for the datapoint",
+      "author": {
+        "id": "803213471402688522",
+        "name": "_luke_w_",
+        "discriminator": "0000",
+        "nickname": "LukeW",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1444868294543937861",
+      "type": "Default",
+      "timestamp": "2025-12-01T01:50:45.774+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "That's from 12-openroad-staprepnr",
+      "author": {
+        "id": "691780627338625077",
+        "name": "rebelmike",
+        "discriminator": "0000",
+        "nickname": "RebelMike",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1444871960717824060",
+      "type": "Default",
+      "timestamp": "2025-12-01T02:05:19.858+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "...it's possible this was just me being dumb. There is a whole bunch of other tcl that librelane runs during STA and it might handle ideal clocks there. But yeah I also see the slow unbuffered reset",
+      "author": {
+        "id": "803213471402688522",
+        "name": "_luke_w_",
+        "discriminator": "0000",
+        "nickname": "LukeW",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1444872074471538721",
+      "type": "Default",
+      "timestamp": "2025-12-01T02:05:46.979+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "normally there is a command like `set_ideal_network` which you can use to do the same thing for resets but I don't think OpenSTA supports it",
+      "author": {
+        "id": "803213471402688522",
+        "name": "_luke_w_",
+        "discriminator": "0000",
+        "nickname": "LukeW",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1444874184940589066",
+      "type": "Default",
+      "timestamp": "2025-12-01T02:14:10.154+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I'm so used to being extremely area constrained on TT that I completely forgot until now that you can set the synth strategy to trade area for speed!",
+      "author": {
+        "id": "691780627338625077",
+        "name": "rebelmike",
+        "discriminator": "0000",
+        "nickname": "RebelMike",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1444878164995215392",
+      "type": "Default",
+      "timestamp": "2025-12-01T02:29:59.073+00:00",
+      "timestampEdited": "2025-12-01T02:33:23.727+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Here is an ugly trick to get it to ignore reset timing pre-CTS (relies on the name of a manual flop instances in my reset synchronisers):\n\n```tcl\nset main_clk_pin [get_pins i_chip_core.clkroot_sys_u.magic_clkroot_anchor_u/Z]\nset rst_pins [get_pins i_chip_core.*sync*flop2/Q]\n\nset clk_pins [get_pins  -of_objects [get_net -of_objects ${main_clk_pin}]]\nset clk_loads [llength ${clk_pins}]\nputs \"clk_sys has ${clk_loads} directly connected pins\"\n\nif { [expr $clk_loads > 10] } {\n    puts \"Setting all clocks to ideal!\"\n    unset_propagated_clock [all_clocks]\n    puts \"Case analysing reset nets:\"\n    foreach pin ${rst_pins} {puts [sta::get_full_name ${pin}]}\n    set_case_analysis 1 ${rst_pins}\n} else {\n    puts \"Setting all clocks to non-ideal\"\n    set_propagated_clock [all_clocks]\n    unset_case_analysis ${rst_pins}\n}\n```\n\nSeems to work for me. Might give better placement as the datapath delays are actually realistic.",
+      "author": {
+        "id": "803213471402688522",
+        "name": "_luke_w_",
+        "discriminator": "0000",
+        "nickname": "LukeW",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
     }
   ],
-  "messageCount": 1
+  "messageCount": 16
 }

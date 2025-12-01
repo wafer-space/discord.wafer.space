@@ -1,2 +1,73 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
-"220639106915368960","tholin","2025-11-30T23:12:35.9210000+00:00","I tried to use the online platform, but it just keeps cycling between ""Queued"" and ""Starting""","",""
+"803213471402688522","_luke_w_","2025-12-01T00:29:20.7850000+00:00","The `.sdc` in the template has this at the end:
+
+```
+if { [info exists ::env(OPENLANE_SDC_IDEAL_CLOCKS)] && $::env(OPENLANE_SDC_IDEAL_CLOCKS) } {
+    unset_propagated_clock [all_clocks]
+} else {
+    set_propagated_clock [all_clocks]
+}
+```
+
+However I've instrumented this and that variable is never set in any stages, which is probably why I have multi-hundred-ns clock slew times in pre-CTS STA. @mole99 do you know what's up with that? librelane sets it here: https://github.com/librelane/librelane/blob/774d6e6f221ccf21bd499e9b8ccba4afeffff4fd/librelane/steps/openroad.py#L725-L728","",""
+"803213471402688522","_luke_w_","2025-12-01T00:36:16.1730000+00:00","(context for suddenly caring about pre-CTS STA is I wanted to try enabling the resizer earlier in the flow to help with some stubborn setup paths)","",""
+"803213471402688522","_luke_w_","2025-12-01T01:15:55.6960000+00:00","I have a dumb workaround:
+
+```tcl
+set clk_pins [get_pins  -of_objects [get_net -of_objects [get_pins i_chip_core.clkroot_sys_u.magic_clkroot_anchor_u/Z]]]
+set clk_loads [llength $clk_pins]
+puts ""clk_sys has $clk_loads directly connected pins""
+
+if { [expr $clk_loads > 10] } {
+    puts ""Setting all clocks to ideal!""
+    unset_propagated_clock [all_clocks]
+} else {
+    puts ""Setting all clocks to non-ideal""
+    set_propagated_clock [all_clocks]
+}
+```
+
+This prints the right messages in the right phases (ideal until after CTS), but even with `unset_propagated_clock [all_clocks]` my early STAs still have enormous clock rise/fall times. Is this just a me problem or do other people's pre-CTS STAs also have huge setup violations due to clock slew?","",""
+"691780627338625077","rebelmike","2025-12-01T01:33:46.0550000+00:00","I thought that was just how it was pre-CTS. I guess there should be some option to tell STA to ignore the load on the clock pin?","",""
+"803213471402688522","_luke_w_","2025-12-01T01:35:36.0360000+00:00","yeah, that is what the `unset_propagated_clock` is supposed to do:","project-template_media/image-74793.png",""
+"803213471402688522","_luke_w_","2025-12-01T01:35:54.0850000+00:00","","project-template_media/image-DB48B.png",""
+"803213471402688522","_luke_w_","2025-12-01T01:37:00.3280000+00:00","(from OpenSTA docs). Ok so it's not just me, it's other people too 😅 right now there isn't really any usable timing information in the early STA which I imagine is part of the reason the early resizer step has been turned off","",""
+"691780627338625077","rebelmike","2025-12-01T01:49:51.8590000+00:00","Ah no, hold on - I think it is working.  I have massive slew but it's on my rst_n net, not my clock net:","",""
+"691780627338625077","rebelmike","2025-12-01T01:50:08.8290000+00:00","```                      0.150000    0.000000    0.000000   clock clk_PAD (rise edge)
+                                  0.000000    0.000000   clock network delay (ideal)
+                      0.150000    0.000000    0.000000 ^ i_chip_core.tt.i_peripherals.i_simple_peri16.i_spi_ctrl.rstn_gf180mcu_fd_sc_mcu7t5v0__dffq_1_Q/CLK (gf180mcu_fd_sc_mcu7t5v0__dffq_1)
+   832    4.638381  110.209221   63.362564   63.362564 ^ i_chip_core.tt.i_peripherals.i_simple_peri16.i_spi_ctrl.rstn_gf180mcu_fd_sc_mcu7t5v0__dffq_1_Q/Q (gf180mcu_fd_sc_mcu7t5v0__dffq_1)
+                                                         i_chip_core.tt.i_peripherals.i_simple_peri16.i_spi_ctrl.rstn (net)
+                    110.209221    0.000000   63.362564 ^ i_chip_core.tt.i_peripherals.i_simple_peri19.ay8913.noise_generator.reset_gf180mcu_fd_sc_mcu7t5v0__clkinv_1_ZN/I (gf180mcu_fd_sc_mcu7t5v0__clkinv_1)
+   164    0.691456    3.280350   53.123268  116.485832 v i_chip_core.tt.i_peripherals.i_simple_peri19.ay8913.noise_generator.reset_gf180mcu_fd_sc_mcu7t5v0__clkinv_1_ZN/ZN (gf180mcu_fd_sc_mcu7t5v0__clkinv_1)
+                                                         i_chip_core.tt.i_peripherals.i_simple_peri19.ay8913.noise_generator.reset (net)
+```","","👍 (1)"
+"803213471402688522","_luke_w_","2025-12-01T01:50:37.9890000+00:00","huhhhh ok, thanks for the datapoint","",""
+"691780627338625077","rebelmike","2025-12-01T01:50:45.7740000+00:00","That's from 12-openroad-staprepnr","",""
+"803213471402688522","_luke_w_","2025-12-01T02:05:19.8580000+00:00","...it's possible this was just me being dumb. There is a whole bunch of other tcl that librelane runs during STA and it might handle ideal clocks there. But yeah I also see the slow unbuffered reset","",""
+"803213471402688522","_luke_w_","2025-12-01T02:05:46.9790000+00:00","normally there is a command like `set_ideal_network` which you can use to do the same thing for resets but I don't think OpenSTA supports it","",""
+"691780627338625077","rebelmike","2025-12-01T02:14:10.1540000+00:00","I'm so used to being extremely area constrained on TT that I completely forgot until now that you can set the synth strategy to trade area for speed!","",""
+"803213471402688522","_luke_w_","2025-12-01T02:29:59.0730000+00:00","Here is an ugly trick to get it to ignore reset timing pre-CTS (relies on the name of a manual flop instances in my reset synchronisers):
+
+```tcl
+set main_clk_pin [get_pins i_chip_core.clkroot_sys_u.magic_clkroot_anchor_u/Z]
+set rst_pins [get_pins i_chip_core.*sync*flop2/Q]
+
+set clk_pins [get_pins  -of_objects [get_net -of_objects ${main_clk_pin}]]
+set clk_loads [llength ${clk_pins}]
+puts ""clk_sys has ${clk_loads} directly connected pins""
+
+if { [expr $clk_loads > 10] } {
+    puts ""Setting all clocks to ideal!""
+    unset_propagated_clock [all_clocks]
+    puts ""Case analysing reset nets:""
+    foreach pin ${rst_pins} {puts [sta::get_full_name ${pin}]}
+    set_case_analysis 1 ${rst_pins}
+} else {
+    puts ""Setting all clocks to non-ideal""
+    set_propagated_clock [all_clocks]
+    unset_case_analysis ${rst_pins}
+}
+```
+
+Seems to work for me. Might give better placement as the datapath delays are actually realistic.","",""

@@ -1,13 +1,140 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / project-template
-After: 11/30/2025 22:57
+After: 11/30/2025 23:57
 ==============================================================
 
-[11/30/2025 23:12] tholin
-I tried to use the online platform, but it just keeps cycling between "Queued" and "Starting"
+[12/01/2025 00:29] _luke_w_
+The `.sdc` in the template has this at the end:
+
+```
+if { [info exists ::env(OPENLANE_SDC_IDEAL_CLOCKS)] && $::env(OPENLANE_SDC_IDEAL_CLOCKS) } {
+    unset_propagated_clock [all_clocks]
+} else {
+    set_propagated_clock [all_clocks]
+}
+```
+
+However I've instrumented this and that variable is never set in any stages, which is probably why I have multi-hundred-ns clock slew times in pre-CTS STA. @mole99 do you know what's up with that? librelane sets it here: https://github.com/librelane/librelane/blob/774d6e6f221ccf21bd499e9b8ccba4afeffff4fd/librelane/steps/openroad.py#L725-L728
+
+{Embed}
+https://github.com/librelane/librelane/blob/774d6e6f221ccf21bd499e9b8ccba4afeffff4fd/librelane/steps/openroad.py
+librelane/librelane/steps/openroad.py at 774d6e6f221ccf21bd499e9b8c...
+ASIC implementation flow infrastructure, successor to OpenLane - librelane/librelane
+project-template_media/librelane-02AD5
+
+
+[12/01/2025 00:36] _luke_w_
+(context for suddenly caring about pre-CTS STA is I wanted to try enabling the resizer earlier in the flow to help with some stubborn setup paths)
+
+
+[12/01/2025 01:15] _luke_w_
+I have a dumb workaround:
+
+```tcl
+set clk_pins [get_pins  -of_objects [get_net -of_objects [get_pins i_chip_core.clkroot_sys_u.magic_clkroot_anchor_u/Z]]]
+set clk_loads [llength $clk_pins]
+puts "clk_sys has $clk_loads directly connected pins"
+
+if { [expr $clk_loads > 10] } {
+    puts "Setting all clocks to ideal!"
+    unset_propagated_clock [all_clocks]
+} else {
+    puts "Setting all clocks to non-ideal"
+    set_propagated_clock [all_clocks]
+}
+```
+
+This prints the right messages in the right phases (ideal until after CTS), but even with `unset_propagated_clock [all_clocks]` my early STAs still have enormous clock rise/fall times. Is this just a me problem or do other people's pre-CTS STAs also have huge setup violations due to clock slew?
+
+
+[12/01/2025 01:33] rebelmike
+I thought that was just how it was pre-CTS. I guess there should be some option to tell STA to ignore the load on the clock pin?
+
+
+[12/01/2025 01:35] _luke_w_
+yeah, that is what the `unset_propagated_clock` is supposed to do:
+
+{Attachments}
+project-template_media/image-74793.png
+
+
+[12/01/2025 01:35] _luke_w_
+
+
+{Attachments}
+project-template_media/image-DB48B.png
+
+
+[12/01/2025 01:37] _luke_w_
+(from OpenSTA docs). Ok so it's not just me, it's other people too 😅 right now there isn't really any usable timing information in the early STA which I imagine is part of the reason the early resizer step has been turned off
+
+
+[12/01/2025 01:49] rebelmike
+Ah no, hold on - I think it is working.  I have massive slew but it's on my rst_n net, not my clock net:
+
+
+[12/01/2025 01:50] rebelmike
+```                      0.150000    0.000000    0.000000   clock clk_PAD (rise edge)
+                                  0.000000    0.000000   clock network delay (ideal)
+                      0.150000    0.000000    0.000000 ^ i_chip_core.tt.i_peripherals.i_simple_peri16.i_spi_ctrl.rstn_gf180mcu_fd_sc_mcu7t5v0__dffq_1_Q/CLK (gf180mcu_fd_sc_mcu7t5v0__dffq_1)
+   832    4.638381  110.209221   63.362564   63.362564 ^ i_chip_core.tt.i_peripherals.i_simple_peri16.i_spi_ctrl.rstn_gf180mcu_fd_sc_mcu7t5v0__dffq_1_Q/Q (gf180mcu_fd_sc_mcu7t5v0__dffq_1)
+                                                         i_chip_core.tt.i_peripherals.i_simple_peri16.i_spi_ctrl.rstn (net)
+                    110.209221    0.000000   63.362564 ^ i_chip_core.tt.i_peripherals.i_simple_peri19.ay8913.noise_generator.reset_gf180mcu_fd_sc_mcu7t5v0__clkinv_1_ZN/I (gf180mcu_fd_sc_mcu7t5v0__clkinv_1)
+   164    0.691456    3.280350   53.123268  116.485832 v i_chip_core.tt.i_peripherals.i_simple_peri19.ay8913.noise_generator.reset_gf180mcu_fd_sc_mcu7t5v0__clkinv_1_ZN/ZN (gf180mcu_fd_sc_mcu7t5v0__clkinv_1)
+                                                         i_chip_core.tt.i_peripherals.i_simple_peri19.ay8913.noise_generator.reset (net)
+```
+
+{Reactions}
+👍
+
+[12/01/2025 01:50] _luke_w_
+huhhhh ok, thanks for the datapoint
+
+
+[12/01/2025 01:50] rebelmike
+That's from 12-openroad-staprepnr
+
+
+[12/01/2025 02:05] _luke_w_
+...it's possible this was just me being dumb. There is a whole bunch of other tcl that librelane runs during STA and it might handle ideal clocks there. But yeah I also see the slow unbuffered reset
+
+
+[12/01/2025 02:05] _luke_w_
+normally there is a command like `set_ideal_network` which you can use to do the same thing for resets but I don't think OpenSTA supports it
+
+
+[12/01/2025 02:14] rebelmike
+I'm so used to being extremely area constrained on TT that I completely forgot until now that you can set the synth strategy to trade area for speed!
+
+
+[12/01/2025 02:29] _luke_w_
+Here is an ugly trick to get it to ignore reset timing pre-CTS (relies on the name of a manual flop instances in my reset synchronisers):
+
+```tcl
+set main_clk_pin [get_pins i_chip_core.clkroot_sys_u.magic_clkroot_anchor_u/Z]
+set rst_pins [get_pins i_chip_core.*sync*flop2/Q]
+
+set clk_pins [get_pins  -of_objects [get_net -of_objects ${main_clk_pin}]]
+set clk_loads [llength ${clk_pins}]
+puts "clk_sys has ${clk_loads} directly connected pins"
+
+if { [expr $clk_loads > 10] } {
+    puts "Setting all clocks to ideal!"
+    unset_propagated_clock [all_clocks]
+    puts "Case analysing reset nets:"
+    foreach pin ${rst_pins} {puts [sta::get_full_name ${pin}]}
+    set_case_analysis 1 ${rst_pins}
+} else {
+    puts "Setting all clocks to non-ideal"
+    set_propagated_clock [all_clocks]
+    unset_case_analysis ${rst_pins}
+}
+```
+
+Seems to work for me. Might give better placement as the datapath delays are actually realistic.
 
 
 ==============================================================
-Exported 1 message(s)
+Exported 15 message(s)
 ==============================================================
