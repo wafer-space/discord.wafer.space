@@ -16,7 +16,7 @@
     "after": null,
     "before": null
   },
-  "exportedAt": "2025-12-01T11:04:31.7890592+00:00",
+  "exportedAt": "2025-12-01T11:57:04.0905528+00:00",
   "messages": [
     {
       "id": "1444828491215278272",
@@ -1545,7 +1545,307 @@
       "reactions": [],
       "mentions": [],
       "inlineEmojis": []
+    },
+    {
+      "id": "1445014108750745621",
+      "type": "Default",
+      "timestamp": "2025-12-01T11:30:10.59+00:00",
+      "timestampEdited": "2025-12-01T11:30:18.895+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Leo Moser (mole99) I think including another `yaml` before `config.yaml` **broke** 9t cell support!",
+      "author": {
+        "id": "538398807986274304",
+        "name": "rzioma",
+        "discriminator": "0000",
+        "nickname": "ReJ aka Renaldas Zioma",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+      },
+      "attachments": [
+        {
+          "id": "1445014108649816086",
+          "url": "project-template_media/image-FA1BF.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 36870
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "323371864074485771",
+          "name": "mole99",
+          "discriminator": "0000",
+          "nickname": "Leo Moser (mole99)",
+          "color": null,
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1423020172595298314",
+              "name": "Mod",
+              "color": null,
+              "position": 1
+            }
+          ],
+          "avatarUrl": "project-template_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1445014670330171574",
+      "type": "Default",
+      "timestamp": "2025-12-01T11:32:24.481+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "`resloved.json` in the runs folder gets confused",
+      "author": {
+        "id": "538398807986274304",
+        "name": "rzioma",
+        "discriminator": "0000",
+        "nickname": "ReJ aka Renaldas Zioma",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+      },
+      "attachments": [
+        {
+          "id": "1445014670128713770",
+          "url": "project-template_media/image-856F4.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 90640
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1445014917261557871",
+      "type": "Default",
+      "timestamp": "2025-12-01T11:33:23.354+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "My quick-and-dirty workaround is to place `STD_CELL_LIBRARY: gf180mcu_fd_sc_mcu9t5v0` in `slot_*.yaml` file instead of `config.yaml`",
+      "author": {
+        "id": "538398807986274304",
+        "name": "rzioma",
+        "discriminator": "0000",
+        "nickname": "ReJ aka Renaldas Zioma",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1445015237064396924",
+      "type": "Default",
+      "timestamp": "2025-12-01T11:34:39.601+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "But begs a question which other parameters are ignored by the flow, if they are not in the first `yaml` file passed into the librelane \ud83e\udd37\u200d\u2642\ufe0f",
+      "author": {
+        "id": "538398807986274304",
+        "name": "rzioma",
+        "discriminator": "0000",
+        "nickname": "ReJ aka Renaldas Zioma",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\ud83e\udd37",
+          "code": "person_shrugging",
+          "isAnimated": false,
+          "imageUrl": "project-template_media/1f937-19884.svg"
+        }
+      ]
+    },
+    {
+      "id": "1445017856063574056",
+      "type": "Reply",
+      "timestamp": "2025-12-01T11:45:04.019+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Very sorry about that! I think this is either a LibreLane bug, or at least strange behaviour (user config resolved too early). I'll open an issue in the LibreLane repro.\nYes, adding `STD_CELL_LIBRARY` to `slot_*.yaml` instead is a workaround.\n\nI'm suspect that only `STD_CELL_LIBRARY` is affected because it is a special variable that can be set by passing `--scl` to LibreLane. If you see other variables being overwritten, please let me know. However, I think that's unlikely.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "project-template_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "538398807986274304",
+          "name": "rzioma",
+          "discriminator": "0000",
+          "nickname": "ReJ aka Renaldas Zioma",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "project-template_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1445014108750745621",
+        "channelId": "1423348662318272592",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1445019037326381129",
+      "type": "Reply",
+      "timestamp": "2025-12-01T11:49:45.654+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I agree that it is very unlikely!",
+      "author": {
+        "id": "538398807986274304",
+        "name": "rzioma",
+        "discriminator": "0000",
+        "nickname": "ReJ aka Renaldas Zioma",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "323371864074485771",
+          "name": "mole99",
+          "discriminator": "0000",
+          "nickname": "Leo Moser (mole99)",
+          "color": null,
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1423020172595298314",
+              "name": "Mod",
+              "color": null,
+              "position": 1
+            }
+          ],
+          "avatarUrl": "project-template_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1445017856063574056",
+        "channelId": "1423348662318272592",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1445019223171797145",
+      "type": "Reply",
+      "timestamp": "2025-12-01T11:50:29.963+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Here is the issue: https://github.com/librelane/librelane/issues/827",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "project-template_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "`STD_CELL_LIBRARY` not correctly resolved \u00b7 Issue #827 \u00b7 librelan...",
+          "url": "https://github.com/librelane/librelane/issues/827",
+          "timestamp": null,
+          "description": "Description It seems that if you specify two (or more?) user configuration files to read in, STD_CELL_LIBRARY will only be considered in the first one. Scenario: Trying to override the stdcell libr...",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "project-template_media/827-DE3DE",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": [],
+          "inlineEmojis": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "538398807986274304",
+          "name": "rzioma",
+          "discriminator": "0000",
+          "nickname": "ReJ aka Renaldas Zioma",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "project-template_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1445019037326381129",
+        "channelId": "1423348662318272592",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
     }
   ],
-  "messageCount": 47
+  "messageCount": 54
 }

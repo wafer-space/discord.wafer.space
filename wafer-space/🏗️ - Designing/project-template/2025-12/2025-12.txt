@@ -1,9 +1,52 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / project-template
-After: 12/01/2025 10:10
+After: 12/01/2025 11:05
 ==============================================================
 
+[12/01/2025 11:30] rzioma
+@Leo Moser (mole99) I think including another `yaml` before `config.yaml` **broke** 9t cell support!
+
+{Attachments}
+project-template_media/image-FA1BF.png
+
+
+[12/01/2025 11:32] rzioma
+`resloved.json` in the runs folder gets confused
+
+{Attachments}
+project-template_media/image-856F4.png
+
+
+[12/01/2025 11:33] rzioma
+My quick-and-dirty workaround is to place `STD_CELL_LIBRARY: gf180mcu_fd_sc_mcu9t5v0` in `slot_*.yaml` file instead of `config.yaml`
+
+
+[12/01/2025 11:34] rzioma
+But begs a question which other parameters are ignored by the flow, if they are not in the first `yaml` file passed into the librelane 🤷‍♂️
+
+
+[12/01/2025 11:45] mole99
+Very sorry about that! I think this is either a LibreLane bug, or at least strange behaviour (user config resolved too early). I'll open an issue in the LibreLane repro.
+Yes, adding `STD_CELL_LIBRARY` to `slot_*.yaml` instead is a workaround.
+
+I'm suspect that only `STD_CELL_LIBRARY` is affected because it is a special variable that can be set by passing `--scl` to LibreLane. If you see other variables being overwritten, please let me know. However, I think that's unlikely.
+
+
+[12/01/2025 11:49] rzioma
+I agree that it is very unlikely!
+
+
+[12/01/2025 11:50] mole99
+Here is the issue: https://github.com/librelane/librelane/issues/827
+
+{Embed}
+https://github.com/librelane/librelane/issues/827
+`STD_CELL_LIBRARY` not correctly resolved · Issue #827 · librelan...
+Description It seems that if you specify two (or more?) user configuration files to read in, STD_CELL_LIBRARY will only be considered in the first one. Scenario: Trying to override the stdcell libr...
+project-template_media/827-DE3DE
+
+
 ==============================================================
-Exported 0 message(s)
+Exported 7 message(s)
 ==============================================================
