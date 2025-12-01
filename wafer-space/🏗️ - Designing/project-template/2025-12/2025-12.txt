@@ -1,43 +1,27 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / project-template
-After: 12/01/2025 15:03
+After: 12/01/2025 16:03
 ==============================================================
 
-[12/01/2025 15:20] tholin
-Alright. Finished with the RISC-V core on my multi-project die. Feature set is rv32ima_zicsr_smrnmi
+[12/01/2025 16:13] polyfractal
+hm, trying to add a logo similar to the WS logo in the corner. I used the same layers (0/0 background, 81/0 art, 152/5 foreground) but I'm getting an error:
+
+> Failed to extract PR boundary from GDSII view of macro 'gf180mcu_bt_ip__logo'. Ensure that the GDSII view has a PR boundary layer.
+
+any ideas? from checking the docs 0/0 should be the PR_bndry
 
 
-[12/01/2025 15:21] tholin
-That’s the second-to-last thing on my to-do list
+[12/01/2025 17:10] _luke_w_
+Looking into why my CTS is weird, I saw there is no max wire length defined. This is my `config.json` from the CTS pass:
 
+```
+    "CTS_CLK_MAX_WIRE_LENGTH": 0,
+```
 
-[12/01/2025 15:22] tholin
-Tomorrow I will do a final code review. Should be pretty relaxed.
-
-
-[12/01/2025 15:27] polyfractal
-https://tenor.com/view/community-chaos-chaotic-fire-gif-17636558
-
-{Embed}
-https://tenor.com/view/community-chaos-chaotic-fire-gif-17636558
-project-template_media/community-chaos-C6518.png
-
-{Reactions}
-😄 (2)
-
-[12/01/2025 15:27] polyfractal
-meanwhile over here
-
-
-[12/01/2025 15:32] tholin
-What I have here is actually almost the bare minimum you need to boot mainline Linux
-
-
-[12/01/2025 15:32] tholin
-But its missing the interrupt controller.
+Would limiting the max wire length help with the pre/post extraction differences?
 
 
 ==============================================================
-Exported 7 message(s)
+Exported 2 message(s)
 ==============================================================
