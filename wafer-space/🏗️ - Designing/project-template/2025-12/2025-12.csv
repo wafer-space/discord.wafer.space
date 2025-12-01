@@ -1,16 +1,5 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
-"323371864074485771","mole99","2025-12-01T18:52:11.0190000+00:00","If you're still getting the same error, you can send me a repo/branch so I can take a look.","",""
-"323371864074485771","mole99","2025-12-01T18:55:12.0290000+00:00","`CTS_CLK_MAX_WIRE_LENGTH` only constraints the wire from the clock input pin to the clock root buffer. So it would only shift the whole clock tree, as I understand it.","","😮 (1)"
-"323371864074485771","mole99","2025-12-01T18:56:35.9360000+00:00","Yes, there was a strange violation where a trace would be too close to one of the SRAMs.
-Just reroll the RNG dice! 😁","","😀 (1)"
-"803213471402688522","_luke_w_","2025-12-01T18:57:16.9930000+00:00","yeah I looked at the TCL and it seems to be a post-CTS repair step, doesn't do anything during CTS","","👌 (1)"
-"803213471402688522","_luke_w_","2025-12-01T18:57:37.1400000+00:00","Also the related `CTS_DISTANCE_BETWEEN_BUFFERS` seems to do nothing at all","","😮 (1)"
-"323371864074485771","mole99","2025-12-01T18:59:19.3660000+00:00","> -distance_between_buffers: Distance (in microns) between buffers that cts should use when creating the tree. When using this parameter, the clock tree algorithm is simplified and only uses a fraction of the segments from the LUT.
-
-Doesn't sound too useful? But I would have at least expected a change.","",""
-"803213471402688522","_luke_w_","2025-12-01T18:59:31.4650000+00:00","oh and `CTS_TOLERANCE` from OpenLANE was removed 😅","",""
-"803213471402688522","_luke_w_","2025-12-01T19:00:20.6710000+00:00","I have a weird long clock branch that contains my SRAM, processor register files (which have clock gates due to latches) and nothing else. I was hoping to segment the clock nets a bit more and bring the SRAMs onto the same branch as the logic","",""
-"803213471402688522","_luke_w_","2025-12-01T19:00:30.2220000+00:00","but I might stop messing with CTS for now","",""
-"840182560252624916","logic_anarchy","2025-12-01T19:01:40.8100000+00:00","When we complete the tapeout, I’ll be so happy to have my old life back.","","matt_oh_no (1),hardlol (1),😎 (1)"
-"323371864074485771","mole99","2025-12-01T19:04:00.5850000+00:00","Fighting with CTS is no fun. This place is not a place of honour.
-By the way, what does your clock tree look like before and after SPEF extraction? Is there a significant mismatch?","",""
+"384390069412429834","polyfractal","2025-12-01T19:38:52.0870000+00:00","Will do, thanks! I was looking through logs and noticed that I forgot to add it to the ignore_disconnected, flatten, etc parts of the config for logo/ID.  hoping that resolves things 🤞","","👍 (1)"
+"1187141985530818611","ravenslofty","2025-12-01T20:27:10.0640000+00:00","`Chip' - Stage 68 - Design Rule Check (KLayout) ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸━━━━━ 67/77 7:51:20`
+I am having a time of it","","🎉 (1)"
+"840182560252624916","logic_anarchy","2025-12-01T20:52:09.3500000+00:00","I’d like to learn how to produce nice like @Tholin  GDS renderings, and how to use the TinyTapeout GDS viewer with GF180MCU designs. I noticed that you’ve already integrated support for GF180, and it appears to be working. @urish @Matt Venn","",""

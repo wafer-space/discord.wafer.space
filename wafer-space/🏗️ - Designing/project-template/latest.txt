@@ -1,67 +1,26 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / project-template
-After: 12/01/2025 18:01
+After: 12/01/2025 19:16
 ==============================================================
 
-[12/01/2025 18:52] mole99
-If you're still getting the same error, you can send me a repo/branch so I can take a look.
-
-
-[12/01/2025 18:55] mole99
-`CTS_CLK_MAX_WIRE_LENGTH` only constraints the wire from the clock input pin to the clock root buffer. So it would only shift the whole clock tree, as I understand it.
+[12/01/2025 19:38] polyfractal
+Will do, thanks! I was looking through logs and noticed that I forgot to add it to the ignore_disconnected, flatten, etc parts of the config for logo/ID.  hoping that resolves things 🤞
 
 {Reactions}
-😮
+👍
 
-[12/01/2025 18:56] mole99
-Yes, there was a strange violation where a trace would be too close to one of the SRAMs.
-Just reroll the RNG dice! 😁
-
-{Reactions}
-😀
-
-[12/01/2025 18:57] _luke_w_
-yeah I looked at the TCL and it seems to be a post-CTS repair step, doesn't do anything during CTS
+[12/01/2025 20:27] ravenslofty
+`Chip' - Stage 68 - Design Rule Check (KLayout) ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸━━━━━ 67/77 7:51:20`
+I am having a time of it
 
 {Reactions}
-👌
+🎉
 
-[12/01/2025 18:57] _luke_w_
-Also the related `CTS_DISTANCE_BETWEEN_BUFFERS` seems to do nothing at all
-
-{Reactions}
-😮
-
-[12/01/2025 18:59] mole99
-> -distance_between_buffers: Distance (in microns) between buffers that cts should use when creating the tree. When using this parameter, the clock tree algorithm is simplified and only uses a fraction of the segments from the LUT.
-
-Doesn't sound too useful? But I would have at least expected a change.
-
-
-[12/01/2025 18:59] _luke_w_
-oh and `CTS_TOLERANCE` from OpenLANE was removed 😅
-
-
-[12/01/2025 19:00] _luke_w_
-I have a weird long clock branch that contains my SRAM, processor register files (which have clock gates due to latches) and nothing else. I was hoping to segment the clock nets a bit more and bring the SRAMs onto the same branch as the logic
-
-
-[12/01/2025 19:00] _luke_w_
-but I might stop messing with CTS for now
-
-
-[12/01/2025 19:01] logic_anarchy
-When we complete the tapeout, I’ll be so happy to have my old life back.
-
-{Reactions}
-matt_oh_no hardlol 😎
-
-[12/01/2025 19:04] mole99
-Fighting with CTS is no fun. This place is not a place of honour.
-By the way, what does your clock tree look like before and after SPEF extraction? Is there a significant mismatch?
+[12/01/2025 20:52] logic_anarchy
+I’d like to learn how to produce nice like @Tholin  GDS renderings, and how to use the TinyTapeout GDS viewer with GF180MCU designs. I noticed that you’ve already integrated support for GF180, and it appears to be working. @urish @Matt Venn
 
 
 ==============================================================
-Exported 11 message(s)
+Exported 3 message(s)
 ==============================================================
