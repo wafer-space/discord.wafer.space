@@ -1,94 +1,67 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / project-template
-After: 12/01/2025 17:10
+After: 12/01/2025 18:01
 ==============================================================
 
-[12/01/2025 17:13] _luke_w_
-(trying a run now with 500 um just as an experiment)
+[12/01/2025 18:52] mole99
+If you're still getting the same error, you can send me a repo/branch so I can take a look.
 
 
-[12/01/2025 17:15] polyfractal
-need to check my notes but if that's the same max_wire_length that I set, it made things much worse. I tried 50 (lol), 500 and 1000 and in all cases the design was notably worse and sometimes failed routing/congestion
-
-
-[12/01/2025 17:15] _luke_w_
-ha
-
-
-[12/01/2025 17:18] polyfractal
-ah ok, so I set `DESIGN_REPAIR_MAX_WIRE_LENGTH` in the config, not sure if that ends up being the same as the CTS setting
-
-
-[12/01/2025 17:18] polyfractal
-i assume not
-
-
-[12/01/2025 17:19] _luke_w_
-ah yeah that is something different I believe -- that is a limit on all of the datapath wires that is applied after global placement
+[12/01/2025 18:55] mole99
+`CTS_CLK_MAX_WIRE_LENGTH` only constraints the wire from the clock input pin to the clock root buffer. So it would only shift the whole clock tree, as I understand it.
 
 {Reactions}
-👍
+😮
 
-[12/01/2025 17:19] _luke_w_
-500 um is barely enough to get across an SRAM (440 um wide I believe)
-
-
-[12/01/2025 17:20] _luke_w_
-I looked at my clock tree and the first net has a routed length of over 3.5 mm which is long enough to see from space
+[12/01/2025 18:56] mole99
+Yes, there was a strange violation where a trace would be too close to one of the SRAMs.
+Just reroll the RNG dice! 😁
 
 {Reactions}
-😁 (2)
+😀
 
-[12/01/2025 17:21] polyfractal
-🤞 it works!
-
-
-[12/01/2025 17:22] polyfractal
-this last month has been the steepest learning curve of my life haha 😂
+[12/01/2025 18:57] _luke_w_
+yeah I looked at the TCL and it seems to be a post-CTS repair step, doesn't do anything during CTS
 
 {Reactions}
-🎉 (2)
+👌
 
-[12/01/2025 17:23] logic_anarchy
-same 🙂
-
-
-[12/01/2025 17:24] logic_anarchy
-ASIC design is like waging war. It is exhausting and brutal.
+[12/01/2025 18:57] _luke_w_
+Also the related `CTS_DISTANCE_BETWEEN_BUFFERS` seems to do nothing at all
 
 {Reactions}
-😂
+😮
 
-[12/01/2025 17:24] _luke_w_
-seemed to increase my clock skew by about 1.5 ns so I don't necessarily recommend this 😅
+[12/01/2025 18:59] mole99
+> -distance_between_buffers: Distance (in microns) between buffers that cts should use when creating the tree. When using this parameter, the clock tree algorithm is simplified and only uses a fraction of the segments from the LUT.
 
-{Reactions}
-😢 (2)
-
-[12/01/2025 17:28] logic_anarchy
-I had  M3.2b violations yesterday, but @Leo Moser (mole99) told me to change DENSITY from 30 to 30.1 and it is gone - lol
+Doesn't sound too useful? But I would have at least expected a change.
 
 
-[12/01/2025 17:31] logic_anarchy
-My Intel i9 PC has been crunching LibreLAN for weeks – this is going to be expensive. Electricity in Germany is among the most expensive in the world.
+[12/01/2025 18:59] _luke_w_
+oh and `CTS_TOLERANCE` from OpenLANE was removed 😅
 
 
-[12/01/2025 17:40] rzioma
+[12/01/2025 19:00] _luke_w_
+I have a weird long clock branch that contains my SRAM, processor register files (which have clock gates due to latches) and nothing else. I was hoping to segment the clock nets a bit more and bring the SRAMs onto the same branch as the logic
 
 
-{Attachments}
-project-template_media/image-47367.png
+[12/01/2025 19:00] _luke_w_
+but I might stop messing with CTS for now
 
-{Reactions}
-🎉
 
-[12/01/2025 17:42] logic_anarchy
-just do it! 🙂
+[12/01/2025 19:01] logic_anarchy
+When we complete the tapeout, I’ll be so happy to have my old life back.
 
 {Reactions}
-😅
+matt_oh_no hardlol 😎
+
+[12/01/2025 19:04] mole99
+Fighting with CTS is no fun. This place is not a place of honour.
+By the way, what does your clock tree look like before and after SPEF extraction? Is there a significant mismatch?
+
 
 ==============================================================
-Exported 17 message(s)
+Exported 11 message(s)
 ==============================================================
