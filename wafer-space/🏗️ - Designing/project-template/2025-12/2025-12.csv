@@ -1,11 +1,3 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
-"538398807986274304","rzioma","2025-12-01T11:30:10.5900000+00:00","@Leo Moser (mole99) I think including another `yaml` before `config.yaml` **broke** 9t cell support!","project-template_media/image-FA1BF.png",""
-"538398807986274304","rzioma","2025-12-01T11:32:24.4810000+00:00","`resloved.json` in the runs folder gets confused","project-template_media/image-856F4.png",""
-"538398807986274304","rzioma","2025-12-01T11:33:23.3540000+00:00","My quick-and-dirty workaround is to place `STD_CELL_LIBRARY: gf180mcu_fd_sc_mcu9t5v0` in `slot_*.yaml` file instead of `config.yaml`","",""
-"538398807986274304","rzioma","2025-12-01T11:34:39.6010000+00:00","But begs a question which other parameters are ignored by the flow, if they are not in the first `yaml` file passed into the librelane 🤷‍♂️","",""
-"323371864074485771","mole99","2025-12-01T11:45:04.0190000+00:00","Very sorry about that! I think this is either a LibreLane bug, or at least strange behaviour (user config resolved too early). I'll open an issue in the LibreLane repro.
-Yes, adding `STD_CELL_LIBRARY` to `slot_*.yaml` instead is a workaround.
-
-I'm suspect that only `STD_CELL_LIBRARY` is affected because it is a special variable that can be set by passing `--scl` to LibreLane. If you see other variables being overwritten, please let me know. However, I think that's unlikely.","",""
-"538398807986274304","rzioma","2025-12-01T11:49:45.6540000+00:00","I agree that it is very unlikely!","",""
-"323371864074485771","mole99","2025-12-01T11:50:29.9630000+00:00","Here is the issue: https://github.com/librelane/librelane/issues/827","",""
+"691780627338625077","rebelmike","2025-12-01T12:19:27.5740000+00:00","You can improve this with `SYNTH_AUTONAME: True`, however that results in very long names so you'll likely have to go up to Magic 8.3.578 or later to avoid LVS errors","",""
+"691780627338625077","rebelmike","2025-12-01T12:57:41.9080000+00:00","Thanks, this along with sorting the resets helped a fair bit!","",""
