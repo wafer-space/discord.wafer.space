@@ -1,13 +1,18 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
-"384390069412429834","polyfractal","2025-12-01T16:13:39.9980000+00:00","hm, trying to add a logo similar to the WS logo in the corner. I used the same layers (0/0 background, 81/0 art, 152/5 foreground) but I'm getting an error:
-
-> Failed to extract PR boundary from GDSII view of macro 'gf180mcu_bt_ip__logo'. Ensure that the GDSII view has a PR boundary layer.
-
-any ideas? from checking the docs 0/0 should be the PR_bndry","",""
-"803213471402688522","_luke_w_","2025-12-01T17:10:08.4080000+00:00","Looking into why my CTS is weird, I saw there is no max wire length defined. This is my `config.json` from the CTS pass:
-
-```
-    ""CTS_CLK_MAX_WIRE_LENGTH"": 0,
-```
-
-Would limiting the max wire length help with the pre/post extraction differences?","",""
+"803213471402688522","_luke_w_","2025-12-01T17:13:12.5980000+00:00","(trying a run now with 500 um just as an experiment)","",""
+"384390069412429834","polyfractal","2025-12-01T17:15:06.0830000+00:00","need to check my notes but if that's the same max_wire_length that I set, it made things much worse. I tried 50 (lol), 500 and 1000 and in all cases the design was notably worse and sometimes failed routing/congestion","",""
+"803213471402688522","_luke_w_","2025-12-01T17:15:34.9040000+00:00","ha","",""
+"384390069412429834","polyfractal","2025-12-01T17:18:30.0910000+00:00","ah ok, so I set `DESIGN_REPAIR_MAX_WIRE_LENGTH` in the config, not sure if that ends up being the same as the CTS setting","",""
+"384390069412429834","polyfractal","2025-12-01T17:18:50.2110000+00:00","i assume not","",""
+"803213471402688522","_luke_w_","2025-12-01T17:19:13.6380000+00:00","ah yeah that is something different I believe -- that is a limit on all of the datapath wires that is applied after global placement","","👍 (1)"
+"803213471402688522","_luke_w_","2025-12-01T17:19:30.5320000+00:00","500 um is barely enough to get across an SRAM (440 um wide I believe)","",""
+"803213471402688522","_luke_w_","2025-12-01T17:20:11.0170000+00:00","I looked at my clock tree and the first net has a routed length of over 3.5 mm which is long enough to see from space","","😁 (2)"
+"384390069412429834","polyfractal","2025-12-01T17:21:02.9840000+00:00","🤞 it works!","",""
+"384390069412429834","polyfractal","2025-12-01T17:22:13.7660000+00:00","this last month has been the steepest learning curve of my life haha 😂","","🎉 (2)"
+"840182560252624916","logic_anarchy","2025-12-01T17:23:43.6550000+00:00","same 🙂","",""
+"840182560252624916","logic_anarchy","2025-12-01T17:24:12.4520000+00:00","ASIC design is like waging war. It is exhausting and brutal.","","😂 (1)"
+"803213471402688522","_luke_w_","2025-12-01T17:24:27.1660000+00:00","seemed to increase my clock skew by about 1.5 ns so I don't necessarily recommend this 😅","","😢 (2)"
+"840182560252624916","logic_anarchy","2025-12-01T17:28:25.3660000+00:00","I had  M3.2b violations yesterday, but @Leo Moser (mole99) told me to change DENSITY from 30 to 30.1 and it is gone - lol","",""
+"840182560252624916","logic_anarchy","2025-12-01T17:31:59.7400000+00:00","My Intel i9 PC has been crunching LibreLAN for weeks – this is going to be expensive. Electricity in Germany is among the most expensive in the world.","",""
+"538398807986274304","rzioma","2025-12-01T17:40:22.5620000+00:00","","project-template_media/image-47367.png","🎉 (1)"
+"840182560252624916","logic_anarchy","2025-12-01T17:42:45.7690000+00:00","just do it! 🙂","","😅 (1)"

@@ -1,27 +1,94 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / project-template
-After: 12/01/2025 16:03
+After: 12/01/2025 17:10
 ==============================================================
 
-[12/01/2025 16:13] polyfractal
-hm, trying to add a logo similar to the WS logo in the corner. I used the same layers (0/0 background, 81/0 art, 152/5 foreground) but I'm getting an error:
-
-> Failed to extract PR boundary from GDSII view of macro 'gf180mcu_bt_ip__logo'. Ensure that the GDSII view has a PR boundary layer.
-
-any ideas? from checking the docs 0/0 should be the PR_bndry
+[12/01/2025 17:13] _luke_w_
+(trying a run now with 500 um just as an experiment)
 
 
-[12/01/2025 17:10] _luke_w_
-Looking into why my CTS is weird, I saw there is no max wire length defined. This is my `config.json` from the CTS pass:
+[12/01/2025 17:15] polyfractal
+need to check my notes but if that's the same max_wire_length that I set, it made things much worse. I tried 50 (lol), 500 and 1000 and in all cases the design was notably worse and sometimes failed routing/congestion
 
-```
-    "CTS_CLK_MAX_WIRE_LENGTH": 0,
-```
 
-Would limiting the max wire length help with the pre/post extraction differences?
+[12/01/2025 17:15] _luke_w_
+ha
 
+
+[12/01/2025 17:18] polyfractal
+ah ok, so I set `DESIGN_REPAIR_MAX_WIRE_LENGTH` in the config, not sure if that ends up being the same as the CTS setting
+
+
+[12/01/2025 17:18] polyfractal
+i assume not
+
+
+[12/01/2025 17:19] _luke_w_
+ah yeah that is something different I believe -- that is a limit on all of the datapath wires that is applied after global placement
+
+{Reactions}
+👍
+
+[12/01/2025 17:19] _luke_w_
+500 um is barely enough to get across an SRAM (440 um wide I believe)
+
+
+[12/01/2025 17:20] _luke_w_
+I looked at my clock tree and the first net has a routed length of over 3.5 mm which is long enough to see from space
+
+{Reactions}
+😁 (2)
+
+[12/01/2025 17:21] polyfractal
+🤞 it works!
+
+
+[12/01/2025 17:22] polyfractal
+this last month has been the steepest learning curve of my life haha 😂
+
+{Reactions}
+🎉 (2)
+
+[12/01/2025 17:23] logic_anarchy
+same 🙂
+
+
+[12/01/2025 17:24] logic_anarchy
+ASIC design is like waging war. It is exhausting and brutal.
+
+{Reactions}
+😂
+
+[12/01/2025 17:24] _luke_w_
+seemed to increase my clock skew by about 1.5 ns so I don't necessarily recommend this 😅
+
+{Reactions}
+😢 (2)
+
+[12/01/2025 17:28] logic_anarchy
+I had  M3.2b violations yesterday, but @Leo Moser (mole99) told me to change DENSITY from 30 to 30.1 and it is gone - lol
+
+
+[12/01/2025 17:31] logic_anarchy
+My Intel i9 PC has been crunching LibreLAN for weeks – this is going to be expensive. Electricity in Germany is among the most expensive in the world.
+
+
+[12/01/2025 17:40] rzioma
+
+
+{Attachments}
+project-template_media/image-47367.png
+
+{Reactions}
+🎉
+
+[12/01/2025 17:42] logic_anarchy
+just do it! 🙂
+
+{Reactions}
+😅
 
 ==============================================================
-Exported 2 message(s)
+Exported 17 message(s)
 ==============================================================
