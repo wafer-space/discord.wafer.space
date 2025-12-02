@@ -1,15 +1,93 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / project-template
-After: 12/02/2025 03:58
+After: 12/02/2025 05:11
 ==============================================================
 
-[12/02/2025 05:06] polyfractal
-ffffff DRC failures 💀 
+[12/02/2025 05:11] _luke_w_
+Nothing but zeroes 🥳
 
-time to learn how to debug...hopefully it's just the logo art I added 🤞
+{Attachments}
+project-template_media/image-5255C.png
+
+
+[12/02/2025 05:11] _luke_w_
+except for this one
+
+{Attachments}
+project-template_media/image-684F5.png
+
+
+[12/02/2025 05:14] _luke_w_
+They are all `Poly overlap of contact < 0.065um (CO.3)` in 9-track std cells
+
+
+[12/02/2025 05:43] bailey8889
+Looking at the rules in the ciel managed `gf180mcuD` pdk, 
+```
+co3_l.output('CO.3', 'CO.3 : Poly2 overlap of contact. : 0.07µm')
+```
+Does wafer.space have it's own version of the pdk?
+
+
+[12/02/2025 05:45] _luke_w_
+I think Leo might have some patches that aren't yet merged (then again that might just be LibreLane)
+
+
+[12/02/2025 05:46] _luke_w_
+ah yeah
+```
+clone-pdk: ## Clone the GF180MCU PDK repository
+    rm -rf $(MAKEFILE_DIR)/gf180mcu
+    git clone https://github.com/wafer-space/gf180mcu.git $(MAKEFILE_DIR)/gf180mcu --depth 1
+.PHONY: clone-pdk
+```
+
+
+[12/02/2025 05:47] _luke_w_
+He mentioned there is something odd about how Magic handles contact on this issue: https://github.com/wafer-space/gf180mcu-project-template/issues/34
+
+KLayout doesn't flag those cells (for that rule)
+
+{Embed}
+https://github.com/wafer-space/gf180mcu-project-template/issues/34
+9-track foundry standard cells are not clean with KLayout or Magic ...
+KLayout violations The clock gating cell icgtp_1 is flagged with the following by klayout: CO.6a : (i) Metal1 (&lt; 0.34um) end-of-line overlap contact (Applies to all &lt; 0.34µm wide metal lines,...
+project-template_media/34-BF360
+
+
+[12/02/2025 05:54] bailey8889
+Started a thread.
+
+
+[12/02/2025 05:58] polyfractal
+ok so I think my DRC issues are just the logo, looking at the final GDS it's misplaced (apparently the origin being set to lower right corner wasn't honored). A few questions:
+
+- I know KLayout can show DRC violations, but where/what file is that stored in? I'm just seeing json files in the klayout DRC directories
+- if I edit the GDS and move it over by hand, think I could restart the flow towards the end? Or will I need to go through the whole build again, fixing it in the config?
+
+{Attachments}
+project-template_media/image-7D824.png
+
+
+[12/02/2025 05:59] polyfractal
+weirdly it passed all the non-DRC steps which is why I didn't catch it. even renders out to images fine 🙁
+
+
+[12/02/2025 05:59] _luke_w_
+iirc the file you want ends with `.lyrdb`
+
+
+[12/02/2025 06:00] _luke_w_
+you can open that in klayout after opening your GDS and it will flag coordinates of the violations and which rules they violate
+
+{Reactions}
+❤️
+
+[12/02/2025 06:00] polyfractal
+_begins grepping_
 
 
 ==============================================================
-Exported 1 message(s)
+Exported 13 message(s)
 ==============================================================

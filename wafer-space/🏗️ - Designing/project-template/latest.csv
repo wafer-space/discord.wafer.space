@@ -1,4 +1,29 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
-"384390069412429834","polyfractal","2025-12-02T05:06:28.2880000+00:00","ffffff DRC failures 💀 
+"803213471402688522","_luke_w_","2025-12-02T05:11:33.7110000+00:00","Nothing but zeroes 🥳","project-template_media/image-5255C.png",""
+"803213471402688522","_luke_w_","2025-12-02T05:11:39.6130000+00:00","except for this one","project-template_media/image-684F5.png",""
+"803213471402688522","_luke_w_","2025-12-02T05:14:58.3560000+00:00","They are all `Poly overlap of contact < 0.065um (CO.3)` in 9-track std cells","",""
+"738396032295108721","bailey8889","2025-12-02T05:43:54.9210000+00:00","Looking at the rules in the ciel managed `gf180mcuD` pdk, 
+```
+co3_l.output('CO.3', 'CO.3 : Poly2 overlap of contact. : 0.07µm')
+```
+Does wafer.space have it's own version of the pdk?","",""
+"803213471402688522","_luke_w_","2025-12-02T05:45:42.8940000+00:00","I think Leo might have some patches that aren't yet merged (then again that might just be LibreLane)","",""
+"803213471402688522","_luke_w_","2025-12-02T05:46:30.8170000+00:00","ah yeah
+```
+clone-pdk: ## Clone the GF180MCU PDK repository
+    rm -rf $(MAKEFILE_DIR)/gf180mcu
+    git clone https://github.com/wafer-space/gf180mcu.git $(MAKEFILE_DIR)/gf180mcu --depth 1
+.PHONY: clone-pdk
+```","",""
+"803213471402688522","_luke_w_","2025-12-02T05:47:39.8580000+00:00","He mentioned there is something odd about how Magic handles contact on this issue: https://github.com/wafer-space/gf180mcu-project-template/issues/34
 
-time to learn how to debug...hopefully it's just the logo art I added 🤞","",""
+KLayout doesn't flag those cells (for that rule)","",""
+"738396032295108721","bailey8889","2025-12-02T05:54:26.5110000+00:00","Started a thread.","",""
+"384390069412429834","polyfractal","2025-12-02T05:58:50.2770000+00:00","ok so I think my DRC issues are just the logo, looking at the final GDS it's misplaced (apparently the origin being set to lower right corner wasn't honored). A few questions:
+
+- I know KLayout can show DRC violations, but where/what file is that stored in? I'm just seeing json files in the klayout DRC directories
+- if I edit the GDS and move it over by hand, think I could restart the flow towards the end? Or will I need to go through the whole build again, fixing it in the config?","project-template_media/image-7D824.png",""
+"384390069412429834","polyfractal","2025-12-02T05:59:26.7500000+00:00","weirdly it passed all the non-DRC steps which is why I didn't catch it. even renders out to images fine 🙁","",""
+"803213471402688522","_luke_w_","2025-12-02T05:59:57.2040000+00:00","iirc the file you want ends with `.lyrdb`","",""
+"803213471402688522","_luke_w_","2025-12-02T06:00:39.8020000+00:00","you can open that in klayout after opening your GDS and it will flag coordinates of the violations and which rules they violate","","❤️ (1)"
+"384390069412429834","polyfractal","2025-12-02T06:00:47.9680000+00:00","_begins grepping_","",""
