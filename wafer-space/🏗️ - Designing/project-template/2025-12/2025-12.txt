@@ -1,235 +1,49 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / project-template
-After: 12/02/2025 17:12
+After: 12/02/2025 18:04
 ==============================================================
 
-[12/02/2025 17:17] logic_anarchy
-I’m going to be so happy when the tape-out is done, because every time I look up here now, I flinch. It’s really like being on a carousel.
+[12/02/2025 18:08] logic_anarchy
+Then you have saved 28 mW?
 
 
-[12/02/2025 17:25] polyfractal
-yah seriously. I just know someone is going to post a "Hey make sure XYZ" and I'll realize mine is opposite but it's too late to change 💀
-
-{Reactions}
-😮
-
-[12/02/2025 17:26] polyfractal
-oh well, if it arrives totally broken at least I'll have some neat trinkets and a good learning experience 😊
-
-
-[12/02/2025 17:28] tholin
-Update: one of my artists got back to me with two PNG files and "sorry I'm late"
-I am turning my PC on again and making this happen, no matter what.
-
-
-[12/02/2025 17:29] tholin
-I have just a little bit of free space on the right of my layout
-
-
-[12/02/2025 17:29] tholin
-About to play high-stakes tetris
-
-
-[12/02/2025 17:31] _luke_w_
-yeah this is functionally fine, you just waste power by reading the RAM every cycle
-
-
-[12/02/2025 17:32] _luke_w_
-ok so that explains the inconsistency, thanks
-
-
-[12/02/2025 17:35] logic_anarchy
-which inconsistency?
-
-
-[12/02/2025 17:36] logic_anarchy
-Wasting how much power?
-
-
-[12/02/2025 17:38] _luke_w_
-like a milliwatt per RAM instance iirc
-
-
-[12/02/2025 17:39] _luke_w_
-there are some power figures in the docs though they're not particularly illuminating
-
-
-[12/02/2025 17:39] _luke_w_
-The fact the RAM model worked for other people and fell on its ass for me. It sounds like I'm the only person deasserting chip select when I don't intend to read the RAM.
-
-
-[12/02/2025 17:45] _luke_w_
-> but that introduced at least one extra clock cycle for it to turn back on
-I don't understand this part. CEN is aligned with the address
-
-
-[12/02/2025 17:47] polyfractal
-honestly no idea. I added a second bank of memory at some point, and noticed that I was throwing away a read each cycle. Checked the docs and saw that I could probably use CEN de-activate unused memory but then tests started failing because the second bank wasn't active when it was needed.
-
-had bigger issues to deal with so went back to just perma-enabled 🙂
-
-
-[12/02/2025 17:48] polyfractal
-from a quick skim of the waveforms it looked like it was just one cycle behind but didn't investigate much
-
-
-[12/02/2025 17:48] _luke_w_
-you might have hit the bug in the RAM model
-
-
-[12/02/2025 17:49] polyfractal
-aha! would make sense given the issues you've run into as well. I just assumed it took the memory an extra cycle to power back up or something 😅
-
-
-[12/02/2025 17:49] _luke_w_
-This is the behavioural RAM model I've been using for most of my sims:
-
-```verilog
-reg [WIDTH-1:0] mem [0:DEPTH-1];
-
-reg [WIDTH-1:0] rdata_q;
-assign rdata = rdata_q;
-always @ (posedge clk) begin: update
-    integer i;
-    if (!cs_n && we_n) begin
-        rdata_q <= mem[addr];
-    end
-    if (!cs_n && !we_n) begin
-        for (i = 0; i < WIDTH / 8; i = i + 1) begin
-            if (!be_n[i]) begin
-                mem[addr][i * 8 +: 8] <= wdata[i * 8 +: 8];
-            end
-        end    
-    end
-end
-```
-
-
-[12/02/2025 17:50] _luke_w_
-basically all inputs are sampled together on the posedge and rdata is valid some time in the next cycle. Pretty much all synchronous SRAMs look like this
-
-
-[12/02/2025 17:51] _luke_w_
-it matches up with the transition table in the RAM docs as well, and matches up with their model if you ignore all the weird behavioural delay stuff they've hacked in
-
-
-[12/02/2025 17:51] _luke_w_
-also the fact that read data stays valid if you don't do another read is handy and I exploit it in one place
-
-
-[12/02/2025 17:51] polyfractal
-you'd think a model provided by the foundry would be correct 😭   as a complete outsider to the industry, i'm kinda horrified what passes as normal (from the little bit I've peeked behind the curtain)
-
-
-[12/02/2025 17:52] _luke_w_
-it's not normal
-
-{Reactions}
-🫠
-
-[12/02/2025 17:52] polyfractal
-especially for such an old node!
-
-
-[12/02/2025 17:53] _luke_w_
-we simulate RTL against vendor RAM models all the time and it's fine because the functional behaviour is described synchronously (maybe with a delay on the read data), and then they add timing checks which you can disable for behavioural sims where there are no delays
-
-
-[12/02/2025 17:53] _luke_w_
-these models are just kinda hacky
-
-
-[12/02/2025 17:53] polyfractal
-welp
-
-
-[12/02/2025 17:54] _luke_w_
-but yes it is true the ASIC industry is much messier than people think
-
-
-[12/02/2025 17:54] _luke_w_
-lots of people who are actually software engineers and just don't want to admit it
-
-
-[12/02/2025 17:54] polyfractal
-maybe they just threw it together as a low priority intern project, since they knew it was part of the original open sourcing efforts?
-
-
-[12/02/2025 17:54] logic_anarchy
-Can I leave it as it is? @LukeW
-
-
-[12/02/2025 17:55] _luke_w_
-yes
-
-{Reactions}
-❤️
-
-[12/02/2025 17:55] _luke_w_
-I did wonder but the model is from 2014:
-
-```
- * Project:             018 5VGREEN SRAM
- * Author:              GlobalFoundries PDK Authors
- * Data Created:        05-06-2014
- * Revision:        0.0
-```
-
-{Reactions}
-😮
-
-[12/02/2025 17:56] logic_anarchy
-When you enable CEN, do you have to wait another clock cycle?
-
-
-[12/02/2025 17:56] _luke_w_
-I wouldn't change your design now given there are issues with the RAM models. What you have should work
-
-
-[12/02/2025 17:56] _luke_w_
-but no, `!CEN && GWEN` is a read enable which is aligned with the address. If that function is true on cycle _n_ then new read data is valid on Q on cycle _n_ + 1
-
-
-[12/02/2025 17:57] _luke_w_
-
+[12/02/2025 18:25] _luke_w_
+That's worst case at 1 MHz
 
 {Attachments}
-project-template_media/image-6077D.png
+project-template_media/image-23A10.png
 
 
-[12/02/2025 17:58] logic_anarchy
-When you have caches and a pipelined CPU, should the CEN signal always be low, since the CPU is doing work every cycle anyway?
+[12/02/2025 18:35] logic_anarchy
+k
 
 
-[12/02/2025 17:58] _luke_w_
-are you issuing a load/store to your D cache every cycle?
+[12/02/2025 19:02] _luke_w_
+For anyone else who needs it
+
+```makefile
+librelane-yolo: ## Run full flow, including DRC, but don't quit after DRC errors
+    librelane librelane/config.yaml --pdk ${PDK} --pdk-root ${PDK_ROOT} --manual-pdk --skip Checker.MagicDRC --skip Checker.KLayoutDRC
+.PHONY: librelane-yolo
+```
+
+{Reactions}
+👍
+
+[12/02/2025 19:05] mole99
+And if you want to add it to your config:
+
+```yaml
+QUIT_ON_MAGIC_DRC: False
+QUIT_ON_KLAYOUT_DRC: False
+```
 
 
-[12/02/2025 17:58] logic_anarchy
-I$ and D$
-
-
-[12/02/2025 17:58] _luke_w_
-are you fetching instructions from your I cache when you're stalled on a `div` or `rem`?
-
-
-[12/02/2025 17:59] logic_anarchy
-Out of order, superscalar 🙂
-
-
-[12/02/2025 18:00] _luke_w_
-Your icache will still stall -- you normally overprovision icache bandwidth so you can catch up after a flush. Anyway no, it is not normal for production designs to enable RAMs when they don't intend to read or write them.
-
-
-[12/02/2025 18:02] logic_anarchy
-Got it
-
-
-[12/02/2025 18:02] logic_anarchy
-Every stall counts
+[12/02/2025 19:07] _luke_w_
+ooh nice
 
 
 ==============================================================
-Exported 46 message(s)
+Exported 6 message(s)
 ==============================================================

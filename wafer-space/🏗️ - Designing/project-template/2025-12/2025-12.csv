@@ -1,78 +1,18 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
-"840182560252624916","logic_anarchy","2025-12-02T17:17:08.1320000+00:00","I’m going to be so happy when the tape-out is done, because every time I look up here now, I flinch. It’s really like being on a carousel.","",""
-"384390069412429834","polyfractal","2025-12-02T17:25:33.4500000+00:00","yah seriously. I just know someone is going to post a ""Hey make sure XYZ"" and I'll realize mine is opposite but it's too late to change 💀","","😮 (1)"
-"384390069412429834","polyfractal","2025-12-02T17:26:28.6050000+00:00","oh well, if it arrives totally broken at least I'll have some neat trinkets and a good learning experience 😊","",""
-"220639106915368960","tholin","2025-12-02T17:28:53.2360000+00:00","Update: one of my artists got back to me with two PNG files and ""sorry I'm late""
-I am turning my PC on again and making this happen, no matter what.","",""
-"220639106915368960","tholin","2025-12-02T17:29:20.0800000+00:00","I have just a little bit of free space on the right of my layout","",""
-"220639106915368960","tholin","2025-12-02T17:29:37.2850000+00:00","About to play high-stakes tetris","",""
-"803213471402688522","_luke_w_","2025-12-02T17:31:55.4680000+00:00","yeah this is functionally fine, you just waste power by reading the RAM every cycle","",""
-"803213471402688522","_luke_w_","2025-12-02T17:32:57.2440000+00:00","ok so that explains the inconsistency, thanks","",""
-"840182560252624916","logic_anarchy","2025-12-02T17:35:20.4300000+00:00","which inconsistency?","",""
-"840182560252624916","logic_anarchy","2025-12-02T17:36:47.1900000+00:00","Wasting how much power?","",""
-"803213471402688522","_luke_w_","2025-12-02T17:38:54.2810000+00:00","like a milliwatt per RAM instance iirc","",""
-"803213471402688522","_luke_w_","2025-12-02T17:39:07.5550000+00:00","there are some power figures in the docs though they're not particularly illuminating","",""
-"803213471402688522","_luke_w_","2025-12-02T17:39:39.9950000+00:00","The fact the RAM model worked for other people and fell on its ass for me. It sounds like I'm the only person deasserting chip select when I don't intend to read the RAM.","",""
-"803213471402688522","_luke_w_","2025-12-02T17:45:30.4000000+00:00","> but that introduced at least one extra clock cycle for it to turn back on
-I don't understand this part. CEN is aligned with the address","",""
-"384390069412429834","polyfractal","2025-12-02T17:47:50.4020000+00:00","honestly no idea. I added a second bank of memory at some point, and noticed that I was throwing away a read each cycle. Checked the docs and saw that I could probably use CEN de-activate unused memory but then tests started failing because the second bank wasn't active when it was needed.
+"840182560252624916","logic_anarchy","2025-12-02T18:08:11.5790000+00:00","Then you have saved 28 mW?","",""
+"803213471402688522","_luke_w_","2025-12-02T18:25:07.1480000+00:00","That's worst case at 1 MHz","project-template_media/image-23A10.png",""
+"840182560252624916","logic_anarchy","2025-12-02T18:35:41.5240000+00:00","k","",""
+"803213471402688522","_luke_w_","2025-12-02T19:02:54.1430000+00:00","For anyone else who needs it
 
-had bigger issues to deal with so went back to just perma-enabled 🙂","",""
-"384390069412429834","polyfractal","2025-12-02T17:48:17.6380000+00:00","from a quick skim of the waveforms it looked like it was just one cycle behind but didn't investigate much","",""
-"803213471402688522","_luke_w_","2025-12-02T17:48:28.0850000+00:00","you might have hit the bug in the RAM model","",""
-"384390069412429834","polyfractal","2025-12-02T17:49:03.0470000+00:00","aha! would make sense given the issues you've run into as well. I just assumed it took the memory an extra cycle to power back up or something 😅","",""
-"803213471402688522","_luke_w_","2025-12-02T17:49:04.1670000+00:00","This is the behavioural RAM model I've been using for most of my sims:
+```makefile
+librelane-yolo: ## Run full flow, including DRC, but don't quit after DRC errors
+    librelane librelane/config.yaml --pdk ${PDK} --pdk-root ${PDK_ROOT} --manual-pdk --skip Checker.MagicDRC --skip Checker.KLayoutDRC
+.PHONY: librelane-yolo
+```","","👍 (1)"
+"323371864074485771","mole99","2025-12-02T19:05:02.7370000+00:00","And if you want to add it to your config:
 
-```verilog
-reg [WIDTH-1:0] mem [0:DEPTH-1];
-
-reg [WIDTH-1:0] rdata_q;
-assign rdata = rdata_q;
-always @ (posedge clk) begin: update
-    integer i;
-    if (!cs_n && we_n) begin
-        rdata_q <= mem[addr];
-    end
-    if (!cs_n && !we_n) begin
-        for (i = 0; i < WIDTH / 8; i = i + 1) begin
-            if (!be_n[i]) begin
-                mem[addr][i * 8 +: 8] <= wdata[i * 8 +: 8];
-            end
-        end    
-    end
-end
+```yaml
+QUIT_ON_MAGIC_DRC: False
+QUIT_ON_KLAYOUT_DRC: False
 ```","",""
-"803213471402688522","_luke_w_","2025-12-02T17:50:01.6770000+00:00","basically all inputs are sampled together on the posedge and rdata is valid some time in the next cycle. Pretty much all synchronous SRAMs look like this","",""
-"803213471402688522","_luke_w_","2025-12-02T17:51:04.7380000+00:00","it matches up with the transition table in the RAM docs as well, and matches up with their model if you ignore all the weird behavioural delay stuff they've hacked in","",""
-"803213471402688522","_luke_w_","2025-12-02T17:51:47.5740000+00:00","also the fact that read data stays valid if you don't do another read is handy and I exploit it in one place","",""
-"384390069412429834","polyfractal","2025-12-02T17:51:53.5370000+00:00","you'd think a model provided by the foundry would be correct 😭   as a complete outsider to the industry, i'm kinda horrified what passes as normal (from the little bit I've peeked behind the curtain)","",""
-"803213471402688522","_luke_w_","2025-12-02T17:52:07.7060000+00:00","it's not normal","","🫠 (1)"
-"384390069412429834","polyfractal","2025-12-02T17:52:10.3200000+00:00","especially for such an old node!","",""
-"803213471402688522","_luke_w_","2025-12-02T17:53:20.5980000+00:00","we simulate RTL against vendor RAM models all the time and it's fine because the functional behaviour is described synchronously (maybe with a delay on the read data), and then they add timing checks which you can disable for behavioural sims where there are no delays","",""
-"803213471402688522","_luke_w_","2025-12-02T17:53:33.8290000+00:00","these models are just kinda hacky","",""
-"384390069412429834","polyfractal","2025-12-02T17:53:43.1310000+00:00","welp","",""
-"803213471402688522","_luke_w_","2025-12-02T17:54:04.7850000+00:00","but yes it is true the ASIC industry is much messier than people think","",""
-"803213471402688522","_luke_w_","2025-12-02T17:54:16.5020000+00:00","lots of people who are actually software engineers and just don't want to admit it","",""
-"384390069412429834","polyfractal","2025-12-02T17:54:24.4670000+00:00","maybe they just threw it together as a low priority intern project, since they knew it was part of the original open sourcing efforts?","",""
-"840182560252624916","logic_anarchy","2025-12-02T17:54:51.0350000+00:00","Can I leave it as it is? @LukeW","",""
-"803213471402688522","_luke_w_","2025-12-02T17:55:05.6960000+00:00","yes","","❤️ (1)"
-"803213471402688522","_luke_w_","2025-12-02T17:55:42.5930000+00:00","I did wonder but the model is from 2014:
-
-```
- * Project:             018 5VGREEN SRAM
- * Author:              GlobalFoundries PDK Authors
- * Data Created:        05-06-2014
- * Revision:        0.0
-```","","😮 (1)"
-"840182560252624916","logic_anarchy","2025-12-02T17:56:01.3270000+00:00","When you enable CEN, do you have to wait another clock cycle?","",""
-"803213471402688522","_luke_w_","2025-12-02T17:56:24.3720000+00:00","I wouldn't change your design now given there are issues with the RAM models. What you have should work","",""
-"803213471402688522","_luke_w_","2025-12-02T17:56:59.3640000+00:00","but no, `!CEN && GWEN` is a read enable which is aligned with the address. If that function is true on cycle _n_ then new read data is valid on Q on cycle _n_ + 1","",""
-"803213471402688522","_luke_w_","2025-12-02T17:57:23.3090000+00:00","","project-template_media/image-6077D.png",""
-"840182560252624916","logic_anarchy","2025-12-02T17:58:02.4390000+00:00","When you have caches and a pipelined CPU, should the CEN signal always be low, since the CPU is doing work every cycle anyway?","",""
-"803213471402688522","_luke_w_","2025-12-02T17:58:21.9540000+00:00","are you issuing a load/store to your D cache every cycle?","",""
-"840182560252624916","logic_anarchy","2025-12-02T17:58:34.6970000+00:00","I$ and D$","",""
-"803213471402688522","_luke_w_","2025-12-02T17:58:47.0790000+00:00","are you fetching instructions from your I cache when you're stalled on a `div` or `rem`?","",""
-"840182560252624916","logic_anarchy","2025-12-02T17:59:24.9600000+00:00","Out of order, superscalar 🙂","",""
-"803213471402688522","_luke_w_","2025-12-02T18:00:43.0790000+00:00","Your icache will still stall -- you normally overprovision icache bandwidth so you can catch up after a flush. Anyway no, it is not normal for production designs to enable RAMs when they don't intend to read or write them.","",""
-"840182560252624916","logic_anarchy","2025-12-02T18:02:34.0130000+00:00","Got it","",""
-"840182560252624916","logic_anarchy","2025-12-02T18:02:55.9720000+00:00","Every stall counts","",""
+"803213471402688522","_luke_w_","2025-12-02T19:07:44.6800000+00:00","ooh nice","",""
