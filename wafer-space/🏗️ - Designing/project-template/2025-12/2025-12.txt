@@ -1,93 +1,127 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / project-template
-After: 12/02/2025 05:11
+After: 12/02/2025 06:01
 ==============================================================
 
-[12/02/2025 05:11] _luke_w_
-Nothing but zeroes 🥳
+[12/02/2025 06:02] polyfractal
+aha
+
+> ./63-klayout-density/reports/density.klayout.lyrdb
+> ./66-klayout-drc/reports/drc.klayout.lyrdb
+
+
+[12/02/2025 06:02] polyfractal
+hiding in reports 🙂
+
+
+[12/02/2025 06:02] _luke_w_
+yeah you want the second one
+
+
+[12/02/2025 06:03] _luke_w_
+it's a bit confusing because the directory with the report is not from the step whose job it is to raise errors when you have DRCs (`checker-klayoutdrc`)
+
+
+[12/02/2025 06:03] polyfractal
+yeah that is confusing for sure
+
+
+[12/02/2025 06:03] polyfractal
+oh happy days, it's all just this stupid logo art 😅
 
 {Attachments}
-project-template_media/image-5255C.png
+project-template_media/image-D49F4.png
+
+{Reactions}
+👍
+
+[12/02/2025 06:04] polyfractal
+reckon I can fix by hand and then start the run from somewhere towards the end? maybe like 57-magic-streamout?
 
 
-[12/02/2025 05:11] _luke_w_
-except for this one
-
-{Attachments}
-project-template_media/image-684F5.png
+[12/02/2025 06:06] mole99
+If you use my script and Makefile to generate the layout for the logo, there's also a make target to run DRC on the logo itself. Once that is clean you can continue with the integration.
 
 
-[12/02/2025 05:14] _luke_w_
-They are all `Poly overlap of contact < 0.065um (CO.3)` in 9-track std cells
+[12/02/2025 06:06] _luke_w_
+it's possible in theory, if you copy your `librelane` Makefile target and add `--last-run --from KLayout.DRC` or some  such. I never got the re-runs to work though
 
 
-[12/02/2025 05:43] bailey8889
-Looking at the rules in the ciel managed `gf180mcuD` pdk, 
-```
-co3_l.output('CO.3', 'CO.3 : Poly2 overlap of contact. : 0.07µm')
-```
-Does wafer.space have it's own version of the pdk?
+[12/02/2025 06:06] _luke_w_
+ah, ignore me and  listen to the expert
 
 
-[12/02/2025 05:45] _luke_w_
-I think Leo might have some patches that aren't yet merged (then again that might just be LibreLane)
+[12/02/2025 06:07] mole99
+No, that's right 😄 
+But you also need to pass the initial state.
 
 
-[12/02/2025 05:46] _luke_w_
-ah yeah
-```
-clone-pdk: ## Clone the GF180MCU PDK repository
-    rm -rf $(MAKEFILE_DIR)/gf180mcu
-    git clone https://github.com/wafer-space/gf180mcu.git $(MAKEFILE_DIR)/gf180mcu --depth 1
-.PHONY: clone-pdk
-```
+[12/02/2025 06:08] mole99
+`--with-initial-state` should point to the input state of e.g. Klayout DRC.
 
 
-[12/02/2025 05:47] _luke_w_
-He mentioned there is something odd about how Magic handles contact on this issue: https://github.com/wafer-space/gf180mcu-project-template/issues/34
+[12/02/2025 06:08] polyfractal
+ah, well I made the logo using my own jank script and then just copied the layout/structure of the WS logo. 🙁  probably easiest to just redo the whole thing, the DRC is the timesuck anyway and that cant be avoided
 
-KLayout doesn't flag those cells (for that rule)
+
+[12/02/2025 06:08] mole99
+However, to see the changes of your macro, you would need to start the flow from the StreamOut step.
+
+
+[12/02/2025 06:09] mole99
+If you need more logo examples, I added two more in my design here: https://github.com/mole99/gf180mcu-fabulous-fpga
 
 {Embed}
-https://github.com/wafer-space/gf180mcu-project-template/issues/34
-9-track foundry standard cells are not clean with KLayout or Magic ...
-KLayout violations The clock gating cell icgtp_1 is flagged with the following by klayout: CO.6a : (i) Metal1 (&lt; 0.34um) end-of-line overlap contact (Applies to all &lt; 0.34µm wide metal lines,...
-project-template_media/34-BF360
+https://github.com/mole99/gf180mcu-fabulous-fpga
+GitHub - mole99/gf180mcu-fabulous-fpga
+Contribute to mole99/gf180mcu-fabulous-fpga development by creating an account on GitHub.
+project-template_media/gf180mcu-fabulous-fpga-FC31E
 
 
-[12/02/2025 05:54] bailey8889
+[12/02/2025 06:09] bailey8889
+@BreakingTaps I seen strange placements due to cells not having a bounding box when the lef is created from magic.
+
+If you created the logo in magic, then I recommend loading the logo, setting the bounding box with
+```
+select top cell
+property FIXED_BBOX [box values]
+lef write <lef_file> -hide
+```
+
+Before that, you could load the lef in klayout to see if the coordinates match the gds. If they don't, then you might try the above solution.
+
+
+[12/02/2025 06:10] polyfractal
+will check, thanks for the tip!
+
+{Reactions}
+👍
+
+[12/02/2025 06:12] polyfractal
+coordinates do appear to be correct (lower right) in klayout
+
+
+[12/02/2025 06:17] polyfractal
+ah, ok I think I see. since I just manually created all the extra stuff (lef, vh, etc) I neglected to see that the lef file specifies an origin too
+
+
+[12/02/2025 06:28] polyfractal
+aaand restarted...hopefully I did that right otherwise it would have been best to start all the way over 😅
+
+
+[12/02/2025 06:29] polyfractal
+shame DRC is single-threaded, seems like it'd be low hanging fruit to run in parallel? I assume each rule is independent of the others?
+
+
+[12/02/2025 06:34] polyfractal
+(i'm also assuming the DRC engine is ruby inside of KLayout but maybe a bad assumption 🙂 )
+
+
+[12/02/2025 06:43] urish
 Started a thread.
 
 
-[12/02/2025 05:58] polyfractal
-ok so I think my DRC issues are just the logo, looking at the final GDS it's misplaced (apparently the origin being set to lower right corner wasn't honored). A few questions:
-
-- I know KLayout can show DRC violations, but where/what file is that stored in? I'm just seeing json files in the klayout DRC directories
-- if I edit the GDS and move it over by hand, think I could restart the flow towards the end? Or will I need to go through the whole build again, fixing it in the config?
-
-{Attachments}
-project-template_media/image-7D824.png
-
-
-[12/02/2025 05:59] polyfractal
-weirdly it passed all the non-DRC steps which is why I didn't catch it. even renders out to images fine 🙁
-
-
-[12/02/2025 05:59] _luke_w_
-iirc the file you want ends with `.lyrdb`
-
-
-[12/02/2025 06:00] _luke_w_
-you can open that in klayout after opening your GDS and it will flag coordinates of the violations and which rules they violate
-
-{Reactions}
-❤️
-
-[12/02/2025 06:00] polyfractal
-_begins grepping_
-
-
 ==============================================================
-Exported 13 message(s)
+Exported 23 message(s)
 ==============================================================
