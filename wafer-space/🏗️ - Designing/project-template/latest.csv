@@ -1,5 +1,13 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
-"840182560252624916","logic_anarchy","2025-12-02T15:06:36.0650000+00:00","What topology does your chain have?","",""
-"1187141985530818611","ravenslofty","2025-12-02T15:35:32.9040000+00:00","it's not a chain","",""
-"840182560252624916","logic_anarchy","2025-12-02T16:02:46.6240000+00:00","I assumed to avoid  a big shift register split into multiple chains. Is that correct?","",""
-"1187141985530818611","ravenslofty","2025-12-02T16:04:55.7370000+00:00","Luke's design has no scan chains. use of scan flops does not imply a scan chain","",""
+"840182560252624916","logic_anarchy","2025-12-02T16:09:28.7450000+00:00","Is it just to reduce logic like muxes and so on?","",""
+"1187141985530818611","ravenslofty","2025-12-02T16:09:44.4540000+00:00","yes, by using scan flops which have that mux merged into the cell.","","👍🏻 (1)"
+"840182560252624916","logic_anarchy","2025-12-02T16:10:48.2030000+00:00","I appreciate the clarification.","",""
+"803213471402688522","_luke_w_","2025-12-02T16:35:04.0350000+00:00","Following up on the RAM issues I mentioned a few days back: https://github.com/wafer-space/gf180mcu-project-template/issues/38
+
+Am I correct that other RAM enjoyers have their chip selects permanently asserted post startup? That might explain why only I am seeing these issues.","",""
+"840182560252624916","logic_anarchy","2025-12-02T17:11:28.3370000+00:00","","project-template_media/image-1-759E0.png",""
+"840182560252624916","logic_anarchy","2025-12-02T17:11:41.2810000+00:00","Is that okay?","",""
+"384390069412429834","polyfractal","2025-12-02T17:12:16.8830000+00:00","I have mine tied to reset. So it's high for the first cycle/holding down reset, and then permanently low after that.
+
+I did play with enabling/disabling to save power when banks aren't being used, but that introduced at least one extra clock cycle for it to turn back on and was too much hassle to deal with so late in my project","",""
+"384390069412429834","polyfractal","2025-12-02T17:12:34.1390000+00:00","(well not specifically the reset pin, but the reset logic)","",""
