@@ -5,16 +5,48 @@ Topic: Welcome to [wafer.space](https://wafer.space/) -
 documentation at [wafer.space github](https://github.com/wafer-space) - 
 buy at [buy.wafer.space](https://buy.wafer.space) - 
 archives at [discord.wafer.space](https://discord.wafer.space/)
-After: 12/03/2025 19:21
+After: 12/03/2025 20:29
 ==============================================================
 
-[12/03/2025 19:55] tholin
-What do I even do when this happens? What config changes can I make?
+[12/03/2025 20:40] 246tnt
+Supposedly OpenROAD now supports resolving antenna violation using higer layer strapping but I didn't search yet how to do that / configure it / ...
+
+
+[12/03/2025 20:40] 246tnt
+That's on my todo for tomorrow.
+
+
+[12/03/2025 20:47] bailey8889
+@Tholin @tnt Does your design use macros? 
+
+These are just guesses. It would be nice to know if anything made a difference.
+
+If it does, you might try the `DIODE_ON_PORTS` parameter. 
+
+If those are fanout related, make sure `DESIGN_REPAIR_TIE_FANOUT` is set to true.
+
+Maybe adjust the `DESIGN_REPAIR_MAX_CAP_PCT` setting. Maybe counter-intuitive, but a higher setting may decrease the ratio by increasing the gate area. On the other hand, a lower setting may, decrease the wiring area.
+
+
+[12/03/2025 20:49] bailey8889
+or https://discord.com/channels/1361349522684510449/1445797038863155381/1445868913744150660
+
+
+[12/03/2025 20:57] 246tnt
+@bailey I have diodes on all input ports of my macro. The violations are on wires going to the IO pads because the IO pads input don't have diodes I guess.
+
+
+[12/03/2025 21:05] bailey8889
+There's a setting for `both` for `DIODE_ON_PORTS`. Does that make a difference/something you want?
+
+
+[12/03/2025 21:13] tholin
+All my config changes make it worse. How am I expected to get 0 violations here?
 
 {Attachments}
-general_media/image-078B0.png
+general_media/image-0FF89.png
 
 
 ==============================================================
-Exported 1 message(s)
+Exported 7 message(s)
 ==============================================================
