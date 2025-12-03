@@ -1,4 +1,20 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
-"169786952432746498","mithro_","2025-12-03T05:33:15.3910000+00:00","14.5kB isn't too bad...","",""
-"169786952432746498","mithro_","2025-12-03T05:35:51.6110000+00:00","@LukeW - Well, if you have some spare time then, want to do some 1x0.5 and/or 0.5x1 projects which might work with your external RAM interface?","",""
-"732347216412278825","urish","2025-12-03T06:00:45.7390000+00:00","Awesome graphics! Well done 🙂","",""
+"803213471402688522","_luke_w_","2025-12-03T06:35:31.4790000+00:00","```c
+/*******************************************************************************
+*                                 SRAM_CHICKEN                                 *
+*******************************************************************************/
+
+// The foundry SRAM models return incorrect data if chip select transitions on a
+// clock edge. 99% sure this is just an issue with the model, but just in case,
+// this register forces all SRAMs to be permanently enabled. You should clear
+// this bit to avoid wasting power.
+
+// Field: SRAM_CHICKEN  Access: RW
+// Reset: 0x1
+#define SYSCFG_SRAM_CHICKEN_LSB  0
+#define SYSCFG_SRAM_CHICKEN_BITS 1
+#define SYSCFG_SRAM_CHICKEN_MASK 0x1
+```
+
+I can simulate with the unmodified foundry models now. When I get chips back I'll find out whether that was necessary.","","👍 (1)"
+"803213471402688522","_luke_w_","2025-12-03T06:36:26.4150000+00:00","Sorry, not this tapeout 😅  I'm going to keep testing up until the last minute","",""

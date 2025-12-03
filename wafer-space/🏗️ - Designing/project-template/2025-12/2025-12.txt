@@ -1,21 +1,36 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / project-template
-After: 12/03/2025 05:10
+After: 12/03/2025 06:02
 ==============================================================
 
-[12/03/2025 05:33] mithro_
-14.5kB isn't too bad...
+[12/03/2025 06:35] _luke_w_
+```c
+/*******************************************************************************
+*                                 SRAM_CHICKEN                                 *
+*******************************************************************************/
 
+// The foundry SRAM models return incorrect data if chip select transitions on a
+// clock edge. 99% sure this is just an issue with the model, but just in case,
+// this register forces all SRAMs to be permanently enabled. You should clear
+// this bit to avoid wasting power.
 
-[12/03/2025 05:35] mithro_
-@LukeW - Well, if you have some spare time then, want to do some 1x0.5 and/or 0.5x1 projects which might work with your external RAM interface?
+// Field: SRAM_CHICKEN  Access: RW
+// Reset: 0x1
+#define SYSCFG_SRAM_CHICKEN_LSB  0
+#define SYSCFG_SRAM_CHICKEN_BITS 1
+#define SYSCFG_SRAM_CHICKEN_MASK 0x1
+```
 
+I can simulate with the unmodified foundry models now. When I get chips back I'll find out whether that was necessary.
 
-[12/03/2025 06:00] urish
-Awesome graphics! Well done 🙂
+{Reactions}
+👍
+
+[12/03/2025 06:36] _luke_w_
+Sorry, not this tapeout 😅  I'm going to keep testing up until the last minute
 
 
 ==============================================================
-Exported 3 message(s)
+Exported 2 message(s)
 ==============================================================
