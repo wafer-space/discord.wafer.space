@@ -1,33 +1,4 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
-"220639106915368960","tholin","2025-12-03T23:27:20.6080000+00:00","Unfortunately, I will now be busy fixing antenna violations in almost all of my designs.","",""
-"220639106915368960","tholin","2025-12-03T23:27:34.0460000+00:00","All but like one or two of them have at least one violation.","",""
-"220639106915368960","tholin","2025-12-03T23:32:43.4550000+00:00","Even the multiplexer!","",""
-"220639106915368960","tholin","2025-12-03T23:36:51.2560000+00:00","This fixes the antenna violations but generates LVS errors.","",""
-"220639106915368960","tholin","2025-12-03T23:41:02.1920000+00:00","Ah, because the config lines you showed me add the diodes *after* detailed routing. I guess its supposed to be before?","",""
-"169786952432746498","mithro_","2025-12-03T23:41:40.7460000+00:00","I don't really know anything, I just forward messages between people 😛","",""
-"220639106915368960","tholin","2025-12-03T23:42:13.6710000+00:00","I am trying
-```
-  substituting_steps:
-    +OpenROAD.RepairAntennas: Odb.InsertECODiodes
-```
-and I’ll report back in ~30 minutes","",""
-"1187141985530818611","ravenslofty","2025-12-03T23:42:30.3680000+00:00","So, platform.wafer.space says it supports Google Drive, but I attach a google drive link and it reports `Security validation failed: URL validation failed: Invalid file size: 0 bytes `","",""
-"1187141985530818611","ravenslofty","2025-12-03T23:43:17.1700000+00:00","uh, I think you might need to run `OpenROAD.DetailedRouting` after that","",""
-"169786952432746498","mithro_","2025-12-03T23:46:42.1110000+00:00","Can you create a GitHub Issue about that?","",""
-"220639106915368960","tholin","2025-12-04T00:19:26.1800000+00:00","Stuck","general_media/image-D5987.png",""
-"1187141985530818611","ravenslofty","2025-12-04T00:20:14.6830000+00:00","I suspect when mine comes around I might end up holding everyone else up >.>","",""
-"220639106915368960","tholin","2025-12-04T01:18:27.3510000+00:00","Got another fun one. If you run the flow on this with its exact config, it’ll fail GLP with `[GPL-0305] RePlAce diverged during gradient descent calculating, resulting in an invalid step length (inf or NaN).` but if the max fanout constraint in the config is changed from 7 to 6, it passes (before failing due to routing congestion).
-Maybe also a fun benchmark case.","general_media/example.tar-E5614.gz",""
-"805909190333038612","trev5514","2025-12-04T01:21:49.4380000+00:00","A month ago I was trying different fanout constraints and it caused so many headaches with that exact error message. I went back to the standard and didn't have any issues since then.","",""
-"169786952432746498","mithro_","2025-12-04T01:22:57.9580000+00:00","I'm pretty sure that should be a bug reported upstream.","",""
-"805909190333038612","trev5514","2025-12-04T01:24:45.0650000+00:00","@Tim 'mithro' Ansell My last gds run on the test-platform.wafer.space website stalled after 3 hours. The same design ran on my computer for over 8 hours and didn't finish. Does the platform.wafer.space have longer run capability?","",""
-"805909190333038612","trev5514","2025-12-04T01:28:42.7090000+00:00","I believe I reported to the project template, in hindsight I believe it's an upstream issue.
-
- https://github.com/wafer-space/gf180mcu-project-template/issues/5","",""
-"169786952432746498","mithro_","2025-12-04T01:35:26.6720000+00:00","I see some people have prechecks running at the +12 hours","","👍 (1)"
-"169786952432746498","mithro_","2025-12-04T01:38:13.8820000+00:00","","general_media/image-5DAE1.png",""
-"220639106915368960","tholin","2025-12-04T01:42:05.5410000+00:00","That doesn't seem right","",""
-"220639106915368960","tholin","2025-12-04T01:42:29.6190000+00:00","My die is packed and it doesn't take nearly as long","",""
-"220639106915368960","tholin","2025-12-04T01:43:05.1060000+00:00","A 0.5x1 slot taking 12 hours feels like something got stuck","",""
-"805909190333038612","trev5514","2025-12-04T01:45:08.7650000+00:00","","",""
-"805909190333038612","trev5514","2025-12-04T01:45:09.1340000+00:00","Maybe not... I don't know how large this design was but if it's more complex than this then I could believe it.","",""
+"169786952432746498","mithro_","2025-12-04T02:18:33.0590000+00:00","At some point in the near future, I'll decomission https://test-platform.wafer.space and then set it up to provide extra precheck workers for https://platform.wafer.space","",""
+"169786952432746498","mithro_","2025-12-04T02:25:31.8540000+00:00","","general_media/image-C35DA.png",""
+"169786952432746498","mithro_","2025-12-04T02:26:21.0820000+00:00","Looks like there are still a few that need to be ported across from test-platform?","general_media/image-CE35D.png","👍 (1)"
