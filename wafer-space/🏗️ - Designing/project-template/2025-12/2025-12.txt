@@ -1,115 +1,29 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / project-template
-After: 12/03/2025 22:01
+After: 12/03/2025 23:04
 ==============================================================
 
-[12/03/2025 22:01] _luke_w_
-it should snap and the redundant vertices should disappear
-
-
-[12/03/2025 22:03] polyfractal
-rad, thanks!
-
-
-[12/03/2025 22:13] polyfractal
-aaand fixed, re-drc time
+[12/03/2025 23:05] trev5514
+My understanding is that 9T is larger and has more room for routing so it can typically run faster. I believe there is also a power tradeoff with them.
 
 {Reactions}
 👍
 
-[12/03/2025 22:20] mithro_
-@ReJ aka Renaldas Zioma - I would suggest making sure ***all*** are on https://platform.wafer.space - that way we have choice. I think we'll find a way to have both.
+[12/03/2025 23:05] trev5514
+I didn't see any 7t overrides, do you happen to know where it was brought up?
 
-{Embed}
-https://platform.wafer.space/
-Welcome to wafer.space
-…
-Platform for wafer.space low cost silicon manufacturing.
+
+[12/03/2025 23:08] polyfractal
+think it was mentioned here: https://discord.com/channels/1361349522684510449/1423348662318272592/1445014108750745621
 
 {Reactions}
 👍
 
-[12/03/2025 22:21] mithro_
-I ***think*** I have two 1x1 slots allocated for @ReJ aka Renaldas Zioma
-
-
-[12/03/2025 22:22] mithro_
-Think you could do a version of that half-width slot with *just* the SRAM connected to the I/O pins?
-
-
-[12/03/2025 22:26] greg.hashtag.9468
-Yeah. Easy could do that. So target the 0.5x1 slot? Just a 512x8 instance?
-
-
-[12/03/2025 22:27] greg.hashtag.9468
-We can add the other sizes too, but would require sharing the A/D bus? Along with muxing on the Q
-
-
-[12/03/2025 22:32] mithro_
-All the sizes! 😛
-
-
-[12/03/2025 22:32] mithro_
-According to @LukeW, something like https://www.renesas.com/en/document/dst/r1rp0416di-series-datasheet?srsltid=AfmBOor09cVZb0I6oElST_hOGtjGlgGKCuuOzj2dmwoCr6L8-vb7cOhK would be the competition 🙂
-
-
-[12/03/2025 22:34] greg.hashtag.9468
-Right I misunderstood. So not a test structure for just a single instance. But fill the area with the 512x8 instances and add address decoding. 👍
-
-
-[12/03/2025 22:37] _luke_w_
-so we can finally get to the bottom of the CEN controversy
-
-
-[12/03/2025 22:38] trev5514
-I tried doing `STD_CELL_LIBRARY: gf180mcu_fd_sc_mcu9t5v0` in the project template and it's not applied (still the 7 track cell). Is this overriden somewhere I'm missing?
-
-
-[12/03/2025 22:39] greg.hashtag.9468
-Quick test: try doing an `export STD_CELL_LIBRARY=gf180mcu_fd_sc_mcu9t5v0` in your shell
-
-
-[12/03/2025 22:39] _luke_w_
-That was the only flag I had to pass, and I am definitely getting 9-track cells in my layout
-
-
-[12/03/2025 22:40] greg.hashtag.9468
-I think this was raised before, in the latest template, the extra yaml for the slot sizes may be applying some defaults
-
-
-[12/03/2025 22:41] greg.hashtag.9468
-Your project @LukeW has everything in the one config.yaml
-
-
-[12/03/2025 22:41] _luke_w_
-ahh ok, that would make sense. I squashed those commits out when I merged because I didn't want to deal with the huge merge conflict with my padring changes and my other changes in that file 😅
-
-
-[12/03/2025 22:48] mithro_
-https://docs.google.com/document/d/1hk0WXCmQ8LYNhn8gIVs8vHymR2MleQx2ro_hQlyOYKU/edit?tab=t.0
-
-{Embed}
-https://docs.google.com/document/d/1hk0WXCmQ8LYNhn8gIVs8vHymR2MleQx2ro_hQlyOYKU/edit?tab=t.0
-wafer.space - GF180MCU SRAM Maximizer
-GF180MCU SRAM Maximizer Goal Work out the maximum amount of SRAM that is able to fit into the GF180MCU configuration.  Specification Layout as many SRAMs as possible that fit in a given die space.  Current die size - 3.88mm x 5.07mm     Die Size         Instances    Total  Wi...
-project-template_media/AHkbwyLHhGHcIwg_ZYuYpHyMCqtZzGVe9z31Z3An73-6ED65
-
-
-[12/03/2025 22:50] mithro_
-If someone wants to do something else random, you could also try filling the die just with capacitors - https://docs.google.com/document/d/1ahoCTmPvKExYtk3qqxvjMpnq5XOcIQvVWMF84zgi82k/edit?tab=t.0#heading=h.psr38aq67ats - I was sure I had more info in that doc but it appears I miss remembered.
-
-{Embed}
-https://docs.google.com/document/d/1ahoCTmPvKExYtk3qqxvjMpnq5XOcIQvVWMF84zgi82k/edit?tab=t.0
-wafer.space - GF180MCU Silicon Capacitor
-GF180MCU Silicon Capacitor Goal Create software which is able to generate a "maximal silicon capacitor" for a given configuration.  Specifications  GDSFactory Uses AI to tune the capacitor capacity Initial targets are the different GF180MCU stack ups.   Why? Empty slots can be filled with silicon...
-project-template_media/AHkbwyLCE9Q0KfpoWw8BHiWlNnXWgJ6S8UzP-WPL1p-7A899
-
-
-[12/03/2025 23:02] polyfractal
-7T vs 9T: is it just that 9T are bigger so they can drive harder and suffer from timing issues less?
+[12/03/2025 23:10] trev5514
+That would be it! Easy fix, thank you!
 
 
 ==============================================================
-Exported 21 message(s)
+Exported 4 message(s)
 ==============================================================
