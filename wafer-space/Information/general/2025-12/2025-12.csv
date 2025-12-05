@@ -1,21 +1,3 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
-"220639106915368960","tholin","2025-12-05T19:13:13.1260000+00:00","Nope. Still getting antenna violations.","",""
-"596068704471482370","246tnt","2025-12-05T19:29:02.1190000+00:00","Yeah ... there is still a bug in the deck 😅","",""
-"596068704471482370","246tnt","2025-12-05T19:29:20.9380000+00:00","`n_diode | n_diode` ... cc @Leo Moser (mole99)","","😢 (1)"
-"323371864074485771","mole99","2025-12-05T19:29:46.5450000+00:00","🤦‍♂️","","😢 (1)"
-"323371864074485771","mole99","2025-12-05T19:29:58.3340000+00:00","Thanks, fixing now...","",""
-"220639106915368960","tholin","2025-12-05T19:31:42.2320000+00:00","Oh","",""
-"220639106915368960","tholin","2025-12-05T19:31:43.3890000+00:00","Well","",""
-"220639106915368960","tholin","2025-12-05T19:32:04.9140000+00:00","I guess I can undo all the changes I’ve been making to my project to try and fix this.","",""
-"323371864074485771","mole99","2025-12-05T19:34:20.1110000+00:00","https://github.com/wafer-space/gf180mcu/releases/tag/1.4.4","",""
-"1365118310701600900","rtimothyedwards_19428","2025-12-05T20:13:13.2360000+00:00","@Leo Moser (mole99):  I'm getting an error
-```
- No libs found for macro                                    flow.py:698
-                    gf180mcu_ocd_ip_sram__sram256x8m8wm1 at corner
-                    max_ff_n40C_5v50. The module will be black-boxed.
-```
-But I am not specifying 5V anywhere.  Where is this corner name coming from?  My MACROS section specifies the .lib files for the SRAMs as, e.g., `tt_025C_3v30`.","",""
-"1365118310701600900","rtimothyedwards_19428","2025-12-05T20:24:13.4420000+00:00","(Also it seems to be looking for 5V .lib files for the standard cells as well, and of course can't find any.)","",""
-"323371864074485771","mole99","2025-12-05T20:25:53.3760000+00:00","The LibreLane config in the PDK defines the various corners. You can override this from your config like so: https://github.com/splinedrive/gf180mcu-kianv-rv32ima-sv32/blob/4da6d0129e7d52011066a0dd335faa4a0551ebb8/librelane/config.yaml#L172
-Make sure to change `STA_CORNERS`, `LIB` and `DEFAULT_CORNER`.","",""
-"323371864074485771","mole99","2025-12-05T20:26:29.1300000+00:00","If `LIB` is not set, the pdk_compat functionality in LibreLane will set it to these values: https://github.com/librelane/librelane/blob/d8b98532399f6eaa230e44e4a505bd653c10dd71/librelane/config/pdk_compat.py#L294","",""
+"1365118310701600900","rtimothyedwards_19428","2025-12-05T20:42:32.3480000+00:00","@Leo Moser (mole99) :  Thanks, that worked for Stage 10 and got me through synthesis.  But I'm still getting the same message (as a warning, not an error) on the floorplanning (Stage 12), but only for the SRAM.  As it is a warning only, I'm going to assume it's okay unless I discover otherwise. . .","","👍 (1)"
+"1187141985530818611","ravenslofty","2025-12-05T21:19:29.8670000+00:00","if I upload a new GDS to platform.wafer.space, do I lose my spot in the queue? ^^;","",""

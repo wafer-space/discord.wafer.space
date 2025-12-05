@@ -5,72 +5,19 @@ Topic: Welcome to [wafer.space](https://wafer.space/) -
 documentation at [wafer.space github](https://github.com/wafer-space) - 
 buy at [buy.wafer.space](https://buy.wafer.space) - 
 archives at [discord.wafer.space](https://discord.wafer.space/)
-After: 12/05/2025 18:33
+After: 12/05/2025 20:28
 ==============================================================
 
-[12/05/2025 19:13] tholin
-Nope. Still getting antenna violations.
-
-
-[12/05/2025 19:29] 246tnt
-Yeah ... there is still a bug in the deck 😅
-
-
-[12/05/2025 19:29] 246tnt
-`n_diode | n_diode` ... cc @Leo Moser (mole99)
+[12/05/2025 20:42] rtimothyedwards_19428
+@Leo Moser (mole99) :  Thanks, that worked for Stage 10 and got me through synthesis.  But I'm still getting the same message (as a warning, not an error) on the floorplanning (Stage 12), but only for the SRAM.  As it is a warning only, I'm going to assume it's okay unless I discover otherwise. . .
 
 {Reactions}
-😢
+👍
 
-[12/05/2025 19:29] mole99
-🤦‍♂️
-
-{Reactions}
-😢
-
-[12/05/2025 19:29] mole99
-Thanks, fixing now...
-
-
-[12/05/2025 19:31] tholin
-Oh
-
-
-[12/05/2025 19:31] tholin
-Well
-
-
-[12/05/2025 19:32] tholin
-I guess I can undo all the changes I’ve been making to my project to try and fix this.
-
-
-[12/05/2025 19:34] mole99
-https://github.com/wafer-space/gf180mcu/releases/tag/1.4.4
-
-
-[12/05/2025 20:13] rtimothyedwards_19428
-@Leo Moser (mole99):  I'm getting an error
-```
- No libs found for macro                                    flow.py:698
-                    gf180mcu_ocd_ip_sram__sram256x8m8wm1 at corner
-                    max_ff_n40C_5v50. The module will be black-boxed.
-```
-But I am not specifying 5V anywhere.  Where is this corner name coming from?  My MACROS section specifies the .lib files for the SRAMs as, e.g., `tt_025C_3v30`.
-
-
-[12/05/2025 20:24] rtimothyedwards_19428
-(Also it seems to be looking for 5V .lib files for the standard cells as well, and of course can't find any.)
-
-
-[12/05/2025 20:25] mole99
-The LibreLane config in the PDK defines the various corners. You can override this from your config like so: https://github.com/splinedrive/gf180mcu-kianv-rv32ima-sv32/blob/4da6d0129e7d52011066a0dd335faa4a0551ebb8/librelane/config.yaml#L172
-Make sure to change `STA_CORNERS`, `LIB` and `DEFAULT_CORNER`.
-
-
-[12/05/2025 20:26] mole99
-If `LIB` is not set, the pdk_compat functionality in LibreLane will set it to these values: https://github.com/librelane/librelane/blob/d8b98532399f6eaa230e44e4a505bd653c10dd71/librelane/config/pdk_compat.py#L294
+[12/05/2025 21:19] ravenslofty
+if I upload a new GDS to platform.wafer.space, do I lose my spot in the queue? ^^;
 
 
 ==============================================================
-Exported 13 message(s)
+Exported 2 message(s)
 ==============================================================
