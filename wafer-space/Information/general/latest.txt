@@ -5,100 +5,35 @@ Topic: Welcome to [wafer.space](https://wafer.space/) -
 documentation at [wafer.space github](https://github.com/wafer-space) - 
 buy at [buy.wafer.space](https://buy.wafer.space) - 
 archives at [discord.wafer.space](https://discord.wafer.space/)
-After: 12/05/2025 12:50
+After: 12/05/2025 15:27
 ==============================================================
 
-[12/05/2025 13:05] tholin
-@Tim Edwards Both cells are now in the library. Have fun!
+[12/05/2025 15:41] egorxe
+BTW, @Tholin you're using your own 3.3V cell library in LibreLane right? What value do you use for ANTENNAGATEPLUSDIFF in your techlefs?
 
 
-[12/05/2025 13:36] tholin
-With the new PDK. NOW what do I do?
+[12/05/2025 15:44] 246tnt
+@Egor Lukyanchenko He is not.
 
-{Attachments}
-general_media/image-C60A6.png
+{Reactions}
+👌
 
-
-[12/05/2025 13:40] tholin
-Antenna repair doesn’t pick up on these.
-
-
-[12/05/2025 13:40] tholin
-The antenna check after DRT says nothing’s wrong.
+[12/05/2025 16:19] rtimothyedwards_19428
+@Leo Moser (mole99) @Tholin :  The LEF parameters can be set with the "property" command in magic by hand, or you can just read LEF on top of an existing layout, if you have the LEF already, and it will generate the properties for you.  Be careful when you do that, because it will also try to relabel everything according to the ports in the LEF file.  That may be what you want, then again, it might not.
 
 
-[12/05/2025 13:45] egorxe
-There is currently an ongoing work to correct KLayout antenna checks, it could be due to this. See latest merged & unmerged PRs in the [PDK repo](https://github.com/wafer-space/gf180mcu/pulls?q=is%3Apr).
-
-{Embed}
-https://github.com/wafer-space/gf180mcu/pulls?q=is%3Apr).
-Pull requests · wafer-space/gf180mcu
-Temporary development repository for the gf180mcuD PDK variant. - Pull requests · wafer-space/gf180mcu
-general_media/gf180mcu-8BA53
-
-
-[12/05/2025 13:46] tholin
-I thought that already was merged?
-
-
-[12/05/2025 13:47] tholin
-Aaaand analog pads once again don’t route
-
-{Attachments}
-general_media/image-8A4F9.png
-
-
-[12/05/2025 13:54] egorxe
-The latest PR from Leo relaxing overly strict Klayout antenna checks (considering whole diode area) [was merget 4 hours ago](https://github.com/wafer-space/gf180mcu/pull/13). Do you have it in already? There is also one from me which is still not merged, but it will make KLayout checks more strict due to proper Metal5 thickness, so it does not look like your problem.
-
-{Embed}
-https://github.com/wafer-space/gf180mcu/pull/13).
-Build software better, together
-GitHub is where people build software. More than 150 million people use GitHub to discover, fork, and contribute to over 420 million projects.
-general_media/github-logo-55c5b9a1fe52-4FC66.png
-
-{Embed}
-https://github.com/wafer-space/gf180mcu/pull/13).
-general_media/github-mark-57519b92ca4e-A0C13.png
-
-{Embed}
-https://github.com/wafer-space/gf180mcu/pull/13).
-general_media/github-octocat-13c86b8b336d-42CA8.png
-
-
-[12/05/2025 14:05] tholin
-@Leo Moser (mole99) I tried this and it appears to not generate `LEFclass`, `LEFsite` and `LEFsymmetry` properties, so ensure they are preserved from the old mag files.
-
-
-[12/05/2025 14:08] mole99
-I think you have to annotate the GDS with the LEF files? I'm not sure as I haven't done this before.
-Perhaps @Tim Edwards could comment on this.
-
-
-[12/05/2025 14:22] tholin
-Also, I am definitely on the new antenna DRC script. I even checked the actual file and it matches.
-
-
-[12/05/2025 14:23] tholin
-Still getting antenna violations that LibreLane isn’t picking up on and repairing.
-
-
-[12/05/2025 14:47] mole99
-The final antenna summary in OpenROAD does not show these violations? If that is the case, can you load the marker database in KLayout to see which nets are affected?
-
-
-[12/05/2025 15:07] 246tnt
-@Tholin If you can post the GDS and XML report, I can have a look.
-
-
-[12/05/2025 15:11] 246tnt
-@Leo Moser (mole99) Actually now that I think about it, generating the mag/maglef is probably done as an install step of open_pdks ...
-
-
-[12/05/2025 15:14] 246tnt
-Yeah, there is some magic stuff but also some python scripting to generate the mag/maglef from the GDS.
+[12/05/2025 16:19] jonathan_ha_25034
+Switching to the development version of librelane might be worth a try to see if something changes. I had similar issues with antenna violations within the macros of our design. You could try to get the librelane dev version with
+```
+nix shell github:librelane/librelane/dev
+```
+and then run the synthesis flow with
+```make
+librelane librelane/config.yaml --pdk ${PDK} --pdk-root ${PDK_ROOT}
+```.
+Set PDK_ROOT to some directory and then Librelane should download the PDK. At least for me this yielded better results that helped me debug the design
 
 
 ==============================================================
-Exported 16 message(s)
+Exported 4 message(s)
 ==============================================================
