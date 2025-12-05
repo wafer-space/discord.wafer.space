@@ -5,181 +5,72 @@ Topic: Welcome to [wafer.space](https://wafer.space/) -
 documentation at [wafer.space github](https://github.com/wafer-space) - 
 buy at [buy.wafer.space](https://buy.wafer.space) - 
 archives at [discord.wafer.space](https://discord.wafer.space/)
-After: 12/05/2025 16:31
+After: 12/05/2025 18:33
 ==============================================================
 
-[12/05/2025 16:35] egorxe
-Allowing Librelane to download a PDK is probably not a good idea, as it will download it using ciel and for gf180mcu it will be outdated.
+[12/05/2025 19:13] tholin
+Nope. Still getting antenna violations.
 
 
-[12/05/2025 16:44] tholin
-I don’t know how to do this.
+[12/05/2025 19:29] 246tnt
+Yeah ... there is still a bug in the deck 😅
 
 
-[12/05/2025 16:44] tholin
-Trying to figure it out
-
-
-[12/05/2025 16:45] tholin
-But also, manually checking the coordinates a few times, its almost all on bidir_PAD2CORE lines
-
-
-[12/05/2025 16:47] tholin
-Here we are
-
-{Attachments}
-general_media/image-C89C0.png
-
-
-[12/05/2025 16:48] ravenslofty
-that's why there's the `--manual-pdk` option to librelane
-
-
-[12/05/2025 17:05] mole99
-About my previous question: Does the final antenna summary in OpenROAD show these violations?
-Because if it does, we just need to convince LibreLane to fix them in some way. If not, then we have a mismatch between OpenROAD's and KLayout's definition of antenna violations.
-
-
-[12/05/2025 17:10] tholin
-
-
-{Attachments}
-general_media/image-8DEB0.png
+[12/05/2025 19:29] 246tnt
+`n_diode | n_diode` ... cc @Leo Moser (mole99)
 
 {Reactions}
-🎉
+😢
 
-[12/05/2025 17:23] egorxe
-If there were no such discrepancies previously , it most likely means that it appeared due to increase in ANTENNAGATEPLUSDIFF, as OR is not overfixing with diodes anymore. If it so, it means that the mismatch is most likely related to diodes, not metals.
-
-
-[12/05/2025 17:29] 246tnt
-@Leo Moser (mole99) Yes, discrepency is what I'd like to check. But I'm wondering if being perfect is even possible since the LEF contains only the total gate/diff are and no information about the layers to reach that gate/diff area so I'm not sure OpenROAD can always be correct.
-
-
-[12/05/2025 17:29] 246tnt
-But I'd need to analyze the final GDS to test that theory.
-
-
-[12/05/2025 17:29] tholin
-So, I have KLayout antenna violations on wires that go in-between macros. I have antennas on all macro ports. So a wire with antennas on both ends is getting an antenna violation. Is that even possible?
-
-
-[12/05/2025 17:30] tholin
-Like, the standard cell, I mean.
-
-
-[12/05/2025 17:31] 246tnt
-Yes, it's possible.
-
-
-[12/05/2025 17:31] 246tnt
-Depending on routing layers, that diode could be useless.
-
-
-[12/05/2025 17:32] tholin
-https://files.tholin.dev/Public/GDSII/chip_top.tar.gz
-
-
-[12/05/2025 17:33] 246tnt
-When OpenROAD inserts a diode, it takes care to put it close to where the gate to protect is. But when you manually instanciate one, OpenROAD just sees that as "just another standard cell" and will place it where ever convenient.
-
-In tiny tapeout I was instanciating diodes, and I had to write a custom script to manually re-position those diode where appropriate so they are effective to fix some of my violations.
-
-
-[12/05/2025 17:34] 246tnt
-If you're manually instanciating diodes, you could instead try to use this : https://openlane2.readthedocs.io/en/latest/reference/step_config_vars.html#diodes-on-ports-protection-routine  which should also take care of placing them well.
-
-
-[12/05/2025 17:35] tholin
-I have DIODE_ON_PORTS: both in all my flows
-
-
-[12/05/2025 17:35] 246tnt
-Ah ok, nevermind then 😅
-
-
-[12/05/2025 17:35] 246tnt
-Could you post the antenna report xml too so I don't have to run it 😅
-
-
-[12/05/2025 17:40] tholin
-
-
-{Attachments}
-general_media/antenna.klayout-D527C.lyrdb
+[12/05/2025 19:29] mole99
+🤦‍♂️
 
 {Reactions}
-👌
+😢
 
-[12/05/2025 17:49] egorxe
-Diodes on output ports of macros do not help much as there is quite low probability of them being connected to the receiving gate without going "up" through the metal stack.
-
-
-[12/05/2025 17:52] 246tnt
-Mmm, something is weird. Beause I picked a random violation and looked at it and it didn't properly account for the input protection diode that's present in the IO cell.
+[12/05/2025 19:29] mole99
+Thanks, fixing now...
 
 
-[12/05/2025 17:53] 246tnt
-Are you sure that was run with the latest PDK ?
+[12/05/2025 19:31] tholin
+Oh
 
 
-[12/05/2025 17:56] 246tnt
-it measures perimeter at 2139  and gate area at 3.15 ( and those looks correct ) and report ratio as 679 ( so indeed a violation ).   But there is a 1 um^2 diode that's propertly connected by a lower metal layer so this should make the effective gate area 3.15 + 15 * 1 = 18.15 and the ratio 117 which is well below the error threshold.
+[12/05/2025 19:31] tholin
+Well
 
 
-[12/05/2025 17:57] tholin
-1.4.1?
+[12/05/2025 19:32] tholin
+I guess I can undo all the changes I’ve been making to my project to try and fix this.
 
 
-[12/05/2025 17:57] 246tnt
-yes.
+[12/05/2025 19:34] mole99
+https://github.com/wafer-space/gf180mcu/releases/tag/1.4.4
 
 
-[12/05/2025 17:58] tholin
-That’s the tag I got checked out
-
-
-[12/05/2025 17:59] tholin
-But I see there have been antenna-check related commits since then
-
-
-[12/05/2025 18:01] tholin
-I will pull the latest and try to run the check again, since I have nothing better to try.
-
-
-[12/05/2025 18:03] rtimothyedwards_19428
-@Tholin :  What am I missing here?
+[12/05/2025 20:13] rtimothyedwards_19428
+@Leo Moser (mole99):  I'm getting an error
 ```
-ABC: Setting driving cell to be "gf180mcu_as_sc_mcu7t3v3__inv_2/Y".
-ABC: Setting output load to be 72.910004.
-ABC: + source /home/tim/gits/gf180mcu_ocd_openframe/librelane/runs/RUN_2025-12-05_13-00-18/06-yosys-s
-ynthesis/AREA_0.abc
-ABC: Error: The network is combinational.
-ABC: Cannot find the default PI driving cell (gf180mcu_as_sc_mcu7t3v3__inv_2/Y) in the library.
+ No libs found for macro                                    flow.py:698
+                    gf180mcu_ocd_ip_sram__sram256x8m8wm1 at corner
+                    max_ff_n40C_5v50. The module will be black-boxed.
 ```
+But I am not specifying 5V anywhere.  Where is this corner name coming from?  My MACROS section specifies the .lib files for the SRAMs as, e.g., `tt_025C_3v30`.
 
 
-[12/05/2025 18:08] tholin
-I don’t know
+[12/05/2025 20:24] rtimothyedwards_19428
+(Also it seems to be looking for 5V .lib files for the standard cells as well, and of course can't find any.)
 
 
-[12/05/2025 18:09] tholin
-Its not happening on my end either
+[12/05/2025 20:25] mole99
+The LibreLane config in the PDK defines the various corners. You can override this from your config like so: https://github.com/splinedrive/gf180mcu-kianv-rv32ima-sv32/blob/4da6d0129e7d52011066a0dd335faa4a0551ebb8/librelane/config.yaml#L172
+Make sure to change `STA_CORNERS`, `LIB` and `DEFAULT_CORNER`.
 
 
-[12/05/2025 18:10] tholin
-So I can’t replicate the issue
-
-
-[12/05/2025 18:11] rtimothyedwards_19428
-Okay, actually that's good to know;  it's probably something in my code, then.
-
-
-[12/05/2025 18:21] rtimothyedwards_19428
-It did not like synthesizing my ring oscillator, which I guess shouldn't surprise me.
+[12/05/2025 20:26] mole99
+If `LIB` is not set, the pdk_compat functionality in LibreLane will set it to these values: https://github.com/librelane/librelane/blob/d8b98532399f6eaa230e44e4a505bd653c10dd71/librelane/config/pdk_compat.py#L294
 
 
 ==============================================================
-Exported 37 message(s)
+Exported 13 message(s)
 ==============================================================
