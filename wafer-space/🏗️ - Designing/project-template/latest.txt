@@ -1,46 +1,16 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / project-template
-After: 12/05/2025 10:07
+After: 12/05/2025 11:07
 ==============================================================
 
-[12/05/2025 10:20] mole99 (pinned)
-📢 Major performance update!
-
-A long-standing issue in the KLayout DRC deck has been discovered and fixed 🎉
-Many thanks to Matthias for [investigating the issue and providing a solution](https://github.com/KLayout/klayout/issues/2241#issuecomment-3612915372).
-This reduces the time taken by KLayout DRC for one tested design from several hours to just 1.5h ⏱️
-
-- PDK [1.4.1](https://github.com/wafer-space/gf180mcu/releases/tag/1.4.1)
-  - Fix the connectivity setup in KLayout DRC.
-  - Check for both P/N-type diodes in the KLayout antenna script. (thanks @tnt!)
-
-Make sure to update your project and your local precheck with the latest PDK:
-
-- Project template [1.2.3](https://github.com/wafer-space/gf180mcu-project-template/releases/tag/1.2.3)
-- Precheck [1.4.2](https://github.com/wafer-space/gf180mcu-precheck/releases/tag/1.4.2)
+[12/05/2025 11:28] mole99
+Yes, this is because both the antenna script and the DRC deck consider the dummy shapes for their checks. Since we have dedicated DRC rules for dummy, which ensures they are spaced from active metal, there's no need to include them here. It's on my list :)
+In fact, I have already removed the dummy shapes from the connectivity setup.
 
 {Reactions}
-blobclap (5)
-
-[12/05/2025 10:20] mole99
-Pinned a message.
-
-
-[12/05/2025 10:39] thorben_61995
-Awesome, my current precheck is still not finished after > 27 hours and was stuck for most of the time in the connectivity setup 😆
-
-
-[12/05/2025 10:44] mole99
-Well, let me know how it goes 😉
-
-{Reactions}
-👍
-
-[12/05/2025 11:01] 246tnt
-BTW, running antenna check pre-fill GDS also seemed to speed it up a bit FWIW.
-
+👌 (2)
 
 ==============================================================
-Exported 5 message(s)
+Exported 1 message(s)
 ==============================================================
