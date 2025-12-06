@@ -5,13 +5,47 @@ Topic: Welcome to [wafer.space](https://wafer.space/) -
 documentation at [wafer.space github](https://github.com/wafer-space) - 
 buy at [buy.wafer.space](https://buy.wafer.space) - 
 archives at [discord.wafer.space](https://discord.wafer.space/)
-After: 12/06/2025 10:23
+After: 12/06/2025 11:19
 ==============================================================
 
-[12/06/2025 11:14] 246tnt
-@Leo Moser (mole99) Why are OFFGRID and ANGLE checked for PMNDMY ?  Doesn't looks like it should really be a problem since that layer is not used for actual mask making.
+[12/06/2025 11:27] mole99
+As for why it is the way it currently is, you would have to ask Mabrains as they created the original rule deck :)
+
+What I found in the docs:
+
+- https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_03.html
+
+> 3.4 Consistent layout all designs on a 0.005μm grid will avoid off-grid and snapping issues during database fracturing.
+
+- https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_07_02.html
+
+> The design grid must be an integer multiple of 0.005μm.
+
+Given the wording of the second statement, and that DRC errors in the design can lead to a back and forth with GF, it is probably safer and simpler to assume that all shapes on all layers need to be on the 5nm grid.
+
+As for the angle checks, I would actually love to be able to draw arbitrary angles (except for acute and as long as all points are on-grid). However, given the wording in the docs I'm not sure about this.
+
+- https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_05_1.html
+
+> SH.2: Avoid any COMP, poly and metal shapes with acute angles (angles <90 deg). Exceptions are only for pre-tested metal inductors with IND_MK mark layers and lettering (non circuit elements).
+
+This would tell me that arbitrary angles (except acute) are allowed on these layers.
+
+However this is contradicted by:
+
+https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_03.html
+
+> 3.6 Only 90 deg and 45 deg bends are allowed for poly and metal lines.
+
+I wouldn't even dare to guess what this means for other layers 🤷‍♂️
+
+{Reactions}
+👍🏻
+
+[12/06/2025 11:29] 246tnt
+👌
 
 
 ==============================================================
-Exported 1 message(s)
+Exported 2 message(s)
 ==============================================================
