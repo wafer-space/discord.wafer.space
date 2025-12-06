@@ -5,88 +5,46 @@ Topic: Welcome to [wafer.space](https://wafer.space/) -
 documentation at [wafer.space github](https://github.com/wafer-space) - 
 buy at [buy.wafer.space](https://buy.wafer.space) - 
 archives at [discord.wafer.space](https://discord.wafer.space/)
-After: 12/06/2025 16:28
+After: 12/06/2025 18:31
 ==============================================================
 
-[12/06/2025 16:36] meinhard
-Were you able to resolve the antenna violations? I quit the checker run after 10h+ to make a small adaptions and start a new one; so I'm not too sure how many trials I have 😄
+[12/06/2025 18:32] 246tnt
+It most definitely can see them. But diodes are also not magic. Some of those nets are huge and one diode might not be enough.
 
 
-[12/06/2025 16:39] tholin
-Down to 5 violations on 2 nets
+[12/06/2025 18:32] tholin
+But alright. I’ll find the configuration variable for changing the pin layers.
 
 
-[12/06/2025 16:40] meinhard
-Which settings did you adapt? `DRT_ANTENNA_REPAIR_ITERS` and 
-`DRT_ANTENNA_MARGIN` or anything else?
+[12/06/2025 18:34] tholin
+Interesting that there is no antenna violations on lines going to my DACs, since those have no input diodes at all.
 
 
-[12/06/2025 16:41] tholin
-I had DRC errors
+[12/06/2025 18:47] rtimothyedwards_19428
+@Tholin :  Small revision to the DFF I made for your standard cell library:  Because I put a via on top of the set pin (SN), OpenROAD will put other vias too close to it if it's not aware that there's a via blockage there.  I generally have the LEF writer not add via blockages (I probably should rethink that), but in this case it's needed.  I added it to the OBS list:
+```
+LAYER Via1
+  RECT 13.645 1.690 13.905 1.950 ;
+```
+which worked fine (no DRC errors generated during routing).  Not sure if it makes more sense to put it under the SN pin PORT record.  I think I can have magic output via records where vias are sitting inside a port boundary.  Until then, these lines have to be added manually.
 
 
-[12/06/2025 16:42] tholin
-The antenna violations I’m getting are not noticed by LibreLane
+[12/06/2025 18:59] tholin
+Cannot find the configuration variable for IO port layers
 
 
-[12/06/2025 16:42] tholin
-So I’ve been playing with INSERT_ECO_DIODES
+[12/06/2025 19:00] tholin
+I could also make this one of the exceptions where I do export the LEF with -pinonly, which can increase routing congestion slightly, but would let you define an area where it is safe to place vias.
 
 
-[12/06/2025 16:42] tholin
-Basically firing blindly hoping I hit something.
+[12/06/2025 19:03] tholin
+I am currently speeding through caracterization at the ff corner, because that is where hold violations happen.
 
 
-[12/06/2025 16:42] tholin
-It only needs to work twice
-
-
-[12/06/2025 17:01] simi150500
-@Jonathan and I are using the same PDK (currently 1.4.1) for both. However, for building the macros we are using the `dev` branch of LibreLane and the "classic" flow. For the top-level build, we are using the LibreLane version from the nix-shell and the "chip" flow. From our POV this seems to work better for the macros in terms of timing and antenna violations. However, tbh, we do not really understand why. But there is nothing against this approach, right? 😅
-
-
-[12/06/2025 17:03] tholin
-As long as no DRC is violated, its at least manufacturable.
-
-{Reactions}
-👍
-
-[12/06/2025 17:08] meinhard
-Ok, thanks. Let's see what it looks like when the next checker runs finishes 🙂
-
-
-[12/06/2025 17:28] tholin
-I made it worse
-
-{Attachments}
-general_media/image-87785.png
-
-
-[12/06/2025 17:28] tholin
-What’s going on here? Why is LibreLane not fixing these?
-
-
-[12/06/2025 17:30] 246tnt
-Can you post updated gds and klayout xml report ?
-
-
-[12/06/2025 18:25] tholin
-https://files.tholin.dev/Public/GDSII/chip_top.tar.gz
-
-
-[12/06/2025 18:25] tholin
-Haven’t looked at it myself yet, though
-
-
-[12/06/2025 18:30] 246tnt
-Ok, I'll take a look at it, but will be later tonight. 
-Some tips to help though would be to move pins of your modules to Met3/Met4 instead of Met2/Met3 so the pins acts as antenna straps. And also try to avoid routing on Met5.
-
-
-[12/06/2025 18:30] tholin
-My guess is that it actually can’t see the port diodes inside the macros.
+[12/06/2025 19:53] 246tnt
+@Tholin  `FP_IO_HLAYER` / `FP_IO_VLAYER`
 
 
 ==============================================================
-Exported 18 message(s)
+Exported 8 message(s)
 ==============================================================

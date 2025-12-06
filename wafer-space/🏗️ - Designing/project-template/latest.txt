@@ -1,21 +1,52 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / project-template
-After: 12/06/2025 17:09
+After: 12/06/2025 19:12
 ==============================================================
 
-[12/06/2025 17:59] polyfractal
-the whole precheck takes about 4hrs on my build server atm (Ryzen 9950x3d, about the fastest I could rent on short notice)
+[12/06/2025 20:11] logic_anarchy
+how?
 
 
-[12/06/2025 18:02] urish
-Takes 4:30 to 5 hours for Tiny Tapeout on GitHub actions, e.g. a fresh one from today: <https://github.com/TinyTapeout/tinytapeout-gf-0p2/actions/runs/19984611269>
+[12/06/2025 20:12] logic_anarchy
+how to rent, where?
 
 
-[12/06/2025 18:18] 246tnt
-If you have the RAM, running magic DRC / KLayout DRC / KLayout antenna in parallel can shorten that.
+[12/06/2025 20:13] polyfractal
+I'm using OVH and their "Gaming" dedicated bare metal servers: https://us.ovhcloud.com/bare-metal/
 
+{Embed}
+https://us.ovhcloud.com/bare-metal/
+Bare Metal Dedicated Servers
+
+{Reactions}
+❤️
+
+[12/06/2025 20:18] logic_anarchy
+by make librelane-magicdrc, make librelane-klayoutdrc? How antenna (inside DRCs)?
+
+
+[12/06/2025 20:42] mole99 (pinned)
+📢 Update Time!
+The PDK has been updated with changes to the KLayout antenna script.
+
+- PDK [1.4.4](https://github.com/wafer-space/gf180mcu/releases/tag/1.4.4)
+  - Skip certain checks in the KLayout antenna script if corresponding layers are empty. Correctly check the top metal layer. (thanks @Egor Lukyanchenko!)
+  - Don't consider dummy metal in the KLayout antenna script (already handled by the DRC rules).
+  - *Actually* check for both P/N-type diodes in the KLayout antenna script. (thanks again @tnt!)
+
+Please make sure to update:
+
+- Project template [1.2.5](https://github.com/wafer-space/gf180mcu-project-template/releases/tag/1.2.5)
+- Precheck [1.4.3](https://github.com/wafer-space/gf180mcu-precheck/releases/tag/1.4.3)
+
+
+[12/06/2025 20:42] mole99
+Pinned a message.
+
+{Reactions}
+❤️
 
 ==============================================================
-Exported 3 message(s)
+Exported 6 message(s)
 ==============================================================

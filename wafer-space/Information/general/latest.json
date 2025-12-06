@@ -16,7 +16,7 @@
     "after": null,
     "before": null
   },
-  "exportedAt": "2025-12-06T18:31:09.4302534+00:00",
+  "exportedAt": "2025-12-06T20:24:55.6549939+00:00",
   "messages": [
     {
       "id": "1444913134920925235",
@@ -10045,7 +10045,245 @@
       "reactions": [],
       "mentions": [],
       "inlineEmojis": []
+    },
+    {
+      "id": "1446932208538353726",
+      "type": "Default",
+      "timestamp": "2025-12-06T18:32:01.216+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It most definitely can see them. But diodes are also not magic. Some of those nets are huge and one diode might not be enough.",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1446932209603842170",
+      "type": "Default",
+      "timestamp": "2025-12-06T18:32:01.47+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "But alright. I\u2019ll find the configuration variable for changing the pin layers.",
+      "author": {
+        "id": "220639106915368960",
+        "name": "tholin",
+        "discriminator": "0000",
+        "nickname": "Tholin",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/a0ed32047bb13e92c0bce95b00e20a81-6B527.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1446932707153285292",
+      "type": "Default",
+      "timestamp": "2025-12-06T18:34:00.095+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Interesting that there is no antenna violations on lines going to my DACs, since those have no input diodes at all.",
+      "author": {
+        "id": "220639106915368960",
+        "name": "tholin",
+        "discriminator": "0000",
+        "nickname": "Tholin",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/a0ed32047bb13e92c0bce95b00e20a81-6B527.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1446936132972445728",
+      "type": "Default",
+      "timestamp": "2025-12-06T18:47:36.874+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Tholin :  Small revision to the DFF I made for your standard cell library:  Because I put a via on top of the set pin (SN), OpenROAD will put other vias too close to it if it's not aware that there's a via blockage there.  I generally have the LEF writer not add via blockages (I probably should rethink that), but in this case it's needed.  I added it to the OBS list:\n```\nLAYER Via1\n  RECT 13.645 1.690 13.905 1.950 ;\n```\nwhich worked fine (no DRC errors generated during routing).  Not sure if it makes more sense to put it under the SN pin PORT record.  I think I can have magic output via records where vias are sitting inside a port boundary.  Until then, these lines have to be added manually.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "220639106915368960",
+          "name": "tholin",
+          "discriminator": "0000",
+          "nickname": "Tholin",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "general_media/a0ed32047bb13e92c0bce95b00e20a81-6B527.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1446939116305383494",
+      "type": "Default",
+      "timestamp": "2025-12-06T18:59:28.156+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Cannot find the configuration variable for IO port layers",
+      "author": {
+        "id": "220639106915368960",
+        "name": "tholin",
+        "discriminator": "0000",
+        "nickname": "Tholin",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/a0ed32047bb13e92c0bce95b00e20a81-6B527.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1446939346673340580",
+      "type": "Reply",
+      "timestamp": "2025-12-06T19:00:23.08+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I could also make this one of the exceptions where I do export the LEF with -pinonly, which can increase routing congestion slightly, but would let you define an area where it is safe to place vias.",
+      "author": {
+        "id": "220639106915368960",
+        "name": "tholin",
+        "discriminator": "0000",
+        "nickname": "Tholin",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/a0ed32047bb13e92c0bce95b00e20a81-6B527.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1365118310701600900",
+          "name": "rtimothyedwards_19428",
+          "discriminator": "0000",
+          "nickname": "Tim Edwards",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "general_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1446936132972445728",
+        "channelId": "1361349523724570941",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1446940183474995304",
+      "type": "Default",
+      "timestamp": "2025-12-06T19:03:42.589+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I am currently speeding through caracterization at the ff corner, because that is where hold violations happen.",
+      "author": {
+        "id": "220639106915368960",
+        "name": "tholin",
+        "discriminator": "0000",
+        "nickname": "Tholin",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/a0ed32047bb13e92c0bce95b00e20a81-6B527.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1446952768429494516",
+      "type": "Default",
+      "timestamp": "2025-12-06T19:53:43.076+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Tholin  `FP_IO_HLAYER` / `FP_IO_VLAYER`",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "220639106915368960",
+          "name": "tholin",
+          "discriminator": "0000",
+          "nickname": "Tholin",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "general_media/a0ed32047bb13e92c0bce95b00e20a81-6B527.png"
+        }
+      ],
+      "inlineEmojis": []
     }
   ],
-  "messageCount": 296
+  "messageCount": 304
 }
