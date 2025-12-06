@@ -1,1 +1,22 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
+"270286460668739587","meinhard","2025-12-06T16:36:08.9160000+00:00","Were you able to resolve the antenna violations? I quit the checker run after 10h+ to make a small adaptions and start a new one; so I'm not too sure how many trials I have 😄","",""
+"220639106915368960","tholin","2025-12-06T16:39:03.3000000+00:00","Down to 5 violations on 2 nets","",""
+"270286460668739587","meinhard","2025-12-06T16:40:55.7980000+00:00","Which settings did you adapt? `DRT_ANTENNA_REPAIR_ITERS` and 
+`DRT_ANTENNA_MARGIN` or anything else?","",""
+"220639106915368960","tholin","2025-12-06T16:41:31.7700000+00:00","I had DRC errors","",""
+"220639106915368960","tholin","2025-12-06T16:42:22.1080000+00:00","The antenna violations I’m getting are not noticed by LibreLane","",""
+"220639106915368960","tholin","2025-12-06T16:42:29.5630000+00:00","So I’ve been playing with INSERT_ECO_DIODES","",""
+"220639106915368960","tholin","2025-12-06T16:42:51.2710000+00:00","Basically firing blindly hoping I hit something.","",""
+"220639106915368960","tholin","2025-12-06T16:42:56.0580000+00:00","It only needs to work twice","",""
+"210834917125390336","simi150500","2025-12-06T17:01:51.8520000+00:00","@Jonathan and I are using the same PDK (currently 1.4.1) for both. However, for building the macros we are using the `dev` branch of LibreLane and the ""classic"" flow. For the top-level build, we are using the LibreLane version from the nix-shell and the ""chip"" flow. From our POV this seems to work better for the macros in terms of timing and antenna violations. However, tbh, we do not really understand why. But there is nothing against this approach, right? 😅","",""
+"220639106915368960","tholin","2025-12-06T17:03:59.8690000+00:00","As long as no DRC is violated, its at least manufacturable.","","👍 (1)"
+"270286460668739587","meinhard","2025-12-06T17:08:18.4780000+00:00","Ok, thanks. Let's see what it looks like when the next checker runs finishes 🙂","",""
+"220639106915368960","tholin","2025-12-06T17:28:27.7120000+00:00","I made it worse","general_media/image-87785.png",""
+"220639106915368960","tholin","2025-12-06T17:28:55.9140000+00:00","What’s going on here? Why is LibreLane not fixing these?","",""
+"596068704471482370","246tnt","2025-12-06T17:30:50.4870000+00:00","Can you post updated gds and klayout xml report ?","",""
+"220639106915368960","tholin","2025-12-06T18:25:45.7250000+00:00","https://files.tholin.dev/Public/GDSII/chip_top.tar.gz","",""
+"220639106915368960","tholin","2025-12-06T18:25:50.6610000+00:00","Haven’t looked at it myself yet, though","",""
+"596068704471482370","246tnt","2025-12-06T18:30:59.1580000+00:00","Ok, I'll take a look at it, but will be later tonight. 
+Some tips to help though would be to move pins of your modules to Met3/Met4 instead of Met2/Met3 so the pins acts as antenna straps. And also try to avoid routing on Met5.","",""
+"220639106915368960","tholin","2025-12-06T18:30:59.2160000+00:00","My guess is that it actually can’t see the port diodes inside the macros.","",""
+"220639106915368960","tholin","2025-12-06T18:31:35.4370000+00:00","I think I could test this by running antenna checks on a fully flattened GDSII","",""
