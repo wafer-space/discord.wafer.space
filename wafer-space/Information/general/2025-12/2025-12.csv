@@ -1,14 +1,1 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
-"596068704471482370","246tnt","2025-12-06T18:32:01.2160000+00:00","It most definitely can see them. But diodes are also not magic. Some of those nets are huge and one diode might not be enough.","",""
-"220639106915368960","tholin","2025-12-06T18:32:01.4700000+00:00","But alright. I’ll find the configuration variable for changing the pin layers.","",""
-"220639106915368960","tholin","2025-12-06T18:34:00.0950000+00:00","Interesting that there is no antenna violations on lines going to my DACs, since those have no input diodes at all.","",""
-"1365118310701600900","rtimothyedwards_19428","2025-12-06T18:47:36.8740000+00:00","@Tholin :  Small revision to the DFF I made for your standard cell library:  Because I put a via on top of the set pin (SN), OpenROAD will put other vias too close to it if it's not aware that there's a via blockage there.  I generally have the LEF writer not add via blockages (I probably should rethink that), but in this case it's needed.  I added it to the OBS list:
-```
-LAYER Via1
-  RECT 13.645 1.690 13.905 1.950 ;
-```
-which worked fine (no DRC errors generated during routing).  Not sure if it makes more sense to put it under the SN pin PORT record.  I think I can have magic output via records where vias are sitting inside a port boundary.  Until then, these lines have to be added manually.","",""
-"220639106915368960","tholin","2025-12-06T18:59:28.1560000+00:00","Cannot find the configuration variable for IO port layers","",""
-"220639106915368960","tholin","2025-12-06T19:00:23.0800000+00:00","I could also make this one of the exceptions where I do export the LEF with -pinonly, which can increase routing congestion slightly, but would let you define an area where it is safe to place vias.","",""
-"220639106915368960","tholin","2025-12-06T19:03:42.5890000+00:00","I am currently speeding through caracterization at the ff corner, because that is where hold violations happen.","",""
-"596068704471482370","246tnt","2025-12-06T19:53:43.0760000+00:00","@Tholin  `FP_IO_HLAYER` / `FP_IO_VLAYER`","",""
