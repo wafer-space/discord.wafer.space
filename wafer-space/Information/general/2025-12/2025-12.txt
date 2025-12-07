@@ -5,114 +5,13 @@ Topic: Welcome to [wafer.space](https://wafer.space/) -
 documentation at [wafer.space github](https://github.com/wafer-space) - 
 buy at [buy.wafer.space](https://buy.wafer.space) - 
 archives at [discord.wafer.space](https://discord.wafer.space/)
-After: 12/07/2025 10:22
+After: 12/07/2025 11:18
 ==============================================================
 
-[12/07/2025 10:23] 246tnt
-AFAICT `magic` implements exactly the same method as KLayout and thus can't properly check for antennas either :/ (cc @Tim Edwards )
-
-{Reactions}
-👀
-
-[12/07/2025 10:31] mole99
-So, KLayout changes the ratio limit depending on the diode area, instead of increasing the gate area proportionally. Good catch, that is indeed a problem.
-
-In this case, it seems we really need to wait for a fix.
-
-Once a patch has been released, I can update the Nix setup in the template quite quickly. The main bottleneck is therefore whether Matthias has time to take a look at this, and the time that is needed for people to fix their designs afterwards.
-
-
-[12/07/2025 10:32] urish
-What about OR, does it calculate the antenna sizes correctly?
-
-
-[12/07/2025 10:33] 246tnt
-It does the best it can. But AFAIK the LEF contains no information about the metal layers for connectivity of the declared gate/diff area so the check can't be 100%.
-
-
-[12/07/2025 10:38] 246tnt
-Like pins have only a single line `ANTENNAGATEAREA` / `ANTENNADIFFAREA` which I don't see how that could be used to fully evaluate antenna without knowing what internal layers path.
-
-
-[12/07/2025 10:38] egorxe
-@tnt You're right there seems to be nothing of the sort... So the only options for this tapeout would likely be either to ignore KLayout antenna violations in precheck, or to create a temporary KLayout fork which will perform antenna_check the way gf180mcu requires it.
-
-{Reactions}
-😮
-
-[12/07/2025 10:41] egorxe
-But it should work correctly for the flat design, right?
-
-
-[12/07/2025 10:44] 246tnt
-For any internal node that doesn't connect to a macro it should be correct. But anything that connect to a macro where the only info is from a LEF could be a problem.
-
-
-[12/07/2025 10:44] 246tnt
-Now this would include IO pads, but AFAICT the io pads have protection diodes and they did take care of having them connected through metal1/metal2 only so that should be fine.
-
-
-[12/07/2025 10:46] 246tnt
-For Tiny Tapeout we also have no signal routing on Metal5 and have all the user signal pins on Metal4 so this will work too because pins then act as antenna strap. This was done on purpose exactly for that reason.
-
-
-[12/07/2025 10:48] 246tnt
-```diff
-diff --git a/src/db/db/dbLayoutToNetlist.cc b/src/db/db/dbLayoutToNetlist.cc
-index 043f1629c..041b51b06 100644
---- a/src/db/db/dbLayoutToNetlist.cc
-+++ b/src/db/db/dbLayoutToNetlist.cc
-@@ -1934,6 +1934,7 @@ db::Region LayoutToNetlist::antenna_check (const db::Region &gate, double gate_a
-       }
- 
-       double r = ratio;
-+      double da = 0.0;
-       bool skip = false;
- 
-       adiodes_int.clear ();
-@@ -1953,7 +1954,7 @@ db::Region LayoutToNetlist::antenna_check (const db::Region &gate, double gate_a
-             skip = true;
-           }
-         } else {
--          r += adiode_int * dbu * dbu * d->second;
-+          da += adiode_int * dbu * dbu * d->second;
-         }
- 
-       }
-@@ -1965,7 +1966,7 @@ db::Region LayoutToNetlist::antenna_check (const db::Region &gate, double gate_a
- 
-         compute_area_and_perimeter_of_net_shapes (*cid, *c, layer_of (gate), agate_int, pgate_int);
- 
--        double agate = 0.0;
-+        double agate = da;
-         if (fabs (gate_area_factor) > 1e-6) {
-           agate += agate_int * dbu * dbu * gate_area_factor;
-         }
-```
-
-{Reactions}
-👌 👀
-
-[12/07/2025 10:49] 246tnt
-(Although with the patch above, the DRC rule need to be changed, the number passed in the diode check needs to be the Mf, so 15 / 2 and not 6000 / 800 )
-
-
-[12/07/2025 10:50] mole99
-I'll try to patch this through the Nix flake.
-
-{Reactions}
-❤️
-
-[12/07/2025 10:54] egorxe
-LibreLane docs recommend supplying netlists for macros if available. But as far as I can tell they are used only in OpenSTA steps. It's probably best to buffer macro pins on the both sides to avoid antenna problems.
-
-{Reactions}
-👀
-
-[12/07/2025 10:58] 246tnt
-Yeah, netlist wouldn't help for the physical layout, it would need to look at the DEF or GDS of the macro and I don't think it does that. I haven't dug a lot into the OR source code, but AFAIK it only looks at the LEF and that just doesn't have enough info to be correct all the time AFAIU.
+[12/07/2025 11:20] egorxe
+OR can only use LEF abstract + Liberty for macros and OpenSTA is able use Verilog netlists + SPEFs instead for more precise timing. But you're right, even if it would be possible to load netlists into OR, it wouldn't help antenna analysis anyway. So the only ways to reliably avoid antennas on wires going through the macro ports seem to be either to locate them on the top  routing layer or to buffer them on both sides.
 
 
 ==============================================================
-Exported 15 message(s)
+Exported 1 message(s)
 ==============================================================
