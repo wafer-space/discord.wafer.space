@@ -5,74 +5,286 @@ Topic: Welcome to [wafer.space](https://wafer.space/) -
 documentation at [wafer.space github](https://github.com/wafer-space) - 
 buy at [buy.wafer.space](https://buy.wafer.space) - 
 archives at [discord.wafer.space](https://discord.wafer.space/)
-After: 12/07/2025 12:43
+After: 12/07/2025 14:23
 ==============================================================
 
-[12/07/2025 12:47] mole99
-- project template: https://github.com/wafer-space/gf180mcu-project-template/tree/antenna-calculations
-- PDK: https://github.com/wafer-space/gf180mcu/tree/antenna-calculations
+[12/07/2025 14:28] egorxe
+My design takes ~4 hours to verify locally, this is why I was pursuing even relatively small antenna runtime optimizations I had in my PR.
 
-Due to the patch KLayout needs to recompile when invoking the Nix shell.
+
+[12/07/2025 14:32] 246tnt
+4h for just for the antenna or the whole precheck ?
+
+
+[12/07/2025 14:41] egorxe
+Just antenna. My old Xeon workstation is rather slow in single thread, but it still should take a couple of hours on fast machine I think. KLayout DRC takes another ~3 hours locally.
+
+
+[12/07/2025 14:53] ravenslofty
+`2025-12-07 06:25:53 +0000: Memory Usage (4133788K) : Executing rule ANT.16_ii_ANT.4 `
+so, that's about 8h30m elapsed time on one antenna rule so far :p
+
+{Reactions}
+😅
+
+[12/07/2025 14:57] mole99
+Yes, but it still feels too long.
+Extracting full connectivity in KLayout DRC for a complex design now takes ~15min. Of course, the actual antenna check goes on top. Still, I can't believe that querying the geometry and calculating the ratios has to take several hours (e.g. for the last antenna check).
+
+Last time I checked with Matthias regarding the connectivity in the DRC deck, it paid off :)
+
+
+[12/07/2025 14:59] 246tnt
+Did you check on magic how long it takes ?
+
+
+[12/07/2025 15:02] 246tnt
+"88 KLayout density errors found."
+
+
+[12/07/2025 15:02] 246tnt
+😢
+
+
+[12/07/2025 15:02] 246tnt
+(using new filler gen)
+
+
+[12/07/2025 15:06] mole99
+Hm, why so many violations? Shouldn't it create a single marker for each violated layer? (It's a global density check, not stepped.)
+
+
+[12/07/2025 15:08] mole99
+And can you show me the ratios for all layers? Should be in the logs.
+
+
+[12/07/2025 15:08] 246tnt
+It's window density ...
+
+
+[12/07/2025 15:08] 246tnt
+M2 layer only ... for basically every where in the chip 😅
+
+
+[12/07/2025 15:09] 246tnt
+
+
+{Attachments}
+general_media/2025-12-07_1579x846_scrot-1467A.png
+
+
+[12/07/2025 15:12] mole99
+Oh right, it's in tiled mode. However, the ratio should still be calculated across the whole chip, it's only the markers that are tiled.
+
+
+[12/07/2025 15:12] mole99
+The problem is that there's Metal1 inside all standard cells. That means that almost no dummy Metal2 can be placed...
+
+
+[12/07/2025 15:13] 246tnt
+Yeah, there is metal2 ... nowhere ...
+
+
+[12/07/2025 15:13] urish
+Why not?
+
+
+[12/07/2025 15:14] 246tnt
+GF has this rulel that you can't place dummy if there is real metal in _adjacent_ layers ...
+
+{Reactions}
+😫
+
+[12/07/2025 15:15] mole99
+Well, there should be some outside of the padring. Else it might be a bug?
+
+{Attachments}
+general_media/image-62159.png
+
+
+[12/07/2025 15:15] 246tnt
+Yes, there is some outside the pad ring and between module but ... meeting 30% with that will be impossible ...
+
+
+[12/07/2025 15:15] 246tnt
+Or maybe making it _solid_ metal2 dummy rather than little squares ..
+
+
+[12/07/2025 15:15] mole99
+That's the DRC rule. If there is active metal above or below, you can't place any dummy.
+It's a stupid rule, that's why we initially decided to ignore it.
+
+
+[12/07/2025 15:16] urish
+Do we know why this rule exists? I can't make sense if it
+
+
+[12/07/2025 15:16] 246tnt
+It's kind of annoying it doesn't report the actual density so we can now how far we are.
+
+
+[12/07/2025 15:16] mole99
+No, there's another rule for that...
+
+
+[12/07/2025 15:16] 246tnt
+@urish Probably to avoid affecting capacitance of nearby nets.
 
 {Reactions}
 👍
 
-[12/07/2025 12:50] mole99
-@Tholin can you verify that this resolves the false positives?
+[12/07/2025 15:16] mole99
+It should be in the log.
 
 
-[12/07/2025 13:24] 246tnt
-FWIW, I ran the chip_top that @Tholin posted yesterday through locally patched KLayout / PDK and it's not reporting any violations.
+[12/07/2025 15:17] 246tnt
+`29.238749553369797`
 
 
-[12/07/2025 14:03] mole99
-No violations at all? That's great!
-Well, hopefully we *do* get violations if they are above the limit 😄
+[12/07/2025 15:17] 246tnt
+😑
 
 
-[12/07/2025 14:03] mole99
-Could you perhaps post your patch in the KLayout issue as a quick starting point for Matthias?
+[12/07/2025 15:17] urish
+But wouldn't the same issue arise with non fill metal as well?
 
 
-[12/07/2025 14:06] 246tnt
-Yeah, knowing if there are actual violations or not is harder 😅 
-Although TBH, given the massive multiplier of 15, it'd be quite challenging to get a violation when any diode is involved. On 3v3 designs, that'd be more likely so maybe Tim will see some in his designs.
+[12/07/2025 15:18] 246tnt
+@urish Of course, but the idea is that if you run simulation without fill, adding the fill shouldn't change/affect the results.
 
 
-[12/07/2025 14:07] 246tnt
-How is the filler update doing ?  It's the last expected fix right ?
+[12/07/2025 15:18] urish
+Do you need some metal 2 smiley macros to throw around in the tt-mux?
 
 
-[12/07/2025 14:12] mole99
-It's going well: https://github.com/wafer-space/gf180mcu/commits/filler-generation/
-The last commit should fix all remaining DPF.1 violations.
-Then, we'll see if we can still meet the density limits for all designs...
+[12/07/2025 15:19] 246tnt
+@urish Maybe copy the logo to `Metal2` layer 🙂
 
 
-[12/07/2025 14:17] mole99
-Another issue is that some designs take multiple hours for the KLayout antenna check. I think there's something going wrong. I checked the connectivity setup for potential shorts, but I don't see how this can happen for some designs but not for others.
+[12/07/2025 15:19] urish
+With pleasure will copy to layer
 
 
-[12/07/2025 14:18] egorxe
-@Leo Moser (mole99) I'll experiment with disabling Antenna fixing stages in LibreLane for my design and see if I'll get matching antenna violations in KLayout.
+[12/07/2025 15:19] mole99
+I can update the wafer.space logo as well.
 
 
-[12/07/2025 14:19] rebelmike
-I was wondering how long this might take - admittedly this is on my laptop but `Executing rule ANT.16_i_ANT.2` has taken over an hour when all of the flow up to that point took ~20 mins
+[12/07/2025 15:20] 246tnt
+Running the fill in non-tiled mode might also help because there are gaps in the fill at the tile boundary
 
 
-[12/07/2025 14:19] rebelmike
-(this is on a quarter slot design)
+[12/07/2025 15:21] mole99
+Yes, there is. But there's currently no solution for that afaik. You will always have filler cells at the tile boundary and KLayout doesn't cut them, but instead remove them.
 
 
-[12/07/2025 14:19] 246tnt
-Each step is progressively longer 😅
+[12/07/2025 15:22] 246tnt
+But you can run it non-tiled right ?
 
 
-[12/07/2025 14:21] egorxe
-Antenna runtime depends very much on the ammount of routing, especially on upper layers. So obviously high density designs will take several times longer to verify.
+[12/07/2025 15:22] mole99
+Yes.
 
+
+[12/07/2025 15:22] 246tnt
+That will take longer of course but at this point I'll take anything that can help get some metal2.
+
+
+[12/07/2025 15:23] mole99
+Well, yeah. But it's not only you. There will be other designs that won't meet density with an even larger margin.
+
+
+[12/07/2025 15:23] 246tnt
+It only the area inside the seal ring considered ?
+
+
+[12/07/2025 15:23] mole99
+No the whole chip as specified in the docs.
+
+
+[12/07/2025 15:25] 246tnt
+I know, but running non-tiled will always lead to more fill, so it's pretty much always good. Sure, that'll only work if you're close but ...
+
+
+[12/07/2025 15:25] 246tnt
+Could we make a fill / decap cell that has enough space between the met1 power rails to allow Metal2 filler ?
+
+
+[12/07/2025 15:25] mole99
+Yeah, of course. Every little bit helps :)
+
+
+[12/07/2025 15:26] mole99
+To be honest, that rule is really stupid and there's a solution to all of that: active dummy metal fill 😈
+
+
+[12/07/2025 15:27] egorxe
+Is there anything in DRM forbidding performing fill using regular non-fill metal layer if it's impossible to reach density with dummy layer?
+
+
+[12/07/2025 15:27] 246tnt
+Sure, I mean, you'd have to do that during fab submission ... copy the `dummy` layer to `drawing` layer and be done with it.
+
+
+[12/07/2025 15:28] 246tnt
+Because for all the dev process and such you want them separate.
+
+{Reactions}
+👌
+
+[12/07/2025 15:28] mole99
+No, not that I have seen.
+
+
+[12/07/2025 15:30] mole99
+I might add an option to the filler script to ignore the previous/subsequent active metal rules. So for analog designs it's still possible to do the fill according to the DRC rules.
+
+
+[12/07/2025 15:32] mole99
+Well, that sounds like a plan. Thanks for giving the script a try and for all the feedback!
+
+
+[12/07/2025 15:39] 246tnt
+Too bad the standard cells don't have a marker layer, it'd have been nice to have a flag to just ignore met1 of stdcell ...
+
+
+[12/07/2025 15:40] mole99
+Yes, but we would still get DRC violations when submitting to the foundry. Except if we added those shapes as active metal...
+
+
+[12/07/2025 15:42] 246tnt
+Oh yeah, of course, it was just to make it easier to deal with mixed analog/digital stuff.
+
+{Reactions}
+👍
+
+[12/07/2025 16:00] 246tnt
+Ah, the klayout patch is no good ...
+
+
+[12/07/2025 16:01] rebelmike
+Can standard fill cells be easily identified at the point the fill is run? If so maybe could always add “active” metal above them (if there’s nothing else there)
+
+
+[12/07/2025 16:09] mole99
+Sylvain had the same idea just a few messages above 😁
+Unfortunately, there's no easy way...
+
+
+[12/07/2025 16:10] rebelmike
+I was wondering if limiting it to just fill cells, rather than all standard cells, might make it easier
+
+
+[12/07/2025 16:11] rebelmike
+Eg is there any record of the cell name at that point, or could a marker be added just to those cells?
+
+
+[12/07/2025 16:16] mole99
+I see what you mean. It would be possible, but not really straightforward.
+Since we need to add dummy metal as active metal anyways, at this point we can just convert all dummy I would say.
+
+{Reactions}
+👍
 
 ==============================================================
-Exported 14 message(s)
+Exported 63 message(s)
 ==============================================================
