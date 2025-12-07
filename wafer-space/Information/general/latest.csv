@@ -1,32 +1,7 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
-"596068704471482370","246tnt","2025-12-06T21:23:53.9920000+00:00","@Tholin Do you have wires going to nowhere ?","",""
-"596068704471482370","246tnt","2025-12-06T21:24:15.5200000+00:00","I'm looking at `io_in[13]` and it seems routed to several modules, but them go un-used in several of those ...","",""
-"220639106915368960","tholin","2025-12-06T21:24:57.4130000+00:00","Yeah, that could be","",""
-"596068704471482370","246tnt","2025-12-06T21:26:01.8240000+00:00","That's causing issues because it ends it with very very long wires to move it around and then going to nowhere, not even a diode to compensate for all that wiring that got added.","",""
-"220639106915368960","tholin","2025-12-06T21:28:33.7510000+00:00","But just like TinyTapeout, my designs may have unused inputs.","",""
-"596068704471482370","246tnt","2025-12-06T21:29:38.8960000+00:00","Then try at least putting a diode on those.","",""
-"220639106915368960","tholin","2025-12-06T21:33:49.8740000+00:00","See, I thought it would do this automatically with DIODE_ON_PORTS: both","",""
-"596068704471482370","246tnt","2025-12-06T21:46:21.5780000+00:00","No, because it goes and adds protection diodes near every instance connected to that net ... no instances, no diodes.","",""
-"596068704471482370","246tnt","2025-12-06T21:48:11.0950000+00:00","I'm not sure why OpenROAD doesn't see the violation though, unless something funk is going on with the LEF of the macros.","",""
-"596068704471482370","246tnt","2025-12-06T21:50:44.8790000+00:00","Wait no, wtf : 
-```
-pmetal_factor: 0.54
-agate: 0.396
-ametal_eff: 3451.0752
-pmetal: 6390.88
-max_ratio_eff: 5324.8
-ratio: 8714.83636364
-diode_factors: (6000)
-adiodes: (0.8208)
-max_ratio: 400
-```","",""
-"596068704471482370","246tnt","2025-12-06T21:52:13.3130000+00:00","`3451.0752 / 0.396 = 8714.83636364` which is what it reports.
-But it also sees the diodes `0.8208` which is correct for 2 antenna diodes cells connected on that segment.
-But then the ratio should be `3451.0752 / (0.396 + 15 * 0.8208) = 271.6` which is not an error.","",""
-"596068704471482370","246tnt","2025-12-06T22:14:38.3350000+00:00","Ok, I think I understand.","",""
-"596068704471482370","246tnt","2025-12-06T22:15:01.3400000+00:00","The check done by klayout doesn't match the PDK.","",""
-"596068704471482370","246tnt","2025-12-06T22:17:05.5960000+00:00","The DRC rule says `ratio = perim_area / (gate_area + MF * diode_area)  < 400`","",""
-"596068704471482370","246tnt","2025-12-06T22:18:10.7850000+00:00","But what KLayout checks is :   `(perim_area / gate_area) < 400 + (400 * MF * diode_area)`","",""
-"596068704471482370","246tnt","2025-12-06T22:18:42.4300000+00:00","Those are not equivalent ...","",""
-"596068704471482370","246tnt","2025-12-06T22:20:56.8240000+00:00","In the example above what KLayout does is compare the ratio it computed ( `8714.83636364` ) to the `max_ratio + (diode_factors * adiodes) = 5324.8` and thus sees it as a violation.","",""
-"596068704471482370","246tnt","2025-12-06T22:21:39.2140000+00:00","(cc @Leo Moser (mole99) )","",""
+"596068704471482370","246tnt","2025-12-06T22:22:35.8880000+00:00","I hope my explanation makes sense 😅","",""
+"596068704471482370","246tnt","2025-12-06T22:27:40.8440000+00:00","AFAICT from the KLayout doc for `antenna_check`, there is no way to implement the check as described in the DRM.","",""
+"220639106915368960","tholin","2025-12-06T22:57:14.1700000+00:00","So is the KLayout check more or less strict than required?","",""
+"378788837452677120","asc9742","2025-12-06T23:11:53.3690000+00:00","@Tim 'mithro' Ansell , the precheck gave out a error_log file but does not contain which rules were violated.
+Is there a way to get the rdb file to see where the errors are?","",""
+"169786952432746498","mithro_","2025-12-06T23:21:36.5730000+00:00","I'm working on that.","",""
