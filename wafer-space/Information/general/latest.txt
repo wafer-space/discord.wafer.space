@@ -5,21 +5,39 @@ Topic: Welcome to [wafer.space](https://wafer.space/) -
 documentation at [wafer.space github](https://github.com/wafer-space) - 
 buy at [buy.wafer.space](https://buy.wafer.space) - 
 archives at [discord.wafer.space](https://discord.wafer.space/)
-After: 12/07/2025 06:33
+After: 12/07/2025 08:31
 ==============================================================
 
-[12/07/2025 06:53] mithro_
-Looks great!
+[12/07/2025 08:37] egorxe
+That is what I've meant
 
 
-[12/07/2025 07:26] 246tnt
-@Egor Lukyanchenko I don't see how extending the shapes would change anything.  I mean you could extend their area and then add them to the "gate" part of the `antenna_check` and not use the `diode` function at all ...
+[12/07/2025 09:18] 246tnt
+@Egor Lukyanchenko But how would you size diode by 15 ?   AFAICT there isn't a relative ration `.sized` operator ... and then you might also end up merging shapes that shouldn't.
 
 
-[12/07/2025 07:27] 246tnt
-@Tholin It's just different ... if the gate area is < 1 um^2 it'll be more strict and if gate area is > 1 um^2 then it's more lenient.
+[12/07/2025 09:23] 246tnt
+The proper way needs to be implemented in KLayout. The related function seem pretty isolated so it's probably not a big job ( actually updating the doc might be half of it 😅 ), but the KLayout maintainer would have to pick the syntax he wants to specify that.
+
+
+[12/07/2025 09:31] 246tnt
+I created https://github.com/KLayout/klayout/issues/2245
+
+{Embed}
+https://github.com/KLayout/klayout/issues/2245
+[gf180mcu] Support `ANTENNAGATEPLUSDIFF` way of accounting for diod...
+The way the antenna computation is done in KLayout cannot implement the actual antenna check that the gf180mcu DRM specifies. In short for diodes/diffusion KLayout can add some value to the maximum...
+general_media/2245-C0782
+
+
+[12/07/2025 09:33] 246tnt
+I'm not sure how applicable it will be for this tapeout because ... time to implement in klayout + time to get binaries in the nix + time to update PDK/template/precheck + time for people to update is probably non negligible and may not fit the timeline.
+
+
+[12/07/2025 09:41] 246tnt
+In the mean time, from the KLayout error file you can at least check if the reported errors are false positive. It's not however possible to know if there are false negatives.
 
 
 ==============================================================
-Exported 3 message(s)
+Exported 6 message(s)
 ==============================================================
