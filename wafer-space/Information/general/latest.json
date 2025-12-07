@@ -16,7 +16,7 @@
     "after": null,
     "before": null
   },
-  "exportedAt": "2025-12-07T10:22:09.1171064+00:00",
+  "exportedAt": "2025-12-07T11:18:05.6456849+00:00",
   "messages": [
     {
       "id": "1444913134920925235",
@@ -11333,7 +11333,609 @@
       "reactions": [],
       "mentions": [],
       "inlineEmojis": []
+    },
+    {
+      "id": "1447171704840523887",
+      "type": "Default",
+      "timestamp": "2025-12-07T10:23:41.584+00:00",
+      "timestampEdited": "2025-12-07T10:24:38.798+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "AFAICT `magic` implements exactly the same method as KLayout and thus can't properly check for antennas either :/ (cc @Tim Edwards )",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\ud83d\udc40",
+            "code": "eyes",
+            "isAnimated": false,
+            "imageUrl": "general_media/1f440-6C64D.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "840182560252624916",
+              "name": "logic_anarchy",
+              "discriminator": "0000",
+              "nickname": "logic anarchy",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "general_media/06c92443282b33fcd404a7ae3bf9f11e-DC579.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "1365118310701600900",
+          "name": "rtimothyedwards_19428",
+          "discriminator": "0000",
+          "nickname": "Tim Edwards",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "general_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1447173687773237330",
+      "type": "Default",
+      "timestamp": "2025-12-07T10:31:34.352+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "So, KLayout changes the ratio limit depending on the diode area, instead of increasing the gate area proportionally. Good catch, that is indeed a problem.\n\nIn this case, it seems we really need to wait for a fix.\n\nOnce a patch has been released, I can update the Nix setup in the template quite quickly. The main bottleneck is therefore whether Matthias has time to take a look at this, and the time that is needed for people to fix their designs afterwards.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "general_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1447174018896756856",
+      "type": "Default",
+      "timestamp": "2025-12-07T10:32:53.298+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "What about OR, does it calculate the antenna sizes correctly?",
+      "author": {
+        "id": "732347216412278825",
+        "name": "urish",
+        "discriminator": "0000",
+        "nickname": "urish",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "general_media/2b6c3aac0ae09fc8a72a4b2e17d7f9c9-39032.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1447174270886351022",
+      "type": "Default",
+      "timestamp": "2025-12-07T10:33:53.377+00:00",
+      "timestampEdited": "2025-12-07T10:34:06.038+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It does the best it can. But AFAIK the LEF contains no information about the metal layers for connectivity of the declared gate/diff area so the check can't be 100%.",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1447175321341263924",
+      "type": "Default",
+      "timestamp": "2025-12-07T10:38:03.825+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Like pins have only a single line `ANTENNAGATEAREA` / `ANTENNADIFFAREA` which I don't see how that could be used to fully evaluate antenna without knowing what internal layers path.",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1447175335740178485",
+      "type": "Reply",
+      "timestamp": "2025-12-07T10:38:07.258+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@tnt You're right there seems to be nothing of the sort... So the only options for this tapeout would likely be either to ignore KLayout antenna violations in precheck, or to create a temporary KLayout fork which will perform antenna_check the way gf180mcu requires it.",
+      "author": {
+        "id": "709384666909507634",
+        "name": "egorxe",
+        "discriminator": "0000",
+        "nickname": "Egor Lukyanchenko",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/3-FB033.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\ud83d\ude2e",
+            "code": "open_mouth",
+            "isAnimated": false,
+            "imageUrl": "general_media/1f62e-FE396.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "840182560252624916",
+              "name": "logic_anarchy",
+              "discriminator": "0000",
+              "nickname": "logic anarchy",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "general_media/06c92443282b33fcd404a7ae3bf9f11e-DC579.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "596068704471482370",
+          "name": "246tnt",
+          "discriminator": "0000",
+          "nickname": "tnt",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "general_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1447155267677720688",
+        "channelId": "1361349523724570941",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1447176084272447571",
+      "type": "Reply",
+      "timestamp": "2025-12-07T10:41:05.722+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "But it should work correctly for the flat design, right?",
+      "author": {
+        "id": "709384666909507634",
+        "name": "egorxe",
+        "discriminator": "0000",
+        "nickname": "Egor Lukyanchenko",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/3-FB033.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "596068704471482370",
+          "name": "246tnt",
+          "discriminator": "0000",
+          "nickname": "tnt",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "general_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1447175321341263924",
+        "channelId": "1361349523724570941",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1447176867835678811",
+      "type": "Default",
+      "timestamp": "2025-12-07T10:44:12.538+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "For any internal node that doesn't connect to a macro it should be correct. But anything that connect to a macro where the only info is from a LEF could be a problem.",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1447177025377927282",
+      "type": "Default",
+      "timestamp": "2025-12-07T10:44:50.099+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Now this would include IO pads, but AFAICT the io pads have protection diodes and they did take care of having them connected through metal1/metal2 only so that should be fine.",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1447177461849788548",
+      "type": "Default",
+      "timestamp": "2025-12-07T10:46:34.162+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "For Tiny Tapeout we also have no signal routing on Metal5 and have all the user signal pins on Metal4 so this will work too because pins then act as antenna strap. This was done on purpose exactly for that reason.",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1447177914964512820",
+      "type": "Default",
+      "timestamp": "2025-12-07T10:48:22.193+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "```diff\ndiff --git a/src/db/db/dbLayoutToNetlist.cc b/src/db/db/dbLayoutToNetlist.cc\nindex 043f1629c..041b51b06 100644\n--- a/src/db/db/dbLayoutToNetlist.cc\n+++ b/src/db/db/dbLayoutToNetlist.cc\n@@ -1934,6 +1934,7 @@ db::Region LayoutToNetlist::antenna_check (const db::Region &gate, double gate_a\n       }\n \n       double r = ratio;\n+      double da = 0.0;\n       bool skip = false;\n \n       adiodes_int.clear ();\n@@ -1953,7 +1954,7 @@ db::Region LayoutToNetlist::antenna_check (const db::Region &gate, double gate_a\n             skip = true;\n           }\n         } else {\n-          r += adiode_int * dbu * dbu * d->second;\n+          da += adiode_int * dbu * dbu * d->second;\n         }\n \n       }\n@@ -1965,7 +1966,7 @@ db::Region LayoutToNetlist::antenna_check (const db::Region &gate, double gate_a\n \n         compute_area_and_perimeter_of_net_shapes (*cid, *c, layer_of (gate), agate_int, pgate_int);\n \n-        double agate = 0.0;\n+        double agate = da;\n         if (fabs (gate_area_factor) > 1e-6) {\n           agate += agate_int * dbu * dbu * gate_area_factor;\n         }\n```",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\ud83d\udc4c",
+            "code": "ok_hand",
+            "isAnimated": false,
+            "imageUrl": "general_media/1f44c-59547.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "323371864074485771",
+              "name": "mole99",
+              "discriminator": "0000",
+              "nickname": "Leo Moser (mole99)",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "general_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+            }
+          ]
+        },
+        {
+          "emoji": {
+            "id": "",
+            "name": "\ud83d\udc40",
+            "code": "eyes",
+            "isAnimated": false,
+            "imageUrl": "general_media/1f440-6C64D.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "840182560252624916",
+              "name": "logic_anarchy",
+              "discriminator": "0000",
+              "nickname": "logic anarchy",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "general_media/06c92443282b33fcd404a7ae3bf9f11e-DC579.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1447178265461526529",
+      "type": "Default",
+      "timestamp": "2025-12-07T10:49:45.758+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "(Although with the patch above, the DRC rule need to be changed, the number passed in the diode check needs to be the Mf, so 15 / 2 and not 6000 / 800 )",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1447178360622026913",
+      "type": "Reply",
+      "timestamp": "2025-12-07T10:50:08.446+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I'll try to patch this through the Nix flake.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "general_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\u2764\ufe0f",
+            "code": "heart",
+            "isAnimated": false,
+            "imageUrl": "general_media/2764-A3D25.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "840182560252624916",
+              "name": "logic_anarchy",
+              "discriminator": "0000",
+              "nickname": "logic anarchy",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "general_media/06c92443282b33fcd404a7ae3bf9f11e-DC579.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "596068704471482370",
+          "name": "246tnt",
+          "discriminator": "0000",
+          "nickname": "tnt",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "general_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1447177914964512820",
+        "channelId": "1361349523724570941",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1447179557231923453",
+      "type": "Reply",
+      "timestamp": "2025-12-07T10:54:53.74+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "LibreLane docs recommend supplying netlists for macros if available. But as far as I can tell they are used only in OpenSTA steps. It's probably best to buffer macro pins on the both sides to avoid antenna problems.",
+      "author": {
+        "id": "709384666909507634",
+        "name": "egorxe",
+        "discriminator": "0000",
+        "nickname": "Egor Lukyanchenko",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/3-FB033.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\ud83d\udc40",
+            "code": "eyes",
+            "isAnimated": false,
+            "imageUrl": "general_media/1f440-6C64D.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "840182560252624916",
+              "name": "logic_anarchy",
+              "discriminator": "0000",
+              "nickname": "logic anarchy",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "general_media/06c92443282b33fcd404a7ae3bf9f11e-DC579.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "596068704471482370",
+          "name": "246tnt",
+          "discriminator": "0000",
+          "nickname": "tnt",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "general_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1447176867835678811",
+        "channelId": "1361349523724570941",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1447180417890386040",
+      "type": "Default",
+      "timestamp": "2025-12-07T10:58:18.937+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yeah, netlist wouldn't help for the physical layout, it would need to look at the DEF or GDS of the macro and I don't think it does that. I haven't dug a lot into the OR source code, but AFAIK it only looks at the LEF and that just doesn't have enough info to be correct all the time AFAIU.",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
     }
   ],
-  "messageCount": 339
+  "messageCount": 354
 }
