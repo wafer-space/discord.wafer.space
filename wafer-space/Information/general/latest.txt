@@ -5,13 +5,74 @@ Topic: Welcome to [wafer.space](https://wafer.space/) -
 documentation at [wafer.space github](https://github.com/wafer-space) - 
 buy at [buy.wafer.space](https://buy.wafer.space) - 
 archives at [discord.wafer.space](https://discord.wafer.space/)
-After: 12/07/2025 11:18
+After: 12/07/2025 12:43
 ==============================================================
 
-[12/07/2025 11:20] egorxe
-OR can only use LEF abstract + Liberty for macros and OpenSTA is able use Verilog netlists + SPEFs instead for more precise timing. But you're right, even if it would be possible to load netlists into OR, it wouldn't help antenna analysis anyway. So the only ways to reliably avoid antennas on wires going through the macro ports seem to be either to locate them on the top  routing layer or to buffer them on both sides.
+[12/07/2025 12:47] mole99
+- project template: https://github.com/wafer-space/gf180mcu-project-template/tree/antenna-calculations
+- PDK: https://github.com/wafer-space/gf180mcu/tree/antenna-calculations
+
+Due to the patch KLayout needs to recompile when invoking the Nix shell.
+
+{Reactions}
+👍
+
+[12/07/2025 12:50] mole99
+@Tholin can you verify that this resolves the false positives?
+
+
+[12/07/2025 13:24] 246tnt
+FWIW, I ran the chip_top that @Tholin posted yesterday through locally patched KLayout / PDK and it's not reporting any violations.
+
+
+[12/07/2025 14:03] mole99
+No violations at all? That's great!
+Well, hopefully we *do* get violations if they are above the limit 😄
+
+
+[12/07/2025 14:03] mole99
+Could you perhaps post your patch in the KLayout issue as a quick starting point for Matthias?
+
+
+[12/07/2025 14:06] 246tnt
+Yeah, knowing if there are actual violations or not is harder 😅 
+Although TBH, given the massive multiplier of 15, it'd be quite challenging to get a violation when any diode is involved. On 3v3 designs, that'd be more likely so maybe Tim will see some in his designs.
+
+
+[12/07/2025 14:07] 246tnt
+How is the filler update doing ?  It's the last expected fix right ?
+
+
+[12/07/2025 14:12] mole99
+It's going well: https://github.com/wafer-space/gf180mcu/commits/filler-generation/
+The last commit should fix all remaining DPF.1 violations.
+Then, we'll see if we can still meet the density limits for all designs...
+
+
+[12/07/2025 14:17] mole99
+Another issue is that some designs take multiple hours for the KLayout antenna check. I think there's something going wrong. I checked the connectivity setup for potential shorts, but I don't see how this can happen for some designs but not for others.
+
+
+[12/07/2025 14:18] egorxe
+@Leo Moser (mole99) I'll experiment with disabling Antenna fixing stages in LibreLane for my design and see if I'll get matching antenna violations in KLayout.
+
+
+[12/07/2025 14:19] rebelmike
+I was wondering how long this might take - admittedly this is on my laptop but `Executing rule ANT.16_i_ANT.2` has taken over an hour when all of the flow up to that point took ~20 mins
+
+
+[12/07/2025 14:19] rebelmike
+(this is on a quarter slot design)
+
+
+[12/07/2025 14:19] 246tnt
+Each step is progressively longer 😅
+
+
+[12/07/2025 14:21] egorxe
+Antenna runtime depends very much on the ammount of routing, especially on upper layers. So obviously high density designs will take several times longer to verify.
 
 
 ==============================================================
-Exported 1 message(s)
+Exported 14 message(s)
 ==============================================================
