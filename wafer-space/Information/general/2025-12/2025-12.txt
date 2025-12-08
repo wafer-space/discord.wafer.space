@@ -5,9 +5,51 @@ Topic: Welcome to [wafer.space](https://wafer.space/) -
 documentation at [wafer.space github](https://github.com/wafer-space) - 
 buy at [buy.wafer.space](https://buy.wafer.space) - 
 archives at [discord.wafer.space](https://discord.wafer.space/)
-After: 12/08/2025 04:37
+After: 12/08/2025 06:40
 ==============================================================
 
+[12/08/2025 07:43] 246tnt
+@Egor Lukyanchenko How's the runtime of the `evaluate_nets` version vs the native `antenna_check` version ?
+
+
+[12/08/2025 07:44] egorxe
+For my test design it looks to be more or less the same.
+
+
+[12/08/2025 07:44] 246tnt
+And does it also report the raw values ( perimeters / gate area / diode area and such as details in each violation ) ?
+
+
+[12/08/2025 07:50] egorxe
+For now version in the PR only marks the violating gates, no nets even. AFAIU all raw values could be made available in GDS properties, but I'm not sure how to output them to lyrdb. Do you suggest to save them always, or just to create some "debug mode"?
+
+
+[12/08/2025 07:51] 246tnt
+I would always put them in the lyrdb, it's just useful to have when you have violation to know if you're way off and just slighly off and to know if a single diode is ok, or more extensive rework.
+
+
+[12/08/2025 07:52] egorxe
+Ok, I'll look into how to add them.
+
+
+[12/08/2025 08:00] 246tnt
+I'd hope that using `put` to put properties on the output shapes would also result in them being in the lyrdb.
+
+
+[12/08/2025 08:05] egorxe
+Yes, this is what I'm going to check first.
+
+
+[12/08/2025 08:15] egorxe
+Seems to work, I'll update PR now. Currently I'm saving gate area, diodes area, antenna perimeter and resulting ratio, that's enough I guess?
+
+{Reactions}
+👌
+
+[12/08/2025 08:21] 246tnt
+I think so yes.
+
+
 ==============================================================
-Exported 0 message(s)
+Exported 10 message(s)
 ==============================================================
