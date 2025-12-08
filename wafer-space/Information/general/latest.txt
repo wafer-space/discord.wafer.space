@@ -5,38 +5,78 @@ Topic: Welcome to [wafer.space](https://wafer.space/) -
 documentation at [wafer.space github](https://github.com/wafer-space) - 
 buy at [buy.wafer.space](https://buy.wafer.space) - 
 archives at [discord.wafer.space](https://discord.wafer.space/)
-After: 12/08/2025 10:29
+After: 12/08/2025 11:23
 ==============================================================
 
-[12/08/2025 10:29] 246tnt
-Ok, the fail to route, I could see that on dense designs.
-But moving pins shouldn't cause DRC errors ...
+[12/08/2025 11:38] 246tnt
+@Egor Lukyanchenko Yup works perfectly and matches the hacked up klayout version. Runtime is basically the same too.
+
+{Reactions}
+👍
+
+[12/08/2025 11:39] egorxe
+You should probably close the KLayout issue :).
 
 
-[12/08/2025 10:30] 246tnt
-But then again, the chip top you had posted last was actually clean from an Antenna PoV when using the fixed antenna check.
+[12/08/2025 11:40] 246tnt
+I was just doing that right after posting the above 😁
 
 
-[12/08/2025 10:30] tholin
-All I changed was move the pins, and suddenly I’m getting Metal3 clearance violations.
+[12/08/2025 11:55] 246tnt
+@Tholin Well it shouldn't happen, so it's definitely a bug, but I'd obviously need way more details to know what's going on 😅
 
 
-[12/08/2025 10:35] 246tnt
-So you jus set `FP_IO_VLAYER` to 'Metal4' ?
+[12/08/2025 11:56] tholin
+Unfortunately, I already deleted the files
 
 
-[12/08/2025 11:11] bailey8889
-@Tholin density errors? I wonder if the obstruction layer in the lef file is causing that. Would adding fill manually in the macro solve the problem?
+[12/08/2025 11:56] tholin
+But I remember the DRC errors were in the power grid
 
 
-[12/08/2025 11:12] tholin
-No, clearance
+[12/08/2025 11:57] tholin
+Two parallel, vertical straps on Metal4 were interrupted by a macro and generated Metal3 rects at the end, going to nowhere. And those were too close together.
 
 
-[12/08/2025 11:12] tholin
-And FP_IO_HLAYER to Metal3
+[12/08/2025 11:57] tholin
+No idea what was going on there.
+
+
+[12/08/2025 12:01] 246tnt
+Oh ... mm, yeah, the template pdn is quite custom, maybe there is some config there messing things up.
+
+
+[12/08/2025 12:01] 246tnt
+But in any case, you should just retry with the new antenna check and see how things turn out now.
+
+
+[12/08/2025 12:02] 246tnt
+(Either pull it in manually or wait for it to be merged)
+
+
+[12/08/2025 12:15] scafir
+Seems like the last update of the pdk causes some false positive on space to wide rules on klayout
+
+
+[12/08/2025 12:15] scafir
+
+
+{Attachments}
+general_media/space_to_wide_false_positive-36A67.gds
+
+
+[12/08/2025 12:16] scafir
+Is it me misunderstanding the rules or an actual error of the pdk?
+
+
+[12/08/2025 12:19] 246tnt
+Definitely looks like a false positive to me
+
+
+[12/08/2025 12:32] scafir
+Seems like "without_touching_edges" should be enabled at the separation check. I'll make a PR.
 
 
 ==============================================================
-Exported 7 message(s)
+Exported 16 message(s)
 ==============================================================
