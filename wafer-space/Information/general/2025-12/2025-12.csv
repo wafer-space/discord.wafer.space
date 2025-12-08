@@ -1,5 +1,9 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
-"596068704471482370","246tnt","2025-12-08T10:22:59.8860000+00:00","@Egor Lukyanchenko I think that's fine. I'm running the update check now to confirm I get the same results as previously.","","👍 (1)"
-"220639106915368960","tholin","2025-12-08T10:27:14.2950000+00:00","My top level fails to route if I don’t let it use Metal5 for routing.","",""
-"220639106915368960","tholin","2025-12-08T10:27:52.9010000+00:00","And moving the IO layers of the macros to Metal3/Metal4 caused DRC errors.","",""
-"220639106915368960","tholin","2025-12-08T10:28:11.9060000+00:00","Running out of things to try for fixing the antenna violations.","",""
+"596068704471482370","246tnt","2025-12-08T10:29:20.5400000+00:00","Ok, the fail to route, I could see that on dense designs.
+But moving pins shouldn't cause DRC errors ...","",""
+"596068704471482370","246tnt","2025-12-08T10:30:18.0910000+00:00","But then again, the chip top you had posted last was actually clean from an Antenna PoV when using the fixed antenna check.","",""
+"220639106915368960","tholin","2025-12-08T10:30:54.3360000+00:00","All I changed was move the pins, and suddenly I’m getting Metal3 clearance violations.","",""
+"596068704471482370","246tnt","2025-12-08T10:35:36.4220000+00:00","So you jus set `FP_IO_VLAYER` to 'Metal4' ?","",""
+"738396032295108721","bailey8889","2025-12-08T11:11:34.0570000+00:00","@Tholin density errors? I wonder if the obstruction layer in the lef file is causing that. Would adding fill manually in the macro solve the problem?","",""
+"220639106915368960","tholin","2025-12-08T11:12:27.0940000+00:00","No, clearance","",""
+"220639106915368960","tholin","2025-12-08T11:12:52.7230000+00:00","And FP_IO_HLAYER to Metal3","",""

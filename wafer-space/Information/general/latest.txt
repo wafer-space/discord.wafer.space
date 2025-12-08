@@ -5,27 +5,38 @@ Topic: Welcome to [wafer.space](https://wafer.space/) -
 documentation at [wafer.space github](https://github.com/wafer-space) - 
 buy at [buy.wafer.space](https://buy.wafer.space) - 
 archives at [discord.wafer.space](https://discord.wafer.space/)
-After: 12/08/2025 09:33
+After: 12/08/2025 10:29
 ==============================================================
 
-[12/08/2025 10:22] 246tnt
-@Egor Lukyanchenko I think that's fine. I'm running the update check now to confirm I get the same results as previously.
-
-{Reactions}
-👍
-
-[12/08/2025 10:27] tholin
-My top level fails to route if I don’t let it use Metal5 for routing.
+[12/08/2025 10:29] 246tnt
+Ok, the fail to route, I could see that on dense designs.
+But moving pins shouldn't cause DRC errors ...
 
 
-[12/08/2025 10:27] tholin
-And moving the IO layers of the macros to Metal3/Metal4 caused DRC errors.
+[12/08/2025 10:30] 246tnt
+But then again, the chip top you had posted last was actually clean from an Antenna PoV when using the fixed antenna check.
 
 
-[12/08/2025 10:28] tholin
-Running out of things to try for fixing the antenna violations.
+[12/08/2025 10:30] tholin
+All I changed was move the pins, and suddenly I’m getting Metal3 clearance violations.
+
+
+[12/08/2025 10:35] 246tnt
+So you jus set `FP_IO_VLAYER` to 'Metal4' ?
+
+
+[12/08/2025 11:11] bailey8889
+@Tholin density errors? I wonder if the obstruction layer in the lef file is causing that. Would adding fill manually in the macro solve the problem?
+
+
+[12/08/2025 11:12] tholin
+No, clearance
+
+
+[12/08/2025 11:12] tholin
+And FP_IO_HLAYER to Metal3
 
 
 ==============================================================
-Exported 4 message(s)
+Exported 7 message(s)
 ==============================================================
