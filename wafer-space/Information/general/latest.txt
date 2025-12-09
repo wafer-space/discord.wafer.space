@@ -5,108 +5,45 @@ Topic: Welcome to [wafer.space](https://wafer.space/) -
 documentation at [wafer.space github](https://github.com/wafer-space) - 
 buy at [buy.wafer.space](https://buy.wafer.space) - 
 archives at [discord.wafer.space](https://discord.wafer.space/)
-After: 12/09/2025 16:36
+After: 12/09/2025 18:33
 ==============================================================
 
-[12/09/2025 16:56] rzioma
-You have to tell it to use them:
+[12/09/2025 19:15] mattvenn
+I did a bit of work in this with different adder topologies: https://www.zerotoasiccourse.com/post/instrumenting-hardware-adders/
 
-SYNTH_ADDER_TYPE: FA
-
-
-[12/09/2025 17:32] polyfractal
-silly newbie question: so yosys has a collection of default strategies/cells to synthesize math and logic, but you can swap in other cells (potentially higher performance but more area, other tradeoffs, etc) and yosys will instead generate with those? Is there a way to tell it which parts of the design to use which cells?
-
-Or would you have to generate/harden individual blocks and use those in a larger design to guarantee what cells are used?
-
-
-[12/09/2025 17:44] ravenslofty
-okay, here's some rough yosys internals. Yosys represents your netlist as a bunch of relatively high-level cells; e.g. an adder is a `$add` cell. synthesis is the job of taking these high-level concept cells and lowering them into concrete implementations. one way you can do that is with the `techmap` command, which takes in a "mapping" Verilog file, and replaces a cell with the contents of that mapping for the cell. the "different strategies" *generally* amount to passing a `techmap` file to map the cell however you want it before the default mapping is applied
-
-{Reactions}
-❤️
-
-[12/09/2025 17:45] ravenslofty
-and yes, you can ask `techmap` to apply only on certain parts of the design. but this is, admittedly, somewhat fragile, and librelane doesn't really expose this
+{Embed}
+https://www.zerotoasiccourse.com/post/instrumenting-hardware-adders/
+Instrumenting Hardware Adders
+Following my interview with Teo on optimising hardware adders, I thought it would be a great project to tapeout on MPW6.
+I wrote about the process on twitter:
+I'm working on putting @td_ene 's adder work onto MPW6. Work in progress repo here: https://t.co/OBg8jQG1HJ
+It was very easy to generate the adders, but I'm getting stuck on instrumenting ...
+general_media/instrumented_adder-52FBE.png
 
 
-[12/09/2025 17:45] polyfractal
-gotcha, thanks for the details!
+[12/09/2025 19:16] mattvenn
+I should get round to publishing the results
 
 
-[12/09/2025 17:46] polyfractal
-i see that things are / can be much more complicated than just hitting the "build" button and accepting whatever is spit out 🙂
+[12/09/2025 19:18] mattvenn
 
 
-[12/09/2025 17:49] ravenslofty
-~~if they aren't, users will complain :p~~
-
-{Reactions}
-😁
-
-[12/09/2025 17:52] polyfractal
-at a higher workflow level, I assume larger projects like to prebuild and harden smaller units to make the project easier to manage (and optimize)? Instead of letting ALU, LSU, etc all regenerate each time, it'd probably make sense to bake those into small IP blocks and just drop them into the final design?
+{Attachments}
+general_media/image-29-F3527.png
 
 
-[12/09/2025 17:54] ravenslofty
-It depends. in a lot of ways this can actually result in a worse end product than if you throw the whole thing at it
+[12/09/2025 19:18] mattvenn
+Interesting takeaway is that ripple adders are the fastest if you only need 8 bits
 
 
-[12/09/2025 17:55] polyfractal
-yeah fair, easier to manage but harder to actually optimize since each block is independent
+[12/09/2025 19:19] mattvenn
+Behavioural is yosys default
 
 
-[12/09/2025 17:55] ravenslofty
-a lot of optimisations become impossible because of the opaqueness of other blocks
-
-
-[12/09/2025 17:55] ravenslofty
-and, well, Yosys does relatively okay, runtime/scalability-wise
-
-
-[12/09/2025 17:56] ravenslofty
-e.g. my 112k gate design takes 7 minutes to synthesise, which I think is okay.
-
-
-[12/09/2025 17:57] ravenslofty
-Most people do not have designs that big, I think
-
-
-[12/09/2025 17:58] polyfractal
-it's all the downstream steps that end up slow though right? all the routing/timing stuff (i.e. on my machine it's like an hour or two)? I assumed that would get baked into each block and speed up the final build process
-
-
-[12/09/2025 17:58] ravenslofty
-It's not like that stuff goes away even when you bake things into macros.
-
-
-[12/09/2025 17:59] polyfractal
-ah, nevermind then 🙂 I really need to dig into how these tools work more so I have a better intuition about what's going on
-
-
-[12/09/2025 17:59] polyfractal
-big ol' blackbox for me right now. feed verilog, get chip 😂
-
-
-[12/09/2025 18:00] ravenslofty
-It's a dangerous path to go down :p
-
-{Reactions}
-🙈
-
-[12/09/2025 18:01] ravenslofty
-*smiles*
-One day your life may be an iceberg with `&mfs`, `aiger vs xaiger flops` and `nldm vs ccs` at the bottom
-
-
-[12/09/2025 18:01] ravenslofty
-:3
-
-
-[12/09/2025 18:02] polyfractal
-I will enjoy my ignorance of those commands while I can 😄
+[12/09/2025 19:35] trev5514
+I'd love to see the area tradeoff for each!
 
 
 ==============================================================
-Exported 22 message(s)
+Exported 6 message(s)
 ==============================================================

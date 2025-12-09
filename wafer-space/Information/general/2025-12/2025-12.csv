@@ -1,28 +1,7 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
-"538398807986274304","rzioma","2025-12-09T16:56:05.6630000+00:00","You have to tell it to use them:
-
-SYNTH_ADDER_TYPE: FA","",""
-"384390069412429834","polyfractal","2025-12-09T17:32:18.9970000+00:00","silly newbie question: so yosys has a collection of default strategies/cells to synthesize math and logic, but you can swap in other cells (potentially higher performance but more area, other tradeoffs, etc) and yosys will instead generate with those? Is there a way to tell it which parts of the design to use which cells?
-
-Or would you have to generate/harden individual blocks and use those in a larger design to guarantee what cells are used?","",""
-"1187141985530818611","ravenslofty","2025-12-09T17:44:13.0330000+00:00","okay, here's some rough yosys internals. Yosys represents your netlist as a bunch of relatively high-level cells; e.g. an adder is a `$add` cell. synthesis is the job of taking these high-level concept cells and lowering them into concrete implementations. one way you can do that is with the `techmap` command, which takes in a ""mapping"" Verilog file, and replaces a cell with the contents of that mapping for the cell. the ""different strategies"" *generally* amount to passing a `techmap` file to map the cell however you want it before the default mapping is applied","","❤️ (1)"
-"1187141985530818611","ravenslofty","2025-12-09T17:45:10.9780000+00:00","and yes, you can ask `techmap` to apply only on certain parts of the design. but this is, admittedly, somewhat fragile, and librelane doesn't really expose this","",""
-"384390069412429834","polyfractal","2025-12-09T17:45:53.9590000+00:00","gotcha, thanks for the details!","",""
-"384390069412429834","polyfractal","2025-12-09T17:46:39.8230000+00:00","i see that things are / can be much more complicated than just hitting the ""build"" button and accepting whatever is spit out 🙂","",""
-"1187141985530818611","ravenslofty","2025-12-09T17:49:47.4850000+00:00","~~if they aren't, users will complain :p~~","","😁 (1)"
-"384390069412429834","polyfractal","2025-12-09T17:52:51.4730000+00:00","at a higher workflow level, I assume larger projects like to prebuild and harden smaller units to make the project easier to manage (and optimize)? Instead of letting ALU, LSU, etc all regenerate each time, it'd probably make sense to bake those into small IP blocks and just drop them into the final design?","",""
-"1187141985530818611","ravenslofty","2025-12-09T17:54:05.1040000+00:00","It depends. in a lot of ways this can actually result in a worse end product than if you throw the whole thing at it","",""
-"384390069412429834","polyfractal","2025-12-09T17:55:09.6630000+00:00","yeah fair, easier to manage but harder to actually optimize since each block is independent","",""
-"1187141985530818611","ravenslofty","2025-12-09T17:55:33.3620000+00:00","a lot of optimisations become impossible because of the opaqueness of other blocks","",""
-"1187141985530818611","ravenslofty","2025-12-09T17:55:49.4700000+00:00","and, well, Yosys does relatively okay, runtime/scalability-wise","",""
-"1187141985530818611","ravenslofty","2025-12-09T17:56:03.9220000+00:00","e.g. my 112k gate design takes 7 minutes to synthesise, which I think is okay.","",""
-"1187141985530818611","ravenslofty","2025-12-09T17:57:57.4040000+00:00","Most people do not have designs that big, I think","",""
-"384390069412429834","polyfractal","2025-12-09T17:58:20.1200000+00:00","it's all the downstream steps that end up slow though right? all the routing/timing stuff (i.e. on my machine it's like an hour or two)? I assumed that would get baked into each block and speed up the final build process","",""
-"1187141985530818611","ravenslofty","2025-12-09T17:58:51.1270000+00:00","It's not like that stuff goes away even when you bake things into macros.","",""
-"384390069412429834","polyfractal","2025-12-09T17:59:35.6880000+00:00","ah, nevermind then 🙂 I really need to dig into how these tools work more so I have a better intuition about what's going on","",""
-"384390069412429834","polyfractal","2025-12-09T17:59:59.7110000+00:00","big ol' blackbox for me right now. feed verilog, get chip 😂","",""
-"1187141985530818611","ravenslofty","2025-12-09T18:00:13.9720000+00:00","It's a dangerous path to go down :p","","🙈 (1)"
-"1187141985530818611","ravenslofty","2025-12-09T18:01:37.5280000+00:00","*smiles*
-One day your life may be an iceberg with `&mfs`, `aiger vs xaiger flops` and `nldm vs ccs` at the bottom","",""
-"1187141985530818611","ravenslofty","2025-12-09T18:01:40.5210000+00:00",":3","",""
-"384390069412429834","polyfractal","2025-12-09T18:02:07.6230000+00:00","I will enjoy my ignorance of those commands while I can 😄","",""
+"492702620759228416","mattvenn","2025-12-09T19:15:13.5300000+00:00","I did a bit of work in this with different adder topologies: https://www.zerotoasiccourse.com/post/instrumenting-hardware-adders/","",""
+"492702620759228416","mattvenn","2025-12-09T19:16:32.0150000+00:00","I should get round to publishing the results","",""
+"492702620759228416","mattvenn","2025-12-09T19:18:19.2780000+00:00","","general_media/image-29-F3527.png",""
+"492702620759228416","mattvenn","2025-12-09T19:18:57.1370000+00:00","Interesting takeaway is that ripple adders are the fastest if you only need 8 bits","",""
+"492702620759228416","mattvenn","2025-12-09T19:19:18.6810000+00:00","Behavioural is yosys default","",""
+"805909190333038612","trev5514","2025-12-09T19:35:14.9660000+00:00","I'd love to see the area tradeoff for each!","",""
