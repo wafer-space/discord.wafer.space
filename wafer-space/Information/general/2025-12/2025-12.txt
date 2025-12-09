@@ -5,22 +5,144 @@ Topic: Welcome to [wafer.space](https://wafer.space/) -
 documentation at [wafer.space github](https://github.com/wafer-space) - 
 buy at [buy.wafer.space](https://buy.wafer.space) - 
 archives at [discord.wafer.space](https://discord.wafer.space/)
-After: 12/09/2025 12:59
+After: 12/09/2025 14:47
 ==============================================================
 
-[12/09/2025 13:46] tholin
-@Tim Edwards Could you please give me a comprehensive list of issues and shortcomings you still see with my SCL?
-Depending on how long that list is, I can’t promise I’ll get to all of it, but I can try.
+[12/09/2025 14:48] tholin
+I’m taking a RISC-approach. I ran synthesis on a big RISC-V core with sky130_fd_sc_hd back when I was doing my sky130 SCL and looked only at cells that got used more than 100 times.
 
 
-[12/09/2025 14:42] rtimothyedwards_19428
-@Tholin :  Honestly, the standard cell library is great.  As far as I know, my only issue with it right now is that you were using variable PAD_CELL_LIBRARY in your librelane setup file, which is apparently incompatible with the dev version of librelane.  I was able to work around it by deleting those lines from the setup file (I'm not including pad cells in my synthesis anyway, for now), but it needs some future-proof fix.  Apart from that, I assume I could get a better synthesis if I had additional cells like a half-adder, full-adder, 4-input basic logic gates, and more variations of OAI cells.  And a slow corner liberty file would be good.  But the library is usable as-is.
+[12/09/2025 14:48] ravenslofty
+> I assume I could get a better synthesis if I had additional cells like a half-adder, full-adder
+probably not. these cells are not inferable because they have multiple outputs.
 
 
-[12/09/2025 14:47] tholin
-Never said I was done adding cells. I think I added the last of the AOI cells recently.
+[12/09/2025 14:49] tholin
+Indeed
+
+
+[12/09/2025 14:49] tholin
+A vlsiffra backend for my SCL is the only thing that those would be good for.
+
+
+[12/09/2025 14:49] ravenslofty
+and honestly, if you're gonna design custom cells to accelerate arithmetic, something targeted towards a more efficient parallel-prefix adder would be best, I think
+
+
+[12/09/2025 14:50] tholin
+But a full-adder is actually just one maj3 and one xor3 cell jammed together. So if I add xor3, that’d also work.
+
+
+[12/09/2025 14:52] rtimothyedwards_19428
+@Lofty :  I was assuming that full adders and half adders would come with mapping files for yosys.
+
+
+[12/09/2025 14:53] ravenslofty
+I would advise against such an approach
+
+
+[12/09/2025 14:53] tholin
+I’ve never seen yosys synthesize adder cells
+
+
+[12/09/2025 14:53] ravenslofty
+the default structure for an adder in Yosys is Brent-Kung
+
+
+[12/09/2025 14:54] tholin
+Okay, if I add xor3 and oai33, I can add my SCL as a technology backend to vlsiffra.
+
+
+[12/09/2025 14:54] tholin
+I am actually almost there.
+
+
+[12/09/2025 14:54] ravenslofty
+might be interesting to think about a csa42, but
+
+
+[12/09/2025 14:54] tholin
+I don’t know what csa42 is
+
+
+[12/09/2025 14:54] ravenslofty
+4:2 compressor for a carry-save adder
+
+
+[12/09/2025 14:55] ravenslofty
+full adders are 3:2 compressors, as such
+
+
+[12/09/2025 14:56] _luke_w_
+The main things I saw that were missing were DFFEs and flops with sync set/clear (the latter being useful for absorbing an OR or ANDN on non-reset datapath flops)
+
+
+[12/09/2025 14:57] _luke_w_
+Also ICGs, but I don't think many people are using clock gates, partly because our CTS doesn't balance through them very well
+
+
+[12/09/2025 14:58] tholin
+Wow, I looked up how fd_sc did its xor3 because I thought "there has to be a more elegant solution than concatenating two xor2 cells" but nope. Its just two xor2 cells slapped together.
+
+
+[12/09/2025 14:59] rtimothyedwards_19428
+@Lofty :  I do analog stuff mostly.  I'm generally happy with whatever yosys synthesizes, because I'm not doing for ultra high performance digital.
+
+
+[12/09/2025 14:59] ravenslofty
+well, unfortunately, it is my job to improve "whatever yosys synthesises" ^^;
+
+
+[12/09/2025 14:59] rtimothyedwards_19428
+@Tholin :  Don't look for inspiration from the foundry libraries, or you'll be disappointed.
+
+
+[12/09/2025 15:00] tholin
+But I’m looking at the boolean logic and I don’t see a better way with less transistors either.
+
+
+[12/09/2025 15:00] tholin
+XOR is just weird
+
+
+[12/09/2025 15:00] tholin
+It eats into your transistor count no matter what you do
+
+
+[12/09/2025 15:00] rtimothyedwards_19428
+@Lofty :  Understood.  I was just explaining why elegant adder solutions are not on my priorities list.  : )
+
+
+[12/09/2025 15:01] ravenslofty
+(I find it interesting that in domino logic structures a xor2 is isomorphic to a mux2)
+
+
+[12/09/2025 15:08] tholin
+My todo list is quite small now. It turns out that aoi cells already cover most of what yosys needs for efficient outputs. I just need oai21 and oai22 and I’m done.
+
+
+[12/09/2025 15:08] tholin
+And oa33 if I want to add that vlsiffra backend.
+
+
+[12/09/2025 15:49] mithro_
+I was working on vlsiffra for gf180mcu and other technologies at the time I left Google
+
+
+[12/09/2025 15:50] mithro_
+https://github.com/mithro/vlsiffra/branches/all
+
+{Embed}
+https://github.com/mithro/vlsiffra/branches/all
+Branches · mithro/vlsiffra
+Create fast and efficient standard cell based adders, multipliers and multiply-adders. - Branches · mithro/vlsiffra
+general_media/vlsiffra-50A99
+
+
+[12/09/2025 16:05] tholin
+I used vlsiffra during my tapeout here
 
 
 ==============================================================
-Exported 3 message(s)
+Exported 32 message(s)
 ==============================================================
