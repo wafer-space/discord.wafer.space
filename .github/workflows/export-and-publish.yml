@@ -133,12 +133,17 @@ jobs:
           git config user.name "Discord Archive Bot"
           git config user.email "actions@github.com"
           git add state.json
-          git commit -m "chore: update export state
+          # Only commit if state.json actually has changes staged
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: update export state
 
           Updated by GitHub Actions on $(date -u +%Y-%m-%d\ %H:%M\ UTC)"
-          # Pull with rebase to handle concurrent workflow updates
-          git pull --rebase origin master
-          git push origin HEAD:master
+            # Pull with rebase to handle concurrent workflow updates
+            git pull --rebase origin master
+            git push origin HEAD:master
+          else
+            echo "No changes to state.json, skipping commit"
+          fi
 
       - name: Deploy to GitHub Pages
         if: steps.check_changes.outputs.has_changes == 'true'
