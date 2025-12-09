@@ -16,6 +16,13 @@ permissions:
   pages: write
   id-token: write
 
+# Ensure only one export workflow runs at a time to prevent state.json merge conflicts.
+# The workflow takes ~54 minutes but runs hourly, so concurrent runs would conflict.
+# With cancel-in-progress: false, queued runs will wait rather than be cancelled.
+concurrency:
+  group: discord-export
+  cancel-in-progress: false
+
 jobs:
   export-and-deploy:
     runs-on: ubuntu-latest
@@ -184,6 +191,7 @@ jobs:
             --exclude=".*hawaii\.edu.*" \
             --exclude=".*github\.com.*" \
             --exclude=".*discord\.com.*" \
+            --exclude=".*claude\.ai.*" \
             --header="User-Agent:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" \
             --header="Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7" \
             --header="Accept-Language:en-US,en;q=0.9" \
