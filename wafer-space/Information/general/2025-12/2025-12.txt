@@ -5,144 +5,108 @@ Topic: Welcome to [wafer.space](https://wafer.space/) -
 documentation at [wafer.space github](https://github.com/wafer-space) - 
 buy at [buy.wafer.space](https://buy.wafer.space) - 
 archives at [discord.wafer.space](https://discord.wafer.space/)
-After: 12/09/2025 14:47
+After: 12/09/2025 16:36
 ==============================================================
 
-[12/09/2025 14:48] tholin
-I’m taking a RISC-approach. I ran synthesis on a big RISC-V core with sky130_fd_sc_hd back when I was doing my sky130 SCL and looked only at cells that got used more than 100 times.
+[12/09/2025 16:56] rzioma
+You have to tell it to use them:
+
+SYNTH_ADDER_TYPE: FA
 
 
-[12/09/2025 14:48] ravenslofty
-> I assume I could get a better synthesis if I had additional cells like a half-adder, full-adder
-probably not. these cells are not inferable because they have multiple outputs.
+[12/09/2025 17:32] polyfractal
+silly newbie question: so yosys has a collection of default strategies/cells to synthesize math and logic, but you can swap in other cells (potentially higher performance but more area, other tradeoffs, etc) and yosys will instead generate with those? Is there a way to tell it which parts of the design to use which cells?
+
+Or would you have to generate/harden individual blocks and use those in a larger design to guarantee what cells are used?
 
 
-[12/09/2025 14:49] tholin
-Indeed
+[12/09/2025 17:44] ravenslofty
+okay, here's some rough yosys internals. Yosys represents your netlist as a bunch of relatively high-level cells; e.g. an adder is a `$add` cell. synthesis is the job of taking these high-level concept cells and lowering them into concrete implementations. one way you can do that is with the `techmap` command, which takes in a "mapping" Verilog file, and replaces a cell with the contents of that mapping for the cell. the "different strategies" *generally* amount to passing a `techmap` file to map the cell however you want it before the default mapping is applied
+
+{Reactions}
+❤️
+
+[12/09/2025 17:45] ravenslofty
+and yes, you can ask `techmap` to apply only on certain parts of the design. but this is, admittedly, somewhat fragile, and librelane doesn't really expose this
 
 
-[12/09/2025 14:49] tholin
-A vlsiffra backend for my SCL is the only thing that those would be good for.
+[12/09/2025 17:45] polyfractal
+gotcha, thanks for the details!
 
 
-[12/09/2025 14:49] ravenslofty
-and honestly, if you're gonna design custom cells to accelerate arithmetic, something targeted towards a more efficient parallel-prefix adder would be best, I think
+[12/09/2025 17:46] polyfractal
+i see that things are / can be much more complicated than just hitting the "build" button and accepting whatever is spit out 🙂
 
 
-[12/09/2025 14:50] tholin
-But a full-adder is actually just one maj3 and one xor3 cell jammed together. So if I add xor3, that’d also work.
+[12/09/2025 17:49] ravenslofty
+~~if they aren't, users will complain :p~~
+
+{Reactions}
+😁
+
+[12/09/2025 17:52] polyfractal
+at a higher workflow level, I assume larger projects like to prebuild and harden smaller units to make the project easier to manage (and optimize)? Instead of letting ALU, LSU, etc all regenerate each time, it'd probably make sense to bake those into small IP blocks and just drop them into the final design?
 
 
-[12/09/2025 14:52] rtimothyedwards_19428
-@Lofty :  I was assuming that full adders and half adders would come with mapping files for yosys.
+[12/09/2025 17:54] ravenslofty
+It depends. in a lot of ways this can actually result in a worse end product than if you throw the whole thing at it
 
 
-[12/09/2025 14:53] ravenslofty
-I would advise against such an approach
+[12/09/2025 17:55] polyfractal
+yeah fair, easier to manage but harder to actually optimize since each block is independent
 
 
-[12/09/2025 14:53] tholin
-I’ve never seen yosys synthesize adder cells
+[12/09/2025 17:55] ravenslofty
+a lot of optimisations become impossible because of the opaqueness of other blocks
 
 
-[12/09/2025 14:53] ravenslofty
-the default structure for an adder in Yosys is Brent-Kung
+[12/09/2025 17:55] ravenslofty
+and, well, Yosys does relatively okay, runtime/scalability-wise
 
 
-[12/09/2025 14:54] tholin
-Okay, if I add xor3 and oai33, I can add my SCL as a technology backend to vlsiffra.
+[12/09/2025 17:56] ravenslofty
+e.g. my 112k gate design takes 7 minutes to synthesise, which I think is okay.
 
 
-[12/09/2025 14:54] tholin
-I am actually almost there.
+[12/09/2025 17:57] ravenslofty
+Most people do not have designs that big, I think
 
 
-[12/09/2025 14:54] ravenslofty
-might be interesting to think about a csa42, but
+[12/09/2025 17:58] polyfractal
+it's all the downstream steps that end up slow though right? all the routing/timing stuff (i.e. on my machine it's like an hour or two)? I assumed that would get baked into each block and speed up the final build process
 
 
-[12/09/2025 14:54] tholin
-I don’t know what csa42 is
+[12/09/2025 17:58] ravenslofty
+It's not like that stuff goes away even when you bake things into macros.
 
 
-[12/09/2025 14:54] ravenslofty
-4:2 compressor for a carry-save adder
+[12/09/2025 17:59] polyfractal
+ah, nevermind then 🙂 I really need to dig into how these tools work more so I have a better intuition about what's going on
 
 
-[12/09/2025 14:55] ravenslofty
-full adders are 3:2 compressors, as such
+[12/09/2025 17:59] polyfractal
+big ol' blackbox for me right now. feed verilog, get chip 😂
 
 
-[12/09/2025 14:56] _luke_w_
-The main things I saw that were missing were DFFEs and flops with sync set/clear (the latter being useful for absorbing an OR or ANDN on non-reset datapath flops)
+[12/09/2025 18:00] ravenslofty
+It's a dangerous path to go down :p
+
+{Reactions}
+🙈
+
+[12/09/2025 18:01] ravenslofty
+*smiles*
+One day your life may be an iceberg with `&mfs`, `aiger vs xaiger flops` and `nldm vs ccs` at the bottom
 
 
-[12/09/2025 14:57] _luke_w_
-Also ICGs, but I don't think many people are using clock gates, partly because our CTS doesn't balance through them very well
+[12/09/2025 18:01] ravenslofty
+:3
 
 
-[12/09/2025 14:58] tholin
-Wow, I looked up how fd_sc did its xor3 because I thought "there has to be a more elegant solution than concatenating two xor2 cells" but nope. Its just two xor2 cells slapped together.
-
-
-[12/09/2025 14:59] rtimothyedwards_19428
-@Lofty :  I do analog stuff mostly.  I'm generally happy with whatever yosys synthesizes, because I'm not doing for ultra high performance digital.
-
-
-[12/09/2025 14:59] ravenslofty
-well, unfortunately, it is my job to improve "whatever yosys synthesises" ^^;
-
-
-[12/09/2025 14:59] rtimothyedwards_19428
-@Tholin :  Don't look for inspiration from the foundry libraries, or you'll be disappointed.
-
-
-[12/09/2025 15:00] tholin
-But I’m looking at the boolean logic and I don’t see a better way with less transistors either.
-
-
-[12/09/2025 15:00] tholin
-XOR is just weird
-
-
-[12/09/2025 15:00] tholin
-It eats into your transistor count no matter what you do
-
-
-[12/09/2025 15:00] rtimothyedwards_19428
-@Lofty :  Understood.  I was just explaining why elegant adder solutions are not on my priorities list.  : )
-
-
-[12/09/2025 15:01] ravenslofty
-(I find it interesting that in domino logic structures a xor2 is isomorphic to a mux2)
-
-
-[12/09/2025 15:08] tholin
-My todo list is quite small now. It turns out that aoi cells already cover most of what yosys needs for efficient outputs. I just need oai21 and oai22 and I’m done.
-
-
-[12/09/2025 15:08] tholin
-And oa33 if I want to add that vlsiffra backend.
-
-
-[12/09/2025 15:49] mithro_
-I was working on vlsiffra for gf180mcu and other technologies at the time I left Google
-
-
-[12/09/2025 15:50] mithro_
-https://github.com/mithro/vlsiffra/branches/all
-
-{Embed}
-https://github.com/mithro/vlsiffra/branches/all
-Branches · mithro/vlsiffra
-Create fast and efficient standard cell based adders, multipliers and multiply-adders. - Branches · mithro/vlsiffra
-general_media/vlsiffra-50A99
-
-
-[12/09/2025 16:05] tholin
-I used vlsiffra during my tapeout here
+[12/09/2025 18:02] polyfractal
+I will enjoy my ignorance of those commands while I can 😄
 
 
 ==============================================================
-Exported 32 message(s)
+Exported 22 message(s)
 ==============================================================

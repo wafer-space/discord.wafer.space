@@ -16,7 +16,7 @@
     "after": null,
     "before": null
   },
-  "exportedAt": "2025-12-09T16:35:59.900568+00:00",
+  "exportedAt": "2025-12-09T18:32:57.6617581+00:00",
   "messages": [
     {
       "id": "1444913134920925235",
@@ -18694,7 +18694,703 @@
       "reactions": [],
       "mentions": [],
       "inlineEmojis": []
+    },
+    {
+      "id": "1447995231596314766",
+      "type": "Reply",
+      "timestamp": "2025-12-09T16:56:05.663+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You have to tell it to use them:\n\nSYNTH_ADDER_TYPE: FA",
+      "author": {
+        "id": "538398807986274304",
+        "name": "rzioma",
+        "discriminator": "0000",
+        "nickname": "ReJ aka Renaldas Zioma",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "220639106915368960",
+          "name": "tholin",
+          "discriminator": "0000",
+          "nickname": "Tholin",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "general_media/edae5aadf146133e0448bfb1f0fa91c4-62B19.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1447964382691590285",
+        "channelId": "1361349523724570941",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1448004347219935343",
+      "type": "Default",
+      "timestamp": "2025-12-09T17:32:18.997+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "silly newbie question: so yosys has a collection of default strategies/cells to synthesize math and logic, but you can swap in other cells (potentially higher performance but more area, other tradeoffs, etc) and yosys will instead generate with those? Is there a way to tell it which parts of the design to use which cells?\n\nOr would you have to generate/harden individual blocks and use those in a larger design to guarantee what cells are used?",
+      "author": {
+        "id": "384390069412429834",
+        "name": "polyfractal",
+        "discriminator": "0000",
+        "nickname": "BreakingTaps",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1448007342103990322",
+      "type": "Reply",
+      "timestamp": "2025-12-09T17:44:13.033+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "okay, here's some rough yosys internals. Yosys represents your netlist as a bunch of relatively high-level cells; e.g. an adder is a `$add` cell. synthesis is the job of taking these high-level concept cells and lowering them into concrete implementations. one way you can do that is with the `techmap` command, which takes in a \"mapping\" Verilog file, and replaces a cell with the contents of that mapping for the cell. the \"different strategies\" *generally* amount to passing a `techmap` file to map the cell however you want it before the default mapping is applied",
+      "author": {
+        "id": "1187141985530818611",
+        "name": "ravenslofty",
+        "discriminator": "0000",
+        "nickname": "Lofty",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/dd665ae27be32531af89aeb08fd05e04-1D5A4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\u2764\ufe0f",
+            "code": "heart",
+            "isAnimated": false,
+            "imageUrl": "general_media/2764-A3D25.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "384390069412429834",
+              "name": "polyfractal",
+              "discriminator": "0000",
+              "nickname": "BreakingTaps",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "general_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "384390069412429834",
+          "name": "polyfractal",
+          "discriminator": "0000",
+          "nickname": "BreakingTaps",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "general_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1448004347219935343",
+        "channelId": "1361349523724570941",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1448007585142804480",
+      "type": "Default",
+      "timestamp": "2025-12-09T17:45:10.978+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "and yes, you can ask `techmap` to apply only on certain parts of the design. but this is, admittedly, somewhat fragile, and librelane doesn't really expose this",
+      "author": {
+        "id": "1187141985530818611",
+        "name": "ravenslofty",
+        "discriminator": "0000",
+        "nickname": "Lofty",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/dd665ae27be32531af89aeb08fd05e04-1D5A4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1448007765418049567",
+      "type": "Default",
+      "timestamp": "2025-12-09T17:45:53.959+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "gotcha, thanks for the details!",
+      "author": {
+        "id": "384390069412429834",
+        "name": "polyfractal",
+        "discriminator": "0000",
+        "nickname": "BreakingTaps",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1448007957785612370",
+      "type": "Default",
+      "timestamp": "2025-12-09T17:46:39.823+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "i see that things are / can be much more complicated than just hitting the \"build\" button and accepting whatever is spit out \ud83d\ude42",
+      "author": {
+        "id": "384390069412429834",
+        "name": "polyfractal",
+        "discriminator": "0000",
+        "nickname": "BreakingTaps",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\ud83d\ude42",
+          "code": "slight_smile",
+          "isAnimated": false,
+          "imageUrl": "general_media/1f642-83E8A.svg"
+        }
+      ]
+    },
+    {
+      "id": "1448008744897220618",
+      "type": "Default",
+      "timestamp": "2025-12-09T17:49:47.485+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "~~if they aren't, users will complain :p~~",
+      "author": {
+        "id": "1187141985530818611",
+        "name": "ravenslofty",
+        "discriminator": "0000",
+        "nickname": "Lofty",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/dd665ae27be32531af89aeb08fd05e04-1D5A4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\ud83d\ude01",
+            "code": "grin",
+            "isAnimated": false,
+            "imageUrl": "general_media/1f601-4E9BD.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "384390069412429834",
+              "name": "polyfractal",
+              "discriminator": "0000",
+              "nickname": "BreakingTaps",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "general_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1448009516598956053",
+      "type": "Default",
+      "timestamp": "2025-12-09T17:52:51.473+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "at a higher workflow level, I assume larger projects like to prebuild and harden smaller units to make the project easier to manage (and optimize)? Instead of letting ALU, LSU, etc all regenerate each time, it'd probably make sense to bake those into small IP blocks and just drop them into the final design?",
+      "author": {
+        "id": "384390069412429834",
+        "name": "polyfractal",
+        "discriminator": "0000",
+        "nickname": "BreakingTaps",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1448009825429618778",
+      "type": "Reply",
+      "timestamp": "2025-12-09T17:54:05.104+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It depends. in a lot of ways this can actually result in a worse end product than if you throw the whole thing at it",
+      "author": {
+        "id": "1187141985530818611",
+        "name": "ravenslofty",
+        "discriminator": "0000",
+        "nickname": "Lofty",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/dd665ae27be32531af89aeb08fd05e04-1D5A4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "384390069412429834",
+          "name": "polyfractal",
+          "discriminator": "0000",
+          "nickname": "BreakingTaps",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "general_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1448009516598956053",
+        "channelId": "1361349523724570941",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1448010096209821931",
+      "type": "Default",
+      "timestamp": "2025-12-09T17:55:09.663+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "yeah fair, easier to manage but harder to actually optimize since each block is independent",
+      "author": {
+        "id": "384390069412429834",
+        "name": "polyfractal",
+        "discriminator": "0000",
+        "nickname": "BreakingTaps",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1448010195610370190",
+      "type": "Default",
+      "timestamp": "2025-12-09T17:55:33.362+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "a lot of optimisations become impossible because of the opaqueness of other blocks",
+      "author": {
+        "id": "1187141985530818611",
+        "name": "ravenslofty",
+        "discriminator": "0000",
+        "nickname": "Lofty",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/dd665ae27be32531af89aeb08fd05e04-1D5A4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1448010263172485371",
+      "type": "Default",
+      "timestamp": "2025-12-09T17:55:49.47+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "and, well, Yosys does relatively okay, runtime/scalability-wise",
+      "author": {
+        "id": "1187141985530818611",
+        "name": "ravenslofty",
+        "discriminator": "0000",
+        "nickname": "Lofty",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/dd665ae27be32531af89aeb08fd05e04-1D5A4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1448010323788300289",
+      "type": "Default",
+      "timestamp": "2025-12-09T17:56:03.922+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "e.g. my 112k gate design takes 7 minutes to synthesise, which I think is okay.",
+      "author": {
+        "id": "1187141985530818611",
+        "name": "ravenslofty",
+        "discriminator": "0000",
+        "nickname": "Lofty",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/dd665ae27be32531af89aeb08fd05e04-1D5A4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1448010799766311205",
+      "type": "Default",
+      "timestamp": "2025-12-09T17:57:57.404+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Most people do not have designs that big, I think",
+      "author": {
+        "id": "1187141985530818611",
+        "name": "ravenslofty",
+        "discriminator": "0000",
+        "nickname": "Lofty",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/dd665ae27be32531af89aeb08fd05e04-1D5A4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1448010895044382740",
+      "type": "Default",
+      "timestamp": "2025-12-09T17:58:20.12+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "it's all the downstream steps that end up slow though right? all the routing/timing stuff (i.e. on my machine it's like an hour or two)? I assumed that would get baked into each block and speed up the final build process",
+      "author": {
+        "id": "384390069412429834",
+        "name": "polyfractal",
+        "discriminator": "0000",
+        "nickname": "BreakingTaps",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1448011025097035838",
+      "type": "Default",
+      "timestamp": "2025-12-09T17:58:51.127+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It's not like that stuff goes away even when you bake things into macros.",
+      "author": {
+        "id": "1187141985530818611",
+        "name": "ravenslofty",
+        "discriminator": "0000",
+        "nickname": "Lofty",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/dd665ae27be32531af89aeb08fd05e04-1D5A4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1448011211999547515",
+      "type": "Default",
+      "timestamp": "2025-12-09T17:59:35.688+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "ah, nevermind then \ud83d\ude42 I really need to dig into how these tools work more so I have a better intuition about what's going on",
+      "author": {
+        "id": "384390069412429834",
+        "name": "polyfractal",
+        "discriminator": "0000",
+        "nickname": "BreakingTaps",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\ud83d\ude42",
+          "code": "slight_smile",
+          "isAnimated": false,
+          "imageUrl": "general_media/1f642-83E8A.svg"
+        }
+      ]
+    },
+    {
+      "id": "1448011312759308368",
+      "type": "Default",
+      "timestamp": "2025-12-09T17:59:59.711+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "big ol' blackbox for me right now. feed verilog, get chip \ud83d\ude02",
+      "author": {
+        "id": "384390069412429834",
+        "name": "polyfractal",
+        "discriminator": "0000",
+        "nickname": "BreakingTaps",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\ud83d\ude02",
+          "code": "joy",
+          "isAnimated": false,
+          "imageUrl": "general_media/1f602-168C5.svg"
+        }
+      ]
+    },
+    {
+      "id": "1448011372574277867",
+      "type": "Default",
+      "timestamp": "2025-12-09T18:00:13.972+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It's a dangerous path to go down :p",
+      "author": {
+        "id": "1187141985530818611",
+        "name": "ravenslofty",
+        "discriminator": "0000",
+        "nickname": "Lofty",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/dd665ae27be32531af89aeb08fd05e04-1D5A4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\ud83d\ude48",
+            "code": "see_no_evil",
+            "isAnimated": false,
+            "imageUrl": "general_media/1f648-B83C5.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "384390069412429834",
+              "name": "polyfractal",
+              "discriminator": "0000",
+              "nickname": "BreakingTaps",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "general_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1448011723033284679",
+      "type": "Default",
+      "timestamp": "2025-12-09T18:01:37.528+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "*smiles*\nOne day your life may be an iceberg with `&mfs`, `aiger vs xaiger flops` and `nldm vs ccs` at the bottom",
+      "author": {
+        "id": "1187141985530818611",
+        "name": "ravenslofty",
+        "discriminator": "0000",
+        "nickname": "Lofty",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/dd665ae27be32531af89aeb08fd05e04-1D5A4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1448011735587098625",
+      "type": "Default",
+      "timestamp": "2025-12-09T18:01:40.521+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": ":3",
+      "author": {
+        "id": "1187141985530818611",
+        "name": "ravenslofty",
+        "discriminator": "0000",
+        "nickname": "Lofty",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/dd665ae27be32531af89aeb08fd05e04-1D5A4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1448011849261125832",
+      "type": "Default",
+      "timestamp": "2025-12-09T18:02:07.623+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I will enjoy my ignorance of those commands while I can \ud83d\ude04",
+      "author": {
+        "id": "384390069412429834",
+        "name": "polyfractal",
+        "discriminator": "0000",
+        "nickname": "BreakingTaps",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\ud83d\ude04",
+          "code": "smile",
+          "isAnimated": false,
+          "imageUrl": "general_media/1f604-BF863.svg"
+        }
+      ]
     }
   ],
-  "messageCount": 557
+  "messageCount": 579
 }
