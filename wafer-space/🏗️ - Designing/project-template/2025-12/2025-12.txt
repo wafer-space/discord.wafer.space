@@ -1,9 +1,73 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / project-template
-After: 12/10/2025 04:08
+After: 12/10/2025 05:18
 ==============================================================
 
+[12/10/2025 05:29] polyfractal
+> 973618 KLayout DRC errors found.
+
+oh lawdy
+
+
+[12/10/2025 05:29] polyfractal
+i'm hoping I didn't update the repo correctly or something 😅
+
+{Attachments}
+project-template_media/image-5919E.png
+
+
+[12/10/2025 05:39] polyfractal
+hmm, I was hopeful config.yaml merged without the new `Metal2_active` or accidentally left in `COMP_fill_cell` / `Poly2_fill_cell`... but no, that merged cleanly
+
+
+[12/10/2025 05:40] trev5514
+Wow, on my beefy CPU, I was at 2 days total, roughly 1 day 16 hours alone on the antenna check. I updated to this and it finished within 12 minutes!
+
+{Reactions}
+waferspace 🙌
+
+[12/10/2025 05:49] mole99
+Sure, when I'm not asleep 😄
+
+
+[12/10/2025 05:50] mithro_
+BTW What is your "beefy CPU"?
+
+
+[12/10/2025 05:50] mole99
+Yes, that would be to meet the global target density more easily. If you have no issue meeting it, then it's not necessary.
+
+
+[12/10/2025 05:53] mole99
+If you're making an analog design, you should be able to use the filler generation as is and still meet all density limits.
+If you have problems meeting the density limit for one of the layers, you can pass `-rd Metaln_active` to the script, where n is the number of the metal layer. This moves the fill shapes to the active metal layer and thus ignores some of the dummy fill rules.
+
+
+[12/10/2025 05:54] mole99
+Did you also clone the latest PDK, not just update the tag? 😁
+
+
+[12/10/2025 05:56] polyfractal
+pretty sure I did! will redo all the steps just to be safe
+
+
+[12/10/2025 05:57] trev5514
+"Relatively beefy" - for what I could afford at the time (2 years ago), not sure how it holds up now days!
+
+13th Gen Intel(R) Core(TM) i7-13700K
+
+My main computer (powerhouse) is an M1 max mac which the above CPU keeps up with nicely. With all the issues from librelane on mac, I loaded ubuntu onto the Intel chip and have been running pnr for my design on that. No issues since. I still use the mac for cocotb tb and everything else.
+
+
+[12/10/2025 07:02] 246tnt
+@Leo Moser (mole99) Moving the filler to active should not be done during fill generation. It should be kept as a filler layer until the very end so you can run DRC with it as a filler metal except for those DF rules.
+
+
+[12/10/2025 07:04] 246tnt
+And you can't just move say Metal2 anyway because if you move it to active, then you'll violate the rules for the Metal3 dummy so it's pretty much an all or nothing.
+
+
 ==============================================================
-Exported 0 message(s)
+Exported 13 message(s)
 ==============================================================

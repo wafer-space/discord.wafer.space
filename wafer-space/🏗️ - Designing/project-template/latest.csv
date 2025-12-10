@@ -1,1 +1,21 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
+"384390069412429834","polyfractal","2025-12-10T05:29:05.2250000+00:00","> 973618 KLayout DRC errors found.
+
+oh lawdy","",""
+"384390069412429834","polyfractal","2025-12-10T05:29:38.2750000+00:00","i'm hoping I didn't update the repo correctly or something 😅","project-template_media/image-5919E.png",""
+"384390069412429834","polyfractal","2025-12-10T05:39:10.6870000+00:00","hmm, I was hopeful config.yaml merged without the new `Metal2_active` or accidentally left in `COMP_fill_cell` / `Poly2_fill_cell`... but no, that merged cleanly","",""
+"805909190333038612","trev5514","2025-12-10T05:40:55.3710000+00:00","Wow, on my beefy CPU, I was at 2 days total, roughly 1 day 16 hours alone on the antenna check. I updated to this and it finished within 12 minutes!","","waferspace (1),🙌 (1)"
+"323371864074485771","mole99","2025-12-10T05:49:38.8540000+00:00","Sure, when I'm not asleep 😄","",""
+"169786952432746498","mithro_","2025-12-10T05:50:46.5220000+00:00","BTW What is your ""beefy CPU""?","",""
+"323371864074485771","mole99","2025-12-10T05:50:57.9030000+00:00","Yes, that would be to meet the global target density more easily. If you have no issue meeting it, then it's not necessary.","",""
+"323371864074485771","mole99","2025-12-10T05:53:40.5630000+00:00","If you're making an analog design, you should be able to use the filler generation as is and still meet all density limits.
+If you have problems meeting the density limit for one of the layers, you can pass `-rd Metaln_active` to the script, where n is the number of the metal layer. This moves the fill shapes to the active metal layer and thus ignores some of the dummy fill rules.","",""
+"323371864074485771","mole99","2025-12-10T05:54:44.4270000+00:00","Did you also clone the latest PDK, not just update the tag? 😁","",""
+"384390069412429834","polyfractal","2025-12-10T05:56:19.4850000+00:00","pretty sure I did! will redo all the steps just to be safe","",""
+"805909190333038612","trev5514","2025-12-10T05:57:19.7250000+00:00","""Relatively beefy"" - for what I could afford at the time (2 years ago), not sure how it holds up now days!
+
+13th Gen Intel(R) Core(TM) i7-13700K
+
+My main computer (powerhouse) is an M1 max mac which the above CPU keeps up with nicely. With all the issues from librelane on mac, I loaded ubuntu onto the Intel chip and have been running pnr for my design on that. No issues since. I still use the mac for cocotb tb and everything else.","",""
+"596068704471482370","246tnt","2025-12-10T07:02:54.7170000+00:00","@Leo Moser (mole99) Moving the filler to active should not be done during fill generation. It should be kept as a filler layer until the very end so you can run DRC with it as a filler metal except for those DF rules.","",""
+"596068704471482370","246tnt","2025-12-10T07:04:23.5170000+00:00","And you can't just move say Metal2 anyway because if you move it to active, then you'll violate the rules for the Metal3 dummy so it's pretty much an all or nothing.","",""
