@@ -1,1 +1,32 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
+"1187141985530818611","ravenslofty","2025-12-10T21:31:16.8450000+00:00","this simulation model is not IEEE 1364.1 compliant, as far as I can tell","",""
+"1187141985530818611","ravenslofty","2025-12-10T21:32:57.3570000+00:00","```verilog
+module gf180mcu_as_sc_mcu7t3v3__dfsrtp_2(
+        input VPW,
+        input VNW,
+        input VDD,
+        input VSS,
+
+        input CLK,
+        input D,
+        input RN,
+        input SN,
+        output Q
+);
+
+reg state;
+
+assign Q = state;
+
+always @(posedge CLK or negedge RN or negedge SN) begin
+        if (RN == 1'b0) begin
+                state <= 1'b0;
+        end else if (SN == 1'b0) begin
+                state <= 1'b1;
+        end else begin
+                state <= D;
+        end
+end
+
+endmodule
+```","",""

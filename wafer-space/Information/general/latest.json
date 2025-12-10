@@ -16,7 +16,7 @@
     "after": null,
     "before": null
   },
-  "exportedAt": "2025-12-10T21:27:52.7471689+00:00",
+  "exportedAt": "2025-12-10T22:23:54.1204872+00:00",
   "messages": [
     {
       "id": "1444913134920925235",
@@ -20112,7 +20112,73 @@
         }
       ],
       "inlineEmojis": []
+    },
+    {
+      "id": "1448426872378626068",
+      "type": "Reply",
+      "timestamp": "2025-12-10T21:31:16.845+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "this simulation model is not IEEE 1364.1 compliant, as far as I can tell",
+      "author": {
+        "id": "1187141985530818611",
+        "name": "ravenslofty",
+        "discriminator": "0000",
+        "nickname": "Lofty",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/dd665ae27be32531af89aeb08fd05e04-1D5A4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1365118310701600900",
+          "name": "rtimothyedwards_19428",
+          "discriminator": "0000",
+          "nickname": "Tim Edwards",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "general_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1448335276547248292",
+        "channelId": "1361349523724570941",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1448427293956640799",
+      "type": "Default",
+      "timestamp": "2025-12-10T21:32:57.357+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "```verilog\nmodule gf180mcu_as_sc_mcu7t3v3__dfsrtp_2(\n        input VPW,\n        input VNW,\n        input VDD,\n        input VSS,\n\n        input CLK,\n        input D,\n        input RN,\n        input SN,\n        output Q\n);\n\nreg state;\n\nassign Q = state;\n\nalways @(posedge CLK or negedge RN or negedge SN) begin\n        if (RN == 1'b0) begin\n                state <= 1'b0;\n        end else if (SN == 1'b0) begin\n                state <= 1'b1;\n        end else begin\n                state <= D;\n        end\nend\n\nendmodule\n```",
+      "author": {
+        "id": "1187141985530818611",
+        "name": "ravenslofty",
+        "discriminator": "0000",
+        "nickname": "Lofty",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/dd665ae27be32531af89aeb08fd05e04-1D5A4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
     }
   ],
-  "messageCount": 601
+  "messageCount": 603
 }

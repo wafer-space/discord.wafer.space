@@ -5,9 +5,46 @@ Topic: Welcome to [wafer.space](https://wafer.space/) -
 documentation at [wafer.space github](https://github.com/wafer-space) - 
 buy at [buy.wafer.space](https://buy.wafer.space) - 
 archives at [discord.wafer.space](https://discord.wafer.space/)
-After: 12/10/2025 20:29
+After: 12/10/2025 21:28
 ==============================================================
 
+[12/10/2025 21:31] ravenslofty
+this simulation model is not IEEE 1364.1 compliant, as far as I can tell
+
+
+[12/10/2025 21:32] ravenslofty
+```verilog
+module gf180mcu_as_sc_mcu7t3v3__dfsrtp_2(
+        input VPW,
+        input VNW,
+        input VDD,
+        input VSS,
+
+        input CLK,
+        input D,
+        input RN,
+        input SN,
+        output Q
+);
+
+reg state;
+
+assign Q = state;
+
+always @(posedge CLK or negedge RN or negedge SN) begin
+        if (RN == 1'b0) begin
+                state <= 1'b0;
+        end else if (SN == 1'b0) begin
+                state <= 1'b1;
+        end else begin
+                state <= D;
+        end
+end
+
+endmodule
+```
+
+
 ==============================================================
-Exported 0 message(s)
+Exported 2 message(s)
 ==============================================================
