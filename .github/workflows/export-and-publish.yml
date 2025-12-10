@@ -138,8 +138,15 @@ jobs:
             git commit -m "chore: update export state
 
           Updated by GitHub Actions on $(date -u +%Y-%m-%d\ %H:%M\ UTC)"
+
             # Pull with rebase to handle concurrent workflow updates
-            git pull --rebase origin master
+            # If rebase fails due to state.json conflict, use merge script to resolve
+            if ! git pull --rebase origin master; then
+              echo "Rebase failed, attempting automatic merge of state.json..."
+              uv run python scripts/merge_state.py
+              git rebase --continue
+            fi
+
             git push origin HEAD:master
           else
             echo "No changes to state.json, skipping commit"
