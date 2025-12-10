@@ -16,7 +16,7 @@
     "after": null,
     "before": null
   },
-  "exportedAt": "2025-12-10T07:20:02.5350689+00:00",
+  "exportedAt": "2025-12-10T09:16:00.565115+00:00",
   "messages": [
     {
       "id": "1444828491215278272",
@@ -14312,7 +14312,358 @@
       "reactions": [],
       "mentions": [],
       "inlineEmojis": []
+    },
+    {
+      "id": "1448214231185883187",
+      "type": "Default",
+      "timestamp": "2025-12-10T07:26:19.234+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@tnt I see your point. However, I was considering the consequences of moving all dummy fill to active metal during the precheck. If we place the fill as dummy metal, but ignore DM.4_DM.6, DM.5_DM.7, we would need to remove these rules from the DRC deck.\n\nThis means, even designs where we don't need to use these exceptions (analog designs and the smaller slot sizes for digital designs) will have their dummy fill moved to active metal. I'm also not sure how happy GF will be about us circumventing these rules. Therefore, I thought it would be better to violate this rule on only one layer.\n\nHowever, you're right. I'm seeing issues with the dummy fill on Metal3 that I didn't notice yesterday: it's getting placed on top of active Metal2.\n\nI'll try to fix this and see if Metal3 can still meet density. If not we may need to resort to the all or nothing method.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "project-template_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "596068704471482370",
+          "name": "246tnt",
+          "discriminator": "0000",
+          "nickname": "tnt",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "project-template_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1448214396261236756",
+      "type": "Default",
+      "timestamp": "2025-12-10T07:26:58.591+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@BreakingTaps This is the issue you're seeing. Sorry about that! I'll look into what went wrong.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "project-template_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "384390069412429834",
+          "name": "polyfractal",
+          "discriminator": "0000",
+          "nickname": "BreakingTaps",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "project-template_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1448216671809441864",
+      "type": "Default",
+      "timestamp": "2025-12-10T07:36:01.124+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Ideally you'd have the option to ignore the distance to next/prev layers but still put them as dummy metal. And then another option in the DRC deck to ignore those rules, then as the last step of the hardening process, move them from `filler` to `drawing` and then run the full precheck on that.",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\ud83d\udc4d",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "project-template_media/1f44d-27259.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "709384666909507634",
+              "name": "egorxe",
+              "discriminator": "0000",
+              "nickname": "egorxe",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "project-template_media/3-FB033.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1448217004094783558",
+      "type": "Default",
+      "timestamp": "2025-12-10T07:37:20.347+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I guess an ideal solution would be, per layer, to add dummy fill as normal first, and then if the min density isn\u2019t met add as little active metal as possible to meet the density requirement. That would then tend not to be so much that the dummy fill on the layer above is too blocked.\n\nMaybe that could be achieved by only converting some of the dummy to active during fill generation for each layer?",
+      "author": {
+        "id": "691780627338625077",
+        "name": "rebelmike",
+        "discriminator": "0000",
+        "nickname": "RebelMike",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1448217504303550535",
+      "type": "Default",
+      "timestamp": "2025-12-10T07:39:19.606+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thing is if you add active on one layer, you now need to remove filler above/below it if you want to meet that rule ..",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1448218530481836093",
+      "type": "Default",
+      "timestamp": "2025-12-10T07:43:24.266+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Let's think like a smart LLM. \n\nInstead of solving the actual problem, we'll simply write a script that will delete the problematic rule  from the calibre deck. Then find a vulnerability in calibre that will allow code execution. Run this script. Problem solved!",
+      "author": {
+        "id": "732347216412278825",
+        "name": "urish",
+        "discriminator": "0000",
+        "nickname": "urish",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "project-template_media/2b6c3aac0ae09fc8a72a4b2e17d7f9c9-39032.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\ud83d\udc9c",
+            "code": "purple_heart",
+            "isAnimated": false,
+            "imageUrl": "project-template_media/1f49c-71A75.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "756011607603019777",
+              "name": "anfroholic",
+              "discriminator": "0000",
+              "nickname": "anfroholic",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "project-template_media/67bd670a335a2f955fb2ded57088a2cb-675B3.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1448219899619971143",
+      "type": "Default",
+      "timestamp": "2025-12-10T07:48:50.694+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I was more thinking like ... add some solid `Metal2.drawing` between the bond pads.",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1448219972814770187",
+      "type": "Default",
+      "timestamp": "2025-12-10T07:49:08.145+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Tons of area far from everything that matters ...",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "project-template_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1448223125157449728",
+      "type": "Default",
+      "timestamp": "2025-12-10T08:01:39.722+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Alright, I found the issue in the filler script. The top-level filler cells were only added to the layout once they had been generated for all layers. This means that subsequent layers did not consider previous ones (which was fine when it all was dummy metal).\n\nBy using `start_changes()` and `end_changes()` I can add the top-level filler cells before generating the actual fill. This allows each fill layer to consider the previous one. However, it does not allow to consider the subsequent layer, i.e. if you generate dummy metal on Metal2, you would need to consider this when placing active Metal3. Therefore, fill would need to be done in two passes: first generate the active metal fill for some layers, then generate the dummy metal fill for the other layers. But yeah, it would prevent fill on the layers above and below the active fill, so not a solution anyways...",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "project-template_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1448223411196133428",
+      "type": "Default",
+      "timestamp": "2025-12-10T08:02:47.919+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The truly general solution is to ignore DM.4_DM.6 and DM.5_DM.7 when generating the dummy fill, and to move these shapes to active metal during the precheck.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "project-template_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
     }
   ],
-  "messageCount": 382
+  "messageCount": 392
 }
