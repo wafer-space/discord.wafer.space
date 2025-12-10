@@ -1,20 +1,5 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
-"169786952432746498","mithro_","2025-12-10T12:28:58.3990000+00:00","","","🔥 (2)"
-"1365118310701600900","rtimothyedwards_19428","2025-12-10T13:01:05.8640000+00:00","How much do you want to bet that when GF itself runs fill generation, that they just fill all layers and don't run DRC afterwards?
+"803213471402688522","_luke_w_","2025-12-10T15:12:55.2540000+00:00","Are the foundry 9-track cells DRC-clean with the latest changes to the DRC decks?","",""
+"323371864074485771","mole99","2025-12-10T15:16:48.7570000+00:00","No, we would waive them in the online platform. The long term plan is to either adjust the GDS slightly or to add GDS-based rules to the magic tech file.
 
-It would be instructive and maybe helpful in the long term to get photos of one of the original GF open MPW runs, etching the surface away to get a view of each metal layer's fill pattern.  Then we will either come to an understanding of what GF actually does to get correct fill density without violating their own rules, or we'll have evidence to go back to them and insist that they change their rules.","",""
-"220639106915368960","tholin","2025-12-10T13:03:31.4260000+00:00","Tim Ansell has a bunch of raw dies from me, ready for destructive testing","","👍 (1)"
-"1365118310701600900","rtimothyedwards_19428","2025-12-10T13:04:21.6270000+00:00","@Leo Moser (mole99) :  The implication of the ""new approach"" is that the previous simple fill pattern generation works correctly with the new method.  So if we submitted something with the original fill pattern generation, do we need to do anything other than re-run precheck?  Is there even a way on the server to simply re-run the precheck without doing a new upload?","",""
-"323371864074485771","mole99","2025-12-10T13:14:25.4160000+00:00","Yes, if you have previously generated the fill pattern when these rules were completely ignored, you can submit your design, as all the dummy layers will be moved to active metal.
-
-However, it might be better to only enable the exception for those layers that really need it :)","",""
-"323371864074485771","mole99","2025-12-10T13:14:40.2110000+00:00","When it comes to the server, that's @Tim 'mithro' Ansell's domain.","",""
-"169786952432746498","mithro_","2025-12-10T13:16:37.7830000+00:00","There is a bunch of images at https://siliconpr0n.org/archive/doku.php?id=vendor:efabless&s[]=gf180mcu#master_page_list but I don't think we ever got as far as delayering","",""
-"220639106915368960","tholin","2025-12-10T13:18:01.8400000+00:00","Also no images from GFMPW-1 dies, which might've been different.","",""
-"1365118310701600900","rtimothyedwards_19428","2025-12-10T13:26:07.3040000+00:00","This looks like about the best image of fill patterns I can get from the GFMPW-0 photos.  It's hard to tell which layers are represented other than top metal.","project-template_media/gf_mpw0_die_photo-7E5C1.png",""
-"323371864074485771","mole99","2025-12-10T13:31:01.7530000+00:00","There doesn't seem to be much fill at all next to the bondpads, but it should be allowed according to their rule. But then again, the density might already be achieved in that local area:
-
-> 1. Check the metal density in an area of 200um by 200um at a step of 100um.
-> 2. Add dummy metal if total die metal density is less than 30%
-
-We don't do that, we fill globally and as much as we can.","",""
+However, there were talks about making magic DRC errors not fail the precheck, which seems to be the likely way forward: https://discord.com/channels/1361349522684510449/1448059137593184366/1448295208683962420","",""
