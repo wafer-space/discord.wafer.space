@@ -6,12 +6,14 @@ import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Any
 from urllib.parse import urlparse
 
 from jinja2 import Environment, FileSystemLoader
 
 # Constants
 MIN_PATH_PARTS_FOR_CHANNEL = 3
+MIN_PATH_PARTS_FOR_EXPORT = 4  # server, channel, month, file
 YYYY_MM_FORMAT_LENGTH = 7  # Length of "YYYY-MM" date format
 
 
@@ -53,7 +55,7 @@ def scan_exports(public_dir: Path) -> list[dict]:
         parts = html_file.relative_to(public_dir).parts
 
         # Need at least: server, channel, month, file
-        if len(parts) >= 4:
+        if len(parts) >= MIN_PATH_PARTS_FOR_EXPORT:
             server = parts[0]
             date = html_file.stem  # YYYY-MM
 
@@ -168,7 +170,9 @@ def is_category(directory: Path) -> bool:
     return False
 
 
-def get_forum_channels(state: dict, server_name: str, public_dir: Path) -> set[str]:
+def get_forum_channels(  # noqa: C901  # Complexity needed for directory type detection
+    state: dict, server_name: str, public_dir: Path
+) -> set[str]:
     """Get forum channel names with directory structure cross-checking.
 
     Directory type detection:
@@ -203,14 +207,14 @@ def get_forum_channels(state: dict, server_name: str, public_dir: Path) -> set[s
             # If it has date archives at top level, it's a CHANNEL
             if has_date_archives(item):
                 if item.name in forum_names:
-                    print(f"  ⚠ Warning: '{item.name}' in state as forum but is a CHANNEL (has date archives)")
+                    print(f"  ⚠ Warning: '{item.name}' is a CHANNEL, not forum")
                 forum_names.discard(item.name)
                 continue
 
             # If subdirectories have date archives, it's a CATEGORY
             if is_category(item):
                 if item.name in forum_names:
-                    print(f"  ⚠ Warning: '{item.name}' in state as forum but is a CATEGORY (contains channels)")
+                    print(f"  ⚠ Warning: '{item.name}' is a CATEGORY, not forum")
                 forum_names.discard(item.name)
 
                 # Also check channels INSIDE this category
@@ -224,7 +228,7 @@ def get_forum_channels(state: dict, server_name: str, public_dir: Path) -> set[s
                     # If child has date archives, it's a channel (not a forum)
                     if has_date_archives(child):
                         if full_channel_name in forum_names:
-                            print(f"  ⚠ Warning: '{full_channel_name}' in state as forum but is a CHANNEL (has date archives)")
+                            print(f"  ⚠ Warning: '{full_channel_name}' is a CHANNEL")
                         forum_names.discard(full_channel_name)
 
                 continue
@@ -294,7 +298,7 @@ def generate_server_index(
     output_path.write_text(html)
 
 
-def generate_channel_index(
+def generate_channel_index(  # noqa: PLR0913  # Index generation needs multiple contexts
     config: dict,
     server: dict,
     channel: dict,
@@ -432,7 +436,7 @@ def collect_forum_threads(forum_dir: Path) -> list[dict]:
     return threads
 
 
-def collect_thread_archives(thread_dir: Path) -> list[dict]:
+def collect_thread_archives(thread_dir: Path) -> list[dict[str, Any]]:
     """Collect archive files for a thread directory.
 
     Args:
@@ -441,7 +445,7 @@ def collect_thread_archives(thread_dir: Path) -> list[dict]:
     Returns:
         List of archive info dicts with date and message_count
     """
-    archives = []
+    archives: list[dict[str, Any]] = []
 
     # Scan for date-based subdirectories (YYYY-MM format)
     for date_dir in thread_dir.iterdir():

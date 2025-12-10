@@ -57,7 +57,7 @@ def test_organize_data_groups_by_server_and_channel() -> None:
                 sample_data = {
                     "guild": {"id": "123", "name": "Test"},
                     "channel": {"id": "456", "name": export["channel"]},
-                    "messages": [{"id": str(i), "content": "test"} for i in range(5)]
+                    "messages": [{"id": str(i), "content": "test"} for i in range(5)],
                 }
                 json.dump(sample_data, f)
 
@@ -109,7 +109,7 @@ def test_organize_data_calculates_stats() -> None:
                 sample_data = {
                     "guild": {"id": "123", "name": "Test"},
                     "channel": {"id": "456", "name": export["channel"]},
-                    "messages": [{"id": "1", "content": "test"}]
+                    "messages": [{"id": "1", "content": "test"}],
                 }
                 json.dump(sample_data, f)
 

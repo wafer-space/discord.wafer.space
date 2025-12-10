@@ -527,12 +527,13 @@ def fetch_guild_channels(  # noqa: C901  # Complex parsing of DiscordChatExporte
 
                     # Build channel path map for hierarchical channels
                     # If channel has a parent_id (category/forum structure), store full path
-                    if channel["parent_id"]:
-                        parent = channel["parent_id"]
-                        name = channel["name"]
-                        channel_path_map[name] = f"{parent}/{name}"
-                    else:
-                        channel_path_map[channel["name"]] = channel["name"]
+                    name = channel["name"]
+                    if name is not None:
+                        if channel["parent_id"]:
+                            parent = channel["parent_id"]
+                            channel_path_map[name] = f"{parent}/{name}"
+                        else:
+                            channel_path_map[name] = name
 
         return channels, channel_path_map
 
@@ -663,7 +664,7 @@ def main() -> None:
             print(f"\nErrors ({len(summary['errors'])}):")
             for error in summary["errors"]:  # Show all errors
                 # Print full error message, with continuation lines indented
-                error_lines = error['error'].splitlines()
+                error_lines = error["error"].splitlines()
                 print(f"  - {error['channel']} ({error['format']}):")
                 for line in error_lines:
                     print(f"    {line}")

@@ -63,12 +63,17 @@ def test_scan_exports_multiple_channels() -> None:
         public = Path(tmpdir) / "public"
 
         # Create multiple servers and channels with month directories
-        (public / "server1" / "general" / "2025-01" / "2025-01.html").parent.mkdir(parents=True)
-        (public / "server1" / "general" / "2025-01" / "2025-01.html").touch()
-        (public / "server1" / "announcements" / "2025-01" / "2025-01.html").parent.mkdir(parents=True)
-        (public / "server1" / "announcements" / "2025-01" / "2025-01.html").touch()
-        (public / "server2" / "chat" / "2025-02" / "2025-02.html").parent.mkdir(parents=True)
-        (public / "server2" / "chat" / "2025-02" / "2025-02.html").touch()
+        s1_general = public / "server1" / "general" / "2025-01"
+        s1_general.mkdir(parents=True)
+        (s1_general / "2025-01.html").touch()
+
+        s1_announce = public / "server1" / "announcements" / "2025-01"
+        s1_announce.mkdir(parents=True)
+        (s1_announce / "2025-01.html").touch()
+
+        s2_chat = public / "server2" / "chat" / "2025-02"
+        s2_chat.mkdir(parents=True)
+        (s2_chat / "2025-02.html").touch()
 
         exports = scan_exports(public)
 
@@ -91,7 +96,7 @@ def test_count_messages_from_json() -> None:
             {"id": "1", "content": "Hello"},
             {"id": "2", "content": "World"},
             {"id": "3", "content": "Test"},
-        ]
+        ],
     }
 
     with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
@@ -109,7 +114,7 @@ def test_count_messages_from_json_empty_messages_array() -> None:
     sample_export = {
         "guild": {"id": "123", "name": "Test"},
         "channel": {"id": "456", "name": "test-channel"},
-        "messages": []
+        "messages": [],
     }
 
     with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:

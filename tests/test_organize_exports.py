@@ -12,6 +12,7 @@ EXPECTED_YEAR_LENGTH = 4
 MAX_MONTH_VALUE = 12
 EXPECTED_FILES_ORGANIZED = 4
 EXPECTED_SERVERS_PROCESSED = 3
+EXPECTED_MERGED_MESSAGES = 3
 
 
 def test_get_current_month() -> None:
@@ -385,6 +386,7 @@ def test_organize_exports_copies_channel_media_directory() -> None:
 
         # Check that media directory was copied into month directory
         from scripts.organize_exports import get_current_month
+
         current_month = get_current_month()
 
         channel_dir = public / "test-server" / "general"
@@ -423,6 +425,7 @@ def test_organize_exports_copies_thread_media_directory() -> None:
 
         # Check that media directory was copied into month directory
         from scripts.organize_exports import get_current_month
+
         current_month = get_current_month()
 
         thread_dir = public / "test-server" / "questions" / "help-needed"
@@ -466,6 +469,7 @@ def test_organize_exports_replaces_existing_media_directory() -> None:
         public = tmpdir_path / "public"
 
         from scripts.organize_exports import get_current_month
+
         current_month = get_current_month()
 
         # Create channel directory with old media in month directory
@@ -532,7 +536,11 @@ def test_organize_exports_merges_json_messages() -> None:
             "channel": {"id": "456", "name": "general"},
             "dateRange": {"after": "2025-01-02T00:00:00", "before": None},
             "messages": [
-                {"id": "1002", "content": "Third message (new)", "timestamp": "2025-01-03T00:00:00"},
+                {
+                    "id": "1002",
+                    "content": "Third message (new)",
+                    "timestamp": "2025-01-03T00:00:00",
+                },
             ],
             "messageCount": 1,
         }
@@ -542,7 +550,7 @@ def test_organize_exports_merges_json_messages() -> None:
         (server_dir / "general.html").write_text("<html>test</html>")
 
         # Organize exports - should merge JSON
-        stats = organize_exports(exports, public)
+        organize_exports(exports, public)
 
         # Read merged JSON
         merged_file = month_dir / f"{current_month}.json"
@@ -551,8 +559,8 @@ def test_organize_exports_merges_json_messages() -> None:
         merged_data = json.loads(merged_file.read_text())
 
         # Should have all 3 messages
-        assert merged_data["messageCount"] == 3
-        assert len(merged_data["messages"]) == 3
+        assert merged_data["messageCount"] == EXPECTED_MERGED_MESSAGES
+        assert len(merged_data["messages"]) == EXPECTED_MERGED_MESSAGES
 
         # Messages should be sorted by ID
         message_ids = [msg["id"] for msg in merged_data["messages"]]
@@ -615,8 +623,8 @@ def test_organize_exports_json_deduplicates_by_id() -> None:
         merged_data = json.loads((month_dir / f"{current_month}.json").read_text())
 
         # Should have 3 unique messages
-        assert merged_data["messageCount"] == 3
-        assert len(merged_data["messages"]) == 3
+        assert merged_data["messageCount"] == EXPECTED_MERGED_MESSAGES
+        assert len(merged_data["messages"]) == EXPECTED_MERGED_MESSAGES
 
         # Message 1000 should have updated content (new version wins)
         msg_1000 = next(m for m in merged_data["messages"] if m["id"] == "1000")

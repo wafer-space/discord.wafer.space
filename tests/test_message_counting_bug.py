@@ -31,7 +31,7 @@ def test_count_messages_from_json_with_real_discord_format() -> None:
             {"id": "3", "timestamp": "2025-11-01T10:02:00Z", "content": "Message 3"},
             {"id": "4", "timestamp": "2025-11-01T10:03:00Z", "content": "Message 4"},
             {"id": "5", "timestamp": "2025-11-01T10:04:00Z", "content": "Message 5"},
-        ]
+        ],
     }
 
     with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
@@ -65,7 +65,7 @@ def test_extract_thread_metadata_counts_correctly() -> None:
             {"id": "3", "timestamp": "2025-11-01T10:02:00Z", "content": "Message 3"},
             {"id": "4", "timestamp": "2025-11-01T10:03:00Z", "content": "Message 4"},
             {"id": "5", "timestamp": "2025-11-01T10:04:00Z", "content": "Message 5"},
-        ]
+        ],
     }
 
     with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
@@ -75,9 +75,9 @@ def test_extract_thread_metadata_counts_correctly() -> None:
     try:
         metadata = extract_thread_metadata(Path(temp_path))
         assert metadata is not None
-        assert (
-            metadata["reply_count"] == EXPECTED_MESSAGE_COUNT
-        ), f"extract_thread_metadata should count {EXPECTED_MESSAGE_COUNT} messages"
+        assert metadata["reply_count"] == EXPECTED_MESSAGE_COUNT, (
+            f"extract_thread_metadata should count {EXPECTED_MESSAGE_COUNT} messages"
+        )
 
     finally:
         Path(temp_path).unlink()
