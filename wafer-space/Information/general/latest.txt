@@ -5,9 +5,76 @@ Topic: Welcome to [wafer.space](https://wafer.space/) -
 documentation at [wafer.space github](https://github.com/wafer-space) - 
 buy at [buy.wafer.space](https://buy.wafer.space) - 
 archives at [discord.wafer.space](https://discord.wafer.space/)
-After: 12/10/2025 12:53
+After: 12/10/2025 14:43
 ==============================================================
 
+[12/10/2025 15:02] _luke_w_
+There is this cursed thing. The PMOS sources are floating but I think that would still be manufacturable on P-substrate? 🤔 from: https://pubs.aip.org/aip/acp/article-pdf/1324/1/346/11503305/346_1_online.pdf
+
+{Attachments}
+general_media/image-264B1.png
+
+
+[12/10/2025 15:02] _luke_w_
+There are also GDI gates but I don't think you can do those on GF180MCU
+
+
+[12/10/2025 15:03] tholin
+I tried building alternative XOR layouts before, but they’re all super slow and have terrible logic high and/or logic low output levels.
+
+{Reactions}
+👍
+
+[12/10/2025 15:04] tholin
+You can do two transistor pair XOR if you want it to have nanosecond long transition times and 1V logic low, 4V logic high on the output.
+
+
+[12/10/2025 15:10] _luke_w_
+Yeah I figured it would need extra buffering but that the ratio might tip in its favour for larger XOR cells
+
+
+[12/10/2025 15:10] _luke_w_
+Guess it is on me to go prove that 😅
+
+
+[12/10/2025 15:27] rtimothyedwards_19428
+@Tholin :  The verilog for the set-reset flop got kind of scrambled.  It should be:
+```
+module gf180mcu_as_sc_mcu7t3v3__dfsrtp_2(
+        input VPW,
+        input VNW,
+        input VDD,
+        input VSS,
+
+        input CLK,
+        input D,
+        input RN,
+        input SN,
+        output Q
+);
+
+reg state;
+wire sr;
+
+assign sr = ~(RN & SN);
+assign Q = state;
+
+always @(posedge CLK or posedge sr) begin
+        if (sr == 1'b1) begin
+                if (RN == 1'b0) begin
+                        state <= 1'b0;
+                end else if (SN == 1'b0) begin
+                        state <= 1'b1;
+                end
+        end else begin
+                state <= D;
+        end
+end
+
+endmodule
+```
+
+
 ==============================================================
-Exported 0 message(s)
+Exported 7 message(s)
 ==============================================================
