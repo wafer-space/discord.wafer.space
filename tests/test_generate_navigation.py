@@ -24,14 +24,14 @@ EXPECTED_THREE_MESSAGES = 3
 def test_scan_exports_finds_files() -> None:
     """Test that scan_exports finds exported files"""
     with tempfile.TemporaryDirectory() as tmpdir:
-        # Create fake export structure
+        # Create fake export structure: public/server/channel/YYYY-MM/YYYY-MM.html
         public = Path(tmpdir) / "public"
-        server_dir = public / "test-server" / "general"
-        server_dir.mkdir(parents=True)
+        month_dir = public / "test-server" / "general" / "2025-01"
+        month_dir.mkdir(parents=True)
 
-        (server_dir / "2025-01.html").touch()
-        (server_dir / "2025-01.json").touch()
-        (server_dir / "2025-01.txt").touch()
+        (month_dir / "2025-01.html").touch()
+        (month_dir / "2025-01.json").touch()
+        (month_dir / "2025-01.txt").touch()
 
         exports = scan_exports(public)
 
@@ -43,11 +43,11 @@ def test_scan_exports_skips_index_files() -> None:
     """Test that scan_exports skips index.html files"""
     with tempfile.TemporaryDirectory() as tmpdir:
         public = Path(tmpdir) / "public"
-        server_dir = public / "test-server" / "general"
-        server_dir.mkdir(parents=True)
+        month_dir = public / "test-server" / "general" / "2025-01"
+        month_dir.mkdir(parents=True)
 
-        (server_dir / "2025-01.html").touch()
-        (server_dir / "index.html").touch()
+        (month_dir / "2025-01.html").touch()
+        (month_dir / "index.html").touch()
         (public / "index.html").touch()
 
         exports = scan_exports(public)
@@ -62,13 +62,13 @@ def test_scan_exports_multiple_channels() -> None:
     with tempfile.TemporaryDirectory() as tmpdir:
         public = Path(tmpdir) / "public"
 
-        # Create multiple servers and channels
-        (public / "server1" / "general" / "2025-01.html").parent.mkdir(parents=True)
-        (public / "server1" / "general" / "2025-01.html").touch()
-        (public / "server1" / "announcements" / "2025-01.html").parent.mkdir(parents=True)
-        (public / "server1" / "announcements" / "2025-01.html").touch()
-        (public / "server2" / "chat" / "2025-02.html").parent.mkdir(parents=True)
-        (public / "server2" / "chat" / "2025-02.html").touch()
+        # Create multiple servers and channels with month directories
+        (public / "server1" / "general" / "2025-01" / "2025-01.html").parent.mkdir(parents=True)
+        (public / "server1" / "general" / "2025-01" / "2025-01.html").touch()
+        (public / "server1" / "announcements" / "2025-01" / "2025-01.html").parent.mkdir(parents=True)
+        (public / "server1" / "announcements" / "2025-01" / "2025-01.html").touch()
+        (public / "server2" / "chat" / "2025-02" / "2025-02.html").parent.mkdir(parents=True)
+        (public / "server2" / "chat" / "2025-02" / "2025-02.html").touch()
 
         exports = scan_exports(public)
 

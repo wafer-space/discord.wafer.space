@@ -225,11 +225,11 @@ description = "Test description"
 base_url = "https://test.example.com"
 """)
 
-        # Create test export files
-        server_dir = public_dir / "test-server" / "general"
-        server_dir.mkdir(parents=True)
-        (server_dir / "2025-01.html").touch()
-        json_path = server_dir / "2025-01.json"
+        # Create test export files with month directory structure
+        month_dir = public_dir / "test-server" / "general" / "2025-01"
+        month_dir.mkdir(parents=True)
+        (month_dir / "2025-01.html").touch()
+        json_path = month_dir / "2025-01.json"
         json_path.write_text('{"id": "1", "content": "test"}\n')
 
         # Create minimal templates
