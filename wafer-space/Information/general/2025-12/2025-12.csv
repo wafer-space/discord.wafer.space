@@ -1,7 +1,66 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
-"169786952432746498","mithro_","2025-12-11T15:39:55.4970000+00:00","Is somewhere here ""meiniki"" working on FazyRV ?","",""
-"1187141985530818611","ravenslofty","2025-12-11T15:52:00.2280000+00:00","that's @Meinhard Kissich","",""
-"323371864074485771","mole99","2025-12-11T15:53:04.7020000+00:00","He's listed in the spreadsheet","",""
-"169786952432746498","mithro_","2025-12-11T15:55:34.8940000+00:00","@Meinhard Kissich - FYI - I cancelled the check you started on test-platform.wafer.space","",""
-"270286460668739587","meinhard","2025-12-11T16:15:10.4190000+00:00","I had remembered to upload to both instances, but that information is likely outdated. Thanks for pointing out 🙂","",""
-"169786952432746498","mithro_","2025-12-11T16:22:22.7110000+00:00","You got a sneak preview of the updates I'm trying to deploy to platform.wafer.space 🙂","","🚀 (1)"
+"220639106915368960","tholin","2025-12-11T17:22:45.6630000+00:00","I had a check that was a minute away from completing :flop:","",""
+"538398807986274304","rzioma","2025-12-11T17:23:53.8540000+00:00","I have related question - I am looking for the smallest possible area population count  circuits (populations are 128 bits and higher).","",""
+"538398807986274304","rzioma","2025-12-11T17:24:35.8960000+00:00","So far I found that adder tree made out FA cells gives me the best result.","",""
+"538398807986274304","rzioma","2025-12-11T17:24:54.4560000+00:00","It ends up being approximately 1 FA cell per 1 input bit.","",""
+"1187141985530818611","ravenslofty","2025-12-11T17:24:55.4460000+00:00","oh, popcount is fun. I assume you want a combinational approach :p","",""
+"220639106915368960","tholin","2025-12-11T17:24:59.2900000+00:00","Nevermind. I reloaded the page and","general_media/image-8C5C3.png","🎉 (3),🥳 (2)"
+"220639106915368960","tholin","2025-12-11T17:25:13.8740000+00:00","First time in weeks. I can finally rest now.","",""
+"538398807986274304","rzioma","2025-12-11T17:25:20.2820000+00:00","Yes, purely combinational.","",""
+"538398807986274304","rzioma","2025-12-11T17:26:25.4220000+00:00","Speed is comparatively not important for me.","",""
+"538398807986274304","rzioma","2025-12-11T17:26:42.9790000+00:00","Minimizing the area is the main goal.","",""
+"1187141985530818611","ravenslofty","2025-12-11T17:27:29.6460000+00:00","do you remember me talking about compressors?","",""
+"538398807986274304","rzioma","2025-12-11T17:28:43.0460000+00:00","4:2 one?","",""
+"1187141985530818611","ravenslofty","2025-12-11T17:29:03.5840000+00:00","yes, but a full adder is itself a 3:2 compressor","",""
+"538398807986274304","rzioma","2025-12-11T17:29:36.4430000+00:00","Or did I ask you about popcount already? 🙂","",""
+"1187141985530818611","ravenslofty","2025-12-11T17:29:43.6830000+00:00","no, you didn't :p","",""
+"538398807986274304","rzioma","2025-12-11T17:30:07.5420000+00:00","FA = 3:2 compressor, I understand that part.","",""
+"1187141985530818611","ravenslofty","2025-12-11T17:30:24.2030000+00:00","a FA feeding into a FA is one way to implement a 4:2 compressor","",""
+"1187141985530818611","ravenslofty","2025-12-11T17:31:55.7560000+00:00","I feel like an adder tree probably is the most optimal way to implement this, but I'll have a think","",""
+"538398807986274304","rzioma","2025-12-11T17:32:02.4560000+00:00","Right now I am building a wide FA array that feeds into another smaller FA array... and on like that","",""
+"1187141985530818611","ravenslofty","2025-12-11T17:33:28.5410000+00:00","I assume you're adding triplets of bits for the first layer with FAs?","","👍 (1)"
+"538398807986274304","rzioma","2025-12-11T17:34:51.1670000+00:00","Yes","",""
+"1187141985530818611","ravenslofty","2025-12-11T17:35:33.4940000+00:00","(*would* be nice if we could use 4:2 compressors here)","",""
+"538398807986274304","rzioma","2025-12-11T17:38:01.9660000+00:00","I use patterns like that which build from smaller components hierarchically:
+```module PopCount128 (
+  input [127:0] data,
+  output  [7:0] count // 8 bits to hold from 0 to 128 (inclusive)
+);
+  wire [43:0] bit0_stage1;
+  wire [15:0] bit0_stage2;
+  wire [ 5:0] bit0_stage3;
+  wire [ 1:0] bit0_stage4;
+  wire [41:0] bit1_stage1;
+  wire [13:0] bit1_stage2;
+  wire [ 4:0] bit1_stage3;
+  wire [ 1:0] bit1_stage4;
+  wire        bit1_stage5;
+  Add128 ad0(.data(data),        .sum(bit0_stage1), .carry(bit1_stage1)); // 42
+  Add44 add1(.data(bit0_stage1), .sum(bit0_stage2), .carry(bit1_stage2)); // 14
+  Add16 add3(.data(bit0_stage2), .sum(bit0_stage3), .carry(bit1_stage3)); // 5
+  Add6  add4(.data(bit0_stage3), .sum(bit0_stage4), .carry(bit1_stage4)); // 2
+  Add2  add5(.data(bit0_stage4), .sum(count[0]),    .carry(bit1_stage5)); // 0.625
+
+  wire [63:0] pop64 = {bit1_stage1, bit1_stage2, bit1_stage3, bit1_stage4, bit1_stage5};
+  PopCount64 count64(.data(pop64), .count(count[7:1]));
+
+endmodule```","",""
+"538398807986274304","rzioma","2025-12-11T17:38:53.8100000+00:00","compressor 128=>44 =>16","",""
+"1187141985530818611","ravenslofty","2025-12-11T17:39:03.5930000+00:00","What's your use case for this, out of curiosity?","",""
+"538398807986274304","rzioma","2025-12-11T17:39:30.2440000+00:00","neural networks 🙂","",""
+"538398807986274304","rzioma","2025-12-11T17:41:11.2350000+00:00","either 1) neural nets with (stationary) ternary weights or
+b) summation at the end of the Logic Gate Networks (LGN aka differentiable logic)","",""
+"538398807986274304","rzioma","2025-12-11T17:42:37.4690000+00:00","It works well with SKY130 PDK FA/HA cells, but not sure what is the best for GF180","",""
+"538398807986274304","rzioma","2025-12-11T17:43:55.1060000+00:00","In GF180 atm I am using `$popcount()` in combination with `SYNTH_ADDER_TYPE: FA` instead.","",""
+"538398807986274304","rzioma","2025-12-11T17:46:43.5000000+00:00","*(there are of course no FA cells in GF180 PDK, but it seems to produce slightly smaller area this way... maybe just a coincidence... also seems to synthesise/route faster)*","",""
+"1187141985530818611","ravenslofty","2025-12-11T17:48:21.0630000+00:00","Okay, that changes things","",""
+"1187141985530818611","ravenslofty","2025-12-11T17:50:09.4020000+00:00","what do you get if you literally do `data[0] + data[1] + ...`?","",""
+"596068704471482370","246tnt","2025-12-11T17:50:49.4530000+00:00","@ReJ aka Renaldas Zioma Given the application, I'm wondering if approximation are ok ?","","👍 (1)"
+"538398807986274304","rzioma","2025-12-11T17:51:12.1270000+00:00","Approximations are OK.","",""
+"538398807986274304","rzioma","2025-12-11T17:52:18.7230000+00:00","That usually does not work as well. Definitely worse (in terms of area) on SKY130 than `FA/HA solution` and worse than `$popcount()` for GF180.","",""
+"1187141985530818611","ravenslofty","2025-12-11T17:53:56.0670000+00:00","yosys has...no handling for `$popcount` that I can find?","",""
+"538398807986274304","rzioma","2025-12-11T17:55:06.9450000+00:00","I don't get any errors and tests run.
+Gate level gives me weirds results though 😉","",""
+"1187141985530818611","ravenslofty","2025-12-11T17:55:16.9850000+00:00","are you using slang?","",""
+"538398807986274304","rzioma","2025-12-11T17:55:46.1400000+00:00","Not at the moment.","",""
+"538398807986274304","rzioma","2025-12-11T18:18:48.2380000+00:00","Actually I wanted to use analog summation, but I don't feel that I can make a one that works reliably with more than 10 inputs 😉","",""
