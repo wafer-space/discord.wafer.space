@@ -1,9 +1,33 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / project-template
-After: 12/12/2025 17:20
+After: 12/12/2025 19:20
 ==============================================================
 
+[12/12/2025 20:31] rtimothyedwards_19428
+Really?  What does the edit page for "Project Details" look like for you?
+
+
+[12/12/2025 20:37] rtimothyedwards_19428
+@Leo Moser (mole99) :  I'm getting antenna violations on I/O pins.  The I/O pins are on the 3.3V set and I may be seeing violations which others don't see because the 3.3V transistors at the input are smaller and so the ratio is easier to exceed (plus the ratio was only slightly above 400).  The problem is that these pins _are_ connected to antenna diodes.  They have a (to me) weird configuration in which the signal is connected to the nwell of an nwell-to-pdiff diode.  But it is still a valid diode.  But klayout reports zero diode area for the net.
+
+
+[12/12/2025 20:43] rtimothyedwards_19428
+@Leo Moser (mole99) :  Also, I am getting nearly no metal2 fill inside the core area of the chip.  This sounds like the issue everyone was having before the latest implementation.  But I'm supposed to be using the latest fill.  How do I know if the fill pattern generator is current?
+
+
+[12/12/2025 21:07] mole99
+Thanks for the report @Tim Edwards, I can take a look tomorrow.
+
+
+[12/12/2025 21:07] mole99
+You need to explicitly allow the metal fill to ignore the active metal below/above it. The project template sets this in the LibreLane config, however, if you run fill manually then you need to pass the following: `-rd Metal2_ignore_active`
+
+
+[12/12/2025 21:09] rtimothyedwards_19428
+Thanks.  Somehow my SRAM test chip worked without it, probably because of all the blank space.
+
+
 ==============================================================
-Exported 0 message(s)
+Exported 6 message(s)
 ==============================================================
