@@ -1,1 +1,54 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
+"384390069412429834","polyfractal","2025-12-17T16:06:26.1920000+00:00","I see the PDK has rules for bumping, is that a thing we could get from GF in the future?  https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_09_4.html","","💜 (1)"
+"756011607603019777","anfroholic","2025-12-17T16:15:09.9070000+00:00","I have also brought up WCSP before. It seems there are a few issues. 
+
+1. Just the extra cost, it would require more masks and processes.
+2. It seems the people who do the bumping are not interested in the quantities we're doing. 
+3. Everyone would have to agree on a standard pinout. (I don't see this one as a dealbreaker, but poses some issues when we try to subdivide dies into smaller forms, or probably worse going in the other direction for a larger than standard size like you were asking for for more sram.) 
+
+It certainly is something that would be very useful if we can devise a way to make it work under all these constraints.","",""
+"384390069412429834","polyfractal","2025-12-17T16:22:08.9050000+00:00","makes sense, thanks @Andrew Wingate! was contemplating chiplet'y things to get more SRAM and simple ""bridge"" interposers using bumps was a potential candidate 😇","","💜 (1)"
+"840182560252624916","logic_anarchy","2025-12-17T16:26:55.4840000+00:00","It's very long","",""
+"756011607603019777","anfroholic","2025-12-17T16:27:33.1530000+00:00","It is, but it's also all 70 pins","",""
+"840182560252624916","logic_anarchy","2025-12-17T16:27:55.9520000+00:00","It's not possible to use a shorter one?","",""
+"840182560252624916","logic_anarchy","2025-12-17T16:29:26.9700000+00:00","I’m using SDRAM in my design","","👍 (1)"
+"756011607603019777","anfroholic","2025-12-17T16:29:38.4750000+00:00","Of course it is. 
+But you'd have to know the pins you could bridge (VCC, VDD, etc.) 
+This thing was made just to fit whatever anyone did, and more to just make something to play with than something that may actually be useful.","",""
+"840182560252624916","logic_anarchy","2025-12-17T16:30:41.5440000+00:00","Sorry to ask, but why do we need an adapter board?","",""
+"756011607603019777","anfroholic","2025-12-17T16:32:42.0790000+00:00","You don't. This was more of an example for people who get the COB version. 
+Ideally you'd have your own motherboard that did whatever you wanted and just had the mating 70pin mezzanine connector assembled so you could put your chip on however you wanted","","😮 (1)"
+"840182560252624916","logic_anarchy","2025-12-17T16:33:30.2360000+00:00","COB version is a naked chip?","",""
+"756011607603019777","anfroholic","2025-12-17T16:35:39.1300000+00:00","COB (Chip On Board) 
+The COB is the small 14mm x 16mm pcb that is on the top. 
+Your die would be wirebonded to that and then you can do whatever you want after, but don't have to find a way to wirebond yourself as it's not as accessible as PCBA","","😮 (1)"
+"840182560252624916","logic_anarchy","2025-12-17T16:36:24.1770000+00:00","How is something like that soldered onto the PCB?","",""
+"756011607603019777","anfroholic","2025-12-17T16:37:25.2580000+00:00","That is wirebonded and covered in clear epoxy","",""
+"840182560252624916","logic_anarchy","2025-12-17T16:37:45.0960000+00:00","Wirebonded from GF?","",""
+"756011607603019777","anfroholic","2025-12-17T16:38:09.8690000+00:00","No they found their own people to do the wirebonding","",""
+"840182560252624916","logic_anarchy","2025-12-17T16:38:35.7620000+00:00","That means we get such PCB with CHIP (COB)","",""
+"840182560252624916","logic_anarchy","2025-12-17T16:38:38.5990000+00:00","?","",""
+"756011607603019777","anfroholic","2025-12-17T16:40:32.3500000+00:00","You get just this part with your die wirebonded and the mezzanine connector on the back. 
+Everything below that (your own motherboard or breakout board) is on you.","cob_media/0005-BCE5B.JPG","👍🏻 (1)"
+"840182560252624916","logic_anarchy","2025-12-17T16:42:10.2640000+00:00","I that ok to use only this here?","cob_media/image-7731D.png,cob_media/image-EBD20.png",""
+"840182560252624916","logic_anarchy","2025-12-17T16:42:29.5160000+00:00","I need short wires for SDRAM","",""
+"840182560252624916","logic_anarchy","2025-12-17T16:43:49.4320000+00:00","Sorry if I’m asking basic questions. I’m not fully in the loop, and I don’t have much PCB design experience.","",""
+"756011607603019777","anfroholic","2025-12-17T16:47:25.2900000+00:00","For your own die, you can choose whatever pads you want for whatever. 
+These were designed respecting the pad choices chosen by Tiny Tapeout as they had the most ready designs available when we started all this. 
+You're also welcome to design your own COB chip as long as you respect the pad locations on the die, the wirebond pads on the COB PCB, and the location of the mezzanine connector. But going outside the standards will leave all the remaining details to you.","",""
+"840182560252624916","logic_anarchy","2025-12-17T16:50:00.6710000+00:00","Would it be possible to design one universal board for all designs, despite the SDRAM/SRAM differences and other incompatibilities?","",""
+"840182560252624916","logic_anarchy","2025-12-17T16:51:53.9590000+00:00","If it’s not possible, I’ll need to ask you more questions here. My assumption is that I’ll need to integrate your COB board via an adapter PCB, considering the Linux SoC’s requirements.","",""
+"756011607603019777","anfroholic","2025-12-17T16:59:16.8600000+00:00","That's more or less what we have. I am unsure of the exact requirements you're asking for. 
+Maybe there are others here more knowledgable who can answer these questions.","",""
+"840182560252624916","logic_anarchy","2025-12-17T17:04:42.2480000+00:00","All good. I can handle the schematic, and probably the PCB layout too, otherwise I’ll just ask. I also want to provide three PMOD interfaces so I can connect an SD card, Ethernet, and Flash through them.
+The board only needs the adapter, SDRAM, discrete components, a clock, uart, and the power supplies.","","👍 (1)"
+"840182560252624916","logic_anarchy","2025-12-17T17:07:46.8130000+00:00","good old times 🙂","cob_media/image-1D69A.png",""
+"840182560252624916","logic_anarchy","2025-12-17T17:08:44.8270000+00:00","maybe 4 pmods: uart, flash, sdcard, ethernet","",""
+"840182560252624916","logic_anarchy","2025-12-17T17:13:23.9510000+00:00","@Andrew Wingate Last question: do we get the COB with this connector already attached?
+
+Which connector we should use for the motherboard?","cob_media/image-212F2.png,cob_media/image-76A31.png",""
+"756011607603019777","anfroholic","2025-12-17T17:13:45.1690000+00:00","Yes","",""
+"840182560252624916","logic_anarchy","2025-12-17T17:14:20.7040000+00:00","And which Connector 236 or 262?","",""
+"756011607603019777","anfroholic","2025-12-17T17:15:21.0100000+00:00","Mating connector","cob_media/image-C5870.png",""
+"840182560252624916","logic_anarchy","2025-12-17T17:15:36.5510000+00:00","Thank you @Andrew Wingate","","👍 (1)"
+"840182560252624916","logic_anarchy","2025-12-17T17:16:11.3330000+00:00","I see, that is a pair 🙂","",""
