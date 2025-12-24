@@ -1,14 +1,39 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
-"756011607603019777","anfroholic","2025-12-24T08:23:43.2600000+00:00","Hey all, got a few updates. 
-First off, the SMT tape and reel components have arrived. 
+"169786952432746498","mithro_","2025-12-24T09:37:38.4910000+00:00","@tnt - if they are only bonding like 10 or 100 gel packs work, but when it gets to 1,000 units things change a bit.","","👍 (1)"
+"169786952432746498","mithro_","2025-12-24T09:39:18.1520000+00:00","What is that last fan looking picture?","",""
+"756011607603019777","anfroholic","2025-12-24T09:40:49.1730000+00:00","2 reels worth of the carrier tape came on paper 13"" reels. It was just the look at it from the side. 
+Thought it looked neat","",""
+"169786952432746498","mithro_","2025-12-24T09:40:55.3920000+00:00","It also depends on where in the production pipeline they are doing the wire bonding. If they do the glueing with more typical PNP style machines, then tape works pretty well.","",""
+"169786952432746498","mithro_","2025-12-24T09:41:45.3040000+00:00","Oh, you're looking through a hole in the paper reel side.","","👍 (1)"
+"756011607603019777","anfroholic","2025-12-24T09:41:58.9160000+00:00","Yeah, I've been hoping whatever we do, there's a panel that has 40+ dies. I have to imagine they can work with tape as it's a pcb?","",""
+"169786952432746498","mithro_","2025-12-24T09:44:48.3470000+00:00","At the high end they pick the dies directly from the diced wafer.","",""
+"756011607603019777","anfroholic","2025-12-24T09:45:39.7900000+00:00","When there aren't 40 different projects at once 😜","",""
+"169786952432746498","mithro_","2025-12-24T10:05:46.4290000+00:00","Yes - that is the rub 🙂","",""
+"756011607603019777","anfroholic","2025-12-24T10:14:25.3790000+00:00","some more updates on progress. 
+I made all these a bit ago, but have note posted (sorry)","",""
+"756011607603019777","anfroholic","2025-12-24T10:14:30.3300000+00:00","## Tape & Reel Mechanisms
 
-I hadn't realized the 13"" reels come unassembled, which is nice for shipping I guess. 
-I'm also not sure anyone would be getting their components on these reels or not. There are a lot of questions in the air about actual yields, but a 7"" reel would *barely fit* so am opting to design with larger reels just in case. 
+The goal is to support at least 40 tape-and-reel mechanisms, with the ability to add more in the future (including half-width or other variants). To keep things flexible and manageable, I’m avoiding putting actuators on each mechanism. Instead, the plan is to use a base-mounted actuator that can drive each unit as needed.
 
-Got boxes of the pressure sensitive cover tape. I have attached some to some tape and think it should work well. 
+Since we don’t yet know how many parts each feeder will need to hold, I’m standardizing on 13"" reels so we can handle just about any reasonable tape quantity in one setup.
 
-We also got a bundle of 7"" reels, they were packed very pretty. This is likely how your dies arrive if you order bare dies.","die-sorter_media/20251223_234922-A0CD3.jpg,die-sorter_media/20251223_235041-75FB3.jpg,die-sorter_media/20251223_234928-E33A8.jpg,die-sorter_media/20251223_235011-D987F.jpg,die-sorter_media/20251223_234939-0223C.jpg,die-sorter_media/20251224_021415-A975C.jpg,die-sorter_media/20251224_021420-6F76C.jpg",""
-"756011607603019777","anfroholic","2025-12-24T08:25:06.1460000+00:00","We also got the tape, it's 12mm wide and seems to be very nice. 
-I have a few chips from the old GF run and they seem to fit well!","die-sorter_media/0012-6ACDE.JPG,die-sorter_media/0016-2FA86.JPG,die-sorter_media/20251223_232305-16CCB.jpg,die-sorter_media/20251223_232053-1252B.jpg",""
-"596068704471482370","246tnt","2025-12-24T09:16:09.2260000+00:00","But did you find any wire bonder that takes die on reels ?
-Granted I only talked to a few, but they all wanted gel packs basically.","",""
+With 40 feeders, setup time matters. Even one minute per reel turns into an hour very quickly, so minimizing loading effort is an important design consideration.","",""
+"756011607603019777","anfroholic","2025-12-24T10:15:52.9210000+00:00","## V1: Lever Pusher
+
+This design is based on a lever-and-spring-finger mechanism I’ve used successfully in SMT feeders.
+
+While it works well there, I’m concerned it may not have enough grip for a tape-and-reel machine. In addition to moving the tape, it has to deal with cover tape forces and the take-up reel. Additionally as these tapes will be used by others after we're done, we can't have any damage to the tape. 
+
+I built a simple prototype mainly to check fit and get a feel for how it behaves in the real world.","die-sorter_media/reeler_v1_2-B54A1.png,die-sorter_media/20251224_024843-BC327.jpg,die-sorter_media/20251224_024849-25B68.jpg,die-sorter_media/reeler_v1-5D987.png,die-sorter_media/reeler_v1_1-C11EB.png,die-sorter_media/0026-73E50.JPG,die-sorter_media/0023-9E4D7.JPG",""
+"756011607603019777","anfroholic","2025-12-24T10:17:14.0730000+00:00","## V2: Ratcheting Mechanism
+
+This version uses a toothed wheel to drive the tape, acting like a ratchet. A spring-loaded drive pushes it forward, and reverse teeth prevent it from backing up on the return stroke.
+
+The current prototypes are very rough and made from inexpensive sheet material, chosen mainly because it’s fast and cheap for early testing (referred to by @Tim 'mithro' Ansell  as “nasty fuzzy particle board stuff” 😂 ).
+
+One issue I’ve noticed is that the drive gear may be a bit small, creating a tighter bend radius than I’d like. That’s something to refine.
+
+So far, this design feels the most promising in terms of grip and overall robustness.","die-sorter_media/reeler_v2_1-897BA.png,die-sorter_media/0027-C49ED.JPG,die-sorter_media/20251224_025232-35B5A.jpg,die-sorter_media/20251224_025242-73F0E.jpg,die-sorter_media/reeler_v2-F1497.png,die-sorter_media/0020-DD288.JPG",""
+"756011607603019777","anfroholic","2025-12-24T10:18:08.5140000+00:00","## V3: All-Gear Design
+
+I also explored an all-gear approach, but this is the least appealing option. Keeping everything aligned and properly indexed would add a lot of complexity, and it doesn’t seem worth the effort compared to the other designs. The feed gear is too big and more.","die-sorter_media/reeler_v3_2-D830E.png,die-sorter_media/0021-8D298.JPG,die-sorter_media/20251224_025028-90E2A.jpg,die-sorter_media/reeler_v3-FDBF4.png,die-sorter_media/reeler_v3_1-EE951.png",""
