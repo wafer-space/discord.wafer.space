@@ -16,7 +16,7 @@
     "after": null,
     "before": null
   },
-  "exportedAt": "2025-12-27T17:36:57.2683333+00:00",
+  "exportedAt": "2025-12-27T19:35:59.5230145+00:00",
   "messages": [
     {
       "id": "1444913134920925235",
@@ -25606,7 +25606,171 @@
           "imageUrl": "general_media/1f605-42B43.svg"
         }
       ]
+    },
+    {
+      "id": "1454533650652594289",
+      "type": "Reply",
+      "timestamp": "2025-12-27T17:57:26.244+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Inference was the target yes. You can do GEMM, CNN, and some other common ops with a systolic array. If you do the right numerical representation (fixed/float) you can do training by just doing a second multiplication pass for the gradients/backprop - at least that was my understanding, I've never done it as inference has been my priority.",
+      "author": {
+        "id": "805909190333038612",
+        "name": "trev5514",
+        "discriminator": "0000",
+        "nickname": "Trevor Peyton",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/2-ADBB4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "250728970478157826",
+          "name": "lromor_",
+          "discriminator": "0000",
+          "nickname": "lromor",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "general_media/d636d45bd4f58156824cbce778207aaa-5FBCB.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1453338064478011392",
+        "channelId": "1361349523724570941",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1454534013417951428",
+      "type": "Reply",
+      "timestamp": "2025-12-27T17:58:52.734+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "That's cool! I'd love to see a comparison. I looked into an xorshift but went with the systolic array instead. I'm curious to see the potential power/area differences you can get in performance!",
+      "author": {
+        "id": "805909190333038612",
+        "name": "trev5514",
+        "discriminator": "0000",
+        "nickname": "Trevor Peyton",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/2-ADBB4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "384390069412429834",
+          "name": "polyfractal",
+          "discriminator": "0000",
+          "nickname": "BreakingTaps",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "general_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1453427296387203286",
+        "channelId": "1361349523724570941",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1454534554466517224",
+      "type": "Reply",
+      "timestamp": "2025-12-27T18:01:01.73+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I see, so you have a lot of synchronous parts. Is your target representation float/fixed point?",
+      "author": {
+        "id": "250728970478157826",
+        "name": "lromor_",
+        "discriminator": "0000",
+        "nickname": "lromor",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/d636d45bd4f58156824cbce778207aaa-5FBCB.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "805909190333038612",
+          "name": "trev5514",
+          "discriminator": "0000",
+          "nickname": "Trevor Peyton",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "general_media/2-ADBB4.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1454533650652594289",
+        "channelId": "1361349523724570941",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1454535394409451745",
+      "type": "Reply",
+      "timestamp": "2025-12-27T18:04:21.988+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The entire array is synchronous. I went with ternary weights, 8-bit activations to fit on chip. FP multipliers are huge, so I stuck with int space.",
+      "author": {
+        "id": "805909190333038612",
+        "name": "trev5514",
+        "discriminator": "0000",
+        "nickname": "Trevor Peyton",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "general_media/2-ADBB4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "250728970478157826",
+          "name": "lromor_",
+          "discriminator": "0000",
+          "nickname": "lromor",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "general_media/d636d45bd4f58156824cbce778207aaa-5FBCB.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1454534554466517224",
+        "channelId": "1361349523724570941",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
     }
   ],
-  "messageCount": 754
+  "messageCount": 758
 }

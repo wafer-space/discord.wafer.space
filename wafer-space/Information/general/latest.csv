@@ -1,1 +1,5 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
+"805909190333038612","trev5514","2025-12-27T17:57:26.2440000+00:00","Inference was the target yes. You can do GEMM, CNN, and some other common ops with a systolic array. If you do the right numerical representation (fixed/float) you can do training by just doing a second multiplication pass for the gradients/backprop - at least that was my understanding, I've never done it as inference has been my priority.","",""
+"805909190333038612","trev5514","2025-12-27T17:58:52.7340000+00:00","That's cool! I'd love to see a comparison. I looked into an xorshift but went with the systolic array instead. I'm curious to see the potential power/area differences you can get in performance!","",""
+"250728970478157826","lromor_","2025-12-27T18:01:01.7300000+00:00","I see, so you have a lot of synchronous parts. Is your target representation float/fixed point?","",""
+"805909190333038612","trev5514","2025-12-27T18:04:21.9880000+00:00","The entire array is synchronous. I went with ternary weights, 8-bit activations to fit on chip. FP multipliers are huge, so I stuck with int space.","",""
