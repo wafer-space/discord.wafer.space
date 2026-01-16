@@ -1,9 +1,30 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / analog
-After: 01/16/2026 15:34
+After: 01/16/2026 17:35
 ==============================================================
 
+[01/16/2026 17:55] polyfractal
+Been dabbling with analog recently and was curiosu if any of the automated analog layout tools worked well. ALIGN (https://github.com/ALIGN-analoglayout/ALIGN-public) looked most promising and had a Sky130 PDK, so I threw Claude Code at it. Sorta have a working GF180 PDK now? Takes in a spice netlist, constraints (matching, symmetry, etc) and spits out GDS
+
+Found some pretty serious limitations though, namely that ALIGN was built with finfet nodes in mind so there are a lot of restrictive routing/placement constraints baked into the core. Had to modify the core to get even moderately compact layouts and it's still a lot of wasted space. DRC and LVS match, but haven't run simulations on the generated output yet... could be hot garbage 😅 
+
+Still, neato tool. Kinda want to start working on something that's tailored for big legacy nodes that have less restrictive DRC.
+
+(screenshot is a CSA + Discriminator + Krummenacher feedback circuit that i've been playing around with)
+
+{Attachments}
+analog_media/Screenshot202026-01-1620084816-8E5A4.png
+
+{Embed}
+https://github.com/ALIGN-analoglayout/ALIGN-public
+GitHub - ALIGN-analoglayout/ALIGN-public
+Contribute to ALIGN-analoglayout/ALIGN-public development by creating an account on GitHub.
+analog_media/ALIGN-public-5FFBF
+
+{Reactions}
+❤️
+
 ==============================================================
-Exported 0 message(s)
+Exported 1 message(s)
 ==============================================================
