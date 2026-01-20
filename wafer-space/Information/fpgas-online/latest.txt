@@ -2,34 +2,62 @@
 Guild: wafer.space Community
 Channel: Information / fpgas-online
 Topic: Channel for continued development of https://fpgas.online
-After: 01/20/2026 20:15
+After: 01/20/2026 21:26
 ==============================================================
 
-[01/20/2026 21:01] tishamdhar
-Does this indicate the NeTV2 I have is a 100T ? 0x13631093 is the IDCODE for a Xilinx Artix-7 FPGA
+[01/20/2026 21:28] tishamdhar
+@Tim 'mithro' Ansell can probably get sources fully uploaded by Bunny and we can get it all converted to KiCAD and make more , I have found the SQRL Acorn quite affordable due to crypto craze. Just need to reverse engineer and open it.
 
 
-[01/20/2026 21:17] carlfk
+[01/20/2026 21:30] mithro_
+According to AI - The JTAG IDCODE 0x13631093 decodes specifically to a Xilinx Artix-7 XC7A100T FPGA. 
 
+I'm guessing you have one of the special "dev" NeTV2 which had the 100T rather than the 35T part?
+
+
+[01/20/2026 21:31] mithro_
+I believe KiCAD can open Altium Designer files these days?
+
+
+[01/20/2026 21:31] mithro_
+We should put it on fpgas.online instead 🙂
+
+
+[01/20/2026 21:41] carlfk
+Where is the jtag header?
+
+
+[01/20/2026 22:14] tishamdhar
+@carlfk
 
 {Attachments}
-fpgas-online_media/rn_image_picker_lib_temp_a801e0f3-f5c3-428-991AE.jpg
+fpgas-online_media/Screenshot_20260121-084415-C87BB.png
 
 
-[01/20/2026 21:19] carlfk
-I was going to frame it and hang it on the wall.
+[01/20/2026 22:16] tishamdhar
+We need an RPi hat that attaches a dirty JTAG to those pins, passes through power and Rx TX and may be interrupts , not sure what those do. And also has a PCIe ribbon cable M2 thingie or just an oculink connector at the edge.
 
 
-[01/20/2026 21:25] carlfk
-https://github.com/AlphamaxMedia/netv2-mainboard/blob/master/hdmi_m2m_jumper-v2.PrjPcb#L92  DocumentPath=C:\Program Files (x86)\Altium\Altium Designer  grumble :p
+[01/20/2026 22:17] tishamdhar
+But it will be specific to the NETV2
 
-{Embed}
-https://github.com/AlphamaxMedia/netv2-mainboard/blob/master/hdmi_m2m_jumper-v2.PrjPcb
-netv2-mainboard/hdmi_m2m_jumper-v2.PrjPcb at master · AlphamaxMedi...
-Release directory for NeTV2 main PCBA files. Contribute to AlphamaxMedia/netv2-mainboard development by creating an account on GitHub.
-fpgas-online_media/netv2-mainboard-F8955
+
+[01/20/2026 22:17] tishamdhar
+Not sure how many of those are out in the wild.
+
+
+[01/20/2026 22:19] tishamdhar
+I suspect the Pci-leech gateware I am loading is for a 35T precompiled and I am loading on a 100T so it is barfing. I have to setup litex and Vivado and all that jazz to compile gateware for the 100T and do a hello world and see.
+
+
+[01/20/2026 22:20] tishamdhar
+I wish OpenOCD had the cross-walk to tell me the FPGA type without giving me a hex.
+
+
+[01/20/2026 22:20] tishamdhar
+Would a 35T gateware run on a 100T ?
 
 
 ==============================================================
-Exported 4 message(s)
+Exported 12 message(s)
 ==============================================================
