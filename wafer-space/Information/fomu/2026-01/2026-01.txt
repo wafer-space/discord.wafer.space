@@ -2,9 +2,92 @@
 Guild: wafer.space Community
 Channel: Information / fomu
 Topic: Channel for the FPGA Tomu aka Fomu (https://fomu.im).
-After: 01/26/2026 13:03
+After: 01/26/2026 15:09
 ==============================================================
 
+[01/26/2026 15:20] carlfk
+MicroPython v1.10-308-g421dcd2 on 2020-01-03; fomu with vexriscv
+
+
+[01/26/2026 15:21] carlfk
+this is from fomu-workshop tar or something I have from years ago
+
+
+[01/26/2026 15:23] carlfk
+if I am runing some py code, and then ^c, it stops but I don't get KeyboardInterrupt like I do on uP on Pico
+
+
+[01/26/2026 15:24] carlfk
+really I want to know where uP print('foo') data is buffered
+
+
+[01/26/2026 15:24] carlfk
+this code consumes it: https://github.com/CarlFK/dolly/blob/main/logr/consume1.py
+
+{Embed}
+https://github.com/CarlFK/dolly/blob/main/logr/consume1.py
+dolly/logr/consume1.py at main · CarlFK/dolly
+dal - data aquision loger . Contribute to CarlFK/dolly development by creating an account on GitHub.
+fomu_media/dolly-9D7A7
+
+
+[01/26/2026 15:25] carlfk
+but s.reset_input_buffer()
+doesn't seem to do much as the next while loop spits out a bunch of lines
+
+
+[01/26/2026 15:26] carlfk
+if I put a sleep(.5), then s.reset_input_buffer() seems to work.
+
+
+[01/26/2026 15:27] carlfk
+so I'm guessing I need to wait for the print() data to get into the buffer that cP can reset_, but I'm wonderin where it is pooling up
+
+
+[01/26/2026 15:30] rebelmike
+If you can find the source for the build, you'll probably want to look in `ports/<whatever it's called>/uart_core.c`
+
+
+[01/26/2026 15:31] rebelmike
+Ctrl-C handling is port specific, as it requires the uart driver to be able to flag a Ctrl-C character has been seen before uP has processed the buffer
+
+
+[01/26/2026 16:26] carlfk
+#tomu channel on irc.freenode.net  https://workshop.fomu.im/en/latest/help.html
+
+
+[01/26/2026 16:26] carlfk
+I can't find the uP fomu port
+
+
+[01/26/2026 16:27] carlfk
+yes I can.  https://github.com/im-tomu/micropython/tree/fomu/ports/fomu
+
+{Embed}
+https://github.com/im-tomu/micropython/tree/fomu/ports/fomu
+micropython/ports/fomu at fomu · im-tomu/micropython
+The Micro Python project. Contribute to im-tomu/micropython development by creating an account on GitHub.
+
+
+[01/26/2026 16:49] carlfk
+// Send string of given length
+void mp_hal_stdout_tx_strn(const char *str, mp_uint_t len) {
+https://github.com/im-tomu/micropython/blob/fomu/ports/fomu/src/uart-core.c
+
+{Embed}
+https://github.com/im-tomu/micropython/blob/fomu/ports/fomu/src/uart-core.c
+micropython/ports/fomu/src/uart-core.c at fomu · im-tomu/micropython
+The Micro Python project. Contribute to im-tomu/micropython development by creating an account on GitHub.
+
+
+[01/26/2026 16:50] carlfk
+is this how uP print() gets sent  up the usb serial ?
+
+
+[01/26/2026 16:50] carlfk
+I'm still curious where stuff is buffered
+
+
 ==============================================================
-Exported 0 message(s)
+Exported 16 message(s)
 ==============================================================
