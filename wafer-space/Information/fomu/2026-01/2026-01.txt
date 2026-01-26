@@ -2,21 +2,33 @@
 Guild: wafer.space Community
 Channel: Information / fomu
 Topic: Channel for the FPGA Tomu aka Fomu (https://fomu.im).
-After: 01/26/2026 17:15
+After: 01/26/2026 19:22
 ==============================================================
 
-[01/26/2026 18:12] rebelmike
-Yes, that's how the output gets to the serial, I don't think there's any other buffering.  That function just loops until it's managed to give all the characters to `usb_write`, and it is called directly from `mp_print_*` functions (via the `MP_PLAT_PRINT_STRN` macro).
+[01/26/2026 21:12] mithro_
+@carlfk - It would be awesome to update micropython on the Fomu....
 
 
-[01/26/2026 18:38] carlfk
-Somewhere is a 256 byte buffer, and then I think a 2nd larger one.   which may be on the Linux/host and then cPython
+[01/26/2026 21:12] mithro_
+@jimmo might be able to help with that....
 
 
-[01/26/2026 18:39] carlfk
-cPython/linux I open the connection, serial.in_waiting shows  0, sleep .1' in_waiting is either 256 or 294 (256 + len(one line of data)
+[01/26/2026 21:12] mithro_
+@carlfk - I also found a couple more of the EVT Pi hat boards. I'd love to get them onto https://fpgas.online and convince people to play with them...
+
+
+[01/26/2026 21:19] carlfk
+what is a EVT Pi hat board ?
+
+
+[01/26/2026 21:20] mithro_
+That blue RPi Hat board which has the same hardware in an easier to look at form factor
+
+
+[01/26/2026 21:23] carlfk
+ah - fomu
 
 
 ==============================================================
-Exported 3 message(s)
+Exported 6 message(s)
 ==============================================================
