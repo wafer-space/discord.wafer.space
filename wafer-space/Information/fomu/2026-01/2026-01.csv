@@ -1,20 +1,4 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
-"443147704126668801","carlfk","2026-01-26T15:20:37.4830000+00:00","MicroPython v1.10-308-g421dcd2 on 2020-01-03; fomu with vexriscv","",""
-"443147704126668801","carlfk","2026-01-26T15:21:44.3040000+00:00","this is from fomu-workshop tar or something I have from years ago","",""
-"443147704126668801","carlfk","2026-01-26T15:23:28.7520000+00:00","if I am runing some py code, and then ^c, it stops but I don't get KeyboardInterrupt like I do on uP on Pico","",""
-"443147704126668801","carlfk","2026-01-26T15:24:20.2640000+00:00","really I want to know where uP print('foo') data is buffered","",""
-"443147704126668801","carlfk","2026-01-26T15:24:56.8320000+00:00","this code consumes it: https://github.com/CarlFK/dolly/blob/main/logr/consume1.py","",""
-"443147704126668801","carlfk","2026-01-26T15:25:36.9020000+00:00","but s.reset_input_buffer()
-doesn't seem to do much as the next while loop spits out a bunch of lines","",""
-"443147704126668801","carlfk","2026-01-26T15:26:12.8430000+00:00","if I put a sleep(.5), then s.reset_input_buffer() seems to work.","",""
-"443147704126668801","carlfk","2026-01-26T15:27:01.7130000+00:00","so I'm guessing I need to wait for the print() data to get into the buffer that cP can reset_, but I'm wonderin where it is pooling up","",""
-"691780627338625077","rebelmike","2026-01-26T15:30:27.8010000+00:00","If you can find the source for the build, you'll probably want to look in `ports/<whatever it's called>/uart_core.c`","",""
-"691780627338625077","rebelmike","2026-01-26T15:31:12.9060000+00:00","Ctrl-C handling is port specific, as it requires the uart driver to be able to flag a Ctrl-C character has been seen before uP has processed the buffer","",""
-"443147704126668801","carlfk","2026-01-26T16:26:05.5460000+00:00","#tomu channel on irc.freenode.net  https://workshop.fomu.im/en/latest/help.html","",""
-"443147704126668801","carlfk","2026-01-26T16:26:36.7320000+00:00","I can't find the uP fomu port","",""
-"443147704126668801","carlfk","2026-01-26T16:27:46.2660000+00:00","yes I can.  https://github.com/im-tomu/micropython/tree/fomu/ports/fomu","",""
-"443147704126668801","carlfk","2026-01-26T16:49:42.2020000+00:00","// Send string of given length
-void mp_hal_stdout_tx_strn(const char *str, mp_uint_t len) {
-https://github.com/im-tomu/micropython/blob/fomu/ports/fomu/src/uart-core.c","",""
-"443147704126668801","carlfk","2026-01-26T16:50:10.7410000+00:00","is this how uP print() gets sent  up the usb serial ?","",""
-"443147704126668801","carlfk","2026-01-26T16:50:45.6970000+00:00","I'm still curious where stuff is buffered","",""
+"691780627338625077","rebelmike","2026-01-26T18:12:52.0690000+00:00","Yes, that's how the output gets to the serial, I don't think there's any other buffering.  That function just loops until it's managed to give all the characters to `usb_write`, and it is called directly from `mp_print_*` functions (via the `MP_PLAT_PRINT_STRN` macro).","",""
+"443147704126668801","carlfk","2026-01-26T18:38:12.0030000+00:00","Somewhere is a 256 byte buffer, and then I think a 2nd larger one.   which may be on the Linux/host and then cPython","",""
+"443147704126668801","carlfk","2026-01-26T18:39:53.1320000+00:00","cPython/linux I open the connection, serial.in_waiting shows  0, sleep .1' in_waiting is either 256 or 294 (256 + len(one line of data)","",""
