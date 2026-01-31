@@ -2,13 +2,24 @@
 Guild: wafer.space Community
 Channel: Information / fpgas-online
 Topic: Channel for continued development of https://fpgas.online
-After: 01/31/2026 17:27
+After: 01/31/2026 19:36
 ==============================================================
 
-[01/31/2026 17:27] carlfk
-I hate to ask.. and it bothers me that we are having this conversation - is any of your PR  needed?
+[01/31/2026 21:02] mithro_
+The description seems reasonable to me:
+
+    cmdline.txt and fstab had hardcoded 10.21.0.1 NFS server IPs.
+    Convert to Jinja2 templates using {{ eth_local_address }} and
+    {{ nfs_root }} so they work across sites with different IPs
+    (e.g. welland at 10.31.0.3, PS1 at 10.21.0.1).
+
+The IP address range 10.31.X.X is what I'm using for the fpgas.online in my network.
+
+
+[01/31/2026 21:33] mithro_
+@carlfk - Can you `ssh -6 root@tweed.welland.mithis.com` ?
 
 
 ==============================================================
-Exported 1 message(s)
+Exported 2 message(s)
 ==============================================================
