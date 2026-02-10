@@ -1,9 +1,118 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / digital
-After: 02/10/2026 03:33
+After: 02/10/2026 05:57
 ==============================================================
 
+[02/10/2026 06:10] mithro_
+What are you working on? LVDS/CML is something that is very interesting to me 🙂 - I would to get us to PCIe eventually.
+
+
+[02/10/2026 06:34] embeddedken
+An FPGA with 5V core and 1.8V-3.3V I/O; maybe a test gigabit transceiver for proving out SGMII or PCIe x1 Gen1 physical-layer capability.
+I think 2.5 Gbps may be almost within the realm of reach for half-rate architecture; solid PLL and CDR would be the limiting factors.
+
+
+[02/10/2026 06:34] mithro_
+Have you seen https://bit.ly/open-pipe-talk ?
+
+{Embed}
+https://bit.ly/open-pipe-talk
+[External Access] SERDES, PIPE and protocols - Pathway to fully ope...
+SERDES, PIPE and protocols Pathway to fully open source implementations... Presenters Tim ‘mithro’ Ansell <tansell@google.com> bit.ly/open-pipe-talk
+digital_media/AHkbwyLd4pLl6QC5MtLBPoesZRhkJmj5EX9MP5I4tK-DAD2D
+
+
+[02/10/2026 06:35] embeddedken
+The associated PIPE interface and Hard IP would be quite a technical challenge; possible greater than PMA development
+
+
+[02/10/2026 06:35] mithro_
+Also have you seen @Leo Moser (mole99)'s FPGA?
+
+
+[02/10/2026 06:35] mithro_
+@EmbeddedKen - If you get me the SERDES, I can get you the PIPE and reset of the stack
+
+{Reactions}
+🥳
+
+[02/10/2026 06:36] embeddedken
+I do have a PCIe serial logic analyzer for decoding DLLPs and TLPs; which could help with silicon bring-up and have extensive experience debugging PCIe for FPGAs.
+
+
+[02/10/2026 06:37] embeddedken
+I'll see what I can do- I'm not an analog wizard; I think PLL/CDR will be the most challenging
+
+
+[02/10/2026 06:37] mithro_
+@EmbeddedKen - @enite and the openfasoc project where working on high quality PLL and CDR structures for SERDES in the past, I have no idea were they ended up getting too. There is some very out of date stuff in https://bit.ly/goog-analog
+
+{Embed}
+https://bit.ly/goog-analog
+Google + Analog Handout - Non-confidential -- https://bit.ly/goog-a...
+Analog bit.ly/goog-analog
+
+
+[02/10/2026 06:38] mithro_
+Their general approach was to write generators so they could eventually tape out like 50 variants to find the best solution.
+
+
+[02/10/2026 06:38] mithro_
+@EmbeddedKen - If we could do the slowest USB3 speed, that would be pretty epic.
+
+
+[02/10/2026 06:39] embeddedken
+One of the first PCIe Gen1 devices was on 180nm- which provides some additional hope. 2.5Gbps is definitely pushing the limits of the process node.
+
+
+[02/10/2026 06:39] mithro_
+This group is one I know attempting to do some stuff -> https://github.com/chili-chips-ba/openPCIE
+
+{Embed}
+https://github.com/chili-chips-ba/openPCIE
+GitHub - chili-chips-ba/openPCIE: Peripheral Component Interconnect...
+Peripheral Component Interconnect (PCI) has taken the Express lane long ago, moving to xGbps SerDes. Now for the first time in opensource on the Host side too. Our project roots for the Root Port i...
+digital_media/openPCIE-C751C
+
+
+[02/10/2026 06:40] mithro_
+@EmbeddedKen - https://github.com/mithro/open-pcie-status
+
+{Embed}
+https://github.com/mithro/open-pcie-status
+GitHub - mithro/open-pcie-status: Repo containing an AI generated r...
+Repo containing an AI generated report on the status of open source PCIe implementations (for FPGAs). - mithro/open-pcie-status
+digital_media/open-pcie-status-D2E8C
+
+
+[02/10/2026 06:40] embeddedken
+I thought SuperSpeed started at 5Gbps... that is probably well out of reach.
+
+
+[02/10/2026 06:41] embeddedken
+Awesome info- I'll dive into these
+
+
+[02/10/2026 06:41] embeddedken
+Amazing to think there's others out there working on PIPE 👏
+
+
+[02/10/2026 06:56] mithro_
+@EmbeddedKen - But yeah, high performance IO would be a great step, even if initially it starts at like 250MHz and then we slowly improve until we can get the 1.5GHz (or is it just 1 GHz, I've forgotten?) needed.
+
+
+[02/10/2026 07:02] embeddedken
+480Mbps for USB2 HS (UTMI)
+1.25Gbps for 1000BASE-X/SGMII (GMII)
+2.5Gbps for PCIe Gen1 (PIPE)
+5.0Gbps for PCIe Gen2 / USB3 SS (PIPE)
+
+
+[02/10/2026 07:14] mole99
+Cool! Which tools are you targeting for synthesis and PnR? FABulous uses Yosys and nextpnr.
+
+
 ==============================================================
-Exported 0 message(s)
+Exported 20 message(s)
 ==============================================================
