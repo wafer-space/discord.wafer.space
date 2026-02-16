@@ -2,9 +2,108 @@
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / cob
 Topic: Channel for discussing chip-on-board packaging options for wafer.space bare die.
-After: 02/15/2026 22:20
+After: 02/16/2026 00:29
 ==============================================================
 
+[02/16/2026 02:15] arabidsquid
+Hey, so I was making a bunch of add-on boards for the upcoming next version of [Barnacle Board](https://github.com/Architeuthis-Flux/Barnacle_Board) and figured I'd make one that maps your 70 pin mezzanine connector to a breadboard. 
+Before I finish routing (and adding labels for the COB pads), I figured I should ask y'all some stuff:
+- Do you even want this? 
+- How likely is it that you want `VDD_CORE`, `VDD_IO`, and `PWR_AUX` separate?
+- What do you generally do with `PWR_AUX`?
+- Is there anything you can think of that would make this more awesome?
+
+{Attachments}
+cob_media/ws-4-400E5.jpg
+cob_media/ws-1-26A9B.jpg
+cob_media/ws-2-79FDA.jpg
+cob_media/IMG_2511-88F28.jpeg
+cob_media/Screenshot_2026-02-15_at_6.00.03_PM-11DCF.png
+
+
+[02/16/2026 02:19] anfroholic
+Awesome!!
+
+> Do you even want this?
+Not sure, but it looks super cool!!
+
+> How likely is it that you want VDD_CORE, VDD_IO, and PWR_AUX separate?
+This was a spec pulled from Tiny Tapeout. Currently they have them all bridged on the die, but that may change in the future. Use your own judgement here. 
+
+> What do you generally do with PWR_AUX?
+Again, this is likely more power pins than a *regular* design would need. We needed a standard and they had the most robust needs and had the most documentation, so that's how we ended up here. 
+
+> Is there anything you can think of that would make this more awesome?
+Artwork! 😉 
+
+Looks great though. Super cool, thanks for sharing!
+
+{Reactions}
+🔥
+
+[02/16/2026 02:23] arabidsquid
+What do you mean, I do have artwork on there. jk I'll definitely add some
+
+{Attachments}
+cob_media/Screenshot_2026-02-15_at_6.21.51_PM-AE225.png
+
+
+[02/16/2026 02:23] anfroholic
+The whole board is a piece of art. It looks great!
+
+{Reactions}
+ColorJumpLogo
+
+[02/16/2026 02:24] arabidsquid
+Thanks for that, so I can treat all those power pins as a single node?
+
+
+[02/16/2026 02:28] anfroholic
+We're still working to harden the standard. 
+This will likely come sometime after the first run is complete. 
+I designed a couple tests. 
+https://kicanvas.org/?repo=https%3A%2F%2Fgithub.com%2Fwafer-space%2Fchip-on-board-wire-bonded-pcbs%2Ftree%2Fmain%2Fscratch%2Fmotherboards%2Fmotherboards
+
+https://github.com/wafer-space/chip-on-board-wire-bonded-pcbs/tree/main/scratch/motherboards/motherboards
+It looks like I did **Not** bridge them.
+
+{Embed}
+https://github.com/wafer-space/chip-on-board-wire-bonded-pcbs/tree/main/scratch/motherboards/motherboards
+chip-on-board-wire-bonded-pcbs/scratch/motherboards/motherboards at...
+Wire bonded chip on board PCB designs. Contribute to wafer-space/chip-on-board-wire-bonded-pcbs development by creating an account on GitHub.
+cob_media/chip-on-board-wire-bonded-pcbs-66450
+
+
+[02/16/2026 02:29] anfroholic
+Really I have no idea what others have done. 
+Getting a concensus on what people actually *did* would be good
+
+
+[02/16/2026 02:30] anfroholic
+And when I say I did not bridge them, I mean VDD_IO <==> VDD_CORE 
+The ones on the same nets are bridged
+
+
+[02/16/2026 02:33] arabidsquid
+Legit. That's good news because it can fit on a half size breadboard that way.
+
+{Reactions}
+👍
+
+[02/16/2026 02:36] arabidsquid
+And eventually you'll be able to plug these into a [Jumperless](https://jumperless.org/) crossbar matrix for some automated testing or whatever
+
+{Embed}
+https://jumperless.org/
+Home - Jumperless Docs
+Learn how to use your Jumperless
+cob_media/ExplodraftWords-3C48D.png
+
+
+[02/16/2026 02:36] anfroholic
+Sweet! I recongnized one of those from your pic above
+
+
 ==============================================================
-Exported 0 message(s)
+Exported 11 message(s)
 ==============================================================

@@ -1,9 +1,14 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
-"169786952432746498","mithro_","2026-02-15T23:24:34.0060000+00:00","@carlfk If you remind me on Wednesday, it should be pretty easy in theory.","","👍 (1)"
-"169786952432746498","mithro_","2026-02-15T23:27:16.5490000+00:00","I""m up at Monarto setting things for my parents until late tomorrow.","",""
-"443147704126668801","carlfk","2026-02-15T23:27:28.0000000+00:00","@Tim 'mithro' Ansell I need help - I think git sub-modules is the answer.","",""
-"169786952432746498","mithro_","2026-02-15T23:27:52.1120000+00:00","git submodules is an answer, it is rarely a good answer despite how much we use it 😛","",""
-"443147704126668801","carlfk","2026-02-15T23:28:02.9800000+00:00","to boot Kianv o tt6, I need this stuff https://github.com/CarlFK/tt-commander-app/blob/feature/cli_bl910/src/ttcontrol/cli/boot_kianv_ulinux.sh","",""
-"443147704126668801","carlfk","2026-02-15T23:29:10.6650000+00:00","part of the problem is the Arty fpga thing expanded to TT, and kinda just the 1 Kianv thing","",""
-"169786952432746498","mithro_","2026-02-15T23:45:10.2420000+00:00","@carlfk - My plan is that when @Matt Venn and friends finish the TT FPGA emulation board, then we will have a bunch of those in the pool.","",""
-"169786952432746498","mithro_","2026-02-15T23:45:40.0450000+00:00","@carlfk - I'm not game to do the vlan rename to fix the IP address stuff while I'm remote 😛","",""
+"443147704126668801","carlfk","2026-02-15T23:51:45.2660000+00:00","@Tim 'mithro' Ansell im still stuck on how to get little_term.py on or close to the rp2040","",""
+"169786952432746498","mithro_","2026-02-15T23:52:11.6870000+00:00","`little_term.py` meaning `litex_term.py` or?","",""
+"443147704126668801","carlfk","2026-02-15T23:57:10.3170000+00:00","https://github.com/CarlFK/tt-commander-app/blob/feature/cli_bl910/src/ttcontrol/cli/little_term.py","",""
+"443147704126668801","carlfk","2026-02-15T23:58:44.0870000+00:00","your ssh client -network- Pi -usb serial- RP2040 -uart serial- TT06 / 910 (KianV Linux)","",""
+"443147704126668801","carlfk","2026-02-15T23:59:08.3840000+00:00","little_term.py runs on RP2040 to connect  Pi -usb serial- to -uart serial- TT06","",""
+"443147704126668801","carlfk","2026-02-16T00:02:53.1150000+00:00","`mpremote fs cp little_term.py :` is the final step to install it, but none of the steps are automated.","",""
+"443147704126668801","carlfk","2026-02-16T00:03:32.3930000+00:00","I'm trying to make it part of https://github.com/CarlFK/pici/wiki/Install","",""
+"169786952432746498","mithro_","2026-02-16T01:53:56.1540000+00:00","@carlfk - I think your text diagram is a little bit hard to understand?
+
+Is this what you mean?
+`<something> <-????-> ssh client <- network -> RPi <- usb serial -> RP2040 <- UART serial -> TT06 Chip (Running 910 - KianV Linux)`","",""
+"169786952432746498","mithro_","2026-02-16T01:54:51.7780000+00:00","BTW I have been learning about conserver which seems to be a tool for sharing serial ports over the network and supports things like multiple connections, logging the output and such.....","",""
+"169786952432746498","mithro_","2026-02-16T01:56:00.2820000+00:00","I've recently started getting it working with the BMC serial over lan ports and also the USB-serial adapter on a RPi Zero which is connected to the consoles on my netgear network switches","",""
