@@ -2,64 +2,65 @@
 Guild: wafer.space Community
 Channel: Information / fpgas-online
 Topic: Channel for continued development of https://fpgas.online
-After: 02/15/2026 23:47
+After: 02/16/2026 02:35
 ==============================================================
 
-[02/15/2026 23:51] carlfk
-@Tim 'mithro' Ansell im still stuck on how to get little_term.py on or close to the rp2040
+[02/16/2026 02:38] carlfk
+yes - as long as you understand what little_term.py does
 
 
-[02/15/2026 23:52] mithro_
-`little_term.py` meaning `litex_term.py` or?
+[02/16/2026 02:39] carlfk
+What is BMC serial?
 
 
-[02/15/2026 23:57] carlfk
-https://github.com/CarlFK/tt-commander-app/blob/feature/cli_bl910/src/ttcontrol/cli/little_term.py
+[02/16/2026 02:40] mithro_
+BMC == Board Management Controller -- it's a little Linux computer that is found on server motherboards which allows you to remotely access things like the power buttons, virtual vga screen, virtual serial port, etc....
+
+
+[02/16/2026 02:47] carlfk
+ok - I undersatnd BMC - how does serial fit in?
+
+
+[02/16/2026 02:52] mithro_
+The BMC lets you connect to the computer's serial port so you can see things like very early BIOS messages or if the linux running on the system is configured correctly even a console. Provides a way to get access to the machine when SSH isn't working or similar. I wanted computers like tweed to output dmesg messages to their serial port and log them so I could see things like kernal panics and such, hence why I was looking at conserver.
+
+But it seems like conserver could be useful for just generally providing remote access to usb serial ports in an RPi as it deals with the problem of multiple devices trying to access the serial port at once (IE you could be connected with something like cu at the same time you connect little_term and another python script)....
+
+
+[02/16/2026 02:56] carlfk
+I'm skeptical :p - the only time I have that problem is when I forget I alreaday have something conected.
+
+
+[02/16/2026 02:57] carlfk
+for early dmesg messages - do you know about https://www.kernel.org/doc/Documentation/networking/netconsole.txt
+
+
+[02/16/2026 02:58] carlfk
+pass a kernel parameter append ... netconsole=@192.156.1.5/eth0,@192.168.1.3/00:08:02:a0🆎cf
+
+
+[02/16/2026 02:59] carlfk
+very early it smashes that ip config and starts spewing udp
+
+
+[02/16/2026 03:07] mithro_
+I did in the past but had forgotten about that....
+
+
+[02/16/2026 03:09] carlfk
+I https://github.com/CarlFK/pici/blob/main/ansible/roles/fixpi/files/boot/ncc.py
 
 {Embed}
-https://github.com/CarlFK/tt-commander-app/blob/feature/cli_bl910/src/ttcontrol/cli/little_term.py
-tt-commander-app/src/ttcontrol/cli/little_term.py at feature/cli_bl...
-Web app to control the Tiny Tapeout Demo board. Contribute to CarlFK/tt-commander-app development by creating an account on GitHub.
-fpgas-online_media/tt-commander-app-2980D
-
-
-[02/15/2026 23:58] carlfk
-your ssh client -network- Pi -usb serial- RP2040 -uart serial- TT06 / 910 (KianV Linux)
-
-
-[02/15/2026 23:59] carlfk
-little_term.py runs on RP2040 to connect  Pi -usb serial- to -uart serial- TT06
-
-
-[02/16/2026 00:02] carlfk
-`mpremote fs cp little_term.py :` is the final step to install it, but none of the steps are automated.
-
-
-[02/16/2026 00:03] carlfk
-I'm trying to make it part of https://github.com/CarlFK/pici/wiki/Install
-
-{Embed}
-https://github.com/CarlFK/pici/wiki/Install
-Install
+https://github.com/CarlFK/pici/blob/main/ansible/roles/fixpi/files/boot/ncc.py
+pici/ansible/roles/fixpi/files/boot/ncc.py at main · CarlFK/pici
 Contribute to CarlFK/pici development by creating an account on GitHub.
 fpgas-online_media/0084b929-8b65-464b-b79a-9e5266256fcb-CE1FE
 
 
-[02/16/2026 01:53] mithro_
-@carlfk - I think your text diagram is a little bit hard to understand?
-
-Is this what you mean?
-`<something> <-????-> ssh client <- network -> RPi <- usb serial -> RP2040 <- UART serial -> TT06 Chip (Running 910 - KianV Linux)`
-
-
-[02/16/2026 01:54] mithro_
-BTW I have been learning about conserver which seems to be a tool for sharing serial ports over the network and supports things like multiple connections, logging the output and such.....
-
-
-[02/16/2026 01:56] mithro_
-I've recently started getting it working with the BMC serial over lan ports and also the USB-serial adapter on a RPi Zero which is connected to the consoles on my netgear network switches
+[02/16/2026 03:10] carlfk
+that beeps when it recieves, which is often when the box is crashing
 
 
 ==============================================================
-Exported 10 message(s)
+Exported 12 message(s)
 ==============================================================
