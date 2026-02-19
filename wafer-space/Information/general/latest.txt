@@ -5,63 +5,21 @@ Topic: Welcome to [wafer.space](https://wafer.space/) -
 documentation at [wafer.space github](https://github.com/wafer-space) - 
 buy at [buy.wafer.space](https://buy.wafer.space) - 
 archives at [discord.wafer.space](https://discord.wafer.space/)
-After: 02/19/2026 17:05
+After: 02/19/2026 19:15
 ==============================================================
 
-[02/19/2026 17:47] egorxe
-Are there any 3.3V digital IO libraries for the gf180mcu or plans to create one? I’m only aware of the foundry-provided 5V library, without level shifters and the OCD 5V IO for a 3.3V core by @Tim Edwards. Are these the only existing IO libraries, or am I missing something? Is running the foundry IO at 3.3V together with the core (which will be rather slow) the only option to get 3.3V CMOS IO currently?
+[02/19/2026 19:30] ravenslofty
+That's not exactly how that works
 
 
-[02/19/2026 17:51] 246tnt
-The foundry one has caracterization data for 3.3V and will run fine at that level.
+[02/19/2026 19:31] ravenslofty
+For example, the foundry cells don't use minimum-width transistors for "size 1" cells
 
 
-[02/19/2026 17:56] 246tnt
-The speed difference between 3.3v and 5v is not that huge, it's only about 20~30% faster.
+[02/19/2026 19:36] 246tnt
+I think he meant length not width.
 
-
-[02/19/2026 18:03] egorxe
-For the core? I've run several tests in Librelane some time ago using 3.3V liberty files for 7t library and got the impression that the difference is closer to 2 times. I'll check again, thanks.
-
-
-[02/19/2026 18:12] rtimothyedwards_19428
-@Egor Lukyanchenko :  For the core, there is the 3.3V library created by @Tholin at https://github.com/AvalonSemiconductors/gf180mcu_as_sc_mcu7t3v3.  It is being tested along with my I/O library on the current Wafer.Space shuttle run.
-
-
-[02/19/2026 18:16] egorxe
-@Tim Edwards I'm aware of that and eagerly awaiting the results :). Do you plan to perform some kind of on-chip timing characterization for cells when you get the silicon?
-
-
-[02/19/2026 18:19] 246tnt
-@Egor Lukyanchenko No, I meant for the IO.
-
-
-[02/19/2026 18:24] egorxe
-For the IO I agree, the difference should be around 30%. But currently the core will need to be at 3.3V also, and it will be much slower, especially if considering ss corner (3V). So I was asking if maybe someone is planning to create 3.3V IO for 5V core or something like it :).
-
-
-[02/19/2026 18:32] 246tnt
-I had a quick go at trying to remove the thick oxide from the foundry standard cell ( go to the 3.3v oxide thickness but still leave the geometry the same ), hoping it would result in faster logic ... this was however quite a failure 😅
-
-
-[02/19/2026 18:34] 246tnt
-The resulting cells ended up slower because although the thinner oxide lowered Vt a tiny bit, it wasn't even enough to compensate the increased gate capacitance also resulting from the thinner oxide and so it was all in all worse than leaving the 5V transistors running at 3v3.
-
-
-[02/19/2026 18:40] egorxe
-Still a great attempt and a very interesting experiment 😄. I saw a discussion about it in Google docs.
-
-
-[02/19/2026 18:54] egorxe
-Have you tried reducing gate width at the same time BTW? The minimum width for 3.3 is 0.28 um vs 0.5 um for 5V, so it should reduce the capacitance by a sizable amount.
-
-
-[02/19/2026 18:57] 246tnt
-Well yes, but that's a whole harder to automate / script 😅
-
-{Reactions}
-😀
 
 ==============================================================
-Exported 13 message(s)
+Exported 3 message(s)
 ==============================================================
