@@ -2,9 +2,55 @@
 Guild: wafer.space Community
 Channel: Information / fpgas-online
 Topic: Channel for continued development of https://fpgas.online
-After: 02/18/2026 19:03
+After: 02/18/2026 21:12
 ==============================================================
 
+[02/18/2026 21:43] mithro_
+@carlfk - I setup a couple more of the Tiny Tapeout boards on RPis here for you
+
+
+[02/18/2026 21:43] mithro_
+@carlfk - But I had the realisation this morning that I was doing the vlans slightly wrong
+
+
+[02/18/2026 21:44] carlfk
+I'm not sure what to do wiht this
+
+
+[02/18/2026 21:44] carlfk
+a diagram of what you have done would probably help
+
+
+[02/18/2026 21:59] mithro_
+@carlfk - Don't worry about it, give me about an hour and I should have it all fixed up
+
+
+[02/18/2026 22:34] mithro_
+@carlfk - Basically, the connection between ten64 (the gateway) and tweed's uplink port should be a *different* vlan to tweed's local port and the RPis so I end up with:
+
+  [tfpgas.ten64] <-- tfpga vlan on switches --> [eth-uplink.tweed : eth-local.tweed] <-- fpga vlan on S3300-1 --> [RPis]
+
+
+[02/18/2026 22:41] carlfk
+S3300-1 is a switch?
+
+
+[02/18/2026 22:44] mithro_
+Yes.
+
+
+[02/18/2026 22:55] carlfk
+A picture would answer these questions
+
+
+[02/18/2026 22:55] carlfk
+is  "tfpga vlan on switches" include the - ":fpga vlan on S3300-1"  ?
+
+
+[02/18/2026 22:57] carlfk
+the PoE control code can and does have "turn off all the PoE on all the ports" which might brick the thing until pull the power cord and maybe poke the reset hole
+
+
 ==============================================================
-Exported 0 message(s)
+Exported 11 message(s)
 ==============================================================
