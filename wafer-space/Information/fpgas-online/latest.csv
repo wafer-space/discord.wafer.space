@@ -1,14 +1,7 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
-"169786952432746498","mithro_","2026-02-18T21:43:00.7880000+00:00","@carlfk - I setup a couple more of the Tiny Tapeout boards on RPis here for you","",""
-"169786952432746498","mithro_","2026-02-18T21:43:13.5760000+00:00","@carlfk - But I had the realisation this morning that I was doing the vlans slightly wrong","",""
-"443147704126668801","carlfk","2026-02-18T21:44:16.7160000+00:00","I'm not sure what to do wiht this","",""
-"443147704126668801","carlfk","2026-02-18T21:44:30.1220000+00:00","a diagram of what you have done would probably help","",""
-"169786952432746498","mithro_","2026-02-18T21:59:03.4720000+00:00","@carlfk - Don't worry about it, give me about an hour and I should have it all fixed up","",""
-"169786952432746498","mithro_","2026-02-18T22:34:32.0500000+00:00","@carlfk - Basically, the connection between ten64 (the gateway) and tweed's uplink port should be a *different* vlan to tweed's local port and the RPis so I end up with:
-
-  [tfpgas.ten64] <-- tfpga vlan on switches --> [eth-uplink.tweed : eth-local.tweed] <-- fpga vlan on S3300-1 --> [RPis]","",""
-"443147704126668801","carlfk","2026-02-18T22:41:04.9840000+00:00","S3300-1 is a switch?","",""
-"169786952432746498","mithro_","2026-02-18T22:44:06.7600000+00:00","Yes.","",""
-"443147704126668801","carlfk","2026-02-18T22:55:04.4300000+00:00","A picture would answer these questions","",""
-"443147704126668801","carlfk","2026-02-18T22:55:44.8050000+00:00","is  ""tfpga vlan on switches"" include the - "":fpga vlan on S3300-1""  ?","",""
-"443147704126668801","carlfk","2026-02-18T22:57:05.1570000+00:00","the PoE control code can and does have ""turn off all the PoE on all the ports"" which might brick the thing until pull the power cord and maybe poke the reset hole","",""
+"443147704126668801","carlfk","2026-02-18T23:32:12.4120000+00:00","https://github.com/CarlFK/pici/blob/main/ansible/roles/site/files/pib/snmp_switch/scripts/allpoeoff.sh","",""
+"443147704126668801","carlfk","2026-02-18T23:37:00.9620000+00:00","there is /etc/environment ... pi_ports=""2 3 5 7 9 11 13 21 23 ""  which is only the ports in ansible inventory but thats only good/valid for what is stable, not experimenting with new things, like adding a TT setup to the fpga/arty setup","",""
+"443147704126668801","carlfk","2026-02-18T23:44:52.8110000+00:00","also in /etc/environment  is `SNMP_SWITCH_AUTHKEY=` which I think needs an export for `source /etc/environment`  but adding export to that file will break EnvironmentFile=/etc/environment","",""
+"443147704126668801","carlfk","2026-02-18T23:44:55.4610000+00:00","https://github.com/CarlFK/pici/blob/main/ansible/roles/site/templates/daphne.service.j2#L10C1-L10C33","",""
+"443147704126668801","carlfk","2026-02-18T23:45:24.8950000+00:00","I could use some help with that.","",""
+"443147704126668801","carlfk","2026-02-18T23:58:08.7220000+00:00","https://github.com/CarlFK/pici/issues/51","",""
