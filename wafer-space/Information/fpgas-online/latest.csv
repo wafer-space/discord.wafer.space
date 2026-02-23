@@ -1,6 +1,19 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
-"169786952432746498","mithro_","2026-02-22T21:36:48.8500000+00:00","@Tisham Dhar (CSIRO EASI) - Initially I was using OpenOCD with the gpiod driver (which was quite slow but still worked), but it looks like Claude has managed to create a new driver using the PIO found in the RP1 chip which is faster than the original broadcom bitbanging driver - https://github.com/mithro/rp1-jtag","",""
-"746955286274900120","tishamdhar","2026-02-22T21:40:38.9610000+00:00","There is no drivers openOCD, push that to git and I will have a go with the NeTV2 I have here","",""
-"746955286274900120","tishamdhar","2026-02-22T21:41:03.7580000+00:00","I will vendor it into OpenOCD tree and compile it there.","",""
-"169786952432746498","mithro_","2026-02-22T21:42:43.8360000+00:00","Claude hasn't finished the OpenOCD integration, but it has finished the openFPGAloader version","",""
-"169786952432746498","mithro_","2026-02-22T21:43:53.9690000+00:00","@Tisham Dhar (CSIRO EASI) - I could use some testing firmware to verify things beyond just reading the Xilinx ID and loading the spiflash proxy.","",""
+"169786952432746498","mithro_","2026-02-22T22:28:11.0770000+00:00","@Tisham Dhar (CSIRO EASI) - Did you do that write up building LiteX firmware for the NeTV2 anywhere?","",""
+"746955286274900120","tishamdhar","2026-02-22T23:22:31.8050000+00:00","I chucked it in my blog","",""
+"746955286274900120","tishamdhar","2026-02-23T00:14:27.2100000+00:00","Install LiteX following the standard setup, then:
+
+cd litex-boards/litex_boards/targets
+
+# Build for XC7A35T variant with Ethernet
+./kosagi_netv2.py --variant=a7-35 --with-ethernet --build
+
+# Or for the 100T variant with PCIe
+./kosagi_netv2.py --variant=a7-100 --with-pcie --build
+The target supports:
+
+DDR3 SDRAM: Using the K4B2G1646F module with LiteDRAM
+Ethernet: RMII PHY via LiteEth
+PCIe: x4 Gen2 via LitePCIe
+SD Card: Both SPI mode and native SDIO
+LED Chaser: For the obligatory blinky demo","",""

@@ -2,35 +2,36 @@
 Guild: wafer.space Community
 Channel: Information / fpgas-online
 Topic: Channel for continued development of https://fpgas.online
-After: 02/22/2026 19:58
+After: 02/22/2026 22:07
 ==============================================================
 
-[02/22/2026 21:36] mithro_
-@Tisham Dhar (CSIRO EASI) - Initially I was using OpenOCD with the gpiod driver (which was quite slow but still worked), but it looks like Claude has managed to create a new driver using the PIO found in the RP1 chip which is faster than the original broadcom bitbanging driver - https://github.com/mithro/rp1-jtag
-
-{Embed}
-https://github.com/mithro/rp1-jtag
-GitHub - mithro/rp1-jtag: High-speed JTAG via Raspberry Pi 5 RP1 PIO
-High-speed JTAG via Raspberry Pi 5 RP1 PIO. Contribute to mithro/rp1-jtag development by creating an account on GitHub.
-fpgas-online_media/rp1-jtag-786FB
+[02/22/2026 22:28] mithro_
+@Tisham Dhar (CSIRO EASI) - Did you do that write up building LiteX firmware for the NeTV2 anywhere?
 
 
-[02/22/2026 21:40] tishamdhar
-There is no drivers openOCD, push that to git and I will have a go with the NeTV2 I have here
+[02/22/2026 23:22] tishamdhar
+I chucked it in my blog
 
 
-[02/22/2026 21:41] tishamdhar
-I will vendor it into OpenOCD tree and compile it there.
+[02/23/2026 00:14] tishamdhar
+Install LiteX following the standard setup, then:
 
+cd litex-boards/litex_boards/targets
 
-[02/22/2026 21:42] mithro_
-Claude hasn't finished the OpenOCD integration, but it has finished the openFPGAloader version
+# Build for XC7A35T variant with Ethernet
+./kosagi_netv2.py --variant=a7-35 --with-ethernet --build
 
+# Or for the 100T variant with PCIe
+./kosagi_netv2.py --variant=a7-100 --with-pcie --build
+The target supports:
 
-[02/22/2026 21:43] mithro_
-@Tisham Dhar (CSIRO EASI) - I could use some testing firmware to verify things beyond just reading the Xilinx ID and loading the spiflash proxy.
+DDR3 SDRAM: Using the K4B2G1646F module with LiteDRAM
+Ethernet: RMII PHY via LiteEth
+PCIe: x4 Gen2 via LitePCIe
+SD Card: Both SPI mode and native SDIO
+LED Chaser: For the obligatory blinky demo
 
 
 ==============================================================
-Exported 5 message(s)
+Exported 3 message(s)
 ==============================================================
