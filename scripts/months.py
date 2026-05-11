@@ -110,12 +110,20 @@ def is_month_dir_name(name: str) -> bool:
 
 
 def scan_completed_months(channel_dir: Path) -> set[str]:
-    """Return the set of YYYY-MM months that already have a non-empty HTML export.
+    """Return the set of YYYY-MM months that are correctly partitioned.
 
-    The HTML file is the user-visible deliverable, so we treat its presence
-    (with non-zero size) as the signal that a month has been successfully
-    exported. Other formats (txt/json/csv) might be regenerable, but if the
-    HTML is missing the month is not "done".
+    A month is "completed" only if:
+
+      - the HTML file exists and is non-empty (user-visible deliverable), AND
+      - the JSON's messages all belong to that month (no cross-contamination).
+
+    The second check is essential for fixing legacy data: the previous
+    implementation dumped messages from many months into a single
+    current-month JSON, so `2025-11/2025-11.json` on the live site contains
+    messages going back to 2025-04. We treat those as incomplete so they
+    get re-exported properly partitioned. Once an honestly-partitioned
+    export replaces them, this function returns "completed" for that month
+    again on subsequent runs.
     """
     if not channel_dir.exists() or not channel_dir.is_dir():
         return set()
@@ -124,6 +132,41 @@ def scan_completed_months(channel_dir: Path) -> set[str]:
         if not entry.is_dir() or not is_month_dir_name(entry.name):
             continue
         html_file = entry / f"{entry.name}.html"
-        if html_file.exists() and html_file.stat().st_size > 0:
-            completed.add(entry.name)
+        if not html_file.exists() or html_file.stat().st_size == 0:
+            continue
+        json_file = entry / f"{entry.name}.json"
+        if json_file.exists() and not _json_is_month_pure(json_file, entry.name):
+            continue
+        completed.add(entry.name)
     return completed
+
+
+def _json_is_month_pure(json_file: Path, month: str) -> bool:
+    """Return True iff every message in the JSON is timestamped within `month`.
+
+    Used to detect legacy mixed-month JSONs from the pre-refactor era. Edge
+    cases (file missing/unreadable/malformed) return True so we don't flag
+    files we can't introspect — the worst case is leaving a month alone when
+    we could have re-exported it, which the user can resolve by deleting
+    the directory if needed.
+    """
+    import json as _json
+
+    try:
+        with open(json_file, encoding="utf-8") as f:
+            data = _json.load(f)
+    except (OSError, _json.JSONDecodeError):
+        return True
+
+    messages = data.get("messages") or []
+    if not messages:
+        # Empty month is consistent with any month tag.
+        return True
+
+    for msg in messages:
+        ts = msg.get("timestamp", "")
+        # Timestamps look like "2026-02-23T05:01:27.918510+00:00" — the
+        # first 7 chars are the YYYY-MM we compare against.
+        if not isinstance(ts, str) or ts[:7] != month:
+            return False
+    return True

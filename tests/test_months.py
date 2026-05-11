@@ -175,3 +175,59 @@ def test_scan_completed_months_empty_when_dir_missing(tmp_path: Path) -> None:
 
     completed = scan_completed_months(tmp_path / "does-not-exist")
     assert completed == set()
+
+
+def test_scan_completed_months_skips_cross_month_jsons(tmp_path: Path) -> None:
+    """A month whose JSON has messages from a different month is NOT complete.
+
+    This is the legacy-data case: the old code dumped all messages into
+    the export-time current month, so `2025-11/2025-11.json` actually
+    holds messages timestamped 2025-04 through 2025-11. We must re-export
+    those months properly, not skip them.
+    """
+    import json as _json
+
+    from scripts.months import scan_completed_months
+
+    channel_dir = tmp_path / "general"
+    month_dir = channel_dir / "2025-11"
+    month_dir.mkdir(parents=True)
+    (month_dir / "2025-11.html").write_text("<html>mixed</html>")
+    (month_dir / "2025-11.json").write_text(
+        _json.dumps(
+            {
+                "messages": [
+                    {"id": "1", "timestamp": "2025-04-10T00:00:00+00:00"},
+                    {"id": "2", "timestamp": "2025-11-20T00:00:00+00:00"},
+                ]
+            }
+        )
+    )
+
+    # A correctly-partitioned month next to it
+    pure_month = channel_dir / "2026-05"
+    pure_month.mkdir()
+    (pure_month / "2026-05.html").write_text("<html>clean</html>")
+    (pure_month / "2026-05.json").write_text(
+        _json.dumps({"messages": [{"id": "10", "timestamp": "2026-05-02T00:00:00+00:00"}]})
+    )
+
+    completed = scan_completed_months(channel_dir)
+    # 2025-11 must be re-exported; 2026-05 is honest and skipped.
+    assert completed == {"2026-05"}
+
+
+def test_scan_completed_months_treats_empty_json_as_complete(tmp_path: Path) -> None:
+    """An empty messages array is consistent with any month tag — count as done."""
+    import json as _json
+
+    from scripts.months import scan_completed_months
+
+    channel_dir = tmp_path / "general"
+    month_dir = channel_dir / "2026-03"
+    month_dir.mkdir(parents=True)
+    (month_dir / "2026-03.html").write_text("<html>empty</html>")
+    (month_dir / "2026-03.json").write_text(_json.dumps({"messages": []}))
+
+    completed = scan_completed_months(channel_dir)
+    assert completed == {"2026-03"}
