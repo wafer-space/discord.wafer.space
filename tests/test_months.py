@@ -1,0 +1,122 @@
+"""Tests for the months module: month range computation and snowflake conversion."""
+
+from datetime import datetime, timezone
+from unittest.mock import patch
+
+import pytest
+
+from scripts.months import (
+    current_month_utc,
+    month_bounds,
+    month_range_iter,
+    snowflake_to_datetime,
+    snowflake_to_month,
+)
+
+
+def test_month_bounds_february_2026() -> None:
+    """Month bounds for 2026-02 should bracket all of February (exclusive after, exclusive before).
+
+    --after must be just before start of month so DCE's exclusive boundary still
+    includes messages at exactly 00:00:00 on day 1 of the month.
+    """
+    after, before = month_bounds("2026-02")
+    assert after == "2026-01-31T23:59:59.999999+00:00"
+    assert before == "2026-03-01T00:00:00+00:00"
+
+
+def test_month_bounds_january_uses_prior_year() -> None:
+    """Month bounds for 2026-01 should reference December 2025 as the lower bound."""
+    after, before = month_bounds("2026-01")
+    assert after == "2025-12-31T23:59:59.999999+00:00"
+    assert before == "2026-02-01T00:00:00+00:00"
+
+
+def test_month_bounds_december_rolls_to_next_year() -> None:
+    """Month bounds for 2025-12 should roll over to January 2026."""
+    after, before = month_bounds("2025-12")
+    assert after == "2025-11-30T23:59:59.999999+00:00"
+    assert before == "2026-01-01T00:00:00+00:00"
+
+
+def test_month_bounds_rejects_invalid_format() -> None:
+    """Invalid month strings raise ValueError."""
+    with pytest.raises(ValueError, match="Invalid month"):
+        month_bounds("2026-13")
+    with pytest.raises(ValueError, match="Invalid month"):
+        month_bounds("not-a-month")
+    with pytest.raises(ValueError, match="Invalid month"):
+        month_bounds("26-01")
+
+
+def test_month_range_iter_three_months() -> None:
+    """Iterating from 2026-01 to 2026-03 should yield three months in order."""
+    months = list(month_range_iter("2026-01", "2026-03"))
+    assert months == ["2026-01", "2026-02", "2026-03"]
+
+
+def test_month_range_iter_same_month() -> None:
+    """When start equals end, yield only that month."""
+    months = list(month_range_iter("2026-05", "2026-05"))
+    assert months == ["2026-05"]
+
+
+def test_month_range_iter_year_rollover() -> None:
+    """Iterating across year boundary yields correct sequence."""
+    months = list(month_range_iter("2025-11", "2026-02"))
+    assert months == ["2025-11", "2025-12", "2026-01", "2026-02"]
+
+
+def test_month_range_iter_rejects_end_before_start() -> None:
+    """Iterator returns empty when end is before start (not an error, just empty)."""
+    months = list(month_range_iter("2026-05", "2026-01"))
+    assert months == []
+
+
+def test_snowflake_to_datetime_wafer_space_guild() -> None:
+    """The wafer.space guild snowflake should map to roughly April 2025.
+
+    Discord snowflakes encode creation time in the upper 42 bits, with epoch
+    starting at Discord's epoch (2015-01-01 UTC).
+    """
+    dt = snowflake_to_datetime("1361349522684510449")
+    assert dt.tzinfo is not None
+    assert dt.year == 2025
+    assert dt.month == 4
+
+
+def test_snowflake_to_datetime_known_value() -> None:
+    """A snowflake with known timestamp converts correctly.
+
+    Discord epoch is 1420070400000 ms (2015-01-01 UTC).
+    Snowflake = (timestamp_ms - epoch) << 22.
+    For timestamp 2020-01-01 UTC = 1577836800000 ms,
+    snowflake = (1577836800000 - 1420070400000) << 22 = 661670957547356160
+    """
+    # 2020-01-01 00:00:00 UTC
+    sf = str((1577836800000 - 1420070400000) << 22)
+    dt = snowflake_to_datetime(sf)
+    assert dt.year == 2020
+    assert dt.month == 1
+    assert dt.day == 1
+
+
+def test_snowflake_to_datetime_rejects_non_numeric() -> None:
+    """Non-numeric snowflake raises ValueError."""
+    with pytest.raises(ValueError, match="numeric"):
+        snowflake_to_datetime("not-a-number")
+
+
+def test_snowflake_to_month_returns_yyyymm() -> None:
+    """snowflake_to_month returns the YYYY-MM string for the snowflake's creation."""
+    month = snowflake_to_month("1361349522684510449")
+    assert month == "2025-04"
+
+
+def test_current_month_utc_format() -> None:
+    """current_month_utc returns YYYY-MM format from UTC now."""
+    with patch("scripts.months.datetime") as mock_dt:
+        mock_dt.now.return_value = datetime(2026, 5, 11, 12, 0, 0, tzinfo=timezone.utc)
+        mock_dt.side_effect = lambda *a, **kw: datetime(*a, **kw)
+        result = current_month_utc()
+        assert result == "2026-05"
