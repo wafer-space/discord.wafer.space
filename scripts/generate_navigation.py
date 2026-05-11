@@ -365,8 +365,9 @@ def organize_data(exports: list[dict], public_dir: Path) -> dict:
         if channel not in servers_data[server]["channels"]:
             servers_data[server]["channels"][channel] = {"name": channel, "archives": []}
 
-        # Count messages from JSON file
-        json_path = public_dir / server / channel / f"{date}.json"
+        # JSON sits next to its HTML inside the month directory:
+        # public/<server>/<channel>/<YYYY-MM>/<YYYY-MM>.json
+        json_path = public_dir / server / channel / date / f"{date}.json"
         message_count = count_messages_from_json(str(json_path))
 
         servers_data[server]["channels"][channel]["archives"].append(

@@ -48,12 +48,18 @@ def test_organize_data_groups_by_server_and_channel() -> None:
         public_dir = Path(tmpdir) / "public"
         public_dir.mkdir()
 
-        # Create dummy JSON files for message counting
+        # Create dummy JSON files for message counting — files live inside
+        # the YYYY-MM directory under the channel, matching the per-month layout.
         for export in exports:
-            json_path = public_dir / export["server"] / export["channel"] / f"{export['date']}.json"
+            json_path = (
+                public_dir
+                / export["server"]
+                / export["channel"]
+                / export["date"]
+                / f"{export['date']}.json"
+            )
             json_path.parent.mkdir(parents=True, exist_ok=True)
             with open(json_path, "w") as f:
-                # Use DiscordChatExporter JSON format
                 sample_data = {
                     "guild": {"id": "123", "name": "Test"},
                     "channel": {"id": "456", "name": export["channel"]},
@@ -100,12 +106,17 @@ def test_organize_data_calculates_stats() -> None:
         public_dir = Path(tmpdir) / "public"
         public_dir.mkdir()
 
-        # Create dummy JSON files
+        # Create dummy JSON files inside per-month directories
         for export in exports:
-            json_path = public_dir / export["server"] / export["channel"] / f"{export['date']}.json"
+            json_path = (
+                public_dir
+                / export["server"]
+                / export["channel"]
+                / export["date"]
+                / f"{export['date']}.json"
+            )
             json_path.parent.mkdir(parents=True, exist_ok=True)
             with open(json_path, "w") as f:
-                # Use DiscordChatExporter JSON format
                 sample_data = {
                     "guild": {"id": "123", "name": "Test"},
                     "channel": {"id": "456", "name": export["channel"]},
@@ -149,9 +160,15 @@ def test_organize_data_sorts_archives() -> None:
         public_dir = Path(tmpdir) / "public"
         public_dir.mkdir()
 
-        # Create dummy JSON files
+        # Create dummy JSON files inside per-month directories
         for export in exports:
-            json_path = public_dir / export["server"] / export["channel"] / f"{export['date']}.json"
+            json_path = (
+                public_dir
+                / export["server"]
+                / export["channel"]
+                / export["date"]
+                / f"{export['date']}.json"
+            )
             json_path.parent.mkdir(parents=True, exist_ok=True)
             with open(json_path, "w") as f:
                 f.write('{"id": "1", "content": "test"}\n')

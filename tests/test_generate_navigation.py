@@ -9,6 +9,7 @@ from scripts.generate_navigation import (
     generate_server_index,
     generate_site_index,
     group_by_year,
+    organize_data,
     scan_exports,
 )
 
@@ -19,6 +20,34 @@ EXPECTED_REPLY_COUNT = 2
 EXPECTED_THREAD_COUNT = 2
 EXPECTED_THREE_EXPORTS = 3
 EXPECTED_THREE_MESSAGES = 3
+EXPECTED_MESSAGE_COUNT_FIVE = 5
+
+
+def test_organize_data_reads_json_from_month_directory() -> None:
+    """The JSON sits at `<channel>/<YYYY-MM>/<YYYY-MM>.json`, not next to the dir.
+
+    Regression: an earlier version read from `<channel>/<YYYY-MM>.json`
+    (the directory itself, not the file inside it), which always returned
+    0 messages and made every archive say "0 messages" on the channel index.
+    """
+    with tempfile.TemporaryDirectory() as tmpdir:
+        public = Path(tmpdir) / "public"
+        month_dir = public / "test-server" / "general" / "2026-05"
+        month_dir.mkdir(parents=True)
+
+        # The HTML the scan picks up
+        (month_dir / "2026-05.html").write_text("<html>may</html>")
+        # The JSON whose messages we want to count
+        json_data = {"messages": [{"id": str(i), "content": f"msg{i}"} for i in range(5)]}
+        (month_dir / "2026-05.json").write_text(json.dumps(json_data))
+
+        exports = scan_exports(public)
+        data = organize_data(exports, public)
+
+        assert "test-server" in data
+        channel = data["test-server"]["channels"]["general"]
+        assert channel["archives"][0]["date"] == "2026-05"
+        assert channel["archives"][0]["message_count"] == EXPECTED_MESSAGE_COUNT_FIVE
 
 
 def test_scan_exports_finds_files() -> None:
