@@ -84,6 +84,10 @@ jobs:
         env:
           DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
           PYTHONPATH: .
+          # Give the export script a 210-minute budget — 30 minutes below the
+          # job timeout so organize/navigate/deploy have time to run on the
+          # partial result if a long backfill exhausts the budget.
+          EXPORT_MAX_RUNTIME_SECONDS: "12600"
         run: |
           echo "Starting export..."
           uv run python scripts/export_channels.py

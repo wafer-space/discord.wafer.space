@@ -5,6 +5,7 @@ import fnmatch
 import os
 import subprocess
 import sys
+import time
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -122,27 +123,32 @@ def _determine_months_to_export(
 ) -> list[str]:
     """Decide which months need to be exported for a channel.
 
-    Returns months in chronological order. The strategy is:
+    Returns months with the current month FIRST, then any missing past
+    months oldest-to-newest. Current-first matters because the first run
+    after a long outage has a lot of backfill work and may not finish in
+    one workflow window — by exporting the current month first for every
+    channel, we guarantee the user-visible state is fresh even if a
+    backfill gets interrupted, and subsequent runs resume the backfill
+    without losing currency.
+
+    Strategy:
 
       - The earliest possible month for any messages is bounded by the
         channel's creation time, which we decode from its snowflake.
-        Months earlier than this can never contain messages.
-      - Past months that already have a non-empty HTML export in `public_dir`
-        are considered complete and skipped (they won't change — Discord
-        doesn't backdate messages).
-      - The current month is always included, since new messages keep arriving.
-
-    On a fresh install or after a long outage this yields every month from
-    channel creation through today; on a steady-state hourly run it yields
-    just the current month.
+      - Past months that already have a non-empty HTML export in
+        `public_channel_dir` AND whose JSON is month-pure are considered
+        complete and skipped.
+      - The current month is always included.
     """
     earliest = snowflake_to_month(channel_id)
     completed = scan_completed_months(public_channel_dir)
-    months: list[str] = []
-    for month in month_range_iter(earliest, current_month):
-        if month == current_month or month not in completed:
-            months.append(month)
-    return months
+    past_months = [
+        month
+        for month in month_range_iter(earliest, current_month)
+        if month != current_month and month not in completed
+    ]
+    # Current month first, then oldest past month -> newest past month.
+    return [current_month, *past_months]
 
 
 FORMAT_MAP = {"html": "HtmlDark", "txt": "PlainText", "json": "Json", "csv": "Csv"}
@@ -642,7 +648,10 @@ def fetch_guild_channels(  # noqa: C901  # Complex parsing of DiscordChatExporte
         raise RuntimeError(f"Channel fetching failed: {str(e)}") from e
 
 
-def export_all_channels(public_dir: Path | None = None) -> dict[str, Any]:
+def export_all_channels(  # noqa: C901,PLR0915  # Orchestration top-level
+    public_dir: Path | None = None,
+    max_runtime_seconds: int | None = None,
+) -> dict[str, Any]:
     """Main export orchestration function.
 
     Loads configuration, initializes state manager, and orchestrates
@@ -652,8 +661,15 @@ def export_all_channels(public_dir: Path | None = None) -> dict[str, Any]:
     complete; pass `Path("public")` in production (the GitHub Actions
     workflow checks out gh-pages into that directory before running this).
 
+    `max_runtime_seconds` lets us stop gracefully before the workflow
+    timeout — important on the first run after a long outage when there's
+    a lot of backfill to do. When the budget is exhausted we still write a
+    summary, save state, and exit 0 so the workflow can deploy what we have.
+    The next workflow invocation will pick up the remaining months because
+    `scan_completed_months` already knows which months are done.
+
     Returns a summary dict with `channels_updated`, `channels_failed`,
-    `total_exports`, and `errors`.
+    `total_exports`, `errors`, and `time_budget_exhausted`.
     """
     if public_dir is None:
         public_dir = Path("public")
@@ -670,6 +686,7 @@ def export_all_channels(public_dir: Path | None = None) -> dict[str, Any]:
         "channels_failed": 0,
         "total_exports": 0,
         "errors": [],
+        "time_budget_exhausted": False,
     }
 
     # Create exports directory
@@ -680,7 +697,17 @@ def export_all_channels(public_dir: Path | None = None) -> dict[str, Any]:
     if config["export"].get("download_media", False):
         print("Media downloads enabled - assets will be stored per-channel-per-month")
 
+    start = time.monotonic()
+
+    def out_of_time() -> bool:
+        return (
+            max_runtime_seconds is not None
+            and time.monotonic() - start > max_runtime_seconds
+        )
+
     print(f"\nStarting exports (current month: {current_month_utc()})...")
+    if max_runtime_seconds:
+        print(f"Time budget: {max_runtime_seconds} seconds")
 
     for server_key, server_config in config["servers"].items():
         print(f"\nProcessing server: {server_config['name']}")
@@ -727,6 +754,15 @@ def export_all_channels(public_dir: Path | None = None) -> dict[str, Any]:
         # Process each channel
         filters = (include_patterns, exclude_patterns)
         for channel in channels:
+            if out_of_time():
+                summary["time_budget_exhausted"] = True
+                print(
+                    f"\n  TIME BUDGET EXHAUSTED after "
+                    f"{int(time.monotonic() - start)}s — stopping gracefully. "
+                    "Next workflow run will resume backfill."
+                )
+                break
+
             chan_id = channel.get("id")
             if not chan_id:
                 continue
@@ -747,6 +783,11 @@ def export_all_channels(public_dir: Path | None = None) -> dict[str, Any]:
             summary["channels_updated"] += updated
             summary["channels_failed"] += failed
             summary["errors"].extend(errors)
+        else:
+            # No `break` happened, continue to next server
+            continue
+        # We broke out due to time budget — also break the server loop
+        break
 
     # Save state
     state_manager.save()
@@ -759,14 +800,22 @@ def main() -> None:
     print("Discord Channel Exporter")
     print("=" * 50)
 
+    # The workflow caps the job at 240 minutes. We give the script a slightly
+    # smaller budget so it can stop gracefully and let organize/navigate/deploy
+    # publish whatever was completed.
+    budget_str = os.environ.get("EXPORT_MAX_RUNTIME_SECONDS")
+    max_runtime = int(budget_str) if budget_str else None
+
     try:
-        summary = export_all_channels()
+        summary = export_all_channels(max_runtime_seconds=max_runtime)
 
         print("\n" + "=" * 50)
         print("Export Summary:")
         print(f"  Channels updated: {summary['channels_updated']}")
         print(f"  Channels failed: {summary['channels_failed']}")
         print(f"  Total exports: {summary['total_exports']}")
+        if summary.get("time_budget_exhausted"):
+            print("  NOTE: stopped early due to time budget; backfill resumes next run")
 
         if summary["errors"]:
             print(f"\nErrors ({len(summary['errors'])}):")

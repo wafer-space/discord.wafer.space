@@ -18,6 +18,7 @@ EXPECTED_EXPORTS_TWO_CHANNELS_THREE_MONTHS = 6
 EXPECTED_EXPORTS_ONE_CHANNEL_THREE_MONTHS_FOUR_FORMATS = 12
 EXPECTED_MONTHS_TWO = 2
 EXPECTED_THREADS_TWO_THREE_MONTHS = 6
+TIME_BUDGET_TOTAL_CHANNELS = 3
 
 
 @contextmanager
@@ -362,22 +363,23 @@ commit_author = "Test Bot"
                                     # Two months, one format = two calls
                                     assert mock_format.call_count == EXPECTED_MONTHS_TWO
 
-                                    # January call uses both --after and --before
-                                    jan_call = mock_format.call_args_list[0]
+                                    # Current month (February) is processed FIRST,
+                                    # with --after at the January boundary and no
+                                    # --before so it captures messages up to "now".
+                                    feb_call = mock_format.call_args_list[0]
+                                    assert feb_call.kwargs["after_timestamp"].startswith(
+                                        "2026-01-31"
+                                    )
+                                    assert feb_call.kwargs["before_timestamp"] is None
+
+                                    # January backfill comes after, fully bracketed.
+                                    jan_call = mock_format.call_args_list[1]
                                     assert jan_call.kwargs["after_timestamp"].startswith(
                                         "2025-12-31"
                                     )
                                     assert jan_call.kwargs["before_timestamp"].startswith(
                                         "2026-02-01"
                                     )
-
-                                    # February (current month) omits --before so it
-                                    # captures all new messages up to "now".
-                                    feb_call = mock_format.call_args_list[1]
-                                    assert feb_call.kwargs["after_timestamp"].startswith(
-                                        "2026-01-31"
-                                    )
-                                    assert feb_call.kwargs["before_timestamp"] is None
 
         del os.environ["DISCORD_BOT_TOKEN"]
 
@@ -634,6 +636,74 @@ commit_author = "Test Bot"
                                 # ThreadInfo is passed as thread_info parameter
                                 thread_info = call_args[1]["thread_info"]
                                 assert thread_info.thread_id == "111"
+
+        del os.environ["DISCORD_BOT_TOKEN"]
+
+    def test_export_all_channels_stops_on_time_budget(self) -> None:
+        """When max_runtime is exceeded, stop gracefully and flag the summary.
+
+        We force out_of_time via a mocked time.monotonic that increments by
+        100 seconds on every call, so by the third channel we've blown past
+        a 60-second budget. The third channel must be skipped, summary must
+        flag time_budget_exhausted, and earlier channels' work is preserved.
+        """
+        os.environ["DISCORD_BOT_TOKEN"] = "test_token"
+
+        config = {
+            "site": {},
+            "servers": {
+                "test-server": {
+                    "name": "Test Server",
+                    "guild_id": "123456789",
+                    "include_channels": ["*"],
+                    "exclude_channels": [],
+                }
+            },
+            "export": {"formats": ["html"]},
+            "github": {},
+        }
+
+        with fixed_months("2026-02", "2026-02"):
+            with patch("scripts.export_channels.load_config", return_value=config):
+                with patch("scripts.export_channels.fetch_guild_channels") as mock_fetch:
+                    mock_fetch.return_value = (
+                        [
+                            {"name": "a", "id": "1"},
+                            {"name": "b", "id": "2"},
+                            {"name": "c", "id": "3"},
+                        ],
+                        {},
+                    )
+                    with patch("scripts.export_channels.StateManager") as mock_state_class:
+                        mock_state = Mock()
+                        mock_state_class.return_value = mock_state
+                        mock_state.load.return_value = {}
+
+                        with patch("scripts.export_channels.run_export") as mock_run:
+                            mock_run.return_value = (True, "")
+
+                            # Each call to time.monotonic() advances 40s.
+                            # Budget of 60s: iter1 check at 40s (allowed),
+                            # iter2 check at 80s (exhausted).
+                            counter = {"v": 0.0}
+
+                            def fake_monotonic() -> float:
+                                v = counter["v"]
+                                counter["v"] += 40.0
+                                return v
+
+                            with patch(
+                                "scripts.export_channels.time.monotonic",
+                                side_effect=fake_monotonic,
+                            ):
+                                with patch("scripts.export_channels.Path"):
+                                    summary = export_all_channels(max_runtime_seconds=60)
+
+                            assert summary["time_budget_exhausted"] is True
+                            # At least one channel processed before stopping
+                            assert summary["channels_updated"] >= 1
+                            # Not all three
+                            assert summary["channels_updated"] < TIME_BUDGET_TOTAL_CHANNELS
 
         del os.environ["DISCORD_BOT_TOKEN"]
 
