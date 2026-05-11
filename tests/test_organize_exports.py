@@ -293,6 +293,64 @@ def test_organize_exports_handles_missing_media_directory() -> None:
         assert not (public_chan / "2026-05_media").exists()
 
 
+def test_organize_exports_strips_cross_month_messages_during_merge() -> None:
+    """When merging into a legacy mixed-month JSON, prune out other months.
+
+    The legacy `2025-11.json` contained messages from 2025-04 through
+    2025-11. A new month-bracketed re-export of November contains only
+    November messages — merging unchanged would propagate the legacy
+    contamination. We must drop the non-November entries during merge.
+    """
+    import json
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        tmpdir_path = Path(tmpdir)
+        exports = tmpdir_path / "exports"
+        public = tmpdir_path / "public"
+
+        # Legacy: 2025-11.json with messages from multiple months
+        existing_dir = public / "test-server" / "general" / "2025-11"
+        existing_dir.mkdir(parents=True)
+        legacy_json = {
+            "guild": {"id": "1"},
+            "channel": {"id": "2"},
+            "messages": [
+                {"id": "100", "content": "april", "timestamp": "2025-04-15T00:00:00+00:00"},
+                {"id": "200", "content": "may", "timestamp": "2025-05-15T00:00:00+00:00"},
+                {"id": "300", "content": "nov", "timestamp": "2025-11-15T00:00:00+00:00"},
+            ],
+            "messageCount": 3,
+        }
+        (existing_dir / "2025-11.json").write_text(json.dumps(legacy_json))
+
+        # New honest export of November
+        channel_dir = exports / "test-server" / "general"
+        channel_dir.mkdir(parents=True)
+        new_json = {
+            "guild": {"id": "1"},
+            "channel": {"id": "2"},
+            "messages": [
+                {"id": "300", "content": "nov (edited)", "timestamp": "2025-11-15T00:00:00+00:00"},
+                {"id": "400", "content": "nov-2", "timestamp": "2025-11-20T00:00:00+00:00"},
+            ],
+            "messageCount": 2,
+        }
+        (channel_dir / "2025-11.json").write_text(json.dumps(new_json))
+        (channel_dir / "2025-11.html").write_text("<html>nov</html>")
+
+        organize_exports(exports, public)
+
+        merged = json.loads((existing_dir / "2025-11.json").read_text())
+        ids = [m["id"] for m in merged["messages"]]
+        # April and May messages purged; November messages retained;
+        # the edit on id=300 wins.
+        assert "100" not in ids
+        assert "200" not in ids
+        assert ids == ["300", "400"]
+        msg_300 = next(m for m in merged["messages"] if m["id"] == "300")
+        assert msg_300["content"] == "nov (edited)"
+
+
 def test_organize_exports_merges_json_messages_same_month() -> None:
     """JSON merge deduplicates messages by ID for the same month."""
     import json

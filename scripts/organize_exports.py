@@ -36,9 +36,17 @@ VALID_EXTENSIONS = {".html", ".txt", ".json", ".csv"}
 def _merge_json_exports(source_file: Path, dest_file: Path) -> bool:
     """Merge new JSON export into the existing archive, deduplicating by ID.
 
-    DCE message IDs are snowflakes, which sort chronologically, so we use
-    them as the natural key and sort by integer value at the end.
+    Both source and destination are expected to belong to a single month
+    (encoded in the dest filename — `2026-05.json` means May 2026). We
+    discard any messages in the *existing* file whose timestamp is from
+    a different month: those are leftovers from the legacy current-month-
+    dump bug and would otherwise propagate forever through merges.
+
+    Within-month edits and deletions are preserved by ID-keyed merge, so
+    nothing legitimate is lost. DCE message IDs are snowflakes, which sort
+    chronologically, so we sort by integer ID at the end.
     """
+    expected_month = dest_file.stem  # filename like "2026-05.json" → "2026-05"
     try:
         with open(source_file, encoding="utf-8") as f:
             new_data = json.load(f)
@@ -51,7 +59,11 @@ def _merge_json_exports(source_file: Path, dest_file: Path) -> bool:
         with open(dest_file, encoding="utf-8") as f:
             existing_data = json.load(f)
 
-        existing_messages = existing_data.get("messages", [])
+        def _in_month(msg: dict[str, Any]) -> bool:
+            ts = msg.get("timestamp", "")
+            return isinstance(ts, str) and ts[:7] == expected_month
+
+        existing_messages = [m for m in existing_data.get("messages", []) if _in_month(m)]
         new_messages = new_data.get("messages", [])
 
         messages_by_id: dict[str, Any] = {}
