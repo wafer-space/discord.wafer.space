@@ -125,6 +125,13 @@ jobs:
           set -euo pipefail
           git config user.name "Discord Archive Bot"
           git config user.email "actions@github.com"
+          # CI has no terminal, so set non-interactive editors. Without this,
+          # `git rebase --continue` after an automatic conflict resolution tries
+          # to launch $EDITOR for the merge commit message and fails with
+          # "Terminal is dumb, but EDITOR unset".
+          export GIT_EDITOR=true
+          export GIT_SEQUENCE_EDITOR=true
+
           git add state.json
           # Only commit if state.json actually has changes staged
           if ! git diff --cached --quiet; then
@@ -134,11 +141,13 @@ jobs:
 
             # Pull with rebase to handle concurrent workflow updates.
             # If rebase fails due to state.json conflict, the merge script
-            # resolves it deterministically.
+            # resolves it deterministically; --no-edit reuses the original
+            # commit message so `git rebase --continue` doesn't need an editor.
             if ! git pull --rebase origin master; then
               echo "Rebase failed, attempting automatic merge of state.json..."
               uv run python scripts/merge_state.py
-              git rebase --continue
+              git add state.json
+              git -c core.editor=true rebase --continue
             fi
 
             git push origin HEAD:master
