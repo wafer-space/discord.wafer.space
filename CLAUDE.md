@@ -76,35 +76,71 @@ uv run python scripts/test_bot_access.py
 ### Data Flow Pipeline
 
 1. **Export** (`scripts/export_channels.py`):
-   - Calls DiscordChatExporter CLI to fetch messages from Discord API
-   - Uses `config.toml` for server/channel configuration
-   - Supports incremental exports via `state.json` tracking
-   - Handles both regular channels and forum threads
-   - Outputs to `exports/` directory
+   - For each channel, computes the channel's earliest possible month from
+     its Discord snowflake (no API call needed). Builds a list of months to
+     export: always the current month, plus any past month not yet present
+     in `public/` with a month-pure JSON.
+   - Runs DiscordChatExporter once per (channel, month, format) tuple,
+     bracketed by `--after` (microsecond before month start) and `--before`
+     (next month's start). For the current month, `--before` is omitted so
+     newly-arrived messages are included.
+   - Writes per-month outputs to `exports/<server>/<channel>/<YYYY-MM>.<ext>`
+     with sibling `<YYYY-MM>_media/` directories for downloaded assets.
+   - Discards past months whose JSON has zero messages (saves disk + avoids
+     noisy empty entries on the published site).
+   - Honors an optional `EXPORT_MAX_RUNTIME_SECONDS` budget so long
+     backfills can be interrupted gracefully and resumed on the next run.
 
 2. **Organize** (`scripts/organize_exports.py`):
-   - Moves exports from `exports/` to `public/` with date-based structure
-   - Creates monthly archives: `public/{server}/{channel}/{YYYY-MM}/{YYYY-MM}.{format}`
-   - Handles both regular channels and nested forum/thread structure
+   - Walks `exports/` for any directory containing `<YYYY-MM>.<ext>` files.
+   - Copies each per-month file into
+     `public/<server>/<channel>/<YYYY-MM>/<YYYY-MM>.<ext>`. The month comes
+     from the **filename**, not from `datetime.now()` — a backfilled
+     2026-03 export lands in `2026-03/`, not the current month.
+   - Merges JSON files by message ID. During merge, drops any existing
+     messages whose timestamp doesn't match the destination month — this
+     cleans up the legacy mixed-month files from the pre-refactor era.
+   - Refreshes `latest.*` symlinks to point at the newest month present.
 
 3. **Navigate** (`scripts/generate_navigation.py`):
-   - Generates navigation index pages using Jinja2 templates
-   - Scans `public/` directory to discover all exported files
-   - Creates hierarchical indexes: site → server → channel/forum → archives
-   - Templates in `templates/` directory
+   - Generates navigation index pages using Jinja2 templates.
+   - Scans `public/` directory to discover all exported files.
+   - Reads each month's JSON from `public/<server>/<channel>/<YYYY-MM>/<YYYY-MM>.json`
+     to compute accurate per-archive message counts.
+   - Creates hierarchical indexes: site → server → channel/forum → archives.
+   - Templates in `templates/` directory.
+
+### Month-based partitioning
+
+`scripts/months.py` contains the primitives:
+
+- `month_bounds(month)` returns the `(after, before)` ISO timestamps that
+  bracket exactly one calendar month UTC, accounting for DCE treating both
+  bounds as exclusive.
+- `snowflake_to_month(channel_id)` decodes a Discord snowflake to its
+  creation month — used to determine the earliest possible month for a
+  channel without an API call.
+- `scan_completed_months(channel_dir)` returns the months in `public/`
+  that already have a non-empty HTML export AND a month-pure JSON. Mixed-
+  month JSONs (legacy data) are NOT considered complete; they get
+  re-exported and replaced.
 
 ### State Management
 
 **File**: `scripts/state.py` (StateManager class)
 **Persistence**: `state.json`
 
-Tracks export progress to enable incremental updates:
-- Last export timestamp per channel
-- Last message ID exported
-- Thread metadata for forum channels
-- Forum index generation timestamps
+After the per-month refactor, `state.json` is no longer used to drive
+incremental export timestamps — month bounds and `scan_completed_months`
+do that work. State is now mostly observational:
 
-**Critical**: The `state.json` file is committed to the repository to persist state between GitHub Actions runs.
+- Last successful export timestamp per channel/thread (for monitoring).
+- Thread metadata (name, title, archived) — consumed by navigation.
+- Forum index generation timestamps.
+
+**Critical**: The `state.json` file is committed to the repository so the
+hourly cron sees recent commits and isn't auto-disabled by GitHub's 60-day
+inactivity rule.
 
 ### Configuration
 
@@ -143,9 +179,10 @@ Forum channels export threads as separate files:
 ```
 discord-download/
 ├── scripts/                    # Python pipeline scripts
-│   ├── export_channels.py     # Main export orchestration
-│   ├── organize_exports.py    # File organization
+│   ├── export_channels.py     # Main export orchestration (per-month)
+│   ├── organize_exports.py    # File organization (per-month → public)
 │   ├── generate_navigation.py # Index page generation
+│   ├── months.py              # Month bounds, snowflake decoding, completion scan
 │   ├── state.py               # State tracking
 │   ├── config.py              # Configuration loading
 │   ├── channel_classifier.py  # Channel type detection
