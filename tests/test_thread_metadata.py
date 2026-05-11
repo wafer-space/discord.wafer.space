@@ -2,7 +2,9 @@
 
 import json
 import tempfile
+from datetime import datetime, timezone
 from pathlib import Path
+from unittest.mock import patch
 
 from scripts.thread_metadata import extract_thread_metadata
 
@@ -11,8 +13,11 @@ EXPECTED_REPLY_COUNT = 3
 
 
 def test_extract_thread_metadata_basic() -> None:
-    """Test basic thread metadata extraction."""
-    # Create temp JSON file with thread data
+    """Recently-active thread is not marked archived.
+
+    The archived check is "last activity > 180 days ago", so we pin
+    `datetime.now()` to make the test independent of wall-clock time.
+    """
     thread_json = {
         "guild": {"name": "Test Server"},
         "channel": {"id": "123456", "name": "How do I start?", "type": "GuildPublicThread"},
@@ -28,7 +33,12 @@ def test_extract_thread_metadata_basic() -> None:
         temp_path = Path(f.name)
 
     try:
-        metadata = extract_thread_metadata(temp_path)
+        # Pretend "now" is two months after the latest message — less than the
+        # 180-day archived threshold, so archived must be False.
+        with patch("scripts.thread_metadata.datetime") as mock_dt:
+            mock_dt.now.return_value = datetime(2026, 1, 15, tzinfo=timezone.utc)
+            mock_dt.fromisoformat.side_effect = datetime.fromisoformat
+            metadata = extract_thread_metadata(temp_path)
 
         assert metadata is not None
         assert metadata["title"] == "How do I start?"

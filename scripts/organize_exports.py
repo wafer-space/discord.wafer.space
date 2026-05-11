@@ -1,460 +1,272 @@
 #!/usr/bin/env python3
 # scripts/organize_exports.py
-"""Organize exported files into date-based directory structure.
+"""Move per-month exports from `exports/` to `public/`.
 
-This script moves exported files from the exports/ directory to the public/
-directory, organizing them by server/channel structure with date-based naming.
+The exporter writes one file per (channel, month, format):
+
+    exports/<server>/<channel>/<YYYY-MM>.<ext>
+    exports/<server>/<forum>/<thread>/<YYYY-MM>.<ext>
+
+This script copies each `<YYYY-MM>.<ext>` (and its sibling `<YYYY-MM>_media/`)
+into the published layout:
+
+    public/<server>/<channel>/<YYYY-MM>/<YYYY-MM>.<ext>
+    public/<server>/<forum>/<thread>/<YYYY-MM>/<YYYY-MM>.<ext>
+
+The month is taken from the filename — never from `datetime.now()`. That's
+the whole point of the refactor: a backfilled 2026-03 export must land in
+the `2026-03/` directory, not the current month's directory.
+
+JSON files are merged with any existing archive in the destination so we
+keep historical messages even if a future re-export trims a range.
 """
 
 import json
 import shutil
 import sys
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from scripts.months import is_month_dir_name
 
-def get_current_month() -> str:
-    """Get current month in YYYY-MM format.
-
-    Returns:
-        Current month string (e.g., "2025-11")
-    """
-    return datetime.now(timezone.utc).strftime("%Y-%m")
-
-
-def _update_latest_symlink(target_dir: Path, extension: str, current_month: str) -> None:
-    """Create or update 'latest' symlink to current month's file.
-
-    Args:
-        target_dir: Directory containing the symlink
-        extension: File extension (e.g., '.html')
-        current_month: Current month string (YYYY-MM)
-    """
-    latest_link = target_dir / f"latest{extension}"
-    if latest_link.exists() or latest_link.is_symlink():
-        latest_link.unlink()
-    latest_link.symlink_to(f"{current_month}/{current_month}{extension}")
-
-
-def _update_media_symlink(target_dir: Path, media_name: str, current_month: str) -> None:
-    """Create or update media directory symlink to current month's media.
-
-    Args:
-        target_dir: Channel/thread directory containing the symlink
-        media_name: Media directory name (e.g., 'channel_media')
-        current_month: Current month string (YYYY-MM)
-    """
-    media_link = target_dir / media_name
-    if media_link.exists() or media_link.is_symlink():
-        if media_link.is_symlink():
-            media_link.unlink()
-        elif media_link.is_dir():
-            shutil.rmtree(media_link)
-        else:
-            media_link.unlink()
-    media_link.symlink_to(f"{current_month}/{media_name}")
+VALID_EXTENSIONS = {".html", ".txt", ".json", ".csv"}
 
 
 def _merge_json_exports(source_file: Path, dest_file: Path) -> bool:
-    """Merge new JSON export with existing archive.
+    """Merge new JSON export into the existing archive, deduplicating by ID.
 
-    Combines messages from both files, deduplicating by message ID.
-    Preserves the most recent metadata (guild, channel info) from source.
-
-    Args:
-        source_file: New incremental export
-        dest_file: Existing archive file
-
-    Returns:
-        True if merge succeeded, False otherwise
+    DCE message IDs are snowflakes, which sort chronologically, so we use
+    them as the natural key and sort by integer value at the end.
     """
     try:
-        # Load new export
         with open(source_file, encoding="utf-8") as f:
             new_data = json.load(f)
 
-        # If destination doesn't exist, just copy source
         if not dest_file.exists():
             with open(dest_file, "w", encoding="utf-8") as f:
                 json.dump(new_data, f, indent=2)
             return True
 
-        # Load existing archive
         with open(dest_file, encoding="utf-8") as f:
             existing_data = json.load(f)
 
-        # Get messages from both, defaulting to empty lists
         existing_messages = existing_data.get("messages", [])
         new_messages = new_data.get("messages", [])
 
-        # Create a dict of messages by ID for deduplication
-        # Existing messages first, then new messages override
         messages_by_id: dict[str, Any] = {}
         for msg in existing_messages:
             msg_id = msg.get("id")
             if msg_id:
                 messages_by_id[msg_id] = msg
-
+        # New messages override existing entries with the same ID (edits).
         for msg in new_messages:
             msg_id = msg.get("id")
             if msg_id:
                 messages_by_id[msg_id] = msg
 
-        # Sort messages by ID (Discord snowflake IDs are chronologically sortable)
         sorted_messages = sorted(messages_by_id.values(), key=lambda m: int(m.get("id", 0)))
 
-        # Use new export as base (has latest metadata), but with merged messages
         merged_data = new_data.copy()
         merged_data["messages"] = sorted_messages
         merged_data["messageCount"] = len(sorted_messages)
 
-        # Update dateRange to cover full history
-        if existing_data.get("dateRange", {}).get("after") is None:
-            # Existing had full history (no after filter)
-            merged_data["dateRange"] = {"after": None, "before": None}
-        elif new_data.get("dateRange", {}).get("after") is not None:
-            # Both are incremental - keep the earlier 'after' or None
-            merged_data["dateRange"]["after"] = None  # Now we have full history
+        # Since we keep history across runs, the merged file represents the
+        # full month range, not the bracket of any single export.
+        merged_data["dateRange"] = {"after": None, "before": None}
 
-        # Write merged result
         with open(dest_file, "w", encoding="utf-8") as f:
             json.dump(merged_data, f, indent=2)
 
         return True
 
     except Exception as e:
-        print(f"    ⚠ JSON merge failed: {e}")
+        print(f"    ⚠ JSON merge failed for {source_file}: {e}")
         return False
 
 
-def _copy_media_directory(source_media_dir: Path, target_dir: Path) -> bool:
-    """Copy media directory to target location.
-
-    Args:
-        source_media_dir: Source media directory (e.g., exports/server/channel_media/)
-        target_dir: Target channel directory (e.g., public/server/channel/)
-
-    Returns:
-        True if copy succeeded, False otherwise
-    """
+def _copy_media_directory(source_media_dir: Path, dest_media_dir: Path) -> bool:
+    """Copy `source_media_dir` to `dest_media_dir`, replacing any existing copy."""
     if not source_media_dir.exists() or not source_media_dir.is_dir():
         return False
-
-    dest_media_dir = target_dir / source_media_dir.name
     try:
-        # Remove existing media directory if it exists
         if dest_media_dir.exists():
             shutil.rmtree(dest_media_dir)
-        # Copy entire media directory
         shutil.copytree(source_media_dir, dest_media_dir)
         return True
     except Exception:
         return False
 
 
-def _copy_to_month_directory(
-    source_file: Path, target_dir: Path, current_month: str
-) -> tuple[Path, bool]:
-    """Copy file to month-based directory structure.
-
-    For JSON files, merges with existing archive to preserve historical messages.
-    For other formats, copies the file (replacing existing).
-
-    Args:
-        source_file: Source file to copy
-        target_dir: Target directory (channel or thread dir)
-        current_month: Current month string (YYYY-MM)
-
-    Returns:
-        Tuple of (destination_path, success)
-    """
+def _copy_month_file(source_file: Path, dest_file: Path) -> bool:
+    """Copy a single per-month file, merging if JSON."""
     extension = source_file.suffix
-    month_dir = target_dir / current_month
-    month_dir.mkdir(parents=True, exist_ok=True)
-
-    dest_file = month_dir / f"{current_month}{extension}"
+    dest_file.parent.mkdir(parents=True, exist_ok=True)
     try:
         if extension == ".json":
-            # Merge JSON exports to preserve historical messages
-            success = _merge_json_exports(source_file, dest_file)
-            if success:
-                _update_latest_symlink(target_dir, extension, current_month)
-            return dest_file, success
-        else:
-            # For non-JSON formats, just copy (HTML/TXT/CSV)
-            shutil.copy2(source_file, dest_file)
-            _update_latest_symlink(target_dir, extension, current_month)
-            return dest_file, True
+            return _merge_json_exports(source_file, dest_file)
+        shutil.copy2(source_file, dest_file)
+        return True
     except Exception:
-        return dest_file, False
+        return False
 
 
-def _organize_thread_file(
-    thread_file: Path,
-    forum_name: str,
-    public_forum_dir: Path,
-    server_context: tuple[str, str, Path],  # (server_name, current_month, public_dir)
-) -> tuple[str | None, str | None]:
-    """Organize a single thread file.
+def _update_latest_symlink(public_channel_dir: Path) -> None:
+    """Point `latest.html` (and friends) at the newest month present.
 
-    Args:
-        thread_file: Thread file to organize
-        forum_name: Forum name
-        public_forum_dir: Public directory for forum
-        server_context: Tuple of (server_name, current_month, public_dir)
-
-    Returns:
-        Tuple of (channel_key, error_msg) - one will be None
+    Scans the channel directory for `YYYY-MM/` subdirectories and creates
+    a symlink for each extension that exists in the most recent month.
     """
-    server_name, current_month, public_dir = server_context
-    thread_name = thread_file.stem
-    extension = thread_file.suffix
-
-    # Skip non-export files
-    if extension not in [".html", ".txt", ".json", ".csv"]:
-        return None, None
-
-    public_thread_dir = public_forum_dir / thread_name
-    dest_file, success = _copy_to_month_directory(thread_file, public_thread_dir, current_month)
-
-    if success:
-        # Copy associated media directory if it exists (into month directory)
-        media_dir = thread_file.parent / f"{thread_name}_media"
-        if media_dir.exists():
-            month_dir = public_thread_dir / current_month
-            if _copy_media_directory(media_dir, month_dir):
-                print(f"    ↳ Copied media directory: {media_dir.name}")
-                # Create symlink from thread root to latest month's media
-                _update_media_symlink(public_thread_dir, media_dir.name, current_month)
-
-        channel_key = f"{server_name}/{forum_name}/{thread_name}"
-        rel_path = dest_file.relative_to(public_dir)
-        print(f"  ✓ {forum_name}/{thread_name}{extension} → {rel_path}")
-        return channel_key, None
-    else:
-        return None, f"Failed to organize {thread_file.name}"
-
-
-def _organize_channel_file(
-    channel_file: Path,
-    public_server: Path,
-    current_month: str,
-    server_name: str,
-    public_dir: Path,
-) -> tuple[str | None, str | None]:
-    """Organize a single channel file.
-
-    Args:
-        channel_file: Channel file to organize
-        public_server: Public directory for server
-        current_month: Current month string
-        server_name: Server name
-        public_dir: Public root directory
-
-    Returns:
-        Tuple of (channel_key, error_msg) - one will be None
-    """
-    channel_name = channel_file.stem
-    ext = channel_file.suffix
-
-    # Skip non-export files
-    if ext not in [".html", ".txt", ".json", ".csv"]:
-        print(f"  ⚠ Skipping {channel_file.name} (unsupported format)")
-        return None, None
-
-    channel_dir = public_server / channel_name
-    dest_file, success = _copy_to_month_directory(channel_file, channel_dir, current_month)
-
-    if success:
-        # Copy associated media directory if it exists (into month directory)
-        media_dir = channel_file.parent / f"{channel_name}_media"
-        if media_dir.exists():
-            month_dir = channel_dir / current_month
-            if _copy_media_directory(media_dir, month_dir):
-                print(f"    ↳ Copied media directory: {media_dir.name}")
-                # Create symlink from channel root to latest month's media
-                _update_media_symlink(channel_dir, media_dir.name, current_month)
-
-        channel_key = f"{server_name}/{channel_name}"
-        print(f"  ✓ {channel_name}{ext} → {dest_file.relative_to(public_dir)}")
-        return channel_key, None
-    else:
-        return None, f"Failed to organize {channel_file.name}"
-
-
-def _process_forum_directory(
-    forum_dir: Path,
-    server_context: tuple[str, Path, str, Path],
-) -> tuple[list[str], list[str], int]:
-    """Process all threads in a forum directory.
-
-    Args:
-        forum_dir: Forum directory path
-        server_context: Tuple of (server_name, public_server, current_month, public_dir)
-
-    Returns:
-        Tuple of (channel_keys, errors, files_organized_count)
-    """
-    server_name, public_server, current_month, public_dir = server_context
-    forum_name = forum_dir.name
-    public_forum_dir = public_server / forum_name
-    public_forum_dir.mkdir(parents=True, exist_ok=True)
-
-    channel_keys: list[str] = []
-    errors: list[str] = []
-    files_count = 0
-
-    thread_context = (server_name, current_month, public_dir)
-
-    for thread_file in forum_dir.iterdir():
-        if not thread_file.is_file():
+    months = sorted(
+        (
+            d.name
+            for d in public_channel_dir.iterdir()
+            if d.is_dir() and is_month_dir_name(d.name)
+        ),
+        reverse=True,
+    )
+    if not months:
+        return
+    newest = months[0]
+    for ext in ("html", "txt", "json", "csv"):
+        target_file = public_channel_dir / newest / f"{newest}.{ext}"
+        if not target_file.exists():
             continue
-
-        channel_key, error = _organize_thread_file(
-            thread_file, forum_name, public_forum_dir, thread_context
-        )
-
-        if channel_key:
-            channel_keys.append(channel_key)
-            files_count += 1
-        elif error:
-            errors.append(error)
-
-    return channel_keys, errors, files_count
+        link = public_channel_dir / f"latest.{ext}"
+        if link.exists() or link.is_symlink():
+            link.unlink()
+        link.symlink_to(f"{newest}/{newest}.{ext}")
 
 
-def _process_server_directory(
-    server_dir: Path,
-    public_dir: Path,
-    current_month: str,
-) -> tuple[set[str], int, list[str]]:
-    """Process all channels and forums in a server directory.
+def _iter_channel_dirs(exports_dir: Path):
+    """Yield each directory that directly contains `YYYY-MM.<ext>` files.
 
-    Args:
-        server_dir: Server export directory
-        public_dir: Public root directory
-        current_month: Current month string
-
-    Returns:
-        Tuple of (channels_seen, files_organized, errors)
+    A channel directory is the leaf level of the export tree: it may be
+    `exports/server/channel/` for a regular channel or
+    `exports/server/forum/thread/` for a thread. We walk the tree and yield
+    any directory whose direct children include a month-named file.
     """
-    server_name = server_dir.name
-    public_server = public_dir / server_name
-    channels_seen: set[str] = set()
+    if not exports_dir.exists():
+        return
+    for root, _dirs, files in _walk_paths(exports_dir):
+        for name in files:
+            stem, _, ext = name.rpartition(".")
+            if ext and f".{ext}" in VALID_EXTENSIONS and is_month_dir_name(stem):
+                yield root
+                break  # one match is enough to mark this directory
+
+
+def _walk_paths(top: Path):
+    """Yield (root_path, [dir_names], [file_names]) like os.walk but with Paths."""
+    stack = [top]
+    while stack:
+        current = stack.pop()
+        try:
+            entries = list(current.iterdir())
+        except OSError:
+            continue
+        dirs = [e for e in entries if e.is_dir()]
+        files = [e.name for e in entries if e.is_file()]
+        yield current, [d.name for d in dirs], files
+        stack.extend(dirs)
+
+
+def _organize_channel_directory(
+    channel_export_dir: Path,
+    exports_root: Path,
+    public_root: Path,
+) -> tuple[int, list[str]]:
+    """Move all per-month files in a channel directory into `public_root`.
+
+    Returns (files_organized, errors).
+    """
+    relative = channel_export_dir.relative_to(exports_root)
+    public_channel_dir = public_root / relative
+
     files_organized = 0
     errors: list[str] = []
+    months_touched: set[str] = set()
 
-    server_context = (server_name, public_server, current_month, public_dir)
+    for entry in sorted(channel_export_dir.iterdir()):
+        if not entry.is_file():
+            continue
+        stem = entry.stem
+        ext = entry.suffix
+        if ext not in VALID_EXTENSIONS or not is_month_dir_name(stem):
+            continue
+        dest_file = public_channel_dir / stem / f"{stem}{ext}"
+        if _copy_month_file(entry, dest_file):
+            files_organized += 1
+            months_touched.add(stem)
+            print(f"  ✓ {relative}/{entry.name} → {dest_file.relative_to(public_root)}")
+        else:
+            errors.append(f"Failed to copy {entry}")
 
-    for item in server_dir.iterdir():
-        if item.is_dir():
-            # Forum directory - process threads
-            keys, item_errors, files_count = _process_forum_directory(item, server_context)
-            channels_seen.update(keys)
-            files_organized += files_count
-            errors.extend(item_errors)
-        elif item.is_file():
-            # Regular channel file
-            channel_key, error = _organize_channel_file(
-                item, public_server, current_month, server_name, public_dir
-            )
-            if channel_key:
-                channels_seen.add(channel_key)
-                files_organized += 1
-            elif error:
-                errors.append(error)
+    # Per-month media directories sit alongside the per-month files
+    for month in months_touched:
+        media_src = channel_export_dir / f"{month}_media"
+        if media_src.exists():
+            media_dst = public_channel_dir / month / f"{month}_media"
+            if _copy_media_directory(media_src, media_dst):
+                print(f"    ↳ media: {media_src.name} → {media_dst.relative_to(public_root)}")
 
-    return channels_seen, files_organized, errors
+    # Refresh the `latest.*` symlinks at the channel root
+    if public_channel_dir.exists():
+        _update_latest_symlink(public_channel_dir)
+
+    return files_organized, errors
 
 
 def organize_exports(
     exports_dir: Path | None = None, public_dir: Path | None = None
 ) -> dict[str, Any]:
-    """Move exports from exports/ to public/ with date-based organization.
+    """Move per-month exports from `exports/` into `public/` with date-based layout.
 
-    Handles both regular channels and forum/thread structure:
-    - Regular: exports/server/channel.html -> public/server/channel/YYYY-MM/YYYY-MM.html
-    - Forums: exports/server/forum/thread.html -> public/server/forum/thread/YYYY-MM/YYYY-MM.html
-
-    Args:
-        exports_dir: Source directory (defaults to "exports")
-        public_dir: Destination directory (defaults to "public")
-
-    Returns:
-        Dict with statistics:
-            - files_organized: Number of files successfully organized
-            - channels_processed: Number of unique channels processed
-            - errors: List of error messages
-
-    Raises:
-        FileNotFoundError: If exports directory doesn't exist
+    Returns a stats dict with `files_organized`, `channels_processed`, and `errors`.
     """
-    # Use defaults if not provided
     if exports_dir is None:
         exports_dir = Path("exports")
     if public_dir is None:
         public_dir = Path("public")
 
-    # Ensure exports directory exists
     if not exports_dir.exists():
         raise FileNotFoundError(
             f"Exports directory not found: {exports_dir}\n"
             "Run scripts/export_channels.py first to generate exports."
         )
 
-    # Create public directory if it doesn't exist
     public_dir.mkdir(exist_ok=True)
 
     stats: dict[str, Any] = {"files_organized": 0, "channels_processed": 0, "errors": []}
+    channel_dirs_seen: set[Path] = set()
 
-    current_month = get_current_month()
-    channels_seen = set()
-
-    # Process each server directory
-    for server_dir in exports_dir.iterdir():
-        if not server_dir.is_dir():
+    for channel_dir in _iter_channel_dirs(exports_dir):
+        if channel_dir in channel_dirs_seen:
             continue
+        channel_dirs_seen.add(channel_dir)
+        print(f"Organizing {channel_dir.relative_to(exports_dir)}...")
+        files, errors = _organize_channel_directory(channel_dir, exports_dir, public_dir)
+        stats["files_organized"] += files
+        stats["errors"].extend(errors)
 
-        print(f"Organizing {server_dir.name}...")
-
-        server_channels, server_files, server_errors = _process_server_directory(
-            server_dir, public_dir, current_month
-        )
-
-        channels_seen.update(server_channels)
-        stats["files_organized"] += server_files
-        for error in server_errors:
-            stats["errors"].append(error)
-            print(f"  ✗ {error}")
-
-    stats["channels_processed"] = len(channels_seen)
+    stats["channels_processed"] = len(channel_dirs_seen)
     return stats
 
 
 def cleanup_exports(exports_dir: Path | None = None) -> None:
-    """Remove organized files from exports directory.
-
-    CAUTION: Only call this after successful organization!
-
-    Args:
-        exports_dir: Directory to clean (defaults to "exports")
+    """Delete per-month files from `exports_dir`. Safe to run after a successful
+    organize pass; preserves directory structure so the next export run lands
+    in the same place.
     """
     if exports_dir is None:
         exports_dir = Path("exports")
-
     if not exports_dir.exists():
         return
-
-    for server_dir in exports_dir.iterdir():
-        if server_dir.is_dir():
-            for export_file in server_dir.iterdir():
-                if export_file.is_file():
-                    export_file.unlink()
-
-            # Remove empty server directory
-            if not any(server_dir.iterdir()):
-                server_dir.rmdir()
+    for path in exports_dir.rglob("*"):
+        if path.is_file():
+            stem = path.stem
+            ext = path.suffix
+            if ext in VALID_EXTENSIONS and is_month_dir_name(stem):
+                path.unlink()
 
 
 def main() -> None:
@@ -463,10 +275,7 @@ def main() -> None:
     print("=" * 50)
 
     try:
-        # Organize exports
         stats = organize_exports()
-
-        # Print summary
         print("\n" + "=" * 50)
         print("Organization Summary:")
         print(f"  Files organized: {stats['files_organized']}")
@@ -474,15 +283,10 @@ def main() -> None:
 
         if stats["errors"]:
             print(f"\nErrors ({len(stats['errors'])}):")
-            for error in stats["errors"][:5]:  # Show first 5
+            for error in stats["errors"][:10]:
                 print(f"  - {error}")
 
-        # Optional: Cleanup exports directory
-        # Uncomment if you want to remove organized files from exports/
-        # cleanup_exports()
-
-        exit_code = 1 if stats["errors"] else 0
-        sys.exit(exit_code)
+        sys.exit(1 if stats["errors"] else 0)
 
     except FileNotFoundError as e:
         print(f"\nERROR: {e}")
