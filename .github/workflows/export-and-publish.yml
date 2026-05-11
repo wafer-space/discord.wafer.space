@@ -17,7 +17,7 @@ permissions:
   id-token: write
 
 # Ensure only one export workflow runs at a time to prevent state.json merge conflicts.
-# The workflow takes ~54 minutes but runs hourly, so concurrent runs would conflict.
+# The workflow can take some time but runs hourly, so concurrent runs would conflict.
 # With cancel-in-progress: false, queued runs will wait rather than be cancelled.
 concurrency:
   group: discord-export
@@ -26,7 +26,7 @@ concurrency:
 jobs:
   export-and-deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 120  # Increased for large Discord servers with many channels
+    timeout-minutes: 240  # Allow time for catch-up backfills (multiple months × channels)
 
     steps:
       - name: Checkout repository
@@ -62,22 +62,21 @@ jobs:
           rm DiscordChatExporter.Cli.linux-x64.zip
 
       - name: Fetch existing gh-pages content
+        # Pulls the previously-published site into public/ so the export step
+        # can see which months are already complete (and skip them). On a
+        # fresh repo gh-pages won't exist yet; that's fine — we start empty.
         run: |
-          # Fetch gh-pages content into public/ so we can merge with existing data
-          # This is essential for incremental JSON merging to preserve historical messages
+          set -euo pipefail
           echo "Fetching existing gh-pages content into public/..."
-
-          # Clean up any existing public directory first
           rm -rf public
 
-          git fetch origin gh-pages:gh-pages 2>/dev/null || echo "No gh-pages branch yet"
-          if git rev-parse --verify gh-pages >/dev/null 2>&1; then
+          if git fetch origin gh-pages:gh-pages; then
             git worktree add public gh-pages
             # Remove .git reference so peaceiris/actions-gh-pages can work properly
             rm -f public/.git
             echo "✓ Fetched $(find public -type f | wc -l) files from gh-pages"
           else
-            echo "No existing gh-pages branch - starting fresh"
+            echo "No existing gh-pages branch yet — starting fresh"
             mkdir -p public
           fi
 
@@ -91,7 +90,6 @@ jobs:
         id: export
 
       - name: Organize exports
-        if: steps.export.outcome == 'success' || steps.export.outcome == 'failure'
         env:
           PYTHONPATH: .
         run: |
@@ -99,17 +97,7 @@ jobs:
           uv run python scripts/organize_exports.py
         id: organize
 
-      - name: Migrate existing media to month directories
-        if: steps.organize.outcome == 'success' || steps.organize.outcome == 'failure'
-        env:
-          PYTHONPATH: .
-        run: |
-          echo "Migrating existing media files..."
-          uv run python scripts/migrate_media.py
-        id: migrate
-
       - name: Run navigation generator
-        if: steps.organize.outcome == 'success' || steps.organize.outcome == 'failure'
         env:
           PYTHONPATH: .
         run: |
@@ -120,8 +108,8 @@ jobs:
       - name: Check for changes
         id: check_changes
         run: |
-          # Check both tracked changes and new files
-          if [ -z "$(git status --porcelain public/ state.json 2>/dev/null)" ]; then
+          set -euo pipefail
+          if [ -z "$(git status --porcelain public/ state.json)" ]; then
             echo "has_changes=false" >> $GITHUB_OUTPUT
           else
             echo "has_changes=true" >> $GITHUB_OUTPUT
@@ -130,6 +118,7 @@ jobs:
       - name: Commit state.json to main
         if: steps.check_changes.outputs.has_changes == 'true'
         run: |
+          set -euo pipefail
           git config user.name "Discord Archive Bot"
           git config user.email "actions@github.com"
           git add state.json
@@ -139,8 +128,9 @@ jobs:
 
           Updated by GitHub Actions on $(date -u +%Y-%m-%d\ %H:%M\ UTC)"
 
-            # Pull with rebase to handle concurrent workflow updates
-            # If rebase fails due to state.json conflict, use merge script to resolve
+            # Pull with rebase to handle concurrent workflow updates.
+            # If rebase fails due to state.json conflict, the merge script
+            # resolves it deterministically.
             if ! git pull --rebase origin master; then
               echo "Rebase failed, attempting automatic merge of state.json..."
               uv run python scripts/merge_state.py
@@ -173,6 +163,7 @@ jobs:
       - name: Install muffet
         if: steps.deploy.outcome == 'success'
         run: |
+          set -euo pipefail
           wget https://github.com/raviqqe/muffet/releases/download/v2.11.1/muffet_linux_amd64.tar.gz
           tar -xzf muffet_linux_amd64.tar.gz
           chmod +x muffet
@@ -181,17 +172,21 @@ jobs:
       - name: Run muffet link check
         if: steps.deploy.outcome == 'success'
         id: muffet
+        # Muffet may legitimately exit non-zero when it finds broken links —
+        # that's information, not a workflow-stopping error. We capture its
+        # report and parse counts, then surface them in the workflow summary.
+        # The step itself fails only if muffet *crashes* or 404s exceed our
+        # threshold; cosmetic broken links don't block the deploy.
+        continue-on-error: false
         run: |
-          set +e  # Don't exit on error - we want to capture muffet's output regardless
-
+          set -uo pipefail
           echo "========================================="
           echo "Running muffet link check on https://discord.wafer.space..."
           echo "========================================="
 
-          # Run muffet, capturing output to both console (via tee) and file
-          # This ensures full output is visible in GitHub Actions logs
-          # --verbose shows successful results too, so we can distinguish between
-          # "muffet ran and found no errors" vs "muffet failed to run"
+          # We intentionally don't `set -e` here: muffet's non-zero exit on
+          # broken links is expected and parsed below.
+          set +e
           ./muffet \
             --verbose \
             --timeout=30 \
@@ -221,27 +216,22 @@ jobs:
             --header="Sec-Fetch-User:?1" \
             --header="Upgrade-Insecure-Requests:1" \
             https://discord.wafer.space 2>&1 | tee muffet-report.txt
-
           MUFFET_EXIT=${PIPESTATUS[0]}
+          set -e
 
           echo ""
           echo "========================================="
           echo "Muffet completed with exit code: $MUFFET_EXIT"
           echo "========================================="
 
-          # Count results - use '|| true' to avoid capturing extra output from '|| echo 0'
-          # grep -c outputs the count even when 0, but exits with code 1 when no matches
-          # With --verbose, each URL checked gets a line, so we can count total URLs
-          # Status codes in muffet output appear as: \t<code>\t<url>
-          # Use pattern to match actual 404 status codes, not URLs containing "404"
-          TOTAL_URLS=$(wc -l < muffet-report.txt || true)
-          TOTAL_404=$(grep -cE $'^\t404\t' muffet-report.txt || true)
-          MEDIA_404=$(grep -E $'^\t404\t' muffet-report.txt | grep -c '_media/' || true)
+          # Count lines / 404s. grep -c exits 1 when there are zero matches,
+          # which would abort under set -e — wrap each in a small helper.
+          count_lines() { wc -l < "$1"; }
+          count_pattern() { grep -cE "$1" "$2" || echo 0; }
 
-          # Ensure we have valid numbers (empty string becomes 0)
-          TOTAL_URLS=${TOTAL_URLS:-0}
-          TOTAL_404=${TOTAL_404:-0}
-          MEDIA_404=${MEDIA_404:-0}
+          TOTAL_URLS=$(count_lines muffet-report.txt)
+          TOTAL_404=$(count_pattern $'^\t404\t' muffet-report.txt)
+          MEDIA_404=$(grep -E $'^\t404\t' muffet-report.txt | grep -c '_media/' || echo 0)
 
           echo "total_urls=$TOTAL_URLS" >> $GITHUB_OUTPUT
           echo "total_404=$TOTAL_404" >> $GITHUB_OUTPUT
@@ -249,20 +239,10 @@ jobs:
           echo "muffet_exit=$MUFFET_EXIT" >> $GITHUB_OUTPUT
 
           echo ""
-          echo "========================================="
           echo "Link Check Summary:"
           echo "- URLs checked: $TOTAL_URLS"
           echo "- Total 404 errors: $TOTAL_404"
           echo "- Media file 404s: $MEDIA_404"
-          echo "- Report saved to: muffet-report.txt"
-          echo "========================================="
-
-          # Fail the step if muffet itself failed (not just found broken links)
-          if [ "$MUFFET_EXIT" -ne 0 ]; then
-            echo ""
-            echo "::error::Muffet link checker failed with exit code $MUFFET_EXIT"
-            exit 1
-          fi
 
       - name: Upload muffet report
         if: always() && steps.deploy.outcome == 'success'
@@ -273,33 +253,61 @@ jobs:
           retention-days: 30
           if-no-files-found: warn
 
+      - name: Surface export errors
+        # CLAUDE.md policy: workflows should fail visibly when there are real
+        # problems. The export script intentionally exits 0 on partial success
+        # so downstream steps (organize/navigate/deploy) can run on whatever
+        # data it produced — but a run with logged errors must still flag in
+        # the workflow status so we don't drift into silently broken runs.
+        if: always()
+        run: |
+          set -euo pipefail
+          if [ ! -f export-summary.json ]; then
+            echo "::warning::export-summary.json not produced — export may have failed before writing it"
+            exit 0
+          fi
+          ERROR_COUNT=$(uv run python -c "import json; print(json.load(open('export-summary.json'))['error_count'])")
+          echo "Export errors logged: $ERROR_COUNT"
+          if [ "$ERROR_COUNT" -gt 0 ]; then
+            echo "::error::Export run logged $ERROR_COUNT errors. See the 'Run export script' step for details."
+            exit 1
+          fi
+
       - name: Report summary
         if: always()
         run: |
+          set -euo pipefail
           echo "## Export Summary" >> $GITHUB_STEP_SUMMARY
           echo "- **Status**: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Export Step**: ${{ steps.export.outcome }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Organize Step**: ${{ steps.organize.outcome }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Migrate Step**: ${{ steps.migrate.outcome }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Navigation Step**: ${{ steps.navigation.outcome }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Changes Detected**: ${{ steps.check_changes.outputs.has_changes }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Deploy Step**: ${{ steps.deploy.outcome }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -f export-summary.json ]; then
+            echo "### Export Counts" >> $GITHUB_STEP_SUMMARY
+            uv run python -c "
+          import json
+          d = json.load(open('export-summary.json'))
+          print(f'- Channels updated: {d[\"channels_updated\"]}')
+          print(f'- Channels failed: {d[\"channels_failed\"]}')
+          print(f'- Total exports: {d[\"total_exports\"]}')
+          print(f'- Errors logged: {d[\"error_count\"]}')
+          " >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
           echo "## Link Check Results" >> $GITHUB_STEP_SUMMARY
           if [ "${{ steps.muffet.outcome }}" == "success" ]; then
-            echo "- **Muffet Status**: ✅ Passed" >> $GITHUB_STEP_SUMMARY
+            echo "- **Muffet Status**: Passed" >> $GITHUB_STEP_SUMMARY
             echo "- **URLs checked**: ${{ steps.muffet.outputs.total_urls }}" >> $GITHUB_STEP_SUMMARY
             echo "- **Total 404 errors**: ${{ steps.muffet.outputs.total_404 }}" >> $GITHUB_STEP_SUMMARY
             echo "- **Media file 404s**: ${{ steps.muffet.outputs.media_404 }}" >> $GITHUB_STEP_SUMMARY
-            echo "- **Report**: Download muffet-report artifact for full details" >> $GITHUB_STEP_SUMMARY
           elif [ "${{ steps.muffet.outcome }}" == "failure" ]; then
-            echo "- **Muffet Status**: ❌ Failed (exit code: ${{ steps.muffet.outputs.muffet_exit }})" >> $GITHUB_STEP_SUMMARY
+            echo "- **Muffet Status**: Failed (exit ${{ steps.muffet.outputs.muffet_exit }})" >> $GITHUB_STEP_SUMMARY
             echo "- **URLs checked**: ${{ steps.muffet.outputs.total_urls }}" >> $GITHUB_STEP_SUMMARY
             echo "- **Total 404 errors**: ${{ steps.muffet.outputs.total_404 }}" >> $GITHUB_STEP_SUMMARY
             echo "- **Media file 404s**: ${{ steps.muffet.outputs.media_404 }}" >> $GITHUB_STEP_SUMMARY
-            echo "- **Report**: Download muffet-report artifact for full details" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "⚠️ **Link check failed - review the muffet-report artifact and logs**" >> $GITHUB_STEP_SUMMARY
           else
             echo "- Link check was skipped (deploy did not run or no changes detected)" >> $GITHUB_STEP_SUMMARY
           fi

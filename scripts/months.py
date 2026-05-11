@@ -15,6 +15,7 @@ correct month-based partitioning:
 """
 
 import re
+from collections.abc import Iterator
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -25,6 +26,9 @@ DISCORD_EPOCH_MS = 1420070400000
 # Snowflakes are 64-bit integers; the top 42 bits encode milliseconds since
 # the Discord epoch. The bottom 22 bits encode worker/process/sequence info.
 SNOWFLAKE_TIMESTAMP_SHIFT = 22
+
+# December wraps to January of the next year when stepping forward by one.
+LAST_MONTH = 12
 
 # YYYY-MM matches a 4-digit year, hyphen, 2-digit month (01-12).
 _MONTH_RE = re.compile(r"^(\d{4})-(0[1-9]|1[0-2])$")
@@ -55,7 +59,7 @@ def month_bounds(month: str) -> tuple[str, str]:
     year, mon = _parse_month(month)
     start = datetime(year, mon, 1, tzinfo=timezone.utc)
     # First instant of the month after `month`.
-    next_year, next_mon = (year + 1, 1) if mon == 12 else (year, mon + 1)
+    next_year, next_mon = (year + 1, 1) if mon == LAST_MONTH else (year, mon + 1)
     end = datetime(next_year, next_mon, 1, tzinfo=timezone.utc)
     # Subtract 1 microsecond so the after-bound is exclusive-just-before-start.
     after = (start - timedelta(microseconds=1)).isoformat()
@@ -63,7 +67,7 @@ def month_bounds(month: str) -> tuple[str, str]:
     return after, before
 
 
-def month_range_iter(start_month: str, end_month: str):
+def month_range_iter(start_month: str, end_month: str) -> Iterator[str]:
     """Yield each month string from start to end inclusive, in order.
 
     If end is before start, yields nothing (rather than raising) — this lets
@@ -75,7 +79,7 @@ def month_range_iter(start_month: str, end_month: str):
     year, mon = start_year, start_mon
     while (year, mon) <= (end_year, end_mon):
         yield f"{year:04d}-{mon:02d}"
-        year, mon = (year + 1, 1) if mon == 12 else (year, mon + 1)
+        year, mon = (year + 1, 1) if mon == LAST_MONTH else (year, mon + 1)
 
 
 def snowflake_to_datetime(snowflake: str) -> datetime:

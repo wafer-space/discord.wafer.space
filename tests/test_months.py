@@ -1,6 +1,7 @@
 """Tests for the months module: month range computation and snowflake conversion."""
 
 from datetime import datetime, timezone
+from pathlib import Path
 from unittest.mock import patch
 
 import pytest
@@ -12,6 +13,14 @@ from scripts.months import (
     snowflake_to_datetime,
     snowflake_to_month,
 )
+
+# Test constants
+WAFER_SPACE_YEAR = 2025
+WAFER_SPACE_MONTH = 4
+JAN_2020_YEAR = 2020
+JAN_2020_MONTH = 1
+JAN_2020_DAY = 1
+THREE_MONTHS = 3
 
 
 def test_month_bounds_february_2026() -> None:
@@ -53,6 +62,7 @@ def test_month_range_iter_three_months() -> None:
     """Iterating from 2026-01 to 2026-03 should yield three months in order."""
     months = list(month_range_iter("2026-01", "2026-03"))
     assert months == ["2026-01", "2026-02", "2026-03"]
+    assert len(months) == THREE_MONTHS
 
 
 def test_month_range_iter_same_month() -> None:
@@ -81,8 +91,8 @@ def test_snowflake_to_datetime_wafer_space_guild() -> None:
     """
     dt = snowflake_to_datetime("1361349522684510449")
     assert dt.tzinfo is not None
-    assert dt.year == 2025
-    assert dt.month == 4
+    assert dt.year == WAFER_SPACE_YEAR
+    assert dt.month == WAFER_SPACE_MONTH
 
 
 def test_snowflake_to_datetime_known_value() -> None:
@@ -96,9 +106,9 @@ def test_snowflake_to_datetime_known_value() -> None:
     # 2020-01-01 00:00:00 UTC
     sf = str((1577836800000 - 1420070400000) << 22)
     dt = snowflake_to_datetime(sf)
-    assert dt.year == 2020
-    assert dt.month == 1
-    assert dt.day == 1
+    assert dt.year == JAN_2020_YEAR
+    assert dt.month == JAN_2020_MONTH
+    assert dt.day == JAN_2020_DAY
 
 
 def test_snowflake_to_datetime_rejects_non_numeric() -> None:
@@ -138,7 +148,7 @@ def test_is_month_dir_name() -> None:
     assert is_month_dir_name("") is False
 
 
-def test_scan_completed_months_finds_month_directories(tmp_path) -> None:
+def test_scan_completed_months_finds_month_directories(tmp_path: Path) -> None:
     """scan_completed_months returns months that have a non-empty HTML file."""
     from scripts.months import scan_completed_months
 
@@ -159,7 +169,7 @@ def test_scan_completed_months_finds_month_directories(tmp_path) -> None:
     assert completed == {"2026-01", "2026-02"}
 
 
-def test_scan_completed_months_empty_when_dir_missing(tmp_path) -> None:
+def test_scan_completed_months_empty_when_dir_missing(tmp_path: Path) -> None:
     """A missing channel directory has no completed months."""
     from scripts.months import scan_completed_months
 

@@ -24,6 +24,7 @@ keep historical messages even if a future re-export trims a range.
 import json
 import shutil
 import sys
+from collections.abc import Iterator
 from pathlib import Path
 from typing import Any
 
@@ -117,11 +118,7 @@ def _update_latest_symlink(public_channel_dir: Path) -> None:
     a symlink for each extension that exists in the most recent month.
     """
     months = sorted(
-        (
-            d.name
-            for d in public_channel_dir.iterdir()
-            if d.is_dir() and is_month_dir_name(d.name)
-        ),
+        (d.name for d in public_channel_dir.iterdir() if d.is_dir() and is_month_dir_name(d.name)),
         reverse=True,
     )
     if not months:
@@ -137,7 +134,7 @@ def _update_latest_symlink(public_channel_dir: Path) -> None:
         link.symlink_to(f"{newest}/{newest}.{ext}")
 
 
-def _iter_channel_dirs(exports_dir: Path):
+def _iter_channel_dirs(exports_dir: Path) -> Iterator[Path]:
     """Yield each directory that directly contains `YYYY-MM.<ext>` files.
 
     A channel directory is the leaf level of the export tree: it may be
@@ -155,7 +152,7 @@ def _iter_channel_dirs(exports_dir: Path):
                 break  # one match is enough to mark this directory
 
 
-def _walk_paths(top: Path):
+def _walk_paths(top: Path) -> Iterator[tuple[Path, list[str], list[str]]]:
     """Yield (root_path, [dir_names], [file_names]) like os.walk but with Paths."""
     stack = [top]
     while stack:
@@ -253,9 +250,10 @@ def organize_exports(
 
 
 def cleanup_exports(exports_dir: Path | None = None) -> None:
-    """Delete per-month files from `exports_dir`. Safe to run after a successful
-    organize pass; preserves directory structure so the next export run lands
-    in the same place.
+    """Delete per-month files from `exports_dir`.
+
+    Safe to run after a successful organize pass; preserves directory
+    structure so the next export run lands in the same place.
     """
     if exports_dir is None:
         exports_dir = Path("exports")

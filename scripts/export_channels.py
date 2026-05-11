@@ -167,9 +167,10 @@ def _export_one_month(
 
     Returns (exports_completed, failures, errors).
     """
-    after, before = month_bounds(month)
-    if is_current_month:
-        before = None  # include up to "now", not just the end of the month
+    after, before_bound = month_bounds(month)
+    # For the current month we omit --before so newly-arrived messages are
+    # included (DCE captures everything from `after` up to its API "now").
+    before: str | None = None if is_current_month else before_bound
 
     media_dir_path = channel_export_dir / f"{month}_media"
     download_media = context.config["export"].get("download_media", False)
@@ -290,7 +291,7 @@ def _update_channel_state_after_export(
         )
 
 
-def _process_single_channel(  # noqa: PLR0913  # Orchestration function needs all context
+def _process_single_channel(  # noqa: PLR0913,PLR0911  # Orchestration needs all context
     context: ChannelExportContext,
     channel: dict[str, str | None],
     channel_type: ChannelType,
@@ -363,7 +364,8 @@ def _process_single_channel(  # noqa: PLR0913  # Orchestration function needs al
         print("    (no months need export)")
         return 0, 1, 0, []
 
-    print(f"    {len(months_to_export)} months to export: {months_to_export[0]}..{months_to_export[-1]}")
+    range_label = f"{months_to_export[0]}..{months_to_export[-1]}"
+    print(f"    {len(months_to_export)} months to export: {range_label}")
 
     total_exports = 0
     total_failures = 0

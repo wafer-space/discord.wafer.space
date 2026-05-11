@@ -243,20 +243,10 @@ def test_organize_exports_handles_forum_threads() -> None:
         organize_exports(exports, public)
 
         assert (
-            public
-            / "test-server"
-            / "questions"
-            / "how-to-start"
-            / "2026-05"
-            / "2026-05.html"
+            public / "test-server" / "questions" / "how-to-start" / "2026-05" / "2026-05.html"
         ).exists()
         assert (
-            public
-            / "test-server"
-            / "questions"
-            / "help-needed"
-            / "2026-04"
-            / "2026-04.html"
+            public / "test-server" / "questions" / "help-needed" / "2026-04" / "2026-04.html"
         ).exists()
 
 

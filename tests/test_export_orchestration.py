@@ -3,6 +3,7 @@
 
 import os
 import tempfile
+from collections.abc import Iterator
 from contextlib import contextmanager
 from pathlib import Path
 from typing import Any
@@ -13,10 +14,14 @@ from scripts.export_channels import export_all_channels, run_export
 # Test constants
 EXPECTED_EXPORTS_TWO_CHANNELS = 2
 EXPECTED_EXPORTS_FOUR_FORMATS = 4
+EXPECTED_EXPORTS_TWO_CHANNELS_THREE_MONTHS = 6
+EXPECTED_EXPORTS_ONE_CHANNEL_THREE_MONTHS_FOUR_FORMATS = 12
+EXPECTED_MONTHS_TWO = 2
+EXPECTED_THREADS_TWO_THREE_MONTHS = 6
 
 
 @contextmanager
-def fixed_months(creation_month: str = "2025-12", current_month: str = "2026-02"):
+def fixed_months(creation_month: str = "2025-12", current_month: str = "2026-02") -> Iterator[None]:
     """Pin month-related primitives so per-month tests have predictable counts.
 
     With creation "2025-12" and current "2026-02", the export loop visits
@@ -27,9 +32,7 @@ def fixed_months(creation_month: str = "2025-12", current_month: str = "2026-02"
     with patch("scripts.export_channels.snowflake_to_month", return_value=creation_month):
         with patch("scripts.export_channels.current_month_utc", return_value=current_month):
             with patch("scripts.export_channels.scan_completed_months", return_value=set()):
-                with patch(
-                    "scripts.export_channels._discard_if_empty_month", return_value=None
-                ):
+                with patch("scripts.export_channels._discard_if_empty_month", return_value=None):
                     yield
 
 
@@ -262,7 +265,10 @@ commit_author = "Test Bot"
                                 summary = export_all_channels()
 
                                 # 2 channels × 3 months × 1 format = 6 exports
-                                assert summary["total_exports"] == 6
+                                assert (
+                                    summary["total_exports"]
+                                    == EXPECTED_EXPORTS_TWO_CHANNELS_THREE_MONTHS
+                                )
 
         del os.environ["DISCORD_BOT_TOKEN"]
 
@@ -305,7 +311,10 @@ commit_author = "Test Bot"
                                 summary = export_all_channels()
 
                                 # 1 channel × 3 months × 4 formats = 12 exports
-                                assert summary["total_exports"] == 12
+                                assert (
+                                    summary["total_exports"]
+                                    == EXPECTED_EXPORTS_ONE_CHANNEL_THREE_MONTHS_FOUR_FORMATS
+                                )
 
         del os.environ["DISCORD_BOT_TOKEN"]
 
@@ -351,7 +360,7 @@ commit_author = "Test Bot"
                                     export_all_channels()
 
                                     # Two months, one format = two calls
-                                    assert mock_format.call_count == 2
+                                    assert mock_format.call_count == EXPECTED_MONTHS_TWO
 
                                     # January call uses both --after and --before
                                     jan_call = mock_format.call_args_list[0]
@@ -559,7 +568,7 @@ commit_author = "Test Bot"
                                 summary = export_all_channels()
 
                                 # 2 threads × 3 months × 1 format = 6 exports
-                                assert summary["total_exports"] == 6
+                                assert summary["total_exports"] == EXPECTED_THREADS_TWO_THREE_MONTHS
 
         del os.environ["DISCORD_BOT_TOKEN"]
 
@@ -686,8 +695,10 @@ commit_author = "Test Bot"
                                     assert len(thread_calls) == 1
                                     # Current month bracket: --after just before
                                     # 2026-02-01, --before is None (capture up to "now").
-                                    assert thread_calls[0].kwargs["after_timestamp"].startswith(
-                                        "2026-01-31"
+                                    assert (
+                                        thread_calls[0]
+                                        .kwargs["after_timestamp"]
+                                        .startswith("2026-01-31")
                                     )
                                     assert thread_calls[0].kwargs["before_timestamp"] is None
 
