@@ -2,8 +2,669 @@
 Guild: wafer.space Community
 Channel: Information / fpgas-online
 Topic: Channel for continued development of https://fpgas.online
-After: 02/23/2026 02:36
+After: 01/31/2026 23:59
+Before: 03/01/2026 00:00
 ==============================================================
+
+[02/01/2026 01:21] carlfk
+well.. my boxes aren't configed for v6.  but I suspect I can dhcp6 or something
+
+
+[02/01/2026 06:59] tishamdhar
+@bunnie I am wiring up the CH347 to the NeTV2, will make a wiring diagram as part of making it work with Raspberry Pi 5, does the netv2 have an on board JTAG chip / programming port ? On the JTAG port attached to the Raspberry Pi is the RST pin equivalent of SRST on JTAG ?
+
+
+[02/01/2026 07:01] tishamdhar
+
+
+{Attachments}
+2026-02_media/PXL_20260201_070058021-2F927.jpg
+2026-02_media/PXL_20260201_070036151-0847D.jpg
+2026-02_media/PXL_20260201_070011214.MP-327DC.jpg
+2026-02_media/PXL_20260201_070008417.MP-D276A.jpg
+2026-02_media/PXL_20260201_070016906-E8335.jpg
+
+
+[02/01/2026 08:12] bunnievorpal
+the ⁨`RES`⁩ pin next to GND goes to PROGRAM_B on the FPGA
+
+
+[02/01/2026 08:12] bunnievorpal
+in other words, holding that low will fully reset the FPGA and cause it to reload its bitstream
+
+
+[02/01/2026 08:12] bunnievorpal
+it's not a jtag reset
+
+
+[02/01/2026 08:12] bunnievorpal
+it's a full system reset
+
+
+[02/02/2026 05:40] mithro_
+The IP address changes are needed due to changes in my networking.
+
+
+[02/02/2026 05:41] mithro_
+@bunnie - I notice the boards have that USB connector and chip, is that just a UART or could that be used to program things too? @Tisham Dhar (CSIRO EASI)  Does that USB exist on the 35t boards too?
+
+
+[02/02/2026 05:43] tishamdhar
+Yea the 35T has an FTDI chip and a USB connector, I was wondering if that was an on-board JTAG
+
+
+[02/02/2026 05:43] tishamdhar
+I haven't tested the CH347 with 35T yet. Was just confirming the wiring
+
+
+[02/02/2026 05:48] bunnievorpal
+you mean the microUSB connector to the right of the HDMI connector? it's just a pair of FPGA pins brought out to a microUSB.
+
+
+[02/02/2026 05:49] bunnievorpal
+i think the idea is that if you wanted to add e.g. a valentyUSB core to it you could do so
+
+
+[02/02/2026 08:08] tishamdhar
+
+
+{Attachments}
+2026-02_media/PXL_20260202_080734145-963CA.jpg
+
+
+[02/02/2026 08:08] tishamdhar
+I mean this one on the 35T
+
+
+[02/04/2026 00:20] tishamdhar
+Tried flashing the NeTV2 with my CH347T, no joy, raspberry pi does pick it up as a JTAG+UART, so that's a win. Could I please get a definitive wiring diagram from the CH347 to the NeTV2 JTAG port.
+
+
+[02/04/2026 00:21] tishamdhar
+The images above should have all the footprints and pinouts. My instinct on how JTAG wiring works seems off and the Captain DMA boards which using CH347 JTAG don't have open designs.
+
+
+[02/04/2026 02:13] mithro_
+@Tisham Dhar (CSIRO EASI) - I would expect that if OpenOCD is able to do things like read the FPGA ID and then program the SPI flashing gateware to write to the spi flash you have things connected correctly.
+
+
+[02/04/2026 02:13] mithro_
+@Tisham Dhar (CSIRO EASI) - It might also be worth trying with the Xilinx JTAG adapter first too.
+
+
+[02/04/2026 05:54] tishamdhar
+The programmer is not so much an issue as wiring it up correctly.
+
+
+[02/04/2026 05:54] tishamdhar
+The FPGA if fetched is not correct indicating I haven't mapped it nicely
+
+
+[02/05/2026 19:17] carlfk
+https://github.com/CarlFK/pici/wiki/ServerSetup  that image, you made the first version.  maybe that version. Any idea where the source is?
+
+{Embed}
+https://github.com/CarlFK/pici/wiki/ServerSetup
+ServerSetup
+Contribute to CarlFK/pici development by creating an account on GitHub.
+2026-02_media/0084b929-8b65-464b-b79a-9e5266256fcb-CE1FE
+
+
+[02/05/2026 20:58] mithro_
+@carlfk - That was a Google Drawing - I believe it is in the folder @ https://drive.google.com/drive/folders/103OYiqZFsTi16W23VrjE-Wm-A9bftEVj?usp=drive_link
+
+{Embed}
+https://drive.google.com/drive/folders/103OYiqZFsTi16W23VrjE-Wm-A9bftEVj?usp=drive_link
+
+
+[02/05/2026 21:23] mithro_
+@Tisham Dhar (CSIRO EASI) - Did you ever see this diagram -> https://docs.google.com/drawings/d/1N9guhJIMGBHqsPUN32olwNP8XzjwhM52Qibt6FMoyq0/edit ?
+
+{Embed}
+https://docs.google.com/drawings/d/1N9guhJIMGBHqsPUN32olwNP8XzjwhM52Qibt6FMoyq0/edit
+NeTV2 + RPi CI System
+PoE+ provides power. System power cycled via switch PoE+ API. RPi netboot, no local state. USB Ethernet
+2026-02_media/AHkbwyIx7HPJqNeluj1LHjIdVbz1AU5FzuiTkwR5V4-00F02
+
+
+[02/05/2026 21:26] mithro_
+@carlfk - Doesn't look like that diagram ended up in that folder...
+
+
+[02/05/2026 21:27] carlfk
+agreeed. it was made long before fpgas.online was regeisted
+
+
+[02/05/2026 21:28] carlfk
+search your drive for "Independent" - and page though the 100 hits :p
+
+
+[02/05/2026 21:29] carlfk
+really this was to give you a starting point for explaing your IP address needs
+
+
+[02/07/2026 11:24] tishamdhar
+
+
+{Attachments}
+2026-02_media/PXL_20260207_112150582-045FE.jpg
+2026-02_media/PXL_20260207_112203445-7E37E.mp4
+
+
+[02/07/2026 11:26] tishamdhar
+The GPIO for programming in that diagram is not feasible. I am trying to replace it with CH347 over USB
+
+
+[02/08/2026 02:27] mithro_
+@Tisham Dhar (CSIRO EASI) - I was really talking about all the other connections
+
+
+[02/08/2026 09:46] tishamdhar
+All other connections seem to work and should be part of the build.
+
+
+[02/13/2026 22:21] mithro_
+@carlfk -
+
+{Attachments}
+2026-02_media/image-CC17C.png
+
+
+[02/13/2026 22:24] carlfk
+\o/
+
+
+[02/13/2026 22:28] carlfk
+did you make the font smaler or something?  There seems to be more chars in the shell terminal
+
+
+[02/13/2026 23:20] carlfk
+@Tim 'mithro' Ansell now we get to play Why doesn't it boot?
+
+
+[02/13/2026 23:21] carlfk
+https://welland.fpgas.online/fpgas/pi25.html  the Pi did a dhcp request, evidance is the server responce:
+
+
+[02/13/2026 23:21] carlfk
+4:38:26 PM: dnsmasq: dhcp old b8:27:eb:47:9f:d1 10.31.0.125 pi25 rpi-47-9f-d1
+
+
+[02/13/2026 23:32] carlfk
+I'm ssh to tweed.  I can guess the setup, but a diagram might be nice
+
+
+[02/14/2026 03:43] mithro_
+@carlfk - I wouldn't touch tweed at the moment, I'm trying to get the AI to summarize the changes it made
+
+
+[02/14/2026 19:57] carlfk
+@Tim 'mithro' Ansell have it make digrams untill it matches how you connected the wires :p
+
+
+[02/14/2026 19:57] carlfk
+I'm a little affraid you have 2 dhcp servers on the same ... subnet?  lan?  whatever you don't want
+
+
+[02/14/2026 23:14] mithro_
+I think I have fixed that with vlans, but there are some complications.
+
+
+[02/14/2026 23:15] carlfk
+I think AI broke it beyond repair
+
+
+[02/14/2026 23:18] carlfk
+https://github.com/CarlFK/pici/blob/main/ansible/roles/pxe/templates/pibs.conf.j2
+
+{Embed}
+https://github.com/CarlFK/pici/blob/main/ansible/roles/pxe/templates/pibs.conf.j2
+pici/ansible/roles/pxe/templates/pibs.conf.j2 at main · CarlFK/pici
+Contribute to CarlFK/pici development by creating an account on GitHub.
+2026-02_media/0084b929-8b65-464b-b79a-9e5266256fcb-CE1FE
+
+
+[02/14/2026 23:18] carlfk
+# 4th IP octet = 100+index x.y.z.103
+
+
+[02/14/2026 23:19] carlfk
+dhcp-range=10.31.0.128,10.31.0.254,255.255.0.0,12h
+
+
+[02/14/2026 23:19] carlfk
+100 to 127 are ... I have no idea what happens.
+
+
+[02/15/2026 03:07] mithro_
+@carlfk - I'm going to rework my home network so that the fpgas and IPs stay at 10.31.X.X rather than having to move to 10.41.X.X which should reduce the curn in the pici ansible
+
+
+[02/15/2026 03:08] carlfk
+im still curious what you are trying to do
+
+
+[02/15/2026 03:08] mithro_
+Oh, wait it looks like pici uses 10.21.X.X ?
+
+
+[02/15/2026 03:10] carlfk
+correct
+
+
+[02/15/2026 03:14] mithro_
+I'm trying to fit an "isolated network" of the fpgas.online hardware into my home network which is also trying isolate the supermicro BMC/coreboot hardware, the IoT network, the guest network and such. The goal is to prevent accidental exposure of my servers to devices which random people can connect too.
+
+
+[02/15/2026 03:16] carlfk
+the PIs and everyting else on the same PoE switch?
+
+
+[02/15/2026 03:17] mithro_
+Internet --> ten64.welland.mithis.com (gateway machine) --> Random networking hardware --> tweed --> PoE switch --> RPis
+
+
+[02/15/2026 03:17] mithro_
+@carlfk - And unlike in the US, I only have one public static IPv4 address rather than a small number of them.
+
+
+[02/15/2026 03:20] carlfk
+I suspect it will be easier to put tweed in place of ten64
+
+
+[02/15/2026 03:22] carlfk
+but if you have figured out how to tunnel to tweed, good.
+
+
+[02/15/2026 03:25] mithro_
+@carlfk - I can't do that because I need ten64 for my home network. As I said, unlike in Sunnyvale where I could give tweed a public IPv4 address I can't do that here.
+
+
+[02/15/2026 03:26] mithro_
+I also have the problem that tweed and the fpgas are a *long* way away from the internet ingress point, so there is a bunch of networking equipment between the gateway and tweed.
+
+
+[02/15/2026 03:30] carlfk
+long = too long for a run of cat5?
+
+
+[02/15/2026 03:30] carlfk
+im not really sure what the real limit is
+
+
+[02/15/2026 03:31] carlfk
+is outgoing byte count something to wory about?
+
+
+[02/15/2026 03:32] carlfk
+the home page of videos are not scaled server side - I send the full res and the player is shurnk
+
+
+[02/15/2026 03:57] mithro_
+The site has 1Gbs down / 100Mbit up
+
+
+[02/15/2026 03:58] mithro_
+I think a cat6 cable might just reach but it'll be a while before I can run that cable.
+
+
+[02/15/2026 20:59] carlfk
+@Tim 'mithro' Ansell how easy can you hook up 2 TT boards (different runs) to anything I can ssh to.  tweed or a arty pi.  or whatever.  something I can text how to address differenrt boards
+
+
+[02/15/2026 20:59] carlfk
+the one board I have online can us /dev/serial/by-id/usb-MicroPython_Board_in_FS_mode_de640cb1d3975a26-if00
+
+
+[02/15/2026 21:00] carlfk
+I'm wondering how unique  de640cb1d3975a26
+
+
+[02/15/2026 23:24] mithro_
+@carlfk If you remind me on Wednesday, it should be pretty easy in theory.
+
+{Reactions}
+👍
+
+[02/15/2026 23:27] mithro_
+I"m up at Monarto setting things for my parents until late tomorrow.
+
+
+[02/15/2026 23:27] carlfk
+@Tim 'mithro' Ansell I need help - I think git sub-modules is the answer.
+
+
+[02/15/2026 23:27] mithro_
+git submodules is an answer, it is rarely a good answer despite how much we use it 😛
+
+{Reactions}
+😆
+
+[02/15/2026 23:28] carlfk
+to boot Kianv o tt6, I need this stuff https://github.com/CarlFK/tt-commander-app/blob/feature/cli_bl910/src/ttcontrol/cli/boot_kianv_ulinux.sh
+
+{Embed}
+https://github.com/CarlFK/tt-commander-app/blob/feature/cli_bl910/src/ttcontrol/cli/boot_kianv_ulinux.sh
+tt-commander-app/src/ttcontrol/cli/boot_kianv_ulinux.sh at feature/...
+Web app to control the Tiny Tapeout Demo board. Contribute to CarlFK/tt-commander-app development by creating an account on GitHub.
+2026-02_media/tt-commander-app-2980D
+
+
+[02/15/2026 23:29] carlfk
+part of the problem is the Arty fpga thing expanded to TT, and kinda just the 1 Kianv thing
+
+
+[02/15/2026 23:45] mithro_
+@carlfk - My plan is that when @Matt Venn and friends finish the TT FPGA emulation board, then we will have a bunch of those in the pool.
+
+
+[02/15/2026 23:45] mithro_
+@carlfk - I'm not game to do the vlan rename to fix the IP address stuff while I'm remote 😛
+
+
+[02/15/2026 23:51] carlfk
+@Tim 'mithro' Ansell im still stuck on how to get little_term.py on or close to the rp2040
+
+
+[02/15/2026 23:52] mithro_
+`little_term.py` meaning `litex_term.py` or?
+
+
+[02/15/2026 23:57] carlfk
+https://github.com/CarlFK/tt-commander-app/blob/feature/cli_bl910/src/ttcontrol/cli/little_term.py
+
+{Embed}
+https://github.com/CarlFK/tt-commander-app/blob/feature/cli_bl910/src/ttcontrol/cli/little_term.py
+tt-commander-app/src/ttcontrol/cli/little_term.py at feature/cli_bl...
+Web app to control the Tiny Tapeout Demo board. Contribute to CarlFK/tt-commander-app development by creating an account on GitHub.
+2026-02_media/tt-commander-app-2980D
+
+
+[02/15/2026 23:58] carlfk
+your ssh client -network- Pi -usb serial- RP2040 -uart serial- TT06 / 910 (KianV Linux)
+
+
+[02/15/2026 23:59] carlfk
+little_term.py runs on RP2040 to connect  Pi -usb serial- to -uart serial- TT06
+
+
+[02/16/2026 00:02] carlfk
+`mpremote fs cp little_term.py :` is the final step to install it, but none of the steps are automated.
+
+
+[02/16/2026 00:03] carlfk
+I'm trying to make it part of https://github.com/CarlFK/pici/wiki/Install
+
+{Embed}
+https://github.com/CarlFK/pici/wiki/Install
+Install
+Contribute to CarlFK/pici development by creating an account on GitHub.
+2026-02_media/0084b929-8b65-464b-b79a-9e5266256fcb-CE1FE
+
+
+[02/16/2026 01:53] mithro_
+@carlfk - I think your text diagram is a little bit hard to understand?
+
+Is this what you mean?
+`<something> <-????-> ssh client <- network -> RPi <- usb serial -> RP2040 <- UART serial -> TT06 Chip (Running 910 - KianV Linux)`
+
+
+[02/16/2026 01:54] mithro_
+BTW I have been learning about conserver which seems to be a tool for sharing serial ports over the network and supports things like multiple connections, logging the output and such.....
+
+
+[02/16/2026 01:56] mithro_
+I've recently started getting it working with the BMC serial over lan ports and also the USB-serial adapter on a RPi Zero which is connected to the consoles on my netgear network switches
+
+
+[02/16/2026 02:38] carlfk
+yes - as long as you understand what little_term.py does
+
+
+[02/16/2026 02:39] carlfk
+What is BMC serial?
+
+
+[02/16/2026 02:40] mithro_
+BMC == Board Management Controller -- it's a little Linux computer that is found on server motherboards which allows you to remotely access things like the power buttons, virtual vga screen, virtual serial port, etc....
+
+
+[02/16/2026 02:47] carlfk
+ok - I undersatnd BMC - how does serial fit in?
+
+
+[02/16/2026 02:52] mithro_
+The BMC lets you connect to the computer's serial port so you can see things like very early BIOS messages or if the linux running on the system is configured correctly even a console. Provides a way to get access to the machine when SSH isn't working or similar. I wanted computers like tweed to output dmesg messages to their serial port and log them so I could see things like kernal panics and such, hence why I was looking at conserver.
+
+But it seems like conserver could be useful for just generally providing remote access to usb serial ports in an RPi as it deals with the problem of multiple devices trying to access the serial port at once (IE you could be connected with something like cu at the same time you connect little_term and another python script)....
+
+
+[02/16/2026 02:56] carlfk
+I'm skeptical :p - the only time I have that problem is when I forget I alreaday have something conected.
+
+
+[02/16/2026 02:57] carlfk
+for early dmesg messages - do you know about https://www.kernel.org/doc/Documentation/networking/netconsole.txt
+
+
+[02/16/2026 02:58] carlfk
+pass a kernel parameter append ... netconsole=@192.156.1.5/eth0,@192.168.1.3/00:08:02:a0🆎cf
+
+
+[02/16/2026 02:59] carlfk
+very early it smashes that ip config and starts spewing udp
+
+
+[02/16/2026 03:07] mithro_
+I did in the past but had forgotten about that....
+
+
+[02/16/2026 03:09] carlfk
+I https://github.com/CarlFK/pici/blob/main/ansible/roles/fixpi/files/boot/ncc.py
+
+{Embed}
+https://github.com/CarlFK/pici/blob/main/ansible/roles/fixpi/files/boot/ncc.py
+pici/ansible/roles/fixpi/files/boot/ncc.py at main · CarlFK/pici
+Contribute to CarlFK/pici development by creating an account on GitHub.
+2026-02_media/0084b929-8b65-464b-b79a-9e5266256fcb-CE1FE
+
+
+[02/16/2026 03:10] carlfk
+that beeps when it recieves, which is often when the box is crashing
+
+
+[02/16/2026 06:17] mattvenn
+Fpga boards are now in the tt shop
+
+
+[02/17/2026 21:57] mithro_
+Now there are less FPGA boards in your shop 🙂
+
+{Reactions}
+😼 (3)
+
+[02/18/2026 21:43] mithro_
+@carlfk - I setup a couple more of the Tiny Tapeout boards on RPis here for you
+
+
+[02/18/2026 21:43] mithro_
+@carlfk - But I had the realisation this morning that I was doing the vlans slightly wrong
+
+
+[02/18/2026 21:44] carlfk
+I'm not sure what to do wiht this
+
+
+[02/18/2026 21:44] carlfk
+a diagram of what you have done would probably help
+
+
+[02/18/2026 21:59] mithro_
+@carlfk - Don't worry about it, give me about an hour and I should have it all fixed up
+
+
+[02/18/2026 22:34] mithro_
+@carlfk - Basically, the connection between ten64 (the gateway) and tweed's uplink port should be a *different* vlan to tweed's local port and the RPis so I end up with:
+
+  [tfpgas.ten64] <-- tfpga vlan on switches --> [eth-uplink.tweed : eth-local.tweed] <-- fpga vlan on S3300-1 --> [RPis]
+
+
+[02/18/2026 22:41] carlfk
+S3300-1 is a switch?
+
+
+[02/18/2026 22:44] mithro_
+Yes.
+
+
+[02/18/2026 22:55] carlfk
+A picture would answer these questions
+
+
+[02/18/2026 22:55] carlfk
+is  "tfpga vlan on switches" include the - ":fpga vlan on S3300-1"  ?
+
+
+[02/18/2026 22:57] carlfk
+the PoE control code can and does have "turn off all the PoE on all the ports" which might brick the thing until pull the power cord and maybe poke the reset hole
+
+
+[02/18/2026 23:32] carlfk
+https://github.com/CarlFK/pici/blob/main/ansible/roles/site/files/pib/snmp_switch/scripts/allpoeoff.sh
+
+{Embed}
+https://github.com/CarlFK/pici/blob/main/ansible/roles/site/files/pib/snmp_switch/scripts/allpoeoff.sh
+pici/ansible/roles/site/files/pib/snmp_switch/scripts/allpoeoff.sh ...
+Contribute to CarlFK/pici development by creating an account on GitHub.
+2026-02_media/0084b929-8b65-464b-b79a-9e5266256fcb-CE1FE
+
+
+[02/18/2026 23:37] carlfk
+there is /etc/environment ... pi_ports="2 3 5 7 9 11 13 21 23 "  which is only the ports in ansible inventory but thats only good/valid for what is stable, not experimenting with new things, like adding a TT setup to the fpga/arty setup
+
+
+[02/18/2026 23:44] carlfk
+also in /etc/environment  is `SNMP_SWITCH_AUTHKEY=` which I think needs an export for `source /etc/environment`  but adding export to that file will break EnvironmentFile=/etc/environment
+
+
+[02/18/2026 23:44] carlfk
+https://github.com/CarlFK/pici/blob/main/ansible/roles/site/templates/daphne.service.j2#L10C1-L10C33
+
+{Embed}
+https://github.com/CarlFK/pici/blob/main/ansible/roles/site/templates/daphne.service.j2
+pici/ansible/roles/site/templates/daphne.service.j2 at main · Carl...
+Contribute to CarlFK/pici development by creating an account on GitHub.
+2026-02_media/0084b929-8b65-464b-b79a-9e5266256fcb-CE1FE
+
+
+[02/18/2026 23:45] carlfk
+I could use some help with that.
+
+
+[02/18/2026 23:58] carlfk
+https://github.com/CarlFK/pici/issues/51
+
+{Embed}
+https://github.com/CarlFK/pici/issues/51
+creditional deployment / availablity needs help · Issue #51 · Car...
+SNMP_SWITCH_AUTHKEY pi_pw and whatever other secrets - they are stored nicely in inventory vault but the deployment to the box is a bit of a mess. I am pretty sure there is something that doesn&#39...
+2026-02_media/51-05517
+
+
+[02/21/2026 08:46] carlfk
+I just added a Ping button to help figure out if a pi is alive
+
+
+[02/21/2026 08:46] carlfk
+https://github.com/CarlFK/pici/blob/main/ansible/roles/site/files/pib/pistat/src/pistat/views.py#L67
+
+{Embed}
+https://github.com/CarlFK/pici/blob/main/ansible/roles/site/files/pib/pistat/src/pistat/views.py
+pici/ansible/roles/site/files/pib/pistat/src/pistat/views.py at mai...
+Contribute to CarlFK/pici development by creating an account on GitHub.
+2026-02_media/0084b929-8b65-464b-b79a-9e5266256fcb-CE1FE
+
+
+[02/21/2026 08:46] carlfk
+https://ps1.fpgas.online/fpgas/pi21.html
+
+
+[02/21/2026 08:47] carlfk
+4:52:28 PM: piview: Raspberry_Pi_5_Model_B_Rev_1
+
+
+[02/21/2026 08:47] carlfk
+it might still be over heating and turning itself off
+
+
+[02/22/2026 02:12] mithro_
+@Tisham Dhar (CSIRO EASI) - I was able to program the NeTV2 FPGA on a RPi5 using the GPIO headers.
+
+
+[02/22/2026 02:22] tishamdhar
+Same ones or different ones ?
+
+
+[02/22/2026 02:23] tishamdhar
+OpeOCD linuxgpiod driver ?
+
+
+[02/22/2026 21:36] mithro_
+@Tisham Dhar (CSIRO EASI) - Initially I was using OpenOCD with the gpiod driver (which was quite slow but still worked), but it looks like Claude has managed to create a new driver using the PIO found in the RP1 chip which is faster than the original broadcom bitbanging driver - https://github.com/mithro/rp1-jtag
+
+{Embed}
+https://github.com/mithro/rp1-jtag
+GitHub - mithro/rp1-jtag: High-speed JTAG via Raspberry Pi 5 RP1 PIO
+High-speed JTAG via Raspberry Pi 5 RP1 PIO. Contribute to mithro/rp1-jtag development by creating an account on GitHub.
+2026-02_media/rp1-jtag-786FB
+
+
+[02/22/2026 21:40] tishamdhar
+There is no drivers openOCD, push that to git and I will have a go with the NeTV2 I have here
+
+
+[02/22/2026 21:41] tishamdhar
+I will vendor it into OpenOCD tree and compile it there.
+
+
+[02/22/2026 21:42] mithro_
+Claude hasn't finished the OpenOCD integration, but it has finished the openFPGAloader version
+
+
+[02/22/2026 21:43] mithro_
+@Tisham Dhar (CSIRO EASI) - I could use some testing firmware to verify things beyond just reading the Xilinx ID and loading the spiflash proxy.
+
+
+[02/22/2026 22:28] mithro_
+@Tisham Dhar (CSIRO EASI) - Did you do that write up building LiteX firmware for the NeTV2 anywhere?
+
+
+[02/22/2026 23:22] tishamdhar
+I chucked it in my blog
+
+
+[02/23/2026 00:14] tishamdhar
+Install LiteX following the standard setup, then:
+
+cd litex-boards/litex_boards/targets
+
+# Build for XC7A35T variant with Ethernet
+./kosagi_netv2.py --variant=a7-35 --with-ethernet --build
+
+# Or for the 100T variant with PCIe
+./kosagi_netv2.py --variant=a7-100 --with-pcie --build
+The target supports:
+
+DDR3 SDRAM: Using the K4B2G1646F module with LiteDRAM
+Ethernet: RMII PHY via LiteEth
+PCIe: x4 Gen2 via LitePCIe
+SD Card: Both SPI mode and native SDIO
+LED Chaser: For the obligatory blinky demo
+
+
+[02/23/2026 01:38] tishamdhar
+I probably have the compiled bitstreams for Litex and PCI Leech floating around will find them in a few minutes after lunch.
+
 
 [02/23/2026 03:35] tishamdhar
 @Tim 'mithro' Ansell  if you have a 35T then the bitstream is at the bottom of this page : https://github.com/ufrisk/pcileech-fpga/blob/master/NeTV2/readme.md
@@ -12,16 +673,209 @@ After: 02/23/2026 02:36
 https://github.com/ufrisk/pcileech-fpga/blob/master/NeTV2/readme.md
 pcileech-fpga/NeTV2/readme.md at master · ufrisk/pcileech-fpga
 FPGA modules used together with the PCILeech Direct Memory Access (DMA) Attack Software - ufrisk/pcileech-fpga
-fpgas-online_media/pcileech-fpga-E3BD9
+2026-02_media/pcileech-fpga-E3BD9
 
 
 [02/23/2026 03:39] tishamdhar
 100T bitstream
 
 {Attachments}
-fpgas-online_media/pcileech_100t484_x1_top-CC6DF.zip
+2026-02_media/pcileech_100t484_x1_top-CC6DF.zip
+
+
+[02/23/2026 07:06] carlfk
+blog url?
+
+
+[02/23/2026 07:28] tishamdhar
+Complete with code snippets : https://whatnicklife.blogspot.com/2026/01/loading-fpga-bitstreams-with-openocd.html?m=0
+
+{Embed}
+https://whatnicklife.blogspot.com/2026/01/loading-fpga-bitstreams-with-openocd.html?m=0
+Loading FPGA Bitstreams with OpenOCD and Raspberry Pi - From Captai...
+A Hot Adelaide Afternoon and a Pile of FPGAs  I was recruited to wire together the NeTV2 to the Raspberry Pi 5 PCI bus by some means. Tim  d...
+2026-02_media/AP1GczOoOvoR6l13ubi_mrwFfM_4AexAW6DQ67SRTv-816B9
+
+
+[02/23/2026 22:12] mithro_
+@RebelMike - According to Claude you have done a bunch of work with the RP1 in the RPi5
+
+
+[02/23/2026 22:13] rebelmike
+I did some stuff trying to hack it when it first came out
+
+
+[02/23/2026 22:14] rebelmike
+There's piolib now though so you don't need to find an exploit just to use the PIOs 😅
+
+
+[02/25/2026 21:38] mithro_
+@RebelMike - I have a crazy idea of having the RPi5 emulate larger (IE megabyte sized) spiflash/psram with the PIO for use both with Tiny Tapeout and BMC motherboard development -- kinda of a more advanced version of your emulation on the RP2040. 
+
+It looks like originally it was quite hard to get >10 Megabyte/second transfers between the RPi5 and PIO device but it looks like ~20->40 Megabyte/seconds might be possible now.
+
+ * https://github.com/mithro/rp1-jtag
+ * https://github.com/mithro/rpi5-rp1-pio-bench
+
+{Embed}
+https://github.com/mithro/rp1-jtag
+GitHub - mithro/rp1-jtag: High-speed JTAG via Raspberry Pi 5 RP1 PIO
+High-speed JTAG via Raspberry Pi 5 RP1 PIO. Contribute to mithro/rp1-jtag development by creating an account on GitHub.
+2026-02_media/rp1-jtag-44374
+
+
+[02/25/2026 21:41] mithro_
+@Tisham Dhar (CSIRO EASI) - I should have debs and static versions of openFPGAloader with the rpi1-jtag support being built now
+
+{Reactions}
+❤️
+
+[02/25/2026 21:46] 246tnt
+I'm not sure what kind of latency you'd manage to get given there is PCIe in the middle ...
+
+
+[02/25/2026 21:47] rebelmike
+I suspect getting deterministic performance over the PCIe bus would be tricky. I would have thought a RP2350 with PSRAM attached (maybe to GPIO instead of through XIP) would be preferable
+
+
+[02/25/2026 21:48] rebelmike
+Although at that point why not just actually attach the PSRAM to the project. I guess you could support slightly different protocols, although never at a high clock speed
+
+
+[02/25/2026 21:51] rebelmike
+One thing I think Pi 5 could be great at that I haven’t seen (though I haven’t looked recently) is a cheap logic analyser. PIO should be able to sample pins at 200MHz and you have reasonably fast access to GBs of memory
+
+
+[02/25/2026 22:04] mithro_
+@RebelMike / @tnt - I'll see what claude is able to do here if I put some hardware in the loop and let it iterate.
+
+
+[02/25/2026 22:04] mithro_
+I ***also*** have the crazy idea of using the RP1 PIO to do a C code LUNA type stack where you can to USB1/USB1.1/UTMI/ULPI on the GPIO pins.
+
+
+[02/25/2026 22:09] mithro_
+I don't think the USB idea would be very useful but it might be fun to try anyway....
+
+
+[02/25/2026 22:27] rebelmike
+For USB there's https://github.com/sekigon-gonnoc/Pico-PIO-USB which only needs one PIO so might work - probably mainly depends on whether there's any latency issues.
+
+{Embed}
+https://github.com/sekigon-gonnoc/Pico-PIO-USB
+GitHub - sekigon-gonnoc/Pico-PIO-USB: USB host/device implementatio...
+USB host/device implementation using PIO of raspberry pi pico (RP2040/RP2350). - sekigon-gonnoc/Pico-PIO-USB
+2026-02_media/Pico-PIO-USB-18D50
+
+
+[02/25/2026 22:29] rebelmike
+As far as I'm aware there's no facility for running code on the RP1's spare ARM core - but when it became clear Raspberry Pi weren't realy interested in making it possible for the community to do stuff in this area I kind of lost interest in it so I don't know about any more recent work
+
+
+[02/25/2026 22:40] mithro_
+@RebelMike - It appears that cleverca22 has been doing your logic analyser stuff https://github.com/cleverca22/libsigrok/commit/e3783bac8176e7454863b37723ab6d8a3f99731a
+
+{Embed}
+https://github.com/cleverca22/libsigrok/commit/e3783bac8176e7454863b37723ab6d8a3f99731a
+initial pi5 pio support · cleverca22/libsigrok@e3783ba
+2026-02_media/e3783bac8176e7454863b37723ab6d8a3f99731a-5F0F6
+
+
+[02/25/2026 22:54] rebelmike
+Cool!
+
+
+[02/26/2026 05:21] urish
+How about using an FPGA for that?
+
+
+[02/26/2026 05:22] mithro_
+@urish - You mean like spispy? 😛
+
+
+[02/26/2026 05:23] urish
+I think so
+
+
+[02/26/2026 05:25] mithro_
+That is what I'm planning on using at the moment
+
+{Reactions}
+👍
+
+[02/26/2026 17:22] carlfk
+@clever helped me with fpga.online pi net boot
+
+
+[02/26/2026 17:24] carlfk
+which lead to https://kicanvas.org/?github=https%3A%2F%2Fgithub.com%2FCarlFK%2Fpimo%2Ftree%2Fmain%2Fproject
+
+
+[02/26/2026 20:27] mithro_
+@carlfk - I was going to tell you to invite @clever to this channel but it turns out he is already here!
+
+
+[02/26/2026 20:27] mithro_
+@carlfk - I think the corporate world would call this "synergy" 😛
+
+
+[02/28/2026 03:39] tishamdhar
+@Tim 'mithro' Ansell  rpi-pio-jtag talking to NeTV2 35T ->
+
+{Attachments}
+2026-02_media/image-DA57C.png
+
+
+[02/28/2026 03:40] tishamdhar
+OpenFPGALoader is patched and built , however it is saying empty on detect
+
+
+[02/28/2026 03:47] tishamdhar
+Never mind , setting pins makes it work
+
+
+[02/28/2026 03:48] tishamdhar
+Making a PR
+
+
+[02/28/2026 03:48] tishamdhar
+k8s@node10:~/openFPGALoader $  cd /home/k8s/openFPGALoader && sudo ./build/openFPGALoader -c rp1pio --detect 2>&1
+empty
+rp1pio: using default pins TCK=4 TMS=17 TDI=27 TDO=22
+index 0:
+        idcode 0x362d093
+        manufacturer xilinx
+        family artix a7 35t
+        model  xc7a35
+        irlength 6
+
+
+[02/28/2026 04:00] tishamdhar
+https://github.com/mithro/rp1-jtag/pull/4
+
+{Embed}
+https://github.com/mithro/rp1-jtag/pull/4
+docs+feat: document openFPGALoader integration, default NeTV2 pins,...
+Summary
+Documents the openFPGALoader integration workflow, adds the missing libfdt-dev dependency, adds default NeTV2 pin assignment, and improves CMake find_path/find_library for librp1jtag. Addre...
+
+
+[02/28/2026 04:01] tishamdhar
+Lemme know if you are working on the OpenOCD implementation. I have Copilot hopping on that. I cannot test it under lspci yet since I dont have a power supply.
+
+
+[02/28/2026 10:44] tishamdhar
+OpenOCD works too : https://github.com/mithro/rp1-jtag/pull/5
+
+{Embed}
+https://github.com/mithro/rp1-jtag/pull/5
+Feature/openocd implementation by whatnick · Pull Request #5 · mi...
+OpenOCD driver implementation by GH Copilot. Tested working.
+sudo /home/k8s/rp1-jtag/drivers/openocd/netv2_spiflash.sh flash /home/k8s/pcileech_netv2_top.bin
+&amp;gt;&amp;gt;&amp;gt; Flashing /home...
+2026-02_media/5-65877
 
 
 ==============================================================
-Exported 2 message(s)
+Exported 171 message(s)
 ==============================================================

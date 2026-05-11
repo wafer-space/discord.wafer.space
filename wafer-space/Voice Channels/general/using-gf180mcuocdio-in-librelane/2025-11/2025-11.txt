@@ -1,0 +1,498 @@
+==============================================================
+Guild: wafer.space Community
+Channel: Information / general / Using gf180mcu_ocd_io in LibreLane
+After: 10/31/2025 23:59
+Before: 12/01/2025 00:00
+==============================================================
+
+[11/26/2025 14:14] 246tnt
+Creating a thread to avoid spamming #general  😅
+
+
+[11/26/2025 14:18] 246tnt
+And I also can't creae issues on the `gf180_ocd_io` repo because issues are disabled on it.
+
+
+[11/26/2025 14:23] mole99
+Actually, I think there is no reason. I simply wanted to do it like the SCL library where you can just select a different one and all the views will point to that one instead. But the PAD library is a bit more complicated and just selecting a different one does not work that well.
+
+
+[11/26/2025 14:28] 246tnt
+Well having the `PAD_CELL_LIBRARY` is nice. But ATM some of the config seem to be set in the base file based on replacing `$PAD_CELL_LIBRARY` and some config is set by loading the subdirectory tcl file.   And I think putting it all in the subdir file (possibly still using `$PAD_CELL_LIBRARY` so you can easily create new config for new IO lib by just copying and patching the little things needed.
+
+{Reactions}
+👌
+
+[11/26/2025 14:28] 246tnt
+Now I'm faced with the much more annoying issue that OpenROAD is segfaulting on me during GlobalRouting 😩
+
+{Reactions}
+😵‍💫
+
+[11/26/2025 17:12] 246tnt
+🎉    Found what OR didn't like 😁
+
+{Reactions}
+👏
+
+[11/26/2025 18:31] 246tnt
+```
+292 Magic DRC errors found.
+47 LVS errors found.
+```
+
+
+[11/26/2025 18:32] 246tnt
+The DRC errors are in the corner cells and looking at the upstream repo, I think @Tim Edwards already fixed them a few hours ago.
+
+
+[11/26/2025 18:32] 246tnt
+The LVS errors look related to the analog pads having DVSS shorted to ASIG5V ...
+
+{Reactions}
+😶
+
+[11/26/2025 18:39] rtimothyedwards_19428
+@tnt: I've been chasing those errors all day long.  Hopefully it should be resolved by tomorrow.
+
+
+[11/26/2025 18:40] 246tnt
+@Tim Edwards DRC or also the LVS one ?
+
+
+[11/26/2025 18:42] rtimothyedwards_19428
+The DRC one.  I should have time to look at the LVS issue but I was previously unaware of it.  The DRC issue has been bugging me for a while;  I just needed to find some time to work on it.
+
+{Reactions}
+👌
+
+[11/26/2025 18:45] 246tnt
+Ok. I'll just wait for the DRC one and keep digging on the LVS one, see if I can find what's the cause since it could very well be something on my side that I screwed up ...
+
+
+[11/26/2025 18:52] 246tnt
+@Tim Edwards BTW, did you adapt all the cells including `in_s` and `in_c` ?  Just to make sure I can also use those 😅
+
+
+[11/26/2025 19:36] rtimothyedwards_19428
+Yes.  All digital cells are 3.3V compatible.
+
+{Reactions}
+👌
+
+[11/26/2025 20:00] rtimothyedwards_19428
+@tnt:  The LVS issue is due to a wayward "DVSS" label that got lost and wandered off and stuck itself to the ASIG5V pad.
+
+
+[11/26/2025 20:11] rtimothyedwards_19428
+I finally found the source of the label, hiding in the LEF file, under the sofa cushions.
+
+
+[11/26/2025 20:47] 246tnt
+Yes, I saw that in the LEF already, I was about to update the issue on github 😅
+
+
+[11/26/2025 20:47] 246tnt
+Still have some other LVS issue but that'll have to wait a bit.
+
+
+[11/26/2025 20:50] rtimothyedwards_19428
+I have confirmed that fixing the LEF caused the virtual short in the magic view to disappear.  It has been pushed.
+
+{Reactions}
+👌
+
+[11/26/2025 21:49] 246tnt
+Ok, yeah, remaining LVS is because one net gets extracted as `\IO_CORNER_NORTH_WEST_INST.DVSS_RING_uq0`  and in the netlist it's `\IO_CORNER_NORTH_WEST_INST.DVSS_RING` and that causes port mismatch.
+
+
+[11/26/2025 21:49] 246tnt
+manually fixing that up and running netgen on the result checks out just fine.
+
+
+[11/26/2025 21:50] rtimothyedwards_19428
+If that's a top-level port then you can avoid the unique name by doing `extract unique notopports`, which was how I got the SRAM to pass LVS.
+
+
+[11/26/2025 21:54] 246tnt
+Yeah, although technically they should be connected internally and not rely on any external connections.
+
+
+[11/26/2025 21:54] 246tnt
+if I use that option, it wouldn't check if they are connected or not.
+
+
+[11/26/2025 21:55] 246tnt
+I mean, if all the DVSS nodes were not connected somewhow, it wouldn't spot it.
+
+
+[11/26/2025 21:56] rtimothyedwards_19428
+One way to get around it is just to copy enough of the connection between them inside the top level cell that magic sees that they are connected within the top level.  Magic does extraction on each individual cell without looking at what's in subcells that might be connecting things together.  Modifying that behavior is probably a lot of work.
+
+{Reactions}
+👍
+
+[11/26/2025 23:39] mithro_
+Please do report segfaults upstream - OpenROAD should *never* segfault.
+
+
+[11/27/2025 13:43] 246tnt
+`21154 KLayout DRC errors found.`
+@Tim Edwards  😢
+
+
+[11/27/2025 14:42] rtimothyedwards_19428
+@tnt :  I assume those errors are coming from the I/O pads?  Can you send me the layout and DRC results?  I made many small changes to the I/O layouts, but they are still the same pads apart from swapping in a level shifter circuit in front of each digital pin.  However, I read in the I/O GDS and regenerated it from magic, so a single missing output layer or incorrect rule could have a massive effect.
+
+
+[11/27/2025 14:42] 246tnt
+Lots of them are more due to marker layers causing different rules to apply.
+
+
+[11/27/2025 14:42] rtimothyedwards_19428
+Presence or absence of marker layers?  Did I manage to drop some ESD marker mask?
+
+
+[11/27/2025 14:43] 246tnt
+Absence.  Of ESD and Latchup.
+And then some Resistor marker layer added instead.
+
+
+[11/27/2025 14:44] 246tnt
+Let me create a reproducible.
+
+
+[11/27/2025 14:44] rtimothyedwards_19428
+Okay.  I'll need to regenerate them with mask hints for the marker layers.  I don't think it's going to be a huge effort.
+
+
+[11/27/2025 14:45] rtimothyedwards_19428
+This is the "dirty" part of "quick & dirty".
+
+
+[11/27/2025 14:48] 246tnt
+```
+klayout -b -zz -r ${PDK_ROOT}/gf180mcuD/libs.tech/klayout/tech/drc/gf180mcu.drc -rd input=/mnt/pdk/OL2/pdk_root/gf180mcuD/libs.ref/gf180mcu_ocd_io/gds/gf180mcu_ocd_io.gds -rd report=drc.klayout.lyrdb -rd feol=True -rd beol=True -rd conn_drc=True -rd wedge=True -rd run_mode=deep -rd thr=16 -rd topcell=gf180mcu_ocd_io__bi_24t
+```
+
+{Reactions}
+👍
+
+[11/27/2025 14:49] 246tnt
+this runs the DRC on only `gf180mcu_ocd_io__bi_24t` and will show the errors.
+
+
+[11/27/2025 14:49] 246tnt
+I mean obviously you need to check all the cells, but that's a good start 😅
+
+
+[11/27/2025 14:49] 246tnt
+And runs much faster than a full chip DRC
+
+
+[11/27/2025 15:39] rtimothyedwards_19428
+@tnt :  Where are you getting the file `gf180mcu.drc` from?  I don't have that in my PDK.
+
+
+[11/27/2025 15:41] 246tnt
+@Tim Edwards Ah, from https://github.com/wafer-space/gf180mcu
+
+
+[11/27/2025 15:42] 246tnt
+I think it's just a top level calling all the rules deck. Probably on @Leo Moser (mole99) 's growing list of stuff to upstream 😅
+
+
+[11/27/2025 15:45] mole99
+Exactly 😁
+
+
+[11/27/2025 15:50] rtimothyedwards_19428
+That file belongs in https://github.com/fossi-foundation/globalfoundries-pdk-libs-gf180mcu_fd_pv
+
+{Embed}
+https://github.com/fossi-foundation/globalfoundries-pdk-libs-gf180mcu_fd_pv
+GitHub - fossi-foundation/globalfoundries-pdk-libs-gf180mcu_fd_pv
+Contribute to fossi-foundation/globalfoundries-pdk-libs-gf180mcu_fd_pv development by creating an account on GitHub.
+2025-11_media/globalfoundries-pdk-libs-gf180mcu_fd_pv-6EC75
+
+{Reactions}
+👍
+
+[11/27/2025 15:51] mole99
+First I need to merge: https://github.com/wafer-space/gf180mcu/pull/1
+and ensure there aren't any regressions.
+
+
+[11/27/2025 15:53] rtimothyedwards_19428
+Is that file written in ~~rust~~ ruby?  I'm getting `ERROR: Can't run macro (no interpreter)` but I think I don't have ~~rust~~ ruby enabled in my version of klayout.
+
+
+[11/27/2025 15:54] mole99
+It's written in ruby, perhaps that is missing?
+
+
+[11/27/2025 15:54] rtimothyedwards_19428
+I meant ruby, sorry.  I thought rust was wrong, somehow.
+
+
+[11/27/2025 15:55] 246tnt
+All klayout drc are written in ruby AFAIK
+
+
+[11/27/2025 15:57] 246tnt
+I can run drc for each cell and post results if that's easier but  I  thought it'd be better if you could validate changes yourself
+
+
+[11/27/2025 16:11] rtimothyedwards_19428
+Posting results might be _quicker_ because I'm going to have to recompile klayout with ruby support.
+
+But I did a layer-by-layer comparison between an original 5V I/O cell and my modified one, and I think I understand where I'm missing layers.  Some of my generated layers (DUALGATE, for example) are not the same size as the original but are probably still valid.  The main issue seems to be the missing "latchup" and "ESD" marker layers.  Both are just two rectangular areas under the pad, and easy to add with mask hints.
+
+There is another issue with all FETs being marked as 5V due to the fact that the I/O library was created before I modified the handling of 5V/6V cells, but that's easy enough to correct and probably doesn't make a difference anyway.
+
+
+[11/27/2025 16:40] 246tnt
+Arf, sorry for dissapearing ... went to grab a drink, knocked something over and spent the last 30 min cleaning up my mess 😅
+
+
+[11/27/2025 16:40] 246tnt
+Running DRC now.
+
+
+[11/27/2025 16:47] 246tnt
+
+
+{Attachments}
+2025-11_media/drc.tar-81A4F.bz2
+
+
+[11/27/2025 16:47] 246tnt
+@Tim Edwards
+
+{Reactions}
+👍
+
+[11/27/2025 17:17] rtimothyedwards_19428
+More work than I was expecting but shouldn't be too big of an issue.
+
+{Reactions}
+👌
+
+[11/27/2025 19:37] 246tnt
+BTW, if there is anything I can do to help, I'd be happy to 🙂
+
+
+[11/27/2025 20:00] rtimothyedwards_19428
+I may need to you run more klayout DRC checks.  But I need to get some updates pushed, first.  I have worked through most of the main errors already.  Fortunately the highest _count_ of errors was in the array contact spacing, which was easy to fix (although it exposed a way to get around magic's generation of wider-spaced 4x4-and-up arrays, which is to stack 4 or more 1xN contact arrays next to each other, which then magic no longer sees as a single "large array").
+
+{Reactions}
+👍
+
+[11/27/2025 22:22] rtimothyedwards_19428
+@tnt :  All right.  I think I have a good handle on all the issues.  I will push everything to the repository along with updates to open_pdks and everything should be ready to retest in the morning.  I may have missed one or two things but nothing looks like it can't be dealt with pretty easily.
+
+I do have to rethink the way I handle generating PPLUS and NPLUS around tap diffusion that is too close to an nwell edge, but I think I have methods now that will work right that weren't available when I originally wrote the GF180MCU tech file.  I haven't tested them yet;  instead I just made sure that all tap diffusion is well away from nwell edges.  It seemed like everything in the I/O library was just slightly closer than the limit that triggers the extra overlap (0.43um).
+
+
+[11/27/2025 23:19] mithro_
+@Tim Edwards - If you have docker installed you can get a docker container with the precheck with all the deps and PDK and everything.
+
+
+[11/28/2025 01:03] rtimothyedwards_19428
+@tnt :  I have updated the PDK and the I/O library.  I don't know if I managed to get everything, but it should be a lot cleaner than before.
+
+
+[11/28/2025 06:55] 246tnt
+@Tim Edwards Indeed, it seems much cleaner now 🙂
+
+
+[11/28/2025 06:56] 246tnt
+
+
+{Attachments}
+2025-11_media/drc.tar-E2AD0.bz2
+
+
+[11/28/2025 06:56] 246tnt
+only fillnc and bi_24t still have items.
+
+
+[11/28/2025 07:18] 246tnt
+I was looking at this extra overlap limit in the DRM and quite confused because on the diagrams that 0.43um is measured from the "inside" edge !?!
+
+
+[11/28/2025 07:18] 246tnt
+
+
+{Attachments}
+2025-11_media/2025-11-28_377x360_scrot-B65BC.png
+
+
+[11/28/2025 07:25] 246tnt
+Just had a look at the exact errors and `filllnc` is just false positive because the cell can't be used by itself, it's too narrow but when put in the ring, there should be no errors ( although the `pr boundary` seems too wide ? )
+
+And the `bi_24t` is minor issues with nplus/pplus extension but trivial to fix with maskhints.
+
+
+[11/28/2025 10:47] 246tnt
+@Tim Edwards Som in `bi_24t`, one of the issue is ... probably a bug in magic or somewhere because if I load the `.mag` and do `gds write gf180mcu_ocd_io__bi_24t` , then there is the issue, like this :
+
+
+[11/28/2025 10:47] 246tnt
+
+
+{Attachments}
+2025-11_media/2025-11-28_874x440_scrot-DE1E5.png
+
+
+[11/28/2025 10:47] 246tnt
+Then I don't do anything else, but just re run the same `gds write` command and then the issue isn't there and the gap was bridged.
+
+
+[11/28/2025 10:47] 246tnt
+
+
+{Attachments}
+2025-11_media/2025-11-28_919x492_scrot-9FABD.png
+
+
+[11/28/2025 10:56] 246tnt
+The other one I fixed with this :
+```diff
+
+diff --git a/magic/comp018green_out_paddrv_6T_PMOS_GROUP.mag b/magic/comp018green_out_paddrv_6T_PMOS_GROUP.mag
+index 98627ee..6a58925 100644
+--- a/magic/comp018green_out_paddrv_6T_PMOS_GROUP.mag
++++ b/magic/comp018green_out_paddrv_6T_PMOS_GROUP.mag
+@@ -3272,4 +3272,6 @@ use PMOS_metal_stack  PMOS_metal_stack_6
+ timestamp 1758724778
+ transform 1 0 809 0 1 496
+ box -44 0 1584 12000
++<< properties >>
++string MASKHINTS_NPLUS 12251 -768 12331 14372
+ << end >>
+```
+
+
+[11/28/2025 10:56] 246tnt
+but maybe you have a more elegant way of preventing it in the first place 😅
+
+
+[11/28/2025 14:41] rtimothyedwards_19428
+@tnt :  Yes, that's where the nwell needs to be extended out to 0.43um to prevent the little stub of NPLUS from showing up.  The algorithm I came up with to deal with the extra overlap of NPLUS or PPLUS for diffusion edges close to an nwell edge works fine except when the diffusion is just slightly less than than the 0.43um limit away from the edge.  Obnoxiously, most of the nwells in the I/O cells have been drawn just slightly under this limit, which then unfortunately highlights where my algorithm doesn't work right.
+
+
+[11/28/2025 14:43] rtimothyedwards_19428
+Yes, I've looked at that illustration before and decided it's an error in the illustration (one of many).
+
+
+[11/28/2025 14:55] 246tnt
+I have a new chip-wide precheck running ATM, hopefully it will be clear.
+
+
+[11/28/2025 15:38] rtimothyedwards_19428
+I made a few edits so that the tap diffusion is wide enough that the NPLUS and PPLUS overlap of contacts is the same width as the overlap of the diffusion, so the NPLUS and PPLUS form simple rectangles that don't need to be hierarchically checked to close up gaps between the shapes.  There was plenty of room to extend the taps outward and I should have done that earlier, just for the sake of the layout being cleaner.  So there will be one more round of updates and the I/O pads should be squeaky-clean by tomorrow.  I still need to rework the algorithm that generates the too-thin diffusion artifacts, but at least the errors only show up in pathological cases.
+
+
+[11/28/2025 15:57] 246tnt
+Ok, hopfully it will show up in a `ciel` release and I can use that to do the final build.
+
+
+[11/28/2025 16:25] 246tnt
+It cleared the KLayout DRC deck. Got some magic DRC errors from the pre-check but I suspect it's because the tech file isn't up to date.
+
+
+[11/28/2025 16:30] rtimothyedwards_19428
+I didn't change the tech file on this round.  The DRC errors look like something that pops up after a GDS read, but I can reproduce them, so I'll take care of them.
+
+
+[11/28/2025 16:31] rtimothyedwards_19428
+No, actually I think I just cut a corner and made the last several changes without running on drc(full), so totally my fault.
+
+
+[11/28/2025 16:34] 246tnt
+I still had the tech file from a while back.
+
+
+[11/28/2025 16:34] rtimothyedwards_19428
+It was an nwell spacing error?
+
+
+[11/28/2025 16:34] 246tnt
+Yes and also some via width < 0.28u
+
+
+[11/28/2025 16:35] 246tnt
+`Via3 width < 0.28um (V3.1 + 2 * V3.4)`
+`MV N-well spacing < 0.74um (NW.2a)`
+`Via4 width < 0.28um (V4.1 + 2 * V4.4)`
+
+
+[11/28/2025 16:42] rtimothyedwards_19428
+The nwell spacing is due to a tiny notch in an nwell and I'm fixing it now.
+The via3/via4 errors are more bothersome---I'm guessing that they come from the same issue in the corner cell where some via rows were spaced close enough together that they get merged by magic, but the rows are slightly offset so they produce slivers that are narrower than the contact after the merge.  But there seems to be some intermittent behavior there, because a few days ago I was fixing those, and after fixing all the errors I saw, I would re-write the GDS, and after reading the GDS back, the errors would appear again, somewhere else.  It was like sometimes it would merge the rows and sometimes it wouldn't.  I thought I had finally fixed the errors once and for all, but apparently not.  The error would not be from the tech file, it would be from the corner cell itself.
+
+
+[11/28/2025 16:44] rtimothyedwards_19428
+Arrgh, yes, I can see them. . .
+
+
+[11/28/2025 22:51] mithro_
+I would really love to create some improved documentation with actually useful GDS examples (which can be rendered into diagrams) of these things which are unclear.
+
+
+[11/29/2025 20:45] 246tnt
+
+
+{Attachments}
+2025-11_media/drc_in_s.klayout-162CD.lyrdb
+2025-11_media/drc_in_c.klayout-C61D6.lyrdb
+2025-11_media/drc_bi_t.klayout-99BA4.lyrdb
+2025-11_media/drc_bi_24t.klayout-3EB84.lyrdb
+2025-11_media/drc_bi_a.klayout-24AB6.lyrdb
+
+
+[11/29/2025 20:46] 246tnt
+@Tim Edwards Errors in NP from the latest cells.
+
+
+[11/29/2025 20:46] 246tnt
+(sorry to be the bearer of bad news 😅 )
+
+
+[11/29/2025 22:00] rtimothyedwards_19428
+@tnt :  No problem, iterate until done.
+Apparently I did not check the output after my last edit (sloppy or sleepy, not sure which.  Or sloppy because of sleepy).  Otherwise I would have seen that.  I just forgot to add 0.02um to the top of the nwells. . .  Sorry for forcing another round.
+
+
+[11/29/2025 22:01] rtimothyedwards_19428
+I also still need to figure out why magic won't cleanly separate the VSS and DVSS when extracting the corner cell, because that's preventing a clean LVS on anything using the padframe.
+
+
+[11/29/2025 22:24] rtimothyedwards_19428
+Now it's suddenly showing a property error in magic, but I think that's related to something that Mitch already pointed out to me, and it's a problem in magic that I need to look into.  It's not a problem in the layouts.
+
+
+[11/30/2025 01:48] mithro_
+Too much turkey? 🙂
+
+
+[11/30/2025 01:54] rtimothyedwards_19428
+@tnt :  I got klayout recompiled with ruby support, so I should be able to run the DRC myself from now on.  I just needed a little time away from the openframe project to get the compile done.
+
+
+[11/30/2025 02:10] rtimothyedwards_19428
+@tnt :  Also:  Confirmed that the I/O cells are finally DRC clean.
+
+
+[11/30/2025 02:11] rtimothyedwards_19428
+@Tim 'mithro' Ansell :  I had duck, not turkey.  The wild turkeys have been wandering around my property recently.  I guess they know it's safe here.
+
+
+[11/30/2025 02:15] mithro_
+The google campus in MTV had the occasional wild turkey wandering around it.
+
+
+==============================================================
+Exported 100 message(s)
+==============================================================

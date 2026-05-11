@@ -1,0 +1,428 @@
+==============================================================
+Guild: wafer.space Community
+Channel: Information / general / Test Submission Platform Issues & Successes?
+After: 11/30/2025 23:59
+Before: 01/01/2026 00:00
+==============================================================
+
+[12/01/2025 04:22] mithro_
+Dunno how time keeps disappearing.
+
+
+[12/01/2025 04:23] mithro_
+I'm just in the process of updating https://test-platform.wafer.space and also looking at deploying the "real" https://platform.wafer.space
+
+{Embed}
+https://test-platform.wafer.space/
+Welcome to wafer.space
+…
+Platform for wafer.space low cost silicon manufacturing.
+
+
+[12/01/2025 04:29] mithro_
+The platform should be able to run 3 checks in parallel
+
+
+[12/01/2025 04:48] mithro_
+
+
+
+[12/01/2025 05:01] noritsunaimamura
+"Permission denied"...
+
+{Attachments}
+2025-12_media/image-A33A3.png
+
+
+[12/01/2025 05:20] mithro_
+Poke me again in about 30m
+
+{Reactions}
+👍
+
+[12/01/2025 09:24] rzioma
+Mine is stuck between "Check queued" and "Checking..." going back and forth.
+
+
+[12/01/2025 09:24] rzioma
+
+
+{Attachments}
+2025-12_media/image-5C36C.png
+
+
+[12/01/2025 09:24] rzioma
+
+
+{Attachments}
+2025-12_media/image-E5A21.png
+
+
+[12/01/2025 09:24] rzioma
+cc @Tholin
+
+
+[12/01/2025 10:19] noritsunaimamura
+I'm in the same situation.
+
+{Attachments}
+2025-12_media/image-F3A72.png
+2025-12_media/image-07073.png
+
+
+[12/01/2025 10:37] mithro_
+Deploying a new version right now which should hopefully fix that.
+
+
+[12/01/2025 10:40] rzioma
+@Tim 'mithro' Ansell do we need to resubmit?
+
+
+[12/01/2025 10:41] mithro_
+It might start automatically.
+
+
+[12/01/2025 10:42] mithro_
+It currently takes ~20m to do a deployment. I need to figure out why it takes so long but that is someone a future problem.
+
+{Reactions}
+👀 (2) 🆗 😫
+
+[12/01/2025 11:35] mithro_
+Well, that didn't work - trying again now.
+
+{Reactions}
+🆗
+
+[12/01/2025 11:49] urish
+Do you need help with this?
+
+
+[12/01/2025 11:53] mithro_
+Running into differences between my local workstation and the remote vm.
+
+
+[12/01/2025 11:54] mithro_
+Also regretting the decision to not make manufacturing checks work like download with seperate download attempts. One of the things to fix after we get past this bit.
+
+
+[12/01/2025 11:58] urish
+IMHO it makes sense just to fire on VMs on demand for this (I think that's with ChipFoundry is doing?)
+
+
+[12/01/2025 11:58] urish
+For TT sumbission we use fly.io
+
+
+[12/01/2025 11:58] mithro_
+I am firing up docker containers on demand
+
+
+[12/01/2025 11:58] urish
+Their advantage is that they can launch a vm in ~100 ms
+
+
+[12/01/2025 11:59] urish
+(using firecracker, so it's actually some hybrid between VM and container)
+
+
+[12/01/2025 11:59] mithro_
+The problem is mostly the django/celery code for managing the vm lifecycle stuff.
+
+
+[12/01/2025 11:59] urish
+With fly they manage the lifecycle for you (but their compute is probably x10 more expensive compare with hetzner)
+
+
+[12/01/2025 12:09] mithro_
+Things will be down for a little bit.
+
+
+[12/01/2025 12:24] mithro_
+Should be back now.
+
+
+[12/01/2025 12:25] urish
+Dispatched!
+
+
+[12/01/2025 12:25] urish
+
+
+{Attachments}
+2025-12_media/image-62AB3.png
+
+
+[12/01/2025 12:26] mithro_
+Dispatched means it's been sent to celery to run the docker command.....
+
+
+[12/01/2025 12:38] mithro_
+Well, that is new......
+
+
+[12/01/2025 12:41] mithro_
+@Leo Moser (mole99) - Something seems to have gone weird with nix in the docker container...
+
+
+[12/01/2025 12:48] urish
+yeah
+
+
+[12/01/2025 12:48] urish
+
+
+{Attachments}
+2025-12_media/image-42004.png
+
+
+[12/01/2025 12:48] urish
+The error is:
+```
+       >        error: unable to download 'https://www.python.org/ftp/python/3.12.10/Python-3.12.10.tar.xz': Could not resolve hostname (6) Could not resolve host: www.python.org
+```
+
+
+[12/01/2025 12:49] urish
+looks like an intermittent DNS error to me?
+
+
+[12/01/2025 12:49] mithro_
+The docker container doesn't have network access.
+
+
+[12/01/2025 12:50] mithro_
+And `nix` should be running with `--offline` too...
+
+
+[12/01/2025 12:51] urish
+The logs don't show the actual nix command, so unfortunately I can't help further
+
+
+[12/01/2025 12:55] mithro_
+https://github.com/wafer-space/gf180mcu-precheck/actions/runs/19823322624/job/56790515702?pr=17
+
+{Embed}
+https://github.com/wafer-space/gf180mcu-precheck/actions/runs/19823322624/job/56790515702?pr=17
+build: add precheck --help validation step to Dockerfile · wafer-s...
+Precheck for wafer.space MPW runs using the gf180mcu PDK  - build: add precheck --help validation step to Dockerfile · wafer-space/gf180mcu-precheck@bf512cd
+2025-12_media/gf180mcu-precheck-B88AF
+
+
+[12/01/2025 12:58] mithro_
+`docker run --rm --network=none -e COLUMNS=200 -e TERM=xterm-256color -v
+    /home/django/platform.wafer.space/wafer_space/media/projects/562a942d-68e0-4370-8573-9cc36ffafd79/wafer-space.gf180mcu-project-template.r19704603402-a4686
+    122452.0p5x0p5_gds.chip_top.gds:/input/design.gds:ro -w /workspace --memory 64g ghcr.io/wafer-space/gf180mcu-precheck:latest python3 precheck.py --input
+    /input/design.gds --top "chip_top" --slot 0p5x0p5`
+
+
+[12/01/2025 13:07] tholin
+I guess I have to re-submit the file to retry?
+
+
+[12/01/2025 13:27] mithro_
+I can make it retry in a moment
+
+
+[12/01/2025 13:54] noritsunaimamura
+When an error occurs, this screen appears and the processing logs disappear.
+How can I check the error logs?
+
+{Attachments}
+2025-12_media/image-28A99.png
+
+
+[12/01/2025 14:09] mithro_
+I just fixed the issue with the logs getting overwritten, its in the process of deploying.
+
+{Reactions}
+🆗
+
+[12/01/2025 14:09] mithro_
+The real issue in your case is that the job which cleans up orphan docker containers cleaned up your docker container.
+
+
+[12/01/2025 14:10] rzioma
+@Tim 'mithro' Ansell is the /home/django/platform… a correct path? since we submit to test-platform…
+
+
+[12/01/2025 14:13] mithro_
+Yeah - the test-platform is suppose to just be the production deployment with a different name.
+
+
+[12/01/2025 14:16] rzioma
+That's what I get if I try to run docker command on my Ubuntu machine
+
+{Attachments}
+2025-12_media/image-8FCDF.png
+
+
+[12/01/2025 14:20] mithro_
+Did you change the bit after the `-v` to match where your GDS file is?
+
+
+[12/01/2025 14:26] mole99
+Is this still an issue?
+
+
+[12/01/2025 14:27] mithro_
+@Leo Moser (mole99) - no it seems to go away after I deleted the container and repulled
+
+{Reactions}
+👌
+
+[12/01/2025 16:14] mithro_
+Check seems to be running for your design now.
+
+{Reactions}
+🆗
+
+[12/01/2025 16:25] rzioma
+ah, turns out, I need to provide the full path from the `~/` not just local path (I was trying to run docker from the folder with gds files).  Works now!
+
+
+[12/01/2025 16:27] rzioma
+works: `docker run --rm --network=none -v ~/z80-open-silicon-tapeout/z80_quarter.gds:/input/design.gds:ro ...`
+
+doesn't:  `docker run --rm --network=none -v z80_quarter.gds:/input/design.gds:ro ...`
+
+
+[12/01/2025 16:41] mithro_
+Looks like it might finally be running
+
+{Attachments}
+2025-12_media/image-6A3B3.png
+
+{Reactions}
+partyblob (2)
+
+[12/01/2025 17:32] rzioma
+It is GREEN!
+
+{Attachments}
+2025-12_media/image-87324.png
+
+
+[12/01/2025 17:33] rzioma
+🛳️ ship it! 🚢
+
+
+[12/01/2025 20:50] noritsunaimamura
+It's GREEN!
+
+{Attachments}
+2025-12_media/image-1049B.png
+
+{Reactions}
+🎉 (2)
+
+[12/01/2025 23:43] mithro_
+Looks like a bunch of the prechecks where able to be churned through last night...
+
+
+[12/02/2025 00:29] mithro_
+The permission issues are because I went a little overboard with the privilege separation. The website can't write any files, only the download workers can. Only the docker workers can start/stop docker containers, etc.
+
+
+[12/02/2025 00:32] mithro_
+And of course when running everything locally it all just runs as your user.
+
+
+[12/02/2025 00:34] mithro_
+I do regret not putting the webapp and workers in their own docker containers, so then a deploy is just a few docker commands, rather than waiting for ansible to run a whole bunch of SSH commands which seem to each be taking 1.5 minutes rather than the 1 second they should.
+
+
+[12/02/2025 05:06] urish
+We can finally join the it's green party too!
+
+
+[12/02/2025 05:06] urish
+
+
+{Attachments}
+2025-12_media/image-813CF.png
+
+
+[12/02/2025 05:07] urish
+1.5 minute to establish the connection or to push the container?
+
+
+[12/02/2025 05:08] urish
+```
+PDK_ROOT = /workspace/gf180mcu
+PDK = gf180mcuD
+Top cell: tt_gf_wrapper
+Die ID: FFFFFFFF
+```
+
+I guess the DIE ID is not yet finalized?
+
+
+[12/02/2025 06:08] mithro_
+1.5m to run a command on the server using SSH (like cat /etc/hostname)
+
+
+[12/02/2025 06:10] mithro_
+Seems like some type of weird interaction between SSH jump hosts, ansible gather facts and other things I don't quite understand yet.
+
+
+[12/02/2025 06:11] urish
+Long shot, but could be a DNS issue?
+
+
+[12/02/2025 06:12] urish
+I've seen cases when failed DNS lookups really slow down systems
+
+
+[12/02/2025 06:23] urish
+Shall we also submit on platform? or test-platform is enough?
+
+
+[12/02/2025 06:23] mithro_
+test-platform should be enough
+
+{Reactions}
+👍
+
+[12/02/2025 07:54] mole99
+The die ID needs to be passed to the precheck by the online platform ([#72](https://github.com/wafer-space/platform.wafer.space/issues/72)). After this has been implemented, the precheck needs to run again. (@Tim 'mithro' Ansell)
+
+
+[12/02/2025 07:57] mole99
+https://platform.wafer.space failed to download the file because of:
+
+```
+Download Error:
+
+Download failed: [Errno 13] Permission denied: '/home/django/platform.wafer.space/wafer_space/media/projects/91a731b3-d0a9-4cc3-bb72-dbc57afca703'
+```
+
+Is this because of the above?
+
+
+[12/02/2025 08:58] mithro_
+Seems like that is fixed now, but yes.
+
+
+[12/02/2025 08:59] mole99
+Yes, precheck is running now 👍
+
+
+[12/02/2025 09:01] mithro_
+I could probably up the number of concurrent prechecks on the platform server. 4 isn't giving test-platform any trouble and it is slower than the primary machine.
+
+{Reactions}
+👌
+
+[12/02/2025 18:34] noritsunaimamura
+Our GDS was all green in the production platform too.
+
+{Attachments}
+2025-12_media/image-99027.png
+
+{Reactions}
+🎉 (2)
+
+==============================================================
+Exported 80 message(s)
+==============================================================

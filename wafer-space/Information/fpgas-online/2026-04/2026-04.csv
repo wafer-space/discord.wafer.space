@@ -1,0 +1,23 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"443147704126668801","carlfk","2026-04-08T03:30:32.0020000+00:00","Im still in disbelief that this works to install packages into the pi: videoteam@val2:~$ sudo chroot /srv/nfs/rpi/trixie/root apt install libcamera-tools","",""
+"443147704126668801","carlfk","2026-04-08T03:31:30.5020000+00:00","val2 is x86, I can't just run arm code.  it's not right.","",""
+"169786952432746498","mithro_","2026-04-08T12:52:55.5990000+00:00","@carlfk - https://github.com/fpgas-online/rpi-qemu","","💚 (1)"
+"443147704126668801","carlfk","2026-04-08T18:59:47.3410000+00:00","Temperature monitoring ?!   we are back into the supernatural :p","",""
+"169786952432746498","mithro_","2026-04-09T00:44:24.9980000+00:00","@carlfk - I think I'm close to having the CI system able to build the tftp/nfsroot server and verify a virtual pi is able to tftp boot and run from the nfs mount.","",""
+"443147704126668801","carlfk","2026-04-09T00:46:37.3100000+00:00","what is the test for ""did the pi boot"" ?","",""
+"169786952432746498","mithro_","2026-04-09T00:49:05.3790000+00:00","@carlfk - That is what the rpi-qemu work above was for. It builds the x86 system in QEMU and then connects the virtual QEMU RPi to the x86 network and verifies that the RPi PXEboots, mounts the nfsroot and then starts the fpgas.online stuff.","",""
+"443147704126668801","carlfk","2026-04-09T00:50:40.8270000+00:00","I understand what it does.  I am curious how you implemented ""verifies""","",""
+"443147704126668801","carlfk","2026-04-11T18:02:08.9990000+00:00","looooook!!! https://www.reddit.com/r/FPGA/comments/1shbhyv/free_access_to_fpgas/","","🔥 (1)"
+"509798510170865675","essen__","2026-04-12T02:41:08.9610000+00:00","You are famous now 💪","",""
+"443147704126668801","carlfk","2026-04-12T02:41:49.6500000+00:00","so much fame","",""
+"169786952432746498","mithro_","2026-04-12T02:42:45.8060000+00:00","@carlfk - My last name has two ls 🙂","",""
+"443147704126668801","carlfk","2026-04-12T02:43:01.6870000+00:00","I edit","",""
+"509798510170865675","essen__","2026-04-12T03:55:32.9320000+00:00","Backstage if you guys are interested. Overwhelmingly positive:","2026-04_media/image-E239E.png","blobclap (1)"
+"169786952432746498","mithro_","2026-04-14T02:13:03.5360000+00:00","@carlfk - In theory I now have running in GitHub Actions the Ansible scripts building the x86 host machine with nfsroot and such and then testing that a RPi is able to PXEboot and nfsmount+overlayfs from that host machine. https://github.com/fpgas-online/fpgas.online-infra","",""
+"169786952432746498","mithro_","2026-04-14T02:15:13.0400000+00:00","Claude and myself came up with the following kind of interesting approach:
+> The server uses systemd-nspawn with qemu-user-static ARM syscall emulation to create a chroot environment from the Pi NFS root, runs sshd inside it, and Ansible connects via SSH as if it were a real Pi. This ensures all packages, services, and configuration are pre-installed before any Pi boots.
+
+Kinda like the chroot approach you were playing with but works more naturally with ansible.","",""
+"169786952432746498","mithro_","2026-04-14T02:57:17.6940000+00:00","@carlfk - Another group kind of interested in the fpgas.online stuff https://github.com/chili-chips-ba/openCologne-PCIE/issues/1#issuecomment-4240999492","",""
+"443147704126668801","carlfk","2026-04-30T08:19:44.8040000+00:00","post looks ilke it is getting some traction - I hink there are 10+""likes"" great.","",""
+"443147704126668801","carlfk","2026-04-30T08:20:16.4100000+00:00","except comment # 2 says  Guys, did you know that Claude ✴️, Anthropic #ai coding agent, was extensively used to create the fpga.online code base‼️   https://www.linkedin.com/feed/update/urn:li:activity:7449678757650518016/?dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287455437480092393472%2Curn%3Ali%3Aactivity%3A7449678757650518016%29","",""

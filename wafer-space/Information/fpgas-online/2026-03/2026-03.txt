@@ -1,0 +1,172 @@
+==============================================================
+Guild: wafer.space Community
+Channel: Information / fpgas-online
+Topic: Channel for continued development of https://fpgas.online
+After: 02/28/2026 23:59
+Before: 04/01/2026 00:00
+==============================================================
+
+[03/08/2026 23:35] mithro_
+I should have 4 * Tiny Tapeout FPGA dev boards available for anyone to play with on https://fpgas.online in the next couple of days. Sadly it seems the USB-C PoE adapters I have are borked in some way (they supply power but block ethernet link) but I have some higher quality ones arriving tomorrow.
+
+
+[03/08/2026 23:36] mithro_
+@carlfk - Did you see that behaviour like that with those adapters at all?
+
+
+[03/08/2026 23:37] carlfk
+maybe?
+
+
+[03/08/2026 23:37] mithro_
+I decided to buy a whole bunch of these adapters -> https://www.waveshare.com/poe-splitter-type-c.htm
+
+{Embed}
+https://www.waveshare.com/poe-splitter-type-c.htm
+Industrial Gigabit PoE Splitter, Metal Case Protection, 5V 2.5A Typ...
+Industrial Gigabit PoE Splitter, Metal Case Protection, 5V 2.5A Type-C Power Output | POE-SPLITTER-TYPE-C
+
+
+[03/08/2026 23:38] carlfk
+I've had various problems with all the things.  so trying to pin down exactly what any one problem is gets tedious
+
+
+[03/12/2026 19:53] carlfk
+@Tim 'mithro' Ansell TT boards or something in TT boxes arrived  - havn't had time to open
+
+
+[03/12/2026 23:06] mithro_
+@carlfk - They are the Tiny Tapeout FPGA Emulation boards
+
+
+[03/12/2026 23:06] mithro_
+@carlfk - Basically has the same FPGA as the Fomu and lets you pretend to an a Tiny Tapeout ASIC
+
+
+[03/12/2026 23:06] mithro_
+@carlfk - I have an AI working on generating you some test designs like your arty loopback thing
+
+
+[03/12/2026 23:07] mithro_
+@carlfk - https://github.com/fpgas-online/fpgas.online-test-designs
+
+{Embed}
+https://github.com/fpgas-online/fpgas.online-test-designs
+GitHub - fpgas-online/fpgas.online-test-designs: Designs use to ver...
+Designs use to verify the functionality of the fpgas.online hardware is working correctly on RPi boot. - fpgas-online/fpgas.online-test-designs
+2026-03_media/fpgas-F8483.online-test-designs
+
+
+[03/14/2026 05:25] carlfk
+Ill get one of the board on ps1s setup in ... 12ish hours
+
+
+[03/14/2026 21:50] mithro_
+@carlfk - No hurry, I have 4 of those boards in the one here at welland
+
+
+[03/14/2026 21:52] carlfk
+good.  hook one up to a pi and get a script running on the pi,  which will likely need some things installed like vu
+
+
+[03/14/2026 21:52] mithro_
+@carlfk - Yeap!
+
+
+[03/14/2026 21:53] carlfk
+you can install a few things into ramdisk - but that gets anoying after a bit
+
+
+[03/14/2026 21:53] mithro_
+@carlfk - At some point we should chat about how we want to proceed with the current pici repo.
+
+
+[03/14/2026 21:53] carlfk
+yup - I think I opened an issue about how to .. um.. spemthing about the TT boards
+
+
+[03/14/2026 21:54] mithro_
+https://github.com/fpgas-online/todo/issues
+
+{Embed}
+https://github.com/fpgas-online/todo/issues
+fpgas-online/todo
+TODO items for https://fpgas.online. Contribute to fpgas-online/todo development by creating an account on GitHub.
+2026-03_media/todo-8B462
+
+
+[03/14/2026 21:54] mithro_
+@carlfk - BTW I discovered this thing call "lldp" which is basically a protocol switches use to tell each other what ports they are connected to
+
+
+[03/14/2026 21:55] mithro_
+@carlfk - If you install it on the rpi's the switch will then get information about which rpi is connected to which physical port.
+
+
+[03/14/2026 21:58] carlfk
+if I run it on the pi, will it report what port it is hooked to?
+
+
+[03/14/2026 21:59] mithro_
+@carlfk - Actually yes, it goes both directions
+
+
+[03/14/2026 21:59] carlfk
+neat
+
+
+[03/14/2026 22:06] mithro_
+@carlfk - BTW Did the Acorn + compute boards ever get deployed?
+
+
+[03/14/2026 22:34] carlfk
+were those the 4 things in a 1U box?
+
+
+[03/14/2026 22:45] mithro_
+Yeah
+
+
+[03/14/2026 22:46] carlfk
+yes.  they are hooked to the same PoE swtich at the pi/arty
+
+
+[03/14/2026 22:46] carlfk
+not sure what ports.  might be a way to figure it out looking at the switch's UI
+
+
+[03/15/2026 01:08] wspitts2
+If you guys are still having trouble with openocd running on RPI we got it working to our jtag taps (which are standard) as well as to ibex and I can share the instructions for our pi zero wireless ones.
+
+
+[03/15/2026 01:10] wspitts2
+We also extended openocd to handle daisy chained JTAG taps. I have to look back at our notes from last year.
+
+
+[03/15/2026 01:20] wspitts2
+This allows you to connect any number of JTAG taps together in the design. The openocd driver as it sat last year didn't allow this (at least as we had tried) but the JTAG standard does. It is nice when you have a multimodule hardware design with multiple design specific taps and want to put some in bypass and interrogate the isolated one.
+
+
+[03/18/2026 03:02] mithro_
+@carlfk - I've been trying to get the AI to document the hardware connectivity and such for the devices @ https://github.com/fpgas-online/fpgas.online-test-designs/tree/main/docs/hardware
+
+{Embed}
+https://github.com/fpgas-online/fpgas.online-test-designs/tree/main/docs/hardware
+fpgas.online-test-designs/docs/hardware at main · fpgas-online/fpg...
+Designs use to verify the functionality of the fpgas.online hardware is working correctly on RPi boot. - fpgas-online/fpgas.online-test-designs
+2026-03_media/fpgas-FEDEE.online-test-designs
+
+
+[03/18/2026 05:46] mithro_
+We are mainly using openfpgaloader and I have Claude working on adding support for rp1-pio accelerated programming. It already works using the libgpio driver but is rather slow - https://github.com/fpgas-online/fpgas.online-test-designs/blob/main/docs/hardware/netv2.md#jtag-via-rpi-gpio
+
+{Embed}
+https://github.com/fpgas-online/fpgas.online-test-designs/blob/main/docs/hardware/netv2.md
+fpgas.online-test-designs/docs/hardware/netv2.md at main · fpgas-o...
+Designs use to verify the functionality of the fpgas.online hardware is working correctly on RPi boot. - fpgas-online/fpgas.online-test-designs
+2026-03_media/fpgas-586CD.online-test-designs
+
+
+==============================================================
+Exported 33 message(s)
+==============================================================

@@ -1,1 +1,695 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
+"492702620759228416","mattvenn","2025-11-02T17:54:56.8290000+00:00","Great talk thanks for sharing, I probably would have missed it otherwise","",""
+"220639106915368960","tholin","2025-11-03T01:13:55.6900000+00:00","I finished porting the AS2650v2 to the wafer.space template. Although I’m not planning to tape this out, its a good reference:
+https://github.com/AvalonSemiconductors/as2650-ws","","💜 (2)"
+"220639106915368960","tholin","2025-11-03T12:50:23.1310000+00:00","Look how much free space there is without caravel!","2025-11_media/image-F5A5A.png","🎉 (4)"
+"220639106915368960","tholin","2025-11-03T12:51:14.0820000+00:00","With enough effort, you could easily double the amount of on-die RAM to 8KiB, but there is also 16 unused pads here as there is more of those too, so could fit more peripherals.","",""
+"220639106915368960","tholin","2025-11-03T12:51:28.2050000+00:00","I am very happy I designed a extendable bus interface for the peripherals.","",""
+"220639106915368960","tholin","2025-11-03T13:02:19.6610000+00:00","Running DRC on this takes more than the 32GB of RAM in my PC, so I have yet to actually see a top-level flow complete on this.","",""
+"220639106915368960","tholin","2025-11-03T13:02:39.2910000+00:00","I will spin up an AWS instance with 128GB of RAM later and hopefully it completes.","",""
+"220639106915368960","tholin","2025-11-03T13:02:52.6930000+00:00","You’ll see me commit the final outputs into the repo if I succeeded.","",""
+"323371864074485771","mole99","2025-11-03T13:04:06.0490000+00:00","Maybe don't commit to the repo as it will bloat the git history, instead maybe as a release?","",""
+"220639106915368960","tholin","2025-11-03T13:06:07.2900000+00:00","Or that","",""
+"220639106915368960","tholin","2025-11-03T13:26:21.2990000+00:00","I did *not* take that much RAM to build user_project_wrapper during GFMPW","",""
+"323371864074485771","mole99","2025-11-03T13:31:24.9700000+00:00","Steps like filler generation were done by Efabless at the time.
+However, if you think a step takes too much RAM for its purpose, please let me know.","",""
+"220639106915368960","tholin","2025-11-03T13:35:09.4510000+00:00","Yeah, I didn’t consider that it now has to check all the fillers.","",""
+"220639106915368960","tholin","2025-11-03T13:35:54.4940000+00:00","I have my own concerns about those. Like, afraid that the fillers will interfere with any artwork on the die.","",""
+"220639106915368960","tholin","2025-11-03T13:36:38.3710000+00:00","Ideally, I’d like the option to block fillers on a specific layer only, instead of every layer at once using fillblock. The artwork pixels themselves would create the required density on whichever layer it is on.","",""
+"323371864074485771","mole99","2025-11-03T13:49:51.1630000+00:00","Unfortunately, this PDK does not provide layers to block fill on specific layers only.
+There's NDMY and PMNDMY (https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_10_08.html).","",""
+"220639106915368960","tholin","2025-11-03T14:34:31.8160000+00:00","I forgot that the SRAM macros generate magic DRC errors.","2025-11_media/image-40898.png",""
+"220639106915368960","tholin","2025-11-03T14:34:44.6000000+00:00","I think the LVS errors are from the logo.","",""
+"220639106915368960","tholin","2025-11-03T14:35:23.6830000+00:00","Yes","",""
+"220639106915368960","tholin","2025-11-03T14:35:26.6580000+00:00","Okay, I can fix that","",""
+"220639106915368960","tholin","2025-11-03T14:35:56.0060000+00:00","Just missing some config lines","",""
+"220639106915368960","tholin","2025-11-03T14:36:40.0140000+00:00","There is a layer in the GDSII file called ""SRAM_CORE"" or something like that, that is probably a DRC exclude.","",""
+"220639106915368960","tholin","2025-11-03T14:36:52.6720000+00:00","Magic seems to ignore it right now. Klayout appears aware and does not generate DRC errors.","",""
+"220639106915368960","tholin","2025-11-03T14:37:39.4610000+00:00","""SramCore 108/5""","",""
+"220639106915368960","tholin","2025-11-03T14:37:40.9330000+00:00","That’s it","",""
+"323371864074485771","mole99","2025-11-03T14:48:03.0190000+00:00","Yes, there are special rules for SRAM:
+- [5V SRAM](https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_11_1.html)
+- [3.3V SRAM](https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_11_2.html)","",""
+"323371864074485771","mole99","2025-11-03T14:48:47.6370000+00:00","Maybe @Tim Edwards could look into adding them to the magic DRC deck, or simply ignore DRC errors in these areas (KLayout also checks them).","",""
+"1365118310701600900","rtimothyedwards_19428","2025-11-03T17:39:54.4090000+00:00","1) What 3.3V SRAM?
+2) Yes, the usual method is to replace the SRAM with an abstract view.  For the foundry-supplied 5V SRAMs, the PDK creates a .mag view in `maglef/` that is DRC clean and points to the GDS data for the SRAM.  That is the appropriate one to have in the layout while running full DRC.","",""
+"323371864074485771","mole99","2025-11-03T17:51:41.7330000+00:00","There are none in the PDK yet, but with Staf Verhaegen's SRAM generator we could try to generate them.
+
+2. I was thinking more along the lines of excluding all areas marked by `SramCore` from the default DRC rules. This way all SRAM macros (and future generated ones) won't result in any violations. We should still check the layout with the KLayout rules, of course.
+  I will try to blackbox the foundry SRAMs for now, I even created a LibreLane PR for that some time ago: https://github.com/librelane/librelane/pull/786","",""
+"220639106915368960","tholin","2025-11-03T18:18:57.3260000+00:00","I opened one of the SRAM macros in magic on its own. There are DRC errors outside the region marked as ""SramCore"" also.","",""
+"596068704471482370","246tnt","2025-11-03T18:36:12.3780000+00:00","Those are illegal overlap but they are ""fixed"" by using the appropriate gds flat glob options when loading the GDS. IIRC Leo already set that up.","",""
+"1365118310701600900","rtimothyedwards_19428","2025-11-03T19:08:51.7920000+00:00","The abstract view is of the entire SRAM macro, so if you use that, it should resolve all issues whether or not they exist in the core cell.","","👍 (2)"
+"323371864074485771","mole99","2025-11-03T19:30:53.4960000+00:00","I've set those up for the I/O and filler cells: https://github.com/wafer-space/gf180mcu-project-template/blob/6c5025a5e572e6c65f1c677966f37575acb1e52a/librelane/config.yaml#L192
+Maybe the `_CDNS_` also fixes the issue for the SRAMs.","",""
+"756011607603019777","anfroholic","2025-11-03T20:17:57.0280000+00:00","Awesome video from @Matt Venn and Nanik Adnani who made some analog designs on gf180
+https://www.youtube.com/watch?v=hVejMrkV-Bk","","❤️ (1)"
+"1365118310701600900","rtimothyedwards_19428","2025-11-03T20:37:30.7200000+00:00","I changed the behavior of magic some revisions ago (after our discussion about the problem) to automatically seed the GDS reader with `flatglob ""*_CDNS_*""` so that this would be taken care of by default for anyone with a sufficiently new version of magic.  But I don't think that will solve the issue with the SRAMs, because the ""CDNS"" string is a result of using Cadence pcells, and the SRAM module cells are not pcells.","",""
+"323371864074485771","mole99","2025-11-03T20:41:41.7990000+00:00","Good to know! Then I can remove that flatglob.","",""
+"169786952432746498","mithro_","2025-11-03T23:57:57.3910000+00:00","@Leo Moser (mole99) - Any recommendation on how much memory the server needs to run the checks?","",""
+"169786952432746498","mithro_","2025-11-04T00:01:10.4980000+00:00","@everyone - If people aren't already - I highly recommend signing up for the wafer.space GF180MCU Run 1 Crowd Supply campaign @ https://www.crowdsupply.com/wafer-space/gf180mcu-run-1","","💜 (3),waferspace (3),❤️ (3)"
+"840182560252624916","logic_destroyer","2025-11-04T00:02:21.6550000+00:00","16 x SRAM 512x8 SP?","",""
+"169786952432746498","mithro_","2025-11-04T00:03:45.7600000+00:00","https://docs.google.com/spreadsheets/d/1fW5ecBsLSec4hXBMaOjMUHQGslm4y-QUILgrxqS8MpA/edit?gid=0#gid=0","",""
+"169786952432746498","mithro_","2025-11-04T00:04:09.5020000+00:00","https://docs.google.com/document/d/1hk0WXCmQ8LYNhn8gIVs8vHymR2MleQx2ro_hQlyOYKU/edit?tab=t.0","","❤️ (1)"
+"220639106915368960","tholin","2025-11-04T00:07:31.0470000+00:00","Could easily fit that much total, yeah","","❤️ (1)"
+"220639106915368960","tholin","2025-11-04T00:07:42.9720000+00:00","But I think I will continue to rely on external memory for most things.","",""
+"252198343764213760","dnaltews","2025-11-04T00:09:52.3720000+00:00","I'm definitely interested in this, but it's a little outside of my hobbyist budget at the moment (especially for pre-ordering when I don't have a specific design pretty far along).  Keeping an eye on it, but unlikely to be in on this first run.  Feedback, if useful: (a) It'd be useful to have details on the COB option (specific sizes, number of pads, etc), and (b) a partial COB option (like 30-100 or so parts) that would allow one to pursue packaging for the rest if results are good, or (c) a packaged option (QFN or the like) would make things a bit more appealing to this particular hobbyist.","",""
+"220639106915368960","tholin","2025-11-04T00:24:08.1190000+00:00","I also wanna add that the magic DRC check taking dozens of gigabytes of RAM to run on the top-level is not good since not everyone has that. Even if that particular step is skipped, the rest of the flow needs enough RAM to where my laptop is struggling. And when it comes to hobbyists, these are the kinds of devices people are using.","",""
+"1365118310701600900","rtimothyedwards_19428","2025-11-04T00:27:33.0350000+00:00","@Tim 'mithro' Ansell :  You might consider crowdsourcing additional Tiny Tapeout runs at Tiny Tapeout prices?  I think you are better off aiming at getting many users at $100 to $200 each than indivduals putting up $7000 a run.  I would certainly put $200 down on a lark, but I'm not going to spend $7000 unless I have something obvious in mind to do with it.","",""
+"252198343764213760","dnaltews","2025-11-04T00:27:34.9020000+00:00","doh.  Might be time to finally upgrade the lunix workstation.  32GB is kinda weak these days I guess ^^","",""
+"169786952432746498","mithro_","2025-11-04T00:28:57.1660000+00:00","I'm hoping that when TT has finished porting that will definately be what happens.","",""
+"169786952432746498","mithro_","2025-11-04T00:29:33.6810000+00:00","@Brian Swetland / @Tim Edwards - You can also sign up for the updates even if you don't buy anything.","","👍 (2)"
+"252198343764213760","dnaltews","2025-11-04T00:29:44.1290000+00:00","something mid-way between TT and a full dedicated wafer space run in cost, number of parts, and area might be interesting too.","",""
+"252198343764213760","dnaltews","2025-11-04T00:31:57.0830000+00:00","I feel like there are probably viable price steps around $500 or $1000 or so for folks interested in something a bit more than a single part on an eval board of TT but not quite as big a commitment as $7000-8500 for 1K parts of their own","",""
+"1365118310701600900","rtimothyedwards_19428","2025-11-04T00:32:16.2410000+00:00","@Tholin :  If anyone wants to help track down _why_ magic is taking dozens of gigabytes of RAM, I can work on thinking of ways to mitigate the resource problem.  It really should not be that bad.  A number of methods were written (including by me) without consideration of how resources might blow up, and even when that goal is kept in mind, it's not always clear how badly some random subroutine is going to scale.  From time to time I work on those issues, but recently I've been doing more PDK work and much of the magic development has been quick fixes and additions for problems that crop up when onboarding a new process.  The ""quick fixes"" are often responsible for the resource hogging because I was trying to solve a problem quickly and just put down what came to mind without thinking about it too deeply.","","❤️ (1)"
+"1365118310701600900","rtimothyedwards_19428","2025-11-04T00:36:32.3400000+00:00","@Tim 'mithro' Ansell :  The $500 range is good for a ""Chipalooza test chip"" type design;  those had about 14 slots for dedicated analog designs, all power gated (and $500 x 14 = $7000, conveniently).  I've been wanting to run something like that on GF but I don't have any structure set up for advertising it.","",""
+"252198343764213760","dnaltews","2025-11-04T00:39:58.2000000+00:00","No matter how you slice it, it's very exciting to see ASIC design heading into viability for hobbyists, small shops, etc, the way PCB and FPGA stuff previously has.  Not just the more affordable shuttle runs, but the open toolchain.","",""
+"1365118310701600900","rtimothyedwards_19428","2025-11-04T00:40:39.1930000+00:00","@Tim 'mithro' Ansell :  Also I don't know how much CrowdSupply works like KickStarter but I'm willing to bet that if you had a $50 entry for just supporting the whole project and getting back some small token piece of swag, you would get a lot of takers.","","👍 (3)"
+"252198343764213760","dnaltews","2025-11-04T00:44:23.7390000+00:00","If there was an interesting project in the run that was open source (or at least open documentation), a support tier for $50-100ish for like 2-3 COB parts of that particular project, under a ""can't guarantee it'll work, but you get an artifact and it *might* work"" disclaimer might be a worthwhile ""support the run"" sort of thing","",""
+"169786952432746498","mithro_","2025-11-04T00:51:05.2780000+00:00","I'm 100% supportive of people organising that type of thing.","",""
+"169786952432746498","mithro_","2025-11-04T00:52:08.4200000+00:00","One of the primary reason Crowd Supply is interested is that they would like people to use Crowd Supply to raise for their own projects that use wafer.space silicon.","",""
+"252198343764213760","dnaltews","2025-11-04T00:54:08.2360000+00:00","Makes sense.  Suppose that could take the form of a template/example project of a TT style interconnect and sub-project-select interface that folks wanting to do so could easily integrate.","",""
+"252198343764213760","dnaltews","2025-11-04T00:54:40.2940000+00:00","oh, interesting!  Yeah that would be cool to see.","",""
+"169786952432746498","mithro_","2025-11-04T00:55:57.8420000+00:00","IE If you are crowd funding a device which is a few hundred dollars and get a few hundred orders, it's reasonable to do a wafer.space run or two.","",""
+"169786952432746498","mithro_","2025-11-04T00:58:34.9160000+00:00","Crowd Supply also offers a pathway to getting your stuff listed on Mouser","",""
+"537091611323007003","aedancullen","2025-11-04T01:02:12.4750000+00:00","@Tholin (or others) - I have a machine (Ryzen 9950X3D, 128GB DDR5) which I was thinking I could give out a few accounts on, for people needing ways to run their stuff. Let me know if this would be helpful for you","",""
+"169786952432746498","mithro_","2025-11-04T01:02:57.1870000+00:00","Sadly my machines which have >128gb memory are in a shipping container","",""
+"220639106915368960","tholin","2025-11-04T01:16:02.3530000+00:00","AWS also works","",""
+"692166844701999105","dshadoff","2025-11-04T01:36:22.4450000+00:00","That's a great point. I hope it is added as an option.  I don't have anything I can fab at this time, but I want to make sure it continues to be available","",""
+"220639106915368960","tholin","2025-11-04T09:26:41.1980000+00:00","Or use any leftover slots to tape out chip design people might be interested in buying and make the money back that way.","",""
+"169786952432746498","mithro_","2025-11-05T11:36:39.9200000+00:00","I had hope to do something like that, but need to have some designs people want to buy first","",""
+"220639106915368960","tholin","2025-11-05T11:40:00.1000000+00:00","I can’t really offer much. I *could* do what I did with the AS2650v2, but with a RISC-V or other architecture that actually has C compiler support.","",""
+"220639106915368960","tholin","2025-11-05T11:40:41.3470000+00:00","But that’s all I can think off","",""
+"169786952432746498","mithro_","2025-11-05T11:45:43.1440000+00:00","Bunnie was suggesting exploring silicon capacitors -> https://docs.google.com/document/d/1ahoCTmPvKExYtk3qqxvjMpnq5XOcIQvVWMF84zgi82k/edit?tab=t.0#heading=h.90mbdw45v39k","",""
+"220639106915368960","tholin","2025-11-05T11:59:08.7630000+00:00","I am also experimenting with analog","",""
+"220639106915368960","tholin","2025-11-05T11:59:53.7460000+00:00","Especially since we can do high-frequency analog stuff inside an IC","",""
+"220639106915368960","tholin","2025-11-05T11:59:58.0550000+00:00","I want to make a chip that just has a bunch of analog gadgets on it","",""
+"220639106915368960","tholin","2025-11-05T12:00:03.3440000+00:00","But I’m still experimenting.","",""
+"169786952432746498","mithro_","2025-11-05T12:04:18.6630000+00:00","There is of course @peterkinget 's Mosbius too","",""
+"1365118310701600900","rtimothyedwards_19428","2025-11-06T01:36:17.7790000+00:00","See https://github.com/fossi-foundation/frigate_analog.  Basically a field-programmable analog array with DACs, ADCs, instrumentation amplifiers, temperature sensor, etc., etc.  Hard to port from sky130 to another process, but I would like to do that for GF180MCU and IHP sg13g2 eventually.","","👏 (2)"
+"1365118310701600900","rtimothyedwards_19428","2025-11-07T00:57:31.0660000+00:00","By the way, I am now actively working on a 3.3V SRAM macro.  A bit of detective work which is a combination of ripping the DUALGATE layer off of the existing SRAMs and squeezing the transistors down to minimum length with the same W/L as the 5V cells have, and squeezing out additional space according to the published 3.3V SRAM design rules.
+
+My estimate from working on the main core SRAM cell is that a 512kB block will be 255um x 285um vs. 430um x 485um for the existing 5V SRAM 512kB macro.  That's approximately 1/3 the area.","","👍 (3),❤️ (4),🔥 (2)"
+"738396032295108721","bailey8889","2025-11-07T02:50:53.2900000+00:00","sky130's mpw_precheck has an oeb check to verify that the gpio connections make sense. 
+Like:
+- If the gpio output is connected, then oeb should not be fixed high.
+- If the gpio input is connected, the gpio should be in input mode.
+- etc.
+Does wafer.space need anything similar?","",""
+"169786952432746498","mithro_","2025-11-07T04:42:52.1030000+00:00","Started a thread.","",""
+"323371864074485771","mole99","2025-11-07T07:06:46.6980000+00:00","Started a thread.","",""
+"323371864074485771","mole99","2025-11-07T07:11:59.1970000+00:00","Started a thread.","",""
+"220639106915368960","tholin","2025-11-07T09:34:24.7670000+00:00","I’m slowly getting better at throwing together these multi-project dies. Come a long way since my first one on GFMPW-1. Optimizing multiplexer timing right now.","",""
+"220639106915368960","tholin","2025-11-07T09:34:54.2170000+00:00","And at this point, I understand it good enough that I can automate it, I think.","",""
+"220639106915368960","tholin","2025-11-07T09:35:43.8820000+00:00","Its definitely possible to auto-generate the multiplexer RTL from some config files specifying each design.","",""
+"220639106915368960","tholin","2025-11-07T09:37:32.0340000+00:00","The big thing with my setup is that any lines going to the pads, be it outputs or output enables or anything like that, have any constant values optimized. If a io_oe value, for instance, is fixed at 0, instead of that being implemented in the project macro, routed on the top-level to the multiplexer where it then passes through standard cells to the output, the constant is instead resolved inside the multiplexer RTL to remove all that overhead.","",""
+"220639106915368960","tholin","2025-11-07T09:37:38.7450000+00:00","Yielding better top-level density and timings.","",""
+"220639106915368960","tholin","2025-11-07T09:38:16.0460000+00:00","","2025-11_media/image-B65EE.png",""
+"220639106915368960","tholin","2025-11-07T09:38:19.9100000+00:00","Like this","",""
+"220639106915368960","tholin","2025-11-07T09:38:46.5320000+00:00","Actually, this may be a better example","2025-11_media/image-7B122.png",""
+"220639106915368960","tholin","2025-11-07T09:39:49.8560000+00:00","So its not as easy as generating a case-block where each entry is
+```verilog
+5'hxx: begin
+  io_oe_sel = designname_oe;
+  io_out_sel = designname_out;
+  io_cs_sel = designname_cs;
+  etc
+```","",""
+"220639106915368960","tholin","2025-11-07T09:40:04.1650000+00:00","Still, I think this is automatable with enough effort.","",""
+"220639106915368960","tholin","2025-11-07T09:41:12.4270000+00:00","This is a really good setup for sharing die space between a low number of designs, like 4 or 5","",""
+"220639106915368960","tholin","2025-11-07T09:41:37.5010000+00:00","Its, like, in-between TinyTapeout and utilizing the full die.","","👍 (2)"
+"220639106915368960","tholin","2025-11-07T09:42:32.0220000+00:00","I could get to work on this if there is demand for a automatic, small-scale multi-project setup.","","💜 (1)"
+"169786952432746498","mithro_","2025-11-07T12:01:20.2270000+00:00","@Tholin - Offer still stands to put Avalon on the wafer.space design-help page -- maybe it could be focused on ""help groups share multiple designs in one slot"" type thing?","",""
+"220639106915368960","tholin","2025-11-07T12:01:55.2840000+00:00","I mean, I at the very least have a LOAD of reference designs.","",""
+"220639106915368960","tholin","2025-11-07T12:02:00.1350000+00:00","Soon even analog stuff","",""
+"169786952432746498","mithro_","2025-11-07T12:02:28.0650000+00:00","Also, might be worth mentioning in the profile update that @Andrew Wingate is doing for me?","",""
+"756011607603019777","anfroholic","2025-11-07T12:04:52.1420000+00:00","Sure!","",""
+"220639106915368960","tholin","2025-11-07T12:06:13.4600000+00:00","Unfortunately, time is tight for me now, so I will definitely not get started on an automated multi-project setup until after december.","",""
+"169786952432746498","mithro_","2025-11-07T12:11:45.4680000+00:00","I mean a ""contact Tholin if you are interested in XYZ"" type thing?","",""
+"220639106915368960","tholin","2025-11-07T12:28:10.7350000+00:00","Probably not. That sounds like it could easily become too stressful on me.","",""
+"691780627338625077","rebelmike","2025-11-07T12:36:48.7710000+00:00","I don't know if @Leo Moser (mole99) is planning to port greyhound, but something like that on a breakout would be interesting for me to buy as a hobbyist.  Mosbius too.","",""
+"220639106915368960","tholin","2025-11-07T12:37:18.7460000+00:00","My next multi-project die is going to include a few things for homebrew computer builders.","","👍 (1)"
+"323371864074485771","mole99","2025-11-07T12:49:22.2090000+00:00","I won't be porting Greyhound just yet, but I'll start with an FPGA. Just need to find the time for it while preparing the reticle :)","","💜 (1)"
+"220639106915368960","tholin","2025-11-07T13:48:10.3070000+00:00","I’m thinking - arranging the macros of my multi-project die is a bit tedious to make sure there is enough spacing. I extended my padout graphic generator to also draw the macros, but even then, its a lot of tweaking values in the config and re-running the generator until I happen to get it right.
+But I wonder if I could turn the padout generator into an interactive UI where you can click and drag the macros with your mouse?","2025-11_media/padout-D3BFA.png",""
+"220639106915368960","tholin","2025-11-07T15:13:25.9260000+00:00","Does magic not automatically generate a PR_bndry when streaming out GDSII? It didn’t for one of my analog macros.","",""
+"220639106915368960","tholin","2025-11-07T15:26:16.0060000+00:00","In any case, setting the bounding box manually works and I now have DACs in my submission.","",""
+"596068704471482370","246tnt","2025-11-07T15:44:42.6070000+00:00","you need the FIXED_BBOX property and then it will.","",""
+"220639106915368960","tholin","2025-11-07T15:55:10.5280000+00:00","","2025-11_media/image-FB91A.png",""
+"220639106915368960","tholin","2025-11-07T15:55:34.5880000+00:00","I just add DACs to this column as I need them","",""
+"220639106915368960","tholin","2025-11-07T15:56:31.2040000+00:00","The outputs are not wired up to the analog pads yet because something broke and I’m still trying to figure it out.","",""
+"220639106915368960","tholin","2025-11-07T15:59:47.3440000+00:00","I am going to create a layout for an op-amp next. Already have a schematic for it. I wanna use op-amps inside one of my peripherals, but I’ll also wire one straight to three analog pads for testing.","",""
+"220639106915368960","tholin","2025-11-07T16:02:05.3120000+00:00","I also wanna see if I can generate a VGA signal, but using actual analog outputs for the colors.","",""
+"596068704471482370","246tnt","2025-11-07T16:05:25.5520000+00:00","Definitely need some big drivers if you're planning direct drive. Each color signal is ~ 14 mA peak. 🙂","",""
+"220639106915368960","tholin","2025-11-07T16:06:32.5830000+00:00","Probably not that. We’ll see.","",""
+"169786952432746498","mithro_","2025-11-08T01:50:12.6640000+00:00","@ᵖʳᵒᵖᵖʸ - See @Tholin's multi-project stuff above.","",""
+"351484320432521226",".leonmc","2025-11-08T15:18:28.6020000+00:00","How likely is it that the first run actually happens? The Crowdsupply page shows only 13% funding, and the announcement about reaching out if you're planning to buy a slot makes it seem like it's currently unlikely to happen?
+And if that were the case, would there be another attempt at a later date, or would that be the end of wafer.space?","",""
+"323371864074485771","mole99","2025-11-08T16:54:10.2280000+00:00","@Tim 'mithro' Ansell","",""
+"169786952432746498","mithro_","2025-11-09T03:40:06.7560000+00:00","@Leon - The run will 100% be happening","",""
+"169786952432746498","mithro_","2025-11-09T03:41:06.1190000+00:00","@Leon - I'm committed to running atleast two GF180MCU runs","",""
+"169786952432746498","mithro_","2025-11-09T03:42:56.1980000+00:00","Getting enough people purchasing slots is important to getting us beyond these first two runs","","👍 (1)"
+"351484320432521226",".leonmc","2025-11-09T07:45:34.7790000+00:00","That's really great to hear, but it might be useful to clarify that on the website somewhere? Usually when a crowdfunding goal isn't reached, that means the project doesn't happen, so the ""13% funded"" on the Crowdsupply page might be deterring people from making plans to use wafer.space? (I'm just guessing though, I know very little about chip design and am just an interested spectator hoping for your success.)","",""
+"691780627338625077","rebelmike","2025-11-09T10:08:10.5680000+00:00","It’s a bit different to a normal crowdfund because the thing you’re buying is only worth something if you’ve completed a design yourself. Doing that will take weeks and most people wouldn’t have started until after the start of the campaign. So it makes sense that most of the purchases will come in at the last minute.","",""
+"351484320432521226",".leonmc","2025-11-09T10:37:50.1540000+00:00","> So it makes sense that most of the purchases will come in at the last minute.
+Of course, but that also means you only know if the project reaches the funding goal at the last minute. With the usual crowdfunding model (where projects without sufficient funding are cancelled), that means people have to commit to spending time and resources without knowing if they can actually have the designs produced. I imagine there are potential customers not willing to do this, for whom it would be highly relevant to know that the first two runs are certain to happen.","","👍 (3)"
+"220639106915368960","tholin","2025-11-09T16:47:23.1460000+00:00","So, my multi-project tapeout is going to have a series of DACs on it and I wish to see if I can use three of them to generate a VGA signal directly. But I don’t wanna display just frames of solid color. Anyone have an existing VGA Demo from TT they’d be okay with me using for testing purposes?","",""
+"732347216412278825","urish","2025-11-09T17:01:02.0330000+00:00","Happy to contribute https://github.com/TinyTapeout/tt-logo-screensaver","","🎉 (1)"
+"732347216412278825","urish","2025-11-09T17:02:16.6490000+00:00","But all TT projects are permissively licensed, so you can choose virtually any project","",""
+"732347216412278825","urish","2025-11-09T17:03:45.2270000+00:00","There are many cool projects from the TT08 demoscene compo: https://tinytapeout.com/competitions/demoscene-tt08-entries/","",""
+"220639106915368960","tholin","2025-11-09T17:47:25.1610000+00:00","That's nice and colorfull! Perfect!","","❤️ (2),ttlogo (3)"
+"220639106915368960","tholin","2025-11-10T13:46:11.4970000+00:00","Overhauling my DAC in multiple ways right now. It doesn’t actually quite work as it is right now.","",""
+"220639106915368960","tholin","2025-11-10T13:46:39.9140000+00:00","Resistors too small. Even a buf_20 cell cannot drive the DAC as it is.","",""
+"220639106915368960","tholin","2025-11-10T13:47:00.0490000+00:00","Did an oopsie and used the wrong kind of resistor.","",""
+"220639106915368960","tholin","2025-11-10T13:47:13.0920000+00:00","Its very confusing how many of them there are.","",""
+"220639106915368960","tholin","2025-11-10T14:20:14.9500000+00:00","Since I have a working opamp now, may as well use it. Here’s old vs. new.","2025-11_media/image-ABC9E.png","👍 (1)"
+"220639106915368960","tholin","2025-11-10T14:20:20.9460000+00:00","Previous version just used a FET","",""
+"220639106915368960","tholin","2025-11-10T14:48:16.5550000+00:00","Oh man, am I going to need some massive transistors in that opamp just to drive a 1Kohm load on the output.","",""
+"220639106915368960","tholin","2025-11-10T15:01:02.2550000+00:00","What does ""number of fingers"" do? If I change it from 1, nothing changes about the simulation output.","",""
+"596068704471482370","246tnt","2025-11-10T15:02:06.8870000+00:00","It's in how many finger the W you indicated will be split during layout.","",""
+"220639106915368960","tholin","2025-11-10T15:02:55.9810000+00:00","Oh, so it doesn’t automatically multiply the W by nf?","",""
+"596068704471482370","246tnt","2025-11-10T15:02:57.6500000+00:00","It does change some things subtly but it's mostly when trying to match devices or changing the capacitance and such, you wouldn't really see it much in the kind of graphs you're plotting.","",""
+"596068704471482370","246tnt","2025-11-10T15:03:11.6880000+00:00","No, the W is the total W, not the finger W.","",""
+"220639106915368960","tholin","2025-11-10T15:03:23.8780000+00:00","Ah","",""
+"220639106915368960","tholin","2025-11-10T15:03:29.0490000+00:00","Because I am trying to multiply W","",""
+"220639106915368960","tholin","2025-11-10T15:04:28.4680000+00:00","While keeping the shape of the FET in the layout managable","",""
+"596068704471482370","246tnt","2025-11-10T15:05:16.8680000+00:00","Well you can inrease nf buf you also need to increase W.","",""
+"220639106915368960","tholin","2025-11-10T15:05:17.4490000+00:00","I guess I just have to do it by hand","",""
+"220639106915368960","tholin","2025-11-10T15:07:34.1960000+00:00","Actually, it doesn’t like that","2025-11_media/image-CA216.png",""
+"220639106915368960","tholin","2025-11-10T15:08:39.1740000+00:00","If the total W gets too high, it breaks.","",""
+"323371864074485771","mole99","2025-11-10T15:24:09.7540000+00:00","The models only support a W up to a certain size. You need to change the multiplier instead.","","😑 (1)"
+"220639106915368960","tholin","2025-11-10T15:47:34.7470000+00:00","That’s a lot of very large transistors.","2025-11_media/image-C44FE.png",""
+"220639106915368960","tholin","2025-11-10T15:47:40.2140000+00:00","This is gonna take a minute","",""
+"220639106915368960","tholin","2025-11-10T16:37:04.1380000+00:00","I’ve found that trying to set up my opamps as voltage followers (output connected to MINUS, source voltage into PLUS) strangely doesn’t work. But building an inverting amplifier with a little bit of gain **does.**","2025-11_media/image-2FA52.png",""
+"220639106915368960","tholin","2025-11-10T16:37:05.2850000+00:00","No idea why","",""
+"220639106915368960","tholin","2025-11-10T16:37:16.9890000+00:00","Don’t question the component name.","",""
+"1365118310701600900","rtimothyedwards_19428","2025-11-10T18:03:35.3560000+00:00","My main problem with that schematic is not that the op-amp is chonky (chonky is in the eye of the beholder!) but that you have some pretty high currents for an on-chip amplifier.  On-chip circuits are usually meant to drive microamps, not milliamps.  Driving an off-chip load does require some beefy components, but with the right amp design, you can restrict the beefy components to just the output driver, and most of the rest of the amplifier will be reasonbly small.  A voltage follower is generally easier to get working than an inverting amplifier (all the drive current goes to the load), so it's probably a good idea to look closely at what's causing that configuration to fail.  Finally, a current bias is much better than a voltage bias, and if it's really taking a voltage bias, then you shouldn't need a milliamp current path through your voltage divider to set it.","",""
+"1365118310701600900","rtimothyedwards_19428","2025-11-10T18:04:57.8170000+00:00","@Tholin :  Feel free to post the amplifier schematic, or a link to the project.","",""
+"220639106915368960","tholin","2025-11-10T18:16:36.3270000+00:00","Note: resistor values are not yet properly tuned, I only care about the ratios so far.","",""
+"220639106915368960","tholin","2025-11-10T18:16:45.2220000+00:00","But yeah, this is meant to drive a pad.","",""
+"220639106915368960","tholin","2025-11-10T18:18:01.4190000+00:00","I should share the schematic for the opamp sometime.","",""
+"220639106915368960","tholin","2025-11-10T19:31:19.8760000+00:00","","2025-11_media/image-F925C.png",""
+"596068704471482370","246tnt","2025-11-10T20:45:36.9550000+00:00","I also wouldn't count too much on that working like in sim. I'm not expert, but biasing the gate of mosfet with a resistor divider seems like it could yield quite a bit of process variation.","",""
+"596068704471482370","246tnt","2025-11-10T20:47:22.0160000+00:00","Why is the gate and drain of XM6 connected together ?","",""
+"596068704471482370","246tnt","2025-11-10T20:50:41.6590000+00:00","Shouldn't the model only care about the finger width and not the total width ?","",""
+"371851806067654657","_saltypretzel","2025-11-10T21:09:35.9760000+00:00","I second this. For the ""adj"" pin, you should definitely consider using a replica biasing scheme.","",""
+"371851806067654657","_saltypretzel","2025-11-10T21:11:10.0460000+00:00","Even if your resistors are ratiometrically designed, your mosfet threshold voltage, mobility, Cox etc... will all change under process. Since mosfets have gain, you'll have a trouble keeping the bias currents the same. across chip-chip or even from one part of the chip to another.","",""
+"371851806067654657","_saltypretzel","2025-11-10T21:12:48.9900000+00:00","the first stage of the amplifier can definitely be a lot smaller (length and width wise)... it seems like one side of the differential pair (and current mirror) is not equal to the other? These should be the same otherwise you will have systematic offset in your circuit.","",""
+"220639106915368960","tholin","2025-11-10T21:21:33.9780000+00:00","Don’t worry - I can explain all this very easily.","",""
+"220639106915368960","tholin","2025-11-10T21:21:41.3220000+00:00","I don’t know what I’m doing","",""
+"220639106915368960","tholin","2025-11-10T21:21:55.7740000+00:00","Analog stuff is so inaccessible still :flop:","",""
+"220639106915368960","tholin","2025-11-10T21:23:22.0790000+00:00","Also, yeah, I do have some weird offsets","",""
+"220639106915368960","tholin","2025-11-10T21:30:57.5130000+00:00","I played with the transistor values until the output looked good. And I simulated it across all process corners and there is very little variance.","",""
+"1437714127744401431","ethanmahintorabi","2025-11-11T08:11:37.6980000+00:00","Been working on a 500x300 black and white camera, and I finally got the pixel array done. All done in gdsfactory https://github.com/njcoburn/OPENIMAGESENSOR/blob/main/test.py","2025-11_media/PXL_20251111_071117024-2A9D5.jpg,2025-11_media/PXL_20251111_080326867-4D5E4.jpg","❤️ (1),blobclap (2),👀 (1),👏 (1)"
+"323371864074485771","mole99","2025-11-11T08:30:30.8600000+00:00","Very cool! Do I see round corners on the photodiode? Do the docs have DRC guidelines on that?","",""
+"220639106915368960","tholin","2025-11-11T11:01:18.5760000+00:00","I built a better opamp after doing some research. This one is almost rail-to-rail!","2025-11_media/image-AEEB7.png",""
+"220639106915368960","tholin","2025-11-11T11:02:04.3540000+00:00","And will only need two big transistors.","",""
+"220639106915368960","tholin","2025-11-11T11:03:06.7680000+00:00","The other opamp I designed I may keep the non-chonky version of for internal use on the die. It has some properties that made it easier to use for building that sine wave generator I showed a long time ago.","",""
+"220639106915368960","tholin","2025-11-11T12:20:18.1670000+00:00","It behaves okay enough under a 1Kohm output load, so I think I’ll move ahead to the layout stage with this one.","",""
+"220639106915368960","tholin","2025-11-11T12:25:42.2580000+00:00","Still a massive output stage just to drive a 1Kohm load. Am I doing this right?","2025-11_media/image-9FB2C.png",""
+"596068704471482370","246tnt","2025-11-11T12:40:21.5450000+00:00","Check the size of the transistor in the IOs. They can drive a 1kohm load with no problem, so if you're bigger than they are, you're doing something wrong.","",""
+"596068704471482370","246tnt","2025-11-11T12:42:27.2030000+00:00","Also post the new internal schematic of your op amp.","",""
+"220639106915368960","tholin","2025-11-11T12:44:18.1410000+00:00","Oh, right","2025-11_media/image-B4788.png",""
+"220639106915368960","tholin","2025-11-11T12:44:52.5580000+00:00","It looks a little weird on the right, having duplicated the transistors in the schematic. But its so that importing the SPICE into magic generates the transistors how I want them.","",""
+"220639106915368960","tholin","2025-11-11T12:47:54.5370000+00:00","Since this thing at least works really good in this configuration, I do wonder if a IO pad structure specifically meant for analog output that contains this circuit would be something people would want to use. It just takes whatever analog signal comes in and boosts it to be able to drive 1kohm loads. (and inverts it, but that can be solved with a second opamp).","",""
+"732905260091310090","valgamaa","2025-11-11T12:49:13.3800000+00:00","I don't know the tools you are using, but many of them will let you get multiple instances in the same way by using InstanceName<N:0> to get N+1 instances of the transistor in the netlist and layout. I would try it in the schematic then check the netlist to see if it works in your toolchain.","",""
+"220639106915368960","tholin","2025-11-11T12:50:06.4300000+00:00","I can do this, but it stacks the transistors in a way I don’t like.","",""
+"596068704471482370","246tnt","2025-11-11T12:51:14.4570000+00:00","So I think one issue might also be expecting it to be rail to rail using that architecture. Inherently that basic op-amp can never be and maybe you're massively oversizing the transistor to get it closer to rail and compensate for a fundamental limit of the architecture.","",""
+"732905260091310090","valgamaa","2025-11-11T12:51:29.5370000+00:00","What might also be worth investigating is using shorter cascoded transistors. Shorter channels will give the same gm with shorter widths, and the cascode will raise the output impedance with lower Vds","",""
+"732905260091310090","valgamaa","2025-11-11T12:52:24.1460000+00:00","With this process you can also probably interdigitate the two transistors for a very compact layout.","",""
+"220639106915368960","tholin","2025-11-11T12:52:30.6190000+00:00","Oh, yeah, I stopped making the transistors larger when I hit an area of diminishing returns. But if I make them any smaller, there is a big difference in the output still.
+What is nice is that its effectively rail-to-rail when used internally, not to drive an output pad.","",""
+"596068704471482370","246tnt","2025-11-11T12:55:22.1070000+00:00","See how this for instance use symmetrical Nmos/Pmos input pairs and then combine them to increase the range : https://www.xschem-viewer.com/?file=https://github.com/htfab/flash-adc/blob/main/xschem/opamp.sch   Obviously this is single stage so you'd still need to drive a power stage instead.","",""
+"220639106915368960","tholin","2025-11-11T12:56:20.4890000+00:00","That xschem viewer doesn’t work on firefox","",""
+"596068704471482370","246tnt","2025-11-11T12:56:56.6100000+00:00","https://github.com/htfab/flash-adc/blob/main/xschem/opamp.sch then 🙂","",""
+"732905260091310090","valgamaa","2025-11-11T12:57:25.3800000+00:00","That is for increased input common-mode range (as needed in a unity-gain non-inverting amplifier), but doesn't do anything for output swing.","",""
+"596068704471482370","246tnt","2025-11-11T12:59:48.9490000+00:00","Oh yeah, I thought it was setup as a non-inverting buffer to buffer the R2R output, my bad. Rechecking the way it's used, it's indeed inverting and will mainain both input at mid range.","",""
+"732905260091310090","valgamaa","2025-11-11T13:01:29.1600000+00:00","Although if the intention is to produce a general-purpose op-amp, then it is a point worth considering in the design.","",""
+"371851806067654657","_saltypretzel","2025-11-11T13:54:52.0580000+00:00","Given you have two gain stages now with the diff amp, you have 3 poles which could be close to each other… make sure everything is stable when you build it with feedback too","",""
+"371851806067654657","_saltypretzel","2025-11-11T14:06:45.4180000+00:00","Oh never mind, they seem to be in parallel… regardless it is still something to consider","",""
+"1437714127744401431","ethanmahintorabi","2025-11-11T15:27:02.2790000+00:00","The docs do not have drc guidance on that, but it didn't trigger any rules so I assume it's okay. The nwell is 5x5um so I assume it's large enough to not matter","",""
+"323371864074485771","mole99","2025-11-11T15:42:20.9110000+00:00","It might be okay, it might also be a missing check :)
+
+I only found the following in [3.0 Layout Information](https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_03.html):
+
+> 3.6 Only 90 deg and 45 deg bends are allowed for poly and metal lines.
+
+So I assume that for nwell round coners are okay (as long as all points are on-grid).
+
+If you have a complete chip layout, please let me know and I can already include it in the reticle to send to GF for early feedback.","",""
+"1437714127744401431","ethanmahintorabi","2025-11-11T15:44:04.9730000+00:00","Do you need a full pad frame with density fill or can I just send you a gds with the pixel array fitting into the die area","",""
+"1437714127744401431","ethanmahintorabi","2025-11-11T15:47:09.1480000+00:00","Or I could just send you some rounded nwell","",""
+"384390069412429834","polyfractal","2025-11-11T19:03:19.2850000+00:00","this looks amazing! have you been doing simulations to check functionality, or just YOLO'ing it? And if yes, how? That's the part that I really stumbled on when thinking about doing an imager 🙂","",""
+"323371864074485771","mole99","2025-11-11T19:47:20.3060000+00:00","@Andrew Wingate Great post, Andrew! https://www.crowdsupply.com/wafer-space/gf180mcu-run-1/updates/chip-on-board","","💜 (3)"
+"1437714127744401431","ethanmahintorabi","2025-11-11T20:13:55.9950000+00:00","Started a thread.","",""
+"732347216412278825","urish","2025-11-11T20:39:41.2810000+00:00","Started a thread.","",""
+"220639106915368960","tholin","2025-11-12T01:17:57.2730000+00:00","All I did was try to include my opamp in another circuit and magic went and reset the positions of the transistors AND saved the changes to the .mag file without asking for confirmation. Why? Why did magic just destroy my work?","2025-11_media/image-28D41.png",""
+"1365118310701600900","rtimothyedwards_19428","2025-11-12T02:40:02.4130000+00:00","I guess you can blame me for that one.  the SPICE import function is supposed to be re-entrant, letting you add, subtract, or change devices without messing with the existing layout.  Apparently that doesn't work?","",""
+"754661674145022032","noritsunaimamura","2025-11-13T09:44:12.7550000+00:00","Hi, All.
+
+We, ISHI-KAI( https://ishi-kai.org/links ), are a community that promotes open source PDK & EDA in Japan.  
+This time, we brought together 14 novice semiconductor designers (most of whom were new to semiconductor design), each of whom created an analog circuit, such as an Inverter or OPAMP, ADC, PLL, BGR, CS, made using xschem & klayout with P-Cells for Wafer.Space GF180MCU .  
+All schematics and layouts are released under an open source license.  
+
+- Our Project
+https://github.com/ishi-kai/ISHI-KAI_Multiple_Projects_WaferSapce-GF180-1
+
+
+This is the development environment for analog circuits we used for Wafer.Space.  
+Feel free to use it if needed.
+
+- WSL Image
+https://www.noritsuna.jp/download/ubuntu2404_waferspace_2025.zip
+ID:ishikai
+Pass:ishikai
+
+   - How to Setup
+Execute on the Windows command line
+> cd [Unzipped directory]
+> wsl --import-in-place ubuntu2404_waferspace_2025 .\ubuntu2404_waferspace_2025\ext4.vhdx
+
+   - How to Use
+Execute on the Windows
+Double-click ubuntu2404_waferspace_2025.lnk
+
+    - How to Delete
+Execute on the Windows command line
+> cd [Unzipped directory]
+> wsl --unregister ubuntu2404_waferspace_2025
+
+    - How to Run precheck
+Execute on the WSL command line
+> cd ~/tools/gf180mcu-precheck/
+> nix-shell
+> export PDK=gf180mcuD
+> export PDK_ROOT=gf180mcu
+> python3 precheck.py --input [GDS file] --top [Top Cell Name]
+
+
+- Setup script for xschem & ngspice, magic, KLayout fo Wafer.Spice GF180 of Analog on Local WSL&Ubuntu&MacOS
+https://github.com/ishi-kai/OpenEDA-PDK_SetupScript
+
+    - How to Setup
+> git clone https://github.com/ishi-kai/OpenEDA-PDK_SetupScript
+> bash eda-setup.sh
+> bash pdk_gf180-setup.sh","","👍 (1)"
+"323371864074485771","mole99","2025-11-13T10:11:19.0860000+00:00","Started a thread.","",""
+"169786952432746498","mithro_","2025-11-13T21:40:37.2930000+00:00","","",""
+"220639106915368960","tholin","2025-11-13T21:44:12.0470000+00:00","Oh! I can use this as the analog output VGA demo on my multi-project die.","",""
+"220639106915368960","tholin","2025-11-14T11:41:01.9280000+00:00","Once I am no longer busy preparing a chip layout for the december tapeout, I am planning to spend the following months (while the fab is busy) on two things. Firstly, my custom 3.3V standard cells (including IO pad structures for 3.3V IO). Secondly, a general-purpose, easy to use toolset for creating multi-project dies. I want to make it as simple as defining a project list in a CSV and dropping it plus the source RTL for each project into a repository template, and the whole multiplexer and top-level setup is auto-generated. It would not be as advanced as TinyTapeout, but more dynamic. Better for when the die is only to be split 4 or 5 ways, with each project having a variable size, so you can do crazy splits like a 3 project die where 90% of available area goes to to project #1 and 5% to #2 and #3 each.
+For bonus points, I may create a GUI for managing the project list, settings and macro arrangement.","","👏 (3),🎉 (2)"
+"492702620759228416","mattvenn","2025-11-14T19:40:00.7600000+00:00","It's old and unmaintained but maybe there are some ideas you can take from my old https://github.com/mattvenn/multi_project_tools","",""
+"756011607603019777","anfroholic","2025-11-14T21:08:13.0650000+00:00","Another CrowdSupply post. This time featuring @Tholin 
+https://www.crowdsupply.com/wafer-space/gf180mcu-run-1/updates/tholin-feature","","💜 (2),🎉 (2)"
+"169786952432746498","mithro_","2025-11-14T21:35:27.5750000+00:00","I got distracted and accidentally created https://discord.wafer.space archive of the discord server","",""
+"220639106915368960","tholin","2025-11-16T21:32:49.8390000+00:00","Triangle and sine/cosine wave generators work much better with the new opamp design.","2025-11_media/image-2728F.png",""
+"220639106915368960","tholin","2025-11-16T21:57:49.9890000+00:00","I wish there was time to get the NTSC color video generator demo going in time for the december tapeout, but I don’t think there is.","","❤️ (1)"
+"220639106915368960","tholin","2025-11-16T21:57:50.8470000+00:00","Sad.","",""
+"1365118310701600900","rtimothyedwards_19428","2025-11-17T02:34:55.4620000+00:00","Update:  Work on the 3.3V SRAM block is progressing steadily.  I was hoping to finish layout at the end of last week, but it ran over into the weekend.  I now have a draft layout, DRC clean, but I have not run LVS yet (will work on that tomorrow)  The design is currently about 300 x 330 um, which makes it just slightly less than 1/2 the area of the 5V SRAM.  I have some room to shave off additional area from the bottom.  I can probably get it down to 300 x 300, but probably don't have time to do that for this tapeout.  Once I get it LVS clean, I will push the layout, netlist, and LEF.  Adjusting all the timing in the liberty and verilog files will take a lot of time and effort.","","👏 (3),🎉 (4)"
+"1365118310701600900","rtimothyedwards_19428","2025-11-17T02:36:03.8120000+00:00","I would post a picture but it looks just like the 5V SRAM layout from a bird's-eye view, so not really worth the effort.","",""
+"732347216412278825","urish","2025-11-17T07:16:11.8610000+00:00","Started a thread.","",""
+"596068704471482370","246tnt","2025-11-17T10:14:18.7060000+00:00","@Leo Moser (mole99) How is your ground ring connected to the pads in the template ?","",""
+"596068704471482370","246tnt","2025-11-17T10:14:51.4260000+00:00","Maybe it didn't build properly for me locally but I'm looking at it and I can't find anywhere where it's attached.","",""
+"323371864074485771","mole99","2025-11-17T10:17:20.9550000+00:00","LVS is clean, so it better be attached 😄 Let me check...","",""
+"596068704471482370","246tnt","2025-11-17T10:17:40.1300000+00:00","Could be attached through substrate ...","",""
+"323371864074485771","mole99","2025-11-17T10:17:47.0160000+00:00","Oh, I see","",""
+"323371864074485771","mole99","2025-11-17T10:18:49.4190000+00:00","It's only attached to the top and bottom ground pad 😅","",""
+"323371864074485771","mole99","2025-11-17T10:19:59.5260000+00:00","The reason is, I made changes to the template and now `gf180mcu_fd_io__dvss` is used for all ground pads instead of my modified `gf180mcu_ws_io__dvss` which has pins on two metal layers.","",""
+"323371864074485771","mole99","2025-11-17T10:20:46.0300000+00:00","I think there should be no issue with `gf180mcu_ws_io__dvss` for both horizontal and vertical I/O rows.","",""
+"323371864074485771","mole99","2025-11-17T10:21:12.9320000+00:00","Thanks a lot for alerting me!","","👌 (1)"
+"596068704471482370","246tnt","2025-11-17T10:21:40.2300000+00:00","I hadn't see the one on top and bottom because I forgot I had added those in the padframe 😅","","😁 (1)"
+"596068704471482370","246tnt","2025-11-17T10:25:16.8560000+00:00","Although I have my rings on Metal5 / Metal4 so I'm not sure how that's going to help me 😅","",""
+"323371864074485771","mole99","2025-11-17T10:25:46.0930000+00:00","Yeah, that's another issue 😅","",""
+"384390069412429834","polyfractal","2025-11-17T15:15:34.5830000+00:00","Crunched all weekend...I think I just might make the tapeout deadline! need to add more tests to the bootloader and uart interface, but if I can convince myself that's working my entry is probably ship'able whenever 🤞","","👏 (2)"
+"323371864074485771","mole99","2025-11-17T15:20:05.2140000+00:00","Feel free to ask if you get stuck at any point in the process.","",""
+"384390069412429834","polyfractal","2025-11-17T15:22:26.4190000+00:00","thanks! might take you up on that once I start integrating into the project template 🙂","","👍 (1)"
+"732347216412278825","urish","2025-11-18T10:43:12.1640000+00:00","Started a thread.","",""
+"323371864074485771","mole99","2025-11-18T17:38:17.9250000+00:00","Important notice regarding the foundry SRAM models ‼️
+
+If you're as innocent as me, you might think that the meaning of the SRAM control signals is as follows:
+
+-    CEN = Chip Enable
+-    GWEN = Global Write Enable
+-    WEN = Write Enable
+
+Far from it! The real meaning is actually:
+
+-    CEN = Chip Enable Negative
+-    GWEN = Global Write Enable Negative
+-    WEN = Write Enable Negative
+
+All of the control signals need to be negated. (I would have preferred CEB, GWEB and WEB...)
+
+Another pitfall: in order for the SRAM model to work, it needs to see a falling edge on CEN. Therefore, you cannot start the simulation with CEN low.
+
+Thank you for your attention 😄","","⁉️ (3)"
+"596068704471482370","246tnt","2025-11-18T17:45:51.7950000+00:00","Oh that's just mean.","","🥲 (1),💯 (1)"
+"323371864074485771","mole99","2025-11-18T17:54:38.4900000+00:00","( @BreakingTaps )","","👀 (1)"
+"384390069412429834","polyfractal","2025-11-18T18:20:53.3540000+00:00","will check my code when I get home, cheers for the note!","","👍 (1)"
+"228329196504481793","nxmq99","2025-11-18T22:54:39.0480000+00:00","this is diabolical, these signals were clearly named by someone who got paid off by Big ECO","","😁 (2)"
+"803213471402688522","_luke_w_","2025-11-18T23:07:34.6080000+00:00","This is normal, wait til you see pads where the output data is called `I`","",""
+"803213471402688522","_luke_w_","2025-11-18T23:08:16.5160000+00:00","as in `I`nto the pad (going out of the chip)","","💀 (1)"
+"169786952432746498","mithro_","2025-11-19T00:35:13.7920000+00:00","I ***assume*** there is no way to verify people are doing things correctly in the precheck.","",""
+"738396032295108721","bailey8889","2025-11-19T01:53:09.5550000+00:00","@Tim 'mithro' Ansell for the chipIgnite shuttle, we implemented an oeb check that would check the connections and logic values at the user - gpio interface and report discrepancies like output signals without oeb connections, output signals with high oeb etc.
+
+Given sufficient specs, I might be able to come up with something using my CVC-RV to examine the port signals and their connections.","",""
+"169786952432746498","mithro_","2025-11-19T01:55:24.1280000+00:00","We should probably update the IP to be named something like CE_N or something....","","👍 (3)"
+"169786952432746498","mithro_","2025-11-19T06:37:09.8030000+00:00","Can people see/access test-platform.wafer.space?","",""
+"732347216412278825","urish","2025-11-19T06:50:41.9530000+00:00","It keeps loading for a long time","",""
+"732347216412278825","urish","2025-11-19T06:51:16.7220000+00:00","Started a thread.","",""
+"756011607603019777","anfroholic","2025-11-19T08:47:27.2870000+00:00","Another update, this time featuring @peterkinget and Mosbius. 
+There's also an interesting interview posted with @Matt Venn talking about his project
+https://www.crowdsupply.com/wafer-space/gf180mcu-run-1/updates/mosbius","","👍 (3)"
+"538398807986274304","rzioma","2025-11-19T12:03:58.9990000+00:00","Looking forward!","",""
+"220639106915368960","tholin","2025-11-19T19:48:34.9400000+00:00","I have a perfectly working layout for a fast DAC now. So why not make an NTSC video generator?","2025-11_media/image-61D61.png","👀 (3)"
+"220639106915368960","tholin","2025-11-19T19:49:42.5570000+00:00","Literally 20 lines of RTL","",""
+"220639106915368960","tholin","2025-11-19T19:49:44.0970000+00:00","Pretty cool","",""
+"169786952432746498","mithro_","2025-11-19T20:44:56.6870000+00:00","@Tholin - How about a 640x480 HDMI output? 😛","",""
+"220639106915368960","tholin","2025-11-19T20:47:06.6740000+00:00","Possible with the ADV7513","",""
+"169786952432746498","mithro_","2025-11-19T21:59:39.4470000+00:00","The pixel clock for an HDMI connection at 640x480 resolution is approximately 25.175 MHz. -- 10bits per pixel makes it 250MHz needed at the I/O","",""
+"220639106915368960","tholin","2025-11-19T22:00:53.9290000+00:00","","2025-11_media/image-A0BCE.png",""
+"220639106915368960","tholin","2025-11-19T22:01:50.4400000+00:00","","2025-11_media/image-50502.png",""
+"220639106915368960","tholin","2025-11-19T22:02:10.3620000+00:00","HDMI PMOD is 100% feasible","",""
+"169786952432746498","mithro_","2025-11-19T22:08:33.0010000+00:00","@Tholin - I'm very familar with those Analog Devices parts","",""
+"803213471402688522","_luke_w_","2025-11-19T22:14:12.9060000+00:00","for 60 Hz it's exactly 25.2 MHz -- for some reason the NTSC colour subcarrier -0.1% thing has made its way into digital standards too","",""
+"803213471402688522","_luke_w_","2025-11-19T22:14:56.2760000+00:00","Simple DDR out running at 126 MHz would do it, the problem is just the pad libraries and the clock source 😅","",""
+"803213471402688522","_luke_w_","2025-11-19T22:15:28.8540000+00:00","you can drive 252 Mbps with a clean eye mask with just a 3.3V CMOS push/pull GPIO on a microcontroller and a 270 ohm resistor to set the current level","",""
+"803213471402688522","_luke_w_","2025-11-19T22:16:32.3570000+00:00","I'm also interested in your NTSC DAC as I'm making a games console 🙂 roughly GBA-competitive in terms of graphics and CPU","",""
+"803213471402688522","_luke_w_","2025-11-19T22:16:46.9250000+00:00","would be awesome to play on a CRT","",""
+"803213471402688522","_luke_w_","2025-11-19T22:17:45.8930000+00:00","(it's just 800 x 525 x 60 = 25.2e6)","",""
+"228329196504481793","nxmq99","2025-11-20T01:16:20.4250000+00:00","i'm also interested in the NTSC logic for game console reasons, I'm working on an NES clone atm","",""
+"220639106915368960","tholin","2025-11-20T02:01:05.8680000+00:00","https://github.com/AvalonSemiconductors/ws-submission-2025/blob/main/macros/NTSCTest/src/ntsc.v","",""
+"803213471402688522","_luke_w_","2025-11-20T12:52:57.9260000+00:00","Ooh so the DAC is R2R with current steering through the 2Rs? I never looked into how DACs are actually implemented before, that's very cool","",""
+"803213471402688522","_luke_w_","2025-11-20T12:53:58.1300000+00:00","Would be great for VGA too. We're a bit too pad-limited for external ladder DACs.","",""
+"803213471402688522","_luke_w_","2025-11-20T12:54:28.3400000+00:00","Annoyed I already assigned all my pads to digital IOs","",""
+"220639106915368960","tholin","2025-11-20T12:54:59.6430000+00:00","I am going to test if its good for VGA also","","❤️ (1)"
+"220639106915368960","tholin","2025-11-20T12:55:07.9560000+00:00","Though right now I am still battling LibreLane","",""
+"220639106915368960","tholin","2025-11-20T12:55:15.4680000+00:00","It is refusing to route the outputs of the DACs to the analog pads.","",""
+"803213471402688522","_luke_w_","2025-11-20T12:55:48.4700000+00:00","LibreLane: ""it's not a one or a zero therefore it cannot hurt me.""","",""
+"220639106915368960","tholin","2025-11-20T15:06:51.6240000+00:00","This is weird. My analog pads aren’t being routed, but the netlist that comes out of detailed routing claims they are connected.","",""
+"220639106915368960","tholin","2025-11-20T15:10:05.6270000+00:00","@Leo Moser (mole99) Are the analog pads getting routed in the unmodified template?","",""
+"323371864074485771","mole99","2025-11-20T15:20:57.6790000+00:00","@Tholin The template does not connect the analog pads to anything. So no, they aren't routed.","",""
+"220639106915368960","tholin","2025-11-20T15:23:41.5520000+00:00","Ah","",""
+"220639106915368960","tholin","2025-11-20T15:23:42.3050000+00:00","Well","",""
+"220639106915368960","tholin","2025-11-20T15:23:49.5320000+00:00","I am connecting them to something and they still don’t route.","",""
+"220639106915368960","tholin","2025-11-20T15:24:05.2820000+00:00","Triggering an obvious LVS error","",""
+"323371864074485771","mole99","2025-11-20T15:29:11.0270000+00:00","In the worst case, you could hardcode the port types as inputs and outputs. A proper solution would of course be better. I haven't tried to route `inout` ports yet, maybe you need to convince OpenROAD's GRT/DRT in some way to do that.","",""
+"220639106915368960","tholin","2025-11-20T16:34:43.1750000+00:00","Already tried that. Actually did a lot of modifications to the PDK files to try and  get it to route, but no luck.","",""
+"596068704471482370","246tnt","2025-11-20T16:54:23.8300000+00:00","Is your project somehwere online we can look at ?","",""
+"220639106915368960","tholin","2025-11-20T16:54:57.8090000+00:00","https://github.com/AvalonSemiconductors/ws-submission-2025","",""
+"596068704471482370","246tnt","2025-11-20T17:02:10.0560000+00:00","You can try to use the `ef` bi IO that have the analog port added and see if it connects better to that.","",""
+"596068704471482370","246tnt","2025-11-20T17:02:29.7490000+00:00","not ideal, but if that works, at least it'll narrow the issue.","",""
+"738396032295108721","bailey8889","2025-11-20T19:02:08.3740000+00:00","@Tholin So I can see the connections in the system verilog. What about the synthesized gate level verilog? Can you see the analog connections there?","",""
+"220639106915368960","tholin","2025-11-20T19:07:53.1340000+00:00","Yes","",""
+"220639106915368960","tholin","2025-11-20T19:08:17.3370000+00:00","The connections are even still present in the netlist post route.","","👍 (1)"
+"596068704471482370","246tnt","2025-11-21T06:51:58.1750000+00:00","I know a lot of people do retro stuff so they probably disagree, but I find that having the default settings of librelane be 5V instead of 3.3V is a bit annoying 😅","","👍 (1)"
+"323371864074485771","mole99","2025-11-21T09:41:33.4740000+00:00","I feel you. Including the libs for KianV was some work. But I would argue that the foundry-provided stdcells shouldn't really be used at 3.3V, as they are really bad for that 😄
+Once we have a confirmed working 3.3V stdcell library, we can discuss setting it as the default for gf180mcu.","",""
+"596068704471482370","246tnt","2025-11-21T09:51:42.2470000+00:00","They're really not _that_ bad at 3.3V.  I wouldn't use them at 1.8V even if they have specs for that, but at 3.3V they're a bit slower but still very much usable.","",""
+"596068704471482370","246tnt","2025-11-21T09:52:47.9690000+00:00","Will the first run include foundry biased wafers ( ss / sf / fs / ff ) with test structures for new standard cells to allow proper validation ?","",""
+"220639106915368960","tholin","2025-11-21T09:59:37.7540000+00:00","When I run nix-shell in the template and then magic, I expected magic to load the gf180mcuD PDK, but it instead loads with sky130A.
+I cannot figure out how to get it to gracefully load the gf180mcuD PDK, so I keep having to go back to iic-osic-tools for analog layout.","",""
+"323371864074485771","mole99","2025-11-21T10:01:25.5330000+00:00","I didn't know the foundry could create biased wafers on purpose. I thought that just happens due to process variations, and the wafers are sorted afterwards based on the measurements of the test structures?
+
+As for your question, I don't think so. First, we would need to pick a stdcell library (or more) to characterize. There is Tholin's library, for example, and the FlexCell library. I tried to PnR Staf's FlexCell library, but I had to stop at routing due to some issues. Also someone need to do the work of creating a chip with these libraries for characterization. @Tim 'mithro' Ansell no one is working on that atm, correct?","",""
+"323371864074485771","mole99","2025-11-21T10:02:08.9360000+00:00","Did you export `PDK_ROOT` and `PDK` and pass the rcfile to magic?","",""
+"596068704471482370","246tnt","2025-11-21T10:03:12.0820000+00:00","@Leo Moser (mole99) I didn't know either, I only learned about that recently. I guess they can tweak parameters and then validate using their own test structure that they hit the target and where that wafer ends up 🤷","","👏 (1)"
+"220639106915368960","tholin","2025-11-21T10:03:59.7910000+00:00","magic crashes","",""
+"220639106915368960","tholin","2025-11-21T10:04:22.7800000+00:00","No, -d OGL is what crashes it, my bad","",""
+"220639106915368960","tholin","2025-11-21T10:06:37.4610000+00:00","We also have the problem of no 3.3V-optimized IO pads. I will create some eventually as part of my SCL, but not in less than two weeks. Next shuttle. Actually, I’ve had to pause work on my SCL so I can participate in this shuttle and have something ready in time. Sorry.","",""
+"323371864074485771","mole99","2025-11-21T10:07:44.3650000+00:00","Don't be sorry, that's super exciting work 👏
+Yeah, 3.3V I/Os would also be great!","",""
+"323371864074485771","mole99","2025-11-21T10:10:14.9380000+00:00","```
+magic: ## Open magic with the gf180mcuD PDK
+    PDK_ROOT=${PDK_ROOT} PDK=${PDK} magic -rcfile ${PDK_ROOT}/${PDK}/libs.tech/magic/gf180mcuD.magicrc
+.PHONY: magic
+```
+
+This should work.","",""
+"220639106915368960","tholin","2025-11-21T10:12:28.8810000+00:00","I am cheating a bit. I took `gf180mcu_fd_io__bi_24t`, flattened some of it and just deleted the DUALGATE layer. Next step would’ve been to go through and shrink the transistor lengths, since the 3.3V transistors have a way shorter minimum length. Note that this produces a 3.3V only pad, not a pad with separate core and IO voltage supporting both.","","👌 (1)"
+"220639106915368960","tholin","2025-11-21T10:13:04.6380000+00:00","The biggest struggle and time-sink would be characterization.","",""
+"596068704471482370","246tnt","2025-11-21T10:13:07.5280000+00:00","TBH for IO pads, I intend to keep the 5V rated ones since 5V compat is good to keep for TT. Although I'd switch to the split core/io voltage ones of course.  And speed wise they're only about 30% slower.","","👍 (1)"
+"220639106915368960","tholin","2025-11-21T10:13:10.4340000+00:00","I don’t think I can rely on lctime anymore.","",""
+"220639106915368960","tholin","2025-11-21T10:13:36.9470000+00:00","I like using lctime because I’ve read most of its code and understand it, but its limited and simplistic.","",""
+"323371864074485771","mole99","2025-11-21T10:14:39.3260000+00:00","Well, there's some talks about performance optimizations at least: https://codeberg.org/librecell/lctime/issues/38","",""
+"169786952432746498","mithro_","2025-11-21T11:26:49.9390000+00:00","You ***can*** overdope and over expose and do things like that.","",""
+"169786952432746498","mithro_","2025-11-21T11:28:17.6900000+00:00","I was trying to convince Mehdi's group to do the same thing as their SKY130 test tile for GF180MCU -> https://github.com/google/skywater-pdk-sky130-raw-data/tree/main/docs/sky130-testtile-open","",""
+"220639106915368960","tholin","2025-11-21T11:57:45.1120000+00:00","I wonder if the issue LibreLane has with the analog pads is that they have no separate pins for the pad and signal input. All the IO pads have a separate PAD pin in their definition, except the analog pads, which just have ASIG5V.","",""
+"220639106915368960","tholin","2025-11-21T11:57:49.7160000+00:00","I’m gonna experiment.","","👍 (1)"
+"220639106915368960","tholin","2025-11-21T13:24:51.6890000+00:00","Update: works","",""
+"220639106915368960","tholin","2025-11-21T13:25:07.9180000+00:00","I will let this flow finish, though, to ensure there is no LVS errors left.","",""
+"220639106915368960","tholin","2025-11-21T13:25:54.5630000+00:00","But it appears that gf180mcu_fd_io__asig_5p0 has some broken port definitions.","",""
+"596068704471482370","246tnt","2025-11-21T13:32:59.5690000+00:00","Or OpenRoad has a bug that's triggered by whatever they're using 🙂","",""
+"596068704471482370","246tnt","2025-11-21T13:33:42.6700000+00:00","Because looking at the LEF I didn't really see anything wrong about it 🤷","",""
+"220639106915368960","tholin","2025-11-21T13:35:54.9930000+00:00","The mag has some weird stuff going on","2025-11_media/image-5528B.png",""
+"220639106915368960","tholin","2025-11-21T13:36:14.1240000+00:00","The ports that are missing the `signal bidirectional`are actually duplicates of ports that do have those parameters.","",""
+"220639106915368960","tholin","2025-11-21T13:36:20.1090000+00:00","Idk","",""
+"220639106915368960","tholin","2025-11-21T13:36:37.6400000+00:00","Removing the broken-looking ones fixed it","",""
+"596068704471482370","246tnt","2025-11-21T13:36:39.7860000+00:00","The mag shouldn't be used by OpenRoad at all.","",""
+"220639106915368960","tholin","2025-11-21T13:36:55.6220000+00:00","Yeah, but I generated the lef and GDSII from that mag","",""
+"220639106915368960","tholin","2025-11-21T13:38:25.7490000+00:00","Oh, I also added a PAD port","",""
+"220639106915368960","tholin","2025-11-21T13:38:48.8380000+00:00","And updated the verilog and lib to reflect this","",""
+"738396032295108721","bailey8889","2025-11-21T13:40:39.0500000+00:00","@Tholin if you added a PAD port to the analog io cell, wouldn't that short with the ASIG5V port?","",""
+"220639106915368960","tholin","2025-11-21T13:41:36.5220000+00:00","Yes","",""
+"220639106915368960","tholin","2025-11-21T13:41:44.1170000+00:00","PAD and ASIG5V are still one and the same","",""
+"220639106915368960","tholin","2025-11-21T13:42:00.1950000+00:00","But *somehow* it makes a difference having both names assigned to it.","",""
+"596068704471482370","246tnt","2025-11-21T13:51:21.2310000+00:00","Is your current ""built"" GDS somewhere ? 
+(The repo doesn't use github action so I can't just download what it looks like there 😅 )","",""
+"220639106915368960","tholin","2025-11-21T13:51:46.1750000+00:00","No","",""
+"220639106915368960","tholin","2025-11-21T13:51:49.0410000+00:00","Its still building","",""
+"220639106915368960","tholin","2025-11-21T13:52:20.5970000+00:00","A github actions pipeline would fail at this time anyways because I *know* it has KLayout DRC errors in the DACs.","",""
+"220639106915368960","tholin","2025-11-21T13:52:37.9590000+00:00","I need to flatten them. It sees errors that aren’t there if you take in context from higher up in the hierarchy.","",""
+"220639106915368960","tholin","2025-11-21T15:24:50.8530000+00:00","I took that make_gds script from the wafer.space logo IP in the project template and updated it to make it more compatible with a wider range of inputs.
+https://github.com/AvalonSemiconductors/ws-submission-2025/blob/main/silicon_art/make_gds.py","",""
+"220639106915368960","tholin","2025-11-21T15:25:04.6540000+00:00","The input image no longer has to be in a specific pixel format.","",""
+"220639106915368960","tholin","2025-11-21T15:25:28.2440000+00:00","But most importantly, I added code to automatically repair potential DRC errors.","",""
+"220639106915368960","tholin","2025-11-21T15:26:09.0200000+00:00","Most common are pixels that only touch at the corner:
+```
+X_  _X
+_X  X_
+```","",""
+"220639106915368960","tholin","2025-11-21T15:26:44.0410000+00:00","But one-pixel gaps are also filled on lower pixel sizes.","",""
+"220639106915368960","tholin","2025-11-21T15:26:48.0890000+00:00","The script now inserts additional pixels until all such errors are gone.","","👍 (2)"
+"220639106915368960","tholin","2025-11-21T16:09:12.4930000+00:00","Which is just a little hint to everyone that I’m about to have a need for converting more complex images to layouts.","","😆 (1),💜 (1)"
+"169786952432746498","mithro_","2025-11-21T23:57:33.4460000+00:00","Cool!","",""
+"169786952432746498","mithro_","2025-11-21T23:57:47.4400000+00:00","Silicon artwork?","",""
+"169786952432746498","mithro_","2025-11-21T23:58:47.3680000+00:00","@Tholin - We should send some to https://www.youtube.com/c/EvilmonkeyzDesignz","",""
+"220639106915368960","tholin","2025-11-22T14:51:38.1400000+00:00","Okay, my modified analog pads do connect now, but also have a ton of DRC errors.","",""
+"220639106915368960","tholin","2025-11-22T14:51:46.1390000+00:00","Imma see if I can’t be a bit smarter about this.","",""
+"492702620759228416","mattvenn","2025-11-22T15:10:37.2900000+00:00","Didn't the PULP team open source their artwork generator recently? I thought they did but I can't find it on their website","",""
+"596068704471482370","246tnt","2025-11-22T15:20:49.5670000+00:00","https://github.com/pulp-platform/artistic","",""
+"220639106915368960","tholin","2025-11-22T15:53:15.3600000+00:00","The duplicate rlabels/ports are indeed a problem. If I don’t remove them, not only does routing fail, but the DRT has a chance of crashing.","",""
+"220639106915368960","tholin","2025-11-22T15:54:47.4590000+00:00","I tried doing a diff of the .lef file with and without the duplicate labels and the coordinates of all the ASIG5V pins change slightly. Current theory: the duplicate ports are not exact duplicates, but slightly shifted downwards. If the lef is then written with -pinonly,  only these shifted duplicates are exported, which occupy illegal positions.","",""
+"738396032295108721","bailey8889","2025-11-22T16:18:35.7290000+00:00","If you're using magic for lef generation, be sure that the bounding box `FIXED_BBOX` is set.","",""
+"220639106915368960","tholin","2025-11-22T16:19:33.3640000+00:00","It is","","👍 (1)"
+"220639106915368960","tholin","2025-11-23T05:06:44.9870000+00:00","https://cdn.discordapp.com/attachments/1331812696873631825/1442018102861627513/image.png?ex=6923e783&is=69229603&hm=b0bbc7f1a30a18d48c6ddf0c7e1d25ba940c31a406d0c496aee6103874962c94&","","💜 (2)"
+"220639106915368960","tholin","2025-11-23T17:23:26.8350000+00:00","I am paranoid about the fillers messing up the silicon art, so I’ve drawn fillblock over it and duplicated the art onto every metal layer and the poly layer to provide the required density.","",""
+"220639106915368960","tholin","2025-11-23T17:23:39.3020000+00:00","DRC passes with this, so hopefully its fine","",""
+"756011607603019777","anfroholic","2025-11-23T17:49:21.2340000+00:00","Can't wait to see this for real!!!","",""
+"756011607603019777","anfroholic","2025-11-23T17:50:28.4960000+00:00","This design is ~120 µm? *edit* tall?","",""
+"220639106915368960","tholin","2025-11-23T17:53:24.1310000+00:00","Its 700 by 583","",""
+"220639106915368960","tholin","2025-11-23T17:53:27.8570000+00:00","um","",""
+"220639106915368960","tholin","2025-11-23T17:53:29.4400000+00:00","quite big","",""
+"756011607603019777","anfroholic","2025-11-23T17:54:14.0390000+00:00","Oh, I see what I'm looking at now. Mistook 2 scales for one
+Awesome!!","",""
+"220639106915368960","tholin","2025-11-23T20:16:00.1780000+00:00","STA is really annoying me right now. Its reporting setup violations in the 100ns violations because an active design might change the output-enable or pull resistors or something on a IO pad, which triggers a change in the pad’s outputs to the core area, which kicks of timing paths through unrelated designs, which may also change output enables which changes pad outputs which triggers changes through the designs etc. etc. and so on. It ""bounces"" like that for up to 5 times before coming to a stop.","",""
+"220639106915368960","tholin","2025-11-23T20:16:40.7770000+00:00","I need STA to disregard ANY timing paths that cross macro boundaries except the multiplexer.","",""
+"220639106915368960","tholin","2025-11-23T20:17:00.4760000+00:00","Only one of these will ever be active at a time and it doesn’t get that.","",""
+"220639106915368960","tholin","2025-11-23T20:17:56.6290000+00:00","I could disable STA or STA checker entirely since the setup timing analysis results are largely meaningless anyway in my use case (every design has its own fmax), but I’d like the flow to fail on hold violations.","",""
+"220639106915368960","tholin","2025-11-23T20:18:21.6490000+00:00","I’d like to ignore just setup violations, but still fail on hold violations.","",""
+"220639106915368960","tholin","2025-11-23T20:20:27.1480000+00:00","I tried `set_false_path -from [get_ports {io_oe_.*}]` and so on, but no luck.","",""
+"220639106915368960","tholin","2025-11-23T20:20:32.0400000+00:00","Or is it `set_false_path -from [get_ports {io_oe_*}]`?","",""
+"220639106915368960","tholin","2025-11-23T20:20:35.7810000+00:00","Glob or regex?","",""
+"596068704471482370","246tnt","2025-11-23T20:26:24.8600000+00:00","`ports` are external pads, so if you're running that on the top level, the ports are the actual pads since the top level include the IO cells.","",""
+"596068704471482370","246tnt","2025-11-23T20:26:45.1860000+00:00","And it's glob.","",""
+"220639106915368960","tholin","2025-11-23T20:27:10.5540000+00:00","Thanks","",""
+"220639106915368960","tholin","2025-11-23T20:27:57.7160000+00:00","Actually, because I thought it was regex, it was still trying to do timing analysis on the design select pins, which I thought I had disabled.","",""
+"596068704471482370","246tnt","2025-11-23T20:28:22.0460000+00:00","You can try to grab the pins on the IO cells `[ get_pins ""*pad/OE"" ]` or something.","",""
+"220639106915368960","tholin","2025-11-23T20:28:28.6910000+00:00","I just looked at the very top of the STA log and then turned that into `set_false_path -from [get_ports {design_sel_*}]`","2025-11_media/image-983D7.png",""
+"220639106915368960","tholin","2025-11-23T20:28:59.4960000+00:00","I’m just matching everything to do with design selection","",""
+"803213471402688522","_luke_w_","2025-11-23T21:07:40.9730000+00:00","If these are digital paths, something I find useful is to insert an anchor buffer in the RTL:
+
+```
+module falsepath_anchor (
+    input  wire i,
+    output wire z
+);
+
+`ifdef GF180MCU
+
+(* keep *)
+gf180mcu_fd_sc_mcu9t5v0__clkbuf_1 magic_falsepath_anchor_u (
+    .I (i),
+    .Z (z)
+);
+
+`else
+
+assign z = i;
+
+`endif
+
+endmodule
+
+```
+
+and then just glob them out in the `.sdc`:
+
+```
+# Apply RTL-inserted false path constraints (setup/hold only, still constrain slew)
+set_false_path -setup -hold -through [get_pins *.magic_falsepath_anchor_u/Z]
+```
+
+It's dirty but it makes the constraints a bit less fragile because you don't have to update them when hierarchy changes. Also I think paths through PD/PU can pretty much universally be falsepathed as the slew on the pad due to pulls is so slow.","",""
+"220639106915368960","tholin","2025-11-23T22:54:18.2910000+00:00","Record for most violations on DRT?","2025-11_media/image-C7553.png","😆 (1)"
+"1437714127744401431","ethanmahintorabi","2025-11-24T00:26:12.7090000+00:00","Does anyone by chance have a level shifter cells for 3.3 -> 5v and vice versa. I'm about to design one to fit in the 7 track library, I can change to the 9 track though if someone already has one","",""
+"169786952432746498","mithro_","2025-11-24T04:20:26.7320000+00:00","@Tholin / @Tim Edwards - You'd be the people I'd guess at being most likely to have done sometihng like the above -^","",""
+"169786952432746498","mithro_","2025-11-24T04:20:52.3860000+00:00","BTW Can people access https://doc.test-platform.wafer.space ?","",""
+"169786952432746498","mithro_","2025-11-24T04:33:36.6540000+00:00","The manufacturing checking will be deployed there very shortly.","",""
+"1437714127744401431","ethanmahintorabi","2025-11-24T04:45:12.8590000+00:00","NX domain for me","",""
+"543162393413287956","h.tamas","2025-11-24T04:45:44.3200000+00:00","Yes on IPv6, no on IPv4","",""
+"1437714127744401431","ethanmahintorabi","2025-11-24T04:45:50.3260000+00:00","Also I decided I'm just going to run the whole tile at 3.3V to avoid the complexity","",""
+"738396032295108721","bailey8889","2025-11-24T08:24:12.0530000+00:00","I cannot access. `DNS_PROBE_FINISHED_NXDOMAIN`","",""
+"169786952432746498","mithro_","2025-11-24T10:06:54.4460000+00:00","IPv6 only for the next few hours.","",""
+"274535015969456128","greg.hashtag.9468","2025-11-24T10:33:35.5120000+00:00","Works for me. I knew configuring ipv6 would pay off 👌","",""
+"169786952432746498","mithro_","2025-11-24T14:27:35.5860000+00:00","IPv4 should now work in theory.","","✅ (1)"
+"1365118310701600900","rtimothyedwards_19428","2025-11-24T14:53:28.9730000+00:00","I made a level shifter for the I/O cells here:  https://github.com/RTimothyEdwards/gf180mcu_ocd_io/; specifically, see https://github.com/RTimothyEdwards/gf180mcu_ocd_io/blob/main/magic/lvlshift_up.mag.  However, this was designed to fit in the existing I/O cells, not the standard cells, so it's not pitch-matched to any standard cell library.  To level-shift down, I generally just use a 5V inverter powered at 3.3V, although if you want it matched to a standard cell library, then the 5V rail should bias the nwell (which will be connected to other 5V standard cell nwells) and the 3.3V supply to the inverter should be a separate pin.","",""
+"738396032295108721","bailey8889","2025-11-24T15:34:15.9490000+00:00","@Tim Edwards just out of curiosity, why do you recommend biasing the level-down shifter (a normally 5V inverter powered at 3.3V) at 5V?","",""
+"596068704471482370","246tnt","2025-11-24T15:36:36.3120000+00:00","@bailey Well if you powered it at 5V , it would output 5V ... that wouldn't be much of a level shifter.","",""
+"596068704471482370","246tnt","2025-11-24T15:37:27.2170000+00:00","If you make an inverter out of 5V transistors but feed them 3.3V, they will wistand the 5V swing input but only output 3.3V on the output, hence shifting down from 5V -> 3.3V domain.","",""
+"538398807986274304","rzioma","2025-11-24T16:46:41.4070000+00:00","I would like to add 16KB of RAM (32 macro x SRAM 512 5V). Any advice on the layout?
+
+*(Z80 design I am working on has a lot of free space, I want to put 16KB of RAM. That particular combinations Z80+16KB RAM is useful for fixing DRAM in old computers)*","",""
+"738396032295108721","bailey8889","2025-11-24T18:49:26.8820000+00:00","@tnt Thanks for the explanation. However, I understand that. I was wondering why @Tim Edwards was recommending biasing at 5V with a 3.3V power supply.","",""
+"1365118310701600900","rtimothyedwards_19428","2025-11-24T18:50:54.8030000+00:00","@bailey :  Because if the level shifter is in a standard cell library and is part of a standard cell block, then the nwell will be shared with other cells biasing it to 5V.","",""
+"738396032295108721","bailey8889","2025-11-24T18:55:42.4630000+00:00","Thanks @tim. So if it's in a 5V standard cell block then the bias is 5V, but if it's in a 3.3V standard cell block, a 3.3V bias is ok too, right?
+
+Wouldn't putting a 3.3V powered 5V standard cell in a 5V standard cell row be difficult? You'd need two power rails. Do the 5V standard cells have 2 power rails?","",""
+"1437714127744401431","ethanmahintorabi","2025-11-24T21:57:50.6010000+00:00","You do need two power rails which is why shifters often exist on the boundary of two power domains. Here's the LV -> HV Sky130 shifter","2025-11_media/image-D16CF.png",""
+"1365118310701600900","rtimothyedwards_19428","2025-11-25T01:23:17.4330000+00:00","@bailey :  You don't need a power rail, just a power connection.  It's only powering the level shifter, not an entire row of logic.  In practice, all the level shifters are going to end up on the edge of the digital block, so it should be easy enough to bring a low voltage power bus close to the block and hook it up.","",""
+"738396032295108721","bailey8889","2025-11-25T02:53:11.6110000+00:00","@Ethan Mahintorabi I understand that a level up shifter needs 2 power rails. 
+
+What I'm asking is why we need two power connections for an inverter implementing a level down shifter. If the cell row height is the same for low/high voltage, then the high voltage capable inverter standard cell could be placed anywhere in a low voltage standard cell layout and still work without a high voltage power connection. The only high voltage is the input signal.","",""
+"1437714127744401431","ethanmahintorabi","2025-11-25T02:56:12.5910000+00:00","Sorry I misunderstood you. You're correct. 
+
+That's essentially what I'm doing but across the whole chip. Using 5V standard cells and IO, but only providing 3.3v power.","","👍 (1)"
+"443147704126668801","carlfk","2025-11-25T05:25:08.1810000+00:00","How many IO pins?","",""
+"1365118310701600900","rtimothyedwards_19428","2025-11-25T16:32:57.3640000+00:00","FYI:  I have started work on a GF180MCU ""openframe"" design.  Hopefully I will get it (and an example user project using the 3.3V logic and the 3.3V SRAM) finished in time for the tapeout.","","👏 (3)"
+"596068704471482370","246tnt","2025-11-25T16:44:17.3490000+00:00","@Tim Edwards I want to also try and submit a TT variant using the split IO so any example of how to do that will be welcome 🙂","",""
+"1365118310701600900","rtimothyedwards_19428","2025-11-25T16:56:36.1020000+00:00","@tnt :  I will be pushing everything to a repository as soon as I have done enough work on it that I know I won't have to replace everything wholesale on every update.  Right now I have it in a half-finished state and using it as a reference would be highly misleading.  Hopefully by end of day today or tomorrow I will have knocked down most of the items on my ""to do"" list.","",""
+"220639106915368960","tholin","2025-11-25T17:02:05.0300000+00:00","It looks like I won’t be able to test my DACs for VGA output at their full range. TT demos only do 2 bits per channel of color depth, while the DACs are capable of 12 bits per channel.","",""
+"220639106915368960","tholin","2025-11-25T17:03:01.0280000+00:00","Though anything about 8 bits per channel would be overkill.","",""
+"732347216412278825","urish","2025-11-25T17:03:01.4100000+00:00","Some demos can do more","",""
+"220639106915368960","tholin","2025-11-25T17:04:11.5800000+00:00","Which ones?","",""
+"732347216412278825","urish","2025-11-25T17:04:41.0200000+00:00","I think @algofoogle (Anton Maurovic) had a demo for his own DAC that can do 8bpc","",""
+"732347216412278825","urish","2025-11-25T17:06:54.3640000+00:00","and there's a variant of the tt logo screensaver which reads a bitmap from the ROM that can be easily adjusted to 8bpc
+
+<https://github.com/urish/tt-rom-vga-screensaver>","",""
+"732347216412278825","urish","2025-11-25T17:08:36.6640000+00:00","basically need to edit `convert.py` and remove the parts that downscales from 8bpc to 2bpc, and extend the ROM word length from 6 bits to 24 bits","",""
+"803213471402688522","_luke_w_","2025-11-25T17:10:59.2360000+00:00","I have a GBA-ish-capable PPU that's currently hooked up to SPI LCD only. Pretty easy to knock together VGA timing generation. Can your DAC tristate its output @Tholin? It would have to share with digital pads (we have combined digital bidi + analogue pads right?)","",""
+"803213471402688522","_luke_w_","2025-11-25T17:11:36.0390000+00:00","It would be RGB555 320x240, with 480p60 timings, so only a 12ish MHz pixel clock. Not sure if that is an interesting test for you.","",""
+"803213471402688522","_luke_w_","2025-11-25T17:12:24.7390000+00:00","For VGA signal levels without an external buffer I would probably just tie off the 3 MSBs of the DAC code input (assuming it's rail-to-rail) and drive bits `8:4` with RGB555 components","",""
+"220639106915368960","tholin","2025-11-25T17:12:59.7440000+00:00","It cannot","",""
+"803213471402688522","_luke_w_","2025-11-25T17:13:06.8120000+00:00","ahhh","",""
+"803213471402688522","_luke_w_","2025-11-25T17:13:20.4920000+00:00","no worries. I'm a bit tight on IOs due to the external parallel SRAM 🙂","",""
+"803213471402688522","_luke_w_","2025-11-25T17:15:02.4060000+00:00","Um. I mean I guess I could replace my audio PWM outputs with a DAC, and then steal my one unassigned GPIO as the third RGB component 🤔  then I could afford 3 analog pads","",""
+"220639106915368960","tholin","2025-11-25T19:14:37.6950000+00:00","Where can I see the total wire length after a flow?","",""
+"1071653002986926112","algofoogle","2025-11-25T20:28:23.9300000+00:00","Yes that’s right, @Tholin I have this, though it’s little more than just an RGB888 test pattern generator: https://tinytapeout.com/chips/tt08/tt_um_algofoogle_tt08_vga_fun  — source for the latest version I taped out is here: https://github.com/algofoogle/ttsky25b-analog-vga-dacs/tree/main/verilog/rtl","",""
+"1071653002986926112","algofoogle","2025-11-25T20:28:31.0940000+00:00","","2025-11_media/image0-9EC21.jpg",""
+"1071653002986926112","algofoogle","2025-11-25T20:30:44.8950000+00:00","I was also working on something more pretty — than the ones above — in RGB888 here: https://github.com/algofoogle/tt10-vga-dac-party/blob/main/verilog/rtl/core_design.v","",""
+"1071653002986926112","algofoogle","2025-11-25T20:34:28.0330000+00:00","I recall @toivoh on the TT discord had an RGB444 demo that would be more interesting. I guess the key would be something that does nice gradients but also hard swings (high frequency stuff and full white or black pixels/blocks over gradients) every now and then… to test both linearity and slew rate. That’s what I was trying to do with the last link I shared.","",""
+"1071653002986926112","algofoogle","2025-11-25T20:35:37.3480000+00:00","Is it in the “metrics” file? The TT GHA reports it, so there would be code in the tt-support-tools repo which pulls it out of librelane run artefacts","",""
+"220639106915368960","tholin","2025-11-25T20:40:40.2100000+00:00","3076425 of whatever unit its in","",""
+"1071653002986926112","algofoogle","2025-11-25T22:54:46.8530000+00:00","I think it’s in microns, so ~3 metres of wire. Nice 🙂","",""
+"1071653002986926112","algofoogle","2025-11-25T22:55:16.5850000+00:00","(This is in the ballpark for large designs, I recall)","",""
+"220639106915368960","tholin","2025-11-25T22:59:24.8160000+00:00","Yes....large","",""
+"220639106915368960","tholin","2025-11-25T22:59:25.5230000+00:00","https://cdn.discordapp.com/attachments/1148704591781843145/1442954997829599325/image.png?ex=69275010&is=6925fe90&hm=dac452663d8f5d1b9a75c76305fe3900699c36cdc6fc07cd6ed57fcb0c20d172","",""
+"220639106915368960","tholin","2025-11-25T23:10:07.4450000+00:00","This is what 32768 x 5 bits of constant data look like.","",""
+"220639106915368960","tholin","2025-11-25T23:13:27.1670000+00:00","Hmmm...I guess its kinda difficult to make a RGB888 demo since none of the simulators, like VGA playground, have support for this color format?","",""
+"803213471402688522","_luke_w_","2025-11-25T23:16:35.8460000+00:00","No data routing on M5?","",""
+"220639106915368960","tholin","2025-11-25T23:17:01.8610000+00:00","M5 has the top-level power grid","",""
+"220639106915368960","tholin","2025-11-25T23:17:08.7150000+00:00","In chip_top","",""
+"220639106915368960","tholin","2025-11-25T23:17:18.1970000+00:00","I do not wish to disrupt it any more than I already have.","","👍 (1)"
+"803213471402688522","_luke_w_","2025-11-25T23:17:52.5350000+00:00","was just asking because you've done an excellent job of shading in all the other layers 😅","",""
+"803213471402688522","_luke_w_","2025-11-25T23:18:25.0200000+00:00","I have a 256-byte ROM for my bootloader and it's enough to make me yearn for tnt's mask ROM","",""
+"220639106915368960","tholin","2025-11-25T23:20:30.2800000+00:00","My data here is literally just a single bitmap","",""
+"220639106915368960","tholin","2025-11-25T23:20:41.6410000+00:00","In my NTSC signal generator test","",""
+"220639106915368960","tholin","2025-11-25T23:21:08.8160000+00:00","This is the least efficient way of encoding an image that I’ve ever seen.","",""
+"169786952432746498","mithro_","2025-11-26T03:05:44.9100000+00:00","How is that different from what the template is creates / is using?","",""
+"1365118310701600900","rtimothyedwards_19428","2025-11-26T03:11:22.4100000+00:00","@Tim 'mithro' Ansell : Well,for one, it's a reference design for the mixed-voltage padframe.","",""
+"169786952432746498","mithro_","2025-11-26T03:13:06.8500000+00:00","It would be nice to eventually have a mixed-voltage padframe support in the gf template. I'm assume @Leo Moser (mole99) has that all under control and you guys are communicating regularly about it.","",""
+"1365118310701600900","rtimothyedwards_19428","2025-11-26T03:15:21.6070000+00:00","Right now, the easiest path for me is to copy a lot of stuff from caravel-gf180mcu.  Once I've worked out all the details, it can be re-done as a template.","",""
+"169786952432746498","mithro_","2025-11-26T03:58:51.4990000+00:00","Guess that makes sense.","",""
+"596068704471482370","246tnt","2025-11-26T07:21:26.3890000+00:00","@LukeW I started drafting things to port it over 😅","","❤️ (2)"
+"1071653002986926112","algofoogle","2025-11-26T11:13:33.2790000+00:00","Ah I see your problem: Your chip is full of... green.","",""
+"1071653002986926112","algofoogle","2025-11-26T11:16:28.0520000+00:00","Started a thread.","",""
+"596068704471482370","246tnt","2025-11-26T13:20:55.7430000+00:00","Ok, setting `PAD_CELL_LIBRARY` doesn't work, can't do that at all because if a `glob` called from the default config doesn't match any file, it's a fatal error, even if you try to later override that config key in your config ...","",""
+"596068704471482370","246tnt","2025-11-26T13:21:20.9930000+00:00","So I need to let `PAD_CELL_LIBRARY` be `gf180mcu_fd_io` and then override each key manually.","",""
+"323371864074485771","mole99","2025-11-26T13:36:29.2660000+00:00","If there's a way to do things smarter in the config or in LibreLane, just let me know and we can change it.","",""
+"596068704471482370","246tnt","2025-11-26T13:43:29.3720000+00:00","Well, I think having `glob` returning no file not be an error would be good 🙂","",""
+"596068704471482370","246tnt","2025-11-26T13:44:33.5330000+00:00","But ATM I'm just trying to get it to run and see exactly what I need to change for that.","","👌 (1)"
+"596068704471482370","246tnt","2025-11-26T14:10:00.3780000+00:00","Is there any reason all those `PAD_` config to be there at all and not in the `gf180mcu_fd_io/config.tcl` ?","",""
+"596068704471482370","246tnt","2025-11-26T14:14:20.2150000+00:00","Started a thread.","",""
+"220639106915368960","tholin","2025-11-26T16:09:37.8450000+00:00","Why is global routing run twice? Its a step that takes forever in some of my flows and its run twice.","",""
+"596068704471482370","246tnt","2025-11-26T16:15:47.7350000+00:00","I don't think it should be run twice ... I only see it once in Chip flow.","",""
+"220639106915368960","tholin","2025-11-26T16:17:18.7980000+00:00","Its run first as its own step","",""
+"220639106915368960","tholin","2025-11-26T16:17:23.1360000+00:00","Then again during Antenna Repair","",""
+"220639106915368960","tholin","2025-11-26T16:17:36.2540000+00:00","Then a third time actually, but after Antenna Repair has inserted new cells, so that checks out.","",""
+"220639106915368960","tholin","2025-11-26T16:18:03.9520000+00:00","I have a flow where global routing takes 15 minutes each time, so that is 45 minutes of just global routing.","",""
+"220639106915368960","tholin","2025-11-26T16:18:47.0060000+00:00","But yeah, Antenna Repair runs GRT before doing anything and I’m wondering why it can’t pull that data from the database from when GRT was run as its own step.","",""
+"220639106915368960","tholin","2025-11-26T17:01:44.0660000+00:00","That’s a new one!","2025-11_media/image-9B649.png",""
+"384390069412429834","polyfractal","2025-11-26T18:26:25.7400000+00:00","hehe I ran into that a bunch last night while messing around with my sram placements","",""
+"805909190333038612","trev5514","2025-11-26T21:21:24.0550000+00:00","I know this was asked somewhere else but I'm curious did you find a good way to layout the SRAM? How many are you using and at what size?","",""
+"384390069412429834","polyfractal","2025-11-26T22:24:02.0360000+00:00","huge grain of salt: I have no idea what I'm doing 😇 
+
+I have twenty 512x8 blocks, and my current setup is a ring around the logic cells. Pretty sure I have them all backwards at the moment though, and I have a bunch of slew/cap violations at the moment (and some other broken stuff too)
+
+Seeing how little logic there actually is, I might condense the blocks closer to help with timing issues","2025-11_media/image_black-51CB7.png","💜 (2)"
+"169786952432746498","mithro_","2025-11-26T23:02:16.1050000+00:00","I'm currently pushing a version of the platform (to either https://doc.test-platform.wafer.space or https://buddy.test-platform.wafer.space) which actually runs the gf180mcu-precheck on incoming designs and could probably use a few testers shortly.","",""
+"169786952432746498","mithro_","2025-11-26T23:02:48.0670000+00:00","I believe that is similar to the layout that @asic destroyer is using for thier design.","","🎉 (1)"
+"840182560252624916","logic_destroyer","2025-11-26T23:10:34.9760000+00:00","","2025-11_media/image-F968E.png",""
+"384390069412429834","polyfractal","2025-11-26T23:15:33.3830000+00:00","now that is some nice logic density! i feel bad for wasting so much space haha","","😮 (1)"
+"169786952432746498","mithro_","2025-11-26T23:25:27.6660000+00:00","@BreakingTaps - It just means you'll have to do more designs and purchase more wafer.space slots! 😛","","😮 (1)"
+"384390069412429834","polyfractal","2025-11-26T23:25:58.2250000+00:00","hehe yessir! plenty of room for growth 🙂","",""
+"840182560252624916","logic_destroyer","2025-11-26T23:26:02.1760000+00:00","In theory, you could build a memory chip by filling the whole die with SRAM cells and routing the signals out","",""
+"169786952432746498","mithro_","2025-11-26T23:26:54.8140000+00:00","I would actually love someone to actually do that! -> https://docs.google.com/document/d/1hk0WXCmQ8LYNhn8gIVs8vHymR2MleQx2ro_hQlyOYKU/edit?tab=t.0#heading=h.5vu5m0flj1fy","","❤️ (1)"
+"220639106915368960","tholin","2025-11-26T23:28:15.8970000+00:00","My custom SCL breaks LVS. Its been over 3 hours.","2025-11_media/image-A8859.png","😮 (1)"
+"220639106915368960","tholin","2025-11-26T23:28:52.6320000+00:00","I tried checking the logs in the runs directory, but they all cut off. Mid-line.","",""
+"220639106915368960","tholin","2025-11-26T23:29:11.5410000+00:00","So either some unflushed file buffers, or it actually hard crashed.","",""
+"738396032295108721","bailey8889","2025-11-26T23:41:16.9900000+00:00","@Tholin If you send what you have of the lvs.log and lvs.report, I'll take a look.","",""
+"220639106915368960","tholin","2025-11-26T23:42:33.8490000+00:00","Already cleaned up the runs directory for another go
+But I comited the librelane project causing the issue:
+https://github.com/AvalonSemiconductors/gf180mcu_as_sc_mcu7t3v3/tree/main/example_project","",""
+"805909190333038612","trev5514","2025-11-27T03:57:22.3780000+00:00","What clock speed are you running at?","",""
+"805909190333038612","trev5514","2025-11-27T06:34:58.2220000+00:00","""Free worldwide shipping is included, but buyers are responsible for insurance and tariffs."" Does anyone have an estimate on what the tariff prices will be for the tapeout to the US?","",""
+"596068704471482370","246tnt","2025-11-27T06:37:22.6150000+00:00","Given this changes every time the orange throws a tantrum, any estimates today wouldn't weigh much for what it will be in 4 months ...","",""
+"805909190333038612","trev5514","2025-11-27T06:43:22.1630000+00:00","An estimate for todays rates would at least help ballpark additional costs.","",""
+"596068704471482370","246tnt","2025-11-27T06:43:52.4040000+00:00","it's around 50%","","❗ (1)"
+"169786952432746498","mithro_","2025-11-27T07:35:55.1280000+00:00","The baseline import tariff for goods from Singapore to the US is 10%, though specific sectoral tariffs may apply and can be higher. It's important to note that these tariffs are based on the product's country of origin, not where it's shipped from.","","👍 (1)"
+"169786952432746498","mithro_","2025-11-27T07:36:10.9290000+00:00","According to the Google AI -- so no idea if that is true or not","",""
+"169786952432746498","mithro_","2025-11-27T07:37:03.9710000+00:00","https://www.paidnice.com/calculators/us-tariff-calculator","",""
+"169786952432746498","mithro_","2025-11-27T07:37:55.1920000+00:00","The COB packaging is likely to happen in China which would make the country of origin probably China","",""
+"169786952432746498","mithro_","2025-11-27T11:42:51.9750000+00:00","While waiting for things to deploy, I had Claude throw together the following API server for the precheck - https://github.com/mithro/gf180mcu-precheck/tree/feature/api-server/server
+
+Would love thoughts on how horrible it is @ https://github.com/wafer-space/gf180mcu-precheck/pull/13 
+
+Thinking was to put up a dedicated hetzner server with the highest single threaded performance running it and allow people to run it.","",""
+"384390069412429834","polyfractal","2025-11-27T12:41:43.1020000+00:00","20mhz right now (albeit with 5ns slack violations at max_ss)","","👀 (1)"
+"169786952432746498","mithro_","2025-11-27T23:14:54.9470000+00:00","BTW - https://doc.test-platform.wafer.space should be *finally* running manufacturing checks now.","","❤️ (1)"
+"169786952432746498","mithro_","2025-11-27T23:20:37.6190000+00:00","","2025-11_media/image-A8A98.png",""
+"169786952432746498","mithro_","2025-11-27T23:40:09.3890000+00:00","I'll be back in an hour or two.","",""
+"169786952432746498","mithro_","2025-11-27T23:47:20.1140000+00:00","Lost most of yesterday to an issue with SSH multiplexing and jump hosts causing my deployment commands to end up on the wrong VM 🙁","",""
+"169786952432746498","mithro_","2025-11-28T00:18:57.6960000+00:00","Test Submission Platform up @ https://doc.test-platform.wafer.space
+
+I expect the submission process is going to be more bumpy than I would like, so I will be trying to babysit it as much as I can. 
+
+Please do say something if you are having issues or things look wrong! At the moment it is just as likely to be the system as it is your problem.","",""
+"169786952432746498","mithro_","2025-11-28T00:20:29.5490000+00:00","Pinned a message.","",""
+"351484320432521226",".leonmc","2025-11-28T07:02:05.7590000+00:00","Since the run is going to happen anyways, what does the funding goal indicate? Is it the amount of buyers where wafer.space becomes sustainable?","",""
+"169786952432746498","mithro_","2025-11-28T09:40:34.5580000+00:00","That is a good question. I guess it indicates the number of paid slots that I was aiming to have purchased.....","",""
+"692166844701999105","dshadoff","2025-11-28T15:12:52.3740000+00:00","I feel confident that the next run will have more uptake, especially if there are any designs sharing their submissions as examples.  Were you planning to have the next run *before* or *after* the receipt of chips from this run ?","",""
+"805909190333038612","trev5514","2025-11-28T21:24:03.5770000+00:00","I tested a submission using a link from google docs compressed and uncompressed and it was failing. With github, the upload worked just fine.","",""
+"169786952432746498","mithro_","2025-11-29T01:09:32.7110000+00:00","Can you log an issue?","",""
+"169786952432746498","mithro_","2025-11-29T01:10:09.7180000+00:00","See the timeline thread @ https://discord.com/channels/1361349522684510449/1436214297532567753","",""
+"1365118310701600900","rtimothyedwards_19428","2025-11-29T22:25:07.1320000+00:00","The first cut of the GF180MCU Caravel ""openframe"" layout has now been pushed to https://github.com/RTimothyEdwards/gf180mcu_ocd_openframe !","","👍 (2),blobclap (1)"
+"1365118310701600900","rtimothyedwards_19428","2025-11-29T22:26:15.4860000+00:00","Now to create a user project for it that is something more than a bunch of connections that turn off all the GPIOs. . .","",""

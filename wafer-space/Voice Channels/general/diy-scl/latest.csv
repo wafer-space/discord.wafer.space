@@ -1,0 +1,45 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"262706220073222144","namibj","2026-05-01T17:50:04.5280000+00:00","","",""
+"262706220073222144","namibj","2026-05-01T17:50:05.5450000+00:00","I'm guessing my MCML SCL efforts are not particularly relevant for those/that application?","",""
+"1187141985530818611","ravenslofty","2026-05-01T17:50:14.4340000+00:00","MCML?","",""
+"262706220073222144","namibj","2026-05-01T17:50:14.7770000+00:00","@Lofty @Tholin","",""
+"262706220073222144","namibj","2026-05-01T17:50:50.1310000+00:00","","2026-05_media/60781_llcrop-6B6A0.jpg",""
+"1187141985530818611","ravenslofty","2026-05-01T17:50:51.4830000+00:00","""mos current mode logic""","",""
+"262706220073222144","namibj","2026-05-01T17:50:52.7440000+00:00","MUX2","",""
+"1187141985530818611","ravenslofty","2026-05-01T17:51:19.8050000+00:00","um, does this use differential signalling?","",""
+"262706220073222144","namibj","2026-05-01T17:52:14.7780000+00:00","stacks up to about 4~5 on sky130; probably more on gf180mcu due to higher voltage margins allowing for more stacked nmos to be in saturation, at least if there's near-zero-native-threshold voltage devices that can be placed in a raised pwell","",""
+"262706220073222144","namibj","2026-05-01T17:52:21.2310000+00:00","yes!","",""
+"262706220073222144","namibj","2026-05-01T17:52:29.1650000+00:00","means inverters are free","",""
+"262706220073222144","namibj","2026-05-01T17:53:06.4240000+00:00","this is a delay cell of which you can use just 2 to get a quadrature VCO","2026-05_media/image_10-53BC3.png",""
+"262706220073222144","namibj","2026-05-01T17:53:58.5540000+00:00","well, you want a bias generator to adjust the load to get good swing at the tail current that gives the desired frequency","",""
+"1187141985530818611","ravenslofty","2026-05-01T17:55:05.5180000+00:00","so, Tholin's 3.3V static CMOS library will fit naturally into a synthesisable flow. mine will require...some finagling but *is* intended to be targetable by synthesis tools.
+
+I'm...much less convinced about the feasibility of dual-rail logic from a synthesis tool. Of course people can hand-design all they want, but I think both Tholin and I want a library which is ""good enough"" for people.","",""
+"262706220073222144","namibj","2026-05-01T17:55:15.0430000+00:00","I'm _trying_ to get the TX part of a serdes onto my tile on ttsky26a and would be porting the design to wafer.space Run2.
+I'd expect to get a sprinkle of SCL done for the fall ttsky26","",""
+"262706220073222144","namibj","2026-05-01T17:55:27.9710000+00:00","wdym dual-rail?","",""
+"1187141985530818611","ravenslofty","2026-05-01T17:56:25.3610000+00:00","""dual-rail"" is the term for differential logic inside an integrated circuit","",""
+"262706220073222144","namibj","2026-05-01T17:56:57.1810000+00:00","the cells once done as actual SCL blocks are just sipped with what currently looks to be a second metal trace over or right adjacent to the Vdd and GND power rails of a normal SCL footprint setup.","",""
+"262706220073222144","namibj","2026-05-01T17:58:25.2840000+00:00","The GND-side one is the tail bias; the Vdd-side one is the PMOS active tie one; that one is skippable in exchange for loosing the ability to dial power-delay-product without having to do dynamic Vdd scaling.","",""
+"262706220073222144","namibj","2026-05-01T17:58:33.2580000+00:00","ohhhh","",""
+"262706220073222144","namibj","2026-05-01T17:59:20.6880000+00:00","(I mean I'm pretty sure it can be routed as just a double-pitch track on the usual DRCs for metal corners.)","",""
+"1187141985530818611","ravenslofty","2026-05-01T18:00:08.7600000+00:00","um, not what I meant, exactly.","",""
+"262706220073222144","namibj","2026-05-01T18:00:31.4340000+00:00","But yes, sure.
+The bigger hurdle would likely be to teach yosys that some cells _exist_ but are often slower than decomposing (not always, and usually not smaller).","",""
+"1187141985530818611","ravenslofty","2026-05-01T18:01:24.3910000+00:00","Well, that's the job of the liberty library.","",""
+"262706220073222144","namibj","2026-05-01T18:01:26.7570000+00:00","Are you suggesting that yosys would have more fundamental issues coping with the concept of free inversion?","",""
+"262706220073222144","namibj","2026-05-01T18:01:53.5910000+00:00","can't google","",""
+"1187141985530818611","ravenslofty","2026-05-01T18:03:42.3400000+00:00","I'm... going to assume this was asked in good faith and you're not trying to imply I don't know how inverters work.","",""
+"1187141985530818611","ravenslofty","2026-05-01T18:04:38.8560000+00:00","https://people.eecs.berkeley.edu/~alanmi/publications/other/liberty07_03.pdf
+
+It's a specification by Synopsis that basically all standard cell libraries use (sky130, gf180mcu, ihp sg13g2...)","",""
+"262706220073222144","namibj","2026-05-01T18:06:55.3890000+00:00","No I'm well aware you know yosys and almost certianly the gate names way better than me.","",""
+"262706220073222144","namibj","2026-05-01T18:07:46.2940000+00:00","But without differential logic it's AFAIK not the case that inversion is (close enough to) free.","",""
+"1187141985530818611","ravenslofty","2026-05-01T18:09:11.1080000+00:00","So, ABC flatly does not understand differential logic, so you have to treat your differential cells as single-rail (non-differential logic) for the purposes of mapping it, and then map from single-rail to dual-rail and duplicate the single-rail nets. 
+
+Realistically? That means writing a Yosys pass to do that transform.","",""
+"1187141985530818611","ravenslofty","2026-05-01T18:09:51.7490000+00:00","In domino logic inversion is free because it's impossible to express inverting functions :p","",""
+"262706220073222144","namibj","2026-05-01T18:17:16.3980000+00:00","oh right forgot that single-ended companion exists","",""
+"262706220073222144","namibj","2026-05-01T18:18:16.6260000+00:00","well, more like, that it (a) does exist and that (b) domino logic refers to it.","",""
+"262706220073222144","namibj","2026-05-01T18:19:32.2390000+00:00","which makes them somewhat similar in synthesis considerations, though MCML isn't as forced to use a dedicated one-shot precharge","",""
+"262706220073222144","namibj","2026-05-01T18:23:40.2250000+00:00","I've been more concerned with the difficulty of power gating MCML and it's near indifference to clock gating (and related, abhorrent power consumption of DFF-RAM), regarding practical usability.","",""

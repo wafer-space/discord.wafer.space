@@ -1,0 +1,1157 @@
+==============================================================
+Guild: wafer.space Community
+Channel: Information / general
+Topic: Welcome to [wafer.space](https://wafer.space/) - 
+documentation at [wafer.space github](https://github.com/wafer-space) - 
+buy at [buy.wafer.space](https://buy.wafer.space) - 
+archives at [discord.wafer.space](https://discord.wafer.space/)
+After: 08/31/2025 23:59
+Before: 10/01/2025 00:00
+==============================================================
+
+[09/04/2025 21:24] mithro_
+@Tholin / @Tim Edwards - I'm hoping to work with @Leo Moser (mole99) to put together something using previous MPW designs to send to GF for testing very soon.
+
+
+[09/04/2025 21:26] tholin
+Like, this month?
+
+
+[09/04/2025 21:55] mithro_
+Yes
+
+
+[09/04/2025 21:55] mithro_
+Hopefully that isn't a surpise to @Leo Moser (mole99)  🙂
+
+
+[09/04/2025 22:08] tholin
+Its was a surprise to me, heh
+
+
+[09/04/2025 22:09] tholin
+Would you also be interested in sending one of the WiP custom padframes to GF for testing?
+
+
+[09/04/2025 22:52] mithro_
+Sure! I believe @Leo Moser (mole99) is busy this week with finishing iHP related stuff?
+
+
+[09/04/2025 23:03] tholin
+I have a padframe that should be working.
+
+
+[09/04/2025 23:05] tholin
+I can take that, populate the project area with a copy of one of my GFMPW designs and we'll see if everything still works as before.
+
+
+[09/04/2025 23:05] tholin
+Would allow me to do some fixes as well. The RISC-V core on my multi-project die is just a few adjustments/bugfixes away from being able to boot Linux.
+
+
+[09/05/2025 00:03] tholin
+@Tim 'mithro' Ansell Would this be of interest to you in general? Linux-capable CPU core on gf180?
+
+
+[09/05/2025 00:04] mithro_
+A bit weird but I definitely wouldn't say no.
+
+
+[09/05/2025 00:08] mithro_
+The uclinux on Tiny Tapeout is a pretty good demo to show people.
+
+
+[09/05/2025 15:54] mole99
+The idea is to get early feedback from GF, especially regarding the sealring, as the corner of the sealring is simply "best-effort" since we don't have any rules for it in the PDK. Another issue is fill generation, for which we currently only have a partial implementation in magic.
+
+I'm just finishing up my IHP tapeout and will be at ORConf right after that. After ORConf, I will have one full week to create a test reticle and work on fill. I will also upload the template repository for wafer.space designs.
+I would appreciate if you could use the template to build your chip @Tholin. It automatically adds the sealring after GDS streamout.
+
+
+[09/05/2025 16:01] tholin
+Alright, will do
+
+
+[09/05/2025 16:02] tholin
+I'm rushing some bugfixes to my multi-project die right now, and then I will tape that out a second time.
+
+
+[09/05/2025 16:03] tholin
+Not gonna do anything new. The multi-project die is a whole heap of designs that I already know the characteristics of, which is good.
+
+
+[09/05/2025 16:11] mole99
+Thanks! I'll let you know after ORConf once it's pushed.
+Being able to make comparisons between previous shuttles is definitely good.
+
+
+[09/05/2025 18:21] rtimothyedwards_19428
+@Tholin :  I'm glad you're working on a 3.3V standard cell library for GF180MCU.  I have come to the conclusion that the OSU standard cells are invalid and probably will never be synthesizable.  I think it is the same old story with academic development---At one time in the past, they had expertise in standard cell design, but that expertise has been lost, and now all they do is academic excercises like CharLib where they are concerned about simulation efficiency and accuracy, and nobody has noticed that the layouts they're passing to the tool are unworkable for a variety of reasons (such as, for example, having a cell height that is not divisible by any track height).
+
+
+[09/05/2025 18:27] tholin
+Yeah! I do need to keep working on it sometime. Its on hold for now until after the first wafer.space shuttle.
+
+
+[09/06/2025 08:15] mole99
+@Tholin Just so you know, final submission will be in early December, so there may still be time to work on it :)
+
+
+[09/06/2025 15:13] tholin
+True, but my SCL is 3.3V and I do wish to tape out one more 5V chip on the first wafer.space shuttle.
+
+
+[09/06/2025 15:14] tholin
+Second and onwards I will be playing with 3.3V. Lets uhhh...make sure that the 5V stuff we have already works first.
+
+
+[09/06/2025 15:14] tholin
+Oh, that *just* reminds me that I should absolutely create a test layout for the extra 5V cells I’m making.
+
+
+[09/08/2025 23:45] mithro_
+@everyone - The CrowdSupply page which will allows you to purchase wafer.space slots will be live in the next day or two. I am looking for people who want to purchase a slot to be beta testers.
+
+{Reactions}
+‼️ (4) 🚀 (4)
+
+[09/09/2025 01:43] ombudsman
+Hey @Tim 'mithro' Ansell which pdk will we be using?
+
+
+[09/09/2025 01:45] mithro_
+The gf180mcu PDK (https://gf180mcu-pdk.readthedocs.io/) - I believe at least @Leo Moser (mole99) & @Tholin, @tnt have already been working with it.
+
+{Reactions}
+👍 (2)
+
+[09/09/2025 01:50] mithro_
+I believe `ciel` is the best way to get the PDK?
+
+
+[09/09/2025 01:51] algofoogle
+Exciting times, Tim 🙂
+
+{Reactions}
+blobsignyes
+
+[09/09/2025 03:04] always_ff_rohan
+yeah, with sky130 I use this - ```
+#Enable PDK with this commit
+ciel enable --pdk-family sky130A 12df12e2e74145e31c5a13de02f9a1e176b56e67
+
+# Initiate the flow from design directory
+librelane --ciel-pdk -p sky130A -s sky130_fd_sc_hd --flow Classic config.json
+```
+
+
+[09/09/2025 03:05] always_ff_rohan
+GF180 is also same I think
+
+
+[09/09/2025 03:14] essen__
+Hi guys, I was told this was the place to be and you where looking for beta testers.
+Still need to give it some more though as to if I wish to commit 6k to my broken a0 👋
+
+
+[09/09/2025 11:54] polyfractal
+heyo, connected with Tim at OpenSauce and might have roped me into participating as well 🙂  In the middle of a big cross-country move right now (and have no layout experience past my own little DIY projects) so not sure if I'll make this first shuttle.
+
+Was thinking about doing some test structures / circuits for an analog'y neuromorphic chip (spiking neural net stuff)
+
+
+[09/10/2025 09:23] algofoogle
+I wish I had the personal budget for a whole die, but in the meantime if anyone is thinking of sharing the cost for a multi-project die, I would at least like to know 🙂
+
+
+[09/10/2025 14:10] essen__
+Hi @algofoogle (Anton Maurovic) 
+How much area would you be looking for, and do you have any specific requirements ?
+
+
+[09/10/2025 15:42] mithro_
+If anyone is ready to order, please contact me with an email address and I'll add you to the access list.
+
+
+[09/10/2025 17:06] mithro_
+Can people test if https://buy.wafer.space sends them to https://www.crowdsupply.com/wafer-space/gf180mcu-run-1/ correctly?
+
+{Embed}
+https://buy.wafer.space/
+wafer.space GF180MCU Run 1
+Fabricate 1,000 chips of your own design
+2025-09_media/gf180mcu-gelpack-dice_jpg_project-main-8DB90.jpg
+
+{Embed}
+https://www.crowdsupply.com/wafer-space/gf180mcu-run-1/
+wafer.space GF180MCU Run 1
+Fabricate 1,000 chips of your own design
+2025-09_media/gf180mcu-gelpack-dice_jpg_open-graph-DE679.jpg
+
+{Reactions}
+👍 (3) 💜
+
+[09/10/2025 17:07] tholin
+Tested on Firefox and Edge. Re-direct works.
+
+{Reactions}
+👆
+
+[09/10/2025 17:09] urish
+Works for me (Chrome)
+
+
+[09/10/2025 17:10] urish
+Nice campaign page!
+
+
+[09/10/2025 17:38] mithro_
+As I mentioned, anyone ready to commit to a slot, please message me and I'll get you added to the ability to purchase right away.
+
+
+[09/11/2025 04:48] algofoogle
+Started a thread.
+
+
+[09/11/2025 06:24] 246tnt
+@Tim 'mithro' Ansell In the campaign page, maybe specify it's the `gf180mcuD` variant in the PDK, that should allow people to lookup anything they need about the exact spec ( like top metal thickness for instance ).
+
+{Reactions}
+➕
+
+[09/11/2025 07:15] mole99
+Also "GlobalFoundries GF180MCU open‑source PDK" should be "GlobalFoundries gf180mcu open‑source PDK" or "GlobalFoundries open‑source PDK for GF180MCU".
+
+
+[09/15/2025 21:24] rtimothyedwards_19428
+@Tholin :  Would it be okay with you if I incorporated your `gf180mcu_as_sc_mcu7t3v3` standard cells into the open_pdks build of GF180MCU as an option?  I would like to put something on the 1st wafer.space shuttle run using this library.
+
+
+[09/15/2025 21:27] tholin
+Okay, full disclaimer first: I never ran the full prechecks on a layout produced with the SCL. I don't know if it produces DRC correct GDSII outputs in the eyes of klayout (which was a massive pain point with my other SCL).
+
+
+[09/15/2025 21:28] rtimothyedwards_19428
+I understand the risks, and I'm willing to run the whole library through a large project synthesis and debug anything that looks wrong.  Maybe extend the library, as well.
+
+
+[09/15/2025 21:28] rtimothyedwards_19428
+I want a 3.3V standard cell library for gf180mcu, and OSU is not going to be it.
+
+
+[09/15/2025 21:29] tholin
+Yeah, I'm not surprised
+
+{Reactions}
+😆
+
+[09/15/2025 21:29] mithro_
+Hi everyone, I'm in the US/Chicago time zone until the 5th October
+
+
+[09/15/2025 21:30] mithro_
+@Tim Edwards - @Leo Moser (mole99) talked with Staf from chips4makers at OrConf and apparently his cells should work on GF180MCU
+
+
+[09/15/2025 21:32] tholin
+I know Tim Ansell wants to do a test tapeout with GF later this month and for his consideration I'm gonna offer a GDSII of my multi-project die, but with some minor bugs fixed and using the template that mole99 is cooking up. After this, I'll be mostly free to keep developing my 3.3V SCL.
+
+
+[09/15/2025 21:38] rtimothyedwards_19428
+@Tim 'mithro' Ansell :  If you want people to have access to Staf's cells (SRAM, or does he have more?), then I just need a pointer to a repository and I can incorporate them into open_pdks for GF180MCU.
+
+
+[09/15/2025 21:39] mithro_
+@Tim Edwards - I'm guessing @Leo Moser (mole99) is probably still travelling back from OrConf at the moment.
+
+
+[09/15/2025 21:42] mithro_
+This is what @Leo Moser (mole99) sent me;
+> I'm now back from ORConf, which was great! I had some interesting discussions with a lot of people.
+> 
+> One of the most interesting projects for us is Staf Verhaegen's SRAM compiler: https://www.youtube.com/watch?v=G9uyKw3XoiM
+> It would not only allow us to generate SRAM macros in different configurations, but also for 3.3V transistors on gf180mcu.
+> 
+> I asked him if he would be interested to put different SRAM configurations on a shuttle slot. He is interested, although there are some changes needed to make it work on gf180mcu.
+> I told him I'll get back to him after asking you whether there's still a slot available.
+> 
+> Moreover, we could also use Staf's FlexCell stdcell generator to generate 3.3V cells. https://gitlab.com/Chips4Makers/c4m-flexcell
+> 
+> Tholins cells are great, but this would give us a larger set of stdcells that we could even take to a different process. Tamas did not use them for the TT test shuttle only because he couldn't get them working with LibreLane in time for the tapeout. But it's just a matter of figuring out how to configure LibreLane with these stdcells.
+> 
+> The only missing part then is the separation of the 5V and 3.3V voltage domains in the padring. There's a clever workaround using breaker cells that Tamas has already used. The proper way would be to create new power/ground pad cells based on the existing ones.
+
+{Embed}
+FOSSi Foundation
+https://www.youtube.com/watch?v=G9uyKw3XoiM
+A portable area efficient SRAM compiler: a ... job somebody has to ...
+For developing a SRAM compiler that is area efficient and performant expertise is needed but above all a lot transpiration and persistence; more so I would say than other circuits. Luckily we (e.g. ChipFlow) is developing one for IHP and their SG13G2 open source process. This work is done in the FlowSpace project funded by the German government....
+2025-09_media/maxresdefault-CA679.jpg
+
+{Embed}
+https://gitlab.com/Chips4Makers/c4m-flexcell
+Chips4Makers / c4m-flexcell · GitLab
+A flexible, scalable, open source standard cell library.
+2025-09_media/twitter_card-570ddb06edf56a2312253c5872489-60AF3.jpg
+
+
+[09/15/2025 21:43] mithro_
+His stuff is also listed at https://bit.ly/ws-gf180mcu-stdcells
+
+{Embed}
+https://bit.ly/ws-gf180mcu-stdcells
+wafer.space - Notes around voltages and options for I/O and standar...
+Notes around voltages and options for I/O and standard cells bit.ly/ws-gf180mcu-stdcells  Voltages and GF180MCU See also https://bit.ly/ws-gf180  The GF180MCU process uses the same stack as the other 180nm process technologies but changes; The default oxide to be the same as the other 180nm proce...
+2025-09_media/AHkbwyJe1agTFR-diddXHLe4QsUKu6Ea4uFT63gtAw-A643A
+
+
+[09/15/2025 21:51] rtimothyedwards_19428
+@Tim 'mithro' Ansell :  I have already declared my intent to work on the dual voltage I/O library problem.
+
+
+[09/15/2025 22:13] mithro_
+@Tim Edwards - Great! Just trying to make sure everyone knows about things.
+
+
+[09/16/2025 07:02] mole99
+@Tholin Thanks for working on your design so we can include it in the test tapeout. Just to be clear, this is not a real tapeout, but rather a way for us to get feedback from GF about the design of the reticle, the sealring, if the fill matches density also on their side etc. The more real world design we have on there, the better. We should probably call it a virtual tapeout :)
+
+
+[09/16/2025 07:03] mole99
+@Tim Edwards Great! From what I understand we need two copies of the power and ground cells each, where one is for the core domain and one for the I/O domain. It would be really helpful if you could take a look at this 👏
+
+For now, Tamas used a nice trick to get separate power domains using custom breaker cells, see: https://github.com/TinyTapeout/tinytapeout-gf-0p1/blob/main/docs/padframe.svg
+However, if we have proper power/ground cells for both domains then we wouldn't have to resort to such tricks.
+
+If you have a PR ready just ping me and I can give it a try. We need to make sure that the pin shape for the bondpad comes first in the LEF, so that OpenROAD will promote the correct pin to a BTerm. See this commit: https://github.com/wafer-space/gf180mcu/commit/eb701885d4fc3aff546c974df1b3e7bcce6bd3c7
+
+
+[09/16/2025 07:09] mole99
+Yes, we would like to get Staf's FlexCell stdcells into the PDK, as well as his SRAMs.
+
+Since both are generated, there's no repository at the moment that hosts the cells afaik. It would probably make sense for wafer.space to host repositories for both, which we keep up to date that you can then incorporate into open_pdks (unless Staf wants to host them himself).
+
+
+[09/16/2025 12:41] tholin
+I made a better DFF to fit into the 7-track 5V SCL. Its slightly wider and has some met2 obstructions, but is significantly faster than the DFFs  that ship with the SCL.
+
+
+[09/16/2025 12:41] tholin
+https://cdn.discordapp.com/attachments/1299769089220284467/1417488167581515857/image.png?ex=68caaa3a&is=68c958ba&hm=c03bbb239d8e5bb97ab8df647c00f7970b70be0423f2ef314d7568e0cb7af515&
+
+{Embed}
+https://cdn.discordapp.com/attachments/1299769089220284467/1417488167581515857/image.png?ex=68caaa3a&is=68c958ba&hm=c03bbb239d8e5bb97ab8df647c00f7970b70be0423f2ef314d7568e0cb7af515&
+2025-09_media/image-5834D.png
+
+
+[09/16/2025 12:42] tholin
+Seeing clock period improvements of up to several ns using this.
+
+{Reactions}
+blobclap (2)
+
+[09/16/2025 15:05] rtimothyedwards_19428
+Where can I grab this to incorporate it into the existing standard cells?
+
+
+[09/16/2025 15:07] rtimothyedwards_19428
+This is a digital standard cell layout made with Tholin's 3.3V standard cells, installed into the PDK with open_pdks and run through librelane.  It was almost ludicrously easy.
+
+{Attachments}
+2025-09_media/ffra-C18BF.png
+
+
+[09/16/2025 15:07] tholin
+Oh good, I expected it to completely break with librelane without major config changes.
+
+
+[09/16/2025 15:09] tholin
+Set `SYNTH_STRATEGY: DELAY 4` if you wanna push it to its limits.
+
+
+[09/16/2025 15:10] rtimothyedwards_19428
+It was almost perfect out-of-the-box.  All I was missing was the "drc_exclude.cells" file, and I had to add a "touch" command to the installer to force it to be created.
+I'll give "SYNTH_STRATEGY: DELAY 4" a try.  This was really just a proof-of-concept test, though.
+
+
+[09/16/2025 15:15] rtimothyedwards_19428
+"SYNTH_STRATEGY: DELAY 4" apparently worked (?).  I'm not sure how to prove that it did.  Anyway, at this point it's more productive for me to be pushing my commit to open_pdks.
+
+
+[09/16/2025 15:18] tholin
+That option makes it optimize for pure speed! Should be able to push the clock period real low now.
+
+
+[09/16/2025 15:43] tholin
+I committed a blank drc_exclude.cells file into the SCL’s repo
+
+
+[09/16/2025 15:43] tholin
+So that should be taken care of now
+
+
+[09/16/2025 16:00] tholin
+https://github.com/AvalonSemiconductors/gf180mcu_extra_cells
+
+{Embed}
+https://github.com/AvalonSemiconductors/gf180mcu_extra_cells
+GitHub - AvalonSemiconductors/gf180mcu_extra_cells: Additional 7-tr...
+Additional 7-track, 5V standard cells for gf180mcu PDK. - AvalonSemiconductors/gf180mcu_extra_cells
+2025-09_media/gf180mcu_extra_cells-C3B07
+
+
+[09/16/2025 16:00] tholin
+Its in here
+
+
+[09/16/2025 16:01] tholin
+gf180mcu_extra__dfxtp_2
+
+
+[09/16/2025 17:18] rtimothyedwards_19428
+Should I merge this directly into the `gf180mcu_fd_sc__` repository, or should I try to incorporate it as an extension (like I did with the "sky130_ef_sc" cells), in which case I would prefer a more targeted library name, like `gf180mcu_as_sc_9t5v0`?
+
+
+[09/16/2025 17:27] tholin
+It should be an extension
+
+
+[09/16/2025 17:27] tholin
+I mean, that's why I called it "extra cells"
+
+
+[09/16/2025 17:28] tholin
+The DFF I made is meant to be a full replacement for the one in the fd_sc_7t5v0, though, and you have the exclude the whole wildcard of `gf180mcu_fd_sc_7t5v0__dff*` from synthesis.
+
+
+[09/16/2025 20:18] mithro_
+I think a `gf180mcu_as_sc_9t5v0` makes the most sense?
+
+
+[09/16/2025 20:26] tholin
+7t
+
+
+[09/16/2025 20:26] tholin
+Its still 7-track
+
+
+[09/16/2025 20:26] tholin
+I'm also reserving that name for if/when I make a full 5V custom SCL
+
+
+[09/16/2025 20:27] tholin
+Addons to the existing SCLs should have a separate naming convention.
+
+
+[09/16/2025 20:31] mithro_
+I would say that everything under `gf180mcu_as_XXXX` would be your name space.
+
+
+[09/16/2025 20:39] tholin
+I'll probably be re-naming this to `gf180mcu_as_extra`, then. Its intended to mostly only contain non-synthesizable special cells anyways, that you have to instantiate explicitly (i.e. transmission gates).
+
+
+[09/16/2025 20:44] mithro_
+SGTM!
+
+
+[09/16/2025 21:10] rebelmike
+Hi all, I've made a start getting TinyQV building on gf180 - shamelessly stole the build script from tinytapeout-gf-0p1.  Result is here https://github.com/MichaelBell/gf180mcu-tinyQV
+
+{Embed}
+https://github.com/MichaelBell/gf180mcu-tinyQV
+GitHub - MichaelBell/gf180mcu-tinyQV: TinyQV for gf180mcu
+TinyQV for gf180mcu. Contribute to MichaelBell/gf180mcu-tinyQV development by creating an account on GitHub.
+2025-09_media/gf180mcu-tinyQV-226D0
+
+
+[09/16/2025 21:11] rebelmike
+Fits in 600x600um with 25um padding.  It's quite slow though, it wouldn't build with a 50MHz clock so I used 40MHz.  Whereas it manages over 70 on sky130, is that expected?
+
+
+[09/16/2025 21:12] tholin
+I've gotten pretty good at squeezing performance out of gf180 flows. Let me try.
+
+
+[09/16/2025 21:13] tholin
+What is tinyQV again?
+
+
+[09/16/2025 21:14] rebelmike
+Sure - though this is just me mucking about for now!  Don't have any particular goal yet.
+
+
+[09/16/2025 21:14] rebelmike
+TinyQV is my quad bit serial Risc-V CPU.  Tim was looking for a small Risc-V CPU and we thought it might be a good fit
+
+
+[09/16/2025 21:16] rebelmike
+Its latest outing was on the ttsky25a Risc-V peripheral competition - those versions are huge with loads of peripherals connected.  But this version is just the "standard" one
+
+
+[09/16/2025 21:17] tholin
+I...uhhh....I’ve never seen this happen before
+
+{Attachments}
+2025-09_media/image-EE40A.png
+
+{Reactions}
+😬
+
+[09/16/2025 21:19] mithro_
+There is some stuff about Mike's TinyQV in my doc @ https://bit.ly/ws-tiny-riscv-proof
+
+{Embed}
+https://bit.ly/ws-tiny-riscv-proof
+wafer.space - GF180MCU Bit Serial RISC-V Implementation - bit.ly/ws...
+GF180MCU Bit Serial RISC-V Implementation https://bit.ly/ws-tiny-riscv-proof  Goal The primary goal of this project is to show a potential pathway to creating “custom RISC-V” chips with wafer.space’s low volume manufacturing & chip on board packaging that are within the realm of being cost compet...
+2025-09_media/AHkbwyLVub4Uei-LT5TnFCJAaungYRu8uZxoPy9gfP-3A9DC
+
+
+[09/16/2025 21:21] 246tnt
+@RebelMike I would expect gf180 to be slower than sky130 yes, no doubt about it.  With tweaking and optimizing, you could maybe get gf180 to match a "default run" of sky130 but if you put the same effort tweaking and optimizing, I'd expect sky130 to win speed wise.
+
+{Reactions}
+👍
+
+[09/16/2025 21:21] mithro_
+@RebelMike - Looks like you are using a bunch of flip flops for the register file? https://github.com/MichaelBell/gf180mcu-tinyQV/blob/main/src/latch_mem.v ?
+
+{Embed}
+https://github.com/MichaelBell/gf180mcu-tinyQV/blob/main/src/latch_mem.v
+gf180mcu-tinyQV/src/latch_mem.v at main · MichaelBell/gf180mcu-tinyQV
+TinyQV for gf180mcu. Contribute to MichaelBell/gf180mcu-tinyQV development by creating an account on GitHub.
+
+
+[09/16/2025 21:22] mithro_
+Or is that main memory?
+
+
+[09/16/2025 21:22] rebelmike
+That is some scratch memory - though not actually included in that build above.
+
+
+[09/16/2025 21:23] rebelmike
+Registers are just flip flops - they're in https://github.com/MichaelBell/tinyQV/blob/gf180mcu/cpu/register.v
+
+{Embed}
+https://github.com/MichaelBell/tinyQV/blob/gf180mcu/cpu/register.v
+tinyQV/cpu/register.v at gf180mcu · MichaelBell/tinyQV
+A Risc-V SoC for Tiny Tapeout. Contribute to MichaelBell/tinyQV development by creating an account on GitHub.
+2025-09_media/tinyQV-4674D
+
+
+[09/16/2025 21:27] rebelmike
+Would probably want to tweak the way this works a bit - all of the registers rotate constantly (idea came from https://github.com/Wren6991/tt02-whisk-serial-processor), but using a clock gate or plain enable in logic so only the registers being accessed are rotated would probably be preferable.
+
+
+[09/16/2025 21:35] mithro_
+@RebelMike - how does that build compare in size to the minimax example @Xobs did a long time ago pictured the doc @ https://bit.ly/ws-tiny-riscv-proof ?
+
+{Attachments}
+2025-09_media/image-41F9D.png
+
+{Embed}
+https://bit.ly/ws-tiny-riscv-proof
+wafer.space - GF180MCU Bit Serial RISC-V Implementation - bit.ly/ws...
+GF180MCU Bit Serial RISC-V Implementation https://bit.ly/ws-tiny-riscv-proof  Goal The primary goal of this project is to show a potential pathway to creating “custom RISC-V” chips with wafer.space’s low volume manufacturing & chip on board packaging that are within the realm of being cost compet...
+2025-09_media/AHkbwyLVub4Uei-LT5TnFCJAaungYRu8uZxoPy9gfP-3A9DC
+
+
+[09/16/2025 21:39] rebelmike
+Is that https://github.com/gsmecher/minimax ? I hadn't come across that before.
+
+{Embed}
+https://github.com/gsmecher/minimax
+GitHub - gsmecher/minimax: Minimax: a Compressed-First, Microcoded ...
+Minimax: a Compressed-First, Microcoded RISC-V CPU - gsmecher/minimax
+2025-09_media/b48422f6-7d75-4c5a-a589-54efc82a55af-555BB
+
+
+[09/16/2025 21:46] rebelmike
+Eyeballing that it looks like the area is around 200x400?  But then there's the large register file.  TinyQV takes the approach of supporting RV32EC with the absolute minimum number of writable registers to allow normal C code to work (just 13, as gp and tp can be hardwired without breaking the C ABI).
+
+
+[09/16/2025 21:56] rebelmike
+TinyQV also supports interrupts and basic CSRs.  I've also included UART, SPI and PWM peripherals in that build.  I guess we would need to decide what should be included given the goal of demoing a "custom Risc-V chip".  Maybe including one of the peripherals from the TT competition would make sense to show that custom design concept.  Probably reducing the number of general purpose IOs makes sense as I imagine the pad space is going to be a limiting factor.
+
+
+[09/16/2025 21:58] mithro_
+@RebelMike - Yeah, I think that was the minimax CPU that @Xobs used.
+
+
+[09/16/2025 22:01] mithro_
+@RebelMike - I think 600um x 600um is only a bit bigger than the largest SRAM block size?
+
+{Attachments}
+2025-09_media/image-15E84.png
+
+
+[09/16/2025 22:07] mithro_
+@RebelMike - Seems like you could fit somewhere like ~40ish copies on a single wafer.space slot?
+
+{Attachments}
+2025-09_media/image-760BD.png
+
+
+[09/16/2025 22:11] rebelmike
+Sounds plausible - the 600x600 was just my initial guess, though I did have to work a little to make the build pass I'm sure it could go a bit smaller (but then we'd probably decide we wanted to include more things anyway).  Taking a peak at @urish's setup for Tiny Tapeout on gf180, 2x2 tiles is 711.20x325.36 - so if that's roughly equivalent to 2x2 tiles on sky130 it should be possible to squeeze it into that area.
+
+
+[09/16/2025 22:13] rebelmike
+Hmm, actually that is quite a lot smaller so that might be a challenge.
+
+
+[09/16/2025 22:15] mithro_
+>40 is much bigger than >20 that doc was potentially thinking about.
+
+
+[09/16/2025 22:21] mithro_
+I had some data about Tiny Tapeout tile sizes and capacities in the spreadsheet @ https://docs.google.com/spreadsheets/d/1hgfRhANt3jyG4w0tgVumoxdqkyLpXQksTHPXk9g4_NM/edit?gid=924741324#gid=924741324 -- That was from quite a long time ago, so don't know if it matches / got updated with the latest configs.
+
+{Embed}
+https://docs.google.com/spreadsheets/d/1hgfRhANt3jyG4w0tgVumoxdqkyLpXQksTHPXk9g4_NM/edit?gid=924741324
+Tiny Tapeout Sizing Comparisons
+2025-09_media/AHkbwyKTMijXzaANNwofCXLWnYQyRHjerus3bpcnIs-2C152
+
+
+[09/16/2025 22:22] rebelmike
+That does assume no (or maybe minimal) on chip cache/RAM.  Performance is therefore not amazing.
+
+
+[09/16/2025 22:23] mithro_
+Well, you might be able to add a 512 bytes SRAM to your config and still fit 20 versions....
+
+{Reactions}
+👍
+
+[09/16/2025 22:24] rebelmike
+Big unknown for me is pad size.  Looks like the TT test chip is using 355x75 with 20.3 spacing.  That could mean pads are a larger area than the CPU
+
+
+[09/16/2025 22:29] mithro_
+@RebelMike - I think the first subdivision configuration is probably just going to be 1/2 or 1/4, so you'll have plenty of space.
+
+{Reactions}
+👍
+
+[09/17/2025 00:17] xobs
+Yeah, one of the downsides to the minimax was that you need two copies of the register file so it could bank everything in case of an unhandled instruction.
+
+
+[09/17/2025 07:48] rebelmike
+Makes sense on FPGA, but expensive on asic.
+
+
+[09/17/2025 20:22] rebelmike
+Some thoughts on size for meeting the eventual goal, and approach to getting TinyQV into a suitable state to enable that, here: https://docs.google.com/document/d/16-JBqH7T6T0cKGpoZkjNh42dn7F8hudmymY-CGiME2c/edit?usp=sharing
+
+{Embed}
+https://docs.google.com/document/d/16-JBqH7T6T0cKGpoZkjNh42dn7F8hudmymY-CGiME2c/edit?usp=sharing
+TinyQV gf180mcu
+TinyQV as custom Risc-V demo  Goal Show it’s possible to create custom Risc-V chips at reasonable cost on wafer.space.  Tim’s doc has more: https://docs.google.com/document/d/1U5tQairqGWx1kK3jr6FB_aSNz2RWzo8jpJg-MWs9UXI/edit?tab=t.0  Preparatory work  Aim is to get TinyQV into a state where it ma...
+2025-09_media/AHkbwyLuz04cEgCPI2rMB0Z62l0OAk1Gv3-17BRRn4-71A39
+
+
+[09/18/2025 21:47] mithro_
+Yeah, minmax was targeting FPGAs where blockram is pretty cheap
+
+
+[09/18/2025 21:58] mithro_
+I updated the wafer-space GitHub organization at with a little more content https://github.com/wafer-space
+
+{Embed}
+https://github.com/wafer-space
+wafer.space
+Budget silicon manufacturing -- create integrated circuits without breaking the bank. - wafer.space
+2025-09_media/206372765-BA965
+
+{Reactions}
+👍
+
+[09/19/2025 04:21] urish
+Looks good
+
+
+[09/19/2025 04:21] mithro_
+Slowly updating the website - https://preview.wafer.space/pr-44/
+
+{Embed}
+https://preview.wafer.space/pr-44/
+wafer.space - Budget silicon manufacturing.
+Create integrated circuits without breaking the bank!
+
+
+[09/19/2025 05:10] mithro_
+I also did an interview today with Chris Gammell for the Amp Hour, challenged him to do a Tiny Tapeout before the next time I'm on his podcast 🙂 - I believe it should be live late next week sometime.
+
+{Reactions}
+❤️
+
+[09/19/2025 05:33] urish
+Nice countdowns!
+
+
+[09/19/2025 09:07] mole99
+I'm glad to announce the wafer.space template! https://github.com/wafer-space/gf180mcu-project-template
+
+{Embed}
+https://github.com/wafer-space/gf180mcu-project-template
+GitHub - wafer-space/gf180mcu-project-template: Project template fo...
+Project template for wafer.space MPW runs using the gf180mcu PDK - wafer-space/gf180mcu-project-template
+2025-09_media/gf180mcu-project-template-97D29
+
+{Reactions}
+🎉 (4)
+
+[09/19/2025 09:07] mole99
+The template is a work in progress, so further changes are to be expected.
+
+There is an issue with resizing in OpenROAD because the I/O library specifies a fanout of 1, therefore we have to wait for a fix to re-enable resizing.
+However, your design may not be affected. Just enable resizing in the config file and see for yourself.
+Filler generation may change in the future, however it should already be possible to meet the target densities.
+DRC with magic is currently failing. There are some unknown layer/datatypes, and we need to either fix the DRC errors in the I/O cells or exclude them during DRC.
+
+
+[09/19/2025 09:07] mole99
+Despite these issues you can already use it to implement your design. Please give it a try and let me know how it goes!
+I've also added a wrapper around the dvdd/dvss pads to allow them to be placed in the eastern and western rows of the padring.
+For now feel free to change the padring as you like.
+
+
+[09/19/2025 09:08] mole99
+As a next step, I would need the final pad positions for the padring from Tiny Tapeout ( @tnt ). These positions will be the same for all wafer.space customers (if they opt for packaging). It is possible to change I/O types such as input/output/bidir, but the power/ground pads should stay the same, as they will be bonded to power/ground rings in the case of CoB and to the ground pad in the case of QFN.
+
+
+[09/19/2025 09:19] 246tnt
+@Leo Moser (mole99) Drafting something now ...
+
+
+[09/19/2025 09:20] algofoogle
+This is pretty exciting! How many pads are you going for?
+
+
+[09/19/2025 09:21] algofoogle
+Fantastic, Tim! Can’t wait to hear it, and I hope he does do a submission! I was thinking Dave Jones should do one too.
+
+
+[09/19/2025 09:24] 246tnt
+Well for TT the target when packaged is QFN64. What I'm drafting now will have 74 bond pads since 10 of those will be GND and will only go to the EPAD.  6 will be power so that leaves 58 "user" connections.
+
+
+[09/19/2025 09:26] tholin
+What I’m drafting is just a copy of the caravel pad-out, but the SPI flash pins become extra user GPIO.
+
+
+[09/19/2025 09:27] tholin
+Since I’m targeting a DIP-40 footprint, that is sufficient IO.
+
+
+[09/19/2025 09:29] mole99
+@Tholin Yes, but you'll have to map this to the Tiny Tapeout padring before your final submission if you want packaging. Some of your unused pads could be used for debugging functionality.
+
+
+[09/19/2025 09:32] 246tnt
+Of course if you just want raw dies and handle all packaging yourself, you do whatever you please.
+
+
+[09/19/2025 09:33] mole99
+Absolutely.
+
+
+[09/19/2025 09:36] algofoogle
+This sounds pretty cool. Just that bit more flexibility than OpenFrame
+
+
+[09/19/2025 09:40] tholin
+I’m probably going to have to do packaging myself if I want to bond to DIP PCB carriers
+
+
+[09/19/2025 09:43] mole99
+I think there was a discussion about providing your own PCBs (with the same CoB footprint?) somewhere. @Tim 'mithro' Ansell will know.
+
+
+[09/19/2025 09:47] tholin
+The PCBs may also have project-specific components on them
+
+
+[09/19/2025 09:47] tholin
+Or it may not even be DIP-40, but something smaller, like DIP-28 (the wide one)
+
+
+[09/19/2025 09:48] tholin
+Or some pins need to be bonded differently
+
+
+[09/19/2025 09:48] tholin
+So there is no one size fits all PCB layout for me. This is the downside of making a multi-project die.
+
+
+[09/19/2025 09:48] tholin
+And why I am desperately trying to hunt down a wire bonder for myself.
+
+
+[09/19/2025 10:00] mole99
+That's why a carrier board (like on Tiny Tapeout) is a good idea. But if that doesn't work for you, you'll have to go the manual route.
+
+
+[09/19/2025 10:05] tholin
+I’m pretty space constrained by having to fit the dimensions of those DIP footprints
+
+
+[09/19/2025 10:12] 246tnt
+@Leo Moser (mole99) https://docs.google.com/spreadsheets/d/1sZCpz6yy-bHGaV2BVG4IZOLBWn--WIddM9pkCQm_Vyc/edit?usp=sharing
+
+{Embed}
+https://docs.google.com/spreadsheets/d/1sZCpz6yy-bHGaV2BVG4IZOLBWn--WIddM9pkCQm_Vyc/edit?usp=sharing
+TT GF180 padframe
+2025-09_media/AHkbwyKYbpWB-91BLdfVeiyR-EDy0Jp2F1tCOeZ1We-12A32
+
+
+[09/19/2025 18:42] mole99
+Started a thread.
+
+
+[09/19/2025 18:52] mithro_
+Seems like everyone has been quite busy while I've been sleeping!
+
+
+[09/19/2025 23:42] rebelmike
+@Leo Moser (mole99) Is https://github.com/wafer-space/gf180mcu-project-template/blob/main/config.yaml#L165 correct?  I think it should either be 25 more, to account for the seal ring on both sides, or exactly 5070x3880 if seal ring is added externally.
+
+
+[09/20/2025 07:46] mole99
+Good catch! I tested the reticle stitcher with my GF-MPW1 project, where I added the sealring externally. I've now updated the project template.
+
+{Reactions}
+👍
+
+[09/20/2025 20:18] mithro_
+@urish / @Matt Venn - After I get the website updated with the campaign content, I would like to get Tiny Tapeout collaboration information up on the websites.
+
+{Reactions}
+👍 (2)
+
+[09/20/2025 21:14] mattvenn
+Fyi I'm travelling next week for austrochip
+
+
+[09/21/2025 03:01] mithro_
+The website @ https://wafer.space has now been updated quite a bit, nothing new compared to the campaign page.
+
+{Embed}
+https://wafer.space/
+wafer.space - Budget silicon manufacturing.
+Create integrated circuits without breaking the bank!
+
+
+[09/21/2025 04:09] urish
+Started a thread.
+
+
+[09/21/2025 15:21] tholin
+So, if I followed the conversation about tiny RISC-V cores on GF180 so far, the biggest constraint so far appears to be the size of the register file, which actually becomes larger than the CPU core itself at some point.
+Has it been considered yet that the registers can be moved into RAM? Reserve 32 words of RAM to hold the register values.
+
+
+[09/21/2025 19:28] rebelmike
+Started a thread.
+
+
+[09/22/2025 15:35] mole99
+I just updated the project template to limit the sealring generator to Metal5 and add `MAGIC_GDS_FLATGLOB` to the LibreLane config.
+The remaining issues during DRC are because of some missing layer definitions, duplicate cell entries, and overlapping cuts (which is annoying to fix as per Tim 😅).
+
+You can update your local copy py simply pulling the latest changes and running `make clone-pdk` again.
+
+
+[09/23/2025 17:23] mithro_
+@Leo Moser (mole99) - Should that fix https://github.com/wafer-space/gf180mcu-project-template/issues/1 ?
+
+{Embed}
+https://github.com/wafer-space/gf180mcu-project-template/issues/1
+Encountered one or more fatal errors while running Magic. · Issue ...
+Ran make clone-pdk, then nix-shell then make librelane ends up with the following error; Generating output for cell chip_top [INFO] GDS Write Complete Classic&#39; - Stage 57 - GDSII Stream Out (Ma...
+2025-09_media/1-8D505
+
+
+[09/23/2025 18:00] mole99
+Streamout should already work, it may be that the template was in a weird state. Can you pull the latest changes and clone the PDK again?
+I've also now subscribed to the repo so I get notifications for the issues. Let's continue on GitHub if you get the same issue again.
+
+
+[09/23/2025 18:42] mithro_
+Just tried again, got the same error I think.....
+
+
+[09/24/2025 09:08] mole99
+Replied to your issue with a solution.
+
+
+[09/24/2025 14:46] mithro_
+Not sure you actually replied with a solution but I'm testing what I think you meant 🙂
+
+
+[09/25/2025 10:14] mattvenn
+Nice amp hour interview @Tim 'mithro' Ansell !
+
+{Reactions}
+💯
+
+[09/25/2025 10:25] urish
+Started a thread.
+
+
+[09/25/2025 10:56] anfroholic
+https://theamphour.com/703-building-wafer-space-with-tim-ansell/
+
+{Embed}
+https://theamphour.com/703-building-wafer-space-with-tim-ansell/
+#703 – Building wafer.space with Tim Ansell | The Amp Hour Electr...
+Tim 'Mithro' Ansell returns to The Amp Hour to discuss his new Singapore based wafer sharing service called wafer.space. Now that eFabless is no more, this venture will aim to make silicon even more accessible to the masses, driving down the costs on a per chip basis. For $7K, you get 1000 chips delivered on a 180 nm process from Global Foundries.
+
+
+[09/25/2025 23:50] rtimothyedwards_19428
+@Tholin :  Would `lctime` be able to create timing files for an I/O library?
+
+
+[09/25/2025 23:51] tholin
+Probably not
+
+
+[09/26/2025 01:36] mithro_
+I'll also be on Teardown Sessions next week on the 3 Oct 2025 @ 2:00pm Chicago (other regions https://bit.ly/teardown-session-waferspace-1) - https://www.youtube.com/watch?v=tEOmnN8IAjs
+
+{Embed}
+https://bit.ly/teardown-session-waferspace-1)
+The World Clock Meeting Planner - Details
+Local time for a meeting, in user selected locations.
+2025-09_media/meeting-planner-95506.png
+
+{Embed}
+Crowd Supply
+https://www.youtube.com/watch?v=tEOmnN8IAjs
+Teardown Session 56: wafer.space with Tim Ansell
+Join Crowd Supply's Helen Leigh for a conversation with Tim Ansell about wafer.space.
+
+About Crowd Supply
+Crowd Supply is the crowdfunding platform of choice for engineers, hackers, designers, and idealists. We help them with the funding and support they need to deliver respectful, thoughtfully crafted, open source hardware to their delighted ba...
+2025-09_media/maxresdefault_live-743AB.jpg
+
+
+[09/26/2025 08:16] h.tamas
+Started a thread.
+
+
+[09/26/2025 09:35] algofoogle
+Great Amp Hour interview @Tim 'mithro' Ansell 🙂 I feel like hassling Chris to get serious about doing a TT submission
+
+{Reactions}
+❤️ (2)
+
+[09/26/2025 13:18] mithro_
+Do it 🙂
+
+{Reactions}
+💪
+
+[09/26/2025 13:34] mattvenn
+I'll try as well
+
+
+[09/27/2025 20:19] tholin
+In about 30 minutes I'll be taking the virtual stage to hold a presentation entitled "How NOT to design an integrated circuit", the synposis for which is  `From low-level programming to now making her own integrated circuits, Tholin is a seasoned member of the Open-Source-Silicon community. Tholin has a record-breaking 8 tapeouts under her belt. In this presentation, we'll gloss over all the successes and present all the failures and mistakes that were made over those tapeouts to learn what to avoid and not to do when taking on such ambitious projects.`
+
+{Reactions}
+💜 (2)
+
+[09/27/2025 20:20] tholin
+I'll be recording the whole thing
+
+
+[09/28/2025 02:47] tholin
+I made my own recording that has better audio from my mic. Threw it up on my fileserver for now. Like 75% of the presentation is about my experiences with GFMPW-0/1.
+https://files.tholin.dev/Public/Videos/dgt_2025_09_27.mp4
+
+{Reactions}
+💜 (2)
+
+[09/28/2025 20:32] mithro_
+@Tholin - Cool, I'll give it a watch later today.
+
+
+[09/29/2025 01:46] mithro_
+@Tholin - Great presentation! It's awesome that you didn't give up after the first few problems. It also looked like you managed to have some type of work arounds for a lot of issues?
+
+
+[09/29/2025 07:46] tholin
+I am incredibly persistent
+
+
+[09/29/2025 07:46] tholin
+I worked around most problems.
+
+
+[09/29/2025 15:54] h_thoreson_71412
+I have work so it will take me a bit to get through but watching around other meetings and obligations
+
+
+[09/29/2025 15:58] mithro_
+@Tholin - I would love to hear the gritty details about how exactly you worked around all the various problems. There is a pretty strong history of people in "our" community getting things working that industry have declared impossible (Another example of @tnt managing to the very early MPW chips going) and I would like to keep driving that home.
+
+
+[09/29/2025 18:21] tholin
+Well, firstly, figuring out what is even going wrong and why is the hard part.
+
+
+[09/29/2025 18:22] tholin
+Only then can you look at what you have and see if you can't nudge things in the right direction again.
+
+
+[09/29/2025 18:24] tholin
+I'm always very happy when I can fix things in software.
+
+
+[09/29/2025 18:27] tholin
+For the AS-11, it just needed a custom assembler frontend to handle the differences in bytecode from the PDP-11/40.
+
+
+[09/29/2025 18:27] tholin
+I say "just" as in, it was a logically simple solution, but took a while to actually implement.
+
+
+[09/29/2025 18:29] tholin
+The VLIW icache actually works under certain conditions. The fetches only fail if the icache contains any instruction packs that have breaks set. So break-free code can be cached safely. So all the software I've written for VLIW, I turn the icache on for loops where its safe and then back off, which still boosts performance decently.
+
+
+[09/29/2025 18:30] tholin
+QCPU is the most exciting story from a hardware perspective, AS2650-1 from a software perspective.
+
+
+[09/29/2025 19:18] h_thoreson_71412
+This is really interesting. It kind of answered one of the lingering questions I've had about how people are using TT to do more sophisticated designs - there's an existing testing framework somewhere?
+
+
+[09/29/2025 21:51] mithro_
+@h_thoreson - @Tim Edwards was also telling me about his usage of an Arty A7 FPGA board I sent him for some TT and GF180MCU testing.
+
+{Reactions}
+👍
+
+[09/29/2025 21:54] h_thoreson_71412
+Interesting - I have one of those but I haven't used it in ages. Hopefully it still works 😅
+
+
+[09/30/2025 01:35] mithro_
+I've merge the Design Help page into the wafer.space website, so https://wafer.space/design-help.html now exists.
+
+{Embed}
+https://wafer.space/design-help.html
+Design Help
+Budget silicon manufacturing.
+
+{Reactions}
+👀
+
+[09/30/2025 01:41] mithro_
+@Tholin - If you want Avalon Semiconductors listed there, 100% happy to add it.
+
+
+[09/30/2025 03:50] mithro_
+Started a thread.
+
+
+[09/30/2025 05:42] mithro_
+@Leo Moser (mole99) and myself will be on Crowd Supply's Teardown Session talking with Helen about wafer.space this Thursday (2nd October) - http://youtu.be/tEOmnN8IAjs
+
+{Embed}
+Crowd Supply
+https://www.youtube.com/watch?v=tEOmnN8IAjs
+Teardown Session 56: wafer.space with Tim Ansell & Leo Moser
+Join Crowd Supply's Helen Leigh for a conversation with Tim Ansell about wafer.space, a new way for chip designers to easily turn a design into real, working chips.
+
+*About Our Guests*
+Tim “mithro” Ansell builds the bridges that make open silicon real. At Google, he helped release the SkyWater SKY130 open-source PDK and launched the Open MPW...
+2025-09_media/maxresdefault_live-743AB.jpg
+
+{Reactions}
+👍 (3)
+
+[09/30/2025 07:42] tholin
+Not yet, unless you want to list my GFMPW-1 submissions as example projects (which you totally can). I am more interested in contributing to writing that Documentation mentioned towards the bottom of the page.
+
+
+[09/30/2025 12:06] vipul.sh
+@Tim 'mithro' Ansell Are there any reference materials or guides available for using GF180 PDK with open-source EDA tools especially for analog design ? Compared to SKY130, there appears to be lack of such publicly accessible resources for GF180.
+
+
+[09/30/2025 12:06] vipul.sh
+Any suggestions how to start exploring designs with GF180?
+
+
+[09/30/2025 12:09] tholin
+Its been a while since I went in-depth with sky130 - what resources for sky130 are you referring to?
+
+
+[09/30/2025 12:21] vipul.sh
+By resources, I am referring to youtube tutorials or publicly available reference flows on platforms like github that can help newcomers get started with a specific PDK (GF180 in this case) and its integration into analog design tools such as xschem, ngspice, magic, netgen.
+
+
+[09/30/2025 12:22] vipul.sh
+Analog design using open-source tools is far less streamlined than RTL-to-GDS flow available for digital design with Openlane.
+
+
+[09/30/2025 12:24] tholin
+Ah, analog design guides for gf180 was something that I was missing. I’ve since figured it out on my own, but it took a bit.
+
+
+[09/30/2025 17:22] mithro_
+Welcome @Vipul - You are correct that GF180MCU resources are a lot more limited than SKY130. We only had 2 free MPW runs for GF180MCU compared to the 8 for SKY130 and until wafer.space there was no easy way to pay to get access to GF180MCU manufacturing (unlike SKY130 which had chipIgnite). 
+
+Hopefully you can help change that now that GF180MCU is more available.
+
+
+[09/30/2025 17:23] mithro_
+I believe the IEEE SCSS Chipathon has a bunch of resources but I can never find the right link to use
+
+
+[09/30/2025 17:23] mithro_
+https://sscs.ieee.org/technical-committees/tc-ose/sscs-pico-design-contest/
+
+{Embed}
+kressel@thinkdm2.com
+https://sscs.ieee.org/technical-committees/tc-ose/sscs-pico-design-contest/
+SSCS “PICO” Open-Source Chipathon - IEEE Solid-State Circuits S...
+SSCS is pleased to announce its 4th open-source integrated circuit (IC) design contest under the umbrella of its PICO Program.
+
+
+[09/30/2025 17:24] mithro_
+And/or https://github.com/sscs-ose/sscs-chipathon-2025 ?
+
+{Embed}
+https://github.com/sscs-ose/sscs-chipathon-2025
+GitHub - sscs-ose/sscs-chipathon-2025: Blocks & Bots: An Open Chip ...
+Blocks & Bots: An Open Chip Playground augmented with LLMs. Please check: https://sscs.ieee.org/technical-committees/tc-ose/sscs-pico-design-contest/ - sscs-ose/sscs-chipathon-2025
+2025-09_media/sscs-chipathon-2025-6FDCC
+
+
+[09/30/2025 17:31] vipul.sh
+Sure @Tim 'mithro' Ansell I will try to work on establishing custom analog design flow with as suggested by @Leo Moser (mole99) and put my queries here wherever I get stuck. Hopefully this will help to streamline the flow with open source analog tools for gf180.
+
+{Reactions}
+❤️
+
+[09/30/2025 17:34] mithro_
+All help is welcome! There are also multiple different ways to do things, so having people give it a go is important.
+
+
+[09/30/2025 17:37] mithro_
+lol - Since launching wafer.space, I'm now getting spam for high-purity fused silica quartz boats to my info email address!
+
+{Reactions}
+😄
+
+==============================================================
+Exported 214 message(s)
+==============================================================

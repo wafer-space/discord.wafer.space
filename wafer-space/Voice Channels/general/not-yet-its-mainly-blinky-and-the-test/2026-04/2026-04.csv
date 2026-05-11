@@ -1,0 +1,23 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"323371864074485771","mole99","2026-04-06T14:34:50.2620000+00:00","","",""
+"323371864074485771","mole99","2026-04-06T14:34:51.1110000+00:00","Well, before you go for a tapeout, it is probably a good idea to validate that the fabric can support more complex designs.
+
+From what I can see, your switch matrix only has direct connections to neighboring tiles. You may need connections that span multiple tiles to improve connectivity, otherwise you may end up with unroutable situations.
+
+After all, 90% of an FPGA is just the routing 😉","",""
+"319853768550121473","thecomputerguy","2026-04-06T14:37:34.0700000+00:00","Yeah, I've been able to verify most of the design. I've asked a couple people to review and give feedback but I haven't heard back from them yet.","",""
+"319853768550121473","thecomputerguy","2026-04-06T14:38:16.4450000+00:00","I'm mainly focused on making the tapeout workflow not be as heavy and slow.","",""
+"323371864074485771","mole99","2026-04-06T14:41:32.2590000+00:00","I see! I really dig the automated and reproducible build of the chip. I use LibreLane to build the FABulous FPGA reproducibly as well, but I only use Nix for the tools.","",""
+"169786952432746498","mithro_","2026-04-06T14:42:38.9450000+00:00","BTW Have you seen my ramberlings in https://docs.google.com/document/d/1n2YaYvHRq6sSTN80jMbDDu8qRKy45c0DJyZbVrDrv_o/edit?tab=t.0 ?","",""
+"319853768550121473","thecomputerguy","2026-04-06T14:42:42.6730000+00:00","Yeah so I looked at LibreLane and I see why it was made. However, I can get better utilization by splitting the tapeout workflow.","",""
+"319853768550121473","thecomputerguy","2026-04-06T14:43:09.6000000+00:00","This is what I've been working on. Each tile gets taped out and everything is placed together at the end.","2026-04_media/HFMdaQMbgAA8apR-55771.png",""
+"319853768550121473","thecomputerguy","2026-04-06T14:43:44.5310000+00:00","Interesting","",""
+"169786952432746498","mithro_","2026-04-06T14:44:06.6560000+00:00","See also my kinda silly spreadsheet at https://docs.google.com/spreadsheets/d/1KIqtzRaZbrWsbKwZqevY2elmVIz1gm5UJqOP75bxcOg/edit?gid=1500563840#gid=1500563840","",""
+"323371864074485771","mole99","2026-04-06T14:44:47.4020000+00:00","Very nice! My LibreLane plugin also first implements the tile macros in parallel and then stitches the fabric: https://github.com/mole99/librelane_plugin_fabulous","",""
+"319853768550121473","thecomputerguy","2026-04-06T14:45:48.0340000+00:00","I get the benefit of being able to use a Nix cache and I can cache things much easily.","",""
+"319853768550121473","thecomputerguy","2026-04-06T14:46:28.4160000+00:00","Huh","",""
+"169786952432746498","mithro_","2026-04-06T14:47:20.5640000+00:00","@The Computer Guy - Don't worry if it doesn't make sense, I was just thinking about the problem by trying to pack standard cells together to get 100% density and not actually doing anything useful.","",""
+"319853768550121473","thecomputerguy","2026-04-06T14:47:42.4540000+00:00","Yeah, I was kinda gathering that","",""
+"323371864074485771","mole99","2026-04-06T14:50:24.3210000+00:00","Yeah, that is a nice approach! I use Make to build the tiles. In theory, I could also only rebuild what is needed, however, that hasn't been necessary so far since implementing all tiles doesn't take that long. But it's a good future improvement.
+
+I also cache the tiles in the CI, see here for the HeiChips fabric: https://github.com/FPGA-Research/heichips25-tapeout/actions/runs/23842507549","",""

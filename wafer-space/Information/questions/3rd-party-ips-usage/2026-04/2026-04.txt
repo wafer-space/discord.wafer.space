@@ -1,0 +1,63 @@
+==============================================================
+Guild: wafer.space Community
+Channel: Information / questions / 3rd party IPs usage?
+After: 03/31/2026 23:59
+Before: 05/01/2026 00:00
+==============================================================
+
+[04/27/2026 09:06] daobaanhvn
+Hello, may I ask whether it is permitted to use IP from third-party vendors (e.g., IO, SRAM, and standard cell IPs)? Can these be taped out in Wafer Space Run 2?
+
+
+[04/27/2026 09:55] 246tnt
+If you have a license for them and if they meet DRC, I don't see why it wouldn't be.
+
+
+[04/27/2026 16:57] mithro_
+Also, many third party proprietary vendors might not be happy that wafer.space won't sign an NDA or other similar contract with them.
+
+
+[04/28/2026 03:20] daobaanhvn
+The situation is that the open GF180MCU PDK only provides 5 V standard cell, IO, and SRAM IP.
+However, I have a license to use 3.3 V standard cell, IO, and SRAM IP from eMemory.
+
+My understanding is that if the design passes the required DRC checks, it should still be possible to tape it out in Run 2. I will also take full responsibility for the use of the eMemory IP and ensure that it complies with its licensing terms.
+
+Could you please confirm if this understanding is correct? Also, would I need to provide any additional documentation (for example, confirmation from eMemory) before tape-out?
+
+In addition, are there any technical concerns with the padframe or COB packaging if the design uses 3.3 V IPs instead of the 5 V IPs provided in the open PDK?
+
+
+[04/28/2026 05:25] 246tnt
+The bond pads need to have the same dimensions and be at exactly the same position as in the default pad frame.
+
+
+[04/28/2026 07:13] mithro_
+Hi @daobaanhvn,
+
+Yes, you are correct that if it passes the **wafer.space DRC checks** (which **could** be different from the checks that eMemory IP has been required to pass) **then** it can be submitted to run #2. wafer.space also don't offer waivers, so if the eMemory IP requires some type of waivers, then that probably won't work.
+
+I would start by running an example design with the IP in it through the tool @ https://github.com/wafer-space/gf180mcu-precheck and see what it says.
+
+You will also be the first person to try this something like, so **expect** it to be rather bumpy it may result in missing the run.
+
+{Embed}
+https://github.com/wafer-space/gf180mcu-precheck
+GitHub - wafer-space/gf180mcu-precheck: Precheck for wafer.space MP...
+Precheck for wafer.space MPW runs using the gf180mcu PDK  - wafer-space/gf180mcu-precheck
+2026-04_media/gf180mcu-precheck-DE6A5
+
+
+[04/28/2026 07:16] mithro_
+@daobaanhvn - As tnt said, the bond pad locations and dimensions will need to be in exactly the right locations. We have not added a check for that to the precheck tooling.
+
+
+[04/28/2026 08:18] daobaanhvn
+Thank you, I will start with the precheck and update soon
+
+{Reactions}
+💯
+
+==============================================================
+Exported 8 message(s)
+==============================================================

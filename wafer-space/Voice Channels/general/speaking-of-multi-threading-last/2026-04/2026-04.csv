@@ -1,0 +1,30 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"323371864074485771","mole99","2026-04-07T07:09:41.0410000+00:00","","",""
+"323371864074485771","mole99","2026-04-07T07:09:43.1060000+00:00","Would you be willing to open an issue, or perhaps even contribute to LibreLane?
+
+If enabling certain options would provide some speed improvements, that would definitely be appreciated. At first glance, I didn't see anything obvious in [Gate Resizer](https://openroad.readthedocs.io/en/latest/main/src/rsz/README.html).","",""
+"384390069412429834","polyfractal","2026-04-07T15:26:55.6430000+00:00","ahhh sorry, that's what I get for responding without looking at my code changes.
+
+I meant OpenSTA not resizer, my bad! I can disentangle the change from the rest of my stuff and send a PR, was a minor tweak to openroad.py in the OpenSTAStep.
+
+(also added a blanket thread parameter since it looked like some other steps could take threads but I don't think that had much effect and is probably not very principled. Might have been redundant too)","",""
+"323371864074485771","mole99","2026-04-07T17:56:19.3960000+00:00","Right! Yes, OpenSTA added native multithreading in its recent 3.0 release afaik.
+
+Donn added [a compatibility layer](https://github.com/librelane/librelane/pull/881) to LibreLane, so we can continue using the same scripts for the LibreLane 3.0 release.
+
+Currently, LibreLane spawns an OpenSTA process for each corner using the [MultiCornerSTA](https://github.com/librelane/librelane/blob/b1095babdafd1d0ceb8182b39a2485989903a81c/librelane/steps/openroad.py#L710) class.
+This was great at the time and definitely better than running each corner sequentially ^^
+However, if you only have three corners, like on gf180mcu, there isn't much to be gained.
+
+Doing multithreading directly in OpenSTA is a major improvement, as many more threads can probably be used in parallel this way. It also means that we only need to keep the database in memory once, reducing the memory footprint and (likely) increasing cache hits. So running OpenSTA multithreaded is definitely desired :)","",""
+"323371864074485771","mole99","2026-04-07T17:57:12.6370000+00:00","How did you modify LibreLane to run OpenSTA multithreaded? You should probably make sure that OpenSTA is only spawned once. Otherwise, you could end up with more software threads than hardware threads.","",""
+"323371864074485771","mole99","2026-04-07T17:57:38.8700000+00:00","By default, each step should try to use up to `--jobs` threads if possible. This is done [here](https://github.com/librelane/librelane/blob/b1095babdafd1d0ceb8182b39a2485989903a81c/librelane/steps/klayout.py#L512), for example. As you can see, each step should also have local overrides e.g. in case running DRC with all available threads exhausts the system memory.","",""
+"384390069412429834","polyfractal","2026-04-08T16:42:25.2500000+00:00","ahh good to know! I was only running small tests, will rerun with my full design to see if I accidentally blow up the machine 🙂
+
+> How did you modify LibreLane to run OpenSTA multithreaded?
+
+IIRC I was just passing in `-threads` when invoking OpenSTA process. It was a very small / targeted change","",""
+"384390069412429834","polyfractal","2026-04-08T16:42:43.2700000+00:00","will doublecheck when i get home","",""
+"323371864074485771","mole99","2026-04-09T07:23:00.1810000+00:00","Haha, it won't blow up the machine, but it could potentially slow things down because of all the context switching 😁
+
+Good to know that's all that's needed. So, we just need to disable the explicit multiprocessing in LibreLane and enable `-threads`.","",""

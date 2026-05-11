@@ -1,0 +1,305 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"169786952432746498","mithro_","2025-10-01T18:58:46.2420000+00:00","@Leo Moser (mole99) - I think I made you a mod which should allow you to create channels.","","👍 (1)"
+"169786952432746498","mithro_","2025-10-02T14:23:38.9510000+00:00","This live stream starts in a few hours!","",""
+"596068704471482370","246tnt","2025-10-02T14:32:08.9790000+00:00","Oh ... in the message it said 3rd october so I noted it for tomorrow 😅","",""
+"596068704471482370","246tnt","2025-10-02T14:32:34.8770000+00:00","(I know it also said Thursday so I should have noted the discrepency but I didn't)","",""
+"323371864074485771","mole99","2025-10-02T14:45:06.3210000+00:00","Yeah, there was a mix-up 😅","",""
+"169786952432746498","mithro_","2025-10-02T14:51:35.2020000+00:00","Yes, it appears I can not work a calendar 😛","",""
+"323371864074485771","mole99","2025-10-02T16:41:43.9070000+00:00","","","🎉 (1)"
+"323371864074485771","mole99","2025-10-02T16:41:44.3530000+00:00","Check out the update to the template!","",""
+"492702620759228416","mattvenn","2025-10-02T17:44:32.4150000+00:00","Glad it's not just me!","",""
+"169786952432746498","mithro_","2025-10-02T17:59:23.2370000+00:00","I even double checked the date.","",""
+"169786952432746498","mithro_","2025-10-02T18:59:14.4960000+00:00","Just about to go live now @ https://www.youtube.com/watch?v=tEOmnN8IAjs","","👌 (1)"
+"732347216412278825","urish","2025-10-02T20:38:32.9490000+00:00","Started a thread.","",""
+"169786952432746498","mithro_","2025-10-02T21:55:04.6190000+00:00","Please reshare https://www.linkedin.com/feed/update/urn:li:activity:7379634646847979520/","","👍 (1)"
+"169786952432746498","mithro_","2025-10-02T22:12:51.0650000+00:00","Appreciate upvotes on hackernews - https://news.ycombinator.com/item?id=45456229","","👍 (1)"
+"169786952432746498","mithro_","2025-10-02T22:28:36.8300000+00:00","Started a thread.","",""
+"169786952432746498","mithro_","2025-10-02T22:30:53.0040000+00:00","I'd appreciate upvotes if you are part of the reddit communities in the thread https://discord.com/channels/1361349522684510449/1361349523724570941/1423436537994940456","","👍 (1)"
+"600324974296956938","hardwall","2025-10-03T04:52:25.1550000+00:00","Great live session yesterday. 
+
+I was looking at what fits in the size / node you have , and I saw this paper.
+ https://sbmicro.org.br/sforum-eventos/sforum2021/Design%20of%20Steel%20ASIC,%20a%20RISC-V%20processor.pdf
+
+They say they used 15mm2 for the STEEL core at 180nm. 
+
+Not a silicon guy, the nosey embedded SW eng from the live stream here. So excuse my naivete. 
+
+Anyways that looks quite large ish? Is it true that you need that much die area for a simple RISC-V core? Using Claude to get ballpark  estimates, I was wondering if I can fit an IBEX in the area you have and the IBEX is larger than the STEEL. 
+
+Can I eyeball what fits with some  gates/mm2 formula?","",""
+"732347216412278825","urish","2025-10-03T04:57:15.4870000+00:00","IIRC tim mentioned about 1.2m gates in the wafer space area","","👍 (1)"
+"691780627338625077","rebelmike","2025-10-03T08:18:30.7910000+00:00","You can see from the image in that paper that the logic is only using a small fraction of the area. IBEX would fit easily.
+For a chip focused on reasonable performance, most of the area would likely be taken up with SRAM for memory and cache.","","👆 (1)"
+"596068704471482370","246tnt","2025-10-03T08:32:45.9840000+00:00","It'll be interesting to see how the campaign progresses. I would actually expect it to stay very low until the very end:
+* There is no mentions of any limited space / number of slots on the campaign page
+* There is no incentives for early birds
+* Unlike other crowdsupply campaign, the user is actually expected to do something, so I would expect most of them to hold off paying until they actually got something to submit, especially given the two items above, there is no benefit to buying early, only risks if you can't finish what you want to do in time.","","👍 (2)"
+"323371864074485771","mole99","2025-10-03T08:56:20.8830000+00:00","All good points @Tim 'mithro' Ansell","","🎉 (1),👍 (1)"
+"600324974296956938","hardwall","2025-10-03T10:26:25.0330000+00:00","I noticed that as well, but I wasn't sure what die size that was.","",""
+"691780627338625077","rebelmike","2025-10-03T10:49:24.3410000+00:00","I think what I would do, if I was trying to create a custom Risc-V for wafer space would be:
+- 8kB internal RAM
+- QSPI flash chip and QSPI PSRAM chip on separate interfaces
+- 4kB cache for each of the PSRAM and flash
+- Hazard3 Risc-V core in a similar config to RP2350, but single core
+That should leave a decent amount of space (maybe 1/3 of the area) for peripherals and custom logic, but enough cache and RAM to give OK performance.  I'd target 3v3 so that it was easy to interface with standard QSPI chips, and hope to get it running at 30MHz.","",""
+"600324974296956938","hardwall","2025-10-03T12:55:45.4920000+00:00","You can't have flash on chip, can you?","",""
+"596068704471482370","246tnt","2025-10-03T13:01:27.4410000+00:00","No","",""
+"169786952432746498","mithro_","2025-10-03T15:29:31.7320000+00:00","There was one attempt at flash on gf180mcu mpw-0 but it was never tested.","",""
+"596068704471482370","246tnt","2025-10-03T15:48:03.6560000+00:00","@Tim 'mithro' Ansell How ? There are no such device in the PDK ?   I saw some floating gate experiment on sky130 that doesn't use sonos, but that was pretty big AFAIR.","",""
+"596068704471482370","246tnt","2025-10-03T15:53:49.6820000+00:00","(That's the paper for what I'm talking about in sky130 https://woset-workshop.github.io/PDFs/2021/a11.pdf )","",""
+"169786952432746498","mithro_","2025-10-03T16:13:39.5890000+00:00","https://docs.google.com/document/d/1I3UOSdVONUD_IXYKU4gYSDF-LOz3-B1a-wXXivrkCnw/edit?tab=t.0#heading=h.ol6cxbt7gxt","","👍 (2)"
+"169786952432746498","mithro_","2025-10-03T16:30:08.1330000+00:00","No idea if that is viable or not and as I said it was never tested due to them needing bare die and only getting packaged (and then getting busy with other stuff).","",""
+"596068704471482370","246tnt","2025-10-03T16:37:15.9150000+00:00","Seems to be a similar approach to what was on sky130, just leave some poly floating connected to several transistors and some of them are used for reading and other for tunneling charge in/out of the gate. But of course the devil is in the detail so that cell could work or not ...","",""
+"600324974296956938","hardwall","2025-10-03T16:44:39.8080000+00:00","Hah, could work or not.. precisely what you don't want to hear about your memory. Not a big problem  I think, but I was just curious about the constraint. It would probably use quite a bit of the die anyway,.","",""
+"600324974296956938","hardwall","2025-10-03T16:46:26.1570000+00:00","I'm wondering why you recommend the hazard3 instead of the Ibex. I was under the impression ibex is better tested.","",""
+"600324974296956938","hardwall","2025-10-03T16:47:39.8730000+00:00","Hazard3 is actually in commercial products though, so I guess that's worth for something.","",""
+"596068704471482370","246tnt","2025-10-03T16:48:08.3270000+00:00","yes, flash is huge and probably a good waste of real estate ... the cells are not small and then you need a ton of periphery circuitry to drive it ( to generate all the high bias voltages and switch them around for instance ).","",""
+"691780627338625077","rebelmike","2025-10-03T16:53:21.3770000+00:00","Ibex looks like it would be a good choice too, but personally I think it would be cool to use the same core that’s in the RP2350.
+Mainly I was trying to give an example of the kind of system that would make sense.","",""
+"169786952432746498","mithro_","2025-10-03T16:54:13.9110000+00:00","Why not both! 😛","",""
+"169786952432746498","mithro_","2025-10-03T16:55:31.1950000+00:00","","2025-10_media/why-not-both-why-not-53866.gif",""
+"1365118310701600900","rtimothyedwards_19428","2025-10-03T21:50:18.4810000+00:00","@tnt :  Workable nonvolatile memory would still be very useful for setting some number of configuration bits that can be read at startup.  It doesn't have to be a kilobyte memory block to be useful.","",""
+"1365118310701600900","rtimothyedwards_19428","2025-10-03T21:54:30.8020000+00:00","Efabless got the Hazard-3 core to tapeout on Sky130 on the ""Frigate"" chip, but unfortunately it never got through manufacture.  I would like to revive the Frigate architecture;  didn't have time to do it for the Cadence tapeout, and don't have the analog IP for the GF180MCU tapeout.  I'm considering a Chipalooza-like contest to get analog IP for GF180MCU, with the general goal of having something like Frigate on the process.","","💯 (1)"
+"169786952432746498","mithro_","2025-10-03T22:03:55.1060000+00:00","@Tim Edwards - Have you seen the OpenFASoC design done on MPW18H1? https://siliconpr0n.org/archive/doku.php?id=mcmaster:efabless:gf180mcu-mpw18h1-18100004","2025-10_media/Rapid-Prototyping-of-Laser-Induced-Graphen-D6CBA.pdf",""
+"169786952432746498","mithro_","2025-10-03T22:09:27.2370000+00:00","I did also send Luke Wren an email about Hazard-3 core on GF180MCU and he was talking about the launch @ https://types.pl/@wren6991/115267726230458487","",""
+"169786952432746498","mithro_","2025-10-03T22:10:24.8000000+00:00","Also did you see the efuse stuff - http://bit.ly/ws-gf180mcu-efuses ? They could be used for configuration bits too.","",""
+"1365118310701600900","rtimothyedwards_19428","2025-10-03T22:20:06.7460000+00:00","@Tim 'mithro' Ansell This set of process options includes efuses?  I have done eFuse  arrays in the past (when I was working at MutiGiG).","",""
+"169786952432746498","mithro_","2025-10-03T22:21:50.5600000+00:00","@Tim Edwards - ***If*** I understand correctly, we do **not** have the foundry provided efuses stuff which uses an extra mask layer. This done was done without needing that in some way?","",""
+"1365118310701600900","rtimothyedwards_19428","2025-10-03T22:29:11.7920000+00:00","Making a working eFuse device is not trivial.  Without a passivation window over the device, you will just melt the material in place and it will re-solidify in place.  [Warning:  misinformation.  Corrected in the discussion with Egor Lukyanchenko, below. Passivation windows are for laser-trimmed fuses.]","",""
+"169786952432746498","mithro_","2025-10-03T22:32:14.1290000+00:00","@Tim Edwards - There are claims it works but it is nontrivial to test due to missing metal connections in the test chip. I recently sent Andrew Zonenberg a couple of the parts that @Egor Lukyanchenko sent me to look at.","",""
+"169786952432746498","mithro_","2025-10-03T22:38:20.2810000+00:00","Also, I'm very interested in sourcing known-good-die for SPI flash parts that we can then wire bond to the custom silicon.","",""
+"691780627338625077","rebelmike","2025-10-03T22:44:50.9060000+00:00","Feels like it would fairly simple just to assemble a flash chip onto the CoB PCB?","",""
+"169786952432746498","mithro_","2025-10-03T23:19:33.6370000+00:00","True, I guess. Was just hoping to reduce the cost by avoiding packaging.","",""
+"169786952432746498","mithro_","2025-10-03T23:33:19.5570000+00:00","BTW I'll be travelling most of next week from Sunday (going Chicago->Singapore->Adelaide).","","😯 (1)"
+"169786952432746498","mithro_","2025-10-04T04:03:49.4350000+00:00","I'm currently tracking a few other metrics like number of subscribers and such. 
+
+It will be interesting to see what happens when we have a submission platform up and running. If if people submit designs to be verified without having purchased a slot or not.","","👌 (1)"
+"169786952432746498","mithro_","2025-10-04T04:05:22.9410000+00:00","Seems reasonable to me. Why not give it a go? 🙂","",""
+"600324974296956938","hardwall","2025-10-04T05:13:21.6750000+00:00","I think he was advising me how a reasonable risc-v would look like. I've been probing around the idea.","",""
+"709384666909507634","egorxe","2025-10-04T07:12:02.0160000+00:00","Hi, @Tim Edwards and everyone else here! Why do you think a passivation window is required above the fuse? Fuse material is not melted per se but is “moved” by electromigration after all. I'm not by any means an expert in technology myself, but the only requirement that is present in open source DRM is that there should be no metal1 and metal2 above the fuse. I understand that the opensource DRM and DRC rules could be incomplete in rarely used aspects like eFuse, but during OpenMPW-GF0 my chip with the eFuse block adhering to these rules was accepted and manufactured, so I guess it passed an official factory DRC with Calibre or something. Unfortunately that chip had a fatal flaw with the power supply for eFuse which I missed due to device level LVS being absent from the tapeout script for GF180 at that time, and the fixed chip was not accepted for the GF1 run. The only way to test the eFuse on the GF0 chip was by decapping it and restoring eFuse power one way or another. I’ve sent @Tim 'mithro' Ansell some of my GF0 chips and described this powering and testing procedure in detail [here](https://docs.google.com/document/d/1O9qWxHJzb4RIqjDzd3Dr9FddIsH_DiyjSaHewqEm0X4/edit?tab=t.0#heading=h.oi68oexfhjcr).","",""
+"709384666909507634","egorxe","2025-10-04T07:12:10.5390000+00:00","As far as I know one of the chips was decapped but the eFuse powering was not attempted, probably Tim knows more about it. But I’ve personally tested a single chip patched this way earlier. If I remember correctly, there were 128 bits of eFuse powered, around half of which I’ve blown writing something semi-random. I had only about a day to test the chip remotely, but during this whole time period (apart from several power downs to ensure nonvolatility) eFuse was constantly being read from Caravel in cycles and all the bits kept their state. 128 bits and one day is a tiny sample for sure, but due to constant reading each bit was sensed around a billion times which is quite a lot for a eFuse and there were 0 read errors. I understand that unless someone repeats this patching procedure, there is only my word about this short testing to trust here, but personally I am sure that it works to some extent. Fuses definitely do not solidify back in place, at least most of them do not as none of my ~64 programmed ones did. A couple of days ago I was contacted by Jonas Svennebring who is planning to lead the effort of creating a chip for testing several IPs to be launched on the first wafer.space run. We agreed to work on putting several eFuse memory blocks created with my updated eFuse compiler to characterize eFuse performance and reliability. So hopefully we’ll have more reliable information about eFuse after the first wafer.space chips arrive. If anyone has some knowledge which could help to make eFuse more reliable or could help in any other way I would be very grateful.","",""
+"709384666909507634","egorxe","2025-10-04T07:31:57.1360000+00:00","Regarding the eFuse mask, some fuse masks are listed as optional [here](https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_04_3.html). But probably these are some other fuses, cause layer numbers do not match eFuse ones and it mentions ""Top plate of MIM capacitors"". As my chip was manufactured during GF0 I assumed that the mask (masks?) necessary for eFuse was present during the run, not sure if it was ordered separately or was included by default. @Tim 'mithro' Ansell do you have a way to check with GF if eFuse masks will be available during planned wafer.space run? Cause if not, there is no reason for me and Jonas to work on putting eFuse on the test chip.","",""
+"709384666909507634","egorxe","2025-10-04T08:53:37.9590000+00:00","As for using eFuse as a MCU ROM or something similar, I think it could be done. Although an eFuse cell has a limited number of read cycles (~10^7-10^9 depending on technology and a testing methodology based on open info) which makes it unsuitable for such tasks directly, it's quite easy to create an eFuse-SRAM hybrid. By copying whole eFuse contents to SRAM after powerup and reading only from SRAM afterwards it's possible to mitigate this limitation for read-heavy uses. Drawbacks are obvious: higher power, startup delay and ~1.5x lower density than a raw eFuse. But I estimate that it's still possible to achieve a density of ~6 kbits/mm^2 which makes small MCU ROMs feasible. Especially because if I'm not mistaken it's currently the only option for post-fabrication programmable ROM.","",""
+"691780627338625077","rebelmike","2025-10-04T13:56:15.5920000+00:00","I would be up for helping create some kind of template that had a rough shape like this - with the aim of giving people a decent Risc-V SoC to add custom logic to.  Though not for this shuttle as I don't have much free time before the deadline and I'm already aiming to get a version of TinyQV using the SRAM block on to the Tiny Tapeout submission, and also a different Risc-V SoC on the next sky130 TT shuttle.","",""
+"691780627338625077","rebelmike","2025-10-04T14:00:17.4760000+00:00","I think if I were to do something towards this in the timeframe of this shuttle it would be to create a cache + QSPI controller and get it into a TT slot.  I think there's an efabless project that @Leo Moser (mole99) used in Greyhound that would make a reasonable starting point.","",""
+"691780627338625077","rebelmike","2025-10-04T14:07:56.9070000+00:00","Also these projects are a hobby for me, so the price is way out of range, and I also wouldn't want 1000 chips!  So would need to either find 20+ people to split the cost and chips with Tiny Tapeout style, or for this to be sponsored on the basis that creating and proving a template like this would be useful.","",""
+"220639106915368960","tholin","2025-10-04T14:25:53.1970000+00:00","I think its totally feasible for me to develop an Arduino-like single-board solution for my AS2650-2 MCU, including being able to update its flash over USB.","",""
+"220639106915368960","tholin","2025-10-04T14:26:46.1850000+00:00","I'll be looking into that this weekend because I have so many of those chips and nothing to use them for as-is.","",""
+"220639106915368960","tholin","2025-10-04T15:46:07.7260000+00:00","I believe its also totally possible to do so with my RISC-V core, but I don't have too many of those chips, so I'll wait until I get a wire bonder so I can use the raw dies for this instead, of which I have plenty.","",""
+"1365118310701600900","rtimothyedwards_19428","2025-10-04T18:29:12.4640000+00:00","@Egor Lukyanchenko :  I apologize, you are correct.  I have worked with laser trim fuses and efuses (in the long past---around 2007 or so), and I was conflating the two.  Laser trim fuses require a passivation window over the device, because the laser evaporates the material, which must have somewhere to go or it just melts and resolidifies, as I said.  But yes, eFuses involve the electromigration of the salicide off the top of the poly and are a different mechanism entirely.
+
+The GF manual, as usual, is very difficult to read and does not help things at all by variously referring to the ""eFuse"", the ""polyfuse"", metal fuses, and OTP.  I still have not figured out what they mean by OTP.  However, by looking at the device/layer truth table, it looks to me like ""polyfuse"" and metal fuses both require a window and therefore one extra mask, whereas I don't see that the eFuse requires any additional mask, and is simply defined by a number of marker layers.","","👍 (1)"
+"732347216412278825","urish","2025-10-04T18:32:02.3410000+00:00","OTP = One time programable","",""
+"1365118310701600900","rtimothyedwards_19428","2025-10-04T18:32:34.0930000+00:00","The N+ poly fuse is apparently a laser trimmed fuse, I guess?
+Also the GF manual further confuses things by referring to the MiM cap layer as ""fuse top"", which is a mystery to me (maybe a layer number reassignment that nobody cleanly fixed in the documentation?).
+
+Anyway, the proof is that you have a working circuit, and as far as I know this was done on the Google/Efabless GF180MCU run without any additional masks.","",""
+"1365118310701600900","rtimothyedwards_19428","2025-10-04T18:33:19.5430000+00:00","@urish :  I know that OTP means ""one-time programmable"".  What I don't know is what OTP _device_ is being indicated by the OTP marker.  It doesn't seem to relate to anything else in the documentation.","","👍 (1)"
+"1365118310701600900","rtimothyedwards_19428","2025-10-04T18:34:34.1560000+00:00","It does not seem to refer to either the eFuse or polyfuse devices, either of which could be referred to as OTP.  Reading it over again, I think it _might_ be referring to the metal (laser trim) fuse.","",""
+"169786952432746498","mithro_","2025-10-04T18:59:58.3840000+00:00","@Tim Edwards / @Egor Lukyanchenko - I can take a look at the mask ordering form and see if I can figure out more info it that is useful.","","👍 (1)"
+"169786952432746498","mithro_","2025-10-04T23:48:32.9970000+00:00","Anyone able to figure out how to get the PDF linked from https://ieeexplore.ieee.org/document/11185233 ? (Which seems to be connected to a GitHub repo @ https://github.com/SJTU-YONGFU-RESEARCH-GRP/PDB-Physical-Design-Database/tree/main/layout/gf180 ).","",""
+"709384666909507634","egorxe","2025-10-05T02:03:30.1100000+00:00","Yeah, there are a lot of confusing terms in DRM, at least regarding OTP cells. To make things even more interesting there are some mentions of [MTP](https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_10_13.html) and [NeoEE](https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_10_15.html) cells. NeoEE seems to be a specific proprietary type of EEPROM, but MTP could refer to a number of things and I'm not sure if it's possible to devise a working MTP cell just from these geometry limitations in DRM.","",""
+"709384666909507634","egorxe","2025-10-05T02:17:37.8730000+00:00","It's downloadable from [here](https://ieeexplore.ieee.org/xpl/tocresult.jsp?isnumber=10677474) probably cause it's early access.","",""
+"169786952432746498","mithro_","2025-10-05T05:33:11.1470000+00:00","I still don't seem to be able to download a PDF from there? That second page just seems to take me back to the first page?","",""
+"709384666909507634","egorxe","2025-10-05T05:37:50.2320000+00:00","For me it worked from that page. Here is the pdf.","2025-10_media/Descriptor_Physical_Design_Database_PDB-11771.pdf",""
+"169786952432746498","mithro_","2025-10-05T05:38:23.2740000+00:00","Maybe IEEE is just blocking me for some reason or something...","",""
+"709384666909507634","egorxe","2025-10-05T05:42:35.0380000+00:00","It's an open access article, so should be available to everyone. May be [direct PDF link](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=11185233) will work for you?","",""
+"169786952432746498","mithro_","2025-10-05T05:43:03.7730000+00:00","That one works!","","👍 (1)"
+"692166844701999105","dshadoff","2025-10-05T20:56:28.8000000+00:00","Mithro, you had said somewhere that buying a 1,000 chip run could be broken down to 100 for first pass, 100 for validation, and then something like 500 for actual products (or something like that).
+On the CrowdSupply livestream, you mentioned how it could scale up (and cost down), but how would it work for test/validaiton iterations (without forcing $7K per attempt) ?","",""
+"596068704471482370","246tnt","2025-10-05T21:01:08.2280000+00:00","I think he meant for the full product, not for the chip alone.  Like you make 1000 asic. Then you build 100 of your product using that chip for the first pass. But you can't revise the chip, only what you put around it.","",""
+"692166844701999105","dshadoff","2025-10-05T21:07:00.8110000+00:00","Well, fully-digital designs can be validate in FPGA, but mixed-signal would be much more complicated","",""
+"692166844701999105","dshadoff","2025-10-05T21:07:18.6390000+00:00","So I think it's reasonable to assume that initial design would need modifications.","",""
+"596068704471482370","246tnt","2025-10-05T21:11:22.5830000+00:00","Yes, I would expect so. But NRE on making 1k chips are still the bulk of the price vs the per wafers cost, so you won't get any real price cut by making only 100.","",""
+"692166844701999105","dshadoff","2025-10-05T21:12:00.7970000+00:00","Don't get me wrong - I'm not complaining about $7K being a lot of money for a working design.  It's just a lot of money if the design doesn't work.","",""
+"596068704471482370","246tnt","2025-10-05T21:12:53.0820000+00:00","Testing sub-modules on real silicon at lower cost is a good use of Tiny Tapeout if you can make your IP fit its constraints.","",""
+"596068704471482370","246tnt","2025-10-05T21:13:34.2180000+00:00","That at least could allow to check it's not DOA and shows signs of life, even if you can't necessarely do full caracterization.","",""
+"692166844701999105","dshadoff","2025-10-05T21:14:12.6010000+00:00","I could pull $7K out of my own pocket, but 3 iterations ... not so much.  So I'd be looking for a small team of like-minded people.","",""
+"692166844701999105","dshadoff","2025-10-05T21:14:54.8590000+00:00","Anyway, I'm only asking because the comment itself piqued my interest.  If it was misunderstood, then mea culpa.","",""
+"1071653002986926112","algofoogle","2025-10-06T00:15:39.9170000+00:00","There will always be people (including me) who are on the lookout for sharing the cost and who only need a smaller number of parts. I (and many others here) have helped assemble single chips that contain multiple designs that share the majority of available pins. TT is the extreme of this and a great way to do it at super low cost/risk, but if you need more like 10%-25% of the total area and more like 30+ signal pins, then (say) $2000 has the potential to get you much greater value on this sort of platform than it does on TT… it’s just a higher barrier to entry in terms of integrating, and higher risk that your design could break the chip for everyone else","",""
+"692166844701999105","dshadoff","2025-10-06T00:34:02.8770000+00:00","Thanks, this is helpful","",""
+"1071653002986926112","algofoogle","2025-10-06T00:37:34.3610000+00:00","@Tim 'mithro' Ansell maybe a dedicated “space sharing” channel would be in demand, unless that erodes your revenue potential. Anyone embarking on this should be prepared to accept the risk, btw, and be aware that someone will spend long hours just trying to make sure everyone’s projects cooperate… lots of cat-herding unless you know the others involved well","",""
+"1071653002986926112","algofoogle","2025-10-06T00:39:22.5770000+00:00","I was lucky to have great parties to the GFMPW-1 chip I integrated and had fabbed, but I’ve seen others who clashed/struggled and some on other chips who didn’t pull their weight… or simply weren’t available at the right times to answer questions about their design, etc.","",""
+"169786952432746498","mithro_","2025-10-06T03:07:38.4320000+00:00","That is why I'm excited about the work with Tiny Tapeouts, gives you an even cheaper way to test out ideas and verify things before you make the larger commitment.","",""
+"169786952432746498","mithro_","2025-10-06T03:09:25.4990000+00:00","As Anton also mentioned, getting you back a large number of parts allows you to share a slot with other people and still get back a useful number of parts.","",""
+"169786952432746498","mithro_","2025-10-06T03:13:47.7330000+00:00","You can also probably mitigate a bunch of risks by having multiple pad frames on one chip.","",""
+"169786952432746498","mithro_","2025-10-06T03:15:16.8010000+00:00","I'm also at the airport, so probably won't be responding for the next day or so.","","👍 (3)"
+"1071653002986926112","algofoogle","2025-10-06T08:25:42.2350000+00:00","For people needing bonding (i.e. most customers??) it seems going with the “standard” pad placement (that is, the one that would be used by TT) might be the affordable way to go, if it means the engineering is already done and the chip-on-board provider is set up for it within the $8500 price. Otherwise, having each design’s own padrings (for shared submissions) is probably a good idea. One idea to reduce the bonding cost in that case MIGHT be to have a quarter-size padring which is symmetrical in such a way that it is placed within each quadrant and the whole die can be rotated 0, 90, 180, and 270 degrees and the pads will end up in exactly the same place.","",""
+"323371864074485771","mole99","2025-10-06T08:42:43.6670000+00:00","By the end of this week, I would like to send a test reticle to GF in order to receive feedback on the sealring, the filler generation and the reticle itself.
+
+If anyone has a project ready with the [gf180mcu-project-template](https://github.com/wafer-space/gf180mcu-project-template), I can include it in this ""virtual tapeout"". This way, you can also get early feedback on whether your design is manufacturable or if the open source DRC deck missed an issue.
+
+@Tholin, if I remember correctly, you were planning to have something ready? I'll improve the filler generation this week, but you can already use the template and update it on Friday to get the latest changes.","",""
+"169786952432746498","mithro_","2025-10-06T09:06:17.8770000+00:00","Pinned a message.","",""
+"220639106915368960","tholin","2025-10-06T12:43:28.9670000+00:00","Ah, I was busy fixing DRC errors in my SCL","",""
+"220639106915368960","tholin","2025-10-06T12:43:34.5250000+00:00","Which should be done now, actually.","",""
+"220639106915368960","tholin","2025-10-06T12:43:47.8350000+00:00","I even had errors inside the cells themselves, which only showed in KLayout.","",""
+"220639106915368960","tholin","2025-10-06T12:44:10.7950000+00:00","Most if not all of the DRC errors should now be gone.","",""
+"220639106915368960","tholin","2025-10-06T15:16:25.9820000+00:00","I’m not sure if I have enough time now. I’ve been focusing on other things. I’ll try.","",""
+"220639106915368960","tholin","2025-10-06T15:28:38.2500000+00:00","I’m also kinda waiting for the template to become usable in iic-osic-tools, which it currently isn’t. I work on my designs on both my PC and my Laptop and need a portable setup for all the tools without a fuss, and iic-osci-tools gives me that.","",""
+"323371864074485771","mole99","2025-10-06T18:23:22.2430000+00:00","No worries, if you have something ready by then, just let me know.","",""
+"323371864074485771","mole99","2025-10-06T18:23:47.9580000+00:00","It will still be a while until all of the changes have been upstreamed to both LibreLane and the PDK, and then you'll need to wait for a new release of the IIC-OSIC-TOOLS.
+
+I would highly recommend using Nix, as it gives you a much better control over your tools. I also started out with OpenLane 1 using Docker, however, once I switched to Nix for OpenLane 2 and now LibreLane, I never looked back.
+
+It's much easier to change the version of individual tools, you can create an environment that is reproducible, and you get the best performance :)
+
+Please consider giving it a try: https://librelane.readthedocs.io/en/latest/getting_started/common/nix_installation/index.html","",""
+"220639106915368960","tholin","2025-10-06T18:26:48.0580000+00:00","I guess I'll have to","",""
+"220639106915368960","tholin","2025-10-06T18:30:30.9670000+00:00","I prefer docker images because they're easy to set up and easy to remove","",""
+"220639106915368960","tholin","2025-10-07T14:05:56.3010000+00:00","Adding more cells to my 3.3v SCL again finally.","",""
+"220639106915368960","tholin","2025-10-07T14:06:17.4450000+00:00","Its just gonna be a big heap of AOI and OAI parts for the next few days.","",""
+"169786952432746498","mithro_","2025-10-08T00:22:31.7090000+00:00","The whole AOI/OAI/etc cells seems like ripe for some type of automation.","",""
+"220639106915368960","tholin","2025-10-08T09:41:39.1040000+00:00","I don't see how. Implementing that would just take longer than me doing it myself.","",""
+"220639106915368960","tholin","2025-10-08T09:47:59.8040000+00:00","If you want cells of perfect performance and density, I don't believe there is a way to get that through computer code. Not without more effort than its worth, since every PDK has its own rules and quirks and so you'll need to update the entire codebase for each new one.","",""
+"1071653002986926112","algofoogle","2025-10-08T10:10:30.0140000+00:00","Is automated generation of standard cell layouts something @htamas worked on, experimentally? https://github.com/htfab/cell-tester","",""
+"596068704471482370","246tnt","2025-10-08T10:10:32.6910000+00:00","C4M has some code to generate cells automatically based on rule set, but I agree with @Tholin that this won't yield the best layout possible. It's all a trade-off ...  I'll be interesting to see the delta.","",""
+"169786952432746498","mithro_","2025-10-08T13:10:10.1400000+00:00","If you are in Australia, there is now a FOSSi Foundation event -> https://fossi-foundation.org/downunderflow/2026","","🎉 (3)"
+"169786952432746498","mithro_","2025-10-09T11:44:53.8390000+00:00","About to give a talk in Singapore at Hackware -> https://engineers.sg/organization/hackware--111","","💜 (1)"
+"220639106915368960","tholin","2025-10-09T12:43:18.6230000+00:00","I’m having troubles with the template. Its been stuck on ""Filler Generation"" for almost an hour, I think, and that’s probably because half of its memory usage is in Swap by now.","",""
+"596068704471482370","246tnt","2025-10-09T12:44:45.7350000+00:00","I never tried on GF180 but on IHP, fill takes a while and yeah, needs a _lot_ of ram. If you don't have the physical ram for it, you can forget it. Use a VM on some cloud provider or that'll never finish.","",""
+"220639106915368960","tholin","2025-10-09T12:45:01.3040000+00:00","What does this step even do?","",""
+"596068704471482370","246tnt","2025-10-09T12:45:58.4570000+00:00","It add small rectangles all over the place to meet the density requirements of each layer, making sure all those dummy rectangle don't interfere with the rest of the circuit ...","",""
+"220639106915368960","tholin","2025-10-09T12:48:28.5640000+00:00","Ah yes, minimum density requirements","",""
+"220639106915368960","tholin","2025-10-09T12:48:58.6700000+00:00","I think I ran into that before, but on PCB layouts. Its weird.","",""
+"220639106915368960","tholin","2025-10-09T12:49:31.6780000+00:00","JLC has some obscure minimum density rules, you’re just unlikely to run into them in 99% of cases.","",""
+"596068704471482370","246tnt","2025-10-09T12:53:05.7830000+00:00","The density here to meet doesn't seem too bad ( 30% ) but there rules are a bit unusual vs sky130 because you have minimum distance between dummy metals and the metals from the layer above and below which is not the case in sk130/ihp.","",""
+"220639106915368960","tholin","2025-10-09T13:00:06.6730000+00:00","I don’t remember a Filler Generation step being required during GFMPW","",""
+"596068704471482370","246tnt","2025-10-09T13:01:46.1540000+00:00","It was done by the foundry or efabless.","",""
+"596068704471482370","246tnt","2025-10-09T13:02:08.5890000+00:00","Same for seal ring AFAIK.","",""
+"323371864074485771","mole99","2025-10-09T16:22:31.1740000+00:00","Filler generation runs in tiled mode, meaning that KLayout assigns each CPU thread a part of the layout to work on.
+The size of the tile and the maximum number of threads in use define the RAM usage.
+
+These can be changed in `gf180mcu/gf180mcuD/libs.tech/klayout/tech/drc/filler_generation/`: `tile_size` is defined individually in each script, and `$threads` is defined in `fill_all.rb`.","",""
+"220639106915368960","tholin","2025-10-09T16:22:58.3900000+00:00","Its pinning all my CPU threads at 100%, so this is definitely working.","",""
+"220639106915368960","tholin","2025-10-09T16:23:08.9780000+00:00","The flow completed after 2 hours of runtime.","",""
+"323371864074485771","mole99","2025-10-09T16:23:33.9580000+00:00","I'll add some proper variables to LibreLane. You should already be able to limit the threads directly in LibreLane, however that would also mean you limit the threads for detailed routing etc.","",""
+"323371864074485771","mole99","2025-10-09T16:24:32.3780000+00:00","If you're swapping memory, then filler generation will take much longer than necessary.","",""
+"323371864074485771","mole99","2025-10-09T16:25:01.6500000+00:00","Yes, sealring and filler cells were added by GF for the GFMPW runs","",""
+"596068704471482370","246tnt","2025-10-09T16:25:43.3230000+00:00","@Leo Moser (mole99) Does the filling respect all those rules across metal layers ? I had never seen those before.","",""
+"596068704471482370","246tnt","2025-10-09T16:26:17.0000000+00:00","Things like `DM.4` ( https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_13_3.html )","",""
+"323371864074485771","mole99","2025-10-09T16:27:05.0830000+00:00","The issue with the DRC rules with the layers above and below the dummy fill is that, since all standard cells contain poly2, you cannot insert any Metal1 fill. That's why, for now, I'm ignoring those rules... I'll see how far I get with that.","",""
+"596068704471482370","246tnt","2025-10-09T16:27:45.4160000+00:00","You really shouldn't need any M1 fill though, the standard cells should provide enough metal inside themselves ?","",""
+"323371864074485771","mole99","2025-10-09T16:28:13.0900000+00:00","That might be true. However, if you have dense routing on any layer, that would also prevent you from generating any fill the layers above and below it.","",""
+"323371864074485771","mole99","2025-10-09T16:29:37.3600000+00:00","I would like to know what is the reasoning behind this rule, maybe GF can asnwer me that once I submit the first reticle. Capacitive coupling perhaps? Or manufacturing reasons? 🤷‍♂️","",""
+"596068704471482370","246tnt","2025-10-09T16:30:15.9560000+00:00","My guess would be capacitive coupling.","",""
+"323371864074485771","mole99","2025-10-09T16:37:07.0740000+00:00","Which might be important to consider for sensitive analog designs, but not so much for digital. At least on sky130 and ihp-sg13g2 we didn't care much ^^","",""
+"403219339391795211","mbalestrini","2025-10-09T23:23:51.9570000+00:00","I took some photos of a GFMPW-1 chip @Tim 'mithro' Ansell sent me.  
+It's the A8, LeoSoC project: https://mbalestrini.github.io/chip_images/GFMPW-1-LeoSoc.html","",""
+"403219339391795211","mbalestrini","2025-10-09T23:31:15.0540000+00:00","","2025-10_media/gfmpw1-LeoSoC-20251009_143310-DSC02918-0BCD8.jpg,2025-10_media/gfmpw1-LeoSoC-20251005_200650-DSC02901-60FC6.jpg,2025-10_media/gfmpw1-LeoSoC-20251005_185755-DSC02884-F8F7B.jpg,2025-10_media/gfmpw1-LeoSoC-20251005_193852-DSC02897-729AB.jpg","🤤 (3)"
+"1071653002986926112","algofoogle","2025-10-10T02:02:05.1460000+00:00","So good, Maximo!","","❤️ (1)"
+"323371864074485771","mole99","2025-10-10T06:21:18.5950000+00:00","Beautiful photos!
+Thank you for taking them, Maximo 🙌","","❤️ (1)"
+"596068704471482370","246tnt","2025-10-10T06:26:02.1620000+00:00","What's you setup for taking those ?","",""
+"220639106915368960","tholin","2025-10-10T10:38:21.5820000+00:00","@Leo Moser (mole99) I think I do have a GDSII for you for the virtual tapeout. I don’t like having standard cells in my top-level layout and prefer the efabless user project area setup where its just placing and connecting macros. So I replicated that and I can give the GDSII for that for checking.","",""
+"323371864074485771","mole99","2025-10-10T12:53:34.2340000+00:00","@Tholin, that would be great! That's fine, as long as you're using the project template. The reason is, the project template prepares the GDS with everything needed for tapeout, including sealring and filler cells. It also adds a QR code in the bottom left corner of the die, which will be replaced by the precheck with the actual ID. I might do some more changes on the filler generation before sending it out, so I might need to regenerate your project locally.
+Please create a fork of the project template repository, customise it to your needs and share it with me.","",""
+"220639106915368960","tholin","2025-10-10T13:06:08.1190000+00:00","Running the precheck locally is kinda difficult right now, btw, because `nix-shell` starts building stuff from source.","",""
+"323371864074485771","mole99","2025-10-10T13:52:26.4490000+00:00","There's no need to run the precheck now. I'll do some more work on it after the virtual tapeout.
+
+Simply building the design using the project template is fine. However, there OpenROAD also needs to be build when calling `nix-shell`. This is because we're currently using a branch of LibreLane and therefore not all binaries are cached. This will improve once most of the changes have been upstreamed.","",""
+"403219339391795211","mbalestrini","2025-10-10T14:07:00.5060000+00:00","This time I used a Sony A7C2
+Most of the photos were taken with this 50mm 1.8 Sony lens and some 3d printed extension tubes (the problem is that I can't control focus or aperture with that lens and the extensions)
+I also use an old Minolta macro lens which gives me more control, but I think is not that sharp
+For lightning I mostly use a led flashlight and in a couple of these direct sunlight","2025-10_media/PXL_20251010_135904851-12305.jpg","👍 (3)"
+"596068704471482370","246tnt","2025-10-10T14:25:52.0730000+00:00","I need to get myself some extension tubes, see what I can capture wihth that.","","🤞 (1)"
+"220639106915368960","tholin","2025-10-10T23:02:02.8540000+00:00","Here 'ya go!
+https://github.com/AvalonSemiconductors/ws-submission-2025","",""
+"220639106915368960","tholin","2025-10-10T23:03:08.0020000+00:00","Let me know if there is any problems with it, otherwise I will continue to develop this repo into a proper submission. I’ll (hopefully) have a slot in the december tapeout.","",""
+"422557460092551178","storborg","2025-10-11T03:25:45.3490000+00:00","Do you have a process for cleaning the die before shooting?","",""
+"324044845632978955","furanfuranfuran","2025-10-11T04:36:57.8750000+00:00","greetings","",""
+"169786952432746498","mithro_","2025-10-11T07:30:20.5330000+00:00","Video from my talk in Singapore is now up at https://www.youtube.com/watch?v=0nqV9Eo17wA","","👍 (4),🔥 (2)"
+"323371864074485771","mole99","2025-10-11T08:08:46.1160000+00:00","Started a thread.","",""
+"403219339391795211","mbalestrini","2025-10-11T14:01:36.3020000+00:00","No, I have to find one. These one were decently clean so I took the photos before trying to clean them","",""
+"384390069412429834","polyfractal","2025-10-11T15:40:17.2090000+00:00","just finished the Amp Hour episode, really interesting! Was fun to hear some more of the backstory and general thoughts on the project 🙂","","💜 (1)"
+"756011607603019777","anfroholic","2025-10-11T15:51:00.0620000+00:00",":bitmap:","",""
+"756011607603019777","anfroholic","2025-10-11T15:51:21.7230000+00:00",":bitmap:","",""
+"756011607603019777","anfroholic","2025-10-11T15:53:55.6690000+00:00",":waferspace:","","waferspace (1)"
+"756011607603019777","anfroholic","2025-10-11T15:54:27.7310000+00:00",":waferspace:","",""
+"756011607603019777","anfroholic","2025-10-11T15:55:03.8380000+00:00","Didn't realize it posted things. Anyways.. New Emoji!!","","waferspace (8)"
+"169786952432746498","mithro_","2025-10-12T03:30:48.1740000+00:00","At some point I'm going to have to do an animated version of that logo.","",""
+"756011607603019777","anfroholic","2025-10-12T03:31:32.7620000+00:00","That would be sweet!!","",""
+"732347216412278825","urish","2025-10-12T07:32:31.5850000+00:00","Yes please","",""
+"600324974296956938","hardwall","2025-10-14T17:48:56.1490000+00:00","I'm curious if you tried reaching out to other open source silicon  initiatives like ZeroRisc? There seems to be some movement in that direction from other people as well.","",""
+"169786952432746498","mithro_","2025-10-15T01:10:17.7820000+00:00","I was in contact with the OpenTitan team when I was at Google but haven't really been following them since the first round of Google layoffs hit them. I did talk to someone from LowRISC at LatchUp.","",""
+"169786952432746498","mithro_","2025-10-15T01:11:23.6380000+00:00","Feel free to forward things their way if you have contacts","",""
+"735201236877312021","always_ff_rohan","2025-10-17T08:44:30.8110000+00:00","can we get a full 4k wallpaper version?","",""
+"403219339391795211","mbalestrini","2025-10-17T13:11:41.4270000+00:00","On the web you can download the full camera resolution version: https://mbalestrini.github.io/chip_images","","👍 (1)"
+"403219339391795211","mbalestrini","2025-10-17T13:12:17.6850000+00:00","Some are cropped so they have less pixels","",""
+"756011607603019777","anfroholic","2025-10-18T03:52:15.2200000+00:00","@mbalestrini These are really wonderful. 
+Would you mind if we posted these other places?","",""
+"403219339391795211","mbalestrini","2025-10-18T13:09:36.7960000+00:00","You can use them! 
+All the photos I upload to that page have a Creative Commons CC0 license","","💜 (2)"
+"756011607603019777","anfroholic","2025-10-18T13:10:06.6690000+00:00","Thank you!!","",""
+"403219339391795211","mbalestrini","2025-10-18T13:12:05.4020000+00:00","You can get the photos from the repo also: https://github.com/mbalestrini/chip_images","","💜 (1)"
+"169786952432746498","mithro_","2025-10-26T06:20:11.0590000+00:00","BTW Bits of https://platform.wafer.space could use testing, checking the login works for you. Check the upload flow works, etc.","",""
+"756011607603019777","anfroholic","2025-10-26T07:35:22.9930000+00:00","I created an account using Github and it all seemed to work well for me","",""
+"220639106915368960","tholin","2025-10-26T13:53:08.3060000+00:00","Same","",""
+"220639106915368960","tholin","2025-10-26T13:54:19.3600000+00:00","How is this platform site being developed? Is there a GitHub repo for it?","",""
+"756011607603019777","anfroholic","2025-10-26T14:23:31.0190000+00:00","Afaik @Tim 'mithro' Ansell is doing most of the development. I don't believe it's open.","",""
+"220639106915368960","tholin","2025-10-26T14:25:37.0280000+00:00","Ah. I was going to offer some help. I do have almost 6 years of professional web dev experience, even though its not my favorite thing.","","💜 (1)"
+"169786952432746498","mithro_","2025-10-27T02:39:33.4570000+00:00","I do plan to have the platform public under an Apache 2.0 license.","",""
+"169786952432746498","mithro_","2025-10-27T02:39:48.6940000+00:00","Mostly developed myself with Claude Code.","",""
+"169786952432746498","mithro_","2025-10-27T02:54:08.4330000+00:00","@Tholin - I think it makes more sense for you to concentrate on doing more cool silicon stuff rather than boring webdev work.","",""
+"220639106915368960","tholin","2025-10-27T12:00:22.5660000+00:00","Webdev isn’t necessarily boring - especially when its about ensuring people’s cool silicon project files make it to the fab safe and sound.","",""
+"323371864074485771","mole99","2025-10-27T13:37:41.9880000+00:00","Started a thread.","",""
+"220639106915368960","tholin","2025-10-27T13:45:21.5460000+00:00","Thrown together in two hours: python script that automatically generates a padout diagram that is *roughly* to-scale from a librelane config.
+https://github.com/AvalonSemiconductors/ws-submission-2025/blob/main/padout_gen.py","","👍 (2)"
+"220639106915368960","tholin","2025-10-27T13:45:32.4860000+00:00","","2025-10_media/padout-BB965.png",""
+"756011607603019777","anfroholic","2025-10-27T15:35:23.3090000+00:00","This is awesome!! 
+Tim has been asking me about creating a second option for a standard padring/cob. Do you have any requests/ recommendations/ insights?","",""
+"220639106915368960","tholin","2025-10-27T15:38:27.8620000+00:00","The current padring in the template is incompatible with DIP-40 ceramic carriers as there is no VDD pad aligned with Pin 40 and no VSS pad aligned with Pin 20.","",""
+"220639106915368960","tholin","2025-10-27T15:38:44.9850000+00:00","Although the latter is less severe","",""
+"220639106915368960","tholin","2025-10-27T15:38:49.1700000+00:00","That is my only complaint","","💜 (1)"
+"220639106915368960","tholin","2025-10-27T15:39:22.3760000+00:00","I guess you can also put the VDD and VSS on other pins, but that’d be going against the de facto convention.","",""
+"756011607603019777","anfroholic","2025-10-27T15:48:36.9700000+00:00","So you're looking to bond the die directly to a carrier like this? 
+Or you're wanting a pcb that has a matching pinout (like what you have drawn before?) 
+
+> I guess you can also put the VDD and VSS on other pins, but that’d be going against the de facto convention.
+There really are no real standards yet, and that's what I'm trying to get to the bottom of. 
+
+Even within the 74pad standard we're already seeing variations like @peterkinget and his students here: https://discord.com/channels/1361349522684510449/1429068742108909638/1429520076536811622
+
+I guess that I'm just missing some vital information, which really needs to come from the wirebonders and their needs/ desires. 
+Thank you","2025-10_media/Untitled-E3E7D.jpg",""
+"220639106915368960","tholin","2025-10-27T15:53:37.7860000+00:00","I do mean one of those carriers","",""
+"220639106915368960","tholin","2025-10-27T15:57:25.7950000+00:00","Generally, VDD is in the top-right corner and VSS in the bottom-left corner of most DIP chips.","",""
+"220639106915368960","tholin","2025-10-27T15:59:58.2610000+00:00","For my multi-project die, I have fully customized the padring at this point. I have three designs on there that can go into DIP-40 packages, with the added difficulty that each has to have the clock pin in a different place. So I had to get a bit creative with placement of the clock pad so bond wires can reach it from all those possible pins.","",""
+"220639106915368960","tholin","2025-10-27T16:01:20.4660000+00:00","NOT to scale","2025-10_media/pads-CD341.png",""
+"220639106915368960","tholin","2025-10-27T16:11:26.6450000+00:00","It’ll probably be a while until I can get my hands on any DIP carriers. Sometimes some show up on ebay randomly, but the actual source only has ""Request Quote"" on the website with mandatory ""Company Information"" fields. Typical.","",""
+"220639106915368960","tholin","2025-10-27T16:11:42.8310000+00:00","Whenever I see that, I just choose to interpret that as ""Too expensive to bother anyways""","",""
+"220639106915368960","tholin","2025-10-27T16:12:23.8440000+00:00","But it’d be fun to experiment with if I ever manage to source some.","",""
+"220639106915368960","tholin","2025-10-27T16:12:36.9360000+00:00","Would look so cool on a demo board.","","💜 (1)"
+"323874444344950794","markemer","2025-10-27T17:16:11.1120000+00:00","8.5 bucks a chip with wirebonding or 7 bucks without is tempting as hell. I think I could sell them (provided I ship a design that works) - just gotta get that cash together.","","💜 (1)"
+"323874444344950794","markemer","2025-10-27T17:17:03.5520000+00:00","Has anyone ever done packaging as an OEM. I did package design at IBM and wirebonding in gradschool, but never actually got like a DIP or QFN made","",""
+"323874444344950794","markemer","2025-10-27T17:17:28.8710000+00:00","are their vendors for that that won't cost more than the damn chip manufacturing?","",""
+"756011607603019777","anfroholic","2025-10-27T17:29:32.1870000+00:00","You can join the discussion in #cob where we're talking about packaging as a chip-on-board. 
+Currently it seems the frontrunner is to have a 74pad die wirebonded to a breakout attached to a 70pin mezzanine connector.","","❤️ (1)"
+"756011607603019777","anfroholic","2025-10-27T19:21:35.9940000+00:00","New update just dropped:
+## Professional Design Support: Your Options for GF180MCU Success
+read it [here](https://www.crowdsupply.com/wafer-space/gf180mcu-run-1/updates/getting-help)","",""
+"220639106915368960","tholin","2025-10-27T19:23:49.9770000+00:00","Since I have the most experience with GF180MCU, I do wonder if there is any knowledge I could pass on in the form of guides. I just don’t know what that would be.","",""
+"220639106915368960","tholin","2025-10-27T19:25:45.2990000+00:00","I wonder if it'd be worth mentioning that tons of reference designs already exist to clone and use, whether in whole or in part. I don’t license all my projects Apache 2.0 for nothing.","",""
+"756011607603019777","anfroholic","2025-10-27T19:27:37.4100000+00:00","For sure! I think @Tim 'mithro' Ansell is still looking for a few more topics for updates. 
+I had floated the idea of edit:*[features of]* TinyTapeout and MosBius but would love to add some of yours as well!!","",""
+"220639106915368960","tholin","2025-10-27T19:28:28.0940000+00:00","The only thing I have that I am proud of that is ready to use would be the components of the AS2650v2 microcontroller.","",""
+"756011607603019777","anfroholic","2025-10-27T19:28:40.5820000+00:00","Sweet!!","",""
+"220639106915368960","tholin","2025-10-27T19:28:42.6460000+00:00","Its fully verified","",""
+"220639106915368960","tholin","2025-10-27T19:28:49.8600000+00:00","And uses the fab SRAM macros","",""
+"220639106915368960","tholin","2025-10-27T19:28:58.4880000+00:00","I think very people managed to figure out how to even use those","",""
+"220639106915368960","tholin","2025-10-27T19:29:30.7810000+00:00","If anyone ever asks about the fab SRAM, I just direct them to my repo:
+https://github.com/AvalonSemiconductors/AS2650","","💜 (2)"
+"756011607603019777","anfroholic","2025-10-27T19:30:17.1150000+00:00","This is ready for GF180MCU?","",""
+"756011607603019777","anfroholic","2025-10-27T19:31:20.6030000+00:00","I've added this in his stuff,
+Thank you!!","",""
+"220639106915368960","tholin","2025-10-27T19:32:06.9940000+00:00","Yeah. I taped this out @ GFMPW-1 and Tim has samples of it. Though keep in mind that the repo was thus made with the efabless caravel user project.","",""
+"220639106915368960","tholin","2025-10-27T19:32:15.3200000+00:00","I could port it to the wafer.space template if demand exists.","","💜 (2)"
+"756011607603019777","anfroholic","2025-10-27T19:32:57.9780000+00:00","Up to Tim really. I like the sound of it though!","",""
+"169786952432746498","mithro_","2025-10-28T03:25:41.1280000+00:00","@Tholin / @Leo Moser (mole99) - I just made the repo public","",""
+"220639106915368960","tholin","2025-10-28T14:11:29.0590000+00:00","Okay, so, this multi-project die is going to contain replicas of old retro chips and some of those are actually clocked on the negative clock edge. I wish to be cycle-accurate, so I am wanting to preserve that behavior. But LibreLane kinda doesn’t like it if I use negedge.","","💜 (2)"
+"220639106915368960","tholin","2025-10-28T14:11:42.1780000+00:00","I believe its still constraining the top-level module output ports to the positive clock edge.","",""
+"691780627338625077","rebelmike","2025-10-28T18:03:40.7670000+00:00","You'll need to tweak the sdc - something like this: https://github.com/TinyTapeout/ttsky25a-tinyQV/blob/main/src/base.sdc#L25-L26","",""
+"756011607603019777","anfroholic","2025-10-30T19:00:41.8280000+00:00","A really cool talk from @bunnie from Teardown where's he's talking about getting back into silicon was just uploaded.
+Thanks for doing this talk bunnie, it was super cool. Love the  computer architecture and your inter-processor network, so cool!
+Also a small namedrop for wafer.space at 29:21 
+https://www.youtube.com/watch?v=pxQCApAAT0s","","💚 (1),❤️ (4)"

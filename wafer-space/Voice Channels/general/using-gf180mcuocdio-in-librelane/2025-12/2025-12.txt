@@ -1,0 +1,99 @@
+==============================================================
+Guild: wafer.space Community
+Channel: Information / general / Using gf180mcu_ocd_io in LibreLane
+After: 11/30/2025 23:59
+Before: 01/01/2026 00:00
+==============================================================
+
+[12/04/2025 21:02] 246tnt
+Mmm, I'm having an antenna violations when connecting to the `SEL` signal of the `ocd` IO but I don't see how that would be possible.
+
+
+[12/04/2025 21:04] 246tnt
+Violating rule is `ANT.16_i_ANT.3`
+
+
+[12/04/2025 21:05] 246tnt
+But (1) the `Metal2` line that connects to that pin is really not that long, like 90 um or so. And (2) there is AFAICT an antenna diode on that input.
+
+
+[12/04/2025 21:14] 246tnt
+The detail on the error is :
+```
+ametal_eff: 202.5162
+ratio: 401.817857143
+agate: 0.504
+max_ratio: 400
+pmetal_factor: 0.54
+adiodes: (0)
+diode_factors: (800)
+pmetal: 375.03
+```
+
+
+[12/04/2025 21:15] 246tnt
+And indeed the gate area is 0.504.  But there is an 1 um x 1 um diode on the same node, so the effective area should be 0.504 + 2 * 1 = 2.504 and thus the ratio is 80 which is _way_ below the 400 threshold
+
+
+[12/04/2025 21:32] 246tnt
+Ah ... the DRC rule only consider `nplus + COMP` to be diodes.
+
+
+[12/04/2025 21:32] 246tnt
+But the IO have `pplus + COMP`
+
+
+[12/04/2025 21:44] 246tnt
+Looking at the doc : 
+"""This comp area contained the protection diode and any other drain or source junction connected to this node."""
+
+so `pplus + COMP` is perfectly valid and should be included in the `diodes` so I'm pretty sure that KLayout deck is wrong.
+
+
+[12/04/2025 21:44] 246tnt
+(cc @Leo Moser (mole99) )
+
+
+[12/05/2025 07:40] mole99
+Thanks @tnt for the hint!
+
+From the DRM:
+
+> 1. Possible repairs to metal antenna nodes, which have a high via count or antenna ratio.
+>   a. Add an NCOMP/Substrate diode for NMOS gate, PCOMP/Nwell diode for PMOS gate.
+>   b. Break the metal close to the gate and jog the metal to an upper metal level.
+
+So instead of:
+
+```
+diode      = nplus.and(comp)
+```
+
+I would do:
+
+```
+n_diode    = nplus.and(comp).not(nwell)
+p_diode    = pplus.and(comp).and(nwell)
+diodes     = n_diode || n_diode
+```
+
+(deep nwell not considered.)
+
+Does that look reasonable to you?
+
+
+[12/05/2025 07:51] 246tnt
+TBH I would think `comp.and(nplus.or(pplus)`  would be enough.
+
+
+[12/05/2025 07:52] 246tnt
+Technically if a signal is connected to what's basically a tap, that's also a diffusion that will dissipate charge I would think.
+
+
+[12/05/2025 07:53] 246tnt
+But it's a rather weird case so the above would work just fine.
+
+
+==============================================================
+Exported 13 message(s)
+==============================================================

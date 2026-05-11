@@ -1,0 +1,384 @@
+{
+  "guild": {
+    "id": "1361349522684510449",
+    "name": "wafer.space Community",
+    "iconUrl": "2025-12_media/fb143eaa45770cbb40493d09b625e98b-09FD1.png"
+  },
+  "channel": {
+    "id": "1443243481744277565",
+    "type": "GuildPublicThread",
+    "categoryId": "1361349523724570941",
+    "category": "general",
+    "name": "Using gf180mcu_ocd_io in LibreLane",
+    "topic": null
+  },
+  "dateRange": {
+    "after": "2025-11-30T23:59:59.999+00:00",
+    "before": "2026-01-01T00:00:00+00:00"
+  },
+  "exportedAt": "2026-05-11T11:21:33.0192587+00:00",
+  "messages": [
+    {
+      "id": "1446245336598446132",
+      "type": "Default",
+      "timestamp": "2025-12-04T21:02:38.184+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Mmm, I'm having an antenna violations when connecting to the `SEL` signal of the `ocd` IO but I don't see how that would be possible.",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-12_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1446245685371338924",
+      "type": "Default",
+      "timestamp": "2025-12-04T21:04:01.338+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Violating rule is `ANT.16_i_ANT.3`",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-12_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1446245944331997294",
+      "type": "Default",
+      "timestamp": "2025-12-04T21:05:03.079+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "But (1) the `Metal2` line that connects to that pin is really not that long, like 90 um or so. And (2) there is AFAICT an antenna diode on that input.",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-12_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1446248197444993024",
+      "type": "Default",
+      "timestamp": "2025-12-04T21:14:00.263+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The detail on the error is :\n```\nametal_eff: 202.5162\nratio: 401.817857143\nagate: 0.504\nmax_ratio: 400\npmetal_factor: 0.54\nadiodes: (0)\ndiode_factors: (800)\npmetal: 375.03\n```",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-12_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1446248524051120313",
+      "type": "Default",
+      "timestamp": "2025-12-04T21:15:18.132+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "And indeed the gate area is 0.504.  But there is an 1 um x 1 um diode on the same node, so the effective area should be 0.504 + 2 * 1 = 2.504 and thus the ratio is 80 which is _way_ below the 400 threshold",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-12_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1446252728350277713",
+      "type": "Default",
+      "timestamp": "2025-12-04T21:32:00.515+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Ah ... the DRC rule only consider `nplus + COMP` to be diodes.",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-12_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1446252759832858645",
+      "type": "Default",
+      "timestamp": "2025-12-04T21:32:08.021+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "But the IO have `pplus + COMP`",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-12_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1446255838577692822",
+      "type": "Default",
+      "timestamp": "2025-12-04T21:44:22.051+00:00",
+      "timestampEdited": "2025-12-04T21:44:32.634+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Looking at the doc : \n\"\"\"This comp area contained the protection diode and any other drain or source junction connected to this node.\"\"\"\n\nso `pplus + COMP` is perfectly valid and should be included in the `diodes` so I'm pretty sure that KLayout deck is wrong.",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-12_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1446255905006948564",
+      "type": "Default",
+      "timestamp": "2025-12-04T21:44:37.889+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "(cc @Leo Moser (mole99) )",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-12_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "323371864074485771",
+          "name": "mole99",
+          "discriminator": "0000",
+          "nickname": "Leo Moser (mole99)",
+          "color": null,
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1423020172595298314",
+              "name": "Mod",
+              "color": null,
+              "position": 1
+            }
+          ],
+          "avatarUrl": "2025-12_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1446405824464556032",
+      "type": "Default",
+      "timestamp": "2025-12-05T07:40:21.473+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks @tnt for the hint!\n\nFrom the DRM:\n\n> 1. Possible repairs to metal antenna nodes, which have a high via count or antenna ratio.\n>   a. Add an NCOMP/Substrate diode for NMOS gate, PCOMP/Nwell diode for PMOS gate.\n>   b. Break the metal close to the gate and jog the metal to an upper metal level.\n\nSo instead of:\n\n```\ndiode      = nplus.and(comp)\n```\n\nI would do:\n\n```\nn_diode    = nplus.and(comp).not(nwell)\np_diode    = pplus.and(comp).and(nwell)\ndiodes     = n_diode || n_diode\n```\n\n(deep nwell not considered.)\n\nDoes that look reasonable to you?",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "2025-12_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "596068704471482370",
+          "name": "246tnt",
+          "discriminator": "0000",
+          "nickname": "tnt",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2025-12_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1446408614704054323",
+      "type": "Default",
+      "timestamp": "2025-12-05T07:51:26.718+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "TBH I would think `comp.and(nplus.or(pplus)`  would be enough.",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-12_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1446408773479698442",
+      "type": "Default",
+      "timestamp": "2025-12-05T07:52:04.573+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Technically if a signal is connected to what's basically a tap, that's also a diffusion that will dissipate charge I would think.",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-12_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1446409159745736811",
+      "type": "Default",
+      "timestamp": "2025-12-05T07:53:36.666+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "But it's a rather weird case so the above would work just fine.",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-12_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    }
+  ],
+  "messageCount": 13
+}

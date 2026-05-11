@@ -1,0 +1,94 @@
+==============================================================
+Guild: wafer.space Community
+Channel: Information / general / Not yet, it's mainly blinky and the test
+After: 03/31/2026 23:59
+Before: 05/01/2026 00:00
+==============================================================
+
+[04/06/2026 14:34] mole99
+
+
+
+[04/06/2026 14:34] mole99
+Well, before you go for a tapeout, it is probably a good idea to validate that the fabric can support more complex designs.
+
+From what I can see, your switch matrix only has direct connections to neighboring tiles. You may need connections that span multiple tiles to improve connectivity, otherwise you may end up with unroutable situations.
+
+After all, 90% of an FPGA is just the routing 😉
+
+
+[04/06/2026 14:37] thecomputerguy
+Yeah, I've been able to verify most of the design. I've asked a couple people to review and give feedback but I haven't heard back from them yet.
+
+
+[04/06/2026 14:38] thecomputerguy
+I'm mainly focused on making the tapeout workflow not be as heavy and slow.
+
+
+[04/06/2026 14:41] mole99
+I see! I really dig the automated and reproducible build of the chip. I use LibreLane to build the FABulous FPGA reproducibly as well, but I only use Nix for the tools.
+
+
+[04/06/2026 14:42] mithro_
+BTW Have you seen my ramberlings in https://docs.google.com/document/d/1n2YaYvHRq6sSTN80jMbDDu8qRKy45c0DJyZbVrDrv_o/edit?tab=t.0 ?
+
+{Embed}
+https://docs.google.com/document/d/1n2YaYvHRq6sSTN80jMbDDu8qRKy45c0DJyZbVrDrv_o/edit?tab=t.0
+wafer.space - GF180MCU Fabulous FPGA
+GF180MCU FABulous FPGA Goal Have a strong 5V tolerant FPGA / CPLD usable for legacy emulation projects.  Specifications   SRAM? Info about what SRAM amount is possible can be found @  Memory is something I am thinking about right now: Different PDKs have different memory options (size, features...
+2026-04_media/AHkbwyLt1-sdZKGLTh5ge2xhMg3cz9DkeQ19EDFwGP-DD8DE
+
+
+[04/06/2026 14:42] thecomputerguy
+Yeah so I looked at LibreLane and I see why it was made. However, I can get better utilization by splitting the tapeout workflow.
+
+
+[04/06/2026 14:43] thecomputerguy
+This is what I've been working on. Each tile gets taped out and everything is placed together at the end.
+
+{Attachments}
+2026-04_media/HFMdaQMbgAA8apR-55771.png
+
+
+[04/06/2026 14:43] thecomputerguy
+Interesting
+
+
+[04/06/2026 14:44] mithro_
+See also my kinda silly spreadsheet at https://docs.google.com/spreadsheets/d/1KIqtzRaZbrWsbKwZqevY2elmVIz1gm5UJqOP75bxcOg/edit?gid=1500563840#gid=1500563840
+
+{Embed}
+https://docs.google.com/spreadsheets/d/1KIqtzRaZbrWsbKwZqevY2elmVIz1gm5UJqOP75bxcOg/edit?gid=1500563840
+wafer.space - GF180MCU LUT sizing and configuration
+2026-04_media/AHkbwyK_mLpBOgdCcFa2EYOgt3BZ1Fgg2hTe7APOmZ-9DF38
+
+
+[04/06/2026 14:44] mole99
+Very nice! My LibreLane plugin also first implements the tile macros in parallel and then stitches the fabric: https://github.com/mole99/librelane_plugin_fabulous
+
+
+[04/06/2026 14:45] thecomputerguy
+I get the benefit of being able to use a Nix cache and I can cache things much easily.
+
+
+[04/06/2026 14:46] thecomputerguy
+Huh
+
+
+[04/06/2026 14:47] mithro_
+@The Computer Guy - Don't worry if it doesn't make sense, I was just thinking about the problem by trying to pack standard cells together to get 100% density and not actually doing anything useful.
+
+
+[04/06/2026 14:47] thecomputerguy
+Yeah, I was kinda gathering that
+
+
+[04/06/2026 14:50] mole99
+Yeah, that is a nice approach! I use Make to build the tiles. In theory, I could also only rebuild what is needed, however, that hasn't been necessary so far since implementing all tiles doesn't take that long. But it's a good future improvement.
+
+I also cache the tiles in the CI, see here for the HeiChips fabric: https://github.com/FPGA-Research/heichips25-tapeout/actions/runs/23842507549
+
+
+==============================================================
+Exported 16 message(s)
+==============================================================

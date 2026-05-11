@@ -1,0 +1,350 @@
+==============================================================
+Guild: wafer.space Community
+Channel: Information / general / Test Submission Platform Issues & Successes?
+After: 10/31/2025 23:59
+Before: 12/01/2025 00:00
+==============================================================
+
+[11/28/2025 00:21] mithro_
+
+
+
+[11/28/2025 00:21] mithro_
+Put things here!
+
+
+[11/28/2025 05:15] urish
+Tried now, it fails to download from a Github releases link:
+
+
+[11/28/2025 05:15] urish
+
+
+{Attachments}
+2025-11_media/image-A22E5.png
+
+
+[11/28/2025 05:16] urish
+looks like some kind of server side permission issue
+
+
+[11/28/2025 05:16] urish
+(also, it's generally not a good idea to expose server paths in error messages)
+
+
+[11/28/2025 05:17] mithro_
+Was that https://doc.test-platform.wafer.space or https://test-platform.wafer.space?
+
+{Embed}
+https://doc.test-platform.wafer.space/
+Welcome to wafer.space
+…
+Platform for wafer.space low cost silicon manufacturing.
+
+{Embed}
+https://test-platform.wafer.space/?
+Welcome to wafer.space
+…
+Platform for wafer.space low cost silicon manufacturing.
+
+
+[11/28/2025 05:32] mithro_
+@urish -^
+
+
+[11/28/2025 05:58] noritsunaimamura
+The top cell name is different, causing an error. How should I fix this?
+I tried the following here, but it didn't work.
+
+1. Set the top cell name to "top".
+2. Set the top cell name to match the file name.
+
+* 1st top cell name is "chip_top".
+
+{Attachments}
+2025-11_media/ISHI-KAI_WS_RUN1.gds.CONTEXT_INFO.precheck-F94CD.log
+2025-11_media/ISHI-KAI_WS_RUN1.gds.CONTEXT_INFO.precheck-1811C.png
+
+
+[11/28/2025 06:45] urish
+The later, I believe
+
+
+[11/28/2025 06:45] urish
+What's the difference?
+
+
+[11/28/2025 06:48] noritsunaimamura
+Setting the top cell name to "$$$CONTEXT_INFO$$$" executed it. It is currently running.
+
+{Attachments}
+2025-11_media/running_2025-11-28_154706-87C17.png
+
+
+[11/28/2025 06:49] mithro_
+I find the top cell name using the following code -> [wafer_space/projects/processors/top_cell_extractor.py](https://github.com/wafer-space/platform.wafer.space/pull/43/files#diff-0e8b30af1143e870f57cfda668d8ddeaa7c640fc26bee8330197357daa0fd556)
+
+{Embed}
+https://github.com/wafer-space/platform.wafer.space/pull/43/files
+Add manufacturability checking system with Docker integration by mi...
+Summary
+Implements automated manufacturability checking for GDS design files using the gf180mcu-precheck tool in Docker containers. This includes export compliance certification requirements and co...
+2025-11_media/21212-01092
+
+
+[11/28/2025 06:52] mithro_
+Different hardware.
+
+
+[11/28/2025 06:54] mithro_
+I just updated the dns so that test-platform.wafer.space should be going to doc.test-platform.wafer.space now instead of the older deployment.
+
+{Reactions}
+🆗 (2)
+
+[11/28/2025 08:36] urish
+Now passed, but only on 2nd attempt:
+
+
+[11/28/2025 08:36] urish
+
+
+{Attachments}
+2025-11_media/image-80A02.png
+
+
+[11/28/2025 08:37] urish
+One thing that is unclear is what the "Draft" state means
+
+
+[11/28/2025 08:37] urish
+usually "Draft" means that the user has to take some actually in order to move to a different status
+
+
+[11/28/2025 08:38] urish
+however, the current UI doesn't seem to imply what's next:
+
+
+[11/28/2025 08:38] urish
+
+
+{Attachments}
+2025-11_media/image-9BC55.png
+
+
+[11/28/2025 08:38] urish
+It just says "File in progress" in the title, submit for manufacturing is disabled, and tit doesn't seem like there are any further actions I can take
+
+
+[11/28/2025 08:49] mithro_
+@urish - Their should be something showing that it has been queued for manufacturing checks.
+
+
+[11/28/2025 08:50] urish
+"File In Progress" in the title is the only indication I spotted
+
+
+[11/28/2025 08:51] mithro_
+If you reload the page, does anything change?
+
+
+[11/28/2025 08:56] urish
+nope
+
+
+[11/28/2025 08:57] urish
+<https://test-platform.wafer.space/projects/3793d311-b00a-4849-8179-c393031d2505/>
+
+
+[11/28/2025 08:57] urish
+that's the page
+
+
+[11/28/2025 08:57] urish
+can also send you the password if you want to see what I'm seeing
+
+
+[11/28/2025 08:58] mithro_
+I have a pending pull request for the "admin can view all projects" functionality.
+
+{Reactions}
+👍
+
+[11/28/2025 10:09] _luke_w_
+Does this flow re-run DRCs? I have an issue right now that my design is flagged by both klayout and magic but the issues are all inside the (9t) foundry cells, and we think the DRCs are spurious. I haven't submitted yet, was just wondering.
+
+
+[11/28/2025 10:11] _luke_w_
+for context I wrote up the DRCs here: https://github.com/wafer-space/gf180mcu-project-template/issues/34
+
+{Embed}
+https://github.com/wafer-space/gf180mcu-project-template/issues/34
+9-track foundry standard cells are not clean with KLayout or Magic ...
+KLayout violations The clock gating cell icgtp_1 is flagged with the following by klayout: CO.6a : (i) Metal1 (&lt; 0.34um) end-of-line overlap contact (Applies to all &lt; 0.34µm wide metal lines,...
+2025-11_media/34-5704C
+
+
+[11/28/2025 10:15] mithro_
+@LukeW - At the moment it doesn't re-run DRCs, but you can submit the same file again and it'll run a new check.
+
+{Reactions}
+👍
+
+[11/28/2025 10:15] mithro_
+If things are working correctly, then it will be using the latest docker image from the precheck repo.
+
+
+[11/28/2025 10:16] _luke_w_
+Thanks. For this run are we happy to manually waive DRCs inside of foundry cells? Hoping there will be time to straighten things out after the first shuttle
+
+
+[11/28/2025 10:16] _luke_w_
+(also cc @Leo Moser (mole99) )
+
+
+[11/28/2025 10:17] mithro_
+@LukeW - My hope is that we can figure it out without needing to waive stuff, but I guess time is disappearing....
+
+
+[11/28/2025 10:20] mole99
+The online platform runs the precheck: https://github.com/wafer-space/gf180mcu-precheck
+This includes a number of smaller checks, but also KLayout and magic DRC.
+
+@LukeW in your case we might need to do a manual submission, since the online precheck will fail.
+
+
+[11/28/2025 10:27] _luke_w_
+Ok thanks, I'll make sure to go through my DRCs again before submission and check it is just the known ones in the foundry cells, and will attach my DRC logs in case you want to check against the precheck output. Also let me know if you want my GDS a little earlier than the deadline
+
+{Reactions}
+👏
+
+[11/28/2025 10:29] mole99
+I don't need it earlier than the deadline, just the deadline is fine 👍
+
+{Reactions}
+🫡
+
+[11/28/2025 15:39] noritsunaimamura
+I hit a soft limit.
+How should I resolve this?
+
+{Attachments}
+2025-11_media/ERROR_softTimeLimitExceded-EC275.png
+
+
+[11/28/2025 22:28] mithro_
+@Noritsuna Imamura - Can you show me what the resource usage timeline shows?
+
+
+[11/28/2025 22:29] mithro_
+I'll add the ability for admins to override the precheck
+
+{Reactions}
+👍
+
+[11/28/2025 22:35] noritsunaimamura
+This is "Processing Logs".
+
+{Attachments}
+2025-11_media/precheck_log-8A36E.txt
+
+
+[11/28/2025 22:48] mithro_
+@Noritsuna Imamura - I meant the stuff under
+
+{Attachments}
+2025-11_media/image-54764.png
+
+
+[11/28/2025 22:50] noritsunaimamura
+Sorry, This is timeline log.
+
+{Attachments}
+2025-11_media/Resource_Usage_Timeline_723_checkpoints-6DD22.txt
+
+
+[11/28/2025 22:52] mithro_
+I wonder what soft limit you hit then... I was thinking it would be memory, but you are well below the limit there.....
+
+
+[11/28/2025 23:10] mithro_
+I'm going to deploy a new version of the website shortly, that should enable me to look at the project directly.
+
+{Reactions}
+🆗 (2)
+
+[11/29/2025 08:39] mithro_
+@Leo Moser (mole99) - Support for the slot sizes is now up at https://buddy.test-platform.wafer.space
+
+
+[11/29/2025 09:28] mole99
+Great 👏 will give it a try later.
+
+
+[11/29/2025 19:15] rzioma
+@Tim 'mithro' Ansell  I have the same issue with `SoftTimeLimitExceeded()`
+
+{Attachments}
+2025-11_media/image-0F534.png
+
+
+[11/29/2025 19:16] rzioma
+Resource Usage Timeline (769 checkpoints)
+
+{Attachments}
+2025-11_media/image-93889.png
+
+
+[11/29/2025 19:17] rzioma
+locally precheck took around 40 minutes
+
+{Attachments}
+2025-11_media/image-BD313.png
+
+
+[11/29/2025 19:29] rzioma
+I tried different GDS with mcu7t cells, but download is **pending**
+
+
+[11/29/2025 21:06] rzioma
+I tried to run docker CLI, but it doesn't seem to be able to map the gds file to `input/design.gds`  for some reason
+
+
+[11/29/2025 21:06] rzioma
+
+
+{Attachments}
+2025-11_media/image-12956.png
+
+
+[11/29/2025 21:09] rzioma
+(even if I change the path to `test-platform`)
+
+
+[11/30/2025 00:56] mithro_
+Looks like I forgot to set docker to store it's files on the large disk instead of root and now test-platform is out of disk space.
+
+{Reactions}
+🤩
+
+[11/30/2025 04:07] mithro_
+I should be deploying a change which fixes the SoftTimeLimit shortly.
+
+{Reactions}
+🆗 partyblob (2)
+
+[11/30/2025 19:12] urish
+getting the permissions issue again:
+
+
+[11/30/2025 19:12] urish
+
+
+{Attachments}
+2025-11_media/image-F3202.png
+
+
+==============================================================
+Exported 61 message(s)
+==============================================================

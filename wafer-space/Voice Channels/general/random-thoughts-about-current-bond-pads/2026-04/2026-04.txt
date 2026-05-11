@@ -1,0 +1,249 @@
+==============================================================
+Guild: wafer.space Community
+Channel: Information / general / Random thoughts about current bond pads
+After: 03/31/2026 23:59
+Before: 05/01/2026 00:00
+==============================================================
+
+[04/28/2026 05:26] mithro_
+@Leo Moser (mole99) - Forgive me if these things are stupid / don't make sense but I had some random thoughts / ideas about ways we should probably modify the "default" template / setup for the padring / pads based on random theories from being at the bond house.
+
+
+[04/28/2026 05:40] mithro_
+Firstly, the pads seem like they are currently very close to the edge of the die. Looking through the microscope they kinda look like they almost connected to it. I assume they must not be, otherwise nothing would work but it was concerning the first time I looked at them.
+
+Could we add a bit more space between the pads and the edge/seal ring?
+
+I know it reduces the available silicon area but I /think/ it should help have more margin there.
+
+
+[04/28/2026 05:41] mithro_
+Secondly, do you know if the top polyimide layer overlaps the metal pad edges? IE Is something like this possible? https://docs.google.com/drawings/d/1YPRHE-uZNg3iSm3SlMcJvfinUueOHtiQbLqJo35Pt_M/edit -- If so could we increase the amount of overlap?
+
+{Embed}
+https://docs.google.com/drawings/d/1YPRHE-uZNg3iSm3SlMcJvfinUueOHtiQbLqJo35Pt_M/edit
+wafer.space - GF180MCU Pad Metal and Polyimide overlap
+Pad Metal Polyimide Polyimide Side View Top View Pad Metal Polyimide Polyimide Polyimide Polyimide Polyimide Opening Polyimide & Metal Overlap
+2026-04_media/AHkbwyKVRgdVVBZW4rGUTRJkPovH89iJtWZKrkMwHu-5A1CB
+
+
+[04/28/2026 06:31] mole99
+Will take a closer look later!
+
+
+[04/28/2026 06:40] 246tnt
+Changing padring would mean we have an issue for TT because changing silicon area means we might need to change the size of tiles (and worst case, even size of power gates meaning we'd need to re-design them ... meaning closing the shuttle)
+
+
+[04/28/2026 06:42] 246tnt
+The passivation already looks like that drawing. The metal pad is 65.35 um x 68 um  and tha passivation opening is 60 x 60 um.
+
+
+[04/28/2026 06:46] 246tnt
+Distance from guard ring to pads meets `GR.2` ( It's 10 um from the marking layer and 11 um away from the actual pad ).   That's more than twice the clearance between pad and first power ring.
+
+
+[04/28/2026 06:55] mithro_
+@tnt - I'm thinking more along the lines of providing more margin in the "default - I just want something which works" configuration of the template.
+
+
+[04/28/2026 06:56] 246tnt
+But that would move the bonding pads, hence the bonding setup.
+
+
+[04/28/2026 06:56] mithro_
+But I also might be suggesting things which make no sense 😛
+
+
+[04/28/2026 06:58] mithro_
+@tnt - If I understand correctly, Tiny Tapeout/you are doing your own bonding (even if we are at the same place) - so that is not something that effects you?
+
+
+[04/28/2026 06:58] 246tnt
+Do we have GDS from the chipathon or from the google GF runs to compare.
+
+
+[04/28/2026 06:58] mithro_
+@tnt - The Google GF shuttle GDS is at https://foss-eda-tools.googlesource.com/third_party/shuttle/gf180mcu
+
+
+[04/28/2026 06:59] 246tnt
+Well one thing we were thinking about is to also offer the TT chips on the standard WS breakout for if people want to use in their own PCB. ( So you'd get the standard TT demo+breakout  and also TT chips on the WS breakout 😅  ).
+
+
+[04/28/2026 07:01] 246tnt
+I think the repo above doesn't have seal ring and fill, this was added later by GF ?  Not sure if they sent back the altered gds ...
+
+
+[04/28/2026 07:01] 246tnt
+( I can't check ... can't figure out how to actually download the files from the repo above .. )
+
+
+[04/28/2026 07:02] 246tnt
+But let's see how it works out with the next set of wafers ...
+
+
+[04/28/2026 07:02] 246tnt
+When do you think you'll start trying with those ?
+
+
+[04/28/2026 07:06] mithro_
+That would be cool!
+
+I'm just throwing stuff out there. It might make sense to do some type of tests along these lines to see if they make any difference.
+
+
+[04/28/2026 07:06] mithro_
+I'm pretty sure if they did send back any altered gds it got lost inside efabless
+
+
+[04/28/2026 07:07] 246tnt
+Someone here (on run 1, on this discord) getting one of the chip probably has equipment to do a cross section and SEM of the failure.
+
+
+[04/28/2026 07:08] 246tnt
+Would be interested to see 😅
+
+
+[04/28/2026 07:27] mithro_
+I'm guessing someone like @azonenberg or @BreakingTaps will eventually look into. I will try and make sure they have some samples.
+
+I'm also trying to figure out if there are any failure analysis labs with SEMs in the Shenzhen area that are within my price range that we can get stuff done with too.
+
+
+[04/28/2026 08:40] azonenberg
+I am absolutely capable of doign a sem/fib section but would need work's approval since it would be on their gear
+
+
+[04/28/2026 08:40] azonenberg
+i have a friend across town with a fib 200 she's trying to bring up but it's not yet in usable condition
+
+
+[04/28/2026 12:47] polyfractal
+parallel lapping and cross-sectioning my chip are on the eventual-todo list (time permitting, have to do it after-hours at work)
+
+What failure in particular would I be looking out for?
+
+
+[04/28/2026 13:14] 246tnt
+@BreakingTaps Bond pad shorted to GND.
+
+{Reactions}
+👍 😮
+
+[04/28/2026 14:55] azonenberg
+is it just one pin on one chip? wire bonded or bare?
+
+
+[04/28/2026 14:56] 246tnt
+@azonenberg No, I have 9 chips here, 6 have several failed bonds.
+
+
+[04/28/2026 14:56] azonenberg
+but randomly distributed, not the same bond pad on each?
+
+
+[04/28/2026 14:56] azonenberg
+any obvious pattern to failure locations?
+
+
+[04/28/2026 14:56] azonenberg
+e.g. power vs io
+
+
+[04/28/2026 14:56] azonenberg
+or one side of the package
+
+
+[04/28/2026 14:57] 246tnt
+It's not the same bond no. But strangely they seem grouped on the same side of the chip ... it's not the same side on every chip but on a given chip I'll have 1 side perfect and another with all the failed bonds.
+
+
+[04/28/2026 14:58] 246tnt
+( I'm only testing 2 sides because the samples I got have "survivor bias", they were the one passing the digital test which tests North/South side at the factory ... but the East/West were not tested at the factory ).
+
+
+[04/28/2026 15:00] azonenberg
+My first guess would be excessive force during the bonding process punching through layers
+
+
+[04/28/2026 15:00] azonenberg
+That should show nicely in a FIB section
+
+
+[04/28/2026 15:00] 246tnt
+If @BreakingTaps has a multimeter, it's pretty easy to test .. Use diode more, put positive lead on GND on one of the cap, then probe along the connector for the IOs.  Good ones should show roughly 0.75V.
+
+{Reactions}
+😮
+
+[04/28/2026 15:01] azonenberg
+How wide is the bond pad?
+
+
+[04/28/2026 15:01] 246tnt
+@azonenberg There is nothing underneath the pad. It would  need to be deformed to push inward to reach the power ring to be shorted to GND.
+
+
+[04/28/2026 15:01] azonenberg
+Substrate is grounded if it's punched hard enough
+
+
+[04/28/2026 15:01] 246tnt
+True ... I didn't think about that.
+
+
+[04/28/2026 15:02] 246tnt
+I did manage to clear a short using brute force. ( 8V / 3A to the IO ... now it works )
+
+
+[04/28/2026 15:03] 246tnt
+
+
+{Attachments}
+2026-04_media/2026-04-27_984x848_scrot-B4E3D.png
+
+
+[04/28/2026 15:03] 246tnt
+Pad passivation opening is  60 x 60 um.
+
+
+[04/28/2026 15:03] 246tnt
+And as noted above, ~4.6 um from the GND power rail.
+
+{Reactions}
+😮 🎉 ❤️ 🔥 waferspace
+
+[04/28/2026 15:15] azonenberg
+lol. the rest of the chip works?
+
+
+[04/28/2026 15:19] azonenberg
+I would be interested in seeing that die, tbh
+
+
+[04/28/2026 15:19] azonenberg
+there may be visible damage or melt marks
+
+
+[04/28/2026 15:19] azonenberg
+that might make an otherwise hard to find short more obvious
+
+
+[04/28/2026 15:33] 246tnt
+Yes, rest of the chip works. And that pin now works too ( it was the `clk` input of TT ) ... I ran several designs with no issues.
+
+{Reactions}
+❤️
+
+[04/29/2026 01:09] mithro_
+@tnt - Would the reverse bias 0.75V test work on any die which is using the standard GF IO?
+
+
+[04/29/2026 05:35] 246tnt
+@Tim 'mithro' Ansell Yes
+
+
+==============================================================
+Exported 53 message(s)
+==============================================================

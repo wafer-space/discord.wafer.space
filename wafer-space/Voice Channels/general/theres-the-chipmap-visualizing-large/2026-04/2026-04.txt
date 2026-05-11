@@ -1,0 +1,203 @@
+==============================================================
+Guild: wafer.space Community
+Channel: Information / general / There's "THE CHIPMAP™: VISUALIZING LARGE
+After: 03/31/2026 23:59
+Before: 05/01/2026 00:00
+==============================================================
+
+[04/20/2026 07:12] mole99
+
+
+
+[04/20/2026 07:12] mole99
+
+
+{Attachments}
+2026-04_media/Bildschirmfoto_vom_2026-04-20_09-11-25-2E219.png
+
+
+[04/20/2026 07:12] mole99
+
+
+{Attachments}
+2026-04_media/Bildschirmfoto_vom_2026-04-20_09-12-02-D4BEB.png
+
+
+[04/20/2026 07:13] azonenberg
+Yep, seems like about the approach i was thinking. i'll have to read that paper
+
+
+[04/20/2026 07:13] mole99
+Stefan Thiede is currently working on a modern (and proprietary) viewer with this approach.
+
+
+[04/20/2026 07:13] azonenberg
+well i want a f/oss one
+
+
+[04/20/2026 07:13] azonenberg
+:p
+
+
+[04/20/2026 07:14] mole99
+Me too 😄
+
+
+[04/20/2026 07:14] azonenberg
+and long term I want an editor built around the same concept
+
+
+[04/20/2026 07:14] azonenberg
+i dont have the time to build it, but maybe if i build a nice viewer someone will start bolting editing features on lol
+
+
+[04/20/2026 07:14] mole99
+One can hope ;)
+
+
+[04/20/2026 07:14] azonenberg
+Or if ngscopeclient builds up enough steam maybe i can turn it over to other maintainers and not be handholding it as much
+
+{Reactions}
+🤞
+
+[04/20/2026 07:14] azonenberg
+and move on to new things
+
+
+[04/20/2026 07:15] azonenberg
+i feel like i have the right combination of HPC, accelerated graphics/GPU dev, and EE skills to tackle such a project, just not the time
+
+
+[04/20/2026 07:15] azonenberg
+and i really want vulkan in my EDA tools one day :p
+
+
+[04/20/2026 07:16] azonenberg
+(did you see some of my recent demos from ngscopeclient going all the way up to ethernet frames basically 100% GPU?)
+
+
+[04/20/2026 07:17] mole99
+I've been following you on Mastodon, and what you do with compute shaders in ngscoceplient is incredible ^^
+
+
+[04/20/2026 07:17] azonenberg
+specifically, for anybody else reading this
+
+
+[04/20/2026 07:17] azonenberg
+
+
+{Attachments}
+2026-04_media/demo-531B5.mp4
+
+
+[04/25/2026 14:45] mithro_
+@azonenberg - There are some papers about NVIDIA doing GPU acceleration for one of the proprietary vendors and getting like 10,000x speed up or something.
+
+
+[04/25/2026 14:46] mithro_
+Like 2023 time frame.
+
+
+[04/25/2026 18:55] azonenberg
+I know they did a bunch of acceleration for lithography
+
+
+[04/25/2026 18:55] azonenberg
+and OPC stuff
+
+
+[04/25/2026 18:56] azonenberg
+anyway, that's something we need in the open stack too
+
+
+[04/26/2026 00:40] mithro_
+@azonenberg - Yeah, I've been hoping the GDSFactory team which is doing a lot of photonics stuff which needs all types of weird structures will push forward areas like ILT based solutions rather than heuristic based OPC that is much more common on 180nm -> 45nm area.
+
+
+[04/26/2026 00:44] mithro_
+@azonenberg - I was just randomly searching for https://github.com/vincentlv/DimmiLitho and it appears there might be more attempts at open source litho simulation out there than I realized. Found the following to accidentally!
+ * https://github.com/TorchOPC/TorchLitho
+ * https://github.com/LithoSimulator/K-Litho
+
+{Embed}
+https://github.com/vincentlv/DimmiLitho
+GitHub - vincentlv/DimmiLitho: Include pixel-based mask synthesis, ...
+Include pixel-based mask synthesis, imaging model for optical lithography in Python - vincentlv/DimmiLitho
+2026-04_media/DimmiLitho-4D909
+
+{Embed}
+https://github.com/TorchOPC/TorchLitho
+GitHub - TorchOPC/TorchLitho: Differentiable Computational Lithogrp...
+Differentiable Computational Lithogrpahy Framework - TorchOPC/TorchLitho
+2026-04_media/1d7b7b9f-ea2b-49ba-81a7-67bdbd4f4457-89812
+
+{Embed}
+https://github.com/LithoSimulator/K-Litho
+GitHub - LithoSimulator/K-Litho: K-Litho is a toolset designed for ...
+K-Litho is a toolset designed for lithography simulation.  It enables optical image calculations using TCC and SOCS, as well as SOCS kernel derivation. - LithoSimulator/K-Litho
+2026-04_media/K-Litho-50D8A
+
+
+[04/26/2026 02:11] namibj
+OPC want. Fab allowance/support when 😄
+(I think the tools may already exist even if as part of research paper code dumps only, but that part shouldn't even be that hard even if one has to write the code for the techniques/algorithms of the paper(s), but it won't/can't really progress until the fab allows test structures/validations in submissions.)
+
+
+[04/26/2026 02:32] mithro_
+We can most certainly have test structures if they pass the current DRC rules.
+
+
+[04/26/2026 02:32] mithro_
+I believe the @Noritsuna Imamura team had a few on run #1
+
+
+[04/26/2026 02:32] mithro_
+The gdsfactory team are also very interested in test structures
+
+
+[04/26/2026 02:34] mithro_
+See alo https://github.com/google/skywater-pdk-sky130-raw-data and https://github.com/google/skywater-pdk-sky130-raw-data/tree/main/docs/sky130-testtile-open for examples of stuff done on sky130 that I would love to see replicated on gf180mcu
+
+{Embed}
+https://github.com/google/skywater-pdk-sky130-raw-data
+GitHub - google/skywater-pdk-sky130-raw-data: Raw data collected ab...
+Raw data collected about the SKY130 process technology. - google/skywater-pdk-sky130-raw-data
+2026-04_media/6331cc72-d873-4a7c-b52c-65abe3dd645f-11FAE
+
+{Embed}
+https://github.com/google/skywater-pdk-sky130-raw-data/tree/main/docs/sky130-testtile-open
+skywater-pdk-sky130-raw-data/docs/sky130-testtile-open at main · g...
+Raw data collected about the SKY130 process technology. - google/skywater-pdk-sky130-raw-data
+2026-04_media/6331cc72-d873-4a7c-b52c-65abe3dd645f-11FAE
+
+
+[04/26/2026 02:35] mithro_
+And also https://bit.ly/test-open-pdk
+
+{Embed}
+https://bit.ly/test-open-pdk
+Building out (automated) test generation and (automated) measuremen...
+Test structure generation and measurement  For improving open source PDKs bit.ly/test-open-pdk  Owner: Tim ‘mithro’ Ansell <me@mith.ro> Contributors: XXX Last Updated: 2023 Q1  Goal The goal of this document is to provide a central point for the (automated) development of test structures and...
+2026-04_media/AHkbwyKZvD6sT--5iIF_m-2xXq2xfNbNuCtKrrj60--060D2
+
+
+[04/26/2026 03:03] namibj
+As I understand it, fab currently applies OPC to the submission before the masks are produced.
+That's inherently in the way of, notably, having some mask patterns that deliberately excercise finer litho interactions in ways that are reasonably easy to measure on produced chips, so that ILT models can be adjusted/tuned to the particular process litho aspects.
+Like, the GDSII doesn't have the mask layers, it's just a proxy that turns into mask layers while the fab applies OPC and some indirection schemes (like self-aligned gate and similar).
+
+
+[04/26/2026 10:52] noritsunaimamura
+Our test pads (prober pads) are designed to match the specifications of the prober owned by Professor Tsuchiya at Kansai University.
+If the timing works out, we plan to conduct a test.
+
+
+[04/26/2026 12:36] mithro_
+We (wafer.space) do get to see the masks and have to sign off on them before they get manufactured. After a run has been confirmed as working, we will also get the actual physical masks.
+
+
+==============================================================
+Exported 35 message(s)
+==============================================================
