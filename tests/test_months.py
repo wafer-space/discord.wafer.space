@@ -120,3 +120,48 @@ def test_current_month_utc_format() -> None:
         mock_dt.side_effect = lambda *a, **kw: datetime(*a, **kw)
         result = current_month_utc()
         assert result == "2026-05"
+
+
+def test_is_month_dir_name() -> None:
+    """is_month_dir_name accepts YYYY-MM strings and rejects others."""
+    from scripts.months import is_month_dir_name
+
+    assert is_month_dir_name("2026-05") is True
+    assert is_month_dir_name("2025-12") is True
+    assert is_month_dir_name("2026-01") is True
+    assert is_month_dir_name("2026-13") is False  # Invalid month
+    assert is_month_dir_name("2026-00") is False  # Invalid month
+    assert is_month_dir_name("26-05") is False  # Wrong format
+    assert is_month_dir_name("2026-5") is False  # Wrong format
+    assert is_month_dir_name("not-a-date") is False
+    assert is_month_dir_name("index") is False
+    assert is_month_dir_name("") is False
+
+
+def test_scan_completed_months_finds_month_directories(tmp_path) -> None:
+    """scan_completed_months returns months that have a non-empty HTML file."""
+    from scripts.months import scan_completed_months
+
+    channel_dir = tmp_path / "general"
+    (channel_dir / "2026-01").mkdir(parents=True)
+    (channel_dir / "2026-01" / "2026-01.html").write_text("<html>jan</html>")
+    (channel_dir / "2026-02").mkdir()
+    (channel_dir / "2026-02" / "2026-02.html").write_text("<html>feb</html>")
+    # Empty HTML file should not count
+    (channel_dir / "2026-03").mkdir()
+    (channel_dir / "2026-03" / "2026-03.html").write_text("")
+    # Missing HTML file should not count
+    (channel_dir / "2026-04").mkdir()
+    # Non-month directory should be ignored
+    (channel_dir / "media").mkdir()
+
+    completed = scan_completed_months(channel_dir)
+    assert completed == {"2026-01", "2026-02"}
+
+
+def test_scan_completed_months_empty_when_dir_missing(tmp_path) -> None:
+    """A missing channel directory has no completed months."""
+    from scripts.months import scan_completed_months
+
+    completed = scan_completed_months(tmp_path / "does-not-exist")
+    assert completed == set()

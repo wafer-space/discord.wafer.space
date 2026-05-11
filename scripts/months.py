@@ -16,6 +16,7 @@ correct month-based partitioning:
 
 import re
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
 
 # Discord uses 2015-01-01T00:00:00.000 UTC as the epoch for its snowflake IDs.
 # https://discord.com/developers/docs/reference#snowflakes
@@ -97,3 +98,28 @@ def snowflake_to_month(snowflake: str) -> str:
 def current_month_utc() -> str:
     """Return the current month in UTC as a YYYY-MM string."""
     return datetime.now(timezone.utc).strftime("%Y-%m")
+
+
+def is_month_dir_name(name: str) -> bool:
+    """Return True iff `name` is a YYYY-MM string with a valid month (01-12)."""
+    return bool(_MONTH_RE.match(name))
+
+
+def scan_completed_months(channel_dir: Path) -> set[str]:
+    """Return the set of YYYY-MM months that already have a non-empty HTML export.
+
+    The HTML file is the user-visible deliverable, so we treat its presence
+    (with non-zero size) as the signal that a month has been successfully
+    exported. Other formats (txt/json/csv) might be regenerable, but if the
+    HTML is missing the month is not "done".
+    """
+    if not channel_dir.exists() or not channel_dir.is_dir():
+        return set()
+    completed: set[str] = set()
+    for entry in channel_dir.iterdir():
+        if not entry.is_dir() or not is_month_dir_name(entry.name):
+            continue
+        html_file = entry / f"{entry.name}.html"
+        if html_file.exists() and html_file.stat().st_size > 0:
+            completed.add(entry.name)
+    return completed

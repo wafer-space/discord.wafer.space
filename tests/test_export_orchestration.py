@@ -3,6 +3,7 @@
 
 import os
 import tempfile
+from contextlib import contextmanager
 from pathlib import Path
 from typing import Any
 from unittest.mock import Mock, patch
@@ -12,6 +13,24 @@ from scripts.export_channels import export_all_channels, run_export
 # Test constants
 EXPECTED_EXPORTS_TWO_CHANNELS = 2
 EXPECTED_EXPORTS_FOUR_FORMATS = 4
+
+
+@contextmanager
+def fixed_months(creation_month: str = "2025-12", current_month: str = "2026-02"):
+    """Pin month-related primitives so per-month tests have predictable counts.
+
+    With creation "2025-12" and current "2026-02", the export loop visits
+    exactly three months per channel: 2025-12, 2026-01, 2026-02. This keeps
+    test assertions stable regardless of wall-clock time and lets us reason
+    about export counts directly.
+    """
+    with patch("scripts.export_channels.snowflake_to_month", return_value=creation_month):
+        with patch("scripts.export_channels.current_month_utc", return_value=current_month):
+            with patch("scripts.export_channels.scan_completed_months", return_value=set()):
+                with patch(
+                    "scripts.export_channels._discard_if_empty_month", return_value=None
+                ):
+                    yield
 
 
 class TestRunExport:
@@ -195,7 +214,13 @@ commit_author = "Test Bot"
         del os.environ["DISCORD_BOT_TOKEN"]
 
     def test_export_all_channels_filters_channels_by_pattern(self) -> None:
-        """Test that channels are filtered by include/exclude patterns."""
+        """Channels matched by exclude_channels are skipped entirely (no DCE calls).
+
+        With creation pinned to 2025-12 and current to 2026-02, each surviving
+        channel triggers 3 months × 1 format = 3 exports. Two channels pass the
+        filter (private-chat is excluded), giving 6 total exports — and
+        importantly, zero exports for the excluded channel.
+        """
         os.environ["DISCORD_BOT_TOKEN"] = "test_token"
 
         config = {
@@ -212,38 +237,40 @@ commit_author = "Test Bot"
             "github": {},
         }
 
-        with patch("scripts.export_channels.load_config", return_value=config):
-            with patch("scripts.export_channels.fetch_guild_channels") as mock_fetch:
-                # Return 3 channels: 2 will pass filter, 1 will be excluded
-                mock_fetch.return_value = (
-                    [
-                        {"name": "general", "id": "111"},
-                        {"name": "announcements", "id": "222"},
-                        {"name": "private-chat", "id": "333"},
-                    ],
-                    {},
-                )
+        with fixed_months("2025-12", "2026-02"):
+            with patch("scripts.export_channels.load_config", return_value=config):
+                with patch("scripts.export_channels.fetch_guild_channels") as mock_fetch:
+                    mock_fetch.return_value = (
+                        [
+                            {"name": "general", "id": "111"},
+                            {"name": "announcements", "id": "222"},
+                            {"name": "private-chat", "id": "333"},
+                        ],
+                        {},
+                    )
 
-                with patch("scripts.export_channels.StateManager") as mock_state_class:
-                    mock_state = Mock()
-                    mock_state_class.return_value = mock_state
-                    mock_state.load.return_value = {}
-                    mock_state.get_channel_state.return_value = None
+                    with patch("scripts.export_channels.StateManager") as mock_state_class:
+                        mock_state = Mock()
+                        mock_state_class.return_value = mock_state
+                        mock_state.load.return_value = {}
+                        mock_state.get_channel_state.return_value = None
 
-                    with patch("scripts.export_channels.run_export") as mock_run:
-                        mock_run.return_value = (True, "Success")
+                        with patch("scripts.export_channels.run_export") as mock_run:
+                            mock_run.return_value = (True, "Success")
 
-                        with patch("scripts.export_channels.Path"):
-                            summary = export_all_channels()
+                            with patch("scripts.export_channels.Path"):
+                                summary = export_all_channels()
 
-                            # Should export general and announcements, skip private-chat
-                            # 2 channels * 1 format = 2 exports
-                            assert summary["total_exports"] == EXPECTED_EXPORTS_TWO_CHANNELS
+                                # 2 channels × 3 months × 1 format = 6 exports
+                                assert summary["total_exports"] == 6
 
         del os.environ["DISCORD_BOT_TOKEN"]
 
     def test_export_all_channels_exports_all_formats(self) -> None:
-        """Test that all configured formats are exported."""
+        """All configured formats are exported for each month of each channel.
+
+        Per-month iteration: 3 months × 4 formats = 12 exports for one channel.
+        """
         os.environ["DISCORD_BOT_TOKEN"] = "test_token"
 
         config = {
@@ -260,29 +287,34 @@ commit_author = "Test Bot"
             "github": {},
         }
 
-        with patch("scripts.export_channels.load_config", return_value=config):
-            with patch("scripts.export_channels.fetch_guild_channels") as mock_fetch:
-                mock_fetch.return_value = ([{"name": "general", "id": "123"}], {})
+        with fixed_months("2025-12", "2026-02"):
+            with patch("scripts.export_channels.load_config", return_value=config):
+                with patch("scripts.export_channels.fetch_guild_channels") as mock_fetch:
+                    mock_fetch.return_value = ([{"name": "general", "id": "123"}], {})
 
-                with patch("scripts.export_channels.StateManager") as mock_state_class:
-                    mock_state = Mock()
-                    mock_state_class.return_value = mock_state
-                    mock_state.load.return_value = {}
-                    mock_state.get_channel_state.return_value = None
+                    with patch("scripts.export_channels.StateManager") as mock_state_class:
+                        mock_state = Mock()
+                        mock_state_class.return_value = mock_state
+                        mock_state.load.return_value = {}
+                        mock_state.get_channel_state.return_value = None
 
-                    with patch("scripts.export_channels.run_export") as mock_run:
-                        mock_run.return_value = (True, "Success")
+                        with patch("scripts.export_channels.run_export") as mock_run:
+                            mock_run.return_value = (True, "Success")
 
-                        with patch("scripts.export_channels.Path"):
-                            summary = export_all_channels()
+                            with patch("scripts.export_channels.Path"):
+                                summary = export_all_channels()
 
-                            # 1 channel * 4 formats = 4 exports
-                            assert summary["total_exports"] == EXPECTED_EXPORTS_FOUR_FORMATS
+                                # 1 channel × 3 months × 4 formats = 12 exports
+                                assert summary["total_exports"] == 12
 
         del os.environ["DISCORD_BOT_TOKEN"]
 
-    def test_export_all_channels_uses_incremental_state(self) -> None:
-        """Test that incremental exports use state for --after timestamp."""
+    def test_export_all_channels_passes_month_bounds(self) -> None:
+        """Per-month exports pass --after/--before that bracket each calendar month.
+
+        Replaces the old "uses --after from state" test — state.json no longer
+        drives incremental bounds; calendar month boundaries do.
+        """
         os.environ["DISCORD_BOT_TOKEN"] = "test_token"
 
         config = {
@@ -299,32 +331,44 @@ commit_author = "Test Bot"
             "github": {},
         }
 
-        with patch("scripts.export_channels.load_config", return_value=config):
-            with patch("scripts.export_channels.fetch_guild_channels") as mock_fetch:
-                mock_fetch.return_value = ([{"name": "general", "id": "123"}], {})
+        with fixed_months("2026-01", "2026-02"):
+            with patch("scripts.export_channels.load_config", return_value=config):
+                with patch("scripts.export_channels.fetch_guild_channels") as mock_fetch:
+                    mock_fetch.return_value = ([{"name": "general", "id": "123"}], {})
 
-                with patch("scripts.export_channels.StateManager") as mock_state_class:
-                    mock_state = Mock()
-                    mock_state_class.return_value = mock_state
-                    mock_state.load.return_value = {}
-                    mock_state.get_channel_state.return_value = {
-                        "last_export": "2025-01-15T10:00:00Z",
-                        "last_message_id": "999",
-                    }
+                    with patch("scripts.export_channels.StateManager") as mock_state_class:
+                        mock_state = Mock()
+                        mock_state_class.return_value = mock_state
+                        mock_state.load.return_value = {}
 
-                    with patch("scripts.export_channels.format_export_command") as mock_format:
-                        mock_format.return_value = ["test", "command"]
+                        with patch("scripts.export_channels.format_export_command") as mock_format:
+                            mock_format.return_value = ["test", "command"]
 
-                        with patch("scripts.export_channels.run_export") as mock_run:
-                            mock_run.return_value = (True, "Success")
+                            with patch("scripts.export_channels.run_export") as mock_run:
+                                mock_run.return_value = (True, "Success")
 
-                            with patch("scripts.export_channels.Path"):
-                                export_all_channels()
+                                with patch("scripts.export_channels.Path"):
+                                    export_all_channels()
 
-                                # Should call format_export_command with after_timestamp
-                                mock_format.assert_called_once()
-                                call_kwargs = mock_format.call_args
-                                assert call_kwargs[1]["after_timestamp"] == "2025-01-15T10:00:00Z"
+                                    # Two months, one format = two calls
+                                    assert mock_format.call_count == 2
+
+                                    # January call uses both --after and --before
+                                    jan_call = mock_format.call_args_list[0]
+                                    assert jan_call.kwargs["after_timestamp"].startswith(
+                                        "2025-12-31"
+                                    )
+                                    assert jan_call.kwargs["before_timestamp"].startswith(
+                                        "2026-02-01"
+                                    )
+
+                                    # February (current month) omits --before so it
+                                    # captures all new messages up to "now".
+                                    feb_call = mock_format.call_args_list[1]
+                                    assert feb_call.kwargs["after_timestamp"].startswith(
+                                        "2026-01-31"
+                                    )
+                                    assert feb_call.kwargs["before_timestamp"] is None
 
         del os.environ["DISCORD_BOT_TOKEN"]
 
@@ -370,7 +414,7 @@ commit_author = "Test Bot"
         del os.environ["DISCORD_BOT_TOKEN"]
 
     def test_export_all_channels_tracks_failures(self) -> None:
-        """Test that failed exports are tracked in summary."""
+        """Failed format exports are reflected in the summary's failure count."""
         os.environ["DISCORD_BOT_TOKEN"] = "test_token"
 
         config = {
@@ -387,31 +431,34 @@ commit_author = "Test Bot"
             "github": {},
         }
 
-        with patch("scripts.export_channels.load_config", return_value=config):
-            with patch("scripts.export_channels.fetch_guild_channels") as mock_fetch:
-                mock_fetch.return_value = ([{"name": "general", "id": "123"}], {})
+        # Pin to a single month so we have exactly 2 calls (one per format).
+        with fixed_months("2026-02", "2026-02"):
+            with patch("scripts.export_channels.load_config", return_value=config):
+                with patch("scripts.export_channels.fetch_guild_channels") as mock_fetch:
+                    mock_fetch.return_value = ([{"name": "general", "id": "123"}], {})
 
-                with patch("scripts.export_channels.StateManager") as mock_state_class:
-                    mock_state = Mock()
-                    mock_state_class.return_value = mock_state
-                    mock_state.load.return_value = {}
-                    mock_state.get_channel_state.return_value = None
+                    with patch("scripts.export_channels.StateManager") as mock_state_class:
+                        mock_state = Mock()
+                        mock_state_class.return_value = mock_state
+                        mock_state.load.return_value = {}
+                        mock_state.get_channel_state.return_value = None
 
-                    with patch("scripts.export_channels.run_export") as mock_run:
-                        # First export succeeds, second fails
-                        mock_run.side_effect = [
-                            (True, "Success"),
-                            (False, "Error: Network timeout"),
-                        ]
+                        with patch("scripts.export_channels.run_export") as mock_run:
+                            # html succeeds, txt fails
+                            mock_run.side_effect = [
+                                (True, "Success"),
+                                (False, "Error: Network timeout"),
+                            ]
 
-                        with patch("scripts.export_channels.Path"):
-                            summary = export_all_channels()
+                            with patch("scripts.export_channels.Path"):
+                                summary = export_all_channels()
 
-                            assert summary["total_exports"] == 1
-                            assert summary["channels_failed"] == 1
-                            assert len(summary["errors"]) == 1
-                            assert summary["errors"][0]["channel"] == "general"
-                            assert summary["errors"][0]["format"] == "txt"
+                                assert summary["total_exports"] == 1
+                                assert summary["channels_failed"] == 1
+                                assert len(summary["errors"]) == 1
+                                assert summary["errors"][0]["channel"] == "general"
+                                # Errors now record the failing month/format combo
+                                assert "txt" in summary["errors"][0]["format"]
 
         del os.environ["DISCORD_BOT_TOKEN"]
 
@@ -464,7 +511,11 @@ commit_author = "Test Bot"
         del os.environ["DISCORD_BOT_TOKEN"]
 
     def test_export_all_channels_handles_forums(self) -> None:
-        """Test that forum channels create directories."""
+        """Forum parents are skipped; threads are exported per-month.
+
+        With 3 months pinned and 2 threads × 1 format, total = 6 exports.
+        The forum parent itself produces zero exports — only its threads do.
+        """
         os.environ["DISCORD_BOT_TOKEN"] = "test_token"
 
         config = {
@@ -482,36 +533,33 @@ commit_author = "Test Bot"
             "github": {},
         }
 
-        with patch("scripts.export_channels.load_config", return_value=config):
-            with patch("scripts.export_channels.fetch_guild_channels") as mock_fetch:
-                # Return forum channel and threads
-                mock_fetch.return_value = (
-                    [
-                        {"name": "questions", "id": "999", "parent_id": None},
-                        {"name": "How to start?", "id": "111", "parent_id": "questions"},
-                        {"name": "Help needed", "id": "222", "parent_id": "questions"},
-                    ],
-                    {},
-                )
+        with fixed_months("2025-12", "2026-02"):
+            with patch("scripts.export_channels.load_config", return_value=config):
+                with patch("scripts.export_channels.fetch_guild_channels") as mock_fetch:
+                    mock_fetch.return_value = (
+                        [
+                            {"name": "questions", "id": "999", "parent_id": None},
+                            {"name": "How to start?", "id": "111", "parent_id": "questions"},
+                            {"name": "Help needed", "id": "222", "parent_id": "questions"},
+                        ],
+                        {},
+                    )
 
-                with patch("scripts.export_channels.StateManager") as mock_state_class:
-                    mock_state = Mock()
-                    mock_state_class.return_value = mock_state
-                    mock_state.load.return_value = {}
-                    mock_state.get_channel_state.return_value = None
-                    mock_state.get_thread_state.return_value = None
+                    with patch("scripts.export_channels.StateManager") as mock_state_class:
+                        mock_state = Mock()
+                        mock_state_class.return_value = mock_state
+                        mock_state.load.return_value = {}
+                        mock_state.get_channel_state.return_value = None
+                        mock_state.get_thread_state.return_value = None
 
-                    with patch("scripts.export_channels.run_export") as mock_run:
-                        mock_run.return_value = (True, "Success")
+                        with patch("scripts.export_channels.run_export") as mock_run:
+                            mock_run.return_value = (True, "Success")
 
-                        with patch("scripts.export_channels.Path"):
-                            summary = export_all_channels()
+                            with patch("scripts.export_channels.Path"):
+                                summary = export_all_channels()
 
-                            # Should export 2 threads (not the forum parent)
-                            assert summary["total_exports"] == EXPECTED_EXPORTS_TWO_CHANNELS
-
-                            # Should create questions directory
-                            # Check mkdir was called for forum directory
+                                # 2 threads × 3 months × 1 format = 6 exports
+                                assert summary["total_exports"] == 6
 
         del os.environ["DISCORD_BOT_TOKEN"]
 
@@ -580,50 +628,26 @@ commit_author = "Test Bot"
 
         del os.environ["DISCORD_BOT_TOKEN"]
 
-    def test_export_all_channels_uses_incremental_for_threads(self) -> None:
-        """Test that thread exports use --after for incremental updates."""
-        import json
-
+    def test_export_all_channels_threads_use_month_bounds(self) -> None:
+        """Thread exports bracket each calendar month, same as channels."""
         os.environ["DISCORD_BOT_TOKEN"] = "test_token"
 
-        # Create state with existing thread
-        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
-            state_data = {
+        config = {
+            "site": {},
+            "servers": {
                 "test-server": {
-                    "forums": {
-                        "questions": {
-                            "threads": {
-                                "111": {
-                                    "name": "how-to-start",
-                                    "title": "How to start?",
-                                    "last_export": "2025-11-14T10:00:00Z",
-                                    "last_message_id": "888",
-                                    "archived": False,
-                                }
-                            }
-                        }
-                    }
+                    "name": "Test Server",
+                    "guild_id": "123456789",
+                    "include_channels": ["*"],
+                    "exclude_channels": [],
+                    "forum_channels": ["questions"],
                 }
-            }
-            json.dump(state_data, f)
-            state_file = f.name
+            },
+            "export": {"formats": ["html"], "include_threads": "all"},
+            "github": {},
+        }
 
-        try:
-            config = {
-                "site": {},
-                "servers": {
-                    "test-server": {
-                        "name": "Test Server",
-                        "guild_id": "123456789",
-                        "include_channels": ["*"],
-                        "exclude_channels": [],
-                        "forum_channels": ["questions"],
-                    }
-                },
-                "export": {"formats": ["html"], "include_threads": "all"},
-                "github": {},
-            }
-
+        with fixed_months("2026-02", "2026-02"):
             with patch("scripts.export_channels.load_config", return_value=config):
                 with patch("scripts.export_channels.StateManager") as mock_state_class:
                     with patch("scripts.export_channels.fetch_guild_channels") as mock_fetch:
@@ -631,11 +655,8 @@ commit_author = "Test Bot"
                             with patch(
                                 "scripts.export_channels.format_export_command"
                             ) as mock_format:
-                                # Setup state manager mock
                                 mock_state = Mock()
-                                mock_state.get_thread_state.return_value = state_data[
-                                    "test-server"
-                                ]["forums"]["questions"]["threads"]["111"]
+                                mock_state.get_thread_state.return_value = None
                                 mock_state.get_channel_state.return_value = None
                                 mock_state_class.return_value = mock_state
 
@@ -651,32 +672,23 @@ commit_author = "Test Bot"
                                     {},
                                 )
 
-                                mock_format.return_value = [
-                                    "test",
-                                    "command",
-                                    "--after",
-                                    "2025-11-14T10:00:00Z",
-                                ]
+                                mock_format.return_value = ["test", "command"]
                                 mock_run.return_value = (True, "")
 
                                 with patch("scripts.export_channels.Path"):
-                                    # Run export
                                     export_all_channels()
 
-                                    # Verify --after was used
-                                    # Check format_export_command called with timestamp
-                                    calls = mock_format.call_args_list
-                                    assert len(calls) > 0
-                                    # Find the call for the thread
-                                    thread_call = None
-                                    for call in calls:
-                                        if call[1].get("channel_id") == "111":
-                                            thread_call = call
-                                            break
-                                    assert thread_call is not None
-                                    assert (
-                                        thread_call[1]["after_timestamp"] == "2025-11-14T10:00:00Z"
+                                    thread_calls = [
+                                        c
+                                        for c in mock_format.call_args_list
+                                        if c.kwargs.get("channel_id") == "111"
+                                    ]
+                                    assert len(thread_calls) == 1
+                                    # Current month bracket: --after just before
+                                    # 2026-02-01, --before is None (capture up to "now").
+                                    assert thread_calls[0].kwargs["after_timestamp"].startswith(
+                                        "2026-01-31"
                                     )
-        finally:
-            Path(state_file).unlink()
-            del os.environ["DISCORD_BOT_TOKEN"]
+                                    assert thread_calls[0].kwargs["before_timestamp"] is None
+
+        del os.environ["DISCORD_BOT_TOKEN"]

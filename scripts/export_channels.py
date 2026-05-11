@@ -12,6 +12,13 @@ from typing import Any
 
 from scripts.channel_classifier import ChannelType, classify_channel, sanitize_thread_name
 from scripts.config import load_config
+from scripts.months import (
+    current_month_utc,
+    month_bounds,
+    month_range_iter,
+    scan_completed_months,
+    snowflake_to_month,
+)
 from scripts.state import StateManager, ThreadInfo
 
 # Constants
@@ -55,17 +62,16 @@ def _determine_export_location(
     server_dir: Path,
     channel_path_map: dict[str, str],
 ) -> tuple[str, Path, str]:
-    """Determine export location and name based on channel type.
+    """Determine the per-channel export directory and the safe name.
 
-    Args:
-        channel: Channel data dict
-        channel_type: Type of channel
-        channel_id: Channel ID
-        server_dir: Server export directory
-        channel_path_map: Dict mapping channel names to their full hierarchical paths
+    Returns a tuple of (safe_name, channel_export_dir, forum_name):
 
-    Returns:
-        Tuple of (safe_name, export_dir, forum_name)
+      - `safe_name`: filesystem-safe identifier for this channel/thread
+      - `channel_export_dir`: the directory inside `exports/` where this
+        channel's per-month files (`{YYYY-MM}.html` etc.) will be written.
+        For regular channels this is `exports/server/{channel}/`; for
+        threads it is `exports/server/{forum_path}/{thread}/`.
+      - `forum_name`: the parent forum's full path for threads, or ""
     """
     if channel_type == ChannelType.THREAD:
         forum_name_raw = channel.get("parent_id")
@@ -75,89 +81,110 @@ def _determine_export_location(
         # If forum is "cob" inside "🏗️ - Designing", path_map will have "cob" -> "🏗️ - Designing/cob"
         forum_full_path = channel_path_map.get(forum_name_simple, forum_name_simple)
 
-        thread_dir = server_dir / forum_full_path
-        thread_dir.mkdir(parents=True, exist_ok=True)
-
-        # Sanitize thread name for filename
         channel_name_raw = channel.get("name")
         safe_name = sanitize_thread_name(
             channel_name_raw if channel_name_raw else "unknown", channel_id
         )
-        # Return forum_full_path as the forum_name for proper state tracking
-        return safe_name, thread_dir, forum_full_path
+        # Per-month files go into exports/server/forum/thread-name/
+        thread_export_dir = server_dir / forum_full_path / safe_name
+        thread_export_dir.mkdir(parents=True, exist_ok=True)
+        return safe_name, thread_export_dir, forum_full_path
     else:
         # Regular channel
         channel_name_raw = channel.get("name")
         channel_name = channel_name_raw if channel_name_raw else "unknown"
-        return channel_name, server_dir, ""
+        # Per-month files go into exports/server/channel-name/
+        channel_export_dir = server_dir / channel_name
+        channel_export_dir.mkdir(parents=True, exist_ok=True)
+        return channel_name, channel_export_dir, ""
 
 
-def _get_last_export_timestamp(
-    context: ChannelExportContext,
+def _public_channel_dir(
+    public_dir: Path,
+    server_key: str,
     channel_type: ChannelType,
-    channel_name: str,
-    channel_id: str,
+    safe_name: str,
     forum_name: str,
-) -> str | None:
-    """Get last export timestamp for incremental updates.
+) -> Path:
+    """Return the published location for a channel, where past months live.
 
-    Args:
-        context: Export context with state manager
-        channel_type: Type of channel
-        channel_name: Channel name
-        channel_id: Channel ID
-        forum_name: Forum name (for threads)
-
-    Returns:
-        Last export timestamp or None
+    Used to scan for already-exported months so we don't re-export them.
     """
     if channel_type == ChannelType.THREAD:
-        thread_state = context.state_manager.get_thread_state(
-            context.server_key, forum_name, channel_id
-        )
-        return thread_state["last_export"] if thread_state else None
-    else:
-        channel_state = context.state_manager.get_channel_state(context.server_key, channel_name)
-        return channel_state["last_export"] if channel_state else None
+        return public_dir / server_key / forum_name / safe_name
+    return public_dir / server_key / safe_name
 
 
-def _export_channel_formats(
+def _determine_months_to_export(
+    channel_id: str,
+    public_channel_dir: Path,
+    current_month: str,
+) -> list[str]:
+    """Decide which months need to be exported for a channel.
+
+    Returns months in chronological order. The strategy is:
+
+      - The earliest possible month for any messages is bounded by the
+        channel's creation time, which we decode from its snowflake.
+        Months earlier than this can never contain messages.
+      - Past months that already have a non-empty HTML export in `public_dir`
+        are considered complete and skipped (they won't change — Discord
+        doesn't backdate messages).
+      - The current month is always included, since new messages keep arriving.
+
+    On a fresh install or after a long outage this yields every month from
+    channel creation through today; on a steady-state hourly run it yields
+    just the current month.
+    """
+    earliest = snowflake_to_month(channel_id)
+    completed = scan_completed_months(public_channel_dir)
+    months: list[str] = []
+    for month in month_range_iter(earliest, current_month):
+        if month == current_month or month not in completed:
+            months.append(month)
+    return months
+
+
+FORMAT_MAP = {"html": "HtmlDark", "txt": "PlainText", "json": "Json", "csv": "Csv"}
+
+
+def _export_one_month(
     context: ChannelExportContext,
     channel_info: ChannelInfo,
-    export_dir: Path,
-    export_name: str,
-    after_timestamp: str | None,
+    channel_export_dir: Path,
+    month: str,
+    is_current_month: bool,
 ) -> tuple[int, int, list[dict[str, str]]]:
-    """Export channel in all configured formats.
+    """Export a single month of a channel in all configured formats.
 
-    Args:
-        context: Export context with config and token
-        channel_info: Channel information
-        export_dir: Directory for exports
-        export_name: Base name for export files
-        after_timestamp: Timestamp for incremental export
+    The month is bracketed by --after / --before so DCE returns exactly
+    the messages from this calendar month UTC. For the current month
+    --before is omitted so newly-arrived messages are included.
 
-    Returns:
-        Tuple of (exports_completed, failures, errors)
+    Output paths inside `channel_export_dir`:
+      - `{month}.html`, `{month}.txt`, `{month}.json`, `{month}.csv`
+      - `{month}_media/` for downloaded assets
+
+    Returns (exports_completed, failures, errors).
     """
-    format_map = {"html": "HtmlDark", "txt": "PlainText", "json": "Json", "csv": "Csv"}
+    after, before = month_bounds(month)
+    if is_current_month:
+        before = None  # include up to "now", not just the end of the month
+
+    media_dir_path = channel_export_dir / f"{month}_media"
+    download_media = context.config["export"].get("download_media", False)
 
     exports_completed = 0
     failures = 0
     errors: list[dict[str, str]] = []
 
+    print(f"    [{month}]")
     for fmt in context.config["export"]["formats"]:
-        output_path = export_dir / f"{export_name}.{fmt}"
-
-        # Create media config from export settings
-        # Store media alongside each channel: export_dir/channel_name_media/
-        media_dir = None
-        if context.config["export"].get("download_media", False):
-            media_dir = str(export_dir / f"{export_name}_media")
+        output_path = channel_export_dir / f"{month}.{fmt}"
 
         media_config = MediaConfig(
-            download_media=context.config["export"].get("download_media", False),
-            media_dir=media_dir,
+            download_media=download_media,
+            media_dir=str(media_dir_path) if download_media else None,
             reuse_media=context.config["export"].get("reuse_media", False),
         )
 
@@ -165,8 +192,9 @@ def _export_channel_formats(
             token=context.token,
             channel_id=channel_info.channel_id,
             output_path=str(output_path),
-            format_type=format_map[fmt],
-            after_timestamp=after_timestamp,
+            format_type=FORMAT_MAP[fmt],
+            after_timestamp=after,
+            before_timestamp=before,
             media_config=media_config,
         )
 
@@ -174,13 +202,58 @@ def _export_channel_formats(
 
         if success:
             exports_completed += 1
-            print(f"    ✓ {fmt.upper()}")
+            print(f"      ✓ {fmt.upper()}")
         else:
             failures += 1
-            errors.append({"channel": channel_info.channel_name, "format": fmt, "error": output})
-            print(f"    ✗ {fmt.upper()} failed")
+            errors.append(
+                {
+                    "channel": channel_info.channel_name,
+                    "format": f"{month}/{fmt}",
+                    "error": output,
+                }
+            )
+            print(f"      ✗ {fmt.upper()} failed")
+
+    # If no messages exist for this past month, DCE will have written empty
+    # outputs that we don't want to keep — they'd just clutter public/. We
+    # detect this via the JSON's messageCount and clean up the month.
+    if exports_completed > 0 and not is_current_month:
+        _discard_if_empty_month(channel_export_dir, month)
 
     return exports_completed, failures, errors
+
+
+def _discard_if_empty_month(channel_export_dir: Path, month: str) -> None:
+    """Delete a month's output files if the JSON shows zero messages.
+
+    Past months with no messages are noise. The current month is always
+    kept (the channel might be silent right now but get a message tomorrow).
+    """
+    import json as _json
+
+    json_path = channel_export_dir / f"{month}.json"
+    if not json_path.exists():
+        return
+    try:
+        with open(json_path, encoding="utf-8") as f:
+            data = _json.load(f)
+    except (OSError, _json.JSONDecodeError):
+        return
+    messages = data.get("messages") or []
+    if messages:
+        return
+
+    # Remove all formats and the media directory for this month
+    for fmt in ("html", "txt", "json", "csv"):
+        f_path = channel_export_dir / f"{month}.{fmt}"
+        if f_path.exists():
+            f_path.unlink()
+    media_dir = channel_export_dir / f"{month}_media"
+    if media_dir.exists() and media_dir.is_dir():
+        import shutil as _shutil
+
+        _shutil.rmtree(media_dir)
+    print(f"      (empty — discarded {month})")
 
 
 def _update_channel_state_after_export(
@@ -224,19 +297,16 @@ def _process_single_channel(  # noqa: PLR0913  # Orchestration function needs al
     server_dir: Path,
     filters: tuple[list[str], list[str]],  # (include_patterns, exclude_patterns)
     channel_path_map: dict[str, str],
+    public_dir: Path,
 ) -> tuple[int, int, int, list[dict[str, str]]]:
-    """Process and export a single channel.
+    """Process and export a single channel, one calendar month at a time.
 
-    Args:
-        context: Export context
-        channel: Channel data
-        channel_type: Type of channel
-        server_dir: Server export directory
-        filters: Tuple of (include_patterns, exclude_patterns) for filtering
-        channel_path_map: Dict mapping channel names to their full hierarchical paths
+    The earliest possible month is derived from the channel snowflake. Past
+    months that already have a non-empty HTML export in `public_dir` are
+    skipped (Discord doesn't backdate messages, so a complete month stays
+    complete). The current month is always re-exported.
 
-    Returns:
-        Tuple of (total_exports, channels_updated, channels_failed, errors)
+    Returns (total_exports, channels_updated, channels_failed, errors).
     """
     include_patterns, exclude_patterns = filters
     channel_name_raw = channel.get("name")
@@ -249,27 +319,26 @@ def _process_single_channel(  # noqa: PLR0913  # Orchestration function needs al
     channel_name: str = channel_name_raw
     channel_id: str = channel_id_raw
 
-    # Skip forum parent channels (only export their threads)
+    # Forum parent channels have no messages of their own — their threads
+    # are exported separately.
     if channel_type == ChannelType.FORUM:
         forum_dir = server_dir / channel_name
         forum_dir.mkdir(exist_ok=True)
         print(f"  Created forum directory: {channel_name}/")
         return 0, 0, 0, []
 
-    # Determine export location based on channel type
-    safe_name, export_dir, forum_name = _determine_export_location(
+    # Determine export location and the matching public/ path
+    safe_name, channel_export_dir, forum_name = _determine_export_location(
         channel, channel_type, channel_id, server_dir, channel_path_map
     )
-    export_name = safe_name
 
-    # Apply include/exclude filters to channel names
+    # Apply include/exclude filters
     if not should_include_channel(channel_name, include_patterns, exclude_patterns):
         print(f"  Skipping {channel_name} (excluded by pattern)")
         return 0, 0, 0, []
 
     print(f"  Exporting #{channel_name}...")
 
-    # Create channel info object
     channel_info = ChannelInfo(
         channel_id=channel_id,
         channel_name=channel_name,
@@ -277,22 +346,44 @@ def _process_single_channel(  # noqa: PLR0913  # Orchestration function needs al
         forum_name=forum_name,
     )
 
-    # Get last export time for incremental updates
-    after_timestamp = _get_last_export_timestamp(
-        context, channel_type, channel_name, channel_id, forum_name
+    # Discover which months still need exporting
+    public_channel_dir = _public_channel_dir(
+        public_dir, context.server_key, channel_type, safe_name, forum_name
     )
+    current_month = current_month_utc()
+    try:
+        months_to_export = _determine_months_to_export(
+            channel_id, public_channel_dir, current_month
+        )
+    except ValueError as e:
+        print(f"    ERROR computing months: {e}")
+        return 0, 0, 1, [{"channel": channel_name, "format": "N/A", "error": str(e)}]
 
-    # Export all configured formats
-    exports_completed, failures, errors = _export_channel_formats(
-        context, channel_info, export_dir, export_name, after_timestamp
-    )
+    if not months_to_export:
+        print("    (no months need export)")
+        return 0, 1, 0, []
 
-    # Update state if no failures occurred
-    if failures == 0:
-        _update_channel_state_after_export(context, channel_type, channel_info)
-        return exports_completed, 1, 0, errors
-    else:
-        return exports_completed, 0, failures, errors
+    print(f"    {len(months_to_export)} months to export: {months_to_export[0]}..{months_to_export[-1]}")
+
+    total_exports = 0
+    total_failures = 0
+    all_errors: list[dict[str, str]] = []
+
+    for month in months_to_export:
+        is_current = month == current_month
+        m_exports, m_failures, m_errors = _export_one_month(
+            context, channel_info, channel_export_dir, month, is_current
+        )
+        total_exports += m_exports
+        total_failures += m_failures
+        all_errors.extend(m_errors)
+
+    # Update state with the last-export timestamp for observability
+    _update_channel_state_after_export(context, channel_type, channel_info)
+
+    if total_failures == 0:
+        return total_exports, 1, 0, all_errors
+    return total_exports, 0, total_failures, all_errors
 
 
 def get_bot_token() -> str:
@@ -349,6 +440,7 @@ def format_export_command(  # noqa: PLR0913
     format_type: str,
     after_timestamp: str | None = None,
     media_config: MediaConfig | None = None,
+    before_timestamp: str | None = None,
 ) -> list[str]:
     """Format DiscordChatExporter CLI command.
 
@@ -359,6 +451,8 @@ def format_export_command(  # noqa: PLR0913
         format_type: Export format (HtmlDark, HtmlLight, PlainText, Json, Csv)
         after_timestamp: Optional timestamp for incremental export
         media_config: Media download configuration
+        before_timestamp: Optional upper-bound timestamp; paired with
+            after_timestamp to bracket a single calendar month
 
     Returns:
         Command as list of arguments
@@ -393,6 +487,9 @@ def format_export_command(  # noqa: PLR0913
 
     if after_timestamp:
         cmd.extend(["--after", after_timestamp])
+
+    if before_timestamp:
+        cmd.extend(["--before", before_timestamp])
 
     # Add media download flags if enabled
     if media_config and media_config.download_media:
@@ -543,19 +640,22 @@ def fetch_guild_channels(  # noqa: C901  # Complex parsing of DiscordChatExporte
         raise RuntimeError(f"Channel fetching failed: {str(e)}") from e
 
 
-def export_all_channels() -> dict[str, Any]:
+def export_all_channels(public_dir: Path | None = None) -> dict[str, Any]:
     """Main export orchestration function.
 
     Loads configuration, initializes state manager, and orchestrates
-    export of all channels from all configured servers.
+    per-month exports for all channels from all configured servers.
 
-    Returns:
-        Summary dict with stats:
-            - channels_updated: Number of channels successfully exported
-            - channels_failed: Number of channels that failed export
-            - total_exports: Total number of format exports completed
-            - errors: List of error dicts with channel, format, and error details
+    `public_dir` is consulted to decide which past months are already
+    complete; pass `Path("public")` in production (the GitHub Actions
+    workflow checks out gh-pages into that directory before running this).
+
+    Returns a summary dict with `channels_updated`, `channels_failed`,
+    `total_exports`, and `errors`.
     """
+    if public_dir is None:
+        public_dir = Path("public")
+
     print("Loading configuration...")
     config = load_config()
 
@@ -574,11 +674,11 @@ def export_all_channels() -> dict[str, Any]:
     exports_dir = Path("exports")
     exports_dir.mkdir(exist_ok=True)
 
-    # Media downloads enabled - assets stored per-channel in {channel_name}_media/
+    # Media downloads enabled - assets stored per-channel/per-month
     if config["export"].get("download_media", False):
-        print("Media downloads enabled - assets will be stored per-channel")
+        print("Media downloads enabled - assets will be stored per-channel-per-month")
 
-    print("\nStarting exports...")
+    print(f"\nStarting exports (current month: {current_month_utc()})...")
 
     for server_key, server_config in config["servers"].items():
         print(f"\nProcessing server: {server_config['name']}")
@@ -632,7 +732,13 @@ def export_all_channels() -> dict[str, Any]:
             channel_type = channel_classifications[chan_id]
 
             exports, updated, failed, errors = _process_single_channel(
-                context, channel, channel_type, server_dir, filters, channel_path_map
+                context,
+                channel,
+                channel_type,
+                server_dir,
+                filters,
+                channel_path_map,
+                public_dir,
             )
 
             summary["total_exports"] += exports
@@ -669,7 +775,16 @@ def main() -> None:
                 for line in error_lines:
                     print(f"    {line}")
 
-        sys.exit(0 if summary["channels_failed"] == 0 else 1)
+        # Write a machine-readable summary so the workflow can decide what to do
+        _write_summary_file(summary)
+
+        # Exit code policy: exit 0 if we made any progress (including a clean
+        # "nothing to do" run), so the workflow can proceed to organize/deploy
+        # what we have. Exit 1 only on catastrophic failure where nothing
+        # succeeded and we hit at least one error — that signals "drop tools
+        # and investigate."
+        catastrophic = summary["channels_updated"] == 0 and summary["channels_failed"] > 0
+        sys.exit(1 if catastrophic else 0)
 
     except Exception as e:
         print(f"\nFATAL ERROR: {e}")
@@ -677,6 +792,28 @@ def main() -> None:
 
         traceback.print_exc()
         sys.exit(1)
+
+
+def _write_summary_file(summary: dict[str, Any]) -> None:
+    """Write a JSON summary of the run for downstream workflow steps to read."""
+    import json as _json
+
+    summary_path = Path("export-summary.json")
+    try:
+        with open(summary_path, "w", encoding="utf-8") as f:
+            _json.dump(
+                {
+                    "channels_updated": summary["channels_updated"],
+                    "channels_failed": summary["channels_failed"],
+                    "total_exports": summary["total_exports"],
+                    "error_count": len(summary["errors"]),
+                    "timestamp": datetime.now(UTC).isoformat(),
+                },
+                f,
+                indent=2,
+            )
+    except OSError as e:
+        print(f"WARNING: could not write export-summary.json: {e}")
 
 
 if __name__ == "__main__":

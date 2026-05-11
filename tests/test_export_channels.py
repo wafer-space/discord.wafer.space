@@ -179,3 +179,34 @@ def test_format_export_command_without_media() -> None:
 
     assert "--media" not in cmd
     assert "--media-dir" not in cmd
+
+
+def test_format_export_command_with_before() -> None:
+    """Bracketing a month requires --before so DCE stops at month end."""
+    cmd = format_export_command(
+        token="test_token",
+        channel_id="123456",
+        output_path="exports/test.html",
+        format_type="HtmlDark",
+        after_timestamp="2026-01-31T23:59:59.999999+00:00",
+        before_timestamp="2026-03-01T00:00:00+00:00",
+    )
+    assert "--after" in cmd
+    assert "2026-01-31T23:59:59.999999+00:00" in cmd
+    assert "--before" in cmd
+    assert "2026-03-01T00:00:00+00:00" in cmd
+
+
+def test_format_export_command_before_only() -> None:
+    """An export with only --before (no --after) is valid (e.g., 'find first message')."""
+    cmd = format_export_command(
+        token="test_token",
+        channel_id="123456",
+        output_path="exports/test.html",
+        format_type="HtmlDark",
+        after_timestamp=None,
+        before_timestamp="2025-06-01T00:00:00+00:00",
+    )
+    assert "--after" not in cmd
+    assert "--before" in cmd
+    assert "2025-06-01T00:00:00+00:00" in cmd
