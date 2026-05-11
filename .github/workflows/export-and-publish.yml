@@ -228,14 +228,26 @@ jobs:
           echo "Muffet completed with exit code: $MUFFET_EXIT"
           echo "========================================="
 
-          # Count lines / 404s. grep -c exits 1 when there are zero matches,
-          # which would abort under set -e — wrap each in a small helper.
-          count_lines() { wc -l < "$1"; }
-          count_pattern() { grep -cE "$1" "$2" || echo 0; }
+          # Count lines / 404s. `grep -c` outputs the count and then exits
+          # non-zero when there are zero matches. The naive `|| echo 0` pattern
+          # double-echoes "0" on no-match because grep already printed "0"
+          # before exiting — that breaks the `key=value` format expected by
+          # $GITHUB_OUTPUT. Capture into a variable and override on failure:
+          count_lines() { wc -l < "$1" | tr -d ' '; }
+          count_pattern() {
+              local n
+              n=$(grep -cE "$1" "$2") || n=0
+              printf '%s' "$n"
+          }
+          count_pipe_pattern() {
+              local n
+              n=$(grep -E "$1" "$2" | grep -c "$3") || n=0
+              printf '%s' "$n"
+          }
 
           TOTAL_URLS=$(count_lines muffet-report.txt)
           TOTAL_404=$(count_pattern $'^\t404\t' muffet-report.txt)
-          MEDIA_404=$(grep -E $'^\t404\t' muffet-report.txt | grep -c '_media/' || echo 0)
+          MEDIA_404=$(count_pipe_pattern $'^\t404\t' muffet-report.txt '_media/')
 
           echo "total_urls=$TOTAL_URLS" >> $GITHUB_OUTPUT
           echo "total_404=$TOTAL_404" >> $GITHUB_OUTPUT
