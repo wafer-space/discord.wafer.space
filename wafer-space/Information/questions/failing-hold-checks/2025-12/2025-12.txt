@@ -1,0 +1,122 @@
+==============================================================
+Guild: wafer.space Community
+Channel: Information / questions / Failing Hold Checks
+After: 11/30/2025 23:59
+Before: 01/01/2026 00:00
+==============================================================
+
+[12/03/2025 19:56] trev5514
+Has anyone been able to pass timing for hold checks on an 11MHz+ design? I have done everything I could think of, yet the corners still end up failing. The path is always pad -> reg nothing else.
+
+I've tried these settings:
+
+PL_RESIZER_HOLD_SLACK_MARGIN from 0.1, 0.3, 0.5 even 0.7 and none seem to make a difference (I do get less hold errors but all still fail)
+I've tried PL_RESIZER_ALLOW_SETUP_VIOS
+
+and
+
+set_input_delay -min 0, .5, 1, 1.5
+
+Any ideas?
+
+
+[12/03/2025 20:08] mole99
+Perhaps an unbalanced clock tree? You can view the clock tree in OpenROAD GUI.
+
+
+[12/03/2025 20:12] ravenslofty
+sure; I've passed hold checks on a 60MHz design :p
+
+
+[12/03/2025 20:12] ravenslofty
+I do often need to ECO some hold buffers in though
+
+
+[12/03/2025 20:18] trev5514
+With the exception of the right spot which I'll look into it looks very balanced.
+
+{Attachments}
+2025-12_media/Screenshot_2025-12-03_at_3.17.55_PM-42947.png
+
+
+[12/03/2025 20:19] trev5514
+Do you manually place them in? Did you change your input/output delays or do you use the templates default 0 for min?
+
+
+[12/03/2025 20:21] ravenslofty
+read `54-openroad-stapostpnr/summary.rpt` to find the failing corners, then look at `54-openroad-stapostpnr/<corner>/min.rpt` to find the failing paths, and then [follow the docs](https://librelane.readthedocs.io/en/latest/usage/using_ecos.html)
+
+
+[12/03/2025 20:21] ravenslofty
+it's manual in that you have to point the tooling at the cell you want to insert a hold buffer for, but there's no physical placement or such
+
+{Reactions}
+👏 (2)
+
+[12/03/2025 20:25] trev5514
+Thank you, I have been looking at those corners but I didn't know about the ECO step!
+
+
+[12/03/2025 20:26] ravenslofty
+(the downside of having a 60MHz design is that I have basically given up on meeting slow corner setup without major cheating)
+
+
+[12/03/2025 20:27] trev5514
+My original target was 90MHz and now I'm just trying to get any passing. I'm currently failing 10MHz...
+
+
+[12/03/2025 20:28] ravenslofty
+are you using the 9-track libraries?
+
+
+[12/03/2025 20:31] trev5514
+Whatever the default one is.
+
+
+[12/03/2025 20:33] ravenslofty
+7-track. Try adding `STD_CELL_LIBRARY: gf180mcu_fd_sc_mcu9t5v0` to your `librelane/config.yaml`
+
+{Reactions}
+👍
+
+[12/03/2025 20:35] trev5514
+I'll give it a go after I try ECO. Surely 10MHz is possible with the 7-track? At this point - what do I know haha!
+
+
+[12/03/2025 20:56] trev5514
+@Lofty Did you ever run into unconnected ECO pins after the eco step?
+
+
+[12/03/2025 21:08] trev5514
+Looks like the disconnected pins are pwr/gnd: eco_buffer_0/VDD, eco_buffer_0/VNW, eco_buffer_0/VPW, and eco_buffer_0/VSS
+
+
+[12/03/2025 21:12] greg.hashtag.9468
+What does your I/O connect to? If it's not actually driven synchronously alongside your clock input. You may be able to further relax the timing.
+With a `input_delay -min 0` you're telling the tools, the external i/o arrives with the clock. So it tries to add 4ns of delay to ensure a leaf in your clock tree.
+
+
+[12/03/2025 21:14] trev5514
+Everything is synchronous with the clock input.
+
+
+[12/03/2025 22:38] polyfractal
+(oof, did not know about ECO or 9T stuff either. probably would have saved a lot of agony fussing with settings 😅 )
+
+
+[12/03/2025 22:39] trev5514
+Maybe, ECO isn't working for me still and neither is the 9T
+
+
+[12/03/2025 22:50] trev5514
+For anyone that runs into the ECO issue:
+
+"+OpenROAD.DetailedRouting": "Odb.InsertECOBuffers"
+ "+Odb.InsertECOBuffers": "OpenROAD.DetailedRouting"
+
+I haven't confirmed yet, but I added the Odb.InsertECOBuffers step but I didn't add the routing after which likely left the ECO buffers unconnected.
+
+
+==============================================================
+Exported 22 message(s)
+==============================================================

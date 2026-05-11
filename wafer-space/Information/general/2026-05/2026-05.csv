@@ -284,10 +284,18 @@ Last night, I wired up the DIP adapter PCB on a breadboard. I just supplied the 
 Nothing fancy, just a quick breadboard build-up and test, but at least we can say that the chip is alive! 🎉
 
 Next, our students can come in and test their own projects. Some motivated students have also decided to build a PCB as part of a seminar work. 🙌 
-I will also try to pour some dies into epoxy cubers. I have already received the materials for it. I just need to find some time for it. 🙂","2026-05_media/breadboard-64F98.mp4,2026-05_media/breadboard1-9A032.jpeg,2026-05_media/breadboard2-B5BD0.jpeg,2026-05_media/breadboard3-FC72B.jpeg","🎉 (3),🥳 (1)"
+I will also try to pour some dies into epoxy cubers. I have already received the materials for it. I just need to find some time for it. 🙂","2026-05_media/breadboard-64F98.mp4,2026-05_media/breadboard1-9A032.jpeg,2026-05_media/breadboard2-B5BD0.jpeg,2026-05_media/breadboard3-FC72B.jpeg","🎉 (4),🥳 (1)"
 "323371864074485771","mole99","2026-05-10T09:38:03.3390000+00:00","Started a thread.","",""
 "169786952432746498","mithro_","2026-05-10T10:27:02.6670000+00:00","That is very cool!","","🙌 (2)"
 "220639106915368960","tholin","2026-05-10T13:31:55.0020000+00:00","I’ve characterized my SCL at the ss_125C_3v00 corner, so all three corners are now done","","👏 (3)"
 "220639106915368960","tholin","2026-05-10T13:33:18.1800000+00:00","I’m thinking of doing a 4th characterization at ss_080C_3v10 since that default slowest corner is kindof extreme. I don’t think anybody here needs their chips to be running at 125°C, so I’d like to offer an alternative maximum constraint of ""just"" 80°C at 3.1V","",""
 "220639106915368960","tholin","2026-05-10T13:34:46.6350000+00:00","So people can aim for a higher fmax at the tradeoff of a more constrained temperature and voltage range that the part is speced for.","",""
 "220639106915368960","tholin","2026-05-10T13:35:36.7170000+00:00","(I’m pretty sure at 125°C you start having other problems, like the epoxy on the COB melting)","",""
+"709384666909507634","egorxe","2026-05-11T10:53:48.2550000+00:00","Hi, @Tholin! Thanks for your amazing work on 3.3V SCL! Do you plan to extend your library? Because if you do, I would like to ask you to add some kind of delay cell to improve hold fixing. Currently I have problems with increasing a hold margin for my Caravel port, which I would like to do for safety. OpenROAD generates thousands of buffer cells but with only ~100ps delay each it has a hard time and takes a huge area.","",""
+"220639106915368960","tholin","2026-05-11T12:40:12.6380000+00:00","I’m currently working on making it easier for people to collaborate to the repo","",""
+"220639106915368960","tholin","2026-05-11T12:40:25.5970000+00:00","I’m just one person, unfortunately","",""
+"323371864074485771","mole99","2026-05-11T12:48:56.6390000+00:00","A delay buffer appears to be simply two buffers in a trench coat, where the first three inverters have a narrow gate width. You might even want to experiment with the gate length for even larger delays.
+
+See here: https://gf180mcu-pdk.readthedocs.io/en/latest/digital/standard_cells/gf180mcu_fd_sc_mcu7t5v0/cells/dlya/gf180mcu_fd_sc_mcu7t5v0__dlya_1.html
+
+Adjusting Tholin's buffers would probably be a good start.","","👍 (1)"

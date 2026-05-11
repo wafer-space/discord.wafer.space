@@ -1,0 +1,40 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"805909190333038612","trev5514","2025-12-03T19:56:38.9350000+00:00","Has anyone been able to pass timing for hold checks on an 11MHz+ design? I have done everything I could think of, yet the corners still end up failing. The path is always pad -> reg nothing else.
+
+I've tried these settings:
+
+PL_RESIZER_HOLD_SLACK_MARGIN from 0.1, 0.3, 0.5 even 0.7 and none seem to make a difference (I do get less hold errors but all still fail)
+I've tried PL_RESIZER_ALLOW_SETUP_VIOS
+
+and
+
+set_input_delay -min 0, .5, 1, 1.5
+
+Any ideas?","",""
+"323371864074485771","mole99","2025-12-03T20:08:12.2100000+00:00","Perhaps an unbalanced clock tree? You can view the clock tree in OpenROAD GUI.","",""
+"1187141985530818611","ravenslofty","2025-12-03T20:12:23.1890000+00:00","sure; I've passed hold checks on a 60MHz design :p","",""
+"1187141985530818611","ravenslofty","2025-12-03T20:12:56.8650000+00:00","I do often need to ECO some hold buffers in though","",""
+"805909190333038612","trev5514","2025-12-03T20:18:41.5080000+00:00","With the exception of the right spot which I'll look into it looks very balanced.","2025-12_media/Screenshot_2025-12-03_at_3.17.55_PM-42947.png",""
+"805909190333038612","trev5514","2025-12-03T20:19:41.1130000+00:00","Do you manually place them in? Did you change your input/output delays or do you use the templates default 0 for min?","",""
+"1187141985530818611","ravenslofty","2025-12-03T20:21:15.3950000+00:00","read `54-openroad-stapostpnr/summary.rpt` to find the failing corners, then look at `54-openroad-stapostpnr/<corner>/min.rpt` to find the failing paths, and then [follow the docs](https://librelane.readthedocs.io/en/latest/usage/using_ecos.html)","",""
+"1187141985530818611","ravenslofty","2025-12-03T20:21:51.8170000+00:00","it's manual in that you have to point the tooling at the cell you want to insert a hold buffer for, but there's no physical placement or such","","👏 (2)"
+"805909190333038612","trev5514","2025-12-03T20:25:12.5000000+00:00","Thank you, I have been looking at those corners but I didn't know about the ECO step!","",""
+"1187141985530818611","ravenslofty","2025-12-03T20:26:11.0420000+00:00","(the downside of having a 60MHz design is that I have basically given up on meeting slow corner setup without major cheating)","",""
+"805909190333038612","trev5514","2025-12-03T20:27:49.4840000+00:00","My original target was 90MHz and now I'm just trying to get any passing. I'm currently failing 10MHz...","",""
+"1187141985530818611","ravenslofty","2025-12-03T20:28:44.4470000+00:00","are you using the 9-track libraries?","",""
+"805909190333038612","trev5514","2025-12-03T20:31:16.9020000+00:00","Whatever the default one is.","",""
+"1187141985530818611","ravenslofty","2025-12-03T20:33:38.5610000+00:00","7-track. Try adding `STD_CELL_LIBRARY: gf180mcu_fd_sc_mcu9t5v0` to your `librelane/config.yaml`","","👍 (1)"
+"805909190333038612","trev5514","2025-12-03T20:35:40.0970000+00:00","I'll give it a go after I try ECO. Surely 10MHz is possible with the 7-track? At this point - what do I know haha!","",""
+"805909190333038612","trev5514","2025-12-03T20:56:08.7450000+00:00","@Lofty Did you ever run into unconnected ECO pins after the eco step?","",""
+"805909190333038612","trev5514","2025-12-03T21:08:11.5410000+00:00","Looks like the disconnected pins are pwr/gnd: eco_buffer_0/VDD, eco_buffer_0/VNW, eco_buffer_0/VPW, and eco_buffer_0/VSS","",""
+"274535015969456128","greg.hashtag.9468","2025-12-03T21:12:55.6890000+00:00","What does your I/O connect to? If it's not actually driven synchronously alongside your clock input. You may be able to further relax the timing.
+With a `input_delay -min 0` you're telling the tools, the external i/o arrives with the clock. So it tries to add 4ns of delay to ensure a leaf in your clock tree.","",""
+"805909190333038612","trev5514","2025-12-03T21:14:30.5420000+00:00","Everything is synchronous with the clock input.","",""
+"384390069412429834","polyfractal","2025-12-03T22:38:44.7530000+00:00","(oof, did not know about ECO or 9T stuff either. probably would have saved a lot of agony fussing with settings 😅 )","",""
+"805909190333038612","trev5514","2025-12-03T22:39:45.0140000+00:00","Maybe, ECO isn't working for me still and neither is the 9T","",""
+"805909190333038612","trev5514","2025-12-03T22:50:33.7860000+00:00","For anyone that runs into the ECO issue:
+
+""+OpenROAD.DetailedRouting"": ""Odb.InsertECOBuffers""
+ ""+Odb.InsertECOBuffers"": ""OpenROAD.DetailedRouting""
+
+I haven't confirmed yet, but I added the Odb.InsertECOBuffers step but I didn't add the routing after which likely left the ECO buffers unconnected.","",""

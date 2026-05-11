@@ -1,0 +1,94 @@
+==============================================================
+Guild: wafer.space Community
+Channel: Information / questions / DRC error Cap
+After: 10/31/2025 23:59
+Before: 12/01/2025 00:00
+==============================================================
+
+[11/29/2025 01:27] enited
+this error does not seem to be solvable. it does not even make sense. if you know the answer, I would appreciate it. It is a DRC error that comes from the cap. apparently it says the bottom plate should be wider than the top ones. and that is what is already there
+
+{Attachments}
+2025-11_media/image-17B9D.png
+
+
+[11/29/2025 01:31] mithro_
+@Leo Moser (mole99) / @Tim Edwards - Any idea?
+
+
+[11/29/2025 01:32] hateemx
+more context: that is the cap, between 5 and 6. just being instantiated results in that error
+
+{Attachments}
+2025-11_media/image-3F8F6.png
+
+
+[11/29/2025 02:25] bailey8889
+@Hateemx Here're the relevant rules from the klayout technology. Sorry if the explanation is too long.
+```
+  mimtm_virtual = fusetop.sized(1.06.um).and(topmin1_metal.interacting(fusetop))
+...
+  # Rule MIMTM.3: Minimum MiM bottom plate overlap of Top plate.
+  logger.info('Executing rule MIMTM.3')
+  mimtm3_l1 = fusetop.enclosed(mimtm_virtual, 0.6.um).polygons(0.001.um)
+  mimtm3_l2 = fusetop.not_inside(mimtm_virtual)
+  mimtm3_l = mimtm3_l1.join(mimtm3_l2)
+  mimtm3_l.output('MIMTM.3', 'MIMTM.3 : Minimum MiM bottom plate overlap of Top plate.')
+```
+When `METAL_LEVEL = 5LM`, `top_min1_metal = metal4`
+
+So `mimtm_virtual` is the intersection of `fusetop` layer grown by 1.06 and `metal4`.
+The first part of the rule, `mimtm3_l1` checks that `metal4` encloses `fusetop` by 0.6um.
+The second part of the rule `mimtm3_l2` checks for `fusetop` outside of `metal4`.
+
+Note that this rule is checking `metal4` and `fusetop` not `metal4` and `metal5`.
+
+
+[11/29/2025 02:30] hateemx
+thanks, the cap is between 5 and 6. and the fusetop is enclosed by 0.6um. I even tried extending metal 5 even more, but no change
+
+
+[11/29/2025 03:21] mithro_
+@Hateemx - It's probably a good idea to commit your changes somewhere and share your GDS for other people to look at.
+
+
+[11/29/2025 03:26] rtimothyedwards_19428
+The problem is that "the cap is between 5 and 6" but this process has only 5 metals.
+
+
+[11/29/2025 03:26] bailey8889
+@Hateemx When you say between 5 and 6, do you mean metal5 and metal6? Is this process `6LM` and not `5LM`?
+
+
+[11/29/2025 03:29] hateemx
+Yes metal 5 and 6. There is no metal 6 yes I thought it is the same as “top metal” but now I get it. I was just using the 2f0F cap and thought it corresponds to that
+
+
+[11/29/2025 03:40] bailey8889
+@Hateemx If it's a pcell, there might be an option to specify the lower and/or upper layer.
+
+
+[11/29/2025 04:17] hateemx
+The Pcell is called mimcap, without specifying capacitance densities. I can use lower metals but i am mot sure how the density works. So what if it is an M4/M5 cap?
+
+{Reactions}
+🤔
+
+[11/29/2025 08:01] mole99
+There's MIM option A and B:
+
+- https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_10_4_1.html
+- https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_10_4_2.html
+
+Afaik this is the stack up we use: https://gf180mcu-pdk.readthedocs.io/en/latest/analog/layout/inter_specs/inter_specs_3_43.html
+
+So the MIM cap should be on top of Metal4.
+
+
+[11/29/2025 15:43] hateemx
+Thanks everyone!
+
+
+==============================================================
+Exported 13 message(s)
+==============================================================

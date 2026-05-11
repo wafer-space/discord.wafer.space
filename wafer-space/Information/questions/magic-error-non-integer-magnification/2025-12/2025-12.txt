@@ -1,0 +1,432 @@
+==============================================================
+Guild: wafer.space Community
+Channel: Information / questions / Magic error: non-integer magnification
+After: 11/30/2025 23:59
+Before: 01/01/2026 00:00
+==============================================================
+
+[12/16/2025 06:18] luighiv
+Hi,
+
+I was running some prechecks for a multiproject chip and it is failing at certain instance throwing this error: 
+```
+Non-integer magnification (0.2) in transform. Rounding to 0.
+```
+Has anyone faced something similiar?, and have an idea how to solve it?
+
+Thanks,
+Luighi
+
+{Attachments}
+2025-12_media/ab738aec-86e8-448c-8614-81bde0995d7c-17D71.png
+
+
+[12/16/2025 16:03] mithro_
+@Leo Moser (mole99) / @Tim Edwards - Any ideas on this error?
+
+
+[12/16/2025 16:04] mole99
+@LuighiV can you post a link to the layout?
+
+
+[12/16/2025 16:11] luighiv
+Hi @Leo Moser (mole99) @Tim 'mithro' Ansell  this is the link https://drive.google.com/file/d/1GgmRQ5E_GbQYZFp6ogSY1hEyT46GxshO/view?usp=sharing
+
+
+[12/16/2025 16:14] luighiv
+In the meantime I was doing  some tests, and  I think I found the root cause of the issue (seemed to have some empty subhierarchies inside A3) I deleted those empty hierarchies and right now I'm running the pre-checks again to confirm if those were the responsible of raising the error
+
+
+[12/16/2025 16:24] mole99
+That's great! However I see some other issues:
+
+
+[12/16/2025 16:24] mole99
+
+
+{Attachments}
+2025-12_media/image-65E3E.png
+
+
+[12/16/2025 16:24] mole99
+The SRAMs from the default template were not correctly deleted. Their PR_bndry layers still exist and their instances can be found in the cell tree.
+
+{Reactions}
+😮
+
+[12/16/2025 16:25] mole99
+The seal ring (guard ring) is missing around the outer padring.
+
+
+[12/16/2025 16:35] luighiv
+Oh... didn't noticed it, I guessed I have deleted it completely, going to update it, thanks for noticing 🙂 👍
+
+{Reactions}
+👍
+
+[12/16/2025 16:36] luighiv
+regarding the seal ring, do you have a Pcell or script I can use to add it?
+
+
+[12/16/2025 16:36] mole99
+I'm adding a check to the precheck to ensure there are some shapes on GUARD_RING_MK: https://github.com/wafer-space/gf180mcu-precheck/pull/36
+This way we should catch such issues earlier :)
+
+{Reactions}
+🙌
+
+[12/16/2025 16:37] mole99
+This is the PCell: https://github.com/wafer-space/gf180mcu/tree/main/gf180mcuD/libs.tech/klayout/tech/pymacros/sealring_cells
+
+
+[12/16/2025 16:38] mole99
+Did you create the padring using `make librelane-padring`?
+
+{Reactions}
+🙌
+
+[12/16/2025 16:39] mole99
+This script adds the sealring to the padring: https://github.com/wafer-space/gf180mcu-project-template/blob/01d1540414fefce2d3c8fca2086c425688fe389a/scripts/padring.py#L59
+
+
+[12/16/2025 16:40] luighiv
+yes, I have created it using that instruction
+
+
+[12/16/2025 16:42] mole99
+Maybe you deleted it accidentally?
+
+
+[12/16/2025 16:42] mole99
+For me it works fine:
+
+{Attachments}
+2025-12_media/image-D1640.png
+
+
+[12/16/2025 16:43] luighiv
+yeah, that's probably the reason, let me generate it again here, thanks for the advice 🙂
+
+{Reactions}
+👍
+
+[12/16/2025 16:43] mole99
+You're welcome!
+
+{Reactions}
+🙌
+
+[12/17/2025 02:19] luighiv
+Hi @Leo Moser (mole99)  thanks for your feeback, now the padframe has the sealring and I deleted completly the SRAM devices:
+
+{Attachments}
+2025-12_media/image-5C5E8.png
+
+
+[12/17/2025 02:34] luighiv
+however now I'm facing an issue with DRC errors, because as I'm following the embedded approach, I use a previous padframe we were using for Chipathon, however, that padframe seems to have some issues with CUP DRC. Do you know how can I fix it?
+
+
+[12/17/2025 02:40] luighiv
+this is the report I got:
+
+{Attachments}
+2025-12_media/image-834D6.png
+2025-12_media/drc1216.klayout-3228E.lyrdb
+
+
+[12/17/2025 03:11] mithro_
+@LuighiV - I guess the chipathon padframe needs to be updated with the fixed cells that Leo updated for wafer.space shuttle.
+
+
+[12/17/2025 03:11] mithro_
+In theory you should just be able to drop in a replacement?
+
+
+[12/17/2025 04:55] luighiv
+Hi @Tim 'mithro' Ansell, thanks for the advice 🙂 . Yes, I think I can do that, I'm trying right now to update the library from Leo's repo in my environment so it could get the fixed cells. Hope it goes fine 🤞
+
+
+[12/17/2025 08:21] mole99
+@LuighiV Yes exactly, the bondpad cells have been updated. You need to replace the bondpads in the chipathon padframe with the bondpads in: https://github.com/wafer-space/gf180mcu/blob/main/gf180mcuD/libs.ref/gf180mcu_fd_io/gds/gf180mcu_fd_io.gds
+Note: only the "Bondpad_5LM" cell has been changed.
+
+
+[12/17/2025 11:56] luighiv
+Hi @Leo Moser (mole99)  thanks for the comment. I've tried to replace the main pads by the new ones in your repo, however, when I run again, it is violating other rules with metal spacing, and the corner pads, have you modified them as well?
+
+{Attachments}
+2025-12_media/image-D3E87.png
+
+
+[12/17/2025 12:42] mole99
+No, I didn't modify any other cells.
+Did you perhaps delete some of the I/O filler cells? The errors always seem to be at the boundary of I/O cells (well, except for the corner cells).
+
+
+[12/17/2025 12:57] luighiv
+Hi Leo, I don't think so, I mean, I haven't delete the fills, what I did was just replace the old pads by the new ones by using the **Replace** cell option in the **Cells** panel
+
+
+[12/17/2025 12:58] mole99
+That sounds like the correct approach. Could you share the current GDS so I can take a look?
+
+
+[12/17/2025 12:59] luighiv
+yes!, please, give me a moment
+
+{Reactions}
+👍
+
+[12/17/2025 13:03] luighiv
+this is the link: https://drive.google.com/file/d/1GgmRQ5E_GbQYZFp6ogSY1hEyT46GxshO/view?usp=drive_link
+
+{Embed}
+https://drive.google.com/file/d/1GgmRQ5E_GbQYZFp6ogSY1hEyT46GxshO/view?usp=drive_link
+chiptop_A_track_ws_embedded__exported.gds
+
+
+[12/17/2025 13:04] luighiv
+and this was the report
+
+{Attachments}
+2025-12_media/drc1217.klayout-E586A.lyrdb
+
+
+[12/17/2025 13:15] mithro_
+@LuighiV - It would be good to load your latest GDS into the platform even if it is currently failing the precheck.
+
+{Reactions}
+🙌
+
+[12/17/2025 13:19] mole99
+Something happened when you swapped out the bondpad cells:
+
+
+[12/17/2025 13:19] mole99
+
+
+{Attachments}
+2025-12_media/image-D58C7.png
+
+
+[12/17/2025 13:19] mole99
+This is the top right corner of the outer padring.
+
+
+[12/17/2025 13:19] mole99
+
+
+{Attachments}
+2025-12_media/image-99866.png
+
+
+[12/17/2025 13:20] mole99
+And this is the top right corner of the inner padring (chipathon).
+
+
+[12/17/2025 13:24] mole99
+These manual edits are dangerous and error prone. How about we create a KLayout script to merge the GDS files and swap the bondpads? :)
+
+Can you share the separate GDS of the empty template project, and the GDS of the chipathon?
+
+
+[12/17/2025 13:29] luighiv
+sure, I'm going to upload it, thanks
+
+
+[12/17/2025 13:31] luighiv
+that would be great 🙂 , let me restore the previous version of the chipathon then, and going to share both
+
+{Reactions}
+👌
+
+[12/17/2025 15:08] luighiv
+Hi @Tim 'mithro' Ansell  I'm having issues to upload from Google Drive. I was using this link https://drive.google.com/file/d/1GgmRQ5E_GbQYZFp6ogSY1hEyT46GxshO/view but it says it has size 0. I've tried with github but it has more than 100Mb so doesn't allow me to upload there
+
+{Attachments}
+2025-12_media/image-DF967.png
+
+{Embed}
+https://drive.google.com/file/d/1GgmRQ5E_GbQYZFp6ogSY1hEyT46GxshO/view
+chiptop_A_track_ws_embedded__exported.gds
+
+
+[12/17/2025 15:16] mole99
+@LuighiV Tim is currently asleep.
+You need a direct link to your layout. However you can compress it, if you didn't already?
+
+
+[12/17/2025 15:16] luighiv
+that's a good point, let me try it here
+
+
+[12/17/2025 15:26] luighiv
+Hi @Leo Moser (mole99)  regarding this point, these are the links for :
+- Original Chipathon GDS: https://github.com/AutoMOS-project/AutoMOS-chipathon2025/blob/update-for-ws/designs/libs/A_track_core/chiptop_A_track/chiptop_A_track__exported.gds
+- Empty WS Padframe: https://github.com/AutoMOS-project/AutoMOS-chipathon2025/blob/update-for-ws/designs/libs/A_track_core/padring_ws/padring_ws.gds
+
+
+[12/17/2025 15:26] luighiv
+It worked! thanks, now it is running the checks
+
+
+[12/17/2025 15:44] mole99
+It seems I got it working, but there is something very strange going on, as you can see:
+
+
+[12/17/2025 15:44] mole99
+
+
+{Attachments}
+2025-12_media/image-F306E.png
+
+
+[12/17/2025 15:44] mole99
+If I open `chiptop_A_track__exported.gds` I can see that something is wrong:
+
+
+[12/17/2025 15:45] mole99
+
+
+{Attachments}
+2025-12_media/image-39653.png
+
+
+[12/17/2025 15:45] mole99
+Normally, the design should be centered and fill the whole screen. KLayout thinks that the design is larger than it actually is?
+
+
+[12/17/2025 15:45] mole99
+There is this strange `Axx_top` cell in the cell hierarchy. If I hide it, you can see its outline:
+
+
+[12/17/2025 15:46] mole99
+
+
+{Attachments}
+2025-12_media/image-1C535.png
+
+
+[12/17/2025 15:47] mole99
+If I open the hierarchy of this cell, there are many, many subcells:
+
+
+[12/17/2025 15:47] mole99
+
+
+{Attachments}
+2025-12_media/image-0B3B4.png
+
+
+[12/17/2025 15:47] mole99
+It seems there is a second separate padring hidden inside this cell?
+
+
+[12/17/2025 15:49] mole99
+You need to clean up the layout, but once that's done I think you should be able to use this script:
+
+{Reactions}
+🙌
+
+[12/17/2025 15:50] mole99
+Enable the Nix shell of the template project and run the following (adjust the paths):
+
+```
+python3 scripts/merge_chipathon.py chipathon/padring_ws.gds chipathon/chiptop_A_track__exported.gds
+```
+
+{Reactions}
+😮
+
+[12/17/2025 15:50] mole99
+
+
+{Attachments}
+2025-12_media/merge_chipathon-7A261.py
+
+{Reactions}
+🙌
+
+[12/17/2025 15:51] luighiv
+Hi Leo, indeed that come from one of the teams, they joined later as they didn't have a number was assigned Axx 😅 . On the other hand, didn't notice they have a second separated padring there. Let me check that, thanks for noticing 🙂
+
+{Reactions}
+👍
+
+[12/17/2025 15:53] luighiv
+that's great! thank you @Leo Moser (mole99)  going to try to clean up and run the script you provided, It will be really helpful, thank you 🙌
+
+
+[12/17/2025 15:56] mole99
+I'm looking forward to your submission :)
+Let me know if there are any issues with the script.
+
+{Reactions}
+🙌
+
+[12/17/2025 15:59] luighiv
+sure! thank you! 🙂
+
+
+[12/17/2025 17:29] luighiv
+Hi Leo, just to comment that in the klayout version we have in the docker image used during the Chipathon (0.30.2) I cannot see those outlines. I was able to see it just in version 0.30.4. Maybe it is in an improvement in recent versions
+
+
+[12/17/2025 17:52] mole99
+That could very well be 👍
+
+{Reactions}
+🙌
+
+[12/17/2025 17:54] mole99
+FYI, after you have merged the designs, you need to run filler generation.
+
+```
+klayout -b -zz -r ${PDK_ROOT}/${PDK}/libs.tech/klayout/tech/drc/filler_generation/fill_all.rb -rd input=chip_top.gds -rd output=chip_top_filled.gds
+```
+
+{Reactions}
+🙌
+
+[12/17/2025 18:15] luighiv
+sure, thank you for sharing it 🙂
+
+{Reactions}
+👍
+
+[12/17/2025 21:42] luighiv
+Hi @Leo Moser (mole99) now the design passed all the checks, thanks for your help 🙂 🙌
+
+{Attachments}
+2025-12_media/image-5CA10.png
+
+{Reactions}
+👏 (2)
+
+[12/18/2025 01:46] mithro_
+Congradulations! Make sure you click the "Submit for Manufacturing" button!
+
+{Reactions}
+🙌
+
+[12/18/2025 03:09] luighiv
+Hi @Tim 'mithro' Ansell yes! I did it, thank you 🙌
+
+{Attachments}
+2025-12_media/image-8ED85.png
+
+
+[12/18/2025 03:16] mithro_
+At the current time, it does look like there should be room on the shuttle for your design.
+
+{Reactions}
+🙌
+
+[12/18/2025 03:22] luighiv
+that's great! hope the possibility remains open till the end of submission time 🤞
+
+
+==============================================================
+Exported 74 message(s)
+==============================================================

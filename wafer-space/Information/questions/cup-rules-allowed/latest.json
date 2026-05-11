@@ -1,0 +1,1064 @@
+{
+  "guild": {
+    "id": "1361349522684510449",
+    "name": "wafer.space Community",
+    "iconUrl": "2026-05_media/fb143eaa45770cbb40493d09b625e98b-09FD1.png"
+  },
+  "channel": {
+    "id": "1501987023433502851",
+    "type": "GuildPublicThread",
+    "categoryId": "1409660288822673408",
+    "category": "questions",
+    "name": "CUP Rules allowed?",
+    "topic": null
+  },
+  "dateRange": {
+    "after": "2026-04-30T23:59:59.999+00:00",
+    "before": null
+  },
+  "exportedAt": "2026-05-11T18:02:16.7333313+00:00",
+  "messages": [
+    {
+      "id": "1501987023433502851",
+      "type": "Default",
+      "timestamp": "2026-05-07T16:40:11.956+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Section 9.3. details Circuit-Under-Pad rules (https://mithro-gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_09_3.html), are these allowed to be used in designs? From prior discussions I know that WLCSP is not allowed because bumping applies to the whole wafer, but can we CUP rules on non-bumped wafers?\n\nContext: I want to open up a bunch of vias in the passivation layer at a size/pitch that is smaller than the PAD rules (https://mithro-gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_09_2.html), and allow active elements underneath or nearby. This is for @Tim 'mithro' Ansell's gate array / structured ASIC idea \ud83d\ude42",
+      "author": {
+        "id": "384390069412429834",
+        "name": "polyfractal",
+        "discriminator": "0000",
+        "nickname": "BreakingTaps",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "169786952432746498",
+          "name": "mithro_",
+          "discriminator": "0000",
+          "nickname": "Tim 'mithro' Ansell",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+        }
+      ],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\ud83d\ude42",
+          "code": "slight_smile",
+          "isAnimated": false,
+          "imageUrl": "2026-05_media/1f642-83E8A.svg"
+        }
+      ]
+    },
+    {
+      "id": "1501996139719819494",
+      "type": "Default",
+      "timestamp": "2026-05-07T17:16:25.448+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "There was a previous discussion about pad openings. I can't find it right now, but from what I can remember, we decided to set the minimum pad opening to 40um, as that is what is stated in the guidelines. @Tim 'mithro' Ansell?\n\nAs for CUP, we actually wanted to disable the CUP rules during submission (if possible), as this would simplify things slightly because a number of rules would not be applied. However, I don't yet know if we can simply disable/waive the CUP rules, or if they are automatically activated if you have devices under/near your pads.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "2026-05_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "169786952432746498",
+          "name": "mithro_",
+          "discriminator": "0000",
+          "nickname": "Tim 'mithro' Ansell",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1502003900859940904",
+      "type": "Default",
+      "timestamp": "2026-05-07T17:47:15.848+00:00",
+      "timestampEdited": "2026-05-07T17:58:21.061+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "hm I'm reading the DRC closer and now I've confused myself \ud83d\ude05 \n\nSo it looks like the PAD rules have a min 40um size and the whole opening in the passivation has to be top metal (with some top metal overlapping the passivation). But the CUP rules seem to allow wires passing through the opening.\n\nDo you know if you can do something similar with PAD? I'd be fine with giant PAD openings as long as I dont need the top metal to fill the whole area. Was hoping for like 5um pitch between M5 lands that I connect myself\n\nEdit: Hmm I see that the DRC says 40 for wedge/ball, but 4um for gold bump. Are the PAD rules entirely defined by the user project or something? I dont fully understand how to apply the DRC here since it differs based on end use?",
+      "author": {
+        "id": "384390069412429834",
+        "name": "polyfractal",
+        "discriminator": "0000",
+        "nickname": "BreakingTaps",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\ud83d\ude05",
+          "code": "sweat_smile",
+          "isAnimated": false,
+          "imageUrl": "2026-05_media/1f605-42B43.svg"
+        }
+      ]
+    },
+    {
+      "id": "1502010396561903618",
+      "type": "Default",
+      "timestamp": "2026-05-07T18:13:04.544+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I think I found the prior discussion about pad sizes etc: https://discord.com/channels/1361349522684510449/1486057912555012167/1486057912555012167",
+      "author": {
+        "id": "384390069412429834",
+        "name": "polyfractal",
+        "discriminator": "0000",
+        "nickname": "BreakingTaps",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1502018565182853191",
+      "type": "Default",
+      "timestamp": "2026-05-07T18:45:32.095+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I feel the same way every time I read the docs \ud83d\ude04\nThe gf180mcu PDK is better quality than, say, the sky130 PDK, but the documentation leaves a lot to be desired...",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "2026-05_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\ud83d\ude01",
+            "code": "grin",
+            "isAnimated": false,
+            "imageUrl": "2026-05_media/1f601-4E9BD.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "384390069412429834",
+              "name": "polyfractal",
+              "discriminator": "0000",
+              "nickname": "BreakingTaps",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-05_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\ud83d\ude04",
+          "code": "smile",
+          "isAnimated": false,
+          "imageUrl": "2026-05_media/1f604-BF863.svg"
+        }
+      ]
+    },
+    {
+      "id": "1502018591728341142",
+      "type": "Default",
+      "timestamp": "2026-05-07T18:45:38.424+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It's possible that 40um is the minimum pad opening, but it could also be that a smaller opening is allowed. We only have the guideline and this note:\n\n> These are just default numbers for DRC purpose only, however, these are VARIABLE and the customer is advised to use the appropriate value acceptable to their assembly house.\n\nHowever, then you have rules for Gold bump with 4um, so physically smaller openings are possible.\n\nAfaik, topmetal needs to cover the whole opening, at least that's the only actual rule: https://mithro-gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_09_1.html",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "2026-05_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1502018814118854897",
+      "type": "Default",
+      "timestamp": "2026-05-07T18:46:31.446+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "CUP is basically just about wedge bonding messing with FEOL structures I think due to strain-induced bandgap effecs, and bonding mechanics being a little different if you have certain structures under the pad which would necessitate tuning the bonding process parameter to account for that difference.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1502019075541307412",
+      "type": "Default",
+      "timestamp": "2026-05-07T18:47:33.774+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "the DRC _rules_ are the ones in the codified DRC list about enclosures and critical dimensions and spacings and density",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1502019095762047027",
+      "type": "Reply",
+      "timestamp": "2026-05-07T18:47:38.595+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "it really does feel like reading tea leaves sometimes \ud83d\ude02",
+      "author": {
+        "id": "384390069412429834",
+        "name": "polyfractal",
+        "discriminator": "0000",
+        "nickname": "BreakingTaps",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\ud83d\ude02",
+            "code": "joy",
+            "isAnimated": false,
+            "imageUrl": "2026-05_media/1f602-168C5.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "323371864074485771",
+              "name": "mole99",
+              "discriminator": "0000",
+              "nickname": "Leo Moser (mole99)",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-05_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "323371864074485771",
+          "name": "mole99",
+          "discriminator": "0000",
+          "nickname": "Leo Moser (mole99)",
+          "color": null,
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1423020172595298314",
+              "name": "Mod",
+              "color": null,
+              "position": 1
+            }
+          ],
+          "avatarUrl": "2026-05_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1502018565182853191",
+        "channelId": "1501987023433502851",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\ud83d\ude02",
+          "code": "joy",
+          "isAnimated": false,
+          "imageUrl": "2026-05_media/1f602-168C5.svg"
+        }
+      ]
+    },
+    {
+      "id": "1502019153131864175",
+      "type": "Default",
+      "timestamp": "2026-05-07T18:47:52.273+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "the bond pads are mostly suggestions to be compatible with generic bond houses",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1502019546511311018",
+      "type": "Default",
+      "timestamp": "2026-05-07T18:49:26.062+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Basically, our reticle is handled as a single project during submission, so we need to decide which wire bonding option to choose for the DRC. The more red lights go on during the submission process, the longer it will take to get it done. That's why Tim would like to make the DRC rules more restrictive, if doing so makes the submission process easier.\n\nI'm not sure if \"Gold bump\" is a separate switch in the proprietary DRC deck and can be used alongside wedge type, for example. Maybe @Tim 'mithro' Ansell could find this out?",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "2026-05_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\ud83d\udc4d",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "2026-05_media/1f44d-27259.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "384390069412429834",
+              "name": "polyfractal",
+              "discriminator": "0000",
+              "nickname": "BreakingTaps",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-05_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "169786952432746498",
+          "name": "mithro_",
+          "discriminator": "0000",
+          "nickname": "Tim 'mithro' Ansell",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1502019808462508052",
+      "type": "Default",
+      "timestamp": "2026-05-07T18:50:28.516+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "c.f. e.g. Propeller 2 on iirc on semi 130 had to have the factory test voltages on GPIOs reduced as the original ones caused latch up damage; note this was testing with voltages way outside the absolute maximum ratings, like +30% or so",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1502020383258312775",
+      "type": "Default",
+      "timestamp": "2026-05-07T18:52:45.558+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "suppose there's also always an option to post-fab etch back the SiN and oxide myself \ud83e\udee0",
+      "author": {
+        "id": "384390069412429834",
+        "name": "polyfractal",
+        "discriminator": "0000",
+        "nickname": "BreakingTaps",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\ud83e\udee0",
+          "code": "\ud83e\udee0",
+          "isAnimated": false,
+          "imageUrl": "2026-05_media/1fae0-D00A5.svg"
+        }
+      ]
+    },
+    {
+      "id": "1502020667422544063",
+      "type": "Default",
+      "timestamp": "2026-05-07T18:53:53.308+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "That would make a great video \ud83d\ude04",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "2026-05_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\ud83d\ude04",
+          "code": "smile",
+          "isAnimated": false,
+          "imageUrl": "2026-05_media/1f604-BF863.svg"
+        }
+      ]
+    },
+    {
+      "id": "1502116235561795665",
+      "type": "Reply",
+      "timestamp": "2026-05-08T01:13:38.528+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "That would be super cool!",
+      "author": {
+        "id": "169786952432746498",
+        "name": "mithro_",
+        "discriminator": "0000",
+        "nickname": "Tim 'mithro' Ansell",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "384390069412429834",
+          "name": "polyfractal",
+          "discriminator": "0000",
+          "nickname": "BreakingTaps",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1502020383258312775",
+        "channelId": "1501987023433502851",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1502116439354773625",
+      "type": "Default",
+      "timestamp": "2026-05-08T01:14:27.116+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@BreakingTaps - I do have limited access to the proprietary DRC decks and can run tests.",
+      "author": {
+        "id": "169786952432746498",
+        "name": "mithro_",
+        "discriminator": "0000",
+        "nickname": "Tim 'mithro' Ansell",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "384390069412429834",
+          "name": "polyfractal",
+          "discriminator": "0000",
+          "nickname": "BreakingTaps",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1502119483274301604",
+      "type": "Default",
+      "timestamp": "2026-05-08T01:26:32.843+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "But have been distracted with the wire bonding.",
+      "author": {
+        "id": "169786952432746498",
+        "name": "mithro_",
+        "discriminator": "0000",
+        "nickname": "Tim 'mithro' Ansell",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1502121811780042942",
+      "type": "Default",
+      "timestamp": "2026-05-08T01:35:48.002+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Sounds good! And yeah no worries, run1 stuff takes precedence \ud83d\ude42\n\nI'm going to try and build out a thing with the assumption that we can find a non-40um pad opening solution and see how it goes. Would prefer not to etch myself, the wet options aren't particularly pleasant or repeatible (hot phosphoric for the SiN, HF for the oxide but both are angry towards aluminum). Also don't really have the facilities for etching stuff anymore, just a dingy shed \ud83d\ude41",
+      "author": {
+        "id": "384390069412429834",
+        "name": "polyfractal",
+        "discriminator": "0000",
+        "nickname": "BreakingTaps",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\ud83d\ude42",
+          "code": "slight_smile",
+          "isAnimated": false,
+          "imageUrl": "2026-05_media/1f642-83E8A.svg"
+        },
+        {
+          "id": "",
+          "name": "\ud83d\ude41",
+          "code": "slight_frown",
+          "isAnimated": false,
+          "imageUrl": "2026-05_media/1f641-E1429.svg"
+        }
+      ]
+    },
+    {
+      "id": "1502122539273420891",
+      "type": "Reply",
+      "timestamp": "2026-05-08T01:38:41.45+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Why'd you have issues with minimum litho dimensional openings in the SiN that have minimum top metal expansion underneath?\nEssentially bond pads so tiny no relevant wire bond house will want them, but large though for the litho to not cause problems?",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "384390069412429834",
+          "name": "polyfractal",
+          "discriminator": "0000",
+          "nickname": "BreakingTaps",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1502121811780042942",
+        "channelId": "1501987023433502851",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1502122955646439506",
+      "type": "Default",
+      "timestamp": "2026-05-08T01:40:20.721+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "hm? not sure I understand the question.\n\nMy reading of the DRC so far is that the only way to make SiN openings is with the pad rules, and those have to be 40um at the moment which is far too large for \"structured asic\" / \"gate array\" sort of customization after fab. But I've only started looking into it so may be incorrect with that assumption!",
+      "author": {
+        "id": "384390069412429834",
+        "name": "polyfractal",
+        "discriminator": "0000",
+        "nickname": "BreakingTaps",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1502124394095579137",
+      "type": "Default",
+      "timestamp": "2026-05-08T01:46:03.674+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "> Not recommended to use 6k top metal for cu wire bonding.\n\nI just read this; does it mean we could use a wire bonder (or possibly less hyper-specialized thermosonic micro welding robot/head) to form/attach copper pillars to the otherwise \"normal\" pads which would then be suited for reasonably normal soldering metallurgy? Because the normal aluminum is not really solderable and (electro/-less) chemical plating seems difficult after dicing.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1502125359422902354",
+      "type": "Reply",
+      "timestamp": "2026-05-08T01:49:53.826+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Oh hmmm ok yeah...\n>>> Drawn\n\nPad (1)\n\nBond pad opening\n\n37\n\n0",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "384390069412429834",
+          "name": "polyfractal",
+          "discriminator": "0000",
+          "nickname": "BreakingTaps",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1502122955646439506",
+        "channelId": "1501987023433502851",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1502128099754643587",
+      "type": "Default",
+      "timestamp": "2026-05-08T02:00:47.172+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "So, for one, if you convince them you're doing gold bumping, they should let you do 4\u03bcm SiN openings.\n> PAD.1 [Gold bump] 4",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1502129208925880492",
+      "type": "Default",
+      "timestamp": "2026-05-08T02:05:11.619+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "yep, if you read up that's one of the pending questions. It's unclear if some parts of the wafer can be designated \"gold bump bonding\" while others are \"wire bonding\" or if the entire wafer needs to be the same",
+      "author": {
+        "id": "384390069412429834",
+        "name": "polyfractal",
+        "discriminator": "0000",
+        "nickname": "BreakingTaps",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1502130866242191360",
+      "type": "Reply",
+      "timestamp": "2026-05-08T02:11:46.754+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Personally I don't see why glofo should care about it beyond Tim telling them he takes the risk of some bond pads being too small for many/most bond processes.\n\nBecause like, this seems like it's an easy DRC for Tim to enforce selectively for different customers of his (different die designs of the MPW reticle)? And note that the existing numbers are already just guidelines for generic bond houses.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "384390069412429834",
+          "name": "polyfractal",
+          "discriminator": "0000",
+          "nickname": "BreakingTaps",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1502129208925880492",
+        "channelId": "1501987023433502851",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1502131466065412167",
+      "type": "Default",
+      "timestamp": "2026-05-08T02:14:09.763+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "agreed, it seems like it _should_ be doable! But also elsewhere Tim has expressed interest in No Waivers for DRC (and GF doesn't want to do waivers either) so if they have something hardcoded like a wafer must be all one type it's sunk.\n\nBut maybe not an issue! Will have to wait until Tim has some time to investigate I think \ud83d\ude42",
+      "author": {
+        "id": "384390069412429834",
+        "name": "polyfractal",
+        "discriminator": "0000",
+        "nickname": "BreakingTaps",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\ud83d\ude42",
+          "code": "slight_smile",
+          "isAnimated": false,
+          "imageUrl": "2026-05_media/1f642-83E8A.svg"
+        }
+      ]
+    },
+    {
+      "id": "1502249742757789827",
+      "type": "Default",
+      "timestamp": "2026-05-08T10:04:09.124+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "yeah, I only have the hope because it should be a bondhouse-provided DRC, not a GF-BEOL-processing DRC, and they do seem to mention that for a bonding option (gold studs) they do very much suggest rather small openings as the DRC limit.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1502857213130309762",
+      "type": "Reply",
+      "timestamp": "2026-05-10T02:18:01.347+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Basically, I'm a small fish for GF and have very little bandwidth with them. Any bandwidth spent on dealing with DRC errors is bandwidth that can't be used on other topics. I would generally say that I can get *one* thing fixed / changed / improved per run on GF's side at most.",
+      "author": {
+        "id": "169786952432746498",
+        "name": "mithro_",
+        "discriminator": "0000",
+        "nickname": "Tim 'mithro' Ansell",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\ud83d\udc4d",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "2026-05_media/1f44d-27259.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "384390069412429834",
+              "name": "polyfractal",
+              "discriminator": "0000",
+              "nickname": "BreakingTaps",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-05_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "384390069412429834",
+          "name": "polyfractal",
+          "discriminator": "0000",
+          "nickname": "BreakingTaps",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1502131466065412167",
+        "channelId": "1501987023433502851",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    }
+  ],
+  "messageCount": 28
+}

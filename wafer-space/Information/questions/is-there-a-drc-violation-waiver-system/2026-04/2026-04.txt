@@ -1,0 +1,48 @@
+==============================================================
+Guild: wafer.space Community
+Channel: Information / questions / Is there a DRC violation waiver system?
+After: 03/31/2026 23:59
+Before: 05/01/2026 00:00
+==============================================================
+
+[04/01/2026 00:40] mithro_
+@Leo Moser (mole99) - I'm not sure they do any planarization of the last layers?
+
+
+[04/01/2026 07:32] mole99
+Neither am I, but I'm also not sure that a chip-sized hole in the passivation layer won't cause problems.
+
+
+[04/01/2026 07:43] 246tnt
+That's what nmz said above, PM.4 ?  You need a 2um overlap of TopMetal for any passivation opening.
+
+
+[04/01/2026 09:08] mole99
+Right. Technically, you could cover the entire chip with TopMetal (no upper density limit?) and open up almost the entire inside area. However, this would be pretty useless since you would then have TopMetal everywhere. Even then, I don't think it would be accepted for manufacture. The rules seem targeted at "normal" bonding applications.
+
+So I guess it's fair to say the min. pad opening is 40x40um, and there's no way around this by opening up the whole chip.
+
+
+[04/01/2026 10:57] nmz787
+Assuming this is "bond pad" rules, then I think each pad would also need to meet "PAD.5 MetalTop (2) overlap of Top_Via (3)" which just says 0.5... not > or <= etc... so I feel they must mean 'exactly 0.5'.
+
+
+[04/01/2026 10:58] nmz787
+Which then cascades to via size rules
+
+
+[04/01/2026 10:58] nmz787
+And presumably they aren't letting topvia be some wild numbers???
+
+
+[04/01/2026 10:58] nmz787
+(i am used to a big CSV file with all the Design Rules, so these multiple webpages and clicking around isn't easy for me)
+
+
+[04/01/2026 11:02] nmz787
+I guess these are the via size rules? https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_07_15.html
+
+
+==============================================================
+Exported 9 message(s)
+==============================================================

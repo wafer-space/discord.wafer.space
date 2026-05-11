@@ -1,0 +1,72 @@
+==============================================================
+Guild: wafer.space Community
+Channel: Information / questions / Missing noise models in PMOS (3.3V & 5V/6V)
+After: 04/30/2026 23:59
+==============================================================
+
+[05/05/2026 22:07] hipstair
+I'm running Gm/Id sweeps for analog design, specifically using the 3.3V transistors (and possibly 5V/6V as well), and not getting any noise for PMOS models (onoise_total id and 1overf both return 0). This is not the case for the NMOS models. Has anyone else ran into this before?
+
+
+[05/06/2026 10:30] mithro_
+@Tim Edwards - Any ideas?
+
+
+[05/06/2026 13:18] rtimothyedwards_19428
+No, not really.  That's the first time I've heard of it.
+
+
+[05/06/2026 23:54] mithro_
+@Tim Edwards - Any idea of other people who might have done stuff using the noise models?
+
+
+[05/07/2026 00:12] rtimothyedwards_19428
+We did essentially zero analog stuff for the two MPW runs at Efabless.  The one thing I can think of is the last Chipathon, which was run on GF180MCU and had some analog projects.  For that, the best people to ask would be Mehdi Saligane, Mitch Bailey, and Peter Kinget.
+
+
+[05/07/2026 02:14] bailey8889
+I asked on Element.
+
+
+[05/07/2026 13:55] christoph_36502
+For me it does work just fine using ngspice.
+
+
+[05/08/2026 01:36] namibj
+@Brandon Hippe if you can share a testbench of that sort with @Christoph , he can probably verify if it works for him. 
+Also, @Christoph might be so kind as to share a testbench + PDK revision hash + ngspice version + ngspice user/system config that "works for him".
+
+
+[05/08/2026 16:39] hipstair
+
+
+{Attachments}
+2026-05_media/sweep-C3381.spice
+
+
+[05/08/2026 16:40] hipstair
+This is the spice file I'm running
+
+
+[05/11/2026 11:53] christoph_36502
+Try to reduce it first to a simple simulation without all the loops. Also your save statements inside the control block should not be prefixed by "." and be stated before the simulation command.
+
+
+[05/11/2026 11:56] christoph_36502
+Here is what my working control section looks like: 
+
+``` 
+.control
+save all
+noise v(out,vss) vin dec 10 100 1e6 1
+print inoise_total
+print all
+setplot noise1
+gnuplot p1 inoise_spectrum
+.endc
+```
+
+
+==============================================================
+Exported 12 message(s)
+==============================================================

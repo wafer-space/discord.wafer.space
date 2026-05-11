@@ -1,0 +1,36 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"839883081896689765","buck_042","2025-12-01T05:30:37.1210000+00:00","@Leo Moser (mole99) Hi mole99, may I ask a further question?  Can I ask why only this much metal is filled here? It seems the density requirement is still not met. Is this normal? Thank you very much!","2025-12_media/image-D9BC8.png,2025-12_media/image-5A019.png,2025-12_media/image-48708.png",""
+"323371864074485771","mole99","2025-12-01T06:06:23.9230000+00:00","The filler generation script was made to fill an entire chip, so it adheres to rules such as leaving a 26um spacing from the edges to meet the 10um distance to the sealring etc.
+I assume this is what leads to what we see here.","",""
+"839883081896689765","buck_042","2025-12-01T06:29:57.8460000+00:00","I see, thanks! I think this works. We do this because we will integrate this module to our analog module.","2025-12_media/image-E41E3.png,2025-12_media/image-D29BE.png","👍 (1)"
+"839883081896689765","buck_042","2025-12-01T06:49:25.8670000+00:00","Oh I see, actually we don't need fill the digital module at this stage, like we can fill all during the top level?","",""
+"323371864074485771","mole99","2025-12-01T07:34:05.7330000+00:00","Yes, that is the usual approach. The fill for the entire chip is added at the end.
+
+If you do an analog top-level integration you can add the fill manually:
+
+```
+klayout -b -zz -r ${PDK_ROOT}/${PDK}/libs.tech/klayout/tech/drc/filler_generation/fill_all.rb -rd input=chip_top.gds -rd output=chip_top_filled.gds
+```","",""
+"839883081896689765","buck_042","2025-12-01T15:13:35.1650000+00:00","Hi Leo, thank you! If we want to do top-level integration, may I ask how to obtain a clean pad ring without any logic cells? My current idea is to follow the template, remove everything in the Verilog except VDD/VSS and the pad instances, and remove the metal fill step in the flow, and then rerun the synthesis and PnR flow. Is this the correct approach?","",""
+"323371864074485771","mole99","2025-12-01T15:17:06.8360000+00:00","There is an easier approach :)
+You customize the flow to only generate the padring + sealring and then streamout the GDS. I already did this for the MOSbius group: https://github.com/wafer-space/gf180mcu-project-template/pull/29","",""
+"839883081896689765","buck_042","2025-12-01T15:26:59.8570000+00:00","Thank you, this is very helpful! So with this, can we still configure our IO plan? Like, by changing the pad instances in Verilog and the IO placement inside the config.yaml.","",""
+"323371864074485771","mole99","2025-12-01T15:29:36.7740000+00:00","Yes, it still uses the LibreLane configuration. It simply rearranges the flow slightly.","",""
+"323371864074485771","mole99","2025-12-01T15:30:12.2080000+00:00","There were XOR errors between magic and KLayout (?) but I haven't had the time to look into it. Maybe you could see what the difference between the two layouts is.","",""
+"839883081896689765","buck_042","2025-12-01T15:34:03.0930000+00:00","Thank you, this is helpful!","","👍 (1)"
+"839883081896689765","buck_042","2025-12-01T15:36:21.1580000+00:00","I will try to do that. But to be honest, we are trying to catch up with the DDL now. 😂  See what we can help. Really thank you, Leo!","",""
+"323371864074485771","mole99","2025-12-01T15:37:41.3830000+00:00","Yes, just make sure to use the correct layout then if there is a difference between magic and KLayout 😁
+No worries! Looking forward to your design.","",""
+"1413605821430104114","xintingjiang_36756","2025-12-01T22:17:35.9270000+00:00","I also encountered this when generating the empty pad frame today. Now I am looking into the differences between the two layouts","",""
+"1413605821430104114","xintingjiang_36756","2025-12-01T22:43:43.7510000+00:00","In my case, klayout gds is correct because I found that the only mismatch is that the magic gds has these extract tieh and tiel cells at the origin and I don't know why","2025-12_media/6ED7F713-7F6F-4110-92A3-15E65CBCDAF2-4EA44.png",""
+"323371864074485771","mole99","2025-12-02T07:34:30.5410000+00:00","Right, that's the difference! It seems that magic exports the instances even if they were not placed. There are some constants that are used in `chip_top`, but we stream out the padring before any of those stdcells can be placed and routed. 
+So the KLayout version is the correct one to use.","",""
+"839883081896689765","buck_042","2025-12-03T15:26:49.8540000+00:00","Hi Leo, may I ask a question? We are doing analog top-level integration now, so after we connect our design to the pad ring, is this the last step before DRC and LVS? Or any other step we should run? Thank you!","",""
+"323371864074485771","mole99","2025-12-03T15:29:08.1390000+00:00","Hi Buck, sure thing. You should also generate the fill before doing DRC and LVS, but other than that, that should be it.","","👍 (1)"
+"839883081896689765","buck_042","2025-12-03T15:30:42.0000000+00:00","Thanks!","",""
+"839883081896689765","buck_042","2025-12-09T02:19:23.6740000+00:00","@Leo Moser (mole99) Hi Leo, sorry to bother you again, after we do the top level analog style integration and do the fill step, is there any script or command that we can use to tun the drc check in librelane environment? Before we used chipathon environment. Thanks!","2025-12_media/image-8B689.png",""
+"596068704471482370","246tnt","2025-12-09T06:23:15.7880000+00:00","If you run the pre-check, it will run DRC.","",""
+"323371864074485771","mole99","2025-12-09T07:24:20.5580000+00:00","As Sylvain said, you can run the precheck.
+This can be done either through the online platform (https://platform.wafer.space/) or locally (https://github.com/wafer-space/gf180mcu-precheck).
+Alternatively, you can run the DRC deck directly: https://github.com/wafer-space/gf180mcu/blob/main/gf180mcuD/libs.tech/klayout/tech/drc/gf180mcu.drc","",""
+"839883081896689765","buck_042","2025-12-09T19:03:29.0470000+00:00","Thanks!","",""

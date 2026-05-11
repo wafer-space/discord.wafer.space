@@ -1,0 +1,110 @@
+ 
+** sch_path: sweep.sch
+**.subckt sweep
+vgn gn 0 DC 1.65 AC 1
+vdn dn 0 1.65
+vbn bn 0 0
+vgp 0 gp DC 1.65 AC 1
+vdp 0 dp 1.65
+vbp 0 bp 0
+Hn 0 nn vdn 1
+Hp 0 np vdp 1
+XM1 0 gn dn bn nfet_03v3 w={wx} l={lx} ng=1 m=1
+XM2 0 gp dp bp pfet_03v3 w={wx} l={lx} ng=1 m=1
+**** begin user architecture code
+.include /mnt/shared/share/pdk/gf180mcu/gf180mcuD/libs.tech/ngspice/design.ngspice
+.lib /mnt/shared/share/pdk/gf180mcu/gf180mcuD/libs.tech/ngspice/sm141064.ngspice typical
+
+.param wx=10.000u lx=0.280u
+.save all
+.noise v(nn) vgn dec 1 1 1e11 1
+.noise v(np) vgp dec 1 1 1e11 1
+.op
+
+.control
+set wr_singlescale
+set wr_vecnames
+set sqrnoise
+
+compose l_vec values 0.280u 0.300u
+compose vg_vec start=0 stop=3.301  step=0.100
+compose vd_vec start=0 stop=3.301  step=0.100
+compose vb_vec start=0 stop=-1.201 step=-0.300
+
+foreach var1 $&l_vec
+    alterparam lx=$var1
+    reset
+    foreach var2 $&vg_vec
+        alter vgn $var2
+        alter vgp $var2
+        foreach var3 $&vd_vec
+            alter vdn $var3
+            alter vdp $var3
+            foreach var4 $&vb_vec
+                alter vbn $var4
+                alter vbp $var4
+                run
+                wrdata techsweep.txt all
+                destroy all
+                set appendwrite
+                unset set wr_vecnames  
+            end
+        end 
+    end
+end
+unset appendwrite
+
+alterparam lx=0.280u
+reset
+op
+show
+write sweep.raw
+.endc
+.save @m.xm1.m0[id]
+.save @m.xm1.m0[vth]
+.save @m.xm1.m0[gm]
+.save @m.xm1.m0[gmbs]
+.save @m.xm1.m0[gds]
+.save @m.xm1.m0[cgg]
+.save @m.xm1.m0[cgdo]
+.save @m.xm1.m0[cgso]
+.save @m.xm1.m0[cgs]
+.save @m.xm1.m0[cgd]
+.save @m.xm1.m0[cgb]
+.save @m.xm1.m0[cdd]
+.save @m.xm1.m0[css]
+.save onoise_total.m.xm1.m0.id
+.save onoise_total.m.xm1.m0.1overf
+.save @vbn[dc]
+.save @vdn[dc]
+.save @vgn[dc]
+.save gn dn bn nn
+
+.save @m.xm2.m0[id]
+.save @m.xm2.m0[vth]
+.save @m.xm2.m0[gm]
+.save @m.xm2.m0[gmbs]
+.save @m.xm2.m0[gds]
+.save @m.xm2.m0[cgg]
+.save @m.xm2.m0[cgdo]
+.save @m.xm2.m0[cgso]
+.save @m.xm2.m0[cgs]
+.save @m.xm2.m0[cgd]
+.save @m.xm2.m0[cgb]
+.save @m.xm2.m0[cdd]
+.save @m.xm2.m0[css]
+.save onoise_total.m.xm2.m0.id
+.save onoise_total.m.xm2.m0.1overf
+.save @vbp[dc]
+.save @vdp[dc]
+.save @vgp[dc]
+.save gp dp bp np
+
+
+.control
+quit
+.endc
+
+**** end user architecture code
+**.ends
+.end

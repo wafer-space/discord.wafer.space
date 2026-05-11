@@ -1,0 +1,341 @@
+{
+  "guild": {
+    "id": "1361349522684510449",
+    "name": "wafer.space Community",
+    "iconUrl": "2025-10_media/fb143eaa45770cbb40493d09b625e98b-09FD1.png"
+  },
+  "channel": {
+    "id": "1433688821479772180",
+    "type": "GuildPublicThread",
+    "categoryId": "1409660288822673408",
+    "category": "questions",
+    "name": "gf180mcuD lvs check error -- layout cell pin order mismatch",
+    "topic": null
+  },
+  "dateRange": {
+    "after": "2025-09-30T23:59:59.999+00:00",
+    "before": "2025-11-01T00:00:00+00:00"
+  },
+  "exportedAt": "2026-05-11T18:19:07.1631333+00:00",
+  "messages": [
+    {
+      "id": "1433688821479772180",
+      "type": "Default",
+      "timestamp": "2025-10-31T05:27:31.691+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi all,\n\nI running the lvs check using klayout 0.30.2 and use the latest gf180mcuD version. What is weird is that I can pass lvs check for the same design using an earlier version of the gf180mcu pdk and failed when I use the updated one. The lvs report is attached.\nMy question is it seems that the root of the problem is the pin order and number of pins do not match for std cell in .cdl file(schematic) and in .cir file(layout extracted).\nI attached the screen shot for the nor gate for instance. The subckt in cdl has 7 pins defined and in layout there are 9 pins. The extra two pins are VPW and VNW which were not there in earlier version. I've tried tight VPW to VSS and VNW to VDD and define gf180mcu_gnd and the VSS as the same net. These errors were still not resolved. \n\nI was wondering has anyone met similar problem before or is there any workaround about this? \nMany thanks in advance!",
+      "author": {
+        "id": "1413605821430104114",
+        "name": "xintingjiang_36756",
+        "discriminator": "0000",
+        "nickname": "Evansika",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-10_media/079dacdd621abb17caecd8882513a32e-13E97.png"
+      },
+      "attachments": [
+        {
+          "id": "1433688822398451773",
+          "url": "2025-10_media/image-1F30A.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 574415
+        },
+        {
+          "id": "1433688823178723470",
+          "url": "2025-10_media/get_attachment_url-8A860.png",
+          "fileName": "get_attachment_url.png",
+          "fileSizeBytes": 157882
+        },
+        {
+          "id": "1433688823598022777",
+          "url": "2025-10_media/get_attachment_url-7FFB3.png",
+          "fileName": "get_attachment_url.png",
+          "fileSizeBytes": 93632
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1433748976523415605",
+      "type": "Default",
+      "timestamp": "2025-10-31T09:26:33.771+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi!\n\nWhen you say the latest gf180mcuD version, do you mean the one from open_pdks or the one from wafer.space?\nThere shouldn't be any changes to the KLayout LVS setup in either of them in the recent versions.\n\nCould you find out which changes have been made to the KLayout LVS setup that cause it to fail?",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "2025-10_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1433845084058554579",
+      "type": "Default",
+      "timestamp": "2025-10-31T15:48:27.593+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi! We used volare to configure the gf180mcu pdk, the hash value for the pdk version is attached. It is the latest version released this Aug",
+      "author": {
+        "id": "1413605821430104114",
+        "name": "xintingjiang_36756",
+        "discriminator": "0000",
+        "nickname": "Evansika",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-10_media/079dacdd621abb17caecd8882513a32e-13E97.png"
+      },
+      "attachments": [
+        {
+          "id": "1433845083853029488",
+          "url": "2025-10_media/image-20977.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 202066
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1433872587028693163",
+      "type": "Default",
+      "timestamp": "2025-10-31T17:37:44.812+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "oh for this coming up tapeout, what is the correct gf180mcu pdk version to use?",
+      "author": {
+        "id": "1413605821430104114",
+        "name": "xintingjiang_36756",
+        "discriminator": "0000",
+        "nickname": "Evansika",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-10_media/079dacdd621abb17caecd8882513a32e-13E97.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1433880759130783755",
+      "type": "Default",
+      "timestamp": "2025-10-31T18:10:13.193+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "In order to submit your design, it must pass the [gf180mcu-precheck](https://github.com/wafer-space/gf180mcu-precheck).\nYou can run it locally, later it will also be available through the platform.\n\nThe precheck uses the wafer.space fork of the PDK: https://github.com/wafer-space/gf180mcu\nWe use this fork for the [gf180mcu-project-template](https://github.com/wafer-space/gf180mcu-project-template).\n\nThe fork has mostly changes around the LibreLane configuration, and we intend to upstream all changes in the near future.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "2025-10_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1433880790718222457",
+      "type": "Default",
+      "timestamp": "2025-10-31T18:10:20.724+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Please do not use volare anymore, it has been replaced by [ciel](https://github.com/fossi-foundation/ciel).",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "2025-10_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1433881152510492702",
+      "type": "Default",
+      "timestamp": "2025-10-31T18:11:46.982+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Still, it is strange that you get this error since there haven't been any recent changes to the KLayout LVS setup. See here: https://github.com/fossi-foundation/globalfoundries-pdk-libs-gf180mcu_fd_pv/tree/main/klayout/lvs",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "2025-10_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1433881332420968498",
+      "type": "Default",
+      "timestamp": "2025-10-31T18:12:29.876+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Can you find if there is a difference in the LVS setup between these two PDK versions?",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "2025-10_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1433881638604898375",
+      "type": "Default",
+      "timestamp": "2025-10-31T18:13:42.876+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Finally, it looks like you are trying to create a digital design. Why not use LibreLane? It also performs LVS, but using magic and netgen.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "2025-10_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1433890171945881651",
+      "type": "Default",
+      "timestamp": "2025-10-31T18:47:37.383+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks a lot! I think I will try LibreLane flow first.",
+      "author": {
+        "id": "1413605821430104114",
+        "name": "xintingjiang_36756",
+        "discriminator": "0000",
+        "nickname": "Evansika",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-10_media/079dacdd621abb17caecd8882513a32e-13E97.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    }
+  ],
+  "messageCount": 10
+}

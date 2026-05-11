@@ -1,0 +1,122 @@
+==============================================================
+Guild: wafer.space Community
+Channel: Information / questions / Is there a DRC violation waiver system?
+After: 02/28/2026 23:59
+Before: 04/01/2026 00:00
+==============================================================
+
+[03/24/2026 17:43] nmz787
+Is passing DRC strictly required to tapeout? Is there any waiver system? For example I want to make topmetal "pads" smaller than design rule pad sizes, as I want to post-process dies/wafers to add additional layers to the design.
+
+
+[03/24/2026 18:24] nmz787
+@Matt Venn  your comments were helpful 🙂
+
+
+[03/24/2026 18:25] nmz787
+Though I assume your "yes" was in regards to "strictly must pass DRC"
+
+
+[03/24/2026 18:33] mattvenn
+I thought I was in the tt discord
+
+
+[03/24/2026 18:33] mattvenn
+Where the answer is no, but I don't know for wafer.space
+
+
+[03/24/2026 19:33] 246tnt
+For last run, they wouldn't even waive the antenna rule 😅
+
+
+[03/24/2026 20:57] nmz787
+that makes sense though, because of charging during plasma steps
+
+
+[03/24/2026 20:59] nmz787
+a discharge event will cause spallation and can cover not only your wafer with particles, but the entire chamber... leading to later batches to get particle contam
+
+{Reactions}
+😮
+
+[03/26/2026 13:09] mole99
+Tim wants wsrun-2 to follow the DRC rules much more strictly, as per the PDK docs.
+
+The only rule I can find for the pad layer is for the top metal overlap: https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_09_1.html
+All the other rules are guidelines: https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_09_2.html
+However, as there is no mention of a minimum pad width anywhere, wafer.space has to assume a minimum width of 40x40 according to PAD.1.
+
+
+[03/27/2026 06:44] mithro_
+Passing DRC is strictly required for tapeout, there is no waiver system and there won't be any support for waivers.
+
+
+[03/27/2026 06:48] mithro_
+@Leo Moser (mole99) - What about the rules @ https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_09_4_3.html and https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_09_4_5.html ?
+
+
+[03/27/2026 06:48] nmz787
+Oh  i thought 4 microns was allowed (some rule or guideline about "gold")
+
+
+[03/27/2026 06:48] nmz787
+But that still is larger than ideal for "a via" to an additional layer
+
+
+[03/27/2026 06:49] nmz787
+Ideally we'd know exactly the fab minimum CD limit
+
+
+[03/27/2026 06:55] nmz787
+It looks like there's 4 different bonding processes...
+
+
+[03/27/2026 06:56] nmz787
+Which one is offered for "bare wafer" purchase option  needs clarification though
+
+
+[03/29/2026 05:11] mithro_
+None of these bonding processes are really on offer, we are using an external wire bonding house.
+
+
+[03/29/2026 08:29] mole99
+Unfortunately, they don't apply to our use case and specify different numbers. While the solder bump (solder ball) rules specify a min. passivation opening of 40um, the probe guidelines specify min. probe passivation opening of 50um.
+
+There's an interesting note in the bond pad guidelines:
+
+> These are just default numbers for DRC purpose only, however, these are VARIABLE and the customer is advised to use the appropriate value acceptable to their assembly house.
+
+So I suppose there's no min. limit for the passivation opening specified, because they assume that you are going to use sane numbers anyway, in order to do the bonding process.
+
+
+[03/29/2026 08:32] mithro_
+Do you see a maximum size for the passivation opening?
+
+
+[03/29/2026 08:54] mole99
+No, I haven't seen one.
+
+
+[03/29/2026 16:20] nmz787
+Minimum is likely more important for the litho operating point for that layer
+
+
+[03/29/2026 23:01] mithro_
+Well, if there is no maximum, then you could just have a completely open top of the chip with no passivation.
+
+
+[03/29/2026 23:08] nmz787
+Wouldn't "Min Probe pad top layer metal overlap of pad opening" flag?
+
+
+[03/29/2026 23:10] mithro_
+Dunno, that is why I was asking.
+
+
+[03/30/2026 08:26] mole99
+Even if there's no rule against it, I'm not sure if that doesn't lead to planarity issues at any of the processing steps.
+
+
+==============================================================
+Exported 25 message(s)
+==============================================================

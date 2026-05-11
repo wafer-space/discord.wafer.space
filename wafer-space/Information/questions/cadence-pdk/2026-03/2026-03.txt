@@ -1,0 +1,88 @@
+==============================================================
+Guild: wafer.space Community
+Channel: Information / questions / Cadence PDK?
+After: 02/28/2026 23:59
+Before: 04/01/2026 00:00
+==============================================================
+
+[03/25/2026 14:40] chaask
+Does the wafer.space GF180 PDK have a Virtuoso compatible version. I am trying to do some analog design work, and i am comfortable inside Virtuoso. So just wondering, if we have that option.
+
+
+[03/25/2026 17:09] nmz787
+I haven't seen any
+
+
+[03/25/2026 17:09] nmz787
+the only DRC seems to be klayout
+
+
+[03/25/2026 17:29] 246tnt
+Wouldn't that be distributed by Cadence directly ?
+
+
+[03/25/2026 17:30] 246tnt
+I know for sky130 open pdk, Cadence is the one ditributing the matching PDK.
+
+
+[03/25/2026 17:30] 246tnt
+It's still subject to NDA and such so no-one else can distribute it ...
+
+
+[03/25/2026 19:37] chaask
+I dont think cadence version is opensource. but generally mpw vendors or the foundry supply the closed source pdk under nda. is that possible with us.
+
+
+[03/25/2026 19:38] chaask
+will our mpw partner also be able do that @Tim 'mithro' Ansell .
+
+
+[03/25/2026 19:43] mithro_
+wafer.space doesn't care how you create the GDS but we don't supply access to any proprietary PDKs.
+
+Your GDS also needs to be 100% clean by the wafer.space platform, not whatever the cadence or any proprietary PDK says. 
+
+Wafer.space also does not support waivers from customers.
+
+
+[03/25/2026 19:46] mithro_
+Some people have access to a mostly compatible Cadence PDK through agreements with other entities and have successfully taped out.
+
+As well, GF will *not* respond to requests for the PDK without other relationships with them already.
+
+
+[03/25/2026 19:46] chaask
+thanks tim.
+
+
+[03/25/2026 19:47] mithro_
+I'm unclear if Cadence tooling is able to load the open source file formats. They are old enough / simple enough they might work with a bit of work.
+
+
+[03/25/2026 19:49] mithro_
+Btw wafer.space also doesn't provide any direct support for tooling - open or closed.
+
+If you need technical help in creating designs (with whatever tooling), the design help page has a number of companies willing to provide paid support services.
+
+{Reactions}
+👍
+
+[03/25/2026 20:48] nmz787
+my experience also is that the foundry provides the PDK, with support for any tools they expect users will want. I have never heard of tool vendors supplying a foundry PDK component
+
+
+[03/25/2026 20:49] nmz787
+for something like DRC, I don't think this is possible without some translator which surely Cadence/Synopsys isn't making for working with klayout
+
+
+[03/25/2026 20:49] nmz787
+OASIS and GDS are industry standards, so of course closed-source tools support them
+
+
+[03/25/2026 20:50] nmz787
+APR techfiles are mostly ASCII with grid definitions (pitches, CDs, spaces) so a translator is likely easier to code (I suppose even for AI)
+
+
+==============================================================
+Exported 17 message(s)
+==============================================================

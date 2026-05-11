@@ -1,0 +1,48 @@
+==============================================================
+Guild: wafer.space Community
+Channel: Information / questions / Magic DRC waving
+After: 10/31/2025 23:59
+Before: 12/01/2025 00:00
+==============================================================
+
+[11/30/2025 14:54] egorxe
+@Leo Moser (mole99) Will it be possible to wave some Magic DRC errors in precheck as long as all KLayout checks are fine? The problem is I'm inconsistently getting Magic DRC errors in factory provided SRAMs. There are several SRAM macros in [our testchip design](https://github.com/ZeduloTech/gf180mcu-testchip2025/blob/e57c1a503bc76d012670eb28d11fc9468af8396c/final/gds/chip_top.gds.gz) and sometimes weird "Can't overlap those layers" DRC errors are reported inside one or two SRAMs, while others are fine. There is nothing else besides the SRAM internals and dummy fill metals in the DRC area, so it looks like a Magic DRC issue. I'll report the issue itself later, for now I just would like to know if it'll be possible to wave some errors while uploading final GDS to the platform, as I doubt that it'll be possible to debug and fix the issue prior to deadline.
+
+{Embed}
+https://github.com/ZeduloTech/gf180mcu-testchip2025/blob/e57c1a503bc76d012670eb28d11fc9468af8396c/final/gds/chip_top.gds.gz
+gf180mcu-testchip2025/final/gds/chip_top.gds.gz at e57c1a503bc76d01...
+SRAM and eFUSE testchip for wafer.space MPW runs using the gf180mcu PDK - ZeduloTech/gf180mcu-testchip2025
+2025-11_media/gf180mcu-testchip2025-FDAB6
+
+
+[11/30/2025 16:07] mole99
+Hi Egor, how did you run DRC? Did you use the Nix shell in the template or did you use custom versions of the tools and the PDK?
+For the final check you should use https://github.com/wafer-space/gf180mcu-precheck, since it will run in the online precheck.
+Other designs haven't had issues with the SRAMs so far, but you need to flatten a number of cells in magic.
+
+Normally, you need to pass both the magic and KLayout DRC deck. Neither DRC deck is a complete implementation and therefore we run both for better coverage.
+
+We will likely waive some magic DRC checks (e.g. CO.3 and CO.4) since they were verified to be slightly inaccurate implementations.
+
+
+[11/30/2025 16:11] egorxe
+I'm running inside the nix environment from the precheck, nothing custom. You could check it yourself with the GDS from the link if you have time, but you have to skip zero polygon check as it will fail on this GDS revision :).
+
+
+[11/30/2025 18:14] mole99
+I'll check it tomorrow, no worries about the zero area polygons for now :)
+
+
+[11/30/2025 18:57] egorxe
+Thanks, Leo! I've fixed zero area polygons [in the next revision](https://github.com/ZeduloTech/gf180mcu-testchip2025/blob/3f49a9b414d45c7de78c40d2b5e2279501ac4e35/final/gds/chip_top.gds.gz) anyway. Also I saw your review request for the python DRC script, but all my free time is going towards finishing GDS for the tapeout :). I'll try to review the script thoughtfully tomorrow, sorry for the delay.
+
+{Embed}
+https://github.com/ZeduloTech/gf180mcu-testchip2025/blob/3f49a9b414d45c7de78c40d2b5e2279501ac4e35/final/gds/chip_top.gds.gz
+gf180mcu-testchip2025/final/gds/chip_top.gds.gz at 3f49a9b414d45c7d...
+SRAM and eFUSE testchip for wafer.space MPW runs using the gf180mcu PDK - ZeduloTech/gf180mcu-testchip2025
+2025-11_media/gf180mcu-testchip2025-2E541
+
+
+==============================================================
+Exported 5 message(s)
+==============================================================

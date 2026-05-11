@@ -1024,7 +1024,7 @@ I will also try to pour some dies into epoxy cubers. I have already received the
 2026-05_media/breadboard3-FC72B.jpeg
 
 {Reactions}
-🎉 (3) 🥳
+🎉 (4) 🥳
 
 [05/10/2026 09:38] mole99
 Started a thread.
@@ -1054,6 +1054,28 @@ So people can aim for a higher fmax at the tradeoff of a more constrained temper
 (I’m pretty sure at 125°C you start having other problems, like the epoxy on the COB melting)
 
 
+[05/11/2026 10:53] egorxe
+Hi, @Tholin! Thanks for your amazing work on 3.3V SCL! Do you plan to extend your library? Because if you do, I would like to ask you to add some kind of delay cell to improve hold fixing. Currently I have problems with increasing a hold margin for my Caravel port, which I would like to do for safety. OpenROAD generates thousands of buffer cells but with only ~100ps delay each it has a hard time and takes a huge area.
+
+
+[05/11/2026 12:40] tholin
+I’m currently working on making it easier for people to collaborate to the repo
+
+
+[05/11/2026 12:40] tholin
+I’m just one person, unfortunately
+
+
+[05/11/2026 12:48] mole99
+A delay buffer appears to be simply two buffers in a trench coat, where the first three inverters have a narrow gate width. You might even want to experiment with the gate length for even larger delays.
+
+See here: https://gf180mcu-pdk.readthedocs.io/en/latest/digital/standard_cells/gf180mcu_fd_sc_mcu7t5v0/cells/dlya/gf180mcu_fd_sc_mcu7t5v0__dlya_1.html
+
+Adjusting Tholin's buffers would probably be a good start.
+
+{Reactions}
+👍
+
 ==============================================================
-Exported 211 message(s)
+Exported 215 message(s)
 ==============================================================

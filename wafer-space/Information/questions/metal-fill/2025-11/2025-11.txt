@@ -1,0 +1,56 @@
+==============================================================
+Guild: wafer.space Community
+Channel: Information / questions / Metal Fill
+After: 10/31/2025 23:59
+Before: 12/01/2025 00:00
+==============================================================
+
+[11/30/2025 03:31] buck_042
+When I use LibreLane to generate a small digital module, everything looks normal but there is no metal fill, whereas I noticed that the top design in the template does have metal fill. What is causing this difference?
+
+{Attachments}
+2025-11_media/image-60690.png
+2025-11_media/image-C245E.png
+
+
+[11/30/2025 03:46] bigturtle8
+First thought would be different hardening strategies in the config.json, but could be wrong (https://librelane.readthedocs.io/en/latest/usage/caravel/index.html)
+
+
+[11/30/2025 03:52] buck_042
+I don't know, I don't see any configuration related to metal fill in template's config.yaml. And the fillers are successfully inserted, but no metal fill.
+
+
+[11/30/2025 04:57] buck_042
+I see, the template uses the chip flow, which calls some KLayout scripts to insert metal fill. In my case, I didn’t explicitly set any flow, so I assume it’s using the default classic flow, which doesn’t seem to run the KLayout density/metal-fill steps.
+
+If I want to add metal fill for a small standalone digital block, what is the recommended approach?
+
+{Attachments}
+2025-11_media/image-81663.png
+2025-11_media/image-6D40A.png
+2025-11_media/image-5CAC4.png
+
+
+[11/30/2025 07:35] mole99
+Normally, you wouldn't run metal fill for a standalone block.
+
+One way to do that, however, is to add the `KLayout.Filler` step after one the StreamOut steps in the Classic flow. You can do this directly in the config.
+
+
+[11/30/2025 07:48] buck_042
+Thanks! May I ask how to do that directly in the config?
+
+
+[11/30/2025 09:37] mole99
+You can find the relevant docs here: https://librelane.readthedocs.io/en/latest/usage/writing_custom_flows.html
+By using `substituting_steps` and placing a "+" before the step ID. You're welcome!
+
+
+[11/30/2025 17:26] buck_042
+Thank you!
+
+
+==============================================================
+Exported 8 message(s)
+==============================================================
