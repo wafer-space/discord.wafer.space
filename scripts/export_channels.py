@@ -700,10 +700,7 @@ def export_all_channels(  # noqa: C901,PLR0915  # Orchestration top-level
     start = time.monotonic()
 
     def out_of_time() -> bool:
-        return (
-            max_runtime_seconds is not None
-            and time.monotonic() - start > max_runtime_seconds
-        )
+        return max_runtime_seconds is not None and time.monotonic() - start > max_runtime_seconds
 
     print(f"\nStarting exports (current month: {current_month_utc()})...")
     if max_runtime_seconds:
