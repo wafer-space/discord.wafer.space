@@ -1,0 +1,1177 @@
+{
+  "guild": {
+    "id": "1361349522684510449",
+    "name": "wafer.space Community",
+    "iconUrl": "2025-11_media/fb143eaa45770cbb40493d09b625e98b-09FD1.png"
+  },
+  "channel": {
+    "id": "1441941697683783711",
+    "type": "GuildPublicThread",
+    "categoryId": "1409660288822673408",
+    "category": "questions",
+    "name": "PDN M4 routing over SRAMs",
+    "topic": null
+  },
+  "dateRange": {
+    "after": "2025-10-31T23:59:59.999+00:00",
+    "before": "2025-12-01T00:00:00+00:00"
+  },
+  "exportedAt": "2026-05-11T22:23:29.2446233+00:00",
+  "messages": [
+    {
+      "id": "1441941697683783711",
+      "type": "Default",
+      "timestamp": "2025-11-23T00:01:30.709+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I attached a picture of my power nets. For some SRAMs, the M4 vertical stripes go straight over the top of the SRAMs, which is what I'd expect. The other SRAMs seem to punch a hole in M4. Any ideas what might be causing this? One other thing that's suspicious is the extra runt stripes visible between the instances in the top right -- these are offset 29 um to the right of the main grid.\n\nI'm using the PDN tcl snippet from the template project to add the straps down the east/west sides of each macro (all in N or S orientation). This is adapted to cover all of my instances but otherwise the same as the template project.\n\n```\nproc sram_pdn_ns {pdnname macrolist} {\n    define_pdn_grid \\\n        -macro \\\n        -instances $macrolist \\\n        -name $pdnname \\\n        -starts_with POWER \\\n        -halo \"$::env(PDN_HORIZONTAL_HALO) $::env(PDN_VERTICAL_HALO)\"\n\n    add_pdn_connect \\\n        -grid $pdnname \\\n        -layers \"$::env(PDN_VERTICAL_LAYER) $::env(PDN_HORIZONTAL_LAYER)\"\n\n    add_pdn_connect \\\n        -grid $pdnname \\\n        -layers \"$::env(PDN_VERTICAL_LAYER) Metal3\"\n\n    add_pdn_stripe \\\n        -grid $pdnname \\\n        -layer Metal4 \\\n        -width 2.36 \\\n        -offset 1.18 \\\n        -spacing 0.28 \\\n        -pitch 426.86 \\\n        -starts_with GROUND \\\n        -number_of_straps 2\n}\n\nsram_pdn_ns pdn_cpu_iram {i_chip_core.iram_u.sram.*.ram_u}\nsram_pdn_ns pdn_apu_ram {i_chip_core.apu_u.ram_u.sram.*.ram_u}\nsram_pdn_ns pdn_ppu_sbram {i_chip_core.ppu_u.*.ram_u}\n```\n\nI'm not getting any DRCs but I expect punching holes in the vertical routing like that is not good for power integrity.",
+      "author": {
+        "id": "803213471402688522",
+        "name": "_luke_w_",
+        "discriminator": "0000",
+        "nickname": "LukeW",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+      },
+      "attachments": [
+        {
+          "id": "1441941698128248872",
+          "url": "2025-11_media/image-13DBB.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 1452580
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441993087370002434",
+      "type": "Default",
+      "timestamp": "2025-11-23T03:25:42.965+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I looked at this a bit further. There were no DRC errors but there were some very interesting warnings:\n\n```\n[WARNING PDN-0231] i_chip_core.ppu_u.blender.palette_mapper.pram_u.g_d256.g_width\\[0\\].ram_u is not connected to any power/ground nets.\n[WARNING PDN-0231] i_chip_core.ppu_u.blender.palette_mapper.pram_u.g_d256.g_width\\[1\\].ram_u is not connected to any power/ground nets.\n[WARNING PDN-0231] i_chip_core.ppu_u.scanbuf0_u.g_d512.g_width\\[0\\].ram_u is not connected to any power/ground nets.\n[WARNING PDN-0231] i_chip_core.ppu_u.scanbuf0_u.g_d512.g_width\\[1\\].ram_u is not connected to any power/ground nets.\n[WARNING PDN-0231] i_chip_core.ppu_u.scanbuf1_u.g_d512.g_width\\[0\\].ram_u is not connected to any power/ground nets.\n[WARNING PDN-0231] i_chip_core.ppu_u.scanbuf1_u.g_d512.g_width\\[1\\].ram_u is not connected to any power/ground nets.\n[WARNING PDN-0231] chip_id is not connected to any power/ground nets.\n[WARNING PDN-0231] wafer_space_logo is not connected to any power/ground nets.\n[WARNING PDN-0231] i_chip_core.ppu_u.blender.palette_mapper.pram_u.g_d256.g_width\\[0\\].ram_u is not connected to any power/ground nets.\n[WARNING PDN-0231] i_chip_core.ppu_u.blender.palette_mapper.pram_u.g_d256.g_width\\[1\\].ram_u is not connected to any power/ground nets.\n[WARNING PDN-0231] i_chip_core.ppu_u.scanbuf0_u.g_d512.g_width\\[0\\].ram_u is not connected to any power/ground nets.\n[WARNING PDN-0231] i_chip_core.ppu_u.scanbuf0_u.g_d512.g_width\\[1\\].ram_u is not connected to any power/ground nets.\n[WARNING PDN-0231] i_chip_core.ppu_u.scanbuf1_u.g_d512.g_width\\[0\\].ram_u is not connected to any power/ground nets.\n[WARNING PDN-0231] i_chip_core.ppu_u.scanbuf1_u.g_d512.g_width\\[1\\].ram_u is not connected to any power/ground nets.\n```\n\nThese are exactly the RAMs which have M4 overroute in my screencap, and they were missing their RTL VDD/VSS connections. Now that's fixed, they also punch holes in M4.",
+      "author": {
+        "id": "803213471402688522",
+        "name": "_luke_w_",
+        "discriminator": "0000",
+        "nickname": "LukeW",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441993762808139817",
+      "type": "Default",
+      "timestamp": "2025-11-23T03:28:24.002+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I think the ideal setup would be for the main M4/M5 grid to continue over the SRAMs, and the M4 vertical straps on west/east edges of the SRAMs would then just via up in multiple places to the M5 horizontal stripes. Is this achievable? I had a look through the flags for `define_pdn_grid` in the openroad docs but I didn't see anything super promising.",
+      "author": {
+        "id": "803213471402688522",
+        "name": "_luke_w_",
+        "discriminator": "0000",
+        "nickname": "LukeW",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1442295753170092142",
+      "type": "Default",
+      "timestamp": "2025-11-23T23:28:24.115+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Leo Moser (mole99) / @Tim Edwards - Any ideas?",
+      "author": {
+        "id": "169786952432746498",
+        "name": "mithro_",
+        "discriminator": "0000",
+        "nickname": "Tim 'mithro' Ansell",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "323371864074485771",
+          "name": "mole99",
+          "discriminator": "0000",
+          "nickname": "Leo Moser (mole99)",
+          "color": null,
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1423020172595298314",
+              "name": "Mod",
+              "color": null,
+              "position": 1
+            }
+          ],
+          "avatarUrl": "2025-11_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+        },
+        {
+          "id": "1365118310701600900",
+          "name": "rtimothyedwards_19428",
+          "discriminator": "0000",
+          "nickname": "Tim Edwards",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2025-11_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1442437662161240195",
+      "type": "Default",
+      "timestamp": "2025-11-24T08:52:17.855+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yeah, I don't think that's achievable at the moment. I think the holes in the PDN are due to the `-halo` option, which cuts the PDN straps.\n\nFor now, you can make the PDN straps on Metal5 thicker to reduce IR-drop across the chip. But for the ideal solution we need to open a feature request in OpenROAD.\n\n@LukeW If you would like to report this, I can show you how to create a standalone reproducible from a LibreLane step.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "2025-11_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "803213471402688522",
+          "name": "_luke_w_",
+          "discriminator": "0000",
+          "nickname": "LukeW",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2025-11_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1442455610527453194",
+      "type": "Default",
+      "timestamp": "2025-11-24T10:03:37.079+00:00",
+      "timestampEdited": "2025-11-24T10:04:01.25+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks, no worries. I asked a coworker about this today and they confirmed we would normally continue our M7/M6 \"waffle\" (on TSMC40) over the top of RAMs, so I don't think what I'm trying to do is too weird.\n\nAs a workaround, maybe I could add some M4 vertical straps to the SRAM GDS just to keep the M5 horizontals all nailed together?\n\nI think I have a few tickets to file on OpenROAD after the dust clears \ud83d\ude42",
+      "author": {
+        "id": "803213471402688522",
+        "name": "_luke_w_",
+        "discriminator": "0000",
+        "nickname": "LukeW",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\ud83d\udc4f",
+            "code": "clap",
+            "isAnimated": false,
+            "imageUrl": "2025-11_media/1f44f-3D381.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "323371864074485771",
+              "name": "mole99",
+              "discriminator": "0000",
+              "nickname": "Leo Moser (mole99)",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2025-11_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\ud83d\ude42",
+          "code": "slight_smile",
+          "isAnimated": false,
+          "imageUrl": "2025-11_media/1f642-83E8A.svg"
+        }
+      ]
+    },
+    {
+      "id": "1442455854342344785",
+      "type": "Default",
+      "timestamp": "2025-11-24T10:04:35.209+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "> . I think the holes in the PDN are due to the -halo option, which cuts the PDN straps.\n\nI thought that too, but in that case I can't explain why it's not also cutting the M5 horizontals?",
+      "author": {
+        "id": "803213471402688522",
+        "name": "_luke_w_",
+        "discriminator": "0000",
+        "nickname": "LukeW",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1442456941480902718",
+      "type": "Default",
+      "timestamp": "2025-11-24T10:08:54.403+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It's on sky130, but when I place my macros there, I can get pdngen to just continue the met4 rails over them, so there might already be some magic incantation to do that.",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1442457037740183593",
+      "type": "Default",
+      "timestamp": "2025-11-24T10:09:17.353+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "( That's how I power my ROM and register files macro in TT ).",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\ud83d\udc4d",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "2025-11_media/1f44d-27259.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "803213471402688522",
+              "name": "_luke_w_",
+              "discriminator": "0000",
+              "nickname": "LukeW",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2025-11_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1442457558458699911",
+      "type": "Default",
+      "timestamp": "2025-11-24T10:11:21.502+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Interesting, I have a couple experiments to try when I get home then. Maybe it's adding the `add_pdn_stripe` on M4 (for connecting up the pins on east/west edge) that is causing it to punch a hole in M4? In that case I could try the pre-strapped RAM GDS someone shared on GitHub. Thanks \ud83d\ude42",
+      "author": {
+        "id": "803213471402688522",
+        "name": "_luke_w_",
+        "discriminator": "0000",
+        "nickname": "LukeW",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\ud83d\ude42",
+          "code": "slight_smile",
+          "isAnimated": false,
+          "imageUrl": "2025-11_media/1f642-83E8A.svg"
+        }
+      ]
+    },
+    {
+      "id": "1442458169145299104",
+      "type": "Default",
+      "timestamp": "2025-11-24T10:13:47.101+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I think the trick is to make sure that both your macro pdn grid and the macro itself have _nothing_ in M4. Then pdngen see that it's all clear and it can just continue the existing rails.  If you have anything in M4 either in the LEF or trying to create things yourself, it will carve a hole the size of the macro.",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\ud83d\udc4d",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "2025-11_media/1f44d-27259.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "803213471402688522",
+              "name": "_luke_w_",
+              "discriminator": "0000",
+              "nickname": "LukeW",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2025-11_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1442462041372753981",
+      "type": "Default",
+      "timestamp": "2025-11-24T10:29:10.312+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@tnt we use `add_pdn_stripe` to add a pair of Metal4 straps on either side of the SRAM macro, in order to easily connect it to the PDN straps on Metal5. This is probably why OpenROAD considers that layer to be blocked.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "2025-11_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "596068704471482370",
+          "name": "246tnt",
+          "discriminator": "0000",
+          "nickname": "tnt",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2025-11_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1442463103706206309",
+      "type": "Default",
+      "timestamp": "2025-11-24T10:33:23.592+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "How do the SRAM power connections work on SKY130 then? I think having a bunch of VDD/VSS on the edges of a RAM is quite normal \ud83e\udd14",
+      "author": {
+        "id": "803213471402688522",
+        "name": "_luke_w_",
+        "discriminator": "0000",
+        "nickname": "LukeW",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\ud83e\udd14",
+          "code": "thinking",
+          "isAnimated": false,
+          "imageUrl": "2025-11_media/1f914-15707.svg"
+        }
+      ]
+    },
+    {
+      "id": "1442463413421867151",
+      "type": "Default",
+      "timestamp": "2025-11-24T10:34:37.434+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Does it just have some M3 straps that get via'd up in multiple places to the M4 rails?",
+      "author": {
+        "id": "803213471402688522",
+        "name": "_luke_w_",
+        "discriminator": "0000",
+        "nickname": "LukeW",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1442463491221884960",
+      "type": "Default",
+      "timestamp": "2025-11-24T10:34:55.983+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Well those macro have M3 straps at various places and they're meant to wire up to M4 rails.",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1442463516400287745",
+      "type": "Default",
+      "timestamp": "2025-11-24T10:35:01.986+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "ah ok, yeah",
+      "author": {
+        "id": "803213471402688522",
+        "name": "_luke_w_",
+        "discriminator": "0000",
+        "nickname": "LukeW",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1442463746248147064",
+      "type": "Default",
+      "timestamp": "2025-11-24T10:35:56.786+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I guess for this tapeout I'll just add some M4 rails to the RAM GDS so my M5s are all still nailed together, but the GF180 RAMs could probably be tweaked to hook up in a way more like the SKY130 ones",
+      "author": {
+        "id": "803213471402688522",
+        "name": "_luke_w_",
+        "discriminator": "0000",
+        "nickname": "LukeW",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1442463848396361818",
+      "type": "Default",
+      "timestamp": "2025-11-24T10:36:21.14+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "or I could leave it-- it's all 5V after all",
+      "author": {
+        "id": "803213471402688522",
+        "name": "_luke_w_",
+        "discriminator": "0000",
+        "nickname": "LukeW",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1442463984442937375",
+      "type": "Default",
+      "timestamp": "2025-11-24T10:36:53.576+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "thanks, I didn't do any SKY130 tapeouts other than TT so never saw the macros",
+      "author": {
+        "id": "803213471402688522",
+        "name": "_luke_w_",
+        "discriminator": "0000",
+        "nickname": "LukeW",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1442539534377287701",
+      "type": "Default",
+      "timestamp": "2025-11-24T15:37:06.084+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Looking at the LEF there are a whole bunch of horizontal M3 VDD/VSS pins that aren't getting connected at the moment due to the hole in M4 (here for 256x8 memory):",
+      "author": {
+        "id": "803213471402688522",
+        "name": "_luke_w_",
+        "discriminator": "0000",
+        "nickname": "LukeW",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+      },
+      "attachments": [
+        {
+          "id": "1442539534565900298",
+          "url": "2025-11_media/image-39228.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 101535
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1442542946153922570",
+      "type": "Default",
+      "timestamp": "2025-11-24T15:50:39.515+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yes, the problem is that those pins are not really... structured. So it's hard to hook them up to the PDN without careful placement. That's why I added the Metal4 straps on both sides. As long as they cross Metal5, you are fine.\nBut connectivity could be better, perhaps a custom wrapper is the best solution after all.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "2025-11_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1442552236793135104",
+      "type": "Default",
+      "timestamp": "2025-11-24T16:27:34.576+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I talked to a layout engineer on my lunch break and they suggested adding M3 rings around the RAM so it works in both orientations without any additional PDN config. I think you would still have reasonable access to data pins via M2",
+      "author": {
+        "id": "803213471402688522",
+        "name": "_luke_w_",
+        "discriminator": "0000",
+        "nickname": "LukeW",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1442555379073421483",
+      "type": "Default",
+      "timestamp": "2025-11-24T16:40:03.754+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "and yeah I realise it's hard to get all of them but is it really ok to have the SRAM powered *only* by its west and east edges? None of the rails in that LEF screencap are connected up to M4. Seems like you could get a lot of ground bounce in the centre",
+      "author": {
+        "id": "803213471402688522",
+        "name": "_luke_w_",
+        "discriminator": "0000",
+        "nickname": "LukeW",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1442556990302982317",
+      "type": "Default",
+      "timestamp": "2025-11-24T16:46:27.901+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "One thing to consider is it's 5V.  0.1V bounce for a 5V vdd will matter way less than the same 0.1V when your vdd is 1.1v \ud83d\ude42",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\ud83d\ude42",
+          "code": "slight_smile",
+          "isAnimated": false,
+          "imageUrl": "2025-11_media/1f642-83E8A.svg"
+        }
+      ]
+    },
+    {
+      "id": "1442564510652170361",
+      "type": "Default",
+      "timestamp": "2025-11-24T17:16:20.892+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yeah that's true \ud83d\ude05  I settled on just a few more stripes to connect the macro's M3 rails up to M5. Still don't like the M4 slot below the macro",
+      "author": {
+        "id": "803213471402688522",
+        "name": "_luke_w_",
+        "discriminator": "0000",
+        "nickname": "LukeW",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+      },
+      "attachments": [
+        {
+          "id": "1442564510635528232",
+          "url": "2025-11_media/image-B1ADD.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 336299
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\ud83d\ude05",
+          "code": "sweat_smile",
+          "isAnimated": false,
+          "imageUrl": "2025-11_media/1f605-42B43.svg"
+        }
+      ]
+    },
+    {
+      "id": "1442564578088190084",
+      "type": "Default",
+      "timestamp": "2025-11-24T17:16:36.97+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "```\n    # Strap pins on east/west edges of RAM\n    add_pdn_stripe \\\n        -grid $pdnname \\\n        -layer Metal4 \\\n        -width 2.36 \\\n        -offset 1.18 \\\n        -spacing 0.28 \\\n        -pitch 426.86 \\\n        -starts_with GROUND \\\n        -number_of_straps 2\n\n    # Due to the above, we've punched an SRAM-sized hole in our M4 vertical\n    # rails. Put some small rails over the top of the macro just to nail M5\n    # back together. We still have an awful slot in the M4 routing above and\n    # below the macro; it's 5V, I'm sure it's ok\n    add_pdn_stripe \\\n        -grid $pdnname \\\n        -layer Metal4 \\\n        -width 2.36 \\\n        -offset 65.93 \\\n        -spacing 0.28 \\\n        -pitch 50 \\\n        -starts_with GROUND \\\n        -number_of_straps 7\n```",
+      "author": {
+        "id": "803213471402688522",
+        "name": "_luke_w_",
+        "discriminator": "0000",
+        "nickname": "LukeW",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1442568313551982613",
+      "type": "Default",
+      "timestamp": "2025-11-24T17:31:27.574+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I filed a ticket just so this isn't forgotten: https://github.com/wafer-space/gf180mcu-project-template/issues/31",
+      "author": {
+        "id": "803213471402688522",
+        "name": "_luke_w_",
+        "discriminator": "0000",
+        "nickname": "LukeW",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "RAM PDN config punches a hole in M4 \u00b7 Issue #31 \u00b7 wafer-space/gf1...",
+          "url": "https://github.com/wafer-space/gf180mcu-project-template/issues/31",
+          "timestamp": null,
+          "description": "Writing up the discord thread so we still remember it post-shuttle. The PDN config has this line to add an M4 strap down each side of the RAM: gf180mcu-project-template/librelane/pdn_cfg.tcl Line 2...",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "2025-11_media/31-DFC52",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": [],
+          "inlineEmojis": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1442583991558602932",
+      "type": "Reply",
+      "timestamp": "2025-11-24T18:33:45.502+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "That's clever! I didn't think of adding another call to `add_pdn_stripe` (not sure why \ud83d\ude05).\nInitially, I tried connecting the pins directly to the Metal4 straps using `add_pdn_connect`, but with that you need to line up the macro with the pins. That's why I resorted to adding the stripes on the sides.\n\nI think it would be good to add your additional stripes to the template too. Maybe I'll make them slightly thicker, since I chose 2.36 only because the pins on the sides are so thin.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "2025-11_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "803213471402688522",
+          "name": "_luke_w_",
+          "discriminator": "0000",
+          "nickname": "LukeW",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2025-11_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1442564510652170361",
+        "channelId": "1441941697683783711",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\ud83d\ude05",
+          "code": "sweat_smile",
+          "isAnimated": false,
+          "imageUrl": "2025-11_media/1f605-42B43.svg"
+        }
+      ]
+    },
+    {
+      "id": "1442641198367117343",
+      "type": "Default",
+      "timestamp": "2025-11-24T22:21:04.668+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@LukeW - GF180MCU actually has some configurations with even less metal layers. I wonder if there is any consideration for that fact in the SRAM design?",
+      "author": {
+        "id": "169786952432746498",
+        "name": "mithro_",
+        "discriminator": "0000",
+        "nickname": "Tim 'mithro' Ansell",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "803213471402688522",
+          "name": "_luke_w_",
+          "discriminator": "0000",
+          "nickname": "LukeW",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2025-11_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1442641526290251847",
+      "type": "Default",
+      "timestamp": "2025-11-24T22:22:22.851+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I mean the RAM is solid up to M3 so if you don't have at least one layer for over-route then you're a bit screwed \ud83d\ude05  but yeah it's possible they have the edge pins so that you can have M4 fully available for routing over the RAM?",
+      "author": {
+        "id": "803213471402688522",
+        "name": "_luke_w_",
+        "discriminator": "0000",
+        "nickname": "LukeW",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\ud83d\ude05",
+          "code": "sweat_smile",
+          "isAnimated": false,
+          "imageUrl": "2025-11_media/1f605-42B43.svg"
+        }
+      ]
+    },
+    {
+      "id": "1442641951055806484",
+      "type": "Default",
+      "timestamp": "2025-11-24T22:24:04.123+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I guess you can do it without any layers above M3,  just impossible to route over the RAM \ud83e\udd14 would wafer.space ever do an MPW with just three metal layers?",
+      "author": {
+        "id": "803213471402688522",
+        "name": "_luke_w_",
+        "discriminator": "0000",
+        "nickname": "LukeW",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\ud83e\udd14",
+          "code": "thinking",
+          "isAnimated": false,
+          "imageUrl": "2025-11_media/1f914-15707.svg"
+        }
+      ]
+    },
+    {
+      "id": "1442828422295588895",
+      "type": "Default",
+      "timestamp": "2025-11-25T10:45:02.331+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "2025-11_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [
+        {
+          "id": "1442828422089936907",
+          "url": "2025-11_media/image-FF945.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 790235
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1442828543712039063",
+      "type": "Default",
+      "timestamp": "2025-11-25T10:45:31.279+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@LukeW what do you think of this? https://github.com/wafer-space/gf180mcu-project-template/pull/32\n\nI used your stripes for the N/S orientation, but made them slightly thicker (4um). The W/E orientation is more awkward: There I added more stripes closer together in the first half for a good connection to the pins underneath, as well as some stripes spaced further apart.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "2025-11_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "803213471402688522",
+          "name": "_luke_w_",
+          "discriminator": "0000",
+          "nickname": "LukeW",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2025-11_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1442905754091782257",
+      "type": "Default",
+      "timestamp": "2025-11-25T15:52:19.668+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "sure, I replied on GitHub just so on the next shuttle when we're like \"why did we do that?\" there's a record",
+      "author": {
+        "id": "803213471402688522",
+        "name": "_luke_w_",
+        "discriminator": "0000",
+        "nickname": "LukeW",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/a2f98861602ee8229f4eb87d5c25d1b1-5FBF4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    }
+  ],
+  "messageCount": 34
+}
