@@ -1083,7 +1083,7 @@ Building SCL releases is now fully automated
 2026-05_media/image-6CD5E.png
 
 {Reactions}
-🎉 (3)
+🎉 (4)
 
 [05/11/2026 15:49] tholin
 
@@ -1104,6 +1104,213 @@ Stretch goal: verify the SCL by building an example project as part of the pipel
 Currently blocked by LVS still locking up with the SCL
 
 
+[05/11/2026 22:22] wayfarer.technologies
+so help me out here...
+can I build an octocore 6502 with 64b addressing?
+
+
+[05/11/2026 22:22] wayfarer.technologies
+will that work here?
+
+
+[05/11/2026 22:22] wayfarer.technologies
+or similar 'weird stuff'?
+
+
+[05/11/2026 22:25] _mwelling_
+the limitations are your imagination and silicon area
+
+
+[05/11/2026 22:26] _mwelling_
+well that and money to pay to a slot on the shuttle
+
+
+[05/11/2026 22:27] _mwelling_
+someone implemented 6502 on tinytapeout: https://tinytapeout.com/chips/ttihp26a/tt_um_chrismoos_6502_mcu
+
+{Embed}
+https://tinytapeout.com/chips/ttihp26a/tt_um_chrismoos_6502_mcu
+163 m6502 Microcontroller - Tiny Tapeout
+Complete 6502 CPU with bus multiplexer, GPIO, Timer, and UART
+2026-05_media/social-preview-2C419
+
+
+[05/11/2026 22:27] wayfarer.technologies
+ok, so im only limited by pads (pins) and available 'cells'/transistors?
+
+
+[05/11/2026 22:28] _mwelling_
+yeah pretty much
+
+
+[05/11/2026 22:28] wayfarer.technologies
+aye, I was talking to those guys, speed is limited to ~33mhz and a small number of pins
+
+
+[05/11/2026 22:28] _mwelling_
+that and the knowhow to implement all of the things
+
+
+[05/11/2026 22:28] wayfarer.technologies
+i need 80-120 pins, and want to hit 800-1200mhz
+
+
+[05/11/2026 22:29] _mwelling_
+I think the pad ring is not that big
+
+
+[05/11/2026 22:29] wayfarer.technologies
+it said 56-120+ pads
+
+
+[05/11/2026 22:30] wayfarer.technologies
+on the website, so im not sure if we mean different things, perhaps some are multiplexed
+
+
+[05/11/2026 22:30] _mwelling_
+yeah the default isn't that big
+
+
+[05/11/2026 22:30] wayfarer.technologies
+im not sure yet
+
+
+[05/11/2026 22:30] wayfarer.technologies
+just getting some conceptual boundaries
+
+
+[05/11/2026 22:30] _mwelling_
+you are on your own if you don't use the default
+
+
+[05/11/2026 22:30] wayfarer.technologies
+ok, 'can I make the whole thing SRAM'?
+
+
+[05/11/2026 22:30] _mwelling_
+sure
+
+
+[05/11/2026 22:31] wayfarer.technologies
+how many 'cells'?
+
+
+[05/11/2026 22:31] wayfarer.technologies
+or transistors do i get?
+
+
+[05/11/2026 22:32] _mwelling_
+depends on a lot of things
+
+
+[05/11/2026 22:34] _mwelling_
+@Tim 'mithro' Ansell or @tnt might have some approximate numbers
+
+
+[05/11/2026 22:37] _mwelling_
+https://mithro.github.io/gf180mcu-project-template/
+
+
+[05/11/2026 22:38] kris____
+there's some information here total cells used/% area used: https://github.com/wafer-space/ws-run1/blob/density-report/reticle_density_report.md
+
+{Embed}
+https://github.com/wafer-space/ws-run1/blob/density-report/reticle_density_report.md
+ws-run1/reticle_density_report.md at density-report · wafer-space/...
+wafer.space GF180MCU Run 1. Contribute to wafer-space/ws-run1 development by creating an account on GitHub.
+2026-05_media/ws-run1-9B3DC
+
+
+[05/11/2026 22:39] fangameempire
+TIny Tapeout projects also show the number of cells used in the GDS github action
+
+
+[05/11/2026 22:39] _mwelling_
+
+
+{Attachments}
+2026-05_media/image-66358.png
+
+
+[05/11/2026 22:39] fangameempire
+Here's mine as an example for Tiny Tapeout
+https://github.com/FangameEmpire/ttsky26a_spacewar/actions/runs/25696603247
+2200 cells ~= 70% of two tiles
+
+{Embed}
+https://github.com/FangameEmpire/ttsky26a_spacewar/actions/runs/25696603247
+Merge bullet tests back into main · FangameEmpire/ttsky26a_spacewa...
+A scaled-down version of the classic PDP-1 game on a VGA display. - Merge bullet tests back into main · FangameEmpire/ttsky26a_spacewar@f151f17
+2026-05_media/ttsky26a_spacewar-E9C06
+
+
+[05/11/2026 22:40] fangameempire
+Or do you mean wafer.space as a whole
+
+
+[05/11/2026 22:40] _mwelling_
+all of this is on the main page
+
+{Attachments}
+2026-05_media/image-D8C6B.png
+
+
+[05/11/2026 22:43] dorythecat_v2
+Read the little text down below
+
+
+[05/11/2026 22:44] dorythecat_v2
+Those are theoretical, using the standard cells included in the temolate
+
+
+[05/11/2026 22:44] _mwelling_
+not sure what you are expecting?
+
+
+[05/11/2026 22:45] dorythecat_v2
+Oh sorry I am very sleepy and thought you were wayfarer
+
+
+[05/11/2026 22:45] dorythecat_v2
+Wow I really need either new glasses or a few more than eight hours of sleep
+
+
+[05/11/2026 22:45] dorythecat_v2
+Again really sorry
+
+
+[05/11/2026 22:45] _mwelling_
+it is fine just giving the basic idea
+
+
+[05/11/2026 22:46] wayfarer.technologies
+looks like its fine for some basic ideas. creating a large sram array with embedded processor is not trivial however
+
+
+[05/11/2026 22:47] wayfarer.technologies
+i wasnt sure if the SRAM listed was 'if its all ram' or in addition to some other components
+
+
+[05/11/2026 22:48] wayfarer.technologies
+i have some 65xx variations/other architectures im interested in developing, including ML algorithms in vhdl
+
+
+[05/11/2026 22:48] _mwelling_
+yeah those are estimates based on the area of a cell and the user area
+
+
+[05/11/2026 22:49] wayfarer.technologies
+an octocore 6502 that can chain handle 64b is certainly a goal, as is some math coprocessor for 6502/816 etc
+
+
+[05/11/2026 22:50] _mwelling_
+since the tools are free you can run some experiments and get an idea of what you can do
+
+
+[05/11/2026 22:50] wayfarer.technologies
+i even have a 4bit 6404 microslice design i might test out someday, as well as a coprocessor for the 6502 that increases address space and some other functions
+
+
 ==============================================================
-Exported 220 message(s)
+Exported 265 message(s)
 ==============================================================
