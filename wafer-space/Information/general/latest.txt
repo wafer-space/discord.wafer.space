@@ -1592,6 +1592,235 @@ If you want to build your own "budget silicon foundry" then you might want to ch
 {Reactions}
 👍
 
+[05/12/2026 15:04] wayfarer.technologies
+why open source?
+do you just mean open access?
+i have no problem using a company in singapore, Im not sure why thats important
+at some point, if I could get my own machines in house to do this in the US, it would be really cool.
+
+
+[05/12/2026 15:18] dshadoff
+Pretty sure "open source" here means that you get access to a PDK without having to sign NDAs, and effectively getting married to the platform
+
+
+[05/12/2026 15:22] wayfarer.technologies
+gotcha, ok. its just a different use of the jargon
+many of these platforms (small business fabrication) want you to use 'their chips' or 'their shell',, and using a template is helpful to some. I just happen to be looking for a place I can have specific control of what Im building
+
+
+[05/12/2026 15:23] dshadoff
+Well, that also depends on what's in their PDK - which is also good if you can access it before signing a contract
+
+
+[05/12/2026 15:23] wayfarer.technologies
+likem the ISAAC/ISAc,, its an ISA/AT-bus controller for small platforms, and it has specifc requirements, so finding a good fit is important
+
+
+[05/12/2026 15:24] wayfarer.technologies
+is that 'product development kit'?
+
+
+[05/12/2026 15:24] wayfarer.technologies
+process design kit?
+
+
+[05/12/2026 15:25] dshadoff
+Maybe more like "process".  Not sure what it stands for exactly, but it's a definition of things like standard cells and all the nitty gritty that you would need in order to simulate
+
+
+[05/12/2026 15:26] wayfarer.technologies
+right, so atm, to get started, today Im looking for a white label company to put my brand name on flashlights
+
+
+[05/12/2026 15:26] dshadoff
+I'm not an expert on the space; just trying to answer a couple of the simpler questions.
+
+
+[05/12/2026 15:26] wayfarer.technologies
+as I move forward, I have a couple of small devices that require unique silicon
+
+
+[05/12/2026 15:27] wayfarer.technologies
+no totally, just a 'today I am', how Im trying to generate capital/revenue
+
+
+[05/12/2026 15:30] wayfarer.technologies
+ISAAC is an 8b AT/ISA bus controller.
+it pairs with a 6502, an lcd driver (like an EVE or Epson SD chip), and similar chips
+plus we are looking for an audio driver/processor for a set of small handheld devices
+
+so Tiny Tapeout might be a good choice for that audio chip, they cant handle an ISA controller (not enough pins)
+their VGA experiments are rudimentary, and so wafer.space seems more our speed for a couple of these
+
+
+[05/12/2026 15:31] wayfarer.technologies
+tiny tapeouot is 'very cool', they just dont have the 'oomph' in terms of capabilities for a lot of stuff.
+
+maybe for a 4bit microslice or 8b math coprocessor, etc
+wafer.space, seems 'bigger', though its 1000 'units' at $4000+
+
+
+[05/12/2026 15:33] polyfractal
+TinyTapeout is just a multi-project-per-die system for getting onto multi-project wafers. I.e. the last wafer.space run also had a TinyTapeout as one of the projects. 
+
+Think of it like a multi-board PCB house, and TinyTapeout is splitting one of the boards amongst friends who are all sharing the same physical PCB
+
+
+[05/12/2026 15:34] polyfractal
+meaning the wafer.space and the tinytapeout projects that ran on GF180 had the same capabilities (made in the same fab etc), just different amount of silicon to work with
+
+
+[05/12/2026 15:37] wayfarer.technologies
+ok gotcha, it just seems like they are more limited overall
+another place I looked required riscV in some manner. 
+finding the right fabricator is certainly going to be an important step.
+I just dont want to get locked into 'building for a system and its constraints'
+
+
+[05/12/2026 15:39] wayfarer.technologies
+so far, wafer.space seems to be 'the most open' or 'blank slate' I can find
+
+
+[05/12/2026 15:41] polyfractal
+It will be more limited mainly because you're sharing silicon and pins with other projects, yes.
+
+If you are mostly in "digital" land, RTL (the programming language for hardware) is mostly portable. You can take the RTL for a RISC processor and tape it out on both Sky130 and GF180 (or TSMC 65 etc etc) without too much fuss. The trick is that most fabs require you to sign an NDA to get the process kit that lets you actually "synthesize" the transistors.
+
+So without that NDA, you're limited to the handful of open fabs like Sky130, GF180, and whatever the IHP one is
+
+That said, you're still going to have to build for a system in mind. I.e. older nodes aren't very efficient for SRAM so it ends up eating a ton of space and you're design will reflect that. Newer nodes are trickier with analog, etc etc
+
+
+[05/12/2026 15:41] wayfarer.technologies
+so 'standard cells', is this like fpga LUTs?
+i see it thrown around, its ~4-20 transistors right?
+
+
+[05/12/2026 15:43] wayfarer.technologies
+im a vhdl guy, and yes, a lot of this is new jargon. i think i see what yo are saying though at least to some degree
+
+
+[05/12/2026 15:45] polyfractal
+a "standard cell" will be basic components like AND, OR, NOT, NAND etc as well as things like buffers, inverters, delay cells, flip flops. You can see the full list here for gf180: https://gf180mcu-pdk.readthedocs.io/en/latest/digital/standard_cells/standard_cells.html
+
+But yeah each is like 3-10 transistors depending on complexity
+
+Your VHDL gets synthesized to this base list of standard cells, then OpenRoad (or proprietary software) places and routes connections to all those cells like a PCB autorouter
+
+
+[05/12/2026 15:46] wayfarer.technologies
+ok, gotcha. so 'standard cell' ~= 'gate or feature'
+
+
+[05/12/2026 15:46] polyfractal
+yep pretty much 🙂 so if you switch fabs, you get a new PDK with a new set of standard cells, but the synth -> place -> route process is mostly automated. Hit recompile and essentially rebuild the same logic on a new fab process
+
+
+[05/12/2026 15:47] wayfarer.technologies
+how many cells do i get for a 1x1 die?
+
+
+[05/12/2026 15:48] polyfractal
+scroll down to "Theoretical maximum standard cell density" on the wafer.space website and Tim has some numbers, as well as real numbers from the first Run
+
+
+[05/12/2026 15:49] polyfractal
+most dense real design was ~316k logic cells it looks like
+
+
+[05/12/2026 15:50] wayfarer.technologies
+i found it, so it will vary based on routing/complexity
+
+
+[05/12/2026 15:50] polyfractal
+yep!
+
+
+[05/12/2026 15:50] wayfarer.technologies
+im getting '100k cells average' at a glance, more if you are optimized, maybe 150k
+
+
+[05/12/2026 15:51] wayfarer.technologies
+so it is certainly realistic to consider "an 8 core 6502, that has a 64b mode"
+or similar levels of complexity.... you could put an 80386 on here ok
+
+
+[05/12/2026 15:52] wayfarer.technologies
+i think this is probably a good fit for me in the long run, once I have a more concrete design.
+
+
+[05/12/2026 15:56] polyfractal
+couldn't say, outside my experience 🙂 but someone taped out a Z80, and iirc the 6502 was a really old fab node (like 10um or something?) so probably very doable. For me at least, the biggest hurdle was just SRAM size because I didn't want to deal with off-chip flash. there's gobs of space if you're just doing digital logic without much need for memory
+
+
+[05/12/2026 15:56] polyfractal
+(work time, bbl!)
+
+
+[05/12/2026 15:56] wayfarer.technologies
+yeah 6502 had no on chip ram, though adding some is certainly a goal
+
+
+[05/12/2026 15:57] wayfarer.technologies
+have a good day, Im hunting drop shipping suppliers here for some working money
+
+
+[05/12/2026 16:06] dshadoff
+Well, also keep in mind that 6502 was NMOS, not CMOS - everything nowadays is CMOS. But wafer.space does have 5V logic standard cells available.
+
+
+[05/12/2026 16:06] dshadoff
+(I expect most places would concentrate on 3.3V logic and I/Os)
+
+
+[05/12/2026 16:06] wayfarer.technologies
+65c02 and 65ce02 were cmos
+
+
+[05/12/2026 16:06] wayfarer.technologies
+they still make the 65c02 today
+
+
+[05/12/2026 16:06] wayfarer.technologies
+iu just want custom chips
+
+
+[05/12/2026 16:07] wayfarer.technologies
+i should say '6502 based'
+
+
+[05/12/2026 16:07] dshadoff
+Yes, I'm just mentioning it in case you were planning on making a plug-in replacement, threshold levels and so on would need to be considered
+
+
+[05/12/2026 16:08] wayfarer.technologies
+no, im more looking at the ce02 variant and going my own direction while maintaing the overall Instruction Set
+
+
+[05/12/2026 16:08] wayfarer.technologies
+6509 is a cool design, it had more memory/address space and better conforms to the AT bus
+
+
+[05/12/2026 16:09] wayfarer.technologies
+i have a portable 8b game platform that can plug into a tv and upscale from 480x270 or so to fHD built for the 8b style of games. marketed at hobbyists, enthusiasts etc
+
+
+[05/12/2026 16:10] wayfarer.technologies
+it needs either a 'full 6502 based SoC', or the ISAAC I mentioned and such
+
+
+[05/12/2026 16:11] wayfarer.technologies
+im almost certain if I could fab out some 6502s (based systems) with onboard ram and better i/o I could sell a few thousand, its just getting everything lined up
+
+
+[05/12/2026 16:11] wayfarer.technologies
+beyond these designs, Im looking at ML algorithms implemented in hardware, in-memory and near-memory computing etc
+
+
+[05/12/2026 16:12] wayfarer.technologies
+6502 stuff is my playground though, how Ill learn the basics
+
+
 ==============================================================
-Exported 329 message(s)
+Exported 379 message(s)
 ==============================================================
