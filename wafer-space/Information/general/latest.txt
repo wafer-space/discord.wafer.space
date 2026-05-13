@@ -1845,6 +1845,235 @@ those look so small you could accidentally inhale one
 Yes, they are tiny!
 
 
+[05/13/2026 14:24] tholin
+Update: the dies are right side up this time
+
+{Attachments}
+2026-05_media/as03-161A7.mp4
+
+{Reactions}
+🎉 (4)
+
+[05/13/2026 14:24] tholin
+You can tell I designed this back in december
+
+
+[05/13/2026 14:29] 246tnt
+Is that a centurion emulator ? 🙂
+
+
+[05/13/2026 14:58] namibj
+EPC-co does N"MOS" (for practical intents it's basically a 5V node with very good support for extended drains)
+
+
+[05/13/2026 15:01] dshadoff
+Yeah, I don't know all the differences, but it's just important to understand if something is being designed as replacement.
+
+
+[05/13/2026 15:03] 246tnt
+I actually have plans to make a 6502 nmos in gf180. I got the original netlist remapped to gf180 transistors 😅   And I got it running basic instructions in a spice sims.
+
+
+[05/13/2026 15:04] 246tnt
+(ok, well I'm cheating a bit, I had to remap the depletion loads as pull-ups implemented by pmos wired as diodes ... )
+
+
+[05/13/2026 15:11] namibj
+Ok, so, gf18mcud I understand to have unusual routing density relative to transistor size that's clear when looking at routed digital standard cell section when zoomed in enough to fit only around a dozen or so cells on screen? 
+I heard about as much? 
+
+And the minimum 3.3V transistors have as minimum available threshold voltage still at healthily-low 0.53/0.63/0.73 (min/typ/max)?
+
+I really should look at how complex that lets MCML gates get without making them unusably slow...
+(I should at least get a VCO+serializer cell ready for the Run2 deadline, better hurry while there's still time.)
+
+
+[05/13/2026 15:11] namibj
+They used negative threshold voltage nmos there?
+
+
+[05/13/2026 15:12] namibj
+Oh they don't do it in silicon, just _on_ silicon substrates 😄
+
+
+[05/13/2026 15:12] 246tnt
+Yeah they were using , depletion nmos.
+
+
+[05/13/2026 15:16] tholin
+DACs work, surprisingly
+
+{Attachments}
+2026-05_media/20260513_171529-0CDB5.jpg
+2026-05_media/20260513_171532-26FF2.jpg
+
+
+[05/13/2026 15:19] 246tnt
+I assume you have opamp / buffer in the path ?
+
+
+[05/13/2026 15:19] tholin
+On the chip, yes
+
+
+[05/13/2026 15:20] 246tnt
+Not on the board ?
+
+
+[05/13/2026 15:20] 246tnt
+Then yeah, I'm surprised it works because your wires were looking awefully thin for a 75R load 😅
+
+
+[05/13/2026 15:34] tholin
+The opamps I built are rated for a 1Kohm load *at best*
+
+
+[05/13/2026 15:34] tholin
+At least, according to simulation
+
+
+[05/13/2026 15:34] tholin
+Was the sim wrong?
+
+
+[05/13/2026 15:34] tholin
+Maybe?
+
+
+[05/13/2026 16:13] namibj
+how do you mean, "rated"?
+Also note that the screen probably does AGC and especially including shelf-based DC offset correction, by sensing the black level left and right of the painted area. That part is actually electrically trivial.
+
+
+[05/13/2026 16:13] tholin
+Look! 24-bit color!
+
+{Attachments}
+2026-05_media/20260513_181242-71F4F.jpg
+
+
+[05/13/2026 16:13] namibj
+yay
+
+
+[05/13/2026 16:13] namibj
+(how? 8bit on-die DAC?)
+
+
+[05/13/2026 16:13] tholin
+Something's off here
+
+{Attachments}
+2026-05_media/20260513_181250-2508F.jpg
+
+
+[05/13/2026 16:13] tholin
+On-die DAC, yeah
+
+
+[05/13/2026 16:14] namibj
+doesn't look like analog artifacting though. Code broken?
+
+
+[05/13/2026 16:15] tholin
+There are no latches between the combinatorial color-generating logic and the DACs, so we're seeing some intermediary states make it to the display. Wild.
+
+
+[05/13/2026 16:15] namibj
+huh
+
+
+[05/13/2026 16:15] tholin
+Because its analog, the signal is continuous and this can happen
+
+
+[05/13/2026 16:15] namibj
+I question the why
+
+
+[05/13/2026 16:16] tholin
+This also means the DACs can switch way faster than 25MHz. Incredible.
+
+
+[05/13/2026 16:16] namibj
+assuming you have a sense of a pixel clock ofc
+
+
+[05/13/2026 16:16] tholin
+We're seeing intermediary states as the combinatorial logic settles
+
+
+[05/13/2026 16:23] tholin
+!
+
+
+[05/13/2026 16:23] tholin
+I completely forgot!
+
+
+[05/13/2026 16:23] tholin
+All of the VGA demos were build using my custom, high speed D-flip-flop standard cell
+
+{Reactions}
+🎉
+
+[05/13/2026 16:23] tholin
+Replacing the PDK’s DFF
+
+
+[05/13/2026 16:23] tholin
+I did not even realize it was working this whole time
+
+
+[05/13/2026 16:39] namibj
+is the PDK one's (that) bad?
+
+
+[05/13/2026 17:04] tholin
+Its optimized for area, not speed
+
+
+[05/13/2026 17:04] tholin
+So it depends on what your needs are
+
+
+[05/13/2026 17:06] tholin
+The NTSC video generator also works
+
+{Attachments}
+2026-05_media/20260513_185907-72D80.jpg
+2026-05_media/20260513_185915-A8B0E.jpg
+
+{Reactions}
+👍
+
+[05/13/2026 17:06] tholin
+All the gray levels!
+
+{Attachments}
+2026-05_media/20260513_185949-17C2A.jpg
+
+
+[05/13/2026 17:07] tholin
+It should also be able to do PAL, I'll test that next
+
+
+[05/13/2026 17:07] tholin
+But this is a VERY cheap video out option
+
+
+[05/13/2026 17:07] tholin
+A single analog pin and the little area for the DAC
+
+
+[05/13/2026 17:19] namibj
+a single? you mean for the composite mode?
+
+
+[05/13/2026 17:20] tholin
+Its only greyscale video
+
+
 ==============================================================
-Exported 382 message(s)
+Exported 431 message(s)
 ==============================================================
