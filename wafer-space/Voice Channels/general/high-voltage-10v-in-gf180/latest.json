@@ -13,10 +13,10 @@
     "topic": null
   },
   "dateRange": {
-    "after": "2026-04-30T23:59:59.999+00:00",
+    "after": null,
     "before": null
   },
-  "exportedAt": "2026-05-15T10:19:53.4125081+00:00",
+  "exportedAt": "2026-05-15T13:55:21.0155043+00:00",
   "messages": [
     {
       "id": "1504736830954799104",
@@ -208,7 +208,79 @@
       "reactions": [],
       "mentions": [],
       "inlineEmojis": []
+    },
+    {
+      "id": "1504817231660580916",
+      "type": "Default",
+      "timestamp": "2026-05-15T12:06:26.18+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Vipul any particular plans for them?\n**I'd like to help validate** in preparation for X.\n\nI'd be looking forward to designing X some time next year.\n\nI'd expect usage of ldmos for local voltage regulation, perhaps in a mode of modulating whether or not a capacitive transformer/divider siphoning off the local power switch's drain voltage cycling gets to top off a local storage capacitor (off of which it would run an LDO or maybe even buck to provide 3.3V core and 5V output gate drive supply) or is just shorted out for the upcoming turn-off-transient; it'd have to also provide diode-action off the ldmos drain potential (as anode) to the local buffer capacitor (of which it'd e.g. LDO the 5V output gate drive \"PA\" and the 3.3V core supply; as cathode) especially during startup/power-on-reset.\nProbably; though it may end up using a separate supply regulating switch for that (EPC2106 perhaps, if there's a way to make a floating 5V CMOS output that can be ground-lifted those 5~10V).\n\nX:\nthe isolated digital-predistortion-enabled gate driver for GaN (e.g. EPC2207) switched-capacitor converters (operating at considerably higher system voltages through operating the switches in series with _very_ careful control as they're not said to be avalanche-proof (||exceeding the drain-source breakdown voltage with gate-source voltage being the recommended off-state 0V would typically result in physical damage, AFAIK||), by using fiber optics to provide isolation against sharp dV/dT for a central brain to coordinate a fleet of the drivers, each with a couple switching dies local to it that are in parallel and sufficiently monitored).",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1214459146217201704",
+          "name": "vipul.sh",
+          "discriminator": "0000",
+          "nickname": "Vipul",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/4-4551A.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1504821075341606953",
+      "type": "Default",
+      "timestamp": "2026-05-15T12:21:42.585+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@namibj What I understand from your requirements is that you plan to design some kind of gate driver circuit for driving a GaN based switch. Please correct me if I am wrong. I don\u2019t have much knowledge about GaN electronics, but do see potential applications of 10V ldmos in some types of battery management designs. Would be glad to explore this further, provided it\u2019s feasible in gf180.",
+      "author": {
+        "id": "1214459146217201704",
+        "name": "vipul.sh",
+        "discriminator": "0000",
+        "nickname": "Vipul",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/4-4551A.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "262706220073222144",
+          "name": "namibj",
+          "discriminator": "0000",
+          "nickname": "namibj",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+        }
+      ],
+      "inlineEmojis": []
     }
   ],
-  "messageCount": 6
+  "messageCount": 8
 }

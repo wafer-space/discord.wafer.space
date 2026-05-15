@@ -28,6 +28,23 @@ So, existing pads support only upto 5V/6V; for 10V need to design custom IO pads
 That's what it looks like to me yes.
 
 
+[05/15/2026 12:06] namibj
+@Vipul any particular plans for them?
+**I'd like to help validate** in preparation for X.
+
+I'd be looking forward to designing X some time next year.
+
+I'd expect usage of ldmos for local voltage regulation, perhaps in a mode of modulating whether or not a capacitive transformer/divider siphoning off the local power switch's drain voltage cycling gets to top off a local storage capacitor (off of which it would run an LDO or maybe even buck to provide 3.3V core and 5V output gate drive supply) or is just shorted out for the upcoming turn-off-transient; it'd have to also provide diode-action off the ldmos drain potential (as anode) to the local buffer capacitor (of which it'd e.g. LDO the 5V output gate drive "PA" and the 3.3V core supply; as cathode) especially during startup/power-on-reset.
+Probably; though it may end up using a separate supply regulating switch for that (EPC2106 perhaps, if there's a way to make a floating 5V CMOS output that can be ground-lifted those 5~10V).
+
+X:
+the isolated digital-predistortion-enabled gate driver for GaN (e.g. EPC2207) switched-capacitor converters (operating at considerably higher system voltages through operating the switches in series with _very_ careful control as they're not said to be avalanche-proof (||exceeding the drain-source breakdown voltage with gate-source voltage being the recommended off-state 0V would typically result in physical damage, AFAIK||), by using fiber optics to provide isolation against sharp dV/dT for a central brain to coordinate a fleet of the drivers, each with a couple switching dies local to it that are in parallel and sufficiently monitored).
+
+
+[05/15/2026 12:21] vipul.sh
+@namibj What I understand from your requirements is that you plan to design some kind of gate driver circuit for driving a GaN based switch. Please correct me if I am wrong. I don’t have much knowledge about GaN electronics, but do see potential applications of 10V ldmos in some types of battery management designs. Would be glad to explore this further, provided it’s feasible in gf180.
+
+
 ==============================================================
-Exported 6 message(s)
+Exported 8 message(s)
 ==============================================================

@@ -22,6 +22,30 @@ They are included with the standard cells
 I guess the epoxy isn't transparent to thermal IR? You could otherwise maybe use a macro lens on a thermal camera to hunt for it
 
 
+[05/15/2026 14:58] namibj
+Well, my offer of trying to reproduce in Xyce if it happens static from POR or external reset/reset-release after POR, does still stand.
+
+
+[05/15/2026 15:01] tholin
+I think its the DACs
+
+
+[05/15/2026 15:02] tholin
+The resistors in the R2R are small, requiring a buf_12 cell to drive and I have 11 DACs on here
+
+
+[05/15/2026 15:03] tholin
+But I thought I wired each design that uses a DAC to send all 0s into the DAC when held in reset, to reduce the static power consumption to near zero
+
+
+[05/15/2026 15:03] tholin
+But after checking with a multimeter, at least 4 of the analog outputs generate a non-zero voltage in reset
+
+
+[05/15/2026 15:03] tholin
+So, I messed that up
+
+
 ==============================================================
-Exported 4 message(s)
+Exported 10 message(s)
 ==============================================================
