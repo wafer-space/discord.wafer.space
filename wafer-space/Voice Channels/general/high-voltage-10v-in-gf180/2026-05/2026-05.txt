@@ -45,6 +45,23 @@ the isolated digital-predistortion-enabled gate driver for GaN (e.g. EPC2207) sw
 @namibj What I understand from your requirements is that you plan to design some kind of gate driver circuit for driving a GaN based switch. Please correct me if I am wrong. I don’t have much knowledge about GaN electronics, but do see potential applications of 10V ldmos in some types of battery management designs. Would be glad to explore this further, provided it’s feasible in gf180.
 
 
+[05/15/2026 14:41] namibj
+No yeah that's about it. 
+
+The complication comes from it not doing it the classic hard switched CMOS output stage way but rather with a class B output "PA" stage (technically an "independently" driven push/pull pair aka half-bridge is what drives the GaN gate, probably via a bit of impedance matching to recycle a decent chunk of the gate charge) fed from a pair of DACs that control the push and pull output driver individually as those will have limited speed and it's trying to reduce overall losses while staying coordinated across multiple GaN that are wired in series for more blocking voltage (if they do any hard switching it has to be synchronized or one catches excess voltage and blows discharge damage in it's channel! At least AFAIK these GaN are not avalanche-proof.).
+
+All the GaN you'd need to know to understand is just this "n-channel logic level mosfet" datasheet; I'd probably aim to use 120~150 normally and up to 180 non-repetitive (in fault containment) of the 200 V drain voltage.
+Note the total gate charge, gate-source charge, gate-drain charge, gate resistance, (if needed compute equivalent total gate-source capacitance from assuming total gate charge goes just to the source and then using the 5V gate-source voltage to turn the charge into a capacitance; for an RC time constant), and look how fast that 23(typ) 35 (max) nC output charge (@100V) charges from e.g. say 20A that should be feasible from the limited 25~35% effective duty cycle in the switching topologies I'm eyeing.
+
+https://epc-co.com/epc/portals/0/epc/documents/datasheets/EPC2207_datasheet.pdf
+
+E.g. about 2.3ns until drain full, 900 pF charge-equivalent input capacitance, 270ps RC time constant of the gate based off of that charge-equivalent capacitance and the gate resistance, 5+-0.5V gate-on target, 0V(+-0.5 if needed) (clamped) gate-off target, etc.
+
+
+[05/15/2026 14:41] namibj
+I can explain differently later if needed/wanted.
+
+
 ==============================================================
-Exported 8 message(s)
+Exported 10 message(s)
 ==============================================================
