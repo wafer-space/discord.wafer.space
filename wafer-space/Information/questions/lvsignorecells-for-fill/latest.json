@@ -1,0 +1,218 @@
+{
+  "guild": {
+    "id": "1361349522684510449",
+    "name": "wafer.space Community",
+    "iconUrl": "2026-05_media/fb143eaa45770cbb40493d09b625e98b-09FD1.png"
+  },
+  "channel": {
+    "id": "1504886967022653481",
+    "type": "GuildPublicThread",
+    "categoryId": "1409660288822673408",
+    "category": "questions",
+    "name": "LVS_IGNORE_CELLS for fill/cap cells?",
+    "topic": null
+  },
+  "dateRange": {
+    "after": "2026-04-30T23:59:59.999+00:00",
+    "before": null
+  },
+  "exportedAt": "2026-05-15T23:19:50.2396022+00:00",
+  "messages": [
+    {
+      "id": "1504886967022653481",
+      "type": "Default",
+      "timestamp": "2026-05-15T16:43:32.386+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "If you have a design with a lot of fill/cap cells, LVS takes an incredibly long time. This is likely due to the single/no pin connections of these cells and the isomorphism checking during LVS to do the matching of cells. Should the PDK ignore these fill cells? \n\n@Leo Moser (mole99) @Tim Edwards ?",
+      "author": {
+        "id": "1417961928961298623",
+        "name": "mguthaus",
+        "discriminator": "0000",
+        "nickname": "Matt G. (Mobius)",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/e459857e9a131799083272cfec162ef6-9879C.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "323371864074485771",
+          "name": "mole99",
+          "discriminator": "0000",
+          "nickname": "Leo Moser (mole99)",
+          "color": null,
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1423020172595298314",
+              "name": "Mod",
+              "color": null,
+              "position": 1
+            }
+          ],
+          "avatarUrl": "2026-05_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+        },
+        {
+          "id": "1365118310701600900",
+          "name": "rtimothyedwards_19428",
+          "discriminator": "0000",
+          "nickname": "Tim Edwards",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1504892555794448606",
+      "type": "Default",
+      "timestamp": "2026-05-15T17:05:44.853+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Netgen has a clever way to deal with this.  It treats every \"cell X with an unconnected pin\" like every other \"cell X with an unconnected pin\" and combines them in parallel, making sure to flag that the pin is unconnected instead of all the pins being connected together.\n\nSo if LVS is taking a long time for this reason, then you are doing something to subvert that method.  This could happen, for example, if the cells get renamed, as can happen when magic tries to disambiguate different projects which are using cells with the same name that may or may not be the same cell.  Mitch had a nice setup file for netgen that handled that case;  I do not think it has been ported to GF or IHP.\n\nIf you can post an example use case, I can quickly figure out if this is being caused by magic prefixing a library, and I can transfer Mitch's solution for sky130 over to gf180mcu.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1504894847549571182",
+      "type": "Default",
+      "timestamp": "2026-05-15T17:14:51.25+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Tim Edwards Here was my patch with the change on the template example:\nhttps://github.com/VLSIDA/gf180mcu-project-template/commit/2bd281386bac9fdf845696a617b356a9b9ef87a6\nNote that I'm using the 3.3V libraries and memories in the branch.\nhttps://github.com/VLSIDA/gf180mcu-project-template/tree/3v3-libraries\n\nWithout those changes, it was running 16+ hours and not finishing LVS.",
+      "author": {
+        "id": "1417961928961298623",
+        "name": "mguthaus",
+        "discriminator": "0000",
+        "nickname": "Matt G. (Mobius)",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/e459857e9a131799083272cfec162ef6-9879C.png"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "fix: ignore fill/tap/decap cells during LVS to avoid netgen hang \u00b7...",
+          "url": "https://github.com/VLSIDA/gf180mcu-project-template/commit/2bd281386bac9fdf845696a617b356a9b9ef87a6",
+          "timestamp": null,
+          "description": "The 3.3V flow inserts ~315k fillcap_16 and ~82k tap_2 instances at\nchip_top \u2014 roughly 3x the device count of the 5V flow and ~257x more\nfillcap_16. Netgen&#39;s iterative partition refinement d...",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "2026-05_media/2bd281386bac9fdf845696a617b356a9b9ef87a6-5D375",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": [],
+          "inlineEmojis": []
+        },
+        {
+          "title": "GitHub - VLSIDA/gf180mcu-project-template at 3v3-libraries",
+          "url": "https://github.com/VLSIDA/gf180mcu-project-template/tree/3v3-libraries",
+          "timestamp": null,
+          "description": "All-Digital PLL for GF180MCU using standard cells. Contribute to VLSIDA/gf180mcu-project-template development by creating an account on GitHub.",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "2026-05_media/gf180mcu-project-template-54141",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": [],
+          "inlineEmojis": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1365118310701600900",
+          "name": "rtimothyedwards_19428",
+          "discriminator": "0000",
+          "nickname": "Tim Edwards",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1504895053917589666",
+      "type": "Default",
+      "timestamp": "2026-05-15T17:15:40.452+00:00",
+      "timestampEdited": "2026-05-15T17:15:48.824+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It was indeed for gf180mcu",
+      "author": {
+        "id": "1417961928961298623",
+        "name": "mguthaus",
+        "discriminator": "0000",
+        "nickname": "Matt G. (Mobius)",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/e459857e9a131799083272cfec162ef6-9879C.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1504895213842337983",
+      "type": "Default",
+      "timestamp": "2026-05-15T17:16:18.581+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Interestingly, the 5V cells didn't really run into the issue since the cell density means many fewer fill/cap/tap cells.",
+      "author": {
+        "id": "1417961928961298623",
+        "name": "mguthaus",
+        "discriminator": "0000",
+        "nickname": "Matt G. (Mobius)",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/e459857e9a131799083272cfec162ef6-9879C.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    }
+  ],
+  "messageCount": 5
+}
