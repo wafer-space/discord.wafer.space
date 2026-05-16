@@ -13,10 +13,10 @@
     "topic": null
   },
   "dateRange": {
-    "after": "2026-04-30T23:59:59.999+00:00",
+    "after": null,
     "before": null
   },
-  "exportedAt": "2026-05-15T23:19:50.2396022+00:00",
+  "exportedAt": "2026-05-16T02:52:48.4286209+00:00",
   "messages": [
     {
       "id": "1504886967022653481",
@@ -212,7 +212,79 @@
       "reactions": [],
       "mentions": [],
       "inlineEmojis": []
+    },
+    {
+      "id": "1504996868587786250",
+      "type": "Default",
+      "timestamp": "2026-05-16T00:00:14.961+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Matt G. (Mobius) The netgen setup can reduce not only devices, but also parallel cells. As you have noticed, if the parallel fill cells are reduced, then netgen can take a long time.\n\nCurrently, this is the setup\n```\n#---------------------------------------------------------------\n# Allow the fill, decap, etc., cells to be parallelized\n#---------------------------------------------------------------\n\nforeach cell $cells1 {\n    if {[regexp {gf180mcu_fd_sc_[^_]+__fillcap_[[:digit:]]+} $cell match]} {\n        property \"-circuit1 $cell\" parallel enable\n    }\n    if {[regexp {gf180mcu_fd_sc_[^_]+__endcap} $cell match]} {\n        property \"-circuit1 $cell\" parallel enable\n    }\n    if {[regexp {gf180mcu_fd_sc_[^_]+__fill_[[:digit:]]+} $cell match]} {\n        property \"-circuit1 $cell\" parallel enable\n    }\n    if {[regexp {gf180mcu_fd_sc_[^_]+__filltie} $cell match]} {\n        property \"-circuit1 $cell\" parallel enable\n    }\n    if {[regexp {gf180mcu_fd_sc_[^_]+__antenna} $cell match]} {\n        property \"-circuit1 $cell\" parallel enable\n    }\n}\n\nforeach cell $cells2 {\n    if {[regexp {gf180mcu_fd_sc_[^_]+__fillcap_[[:digit:]]+} $cell match]} {\n        property \"-circuit2 $cell\" parallel enable\n    }\n    if {[regexp {gf180mcu_fd_sc_[^_]+__endcap} $cell match]} {\n        property \"-circuit2 $cell\" parallel enable\n    }\n    if {[regexp {gf180mcu_fd_sc_[^_]+__fill_[[:digit:]]+} $cell match]} {\n        property \"-circuit2 $cell\" parallel enable\n    }\n    if {[regexp {gf180mcu_fd_sc_[^_]+__filltie} $cell match]} {\n        property \"-circuit2 $cell\" parallel enable\n    }\n    if {[regexp {gf180mcu_fd_sc_[^_]+__antenna} $cell match]} {\n        property \"-circuit2 $cell\" parallel enable\n    }\n}\n```",
+      "author": {
+        "id": "738396032295108721",
+        "name": "bailey8889",
+        "discriminator": "0000",
+        "nickname": "bailey",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/0-EB806.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1417961928961298623",
+          "name": "mguthaus",
+          "discriminator": "0000",
+          "nickname": "Matt G. (Mobius)",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/e459857e9a131799083272cfec162ef6-9879C.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1505025445861658625",
+      "type": "Default",
+      "timestamp": "2026-05-16T01:53:48.314+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Matt G. (Mobius) :  I'm not sure what version of the PDK you have, but from the last WaferSpace tapeout, I added the Avalon 3.3V standard cells to the netgen setup (gf180mcuD/libs.tech/netgen/gf180mcuD_setup.tcl):\n```\n# And do the same for the Avalon semiconductor 3.3V standard cell library.\n\nforeach cell $cells1 {\n    if {[regexp {gf180mcu_as_sc_[^_]+__fill_[[:digit:]]+} $cell match]} {\n        property \"-circuit1 $cell\" parallel enable\n    }\n    if {[regexp {gf180mcu_as_sc_[^_]+__fillcap_[[:digit:]]+} $cell match]} {\n        property \"-circuit1 $cell\" parallel enable\n    }\n    if {[regexp {gf180mcu_as_sc_[^_]+__decap_[[:digit:]]+} $cell match]} {\n        property \"-circuit1 $cell\" parallel enable\n    }\n}\n\nforeach cell $cells2 {\n    if {[regexp {gf180mcu_as_sc_[^_]+__fill_[[:digit:]]+} $cell match]} {\n        property \"-circuit2 $cell\" parallel enable\n    }\n    if {[regexp {gf180mcu_as_sc_[^_]+__fillcap_[[:digit:]]+} $cell match]} {\n        property \"-circuit2 $cell\" parallel enable\n    }\n    if {[regexp {gf180mcu_as_sc_[^_]+__decap_[[:digit:]]+} $cell match]} {\n        property \"-circuit2 $cell\" parallel enable\n    }\n}\n```\nIf you have that version of the PDK or newer, then you should not run into long LVS run-times with the Avalon 3.3V library.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1417961928961298623",
+          "name": "mguthaus",
+          "discriminator": "0000",
+          "nickname": "Matt G. (Mobius)",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/e459857e9a131799083272cfec162ef6-9879C.png"
+        }
+      ],
+      "inlineEmojis": []
     }
   ],
-  "messageCount": 5
+  "messageCount": 7
 }
