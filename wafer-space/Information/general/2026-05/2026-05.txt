@@ -2255,6 +2255,122 @@ On a C64C
 Ahhh oki!
 
 
+[05/17/2026 16:20] tholin
+My chips keep dying
+
+
+[05/17/2026 16:22] tholin
+Same pattern every time: chip works continuously for as long as I keep it powered (from 30 minutes to several hours), but as soon as I power it down, it will not power back up. Instantly glitches out.
+
+
+[05/17/2026 16:23] tholin
+I think that means  thermal expansion and contraction are tearing things appart.
+
+
+[05/17/2026 16:23] tholin
+With as little as a single heating/cooling cycle being enough
+
+
+[05/17/2026 16:33] 246tnt
+try a heatsink ?  (Polishing a bit of the top epoxy to flatten it)
+
+
+[05/17/2026 16:35] tholin
+I don’t think the epoxy is very thermally conductive
+
+
+[05/17/2026 16:36] tholin
+Contributing to the severity of this problem is definitely that the COB PCB is small and thus provides little thermal mass. Even though the die is in direct contact with it, heat is able to build up.
+
+
+[05/17/2026 16:36] tholin
+The air bubbles present in the epoxy of most boards also generate weak points and bottlenecks where heat and expansion stresses are able to build up.
+
+
+[05/17/2026 16:38] tholin
+Though I am in a unique spot of my dies generating a high static power consumption due to a layout flaw, dies with sufficient logic density and clock speeds can generate comparable power consumptions. For instance, the AS2650v2 from GFMPW-1 generates comparable power consumption at 50MHz.
+
+
+[05/17/2026 16:38] 246tnt
+That's a problem with transparent ... normal qfn are glass filled to match silicon expansion better
+
+
+[05/17/2026 16:38] tholin
+So, I may not be the last person to face this issue this shuttle
+
+
+[05/17/2026 16:39] 246tnt
+I had issue with manually bonded ihp chip where hot air reflow would kill the chip and they only tolerated controlled reflow cycle.
+
+
+[05/17/2026 16:40] 246tnt
+Did you identify the layout flaw BTW?
+
+
+[05/17/2026 16:40] tholin
+Probably the DACs
+
+
+[05/17/2026 16:41] tholin
+Its either that, or the 9-track SCL
+
+
+[05/17/2026 16:41] tholin
+I do not believe there is anything wrong with the 7-track SCL
+
+
+[05/17/2026 16:46] tholin
+Maybe there is some other connector that could be used for the COB that allows heat to be transfered away more efficiently?
+
+
+[05/17/2026 16:48] tholin
+It sucks that there was no separate analog supply voltage on wafer.space like there was on caravel. I could’ve isolated the fault otherwise.
+
+
+[05/17/2026 16:51] tholin
+So, I guess I’m sitting on a bunch of dies now that just like to cook themselves to death :/
+
+
+[05/17/2026 16:51] tholin
+Not ideal. I was planning to see if I could prototype some actual products with these, but I can’t sell something that draws power like mad and then self-destructs within the hour
+
+
+[05/17/2026 17:05] 246tnt
+Huh ... there were pads assigned for that... pwr aux
+
+
+[05/17/2026 18:06] tholin
+In other news: the two designs on here that have an audio output and use my DACs for this purpose have some ugly artifacting and clipping on the audio.
+
+
+[05/17/2026 18:07] tholin
+This is what I get for not buffering the data going to the DACs
+
+
+[05/17/2026 18:07] tholin
+Imagine this, but in an audio signal 😬
+
+
+[05/17/2026 18:18] tholin
+I promised that I’d tape out something to test my 3.3V SCL this time around, so I’ll just do this same die, but with my SCL
+
+
+[05/17/2026 18:18] tholin
+Since it features projects of varying complexity, this should be a good test
+
+
+[05/17/2026 18:19] tholin
+I also want to use the level-shifting IO pads if possible, see if a 5V IO voltage and 3.3V core voltage are possible. Are those still in the works?
+
+
+[05/17/2026 18:27] 246tnt
+They are done. We used them in TT in run 1 and they work fine.
+
+
+[05/17/2026 18:28] tholin
+They’re not part of the template yet?
+
+
 ==============================================================
-Exported 469 message(s)
+Exported 498 message(s)
 ==============================================================
