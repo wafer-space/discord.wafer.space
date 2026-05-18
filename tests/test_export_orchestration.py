@@ -473,6 +473,67 @@ commit_author = "Test Bot"
 
         del os.environ["DISCORD_BOT_TOKEN"]
 
+    def test_export_all_channels_skips_forbidden_channel_without_failing(self) -> None:
+        """A forbidden channel is skipped (not failed) and keeps the run green.
+
+        The bot can list the channel but Discord denies read access. This
+        is an expected boundary — it must NOT increment channels_failed or
+        add to the error list (which would turn every workflow run red),
+        but it MUST be visibly counted as skipped.
+        """
+        os.environ["DISCORD_BOT_TOKEN"] = "test_token"
+
+        config = {
+            "site": {},
+            "servers": {
+                "test-server": {
+                    "name": "Test Server",
+                    "include_channels": ["*"],
+                    "exclude_channels": [],
+                    "guild_id": "123456789",
+                }
+            },
+            "export": {"formats": ["html", "txt"]},
+            "github": {},
+        }
+
+        forbidden_output = (
+            "Resolving channel(s)...\nERROR\n"
+            "DiscordChatExporter.Core.Exceptions.DiscordChatExporterException: "
+            "Request to 'channels/1501103893571043379' failed: forbidden."
+        )
+
+        with fixed_months("2026-02", "2026-02"):
+            with patch("scripts.export_channels.load_config", return_value=config):
+                with patch("scripts.export_channels.fetch_guild_channels") as mock_fetch:
+                    mock_fetch.return_value = (
+                        [{"name": "updates-prep", "id": "1501103893571043379"}],
+                        {},
+                    )
+
+                    with patch("scripts.export_channels.StateManager") as mock_state_class:
+                        mock_state = Mock()
+                        mock_state_class.return_value = mock_state
+                        mock_state.load.return_value = {}
+                        mock_state.get_channel_state.return_value = None
+
+                        with patch("scripts.export_channels.run_export") as mock_run:
+                            # First format attempt hits forbidden → whole
+                            # channel short-circuits (no further calls).
+                            mock_run.return_value = (False, forbidden_output)
+
+                            with patch("scripts.export_channels.Path"):
+                                summary = export_all_channels()
+
+                                assert summary["channels_failed"] == 0
+                                assert summary["channels_skipped_forbidden"] == 1
+                                assert summary["errors"] == []
+                                assert summary["total_exports"] == 0
+                                # Short-circuited after the first format probe
+                                assert mock_run.call_count == 1
+
+        del os.environ["DISCORD_BOT_TOKEN"]
+
     def test_export_all_channels_creates_exports_directory(self) -> None:
         """Test that exports directory is created."""
         os.environ["DISCORD_BOT_TOKEN"] = "test_token"

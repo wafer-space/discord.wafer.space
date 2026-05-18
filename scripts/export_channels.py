@@ -154,6 +154,29 @@ def _determine_months_to_export(
 FORMAT_MAP = {"html": "HtmlDark", "txt": "PlainText", "json": "Json", "csv": "Csv"}
 
 
+class ChannelForbiddenError(Exception):
+    """Raised when Discord denies the bot access to a channel.
+
+    This is an *expected* boundary (private/restricted channels the bot
+    isn't a member of), not a pipeline failure. The orchestrator catches
+    it, records the channel as skipped, and keeps the workflow green.
+    """
+
+
+def _is_permission_error(output: str) -> bool:
+    """True if DCE output indicates the bot lacks permission for the channel.
+
+    Discord returns `failed: forbidden` (HTTP 403) or `failed: unauthorized`
+    (HTTP 401) when the bot can see a channel in the guild listing but is
+    not allowed to read it. These are channel-level permission boundaries —
+    no amount of retrying or code change grants access — so we treat them
+    as "skip", distinct from transient failures (timeouts, rate limits)
+    which we DO want surfaced as real errors.
+    """
+    lowered = output.lower()
+    return "failed: forbidden" in lowered or "failed: unauthorized" in lowered
+
+
 def _export_one_month(
     context: ChannelExportContext,
     channel_info: ChannelInfo,
@@ -210,6 +233,11 @@ def _export_one_month(
         if success:
             exports_completed += 1
             print(f"      ✓ {fmt.upper()}")
+        elif _is_permission_error(output):
+            # Channel-level permission boundary — every format and every
+            # month for this channel will fail identically. Short-circuit
+            # the whole channel instead of logging 4×N identical errors.
+            raise ChannelForbiddenError(channel_info.channel_name)
         else:
             failures += 1
             errors.append(
@@ -305,7 +333,7 @@ def _process_single_channel(  # noqa: PLR0913,PLR0911  # Orchestration needs all
     filters: tuple[list[str], list[str]],  # (include_patterns, exclude_patterns)
     channel_path_map: dict[str, str],
     public_dir: Path,
-) -> tuple[int, int, int, list[dict[str, str]]]:
+) -> tuple[int, int, int, int, list[dict[str, str]]]:
     """Process and export a single channel, one calendar month at a time.
 
     The earliest possible month is derived from the channel snowflake. Past
@@ -313,7 +341,10 @@ def _process_single_channel(  # noqa: PLR0913,PLR0911  # Orchestration needs all
     skipped (Discord doesn't backdate messages, so a complete month stays
     complete). The current month is always re-exported.
 
-    Returns (total_exports, channels_updated, channels_failed, errors).
+    Returns (total_exports, channels_updated, channels_failed,
+    channels_skipped_forbidden, errors). `skipped_forbidden` is 1 when the
+    bot lacks permission for the channel — an expected boundary that must
+    NOT count as a failure (it would otherwise turn every run red).
     """
     include_patterns, exclude_patterns = filters
     channel_name_raw = channel.get("name")
@@ -321,7 +352,7 @@ def _process_single_channel(  # noqa: PLR0913,PLR0911  # Orchestration needs all
 
     # Skip malformed channels
     if not channel_name_raw or not channel_id_raw:
-        return 0, 0, 0, []
+        return 0, 0, 0, 0, []
 
     channel_name: str = channel_name_raw
     channel_id: str = channel_id_raw
@@ -332,7 +363,7 @@ def _process_single_channel(  # noqa: PLR0913,PLR0911  # Orchestration needs all
         forum_dir = server_dir / channel_name
         forum_dir.mkdir(exist_ok=True)
         print(f"  Created forum directory: {channel_name}/")
-        return 0, 0, 0, []
+        return 0, 0, 0, 0, []
 
     # Determine export location and the matching public/ path
     safe_name, channel_export_dir, forum_name = _determine_export_location(
@@ -342,7 +373,7 @@ def _process_single_channel(  # noqa: PLR0913,PLR0911  # Orchestration needs all
     # Apply include/exclude filters
     if not should_include_channel(channel_name, include_patterns, exclude_patterns):
         print(f"  Skipping {channel_name} (excluded by pattern)")
-        return 0, 0, 0, []
+        return 0, 0, 0, 0, []
 
     print(f"  Exporting #{channel_name}...")
 
@@ -364,11 +395,11 @@ def _process_single_channel(  # noqa: PLR0913,PLR0911  # Orchestration needs all
         )
     except ValueError as e:
         print(f"    ERROR computing months: {e}")
-        return 0, 0, 1, [{"channel": channel_name, "format": "N/A", "error": str(e)}]
+        return 0, 0, 1, 0, [{"channel": channel_name, "format": "N/A", "error": str(e)}]
 
     if not months_to_export:
         print("    (no months need export)")
-        return 0, 1, 0, []
+        return 0, 1, 0, 0, []
 
     range_label = f"{months_to_export[0]}..{months_to_export[-1]}"
     print(f"    {len(months_to_export)} months to export: {range_label}")
@@ -377,21 +408,28 @@ def _process_single_channel(  # noqa: PLR0913,PLR0911  # Orchestration needs all
     total_failures = 0
     all_errors: list[dict[str, str]] = []
 
-    for month in months_to_export:
-        is_current = month == current_month
-        m_exports, m_failures, m_errors = _export_one_month(
-            context, channel_info, channel_export_dir, month, is_current
-        )
-        total_exports += m_exports
-        total_failures += m_failures
-        all_errors.extend(m_errors)
+    try:
+        for month in months_to_export:
+            is_current = month == current_month
+            m_exports, m_failures, m_errors = _export_one_month(
+                context, channel_info, channel_export_dir, month, is_current
+            )
+            total_exports += m_exports
+            total_failures += m_failures
+            all_errors.extend(m_errors)
+    except ChannelForbiddenError:
+        # Bot can see the channel in the guild listing but isn't allowed to
+        # read it (private/restricted). Expected boundary, not a failure:
+        # report it visibly but keep the workflow green.
+        print(f"    SKIPPED #{channel_name} (forbidden — bot lacks read access)")
+        return 0, 0, 0, 1, []
 
     # Update state with the last-export timestamp for observability
     _update_channel_state_after_export(context, channel_type, channel_info)
 
     if total_failures == 0:
-        return total_exports, 1, 0, all_errors
-    return total_exports, 0, total_failures, all_errors
+        return total_exports, 1, 0, 0, all_errors
+    return total_exports, 0, total_failures, 0, all_errors
 
 
 def get_bot_token() -> str:
@@ -684,6 +722,7 @@ def export_all_channels(  # noqa: C901,PLR0915  # Orchestration top-level
     summary: dict[str, Any] = {
         "channels_updated": 0,
         "channels_failed": 0,
+        "channels_skipped_forbidden": 0,
         "total_exports": 0,
         "errors": [],
         "time_budget_exhausted": False,
@@ -766,7 +805,7 @@ def export_all_channels(  # noqa: C901,PLR0915  # Orchestration top-level
 
             channel_type = channel_classifications[chan_id]
 
-            exports, updated, failed, errors = _process_single_channel(
+            exports, updated, failed, skipped_forbidden, errors = _process_single_channel(
                 context,
                 channel,
                 channel_type,
@@ -779,6 +818,7 @@ def export_all_channels(  # noqa: C901,PLR0915  # Orchestration top-level
             summary["total_exports"] += exports
             summary["channels_updated"] += updated
             summary["channels_failed"] += failed
+            summary["channels_skipped_forbidden"] += skipped_forbidden
             summary["errors"].extend(errors)
         else:
             # No `break` happened, continue to next server
@@ -810,6 +850,7 @@ def main() -> None:
         print("Export Summary:")
         print(f"  Channels updated: {summary['channels_updated']}")
         print(f"  Channels failed: {summary['channels_failed']}")
+        print(f"  Channels skipped (forbidden): {summary.get('channels_skipped_forbidden', 0)}")
         print(f"  Total exports: {summary['total_exports']}")
         if summary.get("time_budget_exhausted"):
             print("  NOTE: stopped early due to time budget; backfill resumes next run")
@@ -853,6 +894,7 @@ def _write_summary_file(summary: dict[str, Any]) -> None:
                 {
                     "channels_updated": summary["channels_updated"],
                     "channels_failed": summary["channels_failed"],
+                    "channels_skipped_forbidden": summary.get("channels_skipped_forbidden", 0),
                     "total_exports": summary["total_exports"],
                     "error_count": len(summary["errors"]),
                     "timestamp": datetime.now(UTC).isoformat(),

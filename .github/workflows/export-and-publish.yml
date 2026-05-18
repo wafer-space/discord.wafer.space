@@ -317,6 +317,7 @@ jobs:
           d = json.load(open('export-summary.json'))
           print(f'- Channels updated: {d[\"channels_updated\"]}')
           print(f'- Channels failed: {d[\"channels_failed\"]}')
+          print(f'- Channels skipped (forbidden): {d.get(\"channels_skipped_forbidden\", 0)}')
           print(f'- Total exports: {d[\"total_exports\"]}')
           print(f'- Errors logged: {d[\"error_count\"]}')
           " >> $GITHUB_STEP_SUMMARY

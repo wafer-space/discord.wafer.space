@@ -5,10 +5,36 @@ import pytest
 
 from scripts.export_channels import (
     MediaConfig,
+    _is_permission_error,
     format_export_command,
     get_bot_token,
     should_include_channel,
 )
+
+
+def test_is_permission_error_detects_forbidden() -> None:
+    """A DCE 'forbidden' response on a channel request is a permission boundary."""
+    output = (
+        "Resolving channel(s)...\nERROR\n"
+        "DiscordChatExporter.Core.Exceptions.DiscordChatExporterException: "
+        "Request to 'channels/1501103893571043379' failed: forbidden.\n"
+        "  at DiscordChatExporter.Core.Discord.DiscordClient.GetJsonResponseAsync(...)"
+    )
+    assert _is_permission_error(output) is True
+
+
+def test_is_permission_error_detects_unauthorized() -> None:
+    """Unauthorized is also a permission boundary, not a pipeline failure."""
+    output = "Request to 'channels/123' failed: unauthorized."
+    assert _is_permission_error(output) is True
+
+
+def test_is_permission_error_false_for_other_failures() -> None:
+    """Genuine errors (timeouts, rate limits, parse errors) are NOT permission errors."""
+    assert _is_permission_error("Export timed out after 900 seconds") is False
+    assert _is_permission_error("Request failed: too many requests") is False
+    assert _is_permission_error("Export completed successfully") is False
+    assert _is_permission_error("") is False
 
 
 def test_get_bot_token_from_env() -> None:
