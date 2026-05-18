@@ -325,7 +325,82 @@ def _update_channel_state_after_export(
         )
 
 
-def _process_single_channel(  # noqa: PLR0913,PLR0911  # Orchestration needs all context
+PHASE_CURRENT = "current"
+PHASE_BACKFILL = "backfill"
+
+
+@dataclass
+class _TimeBudget:
+    """Tracks the elapsed-time budget for a run.
+
+    The workflow caps the job at a hard timeout; we give the script a
+    slightly smaller budget so it can stop gracefully between channels and
+    still let organize/navigate/deploy publish what was completed.
+    """
+
+    start: float
+    max_runtime_seconds: int | None
+
+    def exhausted(self) -> bool:
+        if self.max_runtime_seconds is None:
+            return False
+        return time.monotonic() - self.start > self.max_runtime_seconds
+
+    def elapsed_s(self) -> int:
+        return int(time.monotonic() - self.start)
+
+
+def _run_export_phase(  # noqa: PLR0913  # phase runner needs the per-server context
+    phase: str,
+    channels: list[dict[str, str | None]],
+    channel_classifications: dict[str, ChannelType],
+    context: ChannelExportContext,
+    server_dir: Path,
+    filters: tuple[list[str], list[str]],
+    channel_path_map: dict[str, str],
+    public_dir: Path,
+    summary: dict[str, Any],
+    budget: _TimeBudget,
+) -> bool:
+    """Run one pipeline phase over every channel of a server.
+
+    Returns False if the time budget was exhausted mid-phase (the caller
+    should stop and let the next workflow run resume), True otherwise.
+    """
+    for channel in channels:
+        if budget.exhausted():
+            summary["time_budget_exhausted"] = True
+            print(
+                f"\n  TIME BUDGET EXHAUSTED after {budget.elapsed_s()}s "
+                f"during {phase} phase — stopping gracefully. "
+                "Next workflow run resumes."
+            )
+            return False
+
+        chan_id = channel.get("id")
+        if not chan_id:
+            continue
+
+        channel_type = channel_classifications[chan_id]
+        exports, updated, failed, skipped_forbidden, errors = _process_single_channel(
+            context,
+            channel,
+            channel_type,
+            server_dir,
+            filters,
+            channel_path_map,
+            public_dir,
+            phase=phase,
+        )
+        summary["total_exports"] += exports
+        summary["channels_updated"] += updated
+        summary["channels_failed"] += failed
+        summary["channels_skipped_forbidden"] += skipped_forbidden
+        summary["errors"].extend(errors)
+    return True
+
+
+def _process_single_channel(  # noqa: PLR0913,PLR0911,PLR0912,C901  # Orchestration glue
     context: ChannelExportContext,
     channel: dict[str, str | None],
     channel_type: ChannelType,
@@ -333,18 +408,26 @@ def _process_single_channel(  # noqa: PLR0913,PLR0911  # Orchestration needs all
     filters: tuple[list[str], list[str]],  # (include_patterns, exclude_patterns)
     channel_path_map: dict[str, str],
     public_dir: Path,
+    phase: str = PHASE_CURRENT,
 ) -> tuple[int, int, int, int, list[dict[str, str]]]:
-    """Process and export a single channel, one calendar month at a time.
+    """Export one channel for a single pipeline `phase`.
 
-    The earliest possible month is derived from the channel snowflake. Past
-    months that already have a non-empty HTML export in `public_dir` are
-    skipped (Discord doesn't backdate messages, so a complete month stays
-    complete). The current month is always re-exported.
+    Two-phase design (see `export_all_channels`):
+
+      - `PHASE_CURRENT`: export ONLY the current month. Cheap and run for
+        every channel first, so the live site is fresh everywhere even if
+        the historical backfill never finishes within one workflow window.
+        This phase is authoritative for per-channel status counting.
+      - `PHASE_BACKFILL`: export ONLY missing past months. Runs with the
+        leftover time budget; does NOT re-count `channels_updated` (the
+        channel was already counted in the current phase) to avoid
+        double-counting.
 
     Returns (total_exports, channels_updated, channels_failed,
     channels_skipped_forbidden, errors). `skipped_forbidden` is 1 when the
     bot lacks permission for the channel — an expected boundary that must
-    NOT count as a failure (it would otherwise turn every run red).
+    NOT count as a failure (it would otherwise turn every run red). It is
+    only reported in the current phase to avoid double-counting.
     """
     include_patterns, exclude_patterns = filters
     channel_name_raw = channel.get("name")
@@ -358,11 +441,12 @@ def _process_single_channel(  # noqa: PLR0913,PLR0911  # Orchestration needs all
     channel_id: str = channel_id_raw
 
     # Forum parent channels have no messages of their own — their threads
-    # are exported separately.
+    # are exported separately. Only create the dir once (current phase).
     if channel_type == ChannelType.FORUM:
-        forum_dir = server_dir / channel_name
-        forum_dir.mkdir(exist_ok=True)
-        print(f"  Created forum directory: {channel_name}/")
+        if phase == PHASE_CURRENT:
+            forum_dir = server_dir / channel_name
+            forum_dir.mkdir(exist_ok=True)
+            print(f"  Created forum directory: {channel_name}/")
         return 0, 0, 0, 0, []
 
     # Determine export location and the matching public/ path
@@ -372,10 +456,9 @@ def _process_single_channel(  # noqa: PLR0913,PLR0911  # Orchestration needs all
 
     # Apply include/exclude filters
     if not should_include_channel(channel_name, include_patterns, exclude_patterns):
-        print(f"  Skipping {channel_name} (excluded by pattern)")
+        if phase == PHASE_CURRENT:
+            print(f"  Skipping {channel_name} (excluded by pattern)")
         return 0, 0, 0, 0, []
-
-    print(f"  Exporting #{channel_name}...")
 
     channel_info = ChannelInfo(
         channel_id=channel_id,
@@ -384,25 +467,31 @@ def _process_single_channel(  # noqa: PLR0913,PLR0911  # Orchestration needs all
         forum_name=forum_name,
     )
 
-    # Discover which months still need exporting
+    # Determine which months this phase is responsible for.
     public_channel_dir = _public_channel_dir(
         public_dir, context.server_key, channel_type, safe_name, forum_name
     )
     current_month = current_month_utc()
     try:
-        months_to_export = _determine_months_to_export(
-            channel_id, public_channel_dir, current_month
-        )
+        planned = _determine_months_to_export(channel_id, public_channel_dir, current_month)
     except ValueError as e:
         print(f"    ERROR computing months: {e}")
         return 0, 0, 1, 0, [{"channel": channel_name, "format": "N/A", "error": str(e)}]
 
+    # planned == [current_month, *missing_past_months]
+    if phase == PHASE_CURRENT:
+        months_to_export = [current_month]
+    else:  # PHASE_BACKFILL
+        months_to_export = [m for m in planned if m != current_month]
+
     if not months_to_export:
-        print("    (no months need export)")
+        if phase == PHASE_BACKFILL:
+            return 0, 0, 0, 0, []  # nothing to backfill; already counted in current phase
         return 0, 1, 0, 0, []
 
+    label = "current" if phase == PHASE_CURRENT else "backfill"
     range_label = f"{months_to_export[0]}..{months_to_export[-1]}"
-    print(f"    {len(months_to_export)} months to export: {range_label}")
+    print(f"  Exporting #{channel_name} [{label}] {len(months_to_export)}mo: {range_label}")
 
     total_exports = 0
     total_failures = 0
@@ -419,17 +508,25 @@ def _process_single_channel(  # noqa: PLR0913,PLR0911  # Orchestration needs all
             all_errors.extend(m_errors)
     except ChannelForbiddenError:
         # Bot can see the channel in the guild listing but isn't allowed to
-        # read it (private/restricted). Expected boundary, not a failure:
-        # report it visibly but keep the workflow green.
-        print(f"    SKIPPED #{channel_name} (forbidden — bot lacks read access)")
-        return 0, 0, 0, 1, []
+        # read it (private/restricted). Expected boundary, not a failure.
+        # Only count it in the current phase to avoid double-counting.
+        if phase == PHASE_CURRENT:
+            print(f"    SKIPPED #{channel_name} (forbidden — bot lacks read access)")
+            return 0, 0, 0, 1, []
+        return 0, 0, 0, 0, []
 
-    # Update state with the last-export timestamp for observability
-    _update_channel_state_after_export(context, channel_type, channel_info)
+    # Update the observational last-export timestamp once per run, in the
+    # current phase only. The backfill phase touches the same channel later
+    # in the same run, so re-writing state there is redundant.
+    if phase == PHASE_CURRENT:
+        _update_channel_state_after_export(context, channel_type, channel_info)
 
+    # Only the current phase is authoritative for channels_updated, so the
+    # backfill phase never increments it (prevents double-counting).
+    updated = 1 if (phase == PHASE_CURRENT and total_failures == 0) else 0
     if total_failures == 0:
-        return total_exports, 1, 0, 0, all_errors
-    return total_exports, 0, total_failures, 0, all_errors
+        return total_exports, updated, 0, 0, all_errors
+    return total_exports, updated, total_failures, 0, all_errors
 
 
 def get_bot_token() -> str:
@@ -690,24 +787,32 @@ def export_all_channels(  # noqa: C901,PLR0915  # Orchestration top-level
     public_dir: Path | None = None,
     max_runtime_seconds: int | None = None,
 ) -> dict[str, Any]:
-    """Main export orchestration function.
+    """Main export orchestration function (global two-phase).
 
-    Loads configuration, initializes state manager, and orchestrates
-    per-month exports for all channels from all configured servers.
+    For each server, channels are processed in two global passes rather
+    than one channel-at-a-time pass:
+
+      Phase 1 (current): export ONLY the current month for EVERY channel.
+        This is cheap and guarantees the live site is fresh for every
+        channel — a channel late in the guild listing is no longer starved
+        of its latest messages by an earlier channel's heavy historical
+        backfill.
+      Phase 2 (backfill): with the remaining time budget, fill in missing
+        historical months. Progress persists across runs because
+        `scan_completed_months` records which months are already complete.
 
     `public_dir` is consulted to decide which past months are already
     complete; pass `Path("public")` in production (the GitHub Actions
     workflow checks out gh-pages into that directory before running this).
 
     `max_runtime_seconds` lets us stop gracefully before the workflow
-    timeout — important on the first run after a long outage when there's
-    a lot of backfill to do. When the budget is exhausted we still write a
-    summary, save state, and exit 0 so the workflow can deploy what we have.
-    The next workflow invocation will pick up the remaining months because
-    `scan_completed_months` already knows which months are done.
+    timeout. When the budget is exhausted mid-phase we still write a
+    summary, save state, and exit 0 so the workflow can deploy what we
+    have; the next invocation resumes.
 
     Returns a summary dict with `channels_updated`, `channels_failed`,
-    `total_exports`, `errors`, and `time_budget_exhausted`.
+    `channels_skipped_forbidden`, `total_exports`, `errors`, and
+    `time_budget_exhausted`.
     """
     if public_dir is None:
         public_dir = Path("public")
@@ -736,10 +841,7 @@ def export_all_channels(  # noqa: C901,PLR0915  # Orchestration top-level
     if config["export"].get("download_media", False):
         print("Media downloads enabled - assets will be stored per-channel-per-month")
 
-    start = time.monotonic()
-
-    def out_of_time() -> bool:
-        return max_runtime_seconds is not None and time.monotonic() - start > max_runtime_seconds
+    budget = _TimeBudget(start=time.monotonic(), max_runtime_seconds=max_runtime_seconds)
 
     print(f"\nStarting exports (current month: {current_month_utc()})...")
     if max_runtime_seconds:
@@ -787,44 +889,43 @@ def export_all_channels(  # noqa: C901,PLR0915  # Orchestration top-level
             channel_type = classify_channel(channel, forum_list, channels)
             channel_classifications[chan_id] = channel_type
 
-        # Process each channel
+        # Two-phase processing so the live site stays fresh everywhere even
+        # when the historical backfill can't finish in one workflow window:
+        #   Phase 1 (current): export ONLY the current month for EVERY
+        #     channel. Cheap; guarantees no channel is starved of its
+        #     latest messages by an earlier channel's heavy backfill.
+        #   Phase 2 (backfill): spend the remaining time budget filling in
+        #     missing historical months. Resumes across runs.
         filters = (include_patterns, exclude_patterns)
-        for channel in channels:
-            if out_of_time():
-                summary["time_budget_exhausted"] = True
-                print(
-                    f"\n  TIME BUDGET EXHAUSTED after "
-                    f"{int(time.monotonic() - start)}s — stopping gracefully. "
-                    "Next workflow run will resume backfill."
-                )
-                break
 
-            chan_id = channel.get("id")
-            if not chan_id:
-                continue
-
-            channel_type = channel_classifications[chan_id]
-
-            exports, updated, failed, skipped_forbidden, errors = _process_single_channel(
-                context,
-                channel,
-                channel_type,
-                server_dir,
-                filters,
-                channel_path_map,
-                public_dir,
-            )
-
-            summary["total_exports"] += exports
-            summary["channels_updated"] += updated
-            summary["channels_failed"] += failed
-            summary["channels_skipped_forbidden"] += skipped_forbidden
-            summary["errors"].extend(errors)
-        else:
-            # No `break` happened, continue to next server
-            continue
-        # We broke out due to time budget — also break the server loop
-        break
+        print(f"\n  Phase 1/2: current month for all {len(channels)} channels")
+        if not _run_export_phase(
+            PHASE_CURRENT,
+            channels,
+            channel_classifications,
+            context,
+            server_dir,
+            filters,
+            channel_path_map,
+            public_dir,
+            summary,
+            budget,
+        ):
+            break
+        print("\n  Phase 2/2: historical backfill (budget-limited)")
+        if not _run_export_phase(
+            PHASE_BACKFILL,
+            channels,
+            channel_classifications,
+            context,
+            server_dir,
+            filters,
+            channel_path_map,
+            public_dir,
+            summary,
+            budget,
+        ):
+            break
 
     # Save state
     state_manager.save()

@@ -473,6 +473,81 @@ commit_author = "Test Bot"
 
         del os.environ["DISCORD_BOT_TOKEN"]
 
+    def test_current_month_done_for_all_channels_before_any_backfill(self) -> None:
+        """Phase 1 exports the current month for EVERY channel before Phase 2
+        backfills ANY history.
+
+        This is the anti-starvation guarantee: a channel late in the listing
+        must still get its latest messages even if earlier channels have huge
+        backfills. We assert the global ordering of DCE invocations: every
+        channel's current-month export precedes every backfill export.
+        """
+        os.environ["DISCORD_BOT_TOKEN"] = "test_token"
+
+        config = {
+            "site": {},
+            "servers": {
+                "test-server": {
+                    "name": "Test Server",
+                    "include_channels": ["*"],
+                    "exclude_channels": [],
+                    "guild_id": "123456789",
+                }
+            },
+            "export": {"formats": ["html"]},
+            "github": {},
+        }
+
+        # creation 2025-12, current 2026-02 → per channel: current=2026-02,
+        # backfill=[2025-12, 2026-01]. Three channels.
+        observed_months: list[str] = []
+
+        def fake_format(**kwargs: object) -> list[str]:
+            before = kwargs.get("before_timestamp")
+            # Current month = the call with no --before (open-ended).
+            observed_months.append("current" if before is None else "backfill")
+            return ["dce", "stub"]
+
+        with fixed_months("2025-12", "2026-02"):
+            with patch("scripts.export_channels.load_config", return_value=config):
+                with patch("scripts.export_channels.fetch_guild_channels") as mock_fetch:
+                    mock_fetch.return_value = (
+                        [
+                            {"name": "alpha", "id": "111"},
+                            {"name": "beta", "id": "222"},
+                            {"name": "gamma", "id": "333"},
+                        ],
+                        {},
+                    )
+                    with patch("scripts.export_channels.StateManager") as mock_state_class:
+                        mock_state = Mock()
+                        mock_state_class.return_value = mock_state
+                        mock_state.load.return_value = {}
+                        mock_state.get_channel_state.return_value = None
+
+                        with patch(
+                            "scripts.export_channels.format_export_command",
+                            side_effect=fake_format,
+                        ):
+                            with patch(
+                                "scripts.export_channels.run_export",
+                                return_value=(True, "ok"),
+                            ):
+                                with patch("scripts.export_channels.Path"):
+                                    export_all_channels()
+
+        # 3 channels: 3 current + 3 channels × 2 backfill months = 9 total
+        expected_current = 3
+        expected_backfill = 6
+        assert observed_months.count("current") == expected_current
+        assert observed_months.count("backfill") == expected_backfill
+        # The decisive assertion: NO backfill export occurs before ALL three
+        # current-month exports are done.
+        first_backfill = observed_months.index("backfill")
+        assert observed_months[:first_backfill] == ["current"] * expected_current
+
+        del os.environ["DISCORD_BOT_TOKEN"]
+
     def test_export_all_channels_skips_forbidden_channel_without_failing(self) -> None:
         """A forbidden channel is skipped (not failed) and keeps the run green.
 
