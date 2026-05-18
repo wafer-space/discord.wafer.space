@@ -1,0 +1,349 @@
+{
+  "guild": {
+    "id": "1361349522684510449",
+    "name": "wafer.space Community",
+    "iconUrl": "2026-05_media/fb143eaa45770cbb40493d09b625e98b-09FD1.png"
+  },
+  "channel": {
+    "id": "1503418680451792966",
+    "type": "GuildPublicThread",
+    "categoryId": "1423348662318272592",
+    "category": "project-template",
+    "name": "Hmm, _might_ have found a bug in the LVS",
+    "topic": null
+  },
+  "dateRange": {
+    "after": "2026-04-30T23:59:59.999+00:00",
+    "before": null
+  },
+  "exportedAt": "2026-05-18T20:55:51.5733422+00:00",
+  "messages": [
+    {
+      "id": "1503449602022703346",
+      "type": "21",
+      "timestamp": "2026-05-11T17:31:57.865+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "2026-05_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "384390069412429834",
+          "name": "polyfractal",
+          "discriminator": "0000",
+          "nickname": "BreakingTaps",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1503418680451792966",
+        "channelId": "1423348662318272592",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1503449617964994681",
+      "type": "Default",
+      "timestamp": "2026-05-11T17:32:01.666+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks for the report!\n\nYes, it really seems `diode_connections.lvs` is the only place where `nwell` is used for the connection to the devices.\nEverywhere else, i.e. `moscap_extraction.lvs/mos_extraction.lvs/mos_sab_extraction.lvs/res_extraction.lvs`, `nwell_con` is used.\n\nIf you take a look at `general_derivations.lvs` you can see that `nwell_con` is defined as:\n\n```\nnwell_con       = nwell.not(res_mk)\n```\nI think this is so that nwell resistors are correctly extracted. They are extracted as:\n\n```\n# NWELL\nlogger.info('Extracting NWELL device')\nextract_devices(resistor_with_bulk('nwell', 1000, BResistor), { 'R' => nwell_res, 'C' => nwell_con, 'W' => sub })\n```\n\nYou can find a description about the extractor here: https://www.klayout.de/doc/manual/lvs_device_extractors.html\n\nTaking a look at the connectivity setup in `general_connections.lvs`, only `nwell_con` is connected to `ntap`:\n\n```\n# Inter-layer\nconnect(lvpwell_con, ptap)\nconnect(lvpwell_con, ptap_dw)\nconnect(dnwell, ntap_dw)\nconnect(nwell_con, ntap)\nconnect(ptap, contact)\n...\n```\n\nThat's the reason why you get anonymous pins with just `nwell`.\n\nLong story short, I agree that `nwell_con` should be used :)",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "2026-05_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1503449680325902488",
+      "type": "Default",
+      "timestamp": "2026-05-11T17:32:16.534+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "If you would like to be credited, you can open a PR in the upstream repo: https://github.com/fossi-foundation/globalfoundries-pdk-libs-gf180mcu_fd_pv\nOtherwise, I will do it for you.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "2026-05_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1503449828607397948",
+      "type": "Default",
+      "timestamp": "2026-05-11T17:32:51.887+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You might want to use the LVS setup in this directory anyway, as @Clyde Laforge has made some important improvements around substrate cuts recently.\n\nWe are working on creating a new open_pdks PDK, which will allow us to switch from the current wafer.space PDK fork. However, this probably won't happen until next week, as I'll be at Hackaday Europe this weekend :)",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "2026-05_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1401841055975870476",
+          "name": "scafir",
+          "discriminator": "0000",
+          "nickname": "Clyde Laforge",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/e9fd582c6cd4273d01cbf5dfd4bb3455-27807.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1503452466698522664",
+      "type": "Default",
+      "timestamp": "2026-05-11T17:43:20.857+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Awesome, thanks for taking a look @Leo Moser (mole99)! No credit needed, probably easier/faster for you to make the fix than for me to cobble together a PR \ud83d\ude42 \n\nWill take a look at that LVS setup for my own experiments! and goodluck/have fun at hackaday conf \ud83d\ude42",
+      "author": {
+        "id": "384390069412429834",
+        "name": "polyfractal",
+        "discriminator": "0000",
+        "nickname": "BreakingTaps",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "323371864074485771",
+          "name": "mole99",
+          "discriminator": "0000",
+          "nickname": "Leo Moser (mole99)",
+          "color": null,
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1423020172595298314",
+              "name": "Mod",
+              "color": null,
+              "position": 1
+            }
+          ],
+          "avatarUrl": "2026-05_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+        }
+      ],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\ud83d\ude42",
+          "code": "slight_smile",
+          "isAnimated": false,
+          "imageUrl": "2026-05_media/1f642-83E8A.svg"
+        }
+      ]
+    },
+    {
+      "id": "1503456962321322015",
+      "type": "Default",
+      "timestamp": "2026-05-11T18:01:12.697+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "PR is up: https://github.com/fossi-foundation/globalfoundries-pdk-libs-gf180mcu_fd_pv/pull/20\n\nGreat, and thank you! \ud83d\ude03",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "2026-05_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "fix: diode_nw2ps_* connect to nwell_con by mole99 \u00b7 Pull Request #...",
+          "url": "https://github.com/fossi-foundation/globalfoundries-pdk-libs-gf180mcu_fd_pv/pull/20",
+          "timestamp": null,
+          "description": "Discovered thanks to a report by Zachary.\ndiode_nw2ps_* used the wrong layer for the bulk connection. general_connections.lvs uses nwell_con to connect to ntap.",
+          "color": "#1E2327",
+          "images": [],
+          "fields": [],
+          "inlineEmojis": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\u2764\ufe0f",
+            "code": "heart",
+            "isAnimated": false,
+            "imageUrl": "2026-05_media/2764-A3D25.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "384390069412429834",
+              "name": "polyfractal",
+              "discriminator": "0000",
+              "nickname": "BreakingTaps",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-05_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\ud83d\ude03",
+          "code": "smiley",
+          "isAnimated": false,
+          "imageUrl": "2026-05_media/1f603-5E531.svg"
+        }
+      ]
+    },
+    {
+      "id": "1503461422171164772",
+      "type": "Default",
+      "timestamp": "2026-05-11T18:18:56.008+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "woo!",
+      "author": {
+        "id": "384390069412429834",
+        "name": "polyfractal",
+        "discriminator": "0000",
+        "nickname": "BreakingTaps",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\ud83d\ude4c",
+            "code": "raised_hands",
+            "isAnimated": false,
+            "imageUrl": "2026-05_media/1f64c-7C820.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "323371864074485771",
+              "name": "mole99",
+              "discriminator": "0000",
+              "nickname": "Leo Moser (mole99)",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-05_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    }
+  ],
+  "messageCount": 7
+}

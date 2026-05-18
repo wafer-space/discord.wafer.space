@@ -1,0 +1,78 @@
+==============================================================
+Guild: wafer.space Community
+Channel: Information / questions / SDF annotation issues with Icarus
+After: 04/30/2026 23:59
+==============================================================
+
+[05/14/2026 21:23] professorgeek101
+Hi everyone! I’m working on STA gate-level simulation for a GF180 LibreLane/Wafer.Space project and I’m running into SDF annotation issues with Icarus.
+
+Our post-PNR netlist is using the 3.3V standard-cell library:
+
+`gf180mcu_as_sc_mcu7t3v3`
+
+The SDF contains entries like:
+
+`(IOPATH A Y (...))`
+
+for cells such as:
+
+`gf180mcu_as_sc_mcu7t3v3__inv_2`
+`gf180mcu_as_sc_mcu7t3v3__buff_2`
+
+But the Verilog model I have for `gf180mcu_as_sc_mcu7t3v3.v` appears to be functional-only. For example, the cells only have assignments like:
+
+`assign Y = !A;`
+`assign Y = A;`
+
+and I do not see `specify` / `endspecify` timing blocks. Because of that, Icarus reports errors like:
+
+`Unable to match ModPath A -> Y`
+
+The smoke test still passes functionally, but SDF annotation is not clean.
+
+Is there a timing-capable Verilog model for `gf180mcu_as_sc_mcu7t3v3` with `specify` blocks? Or is timed GLS expected to be done with a different GF180 standard-cell library like `gf180mcu_fd_sc_mcu7t5v`?
+
+Any guidance would be appreciated!
+
+
+[05/14/2026 23:01] ravenslofty
+um, you are aware that you're trying to work with a third-party PDK, right?
+
+Tholin's doing excellent work, but a one-person standard cell library is going to have teething issues like this.
+
+
+[05/15/2026 06:10] mole99
+@Tholin would probably appreciate your contribution of specify timing blocks in the [repository](https://github.com/AvalonSemiconductors/gf180mcu_as_sc_mcu7t3v3).
+
+
+[05/15/2026 13:16] namibj
+By understanding is also that there's currently suspicion on the 3v3 SCL from Tholin (maybe though not the same one, but I don't see why it would not be (effectively) the same) having an issue that causes high power draw and possibly (somewhat) worse at least at/near startup.
+
+@Tholin , if you can confirm the suspicious heating happens from a cold static start (no clocks or the like!), and happen to have the taped-out GDS for me, I'd like to try getting (low-crosstalk-fidelity) PEX out of it and the get Xyce to see how it comes up during it's POR until it (hopefully) stabilizes.
+And see if it triggers and alarms (in particular about power draw, though I fear localized heating might be hard to figure due to the PEX likely not allowing sufficiently-functional thermal connectivity extraction) in the process of the simulation about safe operating areas and/or can at least _somewhat_ point to where the (I presume static) current is going.
+
+If there'd be some special sequence for the external lines to follow to do the turning-on until it exhibits the suspicious power draw, please do share.
+
+I think it'd be more worth it than trying full-die ttsky26a PEX into Xyce especially given that needs me to select a project via (iirc) digital waveforms
+
+
+[05/15/2026 13:21] 246tnt
+AFAIK Tholin's current chip doesn't use his 3v3 SCL.
+
+
+[05/15/2026 13:21] tholin
+I am using the 5V SCL only
+
+
+[05/15/2026 14:00] namibj
+Ohhhh sorry sounded like you had tested (some of) it somewhere on that die already.
+
+
+[05/18/2026 18:33] mithro_
+I think @Tim Edwards has test deisgns with tholin's 3v3 SCL?
+
+
+==============================================================
+Exported 8 message(s)
+==============================================================

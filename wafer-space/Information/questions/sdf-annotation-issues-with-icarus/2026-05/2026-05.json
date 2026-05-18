@@ -1,0 +1,278 @@
+{
+  "guild": {
+    "id": "1361349522684510449",
+    "name": "wafer.space Community",
+    "iconUrl": "2026-05_media/fb143eaa45770cbb40493d09b625e98b-09FD1.png"
+  },
+  "channel": {
+    "id": "1504595042323533845",
+    "type": "GuildPublicThread",
+    "categoryId": "1409660288822673408",
+    "category": "questions",
+    "name": "SDF annotation issues with Icarus",
+    "topic": null
+  },
+  "dateRange": {
+    "after": "2026-04-30T23:59:59.999+00:00",
+    "before": null
+  },
+  "exportedAt": "2026-05-18T20:28:32.0264319+00:00",
+  "messages": [
+    {
+      "id": "1504595042323533845",
+      "type": "Default",
+      "timestamp": "2026-05-14T21:23:32.114+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi everyone! I\u2019m working on STA gate-level simulation for a GF180 LibreLane/Wafer.Space project and I\u2019m running into SDF annotation issues with Icarus.\n\nOur post-PNR netlist is using the 3.3V standard-cell library:\n\n`gf180mcu_as_sc_mcu7t3v3`\n\nThe SDF contains entries like:\n\n`(IOPATH A Y (...))`\n\nfor cells such as:\n\n`gf180mcu_as_sc_mcu7t3v3__inv_2`\n`gf180mcu_as_sc_mcu7t3v3__buff_2`\n\nBut the Verilog model I have for `gf180mcu_as_sc_mcu7t3v3.v` appears to be functional-only. For example, the cells only have assignments like:\n\n`assign Y = !A;`\n`assign Y = A;`\n\nand I do not see `specify` / `endspecify` timing blocks. Because of that, Icarus reports errors like:\n\n`Unable to match ModPath A -> Y`\n\nThe smoke test still passes functionally, but SDF annotation is not clean.\n\nIs there a timing-capable Verilog model for `gf180mcu_as_sc_mcu7t3v3` with `specify` blocks? Or is timed GLS expected to be done with a different GF180 standard-cell library like `gf180mcu_fd_sc_mcu7t5v`?\n\nAny guidance would be appreciated!",
+      "author": {
+        "id": "316007131721760771",
+        "name": "professorgeek101",
+        "discriminator": "0000",
+        "nickname": "ProfessorGeek101",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/9f8e790b8e69f11922712e26172d8c95-0B6CF.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1504619720631128204",
+      "type": "Default",
+      "timestamp": "2026-05-14T23:01:35.881+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "um, you are aware that you're trying to work with a third-party PDK, right?\n\nTholin's doing excellent work, but a one-person standard cell library is going to have teething issues like this.",
+      "author": {
+        "id": "1187141985530818611",
+        "name": "ravenslofty",
+        "discriminator": "0000",
+        "nickname": "Lofty",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/dd665ae27be32531af89aeb08fd05e04-1D5A4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1504727703071494305",
+      "type": "Default",
+      "timestamp": "2026-05-15T06:10:40.901+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Tholin would probably appreciate your contribution of specify timing blocks in the [repository](https://github.com/AvalonSemiconductors/gf180mcu_as_sc_mcu7t3v3).",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "2026-05_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "220639106915368960",
+          "name": "tholin",
+          "discriminator": "0000",
+          "nickname": "Tholin",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/edae5aadf146133e0448bfb1f0fa91c4-62B19.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1504834929723441283",
+      "type": "Default",
+      "timestamp": "2026-05-15T13:16:45.727+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "By understanding is also that there's currently suspicion on the 3v3 SCL from Tholin (maybe though not the same one, but I don't see why it would not be (effectively) the same) having an issue that causes high power draw and possibly (somewhat) worse at least at/near startup.\n\n@Tholin , if you can confirm the suspicious heating happens from a cold static start (no clocks or the like!), and happen to have the taped-out GDS for me, I'd like to try getting (low-crosstalk-fidelity) PEX out of it and the get Xyce to see how it comes up during it's POR until it (hopefully) stabilizes.\nAnd see if it triggers and alarms (in particular about power draw, though I fear localized heating might be hard to figure due to the PEX likely not allowing sufficiently-functional thermal connectivity extraction) in the process of the simulation about safe operating areas and/or can at least _somewhat_ point to where the (I presume static) current is going.\n\nIf there'd be some special sequence for the external lines to follow to do the turning-on until it exhibits the suspicious power draw, please do share.\n\nI think it'd be more worth it than trying full-die ttsky26a PEX into Xyce especially given that needs me to select a project via (iirc) digital waveforms",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "220639106915368960",
+          "name": "tholin",
+          "discriminator": "0000",
+          "nickname": "Tholin",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/edae5aadf146133e0448bfb1f0fa91c4-62B19.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1504836132284797071",
+      "type": "Default",
+      "timestamp": "2026-05-15T13:21:32.44+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "AFAIK Tholin's current chip doesn't use his 3v3 SCL.",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1504836147401199646",
+      "type": "Default",
+      "timestamp": "2026-05-15T13:21:36.044+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I am using the 5V SCL only",
+      "author": {
+        "id": "220639106915368960",
+        "name": "tholin",
+        "discriminator": "0000",
+        "nickname": "Tholin",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/edae5aadf146133e0448bfb1f0fa91c4-62B19.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1504845926320177335",
+      "type": "Default",
+      "timestamp": "2026-05-15T14:00:27.52+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Ohhhh sorry sounded like you had tested (some of) it somewhere on that die already.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506001678418055278",
+      "type": "Reply",
+      "timestamp": "2026-05-18T18:33:00.293+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I think @Tim Edwards has test deisgns with tholin's 3v3 SCL?",
+      "author": {
+        "id": "169786952432746498",
+        "name": "mithro_",
+        "discriminator": "0000",
+        "nickname": "Tim 'mithro' Ansell",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "262706220073222144",
+          "name": "namibj",
+          "discriminator": "0000",
+          "nickname": "namibj",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+        },
+        {
+          "id": "1365118310701600900",
+          "name": "rtimothyedwards_19428",
+          "discriminator": "0000",
+          "nickname": "Tim Edwards",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1504845926320177335",
+        "channelId": "1504595042323533845",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    }
+  ],
+  "messageCount": 8
+}
