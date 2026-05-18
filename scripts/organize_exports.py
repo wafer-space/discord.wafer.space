@@ -123,11 +123,37 @@ def _copy_month_file(source_file: Path, dest_file: Path) -> bool:
         return False
 
 
-def _update_latest_symlink(public_channel_dir: Path) -> None:
-    """Point `latest.html` (and friends) at the newest month present.
+_LATEST_REDIRECT_TEMPLATE = """<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="refresh" content="0; url={target}">
+<link rel="canonical" href="{target}">
+<title>Latest archive</title>
+</head>
+<body>
+<p>Redirecting to the <a href="{target}">latest archive ({month})</a>&hellip;</p>
+</body>
+</html>
+"""
 
-    Scans the channel directory for `YYYY-MM/` subdirectories and creates
-    a symlink for each extension that exists in the most recent month.
+
+def _update_latest_pointers(public_channel_dir: Path) -> None:
+    """Make `latest.*` point at the newest month present.
+
+    `latest.html` is written as a real HTML *redirect* (meta refresh) to
+    `<newest>/<newest>.html`. It must NOT be a symlink: the deploy action
+    (peaceiris/actions-gh-pages) dereferences symlinks into flat file
+    copies, and a flat copy of the month's HTML at the channel root keeps
+    its relative `<newest>_media/...` asset paths. Served at
+    `/channel/latest.html` those resolve to `/channel/<newest>_media/...`
+    (404) instead of `/channel/<newest>/<newest>_media/...`. A redirect
+    sidesteps this — the browser navigates to the real per-month URL
+    before resolving any relative asset paths.
+
+    `latest.txt/json/csv` stay symlinks: plain data formats have no
+    relative asset references, so the flat copy the deploy produces is
+    correct for them.
     """
     months = sorted(
         (d.name for d in public_channel_dir.iterdir() if d.is_dir() and is_month_dir_name(d.name)),
@@ -136,7 +162,21 @@ def _update_latest_symlink(public_channel_dir: Path) -> None:
     if not months:
         return
     newest = months[0]
-    for ext in ("html", "txt", "json", "csv"):
+
+    # HTML: real redirect file (never a symlink).
+    html_target_exists = (public_channel_dir / newest / f"{newest}.html").exists()
+    latest_html = public_channel_dir / "latest.html"
+    if latest_html.exists() or latest_html.is_symlink():
+        latest_html.unlink()
+    if html_target_exists:
+        target = f"{newest}/{newest}.html"
+        latest_html.write_text(
+            _LATEST_REDIRECT_TEMPLATE.format(target=target, month=newest),
+            encoding="utf-8",
+        )
+
+    # Data formats: symlink (deploy flattens to a correct standalone copy).
+    for ext in ("txt", "json", "csv"):
         target_file = public_channel_dir / newest / f"{newest}.{ext}"
         if not target_file.exists():
             continue
@@ -218,9 +258,9 @@ def _organize_channel_directory(
             if _copy_media_directory(media_src, media_dst):
                 print(f"    ↳ media: {media_src.name} → {media_dst.relative_to(public_root)}")
 
-    # Refresh the `latest.*` symlinks at the channel root
+    # Refresh the `latest.*` pointers at the channel root
     if public_channel_dir.exists():
-        _update_latest_symlink(public_channel_dir)
+        _update_latest_pointers(public_channel_dir)
 
     return files_organized, errors
 

@@ -69,8 +69,17 @@ def test_organize_exports_partitions_by_each_filename_month() -> None:
         assert "may" not in march
 
 
-def test_organize_exports_creates_latest_symlinks_to_most_recent_month() -> None:
-    """`latest.html` points at the newest month for that channel."""
+def test_latest_html_is_redirect_not_symlink() -> None:
+    """`latest.html` must be a real HTML redirect, not a symlink/flat copy.
+
+    The deploy action (peaceiris) dereferences symlinks into flat file
+    copies. A flat copy of the month's HTML at the channel root keeps its
+    relative `2026-05_media/...` asset paths, which then resolve to
+    `/channel/2026-05_media/...` (404) instead of
+    `/channel/2026-05/2026-05_media/...`. A meta-refresh redirect avoids
+    this: the browser navigates to the real per-month URL first, so
+    relative asset paths resolve correctly.
+    """
     with tempfile.TemporaryDirectory() as tmpdir:
         tmpdir_path = Path(tmpdir)
         exports = tmpdir_path / "exports"
@@ -83,10 +92,46 @@ def test_organize_exports_creates_latest_symlinks_to_most_recent_month() -> None
 
         organize_exports(exports, public)
 
-        latest_link = public / "test-server" / "general" / "latest.html"
-        assert latest_link.is_symlink()
-        # Should point at 2026-05 (the newest month present in the input)
-        assert latest_link.readlink() == Path("2026-05/2026-05.html")
+        latest_html = public / "test-server" / "general" / "latest.html"
+        assert latest_html.exists()
+        # Must NOT be a symlink (peaceiris would flatten it and break media)
+        assert not latest_html.is_symlink()
+        content = latest_html.read_text()
+        # Points at the newest month's real page via meta refresh
+        assert "2026-05/2026-05.html" in content
+        assert "http-equiv" in content.lower()
+        assert "refresh" in content.lower()
+        # Sanity: it does NOT inline the month's body (which would carry
+        # the broken relative media paths)
+        assert "<html>may</html>" not in content
+
+
+def test_latest_data_files_remain_symlinks() -> None:
+    """latest.txt/json/csv stay symlinks — they have no relative asset refs.
+
+    Plain data formats are self-contained, so a flat copy (what the deploy
+    produces from a symlink) is correct for them; only HTML needs the
+    redirect treatment.
+    """
+    with tempfile.TemporaryDirectory() as tmpdir:
+        tmpdir_path = Path(tmpdir)
+        exports = tmpdir_path / "exports"
+        public = tmpdir_path / "public"
+
+        channel_dir = exports / "test-server" / "general"
+        channel_dir.mkdir(parents=True)
+        (channel_dir / "2026-05.html").write_text("<html>may</html>")
+        (channel_dir / "2026-05.txt").write_text("may text")
+        (channel_dir / "2026-05.json").write_text('{"messages":[]}')
+        (channel_dir / "2026-05.csv").write_text("id\n1\n")
+
+        organize_exports(exports, public)
+
+        base = public / "test-server" / "general"
+        for ext in ("txt", "json", "csv"):
+            link = base / f"latest.{ext}"
+            assert link.is_symlink(), f"latest.{ext} should be a symlink"
+            assert link.readlink() == Path(f"2026-05/2026-05.{ext}")
 
 
 def test_organize_exports_multiple_servers() -> None:
