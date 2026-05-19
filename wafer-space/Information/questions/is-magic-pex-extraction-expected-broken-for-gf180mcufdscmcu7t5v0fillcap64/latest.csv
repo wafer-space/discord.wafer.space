@@ -69,3 +69,22 @@ Yeah, I'll try next time. Actually LVS extraction takes abotu as long as the ini
 "262706220073222144","namibj","2026-05-18T19:19:51.9230000+00:00","oh sorry actually loading only took 20 minutes","",""
 "1365118310701600900","rtimothyedwards_19428","2026-05-18T20:07:25.1380000+00:00","For me, the loading has been going on for > 40 minutes and looks like it is being slowed down by one specific ""grow"" operation.  So the size of this layout has exposed some other inefficiency that I'll also need to look into.","",""
 "262706220073222144","namibj","2026-05-18T20:17:12.6620000+00:00","ahhhh","",""
+"262706220073222144","namibj","2026-05-18T20:19:38.0650000+00:00","Hope you don't see this as a bad thing but rather as a healthy benchmark in scalability.
+
+Any idea how feasible parallel extraction might be for situations like this?
+I'd guess that given the already tile-based method (there are notes about the tile size needing to be tuned for the tech to optimize performance as both too small and too large would be slower than optimal size), it shouldn't be too hard in theory, aside from the Tcl engine being from what I can tell quite single-threaded in it's nature.","",""
+"1365118310701600900","rtimothyedwards_19428","2026-05-18T20:27:37.9870000+00:00","I was working on parallelization recently.  There are several places where the database gets altered during a search, which prevents two processes from accessing the same data.  I got rid of one of them, haven't worked on the other one yet.  After that, yes, it should be possible to parallelize a lot of things in magic.","",""
+"262706220073222144","namibj","2026-05-18T20:27:43.5790000+00:00","I'm asking because Xyce will scale to MPI clusters at least a rack in size quite happily it seems for designs of this kind of size.","",""
+"1365118310701600900","rtimothyedwards_19428","2026-05-18T20:28:25.9070000+00:00","Well, Xyce was designed specifically for parallel processing.  Magic was not, and I have to do the footwork to modernize it.","",""
+"262706220073222144","namibj","2026-05-18T20:28:56.3280000+00:00","What programming language is that work done in?
+I might be motivated to help; profile-guided optimization is one of the larger things I've been doing fairly well at in past years.","",""
+"262706220073222144","namibj","2026-05-18T20:29:41.1830000+00:00","I meant that as there being open tooling to consume the large PEX netlists that arise from full-die extraction.","",""
+"1365118310701600900","rtimothyedwards_19428","2026-05-18T20:32:11.5920000+00:00","Magic was written in 1985, so it's all in plain C.","",""
+"262706220073222144","namibj","2026-05-18T20:33:53.1300000+00:00","(I figured there might be substantial Tcl involved in those parts, but plain C is good for this.)","",""
+"1365118310701600900","rtimothyedwards_19428","2026-05-18T20:34:13.7460000+00:00","There is a lot of Tcl, but not in the core code.","",""
+"262706220073222144","namibj","2026-05-18T20:35:04.3260000+00:00","Yeah in that case I might be able to help somewhat. Let's see how this run progresses at least.","",""
+"1365118310701600900","rtimothyedwards_19428","2026-05-18T20:36:33.9440000+00:00","Any help would be appreciated.  Especially profiling.","",""
+"262706220073222144","namibj","2026-05-18T20:40:10.7610000+00:00","yeah, I'll try to get the next build with debug symbols so DWARF unwinding will work on it","",""
+"262706220073222144","namibj","2026-05-18T20:40:19.7690000+00:00","well, better debug symbols","",""
+"262706220073222144","namibj","2026-05-18T22:10:40.7810000+00:00","oh yeah it feels like you _might_ have accidentally broke loading speed.
+I _thought_ it was further along with the december version, but we'll see if it went through to extraction after I have slept.","",""
