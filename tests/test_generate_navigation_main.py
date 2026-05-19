@@ -182,6 +182,106 @@ def test_organize_data_sorts_archives() -> None:
         assert archives[2]["date"] == "2025-01"
 
 
+def _write_json(public_dir: Path, rel: str, channel_name: str, n_msgs: int) -> None:
+    """Write a DCE-style month JSON at public_dir/<rel>/<rel last seg date>.json."""
+    p = public_dir / rel
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(
+        json.dumps(
+            {
+                "guild": {"id": "1", "name": "T"},
+                "channel": {"id": "2", "name": channel_name},
+                "messages": [
+                    {"id": str(i), "timestamp": "2026-04-02T00:00:00+00:00"}
+                    for i in range(n_msgs)
+                ],
+            }
+        )
+    )
+
+
+def test_organize_data_nests_threads_under_parent_channel() -> None:
+    """A 3-segment path whose parent is itself an exported channel is a THREAD.
+
+    It must be nested under its parent channel — NOT listed as its own
+    top-level channel. This is the core fix: threads appearing as channels.
+    """
+    exports = [
+        {
+            "server": "wafer-space",
+            "channel": "Information/announcements",
+            "date": "2026-04",
+            "path": "wafer-space/Information/announcements/2026-04/2026-04.html",
+        },
+        {
+            "server": "wafer-space",
+            "channel": "Information/announcements/can-one-join",
+            "date": "2026-04",
+            "path": (
+                "wafer-space/Information/announcements/can-one-join/"
+                "2026-04/2026-04.html"
+            ),
+        },
+    ]
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        public_dir = Path(tmpdir) / "public"
+        public_dir.mkdir()
+        _write_json(
+            public_dir,
+            "wafer-space/Information/announcements/2026-04/2026-04.json",
+            "announcements",
+            4,
+        )
+        _write_json(
+            public_dir,
+            "wafer-space/Information/announcements/can-one-join/2026-04/2026-04.json",
+            "Can one join even if I wasn't part of?",
+            7,
+        )
+
+        servers_data = organize_data(exports, public_dir)
+        channels = servers_data["wafer-space"]["channels"]
+
+        # The channel is present; the thread path is NOT a top-level channel.
+        assert "Information/announcements" in channels
+        assert "Information/announcements/can-one-join" not in channels
+        # channel_count counts real channels only (the thread doesn't count).
+        assert servers_data["wafer-space"]["channel_count"] == EXPECTED_ARCHIVE_COUNT_ONE
+
+        chan = channels["Information/announcements"]
+        assert len(chan["threads"]) == EXPECTED_ARCHIVE_COUNT_ONE
+        thread = chan["threads"][0]
+        # Thread carries a human title (from JSON channel.name), a URL-safe
+        # slug, its full path, and its own archives.
+        assert thread["title"] == "Can one join even if I wasn't part of?"
+        assert thread["name"] == "can-one-join"
+        assert thread["path"] == "Information/announcements/can-one-join"
+        assert thread["total_messages"] == 7  # noqa: PLR2004
+        assert thread["archives"][0]["date"] == "2026-04"
+
+
+def test_organize_data_channel_without_threads_has_empty_thread_list() -> None:
+    """A plain channel (no nested threads) still exposes an empty threads list."""
+    exports = [
+        {
+            "server": "s",
+            "channel": "general",
+            "date": "2026-04",
+            "path": "s/general/2026-04/2026-04.html",
+        },
+    ]
+    with tempfile.TemporaryDirectory() as tmpdir:
+        public_dir = Path(tmpdir) / "public"
+        public_dir.mkdir()
+        _write_json(public_dir, "s/general/2026-04/2026-04.json", "general", 3)
+
+        servers_data = organize_data(exports, public_dir)
+        chan = servers_data["s"]["channels"]["general"]
+        assert chan["threads"] == []
+        assert chan["total_messages"] == 3  # noqa: PLR2004
+
+
 def test_organize_data_handles_empty_exports() -> None:
     """Test that organize_data handles empty exports list"""
     with tempfile.TemporaryDirectory() as tmpdir:

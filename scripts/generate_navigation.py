@@ -336,59 +336,122 @@ def generate_channel_index(  # noqa: PLR0913  # Index generation needs multiple 
     output_path.write_text(html)
 
 
-def organize_data(exports: list[dict], public_dir: Path) -> dict:
-    """Organize exports data by server and channel with statistics.
+def _read_channel_title(public_dir: Path, server: str, path: str, date: str) -> str:
+    """Best-effort human title for a channel/thread from a month JSON.
 
-    Args:
-        exports: List of export info dicts from scan_exports
-        public_dir: Path to public directory for message counting
-
-    Returns:
-        Dict mapping server names to server data with channels
+    DCE records the real Discord channel/thread name in `channel.name`,
+    even for an export with zero messages, so this gives the readable
+    thread title instead of the URL slug.
     """
-    servers_data = {}
+    json_path = public_dir / server / path / date / f"{date}.json"
+    try:
+        with open(json_path, encoding="utf-8") as f:
+            data = json.load(f)
+        name = data.get("channel", {}).get("name")
+        if isinstance(name, str) and name:
+            return name
+    except (OSError, json.JSONDecodeError):
+        pass
+    return path.split("/")[-1]
 
+
+def _finalize_archives(archives: list[dict]) -> tuple[list[dict], int, int]:
+    """Sort archives newest-first; return (archives, archive_count, total)."""
+    archives.sort(key=lambda a: a["date"], reverse=True)
+    total = sum(a["message_count"] for a in archives)
+    return archives, len(archives), total
+
+
+def _parent_path(p: str) -> str | None:
+    """Parent export path (drop last segment), or None if top-level."""
+    return p.rsplit("/", 1)[0] if "/" in p else None
+
+
+def _is_thread_path(p: str, path_set: set[str]) -> bool:
+    """A path is a thread iff its parent path is itself an exported path."""
+    parent = _parent_path(p)
+    return parent is not None and parent in path_set
+
+
+def _build_channel_entry(name: str, raw_archives: list[dict]) -> dict:
+    """Build a channel/thread stats dict from its raw per-month archives."""
+    archives, archive_count, total = _finalize_archives(raw_archives)
+    return {
+        "name": name,
+        "archives": archives,
+        "archive_count": archive_count,
+        "message_count": archives[0]["message_count"] if archives else 0,
+        "total_messages": total,
+    }
+
+
+def organize_data(exports: list[dict], public_dir: Path) -> dict:
+    """Organize exports into servers → channels, with threads nested.
+
+    A path is a THREAD when its parent path is *also* an exported path
+    (i.e., the parent is itself a channel with its own month exports).
+    Threads are nested under their parent channel's `threads` list rather
+    than listed as top-level channels. Everything else is a CHANNEL.
+
+    Each channel dict gains: `archives`, `archive_count`, `message_count`
+    (newest archive), `total_messages` (sum across months), and `threads`
+    (list of thread dicts: `name` slug, `path`, `title`, `archives`,
+    `archive_count`, `total_messages`, `last_activity`).
+    """
+    # First pass: bucket raw archives per (server, path).
+    raw: dict[str, dict[str, dict]] = {}
     for export in exports:
         server = export["server"]
-        channel = export["channel"]
+        path = export["channel"]
         date = export["date"]
-
-        # Initialize server if not exists
-        if server not in servers_data:
-            servers_data[server] = {
-                "name": server,
-                "display_name": server.replace("-", " ").title(),
-                "channels": {},
-            }
-
-        # Initialize channel if not exists
-        if channel not in servers_data[server]["channels"]:
-            servers_data[server]["channels"][channel] = {"name": channel, "archives": []}
-
-        # JSON sits next to its HTML inside the month directory:
-        # public/<server>/<channel>/<YYYY-MM>/<YYYY-MM>.json
-        json_path = public_dir / server / channel / date / f"{date}.json"
-        message_count = count_messages_from_json(str(json_path))
-
-        servers_data[server]["channels"][channel]["archives"].append(
-            {"date": date, "message_count": message_count}
+        raw.setdefault(server, {})
+        entry = raw[server].setdefault(path, {"archives": []})
+        json_path = public_dir / server / path / date / f"{date}.json"
+        entry["archives"].append(
+            {"date": date, "message_count": count_messages_from_json(str(json_path))}
         )
 
-    # Calculate statistics for each server and channel
-    for server_data in servers_data.values():
+    servers_data: dict[str, Any] = {}
+    for server, paths in raw.items():
+        path_set = set(paths)
+        server_data: dict[str, Any] = {
+            "name": server,
+            "display_name": server.replace("-", " ").title(),
+            "channels": {},
+            "last_updated": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
+        }
+
+        # Real channels first (a path whose parent is NOT an exported path).
+        for path in paths:
+            if _is_thread_path(path, path_set):
+                continue
+            entry = _build_channel_entry(path, paths[path]["archives"])
+            entry["threads"] = []
+            server_data["channels"][path] = entry
+
+        # Attach threads to their parent channel.
+        for path in paths:
+            if not _is_thread_path(path, path_set):
+                continue
+            entry = _build_channel_entry(path, paths[path]["archives"])
+            newest_date = entry["archives"][0]["date"] if entry["archives"] else ""
+            thread = {
+                **entry,
+                "name": path.split("/")[-1],
+                "path": path,
+                "title": _read_channel_title(public_dir, server, path, newest_date),
+                "last_activity": newest_date,
+            }
+            parent_chan = server_data["channels"].get(_parent_path(path))
+            if parent_chan is not None:
+                parent_chan["threads"].append(thread)
+
+        # Sort each channel's threads newest-activity first.
+        for chan in server_data["channels"].values():
+            chan["threads"].sort(key=lambda t: t["last_activity"], reverse=True)
+
         server_data["channel_count"] = len(server_data["channels"])
-        server_data["last_updated"] = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
-
-        for channel_data in server_data["channels"].values():
-            # Sort archives reverse chronologically (newest first)
-            channel_data["archives"].sort(key=lambda a: a["date"], reverse=True)
-            channel_data["archive_count"] = len(channel_data["archives"])
-
-            # Current month message count (most recent archive)
-            if channel_data["archives"]:
-                channel_data["message_count"] = channel_data["archives"][0]["message_count"]
-            else:
-                channel_data["message_count"] = 0
+        servers_data[server] = server_data
 
     return servers_data
 
@@ -565,12 +628,9 @@ def main() -> None:  # noqa: C901, PLR0912, PLR0915  # Main orchestration functi
             print("ERROR: public/ directory not found. Run export first.")
             sys.exit(1)
 
-        # Load state for forum channel detection
-        state_path = Path("state.json")
-        state = {}
-        if state_path.exists():
-            with open(state_path, encoding="utf-8") as f:
-                state = json.load(f)
+        # Thread vs channel is now derived structurally in organize_data
+        # (a path whose parent is also an exported path is a thread), so
+        # state.json is no longer consulted for forum detection.
 
         # Scan all exports
         print("Scanning exports...")
@@ -590,36 +650,35 @@ def main() -> None:  # noqa: C901, PLR0912, PLR0915  # Main orchestration functi
         # Generate CNAME file for custom domain
         generate_cname_file(config, public_dir / "CNAME")
 
-        # Generate server indexes and channel indexes
+        # Generate server indexes, channel indexes, and per-thread indexes.
+        # Threads are nested in each channel's `threads` list (organize_data),
+        # so a thread is NEVER listed as a top-level channel.
         for server_data in servers_data.values():
             print(f"Generating index for {server_data['display_name']}...")
 
             server_name = server_data["name"]
-            forum_channels = get_forum_channels(state, server_name, public_dir)
-
-            # Sort channels alphabetically and mark forums
             channels_list = list(server_data["channels"].values())
             channels_list.sort(key=lambda c: c["name"])
 
-            # Mark which channels are forums
+            # A "forum-style" channel has threads but no top-level messages
+            # of its own; the server index renders it as a thread hub.
             for channel in channels_list:
-                channel["is_forum"] = channel["name"] in forum_channels
+                channel["is_forum"] = (
+                    channel["total_messages"] == 0 and len(channel["threads"]) > 0
+                )
+                channel["thread_count"] = len(channel["threads"])
 
-            # Generate server index
             generate_server_index(
-                config, server_data, channels_list, public_dir / server_data["name"] / "index.html"
+                config,
+                server_data,
+                channels_list,
+                public_dir / server_name / "index.html",
             )
 
-            # Generate channel indexes (skip forums - they get forum indexes instead)
-
+            thread_pages = 0
             for channel_data in channels_list:
-                # Skip forum channels - they get forum index pages instead
-                if channel_data["name"] in forum_channels:
-                    continue
-
-                # Collect threads for this channel (if any)
-                channel_dir = public_dir / server_data["name"] / channel_data["name"]
-                channel_threads = collect_forum_threads(channel_dir)
+                channel_dir = public_dir / server_name / channel_data["name"]
+                threads = channel_data["threads"]
 
                 generate_channel_index(
                     config,
@@ -627,55 +686,32 @@ def main() -> None:  # noqa: C901, PLR0912, PLR0915  # Main orchestration functi
                     channel_data,
                     channel_data["archives"],
                     channel_dir / "index.html",
-                    threads=channel_threads if channel_threads else None,
+                    threads=threads or None,
                 )
 
-            # Generate forum index pages
+                # Each thread gets its own index page listing its archives.
+                # We reuse the channel-index template with the thread as a
+                # channel-like entity (name = full path so links resolve).
+                for thread in threads:
+                    thread_view = {
+                        "name": thread["path"],
+                        "title": thread["title"],
+                        "threads": [],
+                    }
+                    generate_channel_index(
+                        config,
+                        server_data,
+                        thread_view,
+                        thread["archives"],
+                        public_dir / server_name / thread["path"] / "index.html",
+                        threads=None,
+                    )
+                    thread_pages += 1
 
-            if forum_channels:
-                print(f"Generating forum indexes for {server_data['display_name']}...")
-
-                for forum_name in forum_channels:
-                    forum_dir = public_dir / server_name / forum_name
-
-                    if forum_dir.exists() and forum_dir.is_dir():
-                        # Collect thread metadata
-                        threads = collect_forum_threads(forum_dir)
-
-                        # Generate forum index page
-                        forum_info = ForumInfo(name=forum_name, description=None)
-                        generate_forum_index(
-                            config,
-                            server_data,
-                            forum_info,
-                            threads,
-                            forum_dir / "index.html",
-                        )
-
-                        print(f"  ✓ Generated forum index: {forum_name} ({len(threads)} threads)")
-
-                        # Generate thread index pages
-                        thread_count = 0
-                        for thread in threads:
-                            thread_dir = forum_dir / thread["name"]
-                            if thread_dir.exists() and thread_dir.is_dir():
-                                # Collect thread archives
-                                archives = collect_thread_archives(thread_dir)
-
-                                if archives:  # Only generate if there are archives
-                                    generate_thread_index(
-                                        config,
-                                        server_data,
-                                        forum_info,
-                                        thread["name"],
-                                        thread["title"],
-                                        archives,
-                                        thread_dir / "index.html",
-                                    )
-                                    thread_count += 1
-
-                        if thread_count > 0:
-                            print(f"  ✓ Generated {thread_count} thread indexes for {forum_name}")
+            print(
+                f"  ✓ {len(channels_list)} channels, {thread_pages} threads "
+                f"for {server_data['display_name']}"
+            )
 
         print(f"\n✓ Generated {len(servers_data)} server indexes")
         print("✓ Site index at public/index.html")
