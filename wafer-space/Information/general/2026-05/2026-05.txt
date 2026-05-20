@@ -2567,6 +2567,34 @@ I just need to remember to have the DACs held with the highest possible output w
 I’m gonna need to re-do this whole layout for 3.3V operation soon
 
 
+[05/20/2026 01:08] namibj
+May I suggest doing my style of DAC instead? I.e., R2R DAC with one end terminated to ground and driven by sufficiently beefy D-latches, conveniently arranged around the resistors?
+
+And/or power gating the amplifier itself? That "Adj" there looks like a good point to hook in; just gate the input with a series pmos and shunt the gate with a pmos to VDD and then clamp the drain node of XM9 to VSS with an nmos.
+
+
+[05/20/2026 01:09] namibj
+(just needs to be strong enough to overcome the leakage of XM9 pretty much)
+
+
+[05/20/2026 01:10] namibj
+or, alternatively, clamp down the output stage gate node after blocking off the bias current from reaching XM2's drain/gate; that should work just as well
+
+
+[05/20/2026 01:21] namibj
+if you could afford a LUT to map 8bit target to DAC code you could fix the non-linearity there, just fyi.
+I'm pretty sure it would fit.
+
+
+[05/20/2026 01:29] namibj
+(I am offering to help by porting my ttsky26a DAC to gf180mcuD. It's an R-4R architecture with latches smothering the resistor array at a matched pitch. It thus occupies about 1 base logic cell height plus 1 per each two digits of it; the 17-digit version I got onto ttsky26a is nominally about base-`1.64039` so `4509.21` count aka `12.1387` ENOB (bit equivalent).)
+For 8 ENOB that's naively 11.2 digits, so round up to 12 it is.)
+
+
+[05/20/2026 01:30] namibj
+(Just please let me know what cell library to do this for; the plan is that one would have the drives to the latches conveniently PnR'd around the block that just happens to be several cells tall.)
+
+
 ==============================================================
-Exported 542 message(s)
+Exported 548 message(s)
 ==============================================================

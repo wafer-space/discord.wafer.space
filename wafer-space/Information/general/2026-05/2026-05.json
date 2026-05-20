@@ -16,7 +16,7 @@
     "after": null,
     "before": null
   },
-  "exportedAt": "2026-05-20T00:48:38.7983764+00:00",
+  "exportedAt": "2026-05-20T04:23:49.5856093+00:00",
   "messages": [
     {
       "id": "1499585191176306880",
@@ -17741,7 +17741,157 @@
       "reactions": [],
       "mentions": [],
       "inlineEmojis": []
+    },
+    {
+      "id": "1506463658262139062",
+      "type": "Default",
+      "timestamp": "2026-05-20T01:08:44.871+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "May I suggest doing my style of DAC instead? I.e., R2R DAC with one end terminated to ground and driven by sufficiently beefy D-latches, conveniently arranged around the resistors?\n\nAnd/or power gating the amplifier itself? That \"Adj\" there looks like a good point to hook in; just gate the input with a series pmos and shunt the gate with a pmos to VDD and then clamp the drain node of XM9 to VSS with an nmos.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506463737232752650",
+      "type": "Default",
+      "timestamp": "2026-05-20T01:09:03.699+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "(just needs to be strong enough to overcome the leakage of XM9 pretty much)",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506464035523264614",
+      "type": "Default",
+      "timestamp": "2026-05-20T01:10:14.817+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "or, alternatively, clamp down the output stage gate node after blocking off the bias current from reaching XM2's drain/gate; that should work just as well",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506466801637265489",
+      "type": "Default",
+      "timestamp": "2026-05-20T01:21:14.31+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "if you could afford a LUT to map 8bit target to DAC code you could fix the non-linearity there, just fyi.\nI'm pretty sure it would fit.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506468894804807820",
+      "type": "Default",
+      "timestamp": "2026-05-20T01:29:33.36+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "(I am offering to help by porting my ttsky26a DAC to gf180mcuD. It's an R-4R architecture with latches smothering the resistor array at a matched pitch. It thus occupies about 1 base logic cell height plus 1 per each two digits of it; the 17-digit version I got onto ttsky26a is nominally about base-`1.64039` so `4509.21` count aka `12.1387` ENOB (bit equivalent).)\nFor 8 ENOB that's naively 11.2 digits, so round up to 12 it is.)",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506469128624541806",
+      "type": "Default",
+      "timestamp": "2026-05-20T01:30:29.107+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "(Just please let me know what cell library to do this for; the plan is that one would have the drives to the latches conveniently PnR'd around the block that just happens to be several cells tall.)",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
     }
   ],
-  "messageCount": 542
+  "messageCount": 548
 }
