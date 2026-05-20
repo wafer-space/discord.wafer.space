@@ -2448,6 +2448,79 @@ woo!
 Started a thread.
 
 
+[05/19/2026 18:45] tholin
+This may have been a but stupid, but I decided to let one of my chips run for a few minutes to get it up to temperature and then pressed my thumb against the epoxy blob, not particularly hard, though.
+Chip instantly dies.
+
+
+[05/19/2026 18:46] tholin
+Lets not do that again
+
+
+[05/19/2026 19:03] tholin
+I am running out of working COBs
+
+
+[05/19/2026 19:47] 246tnt
+How much power does your chip use ?
+
+
+[05/19/2026 20:00] tholin
+210mA just sitting there with the clock stopped
+
+
+[05/19/2026 20:00] 246tnt
+Oh ... I see your power output stage for your opamp is class A ... biased with ~ 43 times the reference current which should be about 1 mA so each DAC will burn through ~ 43 mA.
+
+
+[05/19/2026 20:04] tholin
+Uhhh.... oops?
+
+
+[05/19/2026 20:16] 246tnt
+Oh wow you have 10 of them 😅    Obviously I'm a little off if it's "only" burning 210 mA ...
+
+
+[05/19/2026 20:17] tholin
+Or it *would* be burning more, but the power grid can’t do any more
+
+
+[05/19/2026 20:17] tholin
+I’m not sure how to fix this, but I gotta try
+
+
+[05/19/2026 20:18] 246tnt
+So, not sure if you can control their output, but if their output is high ( like 5V ) they will consume less.
+
+
+[05/19/2026 20:19] tholin
+The default state for most of them is it to output 0V
+
+
+[05/19/2026 20:20] 246tnt
+Yeah that's the worse case ... since the pmos ( which are configured as basically 40 mA current source ) try to pull them up and then the nmos has to override that by drawing all the current it can ...
+
+
+[05/19/2026 20:23] tholin
+So I need a better output stage
+
+
+[05/19/2026 20:25] 246tnt
+Yes, you want a class B or AB stage / push-pull.  Here it's basically an internal pull-up wth a pull-down drive transistor. Great for linearity, but heats up like crazy.
+
+
+[05/19/2026 20:26] tholin
+Idk why, but I thought I was building a B stage
+
+
+[05/19/2026 20:26] tholin
+I must’ve confirmation biased hard
+
+
+[05/19/2026 20:26] tholin
+In any case, I now know to check circuit current consumption in spice
+
+
 ==============================================================
-Exported 514 message(s)
+Exported 532 message(s)
 ==============================================================

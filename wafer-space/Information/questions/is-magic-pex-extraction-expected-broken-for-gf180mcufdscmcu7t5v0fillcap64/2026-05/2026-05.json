@@ -16,7 +16,7 @@
     "after": null,
     "before": null
   },
-  "exportedAt": "2026-05-19T17:51:07.2992768+00:00",
+  "exportedAt": "2026-05-19T21:25:48.2246548+00:00",
   "messages": [
     {
       "id": "1505050433586991195",
@@ -1755,7 +1755,521 @@
       "reactions": [],
       "mentions": [],
       "inlineEmojis": []
+    },
+    {
+      "id": "1506398149739020458",
+      "type": "Default",
+      "timestamp": "2026-05-19T20:48:26.422+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "In the end, the loading ended up being relatively well balanced among the input planes magic was generating.  They were pretty much _all_ slow to read.  But that means it would benefit greatly by parallelization, since there didn't appear to be any single plane taking up all the compute time.\n\nI ran overnight and magic generated a 2.5GB .ext file.  Since then, it has run all day and the .res.ext file is still zero bytes.  That's not entirely surprising;  when it hits either the common vccd or vssd networks, it's going to slow to a crawl, because those are going to be massive networks.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506399184385867896",
+      "type": "Default",
+      "timestamp": "2026-05-19T20:52:33.101+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "But I'm analyzing it as it runs and finding all the chokepoints.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506400814254653523",
+      "type": "Default",
+      "timestamp": "2026-05-19T20:59:01.692+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "same",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506400921247154196",
+      "type": "Default",
+      "timestamp": "2026-05-19T20:59:27.201+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "but in the older version it started filling the resistance file sooner",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506401053325791343",
+      "type": "Reply",
+      "timestamp": "2026-05-19T20:59:58.691+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "so you're getting profiling information from this at a macro scale at least?",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1365118310701600900",
+          "name": "rtimothyedwards_19428",
+          "discriminator": "0000",
+          "nickname": "Tim Edwards",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1506399184385867896",
+        "channelId": "1505050433586991195",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506401435984728216",
+      "type": "Default",
+      "timestamp": "2026-05-19T21:01:29.924+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It's not actually profiling;  I'm just spot-checking what magic is doing in gdb, and it's pretty obvious when any arbitrary Ctrl-C lands in the same routine that there's a bottleneck there.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506401701328978091",
+      "type": "Default",
+      "timestamp": "2026-05-19T21:02:33.187+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "`/nix/store/qwianildz86dh9yhmjbj250a7qjlp7pk-magic-vlsi-8.3.581/lib/magic/tcl/magicdnull` has started writing to `.res.ext` within about 12 hours oro so.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506401756043542550",
+      "type": "Reply",
+      "timestamp": "2026-05-19T21:02:46.232+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "ahh kk",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1365118310701600900",
+          "name": "rtimothyedwards_19428",
+          "discriminator": "0000",
+          "nickname": "Tim Edwards",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1506401435984728216",
+        "channelId": "1505050433586991195",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506401831763578990",
+      "type": "Default",
+      "timestamp": "2026-05-19T21:03:04.285+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "if you have debug info to that extend I suggest you try KDAB's hotspot",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506401857688567818",
+      "type": "Default",
+      "timestamp": "2026-05-19T21:03:10.466+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "\"but in the older version it started filling the resistance file sooner\"---Output is buffered, so if it hits either the power or the ground net before the buffer is full, output will remain zero for a _long_ time.  If it processes enough smaller nets first, then it reaches the buffer limit and the output file grows.  It's basically random behavior.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506402013066301510",
+      "type": "Default",
+      "timestamp": "2026-05-19T21:03:47.511+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I'd get youa trace from thiscurrent run if I had enough debug symbols to get any line information and not have half the call stack be ???? symbol",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506402126383939675",
+      "type": "Default",
+      "timestamp": "2026-05-19T21:04:14.528+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I am only spot checking because I wasn't really intending to do a proper profiling on this run.  I just wanted to see what it was doing at a very high level.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506402144306200667",
+      "type": "Reply",
+      "timestamp": "2026-05-19T21:04:18.801+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "oh yeah it spits out in like 8 kB chunks",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1365118310701600900",
+          "name": "rtimothyedwards_19428",
+          "discriminator": "0000",
+          "nickname": "Tim Edwards",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1506401857688567818",
+        "channelId": "1505050433586991195",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506402255979679884",
+      "type": "Default",
+      "timestamp": "2026-05-19T21:04:45.426+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "hotspot attaches to a running process just fine if you can attach gdb",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506402543780237352",
+      "type": "Default",
+      "timestamp": "2026-05-19T21:05:54.043+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Anyway, I already found a bottleneck and have a solution for it.  There's a routine that's trying to sort resistors by size by walking a linked list.  It would benefit immensely from qsort().",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506402582686601417",
+      "type": "Default",
+      "timestamp": "2026-05-19T21:06:03.319+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "it uses kernel based sampling to capture stack top snapshots for post-processing unwinding via DWARF (or if youhave frame pointers, live unwinding via those), and gives you nice timeliene and flamegraph understanding; it's really nice.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506402668929880065",
+      "type": "Default",
+      "timestamp": "2026-05-19T21:06:23.881+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I will give it a try.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506402686327853220",
+      "type": "Reply",
+      "timestamp": "2026-05-19T21:06:28.029+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "oh yeah probaly.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1365118310701600900",
+          "name": "rtimothyedwards_19428",
+          "discriminator": "0000",
+          "nickname": "Tim Edwards",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1506402543780237352",
+        "channelId": "1505050433586991195",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
     }
   ],
-  "messageCount": 59
+  "messageCount": 77
 }

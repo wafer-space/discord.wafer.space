@@ -30,6 +30,23 @@ I guess this is interesting because there are only 3 designs in the 0.5x1 and 1x
 I think net name A is from the template, net name B for TinyQV looks like the function of the pin.  I'm not sure what it is for the other designs.
 
 
+[05/19/2026 20:07] rebelmike
+OK, I've checked and agree with net name B for TinyQV on the Pins sheet.
+I think I understand the "Conn pin #" column for TQVB - it is giving the pin number on the 70-pin connector that you would get if you naturally routed the die pads to the 70-pin.
+The "Conn pin #" in column AL for TQVC looks like it is matching with the TQVB version.  So I guess that's saying how it would be routed to match TQVB.  Similarly for TQVA.  I'm not sure this would necessarily be the best pinout, but it's a reasonable starting point.
+On Common signals, I think you're trying to match signals that would make sense to get on the same mezzanine pins across different projects.  One note here is that it would be better to use the dedicated UART RX for TinyQV instead of the muxed one (though if using the muxed one made it significantly easier then fine).
+It would be very good to match CLK, RST_N, UART and the SPI flash interface across all GD and TQVs.  It would be very good to match the rest of the QSPI interface across the TQVs.
+It would be good to try and route uo_out0-7 consistently across the TQVs, and then present those on a PMOD so that could work with the Tiny Tapeout VGA PMOD.
+Other than that, matching the signals across TQVs is a nice to have, but some inconsistency would be OK.  Note that in2-3, all the analogs and bidirs from 33 up are completely unused so if the CoB board was specific to TQV they wouldn't even necessarily need to be connected.
+For GD I assume the situation for most of the GPIO is similar - it might be nice if they were consistent but it would not really be a big problem if they weren't - you'd just need to refer to different pinout diagrams to understand which GPIO was where on the motherboard.
+I haven't looked at the Z80 - presumably that would need a completely different motherboard anyway.
+
+
+[05/19/2026 20:18] rebelmike
+From the table at the bottom of common signals, I guess that you want to base the expected pinout on GD03 mounted on the standard CoB breakout.
+Have I understood correctly that your interested in a custom CoB per design that would work with that, matching clk, rst_n, UART and SPI?  If so, would you like me to work on custom CoBs for TQV that would match that?
+
+
 ==============================================================
-Exported 6 message(s)
+Exported 8 message(s)
 ==============================================================
