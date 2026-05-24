@@ -663,9 +663,7 @@ def main() -> None:  # noqa: C901, PLR0912, PLR0915  # Main orchestration functi
             # A "forum-style" channel has threads but no top-level messages
             # of its own; the server index renders it as a thread hub.
             for channel in channels_list:
-                channel["is_forum"] = (
-                    channel["total_messages"] == 0 and len(channel["threads"]) > 0
-                )
+                channel["is_forum"] = channel["total_messages"] == 0 and len(channel["threads"]) > 0
                 channel["thread_count"] = len(channel["threads"])
 
             generate_server_index(

@@ -192,8 +192,7 @@ def _write_json(public_dir: Path, rel: str, channel_name: str, n_msgs: int) -> N
                 "guild": {"id": "1", "name": "T"},
                 "channel": {"id": "2", "name": channel_name},
                 "messages": [
-                    {"id": str(i), "timestamp": "2026-04-02T00:00:00+00:00"}
-                    for i in range(n_msgs)
+                    {"id": str(i), "timestamp": "2026-04-02T00:00:00+00:00"} for i in range(n_msgs)
                 ],
             }
         )
@@ -217,10 +216,7 @@ def test_organize_data_nests_threads_under_parent_channel() -> None:
             "server": "wafer-space",
             "channel": "Information/announcements/can-one-join",
             "date": "2026-04",
-            "path": (
-                "wafer-space/Information/announcements/can-one-join/"
-                "2026-04/2026-04.html"
-            ),
+            "path": ("wafer-space/Information/announcements/can-one-join/2026-04/2026-04.html"),
         },
     ]
 

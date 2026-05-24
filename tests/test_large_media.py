@@ -94,9 +94,7 @@ def test_iter_oversized_media_finds_only_big_files(tmp_path: Path) -> None:
 def test_iter_oversized_media_empty_when_all_small(tmp_path: Path) -> None:
     """No oversized files → empty iterator (and missing dir is safe)."""
     pub = tmp_path / "public"
-    _make_month_export(
-        pub / "srv" / "q", "2026-05", media_name="ok.png", media_bytes=b"z" * 10
-    )
+    _make_month_export(pub / "srv" / "q", "2026-05", media_name="ok.png", media_bytes=b"z" * 10)
     assert list(iter_oversized_media(pub, max_bytes=TINY_LIMIT)) == []
     assert list(iter_oversized_media(tmp_path / "nope", max_bytes=TINY_LIMIT)) == []
 
@@ -204,9 +202,7 @@ def test_process_is_idempotent_across_runs(tmp_path: Path) -> None:
 
     first = process_oversized_media(pub, max_bytes=TINY_LIMIT, lfs_staging_dir=staging)
     # Simulate the next hourly run rebuilding the same oversized file.
-    _make_month_export(
-        chan, "2026-05", media_name="big.zst", media_bytes=b"x" * (TINY_LIMIT + 9)
-    )
+    _make_month_export(chan, "2026-05", media_name="big.zst", media_bytes=b"x" * (TINY_LIMIT + 9))
     second = process_oversized_media(pub, max_bytes=TINY_LIMIT, lfs_staging_dir=staging)
 
     assert len(first) == 1
