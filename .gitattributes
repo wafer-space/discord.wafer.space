@@ -1,0 +1,6 @@
+# Oversized Discord attachments (>50MB) are held back from the gh-pages
+# deploy (GitHub rejects files >100MB on push and Pages can't serve them).
+# Their bytes are preserved here in Git LFS on the master branch, and the
+# published site links to them via media.githubusercontent.com — which, unlike
+# GitHub Pages, serves real LFS content. See scripts/large_media.py.
+large_media/** filter=lfs diff=lfs merge=lfs -text

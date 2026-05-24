@@ -211,6 +211,28 @@ def test_process_is_idempotent_across_runs(tmp_path: Path) -> None:
     assert staged.exists()
 
 
+def test_lfs_url_matches_staged_location(tmp_path: Path) -> None:
+    """The link the site serves must point at where the bytes actually land.
+
+    The published page links to ``lfsUrl``; the workflow commits the bytes to
+    ``large_media/<relpath>`` on master. If these diverge the download 404s, so
+    we pin that the staged path (under a staging dir named like the LFS prefix)
+    equals the ``lfsPath`` embedded in the URL.
+    """
+    pub = tmp_path / "public"
+    staging = tmp_path / "large_media"  # named to match the default lfs prefix
+    chan = pub / "srv" / "questions"
+    _make_month_export(chan, "2026-05", media_name="big.zst", media_bytes=b"x" * (TINY_LIMIT + 1))
+
+    [record] = process_oversized_media(pub, max_bytes=TINY_LIMIT, lfs_staging_dir=staging)
+
+    # lfsPath is "large_media/<relpath>"; the bytes must sit at staging/<relpath>.
+    rel_under_prefix = record["lfsPath"].split("/", 1)[1]
+    assert (staging / rel_under_prefix).exists()
+    # And the servable URL must end with exactly that lfsPath.
+    assert record["lfsUrl"].endswith(record["lfsPath"])
+
+
 def test_process_handles_missing_json_gracefully(tmp_path: Path) -> None:
     """A media file with no resolvable attachment metadata is still offloaded.
 

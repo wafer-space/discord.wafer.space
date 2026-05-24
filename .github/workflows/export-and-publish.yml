@@ -113,10 +113,13 @@ jobs:
       # that big, so a single oversized Discord attachment (e.g. a 215MB GDS
       # dump) blocks the entire gh-pages deploy. Hold such files back from
       # public/ — recording a metadata sidecar and rewriting the chat link to
-      # the file's servable LFS URL — so the deploy push always succeeds.
+      # the file's servable LFS URL — so the deploy push always succeeds. The
+      # bytes are moved into large_media/ (LFS_STAGING) and preserved in Git
+      # LFS on master by a later step, after the deploy.
       - name: Hold back oversized media
         env:
           PYTHONPATH: .
+          LARGE_MEDIA_STAGING: large_media
         run: |
           echo "Checking for oversized media (>50MB)..."
           uv run python scripts/large_media.py
@@ -179,6 +182,40 @@ jobs:
           user_email: 'actions@github.com'
           commit_message: 'chore: deploy updated logs'
         id: deploy
+
+      # Preserve the held-back oversized media in Git LFS on master so the bytes
+      # survive even if Discord's CDN copy expires. This runs AFTER the deploy
+      # on purpose: the published site is already updated, so an LFS failure can
+      # never block the deploy — it only fails this job honestly. Idempotent:
+      # identical re-downloaded bytes clean to the same LFS pointer, so no diff
+      # and no commit on subsequent runs (keeps us under the LFS bandwidth quota).
+      - name: Preserve oversized media in Git LFS
+        if: steps.large_media.outcome == 'success'
+        run: |
+          set -euo pipefail
+          if [ ! -d large_media ]; then
+            echo "No large_media/ directory; nothing to preserve."
+            exit 0
+          fi
+          git lfs install --local
+          git config user.name "Discord Archive Bot"
+          git config user.email "actions@github.com"
+          export GIT_EDITOR=true
+          export GIT_SEQUENCE_EDITOR=true
+          git add .gitattributes large_media
+          if git diff --cached --quiet; then
+            echo "No new oversized media to preserve in LFS."
+            exit 0
+          fi
+          # Show what LFS is tracking (a raw >100MB blob here would be rejected
+          # on push, which is exactly what LFS prevents — visible in the log).
+          git lfs ls-files
+          git commit -m "chore: preserve oversized media in LFS
+
+          Updated by GitHub Actions on $(date -u +%Y-%m-%d\ %H:%M\ UTC)"
+          git pull --rebase origin master
+          git push origin HEAD:master
+        id: preserve_lfs
 
       - name: Wait for GitHub Pages deployment
         if: steps.deploy.outcome == 'success'
