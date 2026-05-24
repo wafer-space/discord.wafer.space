@@ -16,7 +16,7 @@
     "after": null,
     "before": null
   },
-  "exportedAt": "2026-05-20T19:56:48.3094876+00:00",
+  "exportedAt": "2026-05-24T08:41:44.3861633+00:00",
   "messages": [
     {
       "id": "1500052907712843907",
@@ -208,7 +208,517 @@
       "reactions": [],
       "mentions": [],
       "inlineEmojis": []
+    },
+    {
+      "id": "1507807238935417086",
+      "type": "Default",
+      "timestamp": "2026-05-23T18:07:39.466+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi everyone.\nThis is my first public open-silicon review package, so I\u2019d really appreciate ASIC/PD feedback.\nI built a compact 3.3V-only GF180 I/O candidate library for wafer.space/open MPW experiments:\n- 160um pad depth\n- 100 signal pads\n- ~17.3mm\u00b2 usable core area\n- local DRC/LVS completed\n- LEF/CDL/SPICE/Liberty/IBIS generation\n- preliminary ngspice PVT/DC characterization\n- config/package generation flow included\nThe project was developed using an automated agent-in-the-loop exploration flow with manual review and verification.\nMain goal: reduce padframe overhead for small GF180 SoCs.\nAny comments on architecture, verification flow, pad strategy, or obvious mistakes would be greatly appreciated.\nhttps://github.com/Detronyx-labs/gf180_compact_3v3_io.git",
+      "author": {
+        "id": "510792389992906754",
+        "name": "zhekar1998",
+        "discriminator": "0000",
+        "nickname": "Zhekar1998",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/0-EB806.png"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "GitHub - Detronyx-labs/gf180_compact_3v3_io: Compact open GF180MCU ...",
+          "url": "https://github.com/Detronyx-labs/gf180_compact_3v3_io.git",
+          "timestamp": null,
+          "description": "Compact open GF180MCU 3.3V-only I/O pad library candidate for wafer.space MPW: transistor-level pad cells, LEF/CDL/SPICE/Liberty/IBIS views, compact 160um padframe, I3C-capable bidirectional pads, ...",
+          "color": "#1E2327",
+          "images": [],
+          "fields": [],
+          "inlineEmojis": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "1426598702289780918",
+            "name": "waferspace",
+            "code": "waferspace",
+            "isAnimated": false,
+            "imageUrl": "2026-05_media/1426598702289780918-5942F.png"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "756011607603019777",
+              "name": "anfroholic",
+              "discriminator": "0000",
+              "nickname": "anfroholic",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-05_media/67bd670a335a2f955fb2ded57088a2cb-675B3.png"
+            }
+          ]
+        },
+        {
+          "emoji": {
+            "id": "1184281983791136778",
+            "name": "ferrisCatOwO",
+            "code": "ferrisCatOwO",
+            "isAnimated": false,
+            "imageUrl": "2026-05_media/1184281983791136778-8D756.png"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "262706220073222144",
+              "name": "namibj",
+              "discriminator": "0000",
+              "nickname": "namibj",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507861645458800670",
+      "type": "Default",
+      "timestamp": "2026-05-23T21:43:50.992+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Tim Edwards  Hi Tim,\nI finally cleaned up and published my GF180MCU 3.3V 12T 2R2W SRAM macro experiment, which borrows from the transistor/layout concepts in your 512x8 reference.\nRepo (Apache-2.0): https://github.com/Detronyx-labs/gf180mcu-3v3-12t-2r2w-sram-macro\nTo be completely honest, this is a fast AI-native / agentic design experiment \u2014 put together in about 3\u20134 days of intense work alongside Codex/LLM to see how far an automated open flow could push a custom multi-port layout. It is definitely not tapeout signoff collateral yet.\nIf you (or anyone here) have a few minutes to glance at the README, I\u2019d love to get a brutal reality check from actual silicon experts on a few things:\nPhysical & Escape Routing: Are the 12T bitcell layout and shared M4/M5 escape assumptions physically defensible for GF180, or are we begging for major EM/IR-drop failures during simultaneous 2R/2W operations?\nExtraction limitations: My local Magic techfile isn't emitting capacitance coefficients for this flavor, so we\u2019re stuck using an OpenRCX geometry-fallback proxy for timing (which throws warnings). How critical is it to escape open-source PEX fallbacks for a custom multiport memory structure like this?\nPrioritization: We have open items for full-macro LVS on row-edge boundaries, Liberty generation, and SNM/read-disturb sweeps. What should we absolute priority-target next to move this closer to tapeout-intent collateral?\nYour documentation was a lifesaver for understanding practical GF180 implementation, so any feedback on where this automated flow breaks down in the real world would be awesome.\nThanks!",
+      "author": {
+        "id": "510792389992906754",
+        "name": "zhekar1998",
+        "discriminator": "0000",
+        "nickname": "Zhekar1998",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/0-EB806.png"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "GitHub - Detronyx-labs/gf180mcu-3v3-12t-2r2w-sram-macro: Open 12T 2...",
+          "url": "https://github.com/Detronyx-labs/gf180mcu-3v3-12t-2r2w-sram-macro",
+          "timestamp": null,
+          "description": "Open 12T 2R2W SRAM hard macro for GF180MCU 3.3V. Contribute to Detronyx-labs/gf180mcu-3v3-12t-2r2w-sram-macro development by creating an account on GitHub.",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "2026-05_media/gf180mcu-3v3-12t-2r2w-sram-macro-F6DF1",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": [],
+          "inlineEmojis": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1365118310701600900",
+          "name": "rtimothyedwards_19428",
+          "discriminator": "0000",
+          "nickname": "Tim Edwards",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507936693326581831",
+      "type": "Reply",
+      "timestamp": "2026-05-24T02:42:03.798+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I've been working with Tim to get full-die PEX into a state that's reasonably considered \"functional\" for smoke testing with Xyce; a major block to using it for fancier behavioral testing is the need to use a separate digital logic simulator (verilator or so? not sure what exactly tbh.) to find FF/latch states of the entire chip at the desired jump-off point for a transient test run, and associating those to the individual signals in the chip to synthesize `.nodeset` commands that force the chip into that desired starting state with an initial DC-operating-point solution, from where it'd then continue settling a DC solution from that moment on that doesn't have the signals pegged to hard VDD/VSS anymore, followed by a few clocks of progress to let at least a bit of PDN parasitics settle in, before then doing the actual state changes of desired concern.\n\nThe extraction into Xyce-compatible PEX with _a lot_ of parasitic resistance and capacitance modeled is already working though; there's just a bit of scaling performance that seems to be left.\n\nIf you want I can test extraction on that macro later.\nI need for that to work only top-level pins to be labeled; the rest will be flattened in KLayout if it's not already flattened, before I feed it to the PEX.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "510792389992906754",
+          "name": "zhekar1998",
+          "discriminator": "0000",
+          "nickname": "Zhekar1998",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/0-EB806.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1507861645458800670",
+        "channelId": "1409664140196188251",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507942710643003577",
+      "type": "Default",
+      "timestamp": "2026-05-24T03:05:58.438+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Zhekar1998 Also if you're willing I'd love to talk a bit about how us two have been doing agentic \"PCell\" construction:\n- you with the 12t-2r2w gf180mcuD sram, using Codex,\n- I with so far a base MCML VCO cell but soon also the other base SerDes component cells (XOR2, MUX2, D-latch at least) on sky130A but with a bit of luck I can port that to gf180mcuD (in time to get a base demo VCO clocking an output MUX that's fed with a 16-wide PBRS-31 generator) into Run2), using Jules.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "510792389992906754",
+          "name": "zhekar1998",
+          "discriminator": "0000",
+          "nickname": "Zhekar1998",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/0-EB806.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507949568317198478",
+      "type": "Reply",
+      "timestamp": "2026-05-24T03:33:13.435+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The gds from `gf180mcu_3v3_12t_2r2w_sram_512x8` seems to short the VSS PDN columns of the top level cell due to misalignment across the VSS colunn and ` c3_r1_rbl` of the 4x4 block.\nPlease get at least basic LVS verification going before suggesting humans other than you yourself should look at the layout and give their opinions.\nExceptions would apply if without having to open a zipfile I could easily see that you're disclaiming that level of integration LVS to have been done.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "510792389992906754",
+          "name": "zhekar1998",
+          "discriminator": "0000",
+          "nickname": "Zhekar1998",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/0-EB806.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1507861645458800670",
+        "channelId": "1409664140196188251",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507951942087999588",
+      "type": "Reply",
+      "timestamp": "2026-05-24T03:42:39.386+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks! Its interesting because I do LVS all times in every runs,  I recheck it now",
+      "author": {
+        "id": "510792389992906754",
+        "name": "zhekar1998",
+        "discriminator": "0000",
+        "nickname": "Zhekar1998",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/0-EB806.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "262706220073222144",
+          "name": "namibj",
+          "discriminator": "0000",
+          "nickname": "namibj",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1507949568317198478",
+        "channelId": "1409664140196188251",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507953265172545719",
+      "type": "Default",
+      "timestamp": "2026-05-24T03:47:54.834+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yes I find it. sorry I do some mistake in rules",
+      "author": {
+        "id": "510792389992906754",
+        "name": "zhekar1998",
+        "discriminator": "0000",
+        "nickname": "Zhekar1998",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/0-EB806.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507953478717276310",
+      "type": "Default",
+      "timestamp": "2026-05-24T03:48:45.747+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I'll repear it and double check it by hands today)))",
+      "author": {
+        "id": "510792389992906754",
+        "name": "zhekar1998",
+        "discriminator": "0000",
+        "nickname": "Zhekar1998",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/0-EB806.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507953784796614676",
+      "type": "Default",
+      "timestamp": "2026-05-24T03:49:58.722+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I don't know how you do that LVS but I suggest you attempt to do it on a flattened layout to check the hierarchy isn't causing problems.\nIt's hard to pin-point problems that way, but I'm pretty sure a basic abstracted-transistors (N/P and 3/4 pins) should be very much practical and a reliable check via graph-matching should be not-a-problem.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507954343238701197",
+      "type": "Reply",
+      "timestamp": "2026-05-24T03:52:11.865+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I have no idea what timezone you're sleep/wake cycle corresponds to; I am as mentioned interested in talking to you (German or English, your choice) about the flow and struggles of this agentic-scripted-cells flow.\nJust in case you may be interested, that is.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "510792389992906754",
+          "name": "zhekar1998",
+          "discriminator": "0000",
+          "nickname": "Zhekar1998",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/0-EB806.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1507953478717276310",
+        "channelId": "1409664140196188251",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507954619454586890",
+      "type": "Reply",
+      "timestamp": "2026-05-24T03:53:17.72+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I'm in GMT +2 but. I will be hapy to speak about this",
+      "author": {
+        "id": "510792389992906754",
+        "name": "zhekar1998",
+        "discriminator": "0000",
+        "nickname": "Zhekar1998",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/0-EB806.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "262706220073222144",
+          "name": "namibj",
+          "discriminator": "0000",
+          "nickname": "namibj",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1507954343238701197",
+        "channelId": "1409664140196188251",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507955049223950346",
+      "type": "Reply",
+      "timestamp": "2026-05-24T03:55:00.185+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "oh same great then.\nI've got a bit of stuff to do offline but in like 2 hours I'd have time to talk.\n\nSent you a DM for further discussing of that.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\ud83d\udc4d",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "2026-05_media/1f44d-27259.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "510792389992906754",
+              "name": "zhekar1998",
+              "discriminator": "0000",
+              "nickname": "Zhekar1998",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-05_media/0-EB806.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "510792389992906754",
+          "name": "zhekar1998",
+          "discriminator": "0000",
+          "nickname": "Zhekar1998",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/0-EB806.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1507954619454586890",
+        "channelId": "1409664140196188251",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
     }
   ],
-  "messageCount": 6
+  "messageCount": 18
 }

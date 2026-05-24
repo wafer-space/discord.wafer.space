@@ -16,7 +16,7 @@
     "after": null,
     "before": null
   },
-  "exportedAt": "2026-05-20T19:25:39.4437482+00:00",
+  "exportedAt": "2026-05-24T08:10:08.1984194+00:00",
   "messages": [
     {
       "id": "1505050433586991195",
@@ -2588,7 +2588,2399 @@
       "reactions": [],
       "mentions": [],
       "inlineEmojis": []
+    },
+    {
+      "id": "1506763016321105992",
+      "type": "Default",
+      "timestamp": "2026-05-20T20:58:17.394+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Andrew Wingate see, I've done substantial research into the direction of applied (beyond) worst-case-optimal join algorithms.\n\nThe mentioned triangle search can be made closer to `O(n)` than naive `O(n^2)` (to a worst case of `O(n^1.5)` aka `O(n^(3/2))`) by:\n\n1. As resistors are undirected edges, roughly presume we just want each resistor in both directions in any index structures (minor improvements can later be made).\n2. Create an index giving us a list of target nodes for each source node (the resistor metadata is carried as auxiliary data with each list entry).\n3. If needed for some access efficiency use a separate index (otherwise use the same and keep a tuple of `(list((target_node, resistor_identity_metadata)), length(that_very_list))`) to quickly look up how much fan-out happens from grabbing that list from a given key into the first index. \n4. Iterate through the list of edges.\n5. For each edge, look up both the first and the second node of that edge in the length-index (the second index, from 3.) and decide which one has less fan-out.\n6. Look up the one with less fan-out in the first index (from 2.) to get the worst-case-optimal choice of what the second edge is and what the third edge will be for specifically the current iteration (first edge) of (4.).\n7. Screen each such-fetched triangle node-triple, specifically the two nodes still dangling (i.e., the non-chosen one from the first edge and the target node of each entry of the second edge), against a hash table or similar set membership test data structure to spend only constant time on each candidate of the third edge (this I think is currently being done since the upgrade to `O(n^2)`; the major trick is just to dynamically choose the less-costly vertex aka join-order for each first edge).\n8. You have successfully completed the task of enumerating all triangles in at most `O(n^1.5)` time.\n\nI'll see to get profiling up so I can hopefully run PEX against a similarly edited GDS of the TinyQV quarter cell submission that \"only\" has 4 VSS and 4 VDD bond pads and is, well, a quarter the die area (usable area not just filled with power rings/IO cells is smaller), in hopes of that GDS being large enough to exercise poor scaling but small enough to not take as many hours to even just load (such that we could reasonably use it for full profiling runs in the coming performance/throughout enhancement updates I hope to contribute greatly to).",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\ud83d\udc9c",
+            "code": "purple_heart",
+            "isAnimated": false,
+            "imageUrl": "2026-05_media/1f49c-71A75.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "756011607603019777",
+              "name": "anfroholic",
+              "discriminator": "0000",
+              "nickname": "Andrew Wingate",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-05_media/67bd670a335a2f955fb2ded57088a2cb-675B3.png"
+            }
+          ]
+        },
+        {
+          "emoji": {
+            "id": "1426598702289780918",
+            "name": "waferspace",
+            "code": "waferspace",
+            "isAnimated": false,
+            "imageUrl": "2026-05_media/1426598702289780918-5942F.png"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "756011607603019777",
+              "name": "anfroholic",
+              "discriminator": "0000",
+              "nickname": "Andrew Wingate",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-05_media/67bd670a335a2f955fb2ded57088a2cb-675B3.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "756011607603019777",
+          "name": "anfroholic",
+          "discriminator": "0000",
+          "nickname": "Andrew Wingate",
+          "color": null,
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1423020172595298314",
+              "name": "Mod",
+              "color": null,
+              "position": 1
+            }
+          ],
+          "avatarUrl": "2026-05_media/67bd670a335a2f955fb2ded57088a2cb-675B3.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506788086057537696",
+      "type": "Default",
+      "timestamp": "2026-05-20T22:37:54.485+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "So, we're in luck, I managed to get frame pointer and debug symbols compiled in for a build of `8.3.645` and am running on `tinyqv_quarter_label_flattened_01.gds` (and I choose a cutoff of 0 for the capacitance as that happened only later and I figured I'd rather get this done now and let Xyce worry to possibly threshold that rather than erase the smaller capacitances ahead of it when magic writes out the extraction in the desired spice netlist format) currently with a `cycles` perf record running with stack tracing using said frame-pointer's; I confirmed it works nicely in KDAB's hotspot for me. Might have to adjust source file search path I guess, will see in a bit.\nFigured I'd upload the gds and also the edited but not yet flattened gds here, as they're small enough when compressed.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [
+        {
+          "id": "1506788090298236958",
+          "url": "https://media.githubusercontent.com/media/wafer-space/discord.wafer.space/master/large_media/wafer-space/Information/questions/is-magic-pex-extraction-expected-broken-for-gf180mcufdscmcu7t5v0fillcap64/2026-05/2026-05_media/tinyqv_quarter_label_flattened_01.gds-8B335.zst",
+          "fileName": "tinyqv_quarter_label_flattened_01.gds.zst",
+          "fileSizeBytes": 226315197,
+          "originalUrl": "2026-05_media/tinyqv_quarter_label_flattened_01.gds-8B335.zst"
+        },
+        {
+          "id": "1506788092818882641",
+          "url": "2026-05_media/tinyqv_quarter_label_edited_01.gds-BD15C.zst",
+          "fileName": "tinyqv_quarter_label_edited_01.gds.zst",
+          "fileSizeBytes": 11896218
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506788309156892844",
+      "type": "Default",
+      "timestamp": "2026-05-20T22:38:47.676+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "At the current growth rate of the perf recording I've got about 7 days until the SSD is filled up; but as this is compressed and contains stack traces it will be vulnerable to changes in data rate as the process stages changes.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\ud83d\udcaf",
+            "code": "100",
+            "isAnimated": false,
+            "imageUrl": "2026-05_media/1f4af-4CFF5.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "756011607603019777",
+              "name": "anfroholic",
+              "discriminator": "0000",
+              "nickname": "Andrew Wingate",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-05_media/67bd670a335a2f955fb2ded57088a2cb-675B3.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506791559557808210",
+      "type": "Default",
+      "timestamp": "2026-05-20T22:51:42.632+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "for your pleasure/sneak peek; a short second recording done while it was running:",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [
+        {
+          "id": "1506791560019447888",
+          "url": "2026-05_media/image-A1BC4.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 262684
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506791662385496235",
+      "type": "Default",
+      "timestamp": "2026-05-20T22:52:07.148+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "flame graph filtered down to `extEnumTilePerim (tclmagic.so) and below.`",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506792313215783036",
+      "type": "Default",
+      "timestamp": "2026-05-20T22:54:42.318+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "the blue timeline sections are the non-hidden flamegraph content; i.e., in the orange timeline sections it was doing _not `extEnumTilePerim`_",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506792539724709918",
+      "type": "Default",
+      "timestamp": "2026-05-20T22:55:36.322+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "notably it was doing `extBasicOverlap` instead of `extBasicCouple` (the latter the direct parent of `extEnumTilePerim`).",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506793031850922044",
+      "type": "Default",
+      "timestamp": "2026-05-20T22:57:33.654+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Tim Edwards if you want I'll give you the profiling result from this run when the run concludes; though for reasons of possible contamination with trace amounts of personal data that one won't be public data (I don't think it has gobbled up any of that, but it's hard to rule out).",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1365118310701600900",
+          "name": "rtimothyedwards_19428",
+          "discriminator": "0000",
+          "nickname": "Tim Edwards",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506797050807717940",
+      "type": "Default",
+      "timestamp": "2026-05-20T23:13:31.848+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@namibj :  I think it is better to wait until the changes I made today to magic migrate to github (in about 8 hours).  I found more routines which it was spending long periods of time on.  I changed the code in both places to cut a significant amount of time off of the execution.  I'm re-running everything for the (I think) fourth time.  The last routines I fixed were pretty far into the \"extresist\" process, so there's a good chance that there are no more obvious outliers taking up all the compute time.\n\nI think that the initial GDS read-in time could be significantly reduced by being careful about what order layers are processed in the \"cifinput\" recipes in the tech file.  If the recipe has \"A AND B AND C\" where A and B are very common layers and C is a very rarely used layer, then \"A AND C AND B\" will execute much faster.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "262706220073222144",
+          "name": "namibj",
+          "discriminator": "0000",
+          "nickname": "namibj",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506797270744436887",
+      "type": "Default",
+      "timestamp": "2026-05-20T23:14:24.285+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hmmmm",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506797847247454279",
+      "type": "Reply",
+      "timestamp": "2026-05-20T23:16:41.734+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "This one is a quarter the size and substantially less dense as the usable area is substantially less than a quarter; it doesn't seem to really have analog but it's from the same MPW run so should be sufficiently represenative, I hope, for purposes of trying/iterating. Do consider using that until you think it's free of any easy to fix and severe performance bugs.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1365118310701600900",
+          "name": "rtimothyedwards_19428",
+          "discriminator": "0000",
+          "nickname": "Tim Edwards",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1506797050807717940",
+        "channelId": "1505050433586991195",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506798615471980615",
+      "type": "Default",
+      "timestamp": "2026-05-20T23:19:44.893+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Okay, thanks.  I'll wait for this run to finish, or at least see where it's at tomorrow morning if it hasn't.  For future runs I'll switch to the quarter size layout.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506798975645126746",
+      "type": "Default",
+      "timestamp": "2026-05-20T23:21:10.765+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yeah ok.\n(What's blocking the changes from migrating faster to a place I could grab the sources from and build to run the profiling on?)",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506799178351775845",
+      "type": "Default",
+      "timestamp": "2026-05-20T23:21:59.094+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Oh, if you want the sources right away, just get them from my server at opencircuitdesign.com.  I use github as a mirror and do an automatic copy every night by cron job.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506799259104575630",
+      "type": "Default",
+      "timestamp": "2026-05-20T23:22:18.347+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Ohhh ok.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506799343741435914",
+      "type": "Default",
+      "timestamp": "2026-05-20T23:22:38.526+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "(`git clone git://opencircuitdesign.com/magic`)",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506800411519221861",
+      "type": "Default",
+      "timestamp": "2026-05-20T23:26:53.104+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "> STATUS: Partly done (early 2020). Extresist now handles all device types, but there is a very strong need to remove the dependence on reading the \".sim\" format and just work all calculations from the values in the \".ext\" file. For example, extresist cannot now handle the substrate node because the \".sim\" format has no concept of a substrate.\noh, would this enable bulk substrate current flow treatment for PEX? At least, in theory; considering that the substrate being substantially thicker than most features would invalidate the simplified sheet resistance 2D-only treatment done so far on BEOL PEX?",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506802293331329146",
+      "type": "Default",
+      "timestamp": "2026-05-20T23:34:21.763+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "ok running that then; compiling.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506806970768818298",
+      "type": "Default",
+      "timestamp": "2026-05-20T23:52:56.951+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Actually I resolved the issue with the substrate before I removed the dependency on the .sim format.  The main thing that removing the .sim dependency did was that it allowed me to start working on hierarchical R-C extraction, which I have partly completed work on (but haven't pushed yet;  still just a local branch on my desktop).",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506807084279398554",
+      "type": "Default",
+      "timestamp": "2026-05-20T23:53:24.014+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Did the sim dependency get removed some time since december?",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506807238616940734",
+      "type": "Default",
+      "timestamp": "2026-05-20T23:54:00.811+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yes.  Most of that work was done in January, I think.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506807542364377099",
+      "type": "Default",
+      "timestamp": "2026-05-20T23:55:13.23+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "This hierarchical R-C extraction you speak off, how does that handle the layer-penetrating capacitive coupling in, let's say, a standard cell fully-synthethic floorplan (a plain hard macro synthesized from Verilog into a prescribed rectangle; let's presume it goes all the way to top metal)?",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506807658135420998",
+      "type": "Default",
+      "timestamp": "2026-05-20T23:55:40.832+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Like, between the cells themselves and the sea of cells.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506807836808581381",
+      "type": "Default",
+      "timestamp": "2026-05-20T23:56:23.431+00:00",
+      "timestampEdited": "2026-05-20T23:58:30.471+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yeah I noticed the files that got produced changed since I moved from the old nix-provided magic version in these PEX trials here.\nEdit: and just was a little curious now that I read about sim file dependency getting removed.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506808403488542771",
+      "type": "Default",
+      "timestamp": "2026-05-20T23:58:38.538+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The parasitic capacitance is already taken care of, hierarchically.  The problem is distributing the parasitics correctly to each sub-network where a net has been broken down into resistive components.  The other problem with hierarchy is determining for each connection between parent and child, which subnets that connection is between.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506809061184897044",
+      "type": "Default",
+      "timestamp": "2026-05-21T00:01:15.345+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The capacitance calculations are quite complicated, looking at the child cell in isolation, the parent cell in isolation, then the parent cell with each child cell added in turn, being careful to find where parasitics in isolation get modified by the presence of all the child cells.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506819184372224233",
+      "type": "Reply",
+      "timestamp": "2026-05-21T00:41:28.901+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yeah, to me that has seemed overall somewhat wasteful?\nLike, I don't _really_ get how that will benefit simulation.\nAt least Xyce appears to just flatten at parse time anyways, where this may at most have vestigial effects on how the circuity is distributed across parallel compute nodes if doing some netlist-ordering-based distribution tactic.\n\nTo me it seems like it should probably be usually cheaper computationally to just extract the PEX flattened, or at least the coupling part (resistance could probably be extracted locally with little harm, but would probably have to treat each contact spot of the ports independent to use the correct node to tie the higher level resistance to the intra-cell resistance).\nThat said, the capacitance extraction should be pretty straight-forward to do in parallel, just tile the overall area into twice as many strips as one wants to run in parallel, keeping a minimum strip width large enough to completely absorb the sideways fringing modeled reach, then process all even strips first in parallel, then add all odd strips in a second parallel run.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1365118310701600900",
+          "name": "rtimothyedwards_19428",
+          "discriminator": "0000",
+          "nickname": "Tim Edwards",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1506809061184897044",
+        "channelId": "1505050433586991195",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506820729742692483",
+      "type": "Default",
+      "timestamp": "2026-05-21T00:47:37.346+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It doesn't benefit simulation.  It benefits extraction, which is quicker, and produces much smaller files.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506821384830193746",
+      "type": "Default",
+      "timestamp": "2026-05-21T00:50:13.531+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Also:  Since magic's `.ext` file output is an intermediate form, and all the hard work is done to get to the intermediate form (`ext2spice` is quick and easy), then the hierarchical format also has the benefit that from the intermediate `.ext` form, you can quickly get any netlist for any cell in the design, with or without parasitics, without having to go through the extraction process again.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506821759356371014",
+      "type": "Default",
+      "timestamp": "2026-05-21T00:51:42.825+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hmmmm....",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506822661580525579",
+      "type": "Default",
+      "timestamp": "2026-05-21T00:55:17.932+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [
+        {
+          "id": "1506822661874122782",
+          "url": "2026-05_media/flamegraph_1-91661.png",
+          "fileName": "flamegraph_1.png",
+          "fileSizeBytes": 670174
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506823366840029205",
+      "type": "Default",
+      "timestamp": "2026-05-21T00:58:06.079+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "seems to be from this region; it was stacktraces that got chopped off for being too deep.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [
+        {
+          "id": "1506823367121043567",
+          "url": "2026-05_media/image-4067E.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 130678
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506823985537613846",
+      "type": "Default",
+      "timestamp": "2026-05-21T01:00:33.588+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Except that all that is from basic extraction;  that's been worked over quite a bit and I consider it to be reasonably efficient.  For example, on my desktop, the extraction of your full chip design took 1 1/2 hours.  Right now, the vast majority of the compute time is not in the basic extraction but in the resistance extraction, which happens afterward.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506825596271853659",
+      "type": "Default",
+      "timestamp": "2026-05-21T01:06:57.617+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Ahhh yeah it's getting there.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506825841122742384",
+      "type": "Default",
+      "timestamp": "2026-05-21T01:07:55.994+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "(That was more a questioning of how wise of a decisiion it is to do that stepping recursively; it feels like it might hit stack exhaustion on some layouts due to that.)",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506826313908879382",
+      "type": "Default",
+      "timestamp": "2026-05-21T01:09:48.715+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I have gotten rid of most of the methods in magic that were apt to hit recursion limits.  I know the extraction \"walk\" routines get rather deep, but I have not yet encountered anything that hit a stack limit and crashed.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506826676758118534",
+      "type": "Default",
+      "timestamp": "2026-05-21T01:11:15.225+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Note that pretty much all of these routines were written in the 1980s.  The \"wisdom\" involved is usually about deciding whether to spend the time to analyze the method and come up with a better one, or to work on something higher up on the priority list instead.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506827447805411388",
+      "type": "Default",
+      "timestamp": "2026-05-21T01:14:19.057+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Right now, the next chokepoint I'm seeking is the loop at `resis/ResMakeRes.c` line 395.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506829268221427722",
+      "type": "Default",
+      "timestamp": "2026-05-21T01:21:33.078+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Oh yeah wasn't suggesting it's necessarily a problem; but yeah. Didn't know how aware you were as it seemed to not be that much of the time actually spent in the severe recursion cases; it just became visible to me because I did so much sampling; it reports on the order of 1.4e9 cycles to have been spent in that highlighted deep region; I think it was a bit more timeline-restricted than quite fair, so probably maybe 5~10 seconds of CPU time spent in such deep recursion that it blew through the unwinding's depth limit.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506872309078556702",
+      "type": "Default",
+      "timestamp": "2026-05-21T04:12:34.818+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "<https://github.com/RTimothyEdwards/magic/blob/29447a35cdb5907f29888d7e9df35f6f41f99b9c/resis/ResMakeRes.c#L395-L400>\nThat linked list chase has shown to take non-insiginificant time froma  brief profile capture.\nNotably, most time is supposedly spent in the pointer fetch of the if's `cmp` assembly instruction.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506873335106113557",
+      "type": "Default",
+      "timestamp": "2026-05-21T04:16:39.442+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I'm assuming most of that linked list choice exists for mostly historical reasons due to being fairly old and the cost of these cache misses not being nearly as severe (relatively speaking) back then.\nSame btw. for EastWest.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506888619594350722",
+      "type": "Default",
+      "timestamp": "2026-05-21T05:17:23.548+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I'll have a good hour or two of profiling right in the middle of vss net resistance extraction (and probably going on to vdd or whatever nets it chooses next) for the last of the 4 GND bond pads to look at after a brief nap, though not for too long sadly, before I have to go to the office and do $dayjob things.\nAt this pace I do have hope that the extraction will finish within the next 24 hours and I can then get the files dragged together for you to enjoy the profiling recording of the entire run on the `0.5x0.5 TinyQV flattened` gds. I think there was some tool to bundle all the files needed to make unwinding work for you, but I'm sure I'll find a decent way to make it viewable in KDAB's hotspot for you (including decompilation view!) until then.\nI'll plan to send you a .tar.zst and necessary instructions for how to feed the data to hotspot via wormhole as discord DM; let me know if that's a problem.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506926812754612287",
+      "type": "Default",
+      "timestamp": "2026-05-21T07:49:09.507+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Also I don't know if you've heard of it before, but as far as attaining a _quantified_ and attributed understanding of `malloc`-spam goes, [KDE's heaptrack](https://invent.kde.org/sdk/heaptrack/) (from the same author as [KDAB's hotspot](https://www.kdab.com/software-technologies/developer-tools/hotspot/)) has done wonders for me when I used it on some photogrammetry/structure-from-motion toolchain [TU Darmstadt's MVE](<https://github.com/simonfuhrmann/mve>).\n\nSmall commits like <https://github.com/namibj/mapmap_cpu/commit/54076e35bc99ae882672e91b28b8308d681898e7> (heaptrack), <https://github.com/namibj/mve/commit/09c252dea56d2e4d78993ee6e0fc5663821d8509> (hotspot), or <https://github.com/namibj/mapmap_cpu/commit/fc6ea70ddccfc08f0768cf6f530fe13d179f88ad> (iirc this one was highlighted by heaptrack for suspicious allocation intensity, then hotspot was used to get a quantified understanding of how bad ||it seemed to be to try and estimate how much whole-program speedup could be reasonably expected to be attained, before I looked for a suitable (smol, easy, compatible licence) concurrent union-find library to \"easily\" vendor into the project and swap out the BFS implementation of the connected-components task for a union-find one. See below for excerpt of the changed file that should make obvious how this kind of problem could be surfaced by heaptrack.||), are representative of the impact I managed with those 7 years ago. \n\n```cpp\n/**\n * A complet contains a partial component: a list of node, its temporary\n * component ID and the ID of seen other complets\n */\nusing complet = std::tuple<std::vector<luint_t>, luint_t, std::set<luint_t>>;\n```\n```cpp\ntbb::concurrent_vector<complet> accrued_complets;\n```",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "SDK / Heaptrack \u00b7 GitLab",
+          "url": "https://invent.kde.org/sdk/heaptrack/",
+          "timestamp": null,
+          "description": "A heap memory profiler for Linux",
+          "color": "#1B202F",
+          "thumbnail": {
+            "url": "2026-05_media/avatar-D0BA8",
+            "width": 64,
+            "height": 64
+          },
+          "images": [],
+          "fields": [],
+          "inlineEmojis": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506948407531671622",
+      "type": "Default",
+      "timestamp": "2026-05-21T09:14:58.103+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [
+        {
+          "id": "1506948407653040198",
+          "url": "2026-05_media/flamegraph_4-E4F8D.txt",
+          "fileName": "flamegraph_4.txt",
+          "fileSizeBytes": 2236122
+        },
+        {
+          "id": "1506948408076800031",
+          "url": "2026-05_media/flamegraph_4-98EF8.svg",
+          "fileName": "flamegraph_4.svg",
+          "fileSizeBytes": 134208
+        },
+        {
+          "id": "1506948408445763604",
+          "url": "2026-05_media/flamegraph_4-9EBA7.png",
+          "fileName": "flamegraph_4.png",
+          "fileSizeBytes": 209800
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506948845060489236",
+      "type": "Default",
+      "timestamp": "2026-05-21T09:16:42.418+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "This is from two big nets (must be one or two vss and one or zero vdd); I filtered carefully but limited by pixel-perfection to the time range of these two among the over 4 hour long `perf record`'s recording.\nIt's CPU cycles spent while executing the process in user mode.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506948942741504123",
+      "type": "Default",
+      "timestamp": "2026-05-21T09:17:05.707+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "the txt is what it calls \"stack collapsed\" export.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506949045111881800",
+      "type": "Default",
+      "timestamp": "2026-05-21T09:17:30.114+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The 3 files are otherwise all from the very same filtered view.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506949666628042763",
+      "type": "Default",
+      "timestamp": "2026-05-21T09:19:58.295+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "also, just fyi",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [
+        {
+          "id": "1506949666661470278",
+          "url": "2026-05_media/log_so_far_2026-05-21T09_19_0300_00-F029B.txt",
+          "fileName": "log_so_far_2026-05-21T09_19_0300_00.txt",
+          "fileSizeBytes": 33938
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506949773511491644",
+      "type": "Default",
+      "timestamp": "2026-05-21T09:20:23.778+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "that's after 9h35 min of CPU time on the process.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506949887080534066",
+      "type": "Default",
+      "timestamp": "2026-05-21T09:20:50.855+00:00",
+      "timestampEdited": "2026-05-21T09:21:00.473+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "(I just re-used the local PDK copy from the other (the large) chip.)",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507049395806535742",
+      "type": "Default",
+      "timestamp": "2026-05-21T15:56:15.584+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "bad news: it crashed at the end.\ngood news: it appears to have finished at least almost all steps.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [
+        {
+          "id": "1507049396305399828",
+          "url": "2026-05_media/log_so_far_2026-05-21T15_53_4600_00-091BE.txt",
+          "fileName": "log_so_far_2026-05-21T15_53_4600_00.txt",
+          "fileSizeBytes": 156185
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507051164603121685",
+      "type": "Default",
+      "timestamp": "2026-05-21T16:03:17.298+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [
+        {
+          "id": "1507051164699463822",
+          "url": "2026-05_media/image-CF218.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 5536
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507051223130570822",
+      "type": "Default",
+      "timestamp": "2026-05-21T16:03:31.252+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [
+        {
+          "id": "1507051223222587453",
+          "url": "2026-05_media/image-7017C.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 647515
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507051287026470974",
+      "type": "Default",
+      "timestamp": "2026-05-21T16:03:46.486+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [
+        {
+          "id": "1507051287131455599",
+          "url": "2026-05_media/image-3422C.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 549669
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507051362108838070",
+      "type": "Default",
+      "timestamp": "2026-05-21T16:04:04.387+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [
+        {
+          "id": "1507051362444247161",
+          "url": "2026-05_media/image-CABA7.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 815198
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507052226345173152",
+      "type": "Default",
+      "timestamp": "2026-05-21T16:07:30.437+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "That _looks_ like it may be the `Bad Device Location at 210074,478892`; it lines up nicely with what seems like it could be a device's bottom left corner, and has that 5/1 scaling applied that magic spoke up at the beginning of the log.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507054840105144502",
+      "type": "Default",
+      "timestamp": "2026-05-21T16:17:53.606+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "`hotspot 1.6.0`; the `.perfparser` pre-digested recording comes soon. It's processing.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507055498422128671",
+      "type": "Default",
+      "timestamp": "2026-05-21T16:20:30.561+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "(It looks to be taking about 20 minutes to process through `/usr/libexec/hotspot-perfparser`)",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507134057207824534",
+      "type": "Default",
+      "timestamp": "2026-05-21T21:32:40.435+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Meanwhile I worked around the issue at ResMakeRes.c:397 with a hash table so that it can convert nodes on the main pass through the linked list instead of running a second loop through the rest of the list to search for nodes that need converting.  This time I will run on your quarter-size chip so that I can see results by the end of the day, maybe, and also take a look at that crash condition.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507136547571630254",
+      "type": "Default",
+      "timestamp": "2026-05-21T21:42:34.184+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Sorry for talking past you somewhat here. . . It's just that there are obvious chokepoints that need to be fixed, and I don't really need a flame graph to figure out what they are and what to do about them.  I think I'm quickly getting to a point where the resistance extraction is decently efficient, at least for now.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507147159097708564",
+      "type": "Default",
+      "timestamp": "2026-05-21T22:24:44.169+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Also it looks like the next performance bottleneck is the use of DBPaint() and DBErase() in ResDissolveContacts().  It should not be using such high-level paint routines;  it should be pretty easy to cut a large amount of time off of those calls.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507149762896592948",
+      "type": "Reply",
+      "timestamp": "2026-05-21T22:35:04.963+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Oh sorry yeah I mostly collected it as I tried to get output from it (on the quarter slot) at the same time; it failed extracting a device as noted which seemed.... strange.\n\nBut hotspot allows masking out parts both in timeline view and in flamegraph view (arbitrary combinations) via \"filter out symbol\" to jump to the point where these smaller improvements are already presumed-done (at least the fundamental one like the hash table), so one doesn't need to wait for a run to complete just to get an understanding of what's the next most relevant part.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1365118310701600900",
+          "name": "rtimothyedwards_19428",
+          "discriminator": "0000",
+          "nickname": "Tim Edwards",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1507136547571630254",
+        "channelId": "1505050433586991195",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507150288715251793",
+      "type": "Default",
+      "timestamp": "2026-05-21T22:37:10.328+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You might want to attempt to understant what's going on with the device extraction failure if you want to see performance of the SPICE generation at the end.\nI just put all 3 versions of the quarter slot gds I have here in case I missed any.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [
+        {
+          "id": "1507150292528005150",
+          "url": "https://media.githubusercontent.com/media/wafer-space/discord.wafer.space/master/large_media/wafer-space/Information/questions/is-magic-pex-extraction-expected-broken-for-gf180mcufdscmcu7t5v0fillcap64/2026-05/2026-05_media/tinyqv_quarter_label_flattened_01.gds-E9F16.zst",
+          "fileName": "tinyqv_quarter_label_flattened_01.gds.zst",
+          "fileSizeBytes": 226315197,
+          "originalUrl": "2026-05_media/tinyqv_quarter_label_flattened_01.gds-E9F16.zst"
+        },
+        {
+          "id": "1507150292775473272",
+          "url": "2026-05_media/tinyqv_quarter_label_edited_01.gds-93BC4.zst",
+          "fileName": "tinyqv_quarter_label_edited_01.gds.zst",
+          "fileSizeBytes": 11896218
+        },
+        {
+          "id": "1507150293010219068",
+          "url": "2026-05_media/tinyqv_quarter.gds-37FE9.gz",
+          "fileName": "tinyqv_quarter.gds.gz",
+          "fileSizeBytes": 15293209
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507160362569564340",
+      "type": "Default",
+      "timestamp": "2026-05-21T23:17:12.122+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Nothing like a full chip design to exercise all the corner cases. . .",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507167626269298800",
+      "type": "Default",
+      "timestamp": "2026-05-21T23:46:03.923+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@namibj :  The full R-C extraction of `tinyqv_quarter_label_edited_01` completed on my desktop in just under two hours.  I did not get a crash condition.  I did, however, encounter two instances of `Missing rptr at (...)`, indicating an attempt to access a resistor structure that had been previously freed, and a bunch of `Missing substrate conection of device at (...)` which remains to be debugged.  I did not get any `Bad Device Location` errors.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "262706220073222144",
+          "name": "namibj",
+          "discriminator": "0000",
+          "nickname": "namibj",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507167865202278400",
+      "type": "Default",
+      "timestamp": "2026-05-21T23:47:00.889+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The final netlist is just under 2GB.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507168081498210425",
+      "type": "Default",
+      "timestamp": "2026-05-21T23:47:52.458+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "`PDK_ROOT=`realpath gf180mcu_pdk` PDK=gf180mcuD scripts/extract_spice.py /home/namibj/Downloads/tinyqv_quarter_label_flattened_01.gds --cthresh 0 --subcircuit-top --hierarchy-off`",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [
+        {
+          "id": "1507168082034950144",
+          "url": "2026-05_media/extract_spice-C9D1F.py",
+          "fileName": "extract_spice.py",
+          "fileSizeBytes": 7485
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507168266357833810",
+      "type": "Reply",
+      "timestamp": "2026-05-21T23:48:36.532+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "something Xyce or ngspice would digest?",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1365118310701600900",
+          "name": "rtimothyedwards_19428",
+          "discriminator": "0000",
+          "nickname": "Tim Edwards",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1507167865202278400",
+        "channelId": "1505050433586991195",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507168820329189547",
+      "type": "Default",
+      "timestamp": "2026-05-21T23:50:48.609+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "BTW, `Missing substrate connection` means that magic could not determine what subnet a device's substrate (or bulk terminal) connects to, so while it does not exactly invalidate the netlist, it means that some devices will have a substrate connection to the default, which would be the label at the pad for one of the VDD or VSS pins, and not somewhere deep inside the substrate's resistor network where it should be.  The final output SPICE _might_ be digestible by Xyce.  Not sure how ngspice will handle a 2GB netlist.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507168849894838343",
+      "type": "Default",
+      "timestamp": "2026-05-21T23:50:55.658+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "if there's anything convenient in particular I should add to get step progress information in the future I'd be happy to add that",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507169075590201522",
+      "type": "Default",
+      "timestamp": "2026-05-21T23:51:49.468+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "ngspice was more of a \"in theory it meets the spec\" part; I'm squarely looking at Xyce for this type of job.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507169393065463880",
+      "type": "Default",
+      "timestamp": "2026-05-21T23:53:05.16+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "This is the shell script I'm using to do the extraction.  It is hard-coded to my PDK location and the GDS file and top cell name.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [
+        {
+          "id": "1507169393119854623",
+          "url": "2026-05_media/run_tinyqv_rcx_extract-C26FE.sh",
+          "fileName": "run_tinyqv_rcx_extract.sh",
+          "fileSizeBytes": 805
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507169579590488206",
+      "type": "Default",
+      "timestamp": "2026-05-21T23:53:49.631+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The above linked script's output on designs like a TT submission or in this case, iirc Tholin's DAC hard macro, resulted in a valid netlist.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507169816908267561",
+      "type": "Default",
+      "timestamp": "2026-05-21T23:54:46.212+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I'm positive the prior version which to my eye had identical tcl fed to magic aside from the obvious path/name differences produced functional ngspice and Xyce netlist.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507170026174546110",
+      "type": "Default",
+      "timestamp": "2026-05-21T23:55:36.105+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "thanks for your script",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507170148295901225",
+      "type": "Default",
+      "timestamp": "2026-05-21T23:56:05.221+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "(I'm about to sleep though, so best of luck to you and big thanks already.)",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507170449191207024",
+      "type": "Default",
+      "timestamp": "2026-05-21T23:57:16.96+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "As for the substrate connection, I think the sealring was isolated on all layers both to the inside and the outside of the chip.\nI think some ESD diodes in IO pads may also expect implicit substrate connectivity.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507171182158418053",
+      "type": "Default",
+      "timestamp": "2026-05-22T00:00:11.713+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I am on travel from some time mid-day tomorrow, so I might not get back to work on it for a few days.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507171370017230858",
+      "type": "Default",
+      "timestamp": "2026-05-22T00:00:56.502+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "If it's just a 2-hour run I'd at least strongly consider throwing mozilla's rr at it, fast forward in the replay to the missing rptr notice via probably a breakpoint set to where the notice is emitted, then use reverse-continue with data watchpoints on the allocations that got freed before.\nYour deep knowledge ofc may bring a more specific path of debugging that to light.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507172522708177036",
+      "type": "Reply",
+      "timestamp": "2026-05-22T00:05:31.325+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "That's no problem gives me time to port my MCML VCO efforts from sky130A to gf180mcuD to see where the speeds and sizing are approximately at; such that I can get the PCell topology adjusted and at least hope to make it for the RUn2 deadline even though I failed to make it for the ttsky26a deadline (barely got two instances of a DNL-compensatable-via-digital-calibration DAC onto it, instead of the supposed DAC-tuned PLL/VCO core).",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1365118310701600900",
+          "name": "rtimothyedwards_19428",
+          "discriminator": "0000",
+          "nickname": "Tim Edwards",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1507171182158418053",
+        "channelId": "1505050433586991195",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507414531654160485",
+      "type": "Default",
+      "timestamp": "2026-05-22T16:07:10.754+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I pushed another update in which I got rid of the calls to DBPaint() and DBErase() in favor of simpler lower-level subroutines that do the same thing more efficiently.  The total time to process the quarter chip is now down to just under an hour and a half.  The process is now spending much of the time doing connectivity searches, which is already highly optimized, so I don't think there will be too much further opportunity to cut significant percentages off of the processing time.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1507435333531471953",
+      "type": "Default",
+      "timestamp": "2026-05-22T17:29:50.308+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "ok",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
     }
   ],
-  "messageCount": 88
+  "messageCount": 170
 }

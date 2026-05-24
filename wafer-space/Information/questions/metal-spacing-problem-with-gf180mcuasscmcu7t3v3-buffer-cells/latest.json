@@ -1,0 +1,509 @@
+{
+  "guild": {
+    "id": "1361349522684510449",
+    "name": "wafer.space Community",
+    "iconUrl": "2026-05_media/fb143eaa45770cbb40493d09b625e98b-09FD1.png"
+  },
+  "channel": {
+    "id": "1506782635287117936",
+    "type": "GuildPublicThread",
+    "categoryId": "1409660288822673408",
+    "category": "questions",
+    "name": "Metal spacing problem with gf180mcu_as_sc_mcu7t3v3 buffer cells",
+    "topic": null
+  },
+  "dateRange": {
+    "after": "2026-04-30T23:59:59.999+00:00",
+    "before": null
+  },
+  "exportedAt": "2026-05-24T08:13:09.8296104+00:00",
+  "messages": [
+    {
+      "id": "1506782635287117936",
+      "type": "Default",
+      "timestamp": "2026-05-20T22:16:14.92+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hello, is anyone else running into metal spacing errors with the gf180mcu_as_sc_mcu7t3v3 buffer cells? I submitted an issue on their github here: https://github.com/AvalonSemiconductors/gf180mcu_as_sc_mcu7t3v3/issues/1\n My current workaround is to exclude those cells.",
+      "author": {
+        "id": "363887909486460928",
+        "name": "ethan21329",
+        "discriminator": "0000",
+        "nickname": "Ethan",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/954bae70bdaac9bd40833bed096ff022-E82ED.png"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "Spacing problem on parameter of buffer cells \u00b7 Issue #1 \u00b7 AvalonS...",
+          "url": "https://github.com/AvalonSemiconductors/gf180mcu_as_sc_mcu7t3v3/issues/1",
+          "timestamp": null,
+          "description": "I am trying to run librelane using the gf180mcu_as_sc_mcu7t3v3 standard library and I'm constantly getting metal spacing errors on some buffer cells with VDD/VSS straps. I am currently getting ...",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "2026-05_media/1-A1A31",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": [],
+          "inlineEmojis": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\ud83d\udc4d",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "2026-05_media/1f44d-27259.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "1417961928961298623",
+              "name": "mguthaus",
+              "discriminator": "0000",
+              "nickname": "Matt G. (Mobius)",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-05_media/e459857e9a131799083272cfec162ef6-9879C.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506785486847611080",
+      "type": "Default",
+      "timestamp": "2026-05-20T22:27:34.785+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Could you try to manually edit the cell to give minimum gap there?\nLooking at it it should allow for enough space to shift the pin area over towards teh center of the cell.\n\nIMO this feels like blame should be not with the shapes in the cell but rather the routing choices above that choose this violation; perhaps the straps need a larger keepout than configured and it might not have been noticed earlier because it might not have hit this with other cells before.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506787124207157358",
+      "type": "Default",
+      "timestamp": "2026-05-20T22:34:05.162+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I wasn't aware that I could manually edit the cell. This is for my chip design class so I'll ask my professor about it. Thanks!",
+      "author": {
+        "id": "363887909486460928",
+        "name": "ethan21329",
+        "discriminator": "0000",
+        "nickname": "Ethan",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/954bae70bdaac9bd40833bed096ff022-E82ED.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506793467911864400",
+      "type": "Reply",
+      "timestamp": "2026-05-20T22:59:17.619+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Oh it's not going to be hard, it might be documented in the repo actually how to build it from whatever authoritative design file version it's defined from.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "363887909486460928",
+          "name": "ethan21329",
+          "discriminator": "0000",
+          "nickname": "Ethan",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/954bae70bdaac9bd40833bed096ff022-E82ED.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1506787124207157358",
+        "channelId": "1506782635287117936",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506794089885073500",
+      "type": "Default",
+      "timestamp": "2026-05-20T23:01:45.909+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I mean you could fix these few DRCs manually easily in KLayout if you need them to be gone for tapeout and won't re-synthesize the design. Just \"select as new top\" in the cell hierarchy on the offending cell and mangle it a bit; then adjust the routing artifacts that came from it to make them also no longer offend DRC.\n\nThat's not the proper way because it's manual work done after the authomated synthesis, but it's probably the easiest way for a one-off if you can't get anywhere within half an hour of messing with the repo to try and fix it before synthesis.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506798406549508197",
+      "type": "Reply",
+      "timestamp": "2026-05-20T23:18:55.082+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Can you specify keep-out regions for straps?",
+      "author": {
+        "id": "1417961928961298623",
+        "name": "mguthaus",
+        "discriminator": "0000",
+        "nickname": "Matt G. (Mobius)",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/e459857e9a131799083272cfec162ef6-9879C.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "262706220073222144",
+          "name": "namibj",
+          "discriminator": "0000",
+          "nickname": "namibj",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1506785486847611080",
+        "channelId": "1506782635287117936",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506798715262734458",
+      "type": "Reply",
+      "timestamp": "2026-05-20T23:20:08.685+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It would probably be better to get a fix upstreamed for others though. Yes, this would be a hack workaround. So is disabling the cell but that would be at the expense of less flexibility in the buffer library.",
+      "author": {
+        "id": "1417961928961298623",
+        "name": "mguthaus",
+        "discriminator": "0000",
+        "nickname": "Matt G. (Mobius)",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/e459857e9a131799083272cfec162ef6-9879C.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "262706220073222144",
+          "name": "namibj",
+          "discriminator": "0000",
+          "nickname": "namibj",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1506794089885073500",
+        "channelId": "1506782635287117936",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506806642749214731",
+      "type": "Default",
+      "timestamp": "2026-05-20T23:51:38.745+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Oh sure they should be fixed upstream; but I'd rather this be manually edited once to at least have _a_ submission for the tapeout slot filed that isn't expected to be buggy by best understanding at the time of filing, than to risk something happeneing like idk even jst one's computer releasing magic smoke and ending up without any expected-functional submission filed.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506806969816584273",
+      "type": "Reply",
+      "timestamp": "2026-05-20T23:52:56.724+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Given the offending metal appears to not be itself part of the cell, I expect the keepout/distance-violation bug to be in whatever routing or strap placement code messed up to do this.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1417961928961298623",
+          "name": "mguthaus",
+          "discriminator": "0000",
+          "nickname": "Matt G. (Mobius)",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/e459857e9a131799083272cfec162ef6-9879C.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1506798406549508197",
+        "channelId": "1506782635287117936",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506807686623137945",
+      "type": "Reply",
+      "timestamp": "2026-05-20T23:55:47.624+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It is a pin accessibility problem with the library. Yes, the offending metal isn't part of the cell, but the router cannot access the pin with a nearby blockage (that is legal at that location).",
+      "author": {
+        "id": "1417961928961298623",
+        "name": "mguthaus",
+        "discriminator": "0000",
+        "nickname": "Matt G. (Mobius)",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/e459857e9a131799083272cfec162ef6-9879C.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "262706220073222144",
+          "name": "namibj",
+          "discriminator": "0000",
+          "nickname": "namibj",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1506806969816584273",
+        "channelId": "1506782635287117936",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506808085409304826",
+      "type": "Reply",
+      "timestamp": "2026-05-20T23:57:22.702+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "did you look at the shown layout? It looks to me that the router choose to put the via left-aligned instead of right-aligned in the m1 contact area.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1417961928961298623",
+          "name": "mguthaus",
+          "discriminator": "0000",
+          "nickname": "Matt G. (Mobius)",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/e459857e9a131799083272cfec162ef6-9879C.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1506807686623137945",
+        "channelId": "1506782635287117936",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506830347751653386",
+      "type": "Default",
+      "timestamp": "2026-05-21T01:25:50.458+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Tholin - FYI",
+      "author": {
+        "id": "169786952432746498",
+        "name": "mithro_",
+        "discriminator": "0000",
+        "nickname": "Tim 'mithro' Ansell",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "220639106915368960",
+          "name": "tholin",
+          "discriminator": "0000",
+          "nickname": "Tholin",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/edae5aadf146133e0448bfb1f0fa91c4-62B19.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1506853845739896974",
+      "type": "Reply",
+      "timestamp": "2026-05-21T02:59:12.815+00:00",
+      "timestampEdited": "2026-05-21T03:00:00.141+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I did. Typically any pin that causes a violation to adjacent shapes is a problem in many tools. Usually this is solved by having \"on grid\" pins.",
+      "author": {
+        "id": "1417961928961298623",
+        "name": "mguthaus",
+        "discriminator": "0000",
+        "nickname": "Matt G. (Mobius)",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/e459857e9a131799083272cfec162ef6-9879C.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "262706220073222144",
+          "name": "namibj",
+          "discriminator": "0000",
+          "nickname": "namibj",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1506808085409304826",
+        "channelId": "1506782635287117936",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    }
+  ],
+  "messageCount": 13
+}

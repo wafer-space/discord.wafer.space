@@ -406,6 +406,440 @@ No I mean triangle counting/enumeration is O(n^(3/2)) worst-case if written suff
 n being edge count
 
 
+[05/20/2026 20:58] namibj
+@Andrew Wingate see, I've done substantial research into the direction of applied (beyond) worst-case-optimal join algorithms.
+
+The mentioned triangle search can be made closer to `O(n)` than naive `O(n^2)` (to a worst case of `O(n^1.5)` aka `O(n^(3/2))`) by:
+
+1. As resistors are undirected edges, roughly presume we just want each resistor in both directions in any index structures (minor improvements can later be made).
+2. Create an index giving us a list of target nodes for each source node (the resistor metadata is carried as auxiliary data with each list entry).
+3. If needed for some access efficiency use a separate index (otherwise use the same and keep a tuple of `(list((target_node, resistor_identity_metadata)), length(that_very_list))`) to quickly look up how much fan-out happens from grabbing that list from a given key into the first index. 
+4. Iterate through the list of edges.
+5. For each edge, look up both the first and the second node of that edge in the length-index (the second index, from 3.) and decide which one has less fan-out.
+6. Look up the one with less fan-out in the first index (from 2.) to get the worst-case-optimal choice of what the second edge is and what the third edge will be for specifically the current iteration (first edge) of (4.).
+7. Screen each such-fetched triangle node-triple, specifically the two nodes still dangling (i.e., the non-chosen one from the first edge and the target node of each entry of the second edge), against a hash table or similar set membership test data structure to spend only constant time on each candidate of the third edge (this I think is currently being done since the upgrade to `O(n^2)`; the major trick is just to dynamically choose the less-costly vertex aka join-order for each first edge).
+8. You have successfully completed the task of enumerating all triangles in at most `O(n^1.5)` time.
+
+I'll see to get profiling up so I can hopefully run PEX against a similarly edited GDS of the TinyQV quarter cell submission that "only" has 4 VSS and 4 VDD bond pads and is, well, a quarter the die area (usable area not just filled with power rings/IO cells is smaller), in hopes of that GDS being large enough to exercise poor scaling but small enough to not take as many hours to even just load (such that we could reasonably use it for full profiling runs in the coming performance/throughout enhancement updates I hope to contribute greatly to).
+
+{Reactions}
+💜 waferspace
+
+[05/20/2026 22:37] namibj
+So, we're in luck, I managed to get frame pointer and debug symbols compiled in for a build of `8.3.645` and am running on `tinyqv_quarter_label_flattened_01.gds` (and I choose a cutoff of 0 for the capacitance as that happened only later and I figured I'd rather get this done now and let Xyce worry to possibly threshold that rather than erase the smaller capacitances ahead of it when magic writes out the extraction in the desired spice netlist format) currently with a `cycles` perf record running with stack tracing using said frame-pointer's; I confirmed it works nicely in KDAB's hotspot for me. Might have to adjust source file search path I guess, will see in a bit.
+Figured I'd upload the gds and also the edited but not yet flattened gds here, as they're small enough when compressed.
+
+{Attachments}
+https://media.githubusercontent.com/media/wafer-space/discord.wafer.space/master/large_media/wafer-space/Information/questions/is-magic-pex-extraction-expected-broken-for-gf180mcufdscmcu7t5v0fillcap64/2026-05/2026-05_media/tinyqv_quarter_label_flattened_01.gds-8B335.zst
+2026-05_media/tinyqv_quarter_label_edited_01.gds-BD15C.zst
+
+
+[05/20/2026 22:38] namibj
+At the current growth rate of the perf recording I've got about 7 days until the SSD is filled up; but as this is compressed and contains stack traces it will be vulnerable to changes in data rate as the process stages changes.
+
+{Reactions}
+💯
+
+[05/20/2026 22:51] namibj
+for your pleasure/sneak peek; a short second recording done while it was running:
+
+{Attachments}
+2026-05_media/image-A1BC4.png
+
+
+[05/20/2026 22:52] namibj
+flame graph filtered down to `extEnumTilePerim (tclmagic.so) and below.`
+
+
+[05/20/2026 22:54] namibj
+the blue timeline sections are the non-hidden flamegraph content; i.e., in the orange timeline sections it was doing _not `extEnumTilePerim`_
+
+
+[05/20/2026 22:55] namibj
+notably it was doing `extBasicOverlap` instead of `extBasicCouple` (the latter the direct parent of `extEnumTilePerim`).
+
+
+[05/20/2026 22:57] namibj
+@Tim Edwards if you want I'll give you the profiling result from this run when the run concludes; though for reasons of possible contamination with trace amounts of personal data that one won't be public data (I don't think it has gobbled up any of that, but it's hard to rule out).
+
+
+[05/20/2026 23:13] rtimothyedwards_19428
+@namibj :  I think it is better to wait until the changes I made today to magic migrate to github (in about 8 hours).  I found more routines which it was spending long periods of time on.  I changed the code in both places to cut a significant amount of time off of the execution.  I'm re-running everything for the (I think) fourth time.  The last routines I fixed were pretty far into the "extresist" process, so there's a good chance that there are no more obvious outliers taking up all the compute time.
+
+I think that the initial GDS read-in time could be significantly reduced by being careful about what order layers are processed in the "cifinput" recipes in the tech file.  If the recipe has "A AND B AND C" where A and B are very common layers and C is a very rarely used layer, then "A AND C AND B" will execute much faster.
+
+
+[05/20/2026 23:14] namibj
+Hmmmm
+
+
+[05/20/2026 23:16] namibj
+This one is a quarter the size and substantially less dense as the usable area is substantially less than a quarter; it doesn't seem to really have analog but it's from the same MPW run so should be sufficiently represenative, I hope, for purposes of trying/iterating. Do consider using that until you think it's free of any easy to fix and severe performance bugs.
+
+
+[05/20/2026 23:19] rtimothyedwards_19428
+Okay, thanks.  I'll wait for this run to finish, or at least see where it's at tomorrow morning if it hasn't.  For future runs I'll switch to the quarter size layout.
+
+
+[05/20/2026 23:21] namibj
+Yeah ok.
+(What's blocking the changes from migrating faster to a place I could grab the sources from and build to run the profiling on?)
+
+
+[05/20/2026 23:21] rtimothyedwards_19428
+Oh, if you want the sources right away, just get them from my server at opencircuitdesign.com.  I use github as a mirror and do an automatic copy every night by cron job.
+
+
+[05/20/2026 23:22] namibj
+Ohhh ok.
+
+
+[05/20/2026 23:22] rtimothyedwards_19428
+(`git clone git://opencircuitdesign.com/magic`)
+
+
+[05/20/2026 23:26] namibj
+> STATUS: Partly done (early 2020). Extresist now handles all device types, but there is a very strong need to remove the dependence on reading the ".sim" format and just work all calculations from the values in the ".ext" file. For example, extresist cannot now handle the substrate node because the ".sim" format has no concept of a substrate.
+oh, would this enable bulk substrate current flow treatment for PEX? At least, in theory; considering that the substrate being substantially thicker than most features would invalidate the simplified sheet resistance 2D-only treatment done so far on BEOL PEX?
+
+
+[05/20/2026 23:34] namibj
+ok running that then; compiling.
+
+
+[05/20/2026 23:52] rtimothyedwards_19428
+Actually I resolved the issue with the substrate before I removed the dependency on the .sim format.  The main thing that removing the .sim dependency did was that it allowed me to start working on hierarchical R-C extraction, which I have partly completed work on (but haven't pushed yet;  still just a local branch on my desktop).
+
+
+[05/20/2026 23:53] namibj
+Did the sim dependency get removed some time since december?
+
+
+[05/20/2026 23:54] rtimothyedwards_19428
+Yes.  Most of that work was done in January, I think.
+
+
+[05/20/2026 23:55] namibj
+This hierarchical R-C extraction you speak off, how does that handle the layer-penetrating capacitive coupling in, let's say, a standard cell fully-synthethic floorplan (a plain hard macro synthesized from Verilog into a prescribed rectangle; let's presume it goes all the way to top metal)?
+
+
+[05/20/2026 23:55] namibj
+Like, between the cells themselves and the sea of cells.
+
+
+[05/20/2026 23:56] namibj
+Yeah I noticed the files that got produced changed since I moved from the old nix-provided magic version in these PEX trials here.
+Edit: and just was a little curious now that I read about sim file dependency getting removed.
+
+
+[05/20/2026 23:58] rtimothyedwards_19428
+The parasitic capacitance is already taken care of, hierarchically.  The problem is distributing the parasitics correctly to each sub-network where a net has been broken down into resistive components.  The other problem with hierarchy is determining for each connection between parent and child, which subnets that connection is between.
+
+
+[05/21/2026 00:01] rtimothyedwards_19428
+The capacitance calculations are quite complicated, looking at the child cell in isolation, the parent cell in isolation, then the parent cell with each child cell added in turn, being careful to find where parasitics in isolation get modified by the presence of all the child cells.
+
+
+[05/21/2026 00:41] namibj
+Yeah, to me that has seemed overall somewhat wasteful?
+Like, I don't _really_ get how that will benefit simulation.
+At least Xyce appears to just flatten at parse time anyways, where this may at most have vestigial effects on how the circuity is distributed across parallel compute nodes if doing some netlist-ordering-based distribution tactic.
+
+To me it seems like it should probably be usually cheaper computationally to just extract the PEX flattened, or at least the coupling part (resistance could probably be extracted locally with little harm, but would probably have to treat each contact spot of the ports independent to use the correct node to tie the higher level resistance to the intra-cell resistance).
+That said, the capacitance extraction should be pretty straight-forward to do in parallel, just tile the overall area into twice as many strips as one wants to run in parallel, keeping a minimum strip width large enough to completely absorb the sideways fringing modeled reach, then process all even strips first in parallel, then add all odd strips in a second parallel run.
+
+
+[05/21/2026 00:47] rtimothyedwards_19428
+It doesn't benefit simulation.  It benefits extraction, which is quicker, and produces much smaller files.
+
+
+[05/21/2026 00:50] rtimothyedwards_19428
+Also:  Since magic's `.ext` file output is an intermediate form, and all the hard work is done to get to the intermediate form (`ext2spice` is quick and easy), then the hierarchical format also has the benefit that from the intermediate `.ext` form, you can quickly get any netlist for any cell in the design, with or without parasitics, without having to go through the extraction process again.
+
+
+[05/21/2026 00:51] namibj
+Hmmmm....
+
+
+[05/21/2026 00:55] namibj
+
+
+{Attachments}
+2026-05_media/flamegraph_1-91661.png
+
+
+[05/21/2026 00:58] namibj
+seems to be from this region; it was stacktraces that got chopped off for being too deep.
+
+{Attachments}
+2026-05_media/image-4067E.png
+
+
+[05/21/2026 01:00] rtimothyedwards_19428
+Except that all that is from basic extraction;  that's been worked over quite a bit and I consider it to be reasonably efficient.  For example, on my desktop, the extraction of your full chip design took 1 1/2 hours.  Right now, the vast majority of the compute time is not in the basic extraction but in the resistance extraction, which happens afterward.
+
+
+[05/21/2026 01:06] namibj
+Ahhh yeah it's getting there.
+
+
+[05/21/2026 01:07] namibj
+(That was more a questioning of how wise of a decisiion it is to do that stepping recursively; it feels like it might hit stack exhaustion on some layouts due to that.)
+
+
+[05/21/2026 01:09] rtimothyedwards_19428
+I have gotten rid of most of the methods in magic that were apt to hit recursion limits.  I know the extraction "walk" routines get rather deep, but I have not yet encountered anything that hit a stack limit and crashed.
+
+
+[05/21/2026 01:11] rtimothyedwards_19428
+Note that pretty much all of these routines were written in the 1980s.  The "wisdom" involved is usually about deciding whether to spend the time to analyze the method and come up with a better one, or to work on something higher up on the priority list instead.
+
+
+[05/21/2026 01:14] rtimothyedwards_19428
+Right now, the next chokepoint I'm seeking is the loop at `resis/ResMakeRes.c` line 395.
+
+
+[05/21/2026 01:21] namibj
+Oh yeah wasn't suggesting it's necessarily a problem; but yeah. Didn't know how aware you were as it seemed to not be that much of the time actually spent in the severe recursion cases; it just became visible to me because I did so much sampling; it reports on the order of 1.4e9 cycles to have been spent in that highlighted deep region; I think it was a bit more timeline-restricted than quite fair, so probably maybe 5~10 seconds of CPU time spent in such deep recursion that it blew through the unwinding's depth limit.
+
+
+[05/21/2026 04:12] namibj
+<https://github.com/RTimothyEdwards/magic/blob/29447a35cdb5907f29888d7e9df35f6f41f99b9c/resis/ResMakeRes.c#L395-L400>
+That linked list chase has shown to take non-insiginificant time froma  brief profile capture.
+Notably, most time is supposedly spent in the pointer fetch of the if's `cmp` assembly instruction.
+
+
+[05/21/2026 04:16] namibj
+I'm assuming most of that linked list choice exists for mostly historical reasons due to being fairly old and the cost of these cache misses not being nearly as severe (relatively speaking) back then.
+Same btw. for EastWest.
+
+
+[05/21/2026 05:17] namibj
+I'll have a good hour or two of profiling right in the middle of vss net resistance extraction (and probably going on to vdd or whatever nets it chooses next) for the last of the 4 GND bond pads to look at after a brief nap, though not for too long sadly, before I have to go to the office and do $dayjob things.
+At this pace I do have hope that the extraction will finish within the next 24 hours and I can then get the files dragged together for you to enjoy the profiling recording of the entire run on the `0.5x0.5 TinyQV flattened` gds. I think there was some tool to bundle all the files needed to make unwinding work for you, but I'm sure I'll find a decent way to make it viewable in KDAB's hotspot for you (including decompilation view!) until then.
+I'll plan to send you a .tar.zst and necessary instructions for how to feed the data to hotspot via wormhole as discord DM; let me know if that's a problem.
+
+
+[05/21/2026 07:49] namibj
+Also I don't know if you've heard of it before, but as far as attaining a _quantified_ and attributed understanding of `malloc`-spam goes, [KDE's heaptrack](https://invent.kde.org/sdk/heaptrack/) (from the same author as [KDAB's hotspot](https://www.kdab.com/software-technologies/developer-tools/hotspot/)) has done wonders for me when I used it on some photogrammetry/structure-from-motion toolchain [TU Darmstadt's MVE](<https://github.com/simonfuhrmann/mve>).
+
+Small commits like <https://github.com/namibj/mapmap_cpu/commit/54076e35bc99ae882672e91b28b8308d681898e7> (heaptrack), <https://github.com/namibj/mve/commit/09c252dea56d2e4d78993ee6e0fc5663821d8509> (hotspot), or <https://github.com/namibj/mapmap_cpu/commit/fc6ea70ddccfc08f0768cf6f530fe13d179f88ad> (iirc this one was highlighted by heaptrack for suspicious allocation intensity, then hotspot was used to get a quantified understanding of how bad ||it seemed to be to try and estimate how much whole-program speedup could be reasonably expected to be attained, before I looked for a suitable (smol, easy, compatible licence) concurrent union-find library to "easily" vendor into the project and swap out the BFS implementation of the connected-components task for a union-find one. See below for excerpt of the changed file that should make obvious how this kind of problem could be surfaced by heaptrack.||), are representative of the impact I managed with those 7 years ago. 
+
+```cpp
+/**
+ * A complet contains a partial component: a list of node, its temporary
+ * component ID and the ID of seen other complets
+ */
+using complet = std::tuple<std::vector<luint_t>, luint_t, std::set<luint_t>>;
+```
+```cpp
+tbb::concurrent_vector<complet> accrued_complets;
+```
+
+{Embed}
+https://invent.kde.org/sdk/heaptrack/
+SDK / Heaptrack · GitLab
+A heap memory profiler for Linux
+2026-05_media/avatar-D0BA8
+
+
+[05/21/2026 09:14] namibj
+
+
+{Attachments}
+2026-05_media/flamegraph_4-E4F8D.txt
+2026-05_media/flamegraph_4-98EF8.svg
+2026-05_media/flamegraph_4-9EBA7.png
+
+
+[05/21/2026 09:16] namibj
+This is from two big nets (must be one or two vss and one or zero vdd); I filtered carefully but limited by pixel-perfection to the time range of these two among the over 4 hour long `perf record`'s recording.
+It's CPU cycles spent while executing the process in user mode.
+
+
+[05/21/2026 09:17] namibj
+the txt is what it calls "stack collapsed" export.
+
+
+[05/21/2026 09:17] namibj
+The 3 files are otherwise all from the very same filtered view.
+
+
+[05/21/2026 09:19] namibj
+also, just fyi
+
+{Attachments}
+2026-05_media/log_so_far_2026-05-21T09_19_0300_00-F029B.txt
+
+
+[05/21/2026 09:20] namibj
+that's after 9h35 min of CPU time on the process.
+
+
+[05/21/2026 09:20] namibj
+(I just re-used the local PDK copy from the other (the large) chip.)
+
+
+[05/21/2026 15:56] namibj
+bad news: it crashed at the end.
+good news: it appears to have finished at least almost all steps.
+
+{Attachments}
+2026-05_media/log_so_far_2026-05-21T15_53_4600_00-091BE.txt
+
+
+[05/21/2026 16:03] namibj
+
+
+{Attachments}
+2026-05_media/image-CF218.png
+
+
+[05/21/2026 16:03] namibj
+
+
+{Attachments}
+2026-05_media/image-7017C.png
+
+
+[05/21/2026 16:03] namibj
+
+
+{Attachments}
+2026-05_media/image-3422C.png
+
+
+[05/21/2026 16:04] namibj
+
+
+{Attachments}
+2026-05_media/image-CABA7.png
+
+
+[05/21/2026 16:07] namibj
+That _looks_ like it may be the `Bad Device Location at 210074,478892`; it lines up nicely with what seems like it could be a device's bottom left corner, and has that 5/1 scaling applied that magic spoke up at the beginning of the log.
+
+
+[05/21/2026 16:17] namibj
+`hotspot 1.6.0`; the `.perfparser` pre-digested recording comes soon. It's processing.
+
+
+[05/21/2026 16:20] namibj
+(It looks to be taking about 20 minutes to process through `/usr/libexec/hotspot-perfparser`)
+
+
+[05/21/2026 21:32] rtimothyedwards_19428
+Meanwhile I worked around the issue at ResMakeRes.c:397 with a hash table so that it can convert nodes on the main pass through the linked list instead of running a second loop through the rest of the list to search for nodes that need converting.  This time I will run on your quarter-size chip so that I can see results by the end of the day, maybe, and also take a look at that crash condition.
+
+
+[05/21/2026 21:42] rtimothyedwards_19428
+Sorry for talking past you somewhat here. . . It's just that there are obvious chokepoints that need to be fixed, and I don't really need a flame graph to figure out what they are and what to do about them.  I think I'm quickly getting to a point where the resistance extraction is decently efficient, at least for now.
+
+
+[05/21/2026 22:24] rtimothyedwards_19428
+Also it looks like the next performance bottleneck is the use of DBPaint() and DBErase() in ResDissolveContacts().  It should not be using such high-level paint routines;  it should be pretty easy to cut a large amount of time off of those calls.
+
+
+[05/21/2026 22:35] namibj
+Oh sorry yeah I mostly collected it as I tried to get output from it (on the quarter slot) at the same time; it failed extracting a device as noted which seemed.... strange.
+
+But hotspot allows masking out parts both in timeline view and in flamegraph view (arbitrary combinations) via "filter out symbol" to jump to the point where these smaller improvements are already presumed-done (at least the fundamental one like the hash table), so one doesn't need to wait for a run to complete just to get an understanding of what's the next most relevant part.
+
+
+[05/21/2026 22:37] namibj
+You might want to attempt to understant what's going on with the device extraction failure if you want to see performance of the SPICE generation at the end.
+I just put all 3 versions of the quarter slot gds I have here in case I missed any.
+
+{Attachments}
+https://media.githubusercontent.com/media/wafer-space/discord.wafer.space/master/large_media/wafer-space/Information/questions/is-magic-pex-extraction-expected-broken-for-gf180mcufdscmcu7t5v0fillcap64/2026-05/2026-05_media/tinyqv_quarter_label_flattened_01.gds-E9F16.zst
+2026-05_media/tinyqv_quarter_label_edited_01.gds-93BC4.zst
+2026-05_media/tinyqv_quarter.gds-37FE9.gz
+
+
+[05/21/2026 23:17] rtimothyedwards_19428
+Nothing like a full chip design to exercise all the corner cases. . .
+
+
+[05/21/2026 23:46] rtimothyedwards_19428
+@namibj :  The full R-C extraction of `tinyqv_quarter_label_edited_01` completed on my desktop in just under two hours.  I did not get a crash condition.  I did, however, encounter two instances of `Missing rptr at (...)`, indicating an attempt to access a resistor structure that had been previously freed, and a bunch of `Missing substrate conection of device at (...)` which remains to be debugged.  I did not get any `Bad Device Location` errors.
+
+
+[05/21/2026 23:47] rtimothyedwards_19428
+The final netlist is just under 2GB.
+
+
+[05/21/2026 23:47] namibj
+`PDK_ROOT=`realpath gf180mcu_pdk` PDK=gf180mcuD scripts/extract_spice.py /home/namibj/Downloads/tinyqv_quarter_label_flattened_01.gds --cthresh 0 --subcircuit-top --hierarchy-off`
+
+{Attachments}
+2026-05_media/extract_spice-C9D1F.py
+
+
+[05/21/2026 23:48] namibj
+something Xyce or ngspice would digest?
+
+
+[05/21/2026 23:50] rtimothyedwards_19428
+BTW, `Missing substrate connection` means that magic could not determine what subnet a device's substrate (or bulk terminal) connects to, so while it does not exactly invalidate the netlist, it means that some devices will have a substrate connection to the default, which would be the label at the pad for one of the VDD or VSS pins, and not somewhere deep inside the substrate's resistor network where it should be.  The final output SPICE _might_ be digestible by Xyce.  Not sure how ngspice will handle a 2GB netlist.
+
+
+[05/21/2026 23:50] namibj
+if there's anything convenient in particular I should add to get step progress information in the future I'd be happy to add that
+
+
+[05/21/2026 23:51] namibj
+ngspice was more of a "in theory it meets the spec" part; I'm squarely looking at Xyce for this type of job.
+
+
+[05/21/2026 23:53] rtimothyedwards_19428
+This is the shell script I'm using to do the extraction.  It is hard-coded to my PDK location and the GDS file and top cell name.
+
+{Attachments}
+2026-05_media/run_tinyqv_rcx_extract-C26FE.sh
+
+
+[05/21/2026 23:53] namibj
+The above linked script's output on designs like a TT submission or in this case, iirc Tholin's DAC hard macro, resulted in a valid netlist.
+
+
+[05/21/2026 23:54] namibj
+I'm positive the prior version which to my eye had identical tcl fed to magic aside from the obvious path/name differences produced functional ngspice and Xyce netlist.
+
+
+[05/21/2026 23:55] namibj
+thanks for your script
+
+
+[05/21/2026 23:56] namibj
+(I'm about to sleep though, so best of luck to you and big thanks already.)
+
+
+[05/21/2026 23:57] namibj
+As for the substrate connection, I think the sealring was isolated on all layers both to the inside and the outside of the chip.
+I think some ESD diodes in IO pads may also expect implicit substrate connectivity.
+
+
+[05/22/2026 00:00] rtimothyedwards_19428
+I am on travel from some time mid-day tomorrow, so I might not get back to work on it for a few days.
+
+
+[05/22/2026 00:00] namibj
+If it's just a 2-hour run I'd at least strongly consider throwing mozilla's rr at it, fast forward in the replay to the missing rptr notice via probably a breakpoint set to where the notice is emitted, then use reverse-continue with data watchpoints on the allocations that got freed before.
+Your deep knowledge ofc may bring a more specific path of debugging that to light.
+
+
+[05/22/2026 00:05] namibj
+That's no problem gives me time to port my MCML VCO efforts from sky130A to gf180mcuD to see where the speeds and sizing are approximately at; such that I can get the PCell topology adjusted and at least hope to make it for the RUn2 deadline even though I failed to make it for the ttsky26a deadline (barely got two instances of a DNL-compensatable-via-digital-calibration DAC onto it, instead of the supposed DAC-tuned PLL/VCO core).
+
+
+[05/22/2026 16:07] rtimothyedwards_19428
+I pushed another update in which I got rid of the calls to DBPaint() and DBErase() in favor of simpler lower-level subroutines that do the same thing more efficiently.  The total time to process the quarter chip is now down to just under an hour and a half.  The process is now spending much of the time doing connectivity searches, which is already highly optimized, so I don't think there will be too much further opportunity to cut significant percentages off of the processing time.
+
+
+[05/22/2026 17:29] namibj
+ok
+
+
 ==============================================================
-Exported 88 message(s)
+Exported 170 message(s)
 ==============================================================

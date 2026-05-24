@@ -705,3 +705,78 @@ I'd pivot to that for the full-die PEX trials to not have to wait so many hours 
 "691780627338625077","rebelmike","2026-05-20T18:39:44.8660000+00:00","Yep - ah Discord file upload limit","",""
 "691780627338625077","rebelmike","2026-05-20T18:40:59.6370000+00:00","See https://github.com/MichaelBell/ws01-tinyQV/releases/tag/ws-run1","",""
 "691780627338625077","rebelmike","2026-05-20T18:43:08.9860000+00:00","I don't think I have the full build results saved off, but you should be able to re-run the flow just by cloning the repo and running it with `SLOT=0p5x0p5 make librelane`","",""
+"262706220073222144","namibj","2026-05-20T19:24:14.3440000+00:00","Thanks the gds is all I need here; I'll just edit and flatten it and then it'll be fine.","",""
+"262706220073222144","namibj","2026-05-20T19:24:46.3880000+00:00","(I just mess with labels)","",""
+"262706220073222144","namibj","2026-05-20T19:29:02.5860000+00:00","I'd used https://wormhole.app/ with great success so far just saying","",""
+"262706220073222144","namibj","2026-05-20T20:19:39.6210000+00:00","ahh great; do the VSS and VDD pads have distinguishing names by chance?","",""
+"262706220073222144","namibj","2026-05-20T20:21:58.4590000+00:00","I hope it's one per side I'll just name them by cardinal directions if so.","",""
+"691780627338625077","rebelmike","2026-05-20T20:52:07.5100000+00:00","Yep, one per side, allegedly dvss_pads[3:0] and dvdd_pads[3:0]","",""
+"691780627338625077","rebelmike","2026-05-20T20:53:00.5210000+00:00","Ah although maybe they don't actually end up with unique names - not sure what librelane does there","",""
+"262706220073222144","namibj","2026-05-20T21:00:19.2280000+00:00","Honestly if you can tell me what the name in which side is that'd solve it for me (I'll hand-assing them after having wiped all other text from the gds).","",""
+"262706220073222144","namibj","2026-05-20T21:01:06.0760000+00:00","It thinks they are shorted because it ignores PEX so it gives them the name they probably have inside from the standard cell PDN.","",""
+"691780627338625077","rebelmike","2026-05-20T21:02:47.6000000+00:00","It's from https://github.com/MichaelBell/ws01-tinyQV/blob/main/librelane/slots/slot_0p5x0p5.yaml so 0 is south, 1 is east, 2 is north, 3 is west","",""
+"262706220073222144","namibj","2026-05-20T21:08:57.1630000+00:00","ahh yeah found here","",""
+"169786952432746498","mithro_","2026-05-21T01:19:53.9140000+00:00","Why not just power gate them?","",""
+"262706220073222144","namibj","2026-05-21T01:27:03.8720000+00:00","(My suggestion was intrusive power gating; choke off biasing of the differential error amplifier; clamp the push-pull output stage's bottom nmos's gate off; shouldn't need substantial size increase that way and performance impact should also be minimal (I'd guess less than if putting a series device into the output load path.)","",""
+"262706220073222144","namibj","2026-05-21T01:38:23.0260000+00:00","@Tim 'mithro' Ansell Do you happen to have any ideas for how to salvage the remaining taped-out chips? I'd have thought to carefully add heat-extraction if they are already bonded and use an expansion-matched carrier (AlN?) as the die attach surface or glue a heat spreader that'll be exposed at the top to the active area of the die before it gets the post-COB-bonding epoxy drop.
+
+(I'm mostly asking because I've been looking towards more power-dense usage than what appears to have mostly been taped-out recently, and am worried now that a mere ~1.2W static draw in a corner of a full slot has been shown to break/crack.)","",""
+"169786952432746498","mithro_","2026-05-21T02:59:35.3970000+00:00","@Tholin has ~300 bare die they can play with.","",""
+"262706220073222144","namibj","2026-05-21T03:00:56.5650000+00:00","Good at least; I thought you might have some suggestions for less-cheap but more-thermally-capable packaging?","",""
+"169786952432746498","mithro_","2026-05-21T03:04:51.1520000+00:00","@namibj - Maybe talk to @stuart? He is looking for more customers for custom wire bonding stuff.","",""
+"262706220073222144","namibj","2026-05-21T03:05:26.8890000+00:00","ahh thanks!","",""
+"169786952432746498","mithro_","2026-05-21T03:07:48.6530000+00:00","@namibj - I'm also very interested in seeing how we could do direct bonding from the die to the PCB rather than wire bonding.","",""
+"262706220073222144","namibj","2026-05-21T03:08:22.3000000+00:00","yeah","",""
+"262706220073222144","namibj","2026-05-21T03:27:49.4780000+00:00","https://www.ihp-solutions.com/1/services/packaging-and-vas/
+> IHP Solutions offers various value added services for the ASICs produced at the IHP **and for chips coming from customers directly.**
+emphasis mine.
+
+I am not in a position of vaguely enough authority to ask, but I am offering my German skills if they'd be relevant.
+We could ask them with a budget range of ""we'd be looking at spending between X and Y mostly depending on the details (and how much of the cost is per-die vs. per-reticle/per-maskset) to get better packaging for Run3, it's on top of this base GF180mcuD configuration, this many wafers, please let us know if you are interested and if you are, please provide some general proposals for what packaging options we'd be looking at within the budget"".
+
+""If there are requirements to design automation and open-PDK support to prevent costly engineering time during design submission, we would be open to enabling tooling to avoid prohibitive per-die NRE costs.""","",""
+"262706220073222144","namibj","2026-05-21T03:31:29.0710000+00:00","I'll port the DRC deck to open tooling if I have to for this.
+We already managed to automate the die sorter anyways....","",""
+"1140876793298047028","mavmaster","2026-05-21T07:09:06.5880000+00:00","IHP published pricings in the order of 6500 eur for bumping to 18.5k eur for CU pillar. This was per MPW slot purchased however there might be potential for in house bumping and I am currently looking into testing CU or AL pillar deposition after receive run 2 GF dies. Flip chip bonding would be really nice for the higher power / density / mmIC projects my team is working on","",""
+"262706220073222144","namibj","2026-05-21T08:19:29.5900000+00:00","How do you mean, ""[potential for] in house bumping""?
+
+My expectation would be that if there's a way to do it wafer-scale but sufficiently selective to not be a problem for those wafer.space customers who's plans are incompatible with fcBGA (even if on a fan-out package like how the current COB is and how vaguely modern CPU/southbridge LGA/BGA packages use a high density FR4-looking PCB to fan out chip-scale bump pitch to low-cost 4-layer-desktop-mainboard compatible coarse pitch, leaving the back of the die exposed for lower-power chips that don't warrant a an indium soldered metal IHS), then some kind of bumping should be practical at cost similar to the current COB+wire-bonding, but not counting the then-necessary high-density fan-out board/interposer that would cope with the 200~300 μm ball pitch needed to match the current setup's IO count.
+
+And beyond that, I also just generally question the selection of this NIH-smelling COB ""solution"" vs. a classic TQFP with a vaguely-decent exposed-bottom thermal pad, overmolded in classic black filled epoxy perhaps if such available using the 150 or 175 C Tj rated epoxy they use on integrated power stages.
+The bonding should be same complexity as current COB bonding, and the overmolding would merely have to adjust fill volume to the 2 (technically 3) die sizes in use.
+Rough estimation suggests feasible R_th(junction-to-case) assuming a 5mm² hot spot zone of 0.5~1 `°C/W` so essentially trivial contribution and also fairly easy to cool after it's spread a bit from the copper slab it's glued to.","",""
+"220639106915368960","tholin","2026-05-21T20:09:46.5270000+00:00","One of the secrets on my chips that I guess I’ll reveal since I won’t be sending these hot dies to anyone anytime soon, is one of the test patterns you can get out of the NTSC video generator test. That’s why the NTSC generator macro takes up 10% of the core area. It has to encode this whole image.","2026-05_media/20260513_190005-37B31.jpg,2026-05_media/20260513_190015-8541D.jpg","💜 (3)"
+"220639106915368960","tholin","2026-05-21T20:10:54.7980000+00:00","This is the most inefficient way in which I have ever stored an image file","",""
+"262706220073222144","namibj","2026-05-21T20:18:53.5700000+00:00","And here I thought you were doing some kind of fancy subcarrier DDS math, though tbf you did mention it's not color NTSC.","",""
+"596068704471482370","246tnt","2026-05-21T20:41:07.6940000+00:00","@Tholin Are you feeding them 5V or 3.3V btw ?","",""
+"220639106915368960","tholin","2026-05-21T20:41:36.5180000+00:00","5V","",""
+"262706220073222144","namibj","2026-05-21T20:49:51.4890000+00:00","> 18–32-gauge needles were tested.
+QS815-SD
+https://www.indium.com/products/sintering-materials/pressureless-sintering/quicksinter/
+Almost forgot some of these formulations are capable of sufficiently selective coverage to play LGA soldering.","",""
+"262706220073222144","namibj","2026-05-21T20:50:10.7610000+00:00","> and will bond strongly to die with Ag, Au, or
+> Cu surfaces depending on sintering atmosphere and profile.","",""
+"262706220073222144","namibj","2026-05-21T20:50:30.7720000+00:00","Biggest issue is that top metal can't be Al.","",""
+"1447738536638943333","dorythecat_v2","2026-05-21T21:01:57.8160000+00:00","relatable symbols and an avali, peak test pattern","",""
+"262706220073222144","namibj","2026-05-21T21:15:06.5140000+00:00","It's a static pattern, right? I e., the signal waveform is supposed to repeat every frame?","",""
+"220639106915368960","tholin","2026-05-21T21:16:38.4160000+00:00","It is","",""
+"262706220073222144","namibj","2026-05-21T21:21:37.3670000+00:00","When PEX actually works I wanna try to throw Xyce's HB analysis at it.","",""
+"262706220073222144","namibj","2026-05-21T21:22:05.5100000+00:00","If it works at all it's going to be gloriously horrific.","",""
+"262706220073222144","namibj","2026-05-21T21:22:17.5970000+00:00",":ferrisCatSneaky:","",""
+"262706220073222144","namibj","2026-05-21T21:23:43.9770000+00:00","Do you use a pixel clock in there? If so, how fast or how many pixels per line?","",""
+"262706220073222144","namibj","2026-05-21T21:29:57.6910000+00:00","Hmmm, about 534 (ish) pixel ""clocks"" per line....
+""Only"" 140k (ish) harmonics of the frame (not field!) rate until hitting the luma bandwidth cap 🙁","",""
+"220639106915368960","tholin","2026-05-21T21:45:29.5600000+00:00","I’m using these numbers","2026-05_media/image-B7182.png",""
+"220639106915368960","tholin","2026-05-21T21:45:58.9530000+00:00","So these are the pixel clocks","",""
+"169786952432746498","mithro_","2026-05-22T05:50:43.2920000+00:00","@namibj - If you can find a way to do TQFP for under $1.50 USD all up when doing only 1000 units, then I would be extremely happy. The cheapest I have found today ends up being ~$10 USD per chip.","",""
+"169786952432746498","mithro_","2026-05-22T05:54:53.3840000+00:00","iHP bumping is not compatible with something like wafer.space because they need to do it on a whole wafer and can't handle cut die.
+
+You can purchase full wafers from wafer.space (for $2k USD each) and have iHP do the bumping but you are only getting ~28 of your die per wafer -- which means you are starting at a cost of ~$70 USD per die.","",""
+"262706220073222144","namibj","2026-05-22T13:39:05.9340000+00:00","My thought was to, if that's possible, do it in a way that doesn't preclude the non-bumped dies from wire bonding.
+
+Though yeah I should look more at the low temperature sintering offerings out there, I have hope some of them happens to be selective enough to work. Targeting around 0.2~0.4 mm pitch.
+
+Should only require a top metal plating at least.","",""
+"210834917125390336","simi150500","2026-05-23T14:09:00.6370000+00:00","To present our students with their chips, I played around with resin for the first time. I think the resin cubes turned out quite well. Sure, there's still room for improvement, but for my first time working with resin, I think they're pretty okay. 🙂","2026-05_media/resin_cubes-1D4EE.jpg","💜 (3),🧊 (2)"
+"210834917125390336","simi150500","2026-05-23T14:11:46.2660000+00:00","I think for the ""display only dies"", this is the ideal solution to give away or display somewhere.","",""
+"756011607603019777","anfroholic","2026-05-23T14:41:09.6290000+00:00","Those look great!!","","🙌 (1)"

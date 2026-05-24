@@ -164,3 +164,98 @@ Can't wait to see you bring it up. Don't hesitate ever to message, I could be in
 "169786952432746498","mithro_","2026-05-18T15:54:50.0670000+00:00","@Lauri seems to have made some great progress on the wire bond connectivity tester!","","👍 (1)"
 "169786952432746498","mithro_","2026-05-18T22:17:39.0210000+00:00","@Lauri - The number of pads @ https://mithro.github.io/gf180mcu-project-template/ are now correct for the 1x1 default.","","👍 (1)"
 "967498101566873620","zorin1384","2026-05-20T15:20:04.8630000+00:00","Is there anyone looking for a developer?","",""
+"691780627338625077","rebelmike","2026-05-20T22:35:14.5690000+00:00","I've been having some luck routing the tall thin one (0p5x1) by having the die at 45 degrees:","2026-05_media/image-9F41B.png","💜 (1)"
+"756011607603019777","anfroholic","2026-05-20T22:35:53.3320000+00:00","That's interesting","",""
+"691780627338625077","rebelmike","2026-05-20T22:37:20.2730000+00:00","Ended up breaking compatibility with some of the TinyQV pins, but none of the important ones - so bidir[27:0], in[1:0], clk and rst_n all match the 1x1","",""
+"756011607603019777","anfroholic","2026-05-20T22:38:06.7130000+00:00","Oh, is this one also only 2 layers?","",""
+"691780627338625077","rebelmike","2026-05-20T22:38:16.4920000+00:00","Yeah","",""
+"756011607603019777","anfroholic","2026-05-20T22:39:14.9730000+00:00","Would you mind setting your min trace spacing to .103mm please. 
+The last boards I had to change a bit as the boardhouse complained some parts were <.1mm 
+I don't think you did anything wrong. I checked and DRC was clean...","",""
+"691780627338625077","rebelmike","2026-05-20T22:39:17.4590000+00:00","I guess the one thing I haven't considered yet is whether I can connect all the grounds, but hopefully I'll work something out 😄","","😂 (1)"
+"756011607603019777","anfroholic","2026-05-20T22:39:55.4500000+00:00","haha, if it has to be 4 I don't think that's the end of the world, and if that's the case you can also disregard the previous statement.","",""
+"756011607603019777","anfroholic","2026-05-20T22:40:16.3140000+00:00","4layer spec is .09 so we're all clear there.","",""
+"691780627338625077","rebelmike","2026-05-20T22:41:00.1780000+00:00","Will do.  Also for the last one I had hole to hole 0.25mm, but I double checked the JLC rules and they are 0.2 so I tuned that down to 0.2, does that sound ok?  Maybe should put a safety fudge on that too?","",""
+"756011607603019777","anfroholic","2026-05-20T22:41:50.4760000+00:00","Wouldn't hurt. 
+Again, I have no idea why they failed us. let me get the pic, 1 sec","",""
+"756011607603019777","anfroholic","2026-05-20T22:43:08.3910000+00:00","This was what they sent us.","2026-05_media/ADKq_NYBZIQX9_SJ7-7V5ApjeDTOvFztbDKtXYYCXW-DD362.png",""
+"691780627338625077","rebelmike","2026-05-20T22:44:03.0250000+00:00","Hmm, was the problem via to track?","",""
+"756011607603019777","anfroholic","2026-05-20T22:44:38.2750000+00:00","4 layer is also an easy fix. 
+Also I have no idea, there are arrows everywhere it seems 🤣","","😆 (1)"
+"756011607603019777","anfroholic","2026-05-20T22:45:02.4460000+00:00","> Hi there,
+> 
+> Sorry to bother you, but we'd like to confirm with you an issue found when engineer making production file of your PCB order.
+> 
+> The spacing between traces is smaller than 0.1mm which is not enough to proceed, could we help you cancel this order?","",""
+"691780627338625077","rebelmike","2026-05-20T22:46:56.9880000+00:00","Weird, maybe some unit conversion caused some rounding issue?  Anyway, I'll go up to 0.103 - I've got a bunch of tightly packed traces but hopefully won't take too long to wiggle them apart!","",""
+"691780627338625077","rebelmike","2026-05-20T22:50:47.6880000+00:00","Cool, and good to know that 4 layer isn't a major issue - if we end up trying to do custom CoBs to match important pins on all the Racquet and TinyQV designs then routing might get even more fun!","",""
+"691780627338625077","rebelmike","2026-05-20T22:53:17.9160000+00:00","Anyway - I need to call it a night - I've pushed my WIP to https://github.com/MichaelBell/chip-on-board-wire-bonded-pcbs/tree/half-slot-dev if you want to take a look","",""
+"756011607603019777","anfroholic","2026-05-20T22:53:57.6900000+00:00","Thanks and goodnight","",""
+"262706220073222144","namibj","2026-05-20T23:03:26.8310000+00:00","Are you doing JLC? If so, I'd be surprised why you weren't just going for 4L in the first place.","",""
+"756011607603019777","anfroholic","2026-05-20T23:12:38.1910000+00:00","We are. That's why I was saying that as well. It's not much difference in price","",""
+"262706220073222144","namibj","2026-05-20T23:13:04.2070000+00:00","Yeah 4L for signal integrity!","",""
+"756011607603019777","anfroholic","2026-05-20T23:13:12.7760000+00:00","That as well","",""
+"262706220073222144","namibj","2026-05-21T03:04:27.1910000+00:00","In the interest of possibly understanding safety margins that were shown to not be that large by Tholin's DAC's OpAmps, do we have material datasheet information or enough detail that I could dig such up for the COBs?
+
+Notably, thermal expansion behavior of the board; how the chip is attached to the board; what the goop is that's covering the front of the die.","",""
+"691780627338625077","rebelmike","2026-05-21T21:46:15.2090000+00:00","So I was thinking - if the plan is to do custom CoB PCBs for TinyQV and the other run 1 half slot designs, then why are we trying to match the pinout for the default template on the generic half slot CoBs?  It would be better just to do the natural pinout and then fix the templates, rather than doing more complex than necessary routing and then locking that in for future runs.  It would also make sense to update all the CoBs to 4 layer for better signal integrity if the cost difference is negligible.
+That does obviously require the generic CoBs are completed reasonably quickly so that the template can be updated in plenty of time for the run 2 designs.  But I wouldn't suggest moving any of the power pads, clock or reset, and beyond that it is likely that pinout matching only matters if people are submitting the same design at different slot sizes, or expecting a common motherboard to work between different slot sizes on the basis of using pins with the same name in the template.
+Thoughts?","",""
+"756011607603019777","anfroholic","2026-05-21T21:48:10.5640000+00:00","I've been speaking with @Tim 'mithro' Ansell  and have been wanting to change things about the layout and the standard template and fix things at the beginning so it's harmonized across the sizes from the start.","",""
+"691780627338625077","rebelmike","2026-05-21T21:51:53.9620000+00:00","Cool, it probably wouldn't take long to work out what the natural pad order would be and adjust the default template, even if the routing isn't actually done at that point.  I know @Leo Moser (mole99) is planning to push a significant template update soon so if that is the direction maybe getting it done before that goes out would be a good idea","","👍 (1)"
+"169786952432746498","mithro_","2026-05-22T01:20:41.3650000+00:00","I'm sure a professional packaging house will happily provide you with all these details if you are willing to order at least 1 million units a month. 
+
+For $1.50 USD for <1000 units getting things like data sheets is pretty impossible most of the time.","",""
+"323371864074485771","mole99","2026-05-22T06:22:42.9210000+00:00","I agree, we should probably do all of the major changes now, so people only need to migrate once.
+
+@Andrew Wingate we should also change the pin order of the die to match the CoB, so that it doesn't need to be turned upside down. This should help reduce the confusion around the pinout, too.","",""
+"596068704471482370","246tnt","2026-05-22T06:42:31.9400000+00:00","Why not just rotate the CoB PCB by 180 deg ... ?","",""
+"596068704471482370","246tnt","2026-05-22T06:49:45.9020000+00:00","The pin number themselves already match, it's just on the PCB version / footprint, it was rotated so the first is on the top right instead of bottom left ...","",""
+"323371864074485771","mole99","2026-05-22T08:13:26.4300000+00:00","I thought there was a reason downstream why that isn't easily possible. @Andrew Wingate what was the reason again for rotating the die?
+Perhaps we should just change the PCB then. In any case, it should be consistent.","",""
+"756011607603019777","anfroholic","2026-05-22T18:57:13.7750000+00:00","@tnt @Leo Moser (mole99) 
+Just rotating won't fix the underlying problem. 
+We should strive to harmonize default across the different die sizes. 
+If we follow something like my diagrams here, you could design for any size die and still get a cob that matches all three (or four if the 1/4 slot follows)
+I prefer the fiducial to be up top because it follows convention","2026-05_media/image-C9BE3.png",""
+"220639106915368960","tholin","2026-05-22T18:59:59.6680000+00:00","I think the thing that made it confusing is that the die has a wafer.space logo on it and the PCB has a waver.space logo on it, but they are on *opposite corners* from each other","",""
+"220639106915368960","tholin","2026-05-22T19:00:18.3110000+00:00","Instead of it being used as a alignment marker","",""
+"756011607603019777","anfroholic","2026-05-22T19:01:37.5730000+00:00","Agreed that did not help.
+Not sure how it's getting announced, but if you want to have the COB 3 corners will be used by the defaults. 
+Qr code, ws logo, blank space. The Qr and the blank will be in opposing corners","",""
+"596068704471482370","246tnt","2026-05-22T19:30:40.4650000+00:00","@Andrew Wingate The current COB footprint on the PCB has the pad 0 in the top right, not top left ... so if you rotate it 180 it's fine and aligned with the die.","",""
+"756011607603019777","anfroholic","2026-05-22T19:30:57.0600000+00:00","That is correct","",""
+"596068704471482370","246tnt","2026-05-22T19:31:33.0490000+00:00","That was the main issue in assmbly ... people expected the die to be placed in the same way it was visible in the GDS.","",""
+"756011607603019777","anfroholic","2026-05-22T19:34:21.8190000+00:00","I believe what we have here is an [x y problem](https://en.wikipedia.org/wiki/XY_problem)
+To me, I think harmonizing across the die sizes is the bigger issue. If you're changing that, then also change the position of the fiducial so it cannot be confused.","",""
+"691780627338625077","rebelmike","2026-05-23T17:05:45.8830000+00:00","I think there are just two independent issues that should be addressed at the same time:
+- The CoB layout for half and quarter slots isn't finalised (and wasn't known when run 1 designs were done), so projects in different size slots can't match their pinouts.  Once the layout is known it would make sense to harmonize the default template (but most people will customize that anyway, so the important thing is knowing the mapping).
+- The wafer space logos are in different places on the board and the chip, which is confusing.  The proposal seems to be to change both board and template to have the logo (and therefore pin 1) in the top left, is that correct?  Obviously everyone will need to update their run 2 projects if that change is made.","",""
+"756011607603019777","anfroholic","2026-05-23T18:12:09.2910000+00:00","Agreed, and thanks for the work you've done with the half slot dies. 
+And to be clear, a lot of the changes I'm requesting are still just my opinion. 
+That said, having worked with a number of the downstream effects, someday we're likely to want to make changes.  
+Harmonizing the template across sizes will help with whatever next version of cob we may introduce, if people want to harmonize across different dip like packages, this would be easier. 
+Unless I'm mistaken, I think we collectively have enough information to make some better decisions across the board. And doing so sooner than later would be better.","","👍 (1)"
+"756011607603019777","anfroholic","2026-05-23T18:18:45.9380000+00:00","Also of note, any of these propositions are _only_ for people who are looking to get the standard COB packaging. 
+Other than that, anyone's still free to do whatever they like.","",""
+"691780627338625077","rebelmike","2026-05-23T18:20:37.5380000+00:00","On the half slot CoBs, I’ve now got distracted by a possible run 2 silicon project, but I could potentially do some more on those.","",""
+"756011607603019777","anfroholic","2026-05-23T18:21:53.5660000+00:00","The first panels of the p5x1 version should be back from the board house in the next few days if I understand correctly","","👍 (1)"
+"691780627338625077","rebelmike","2026-05-23T18:25:38.2430000+00:00","CoB work items I'm aware I could look at:
+- Make a simplified version of the 1x0p5 CoB, and also going up to 4 layers.  That would become the standard one going forwards
+- Have another go at the 0p5x1 - this time going for the simplest routing, and hence probably just having the chip in the obvious ""upright"" position rather than diagonal.  Again change to 4 layers.
+- Create run 1 TinyQV specific 1x0p5, 0p5x1 (and eventually 0p5x0p5) CoBs that match clk, SPI, UART to the pinout of the 1x1 GD03 Racquet project.","",""
+"691780627338625077","rebelmike","2026-05-23T18:27:10.0580000+00:00","Then there's:
+- Create a motherboard against that pinout that could be used by TinyQV or Racquet with the custom CoB
+- And also make a TinyQV motherboard for the original 1x0p5 CoB, if I'm likely to receive any chips bonded to it 🙂","",""
+"691780627338625077","rebelmike","2026-05-23T18:28:08.0400000+00:00","I would ideally like to get my hands on a TinyQV board a little before the run 2 deadline as I may be doing a revision so it would be good to know if anything didn't work","",""
+"756011607603019777","anfroholic","2026-05-23T18:33:17.2550000+00:00","> And also make a TinyQV motherboard for the original 1x0p5 CoB, if I'm likely to receive any chips bonded to it 
+As far as I understand, this is definitely the plan. I can't imagine it's not. I'm not in China anymore so am a bit more detached now. 
+I would bet something gets sent to you in about a week or two.","",""
+"691780627338625077","rebelmike","2026-05-23T18:36:39.2020000+00:00","Awesome!  There's two copies of TinyQV in this size slot so even if Tim would like a bunch in a custom CoB eventually there should be loads left still.  I'll put together a quick motherboard based on the pinout on the existing CoB so I have something to test with.","","💜 (1)"
+"691780627338625077","rebelmike","2026-05-23T19:17:25.4340000+00:00","Just to double check, is this the correct part for the mating connector?  https://www.lcsc.com/product-detail/C19089292.html","",""
+"691780627338625077","rebelmike","2026-05-23T19:17:52.0860000+00:00","The link from the https://github.com/wafer-space/chip-on-board-wire-bonded-pcbs/ readme is broken (maybe the part number has changed?)","",""
+"756011607603019777","anfroholic","2026-05-23T19:18:36.5770000+00:00","That is correct. 
+Keep in mind there are a number of different heights if that is of concern, and there are also other compatible brands as well.","","👍 (1)"
+"756011607603019777","anfroholic","2026-05-23T19:20:45.9080000+00:00","The link has been fixed. Thanks","","👍 (1)"
+"691780627338625077","rebelmike","2026-05-23T23:53:16.3280000+00:00","Doh.  Just finished routing my board.  For some reason at that point I decided to double check that the pinout of the mezzanine connector was correct.  And it's not - the pins on the connector in the motherboards project which I grabbed the footprint from are flipped compared to the CoB!  That doesn't matter for those simple breakouts because they just expose all the pins.  Incidentally I think that means the pin 1 marking on those simple breakout motherboards is actually against pin 70.","",""
+"691780627338625077","rebelmike","2026-05-24T08:14:42.5070000+00:00","Ah, this is the same thing that @BreakingTaps spotted last week!","",""

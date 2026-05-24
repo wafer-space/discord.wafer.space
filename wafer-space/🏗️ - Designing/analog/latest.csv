@@ -53,3 +53,16 @@ I wonder if you could throw a resistive element under a metal reflector layer an
 "220639106915368960","tholin","2026-05-20T12:04:37.4610000+00:00","And can still drive a 1K load","",""
 "220639106915368960","tholin","2026-05-20T12:05:25.8920000+00:00","Yes, I could still make it use less current by optimizing it to drive smaller loads, but this is a nice tradeoff","",""
 "220639106915368960","tholin","2026-05-20T12:05:35.1820000+00:00","My next chip is only going to have 2 of these anyways","",""
+"169786952432746498","mithro_","2026-05-21T01:26:17.4120000+00:00","@Tholin - Invest in power gating anyway 😛","","😂 (1)"
+"384390069412429834","polyfractal","2026-05-23T22:04:59.8180000+00:00","Welp, defeated by DRC again 🙃  
+
+working on a 1T pixel design based off of this paper (https://www.mdpi.com/1424-8220/9/1/131). Needs a floating P body which I figured you could build with DNWell -> LVPWell -> NPlus. Got everything dialed into minimum size that would make DRC happy, then arrayed it and discovered another DRC rule: LVPWell to LVPWell must be >1.4um. There goes my pixel density! 😂  
+
+Should still work, but I was hoping for <2-3um pitch so I could play with sub-diffraction limit oversampling stuff. But with that DRC limitation might as well make the active area larger and run it as a normal detector.","2026-05_media/sensors-09-00131f8-FBF72.png",""
+"384390069412429834","polyfractal","2026-05-23T22:07:26.2280000+00:00","better screenshot","2026-05_media/image-0CD69.png",""
+"262706220073222144","namibj","2026-05-24T01:51:42.4150000+00:00","Can't you use pmos devices instead and not need the dnwell?
+Also I still don't quite get where and how STI is litho'd. Like, what patterns/shapes even do that?
+
+Also, https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_07_04.html says:
+> Equi potential min space  0.86V","2026-05_media/image-48382.png",""
+"262706220073222144","namibj","2026-05-24T01:56:41.9470000+00:00","Also maybe look at https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_10_07.html it feels like you may be doing things similar to those restrictions depending on biasing conditions?","",""

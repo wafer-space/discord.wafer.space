@@ -39,6 +39,105 @@ You can disable DRC to make it go faster
 Certainly. Good work.
 
 
+[05/23/2026 18:07] zhekar1998
+Hi everyone.
+This is my first public open-silicon review package, so I’d really appreciate ASIC/PD feedback.
+I built a compact 3.3V-only GF180 I/O candidate library for wafer.space/open MPW experiments:
+- 160um pad depth
+- 100 signal pads
+- ~17.3mm² usable core area
+- local DRC/LVS completed
+- LEF/CDL/SPICE/Liberty/IBIS generation
+- preliminary ngspice PVT/DC characterization
+- config/package generation flow included
+The project was developed using an automated agent-in-the-loop exploration flow with manual review and verification.
+Main goal: reduce padframe overhead for small GF180 SoCs.
+Any comments on architecture, verification flow, pad strategy, or obvious mistakes would be greatly appreciated.
+https://github.com/Detronyx-labs/gf180_compact_3v3_io.git
+
+{Embed}
+https://github.com/Detronyx-labs/gf180_compact_3v3_io.git
+GitHub - Detronyx-labs/gf180_compact_3v3_io: Compact open GF180MCU ...
+Compact open GF180MCU 3.3V-only I/O pad library candidate for wafer.space MPW: transistor-level pad cells, LEF/CDL/SPICE/Liberty/IBIS views, compact 160um padframe, I3C-capable bidirectional pads, ...
+
+{Reactions}
+waferspace ferrisCatOwO
+
+[05/23/2026 21:43] zhekar1998
+@Tim Edwards  Hi Tim,
+I finally cleaned up and published my GF180MCU 3.3V 12T 2R2W SRAM macro experiment, which borrows from the transistor/layout concepts in your 512x8 reference.
+Repo (Apache-2.0): https://github.com/Detronyx-labs/gf180mcu-3v3-12t-2r2w-sram-macro
+To be completely honest, this is a fast AI-native / agentic design experiment — put together in about 3–4 days of intense work alongside Codex/LLM to see how far an automated open flow could push a custom multi-port layout. It is definitely not tapeout signoff collateral yet.
+If you (or anyone here) have a few minutes to glance at the README, I’d love to get a brutal reality check from actual silicon experts on a few things:
+Physical & Escape Routing: Are the 12T bitcell layout and shared M4/M5 escape assumptions physically defensible for GF180, or are we begging for major EM/IR-drop failures during simultaneous 2R/2W operations?
+Extraction limitations: My local Magic techfile isn't emitting capacitance coefficients for this flavor, so we’re stuck using an OpenRCX geometry-fallback proxy for timing (which throws warnings). How critical is it to escape open-source PEX fallbacks for a custom multiport memory structure like this?
+Prioritization: We have open items for full-macro LVS on row-edge boundaries, Liberty generation, and SNM/read-disturb sweeps. What should we absolute priority-target next to move this closer to tapeout-intent collateral?
+Your documentation was a lifesaver for understanding practical GF180 implementation, so any feedback on where this automated flow breaks down in the real world would be awesome.
+Thanks!
+
+{Embed}
+https://github.com/Detronyx-labs/gf180mcu-3v3-12t-2r2w-sram-macro
+GitHub - Detronyx-labs/gf180mcu-3v3-12t-2r2w-sram-macro: Open 12T 2...
+Open 12T 2R2W SRAM hard macro for GF180MCU 3.3V. Contribute to Detronyx-labs/gf180mcu-3v3-12t-2r2w-sram-macro development by creating an account on GitHub.
+2026-05_media/gf180mcu-3v3-12t-2r2w-sram-macro-F6DF1
+
+
+[05/24/2026 02:42] namibj
+I've been working with Tim to get full-die PEX into a state that's reasonably considered "functional" for smoke testing with Xyce; a major block to using it for fancier behavioral testing is the need to use a separate digital logic simulator (verilator or so? not sure what exactly tbh.) to find FF/latch states of the entire chip at the desired jump-off point for a transient test run, and associating those to the individual signals in the chip to synthesize `.nodeset` commands that force the chip into that desired starting state with an initial DC-operating-point solution, from where it'd then continue settling a DC solution from that moment on that doesn't have the signals pegged to hard VDD/VSS anymore, followed by a few clocks of progress to let at least a bit of PDN parasitics settle in, before then doing the actual state changes of desired concern.
+
+The extraction into Xyce-compatible PEX with _a lot_ of parasitic resistance and capacitance modeled is already working though; there's just a bit of scaling performance that seems to be left.
+
+If you want I can test extraction on that macro later.
+I need for that to work only top-level pins to be labeled; the rest will be flattened in KLayout if it's not already flattened, before I feed it to the PEX.
+
+
+[05/24/2026 03:05] namibj
+@Zhekar1998 Also if you're willing I'd love to talk a bit about how us two have been doing agentic "PCell" construction:
+- you with the 12t-2r2w gf180mcuD sram, using Codex,
+- I with so far a base MCML VCO cell but soon also the other base SerDes component cells (XOR2, MUX2, D-latch at least) on sky130A but with a bit of luck I can port that to gf180mcuD (in time to get a base demo VCO clocking an output MUX that's fed with a 16-wide PBRS-31 generator) into Run2), using Jules.
+
+
+[05/24/2026 03:33] namibj
+The gds from `gf180mcu_3v3_12t_2r2w_sram_512x8` seems to short the VSS PDN columns of the top level cell due to misalignment across the VSS colunn and ` c3_r1_rbl` of the 4x4 block.
+Please get at least basic LVS verification going before suggesting humans other than you yourself should look at the layout and give their opinions.
+Exceptions would apply if without having to open a zipfile I could easily see that you're disclaiming that level of integration LVS to have been done.
+
+
+[05/24/2026 03:42] zhekar1998
+Thanks! Its interesting because I do LVS all times in every runs,  I recheck it now
+
+
+[05/24/2026 03:47] zhekar1998
+Yes I find it. sorry I do some mistake in rules
+
+
+[05/24/2026 03:48] zhekar1998
+I'll repear it and double check it by hands today)))
+
+
+[05/24/2026 03:49] namibj
+I don't know how you do that LVS but I suggest you attempt to do it on a flattened layout to check the hierarchy isn't causing problems.
+It's hard to pin-point problems that way, but I'm pretty sure a basic abstracted-transistors (N/P and 3/4 pins) should be very much practical and a reliable check via graph-matching should be not-a-problem.
+
+
+[05/24/2026 03:52] namibj
+I have no idea what timezone you're sleep/wake cycle corresponds to; I am as mentioned interested in talking to you (German or English, your choice) about the flow and struggles of this agentic-scripted-cells flow.
+Just in case you may be interested, that is.
+
+
+[05/24/2026 03:53] zhekar1998
+I'm in GMT +2 but. I will be hapy to speak about this
+
+
+[05/24/2026 03:55] namibj
+oh same great then.
+I've got a bit of stuff to do offline but in like 2 hours I'd have time to talk.
+
+Sent you a DM for further discussing of that.
+
+{Reactions}
+👍
+
 ==============================================================
-Exported 6 message(s)
+Exported 18 message(s)
 ==============================================================

@@ -181,6 +181,45 @@ Yes, I could still make it use less current by optimizing it to drive smaller lo
 My next chip is only going to have 2 of these anyways
 
 
+[05/21/2026 01:26] mithro_
+@Tholin - Invest in power gating anyway 😛
+
+{Reactions}
+😂
+
+[05/23/2026 22:04] polyfractal
+Welp, defeated by DRC again 🙃  
+
+working on a 1T pixel design based off of this paper (https://www.mdpi.com/1424-8220/9/1/131). Needs a floating P body which I figured you could build with DNWell -> LVPWell -> NPlus. Got everything dialed into minimum size that would make DRC happy, then arrayed it and discovered another DRC rule: LVPWell to LVPWell must be >1.4um. There goes my pixel density! 😂  
+
+Should still work, but I was hoping for <2-3um pitch so I could play with sub-diffraction limit oversampling stuff. But with that DRC limitation might as well make the active area larger and run it as a normal detector.
+
+{Attachments}
+2026-05_media/sensors-09-00131f8-FBF72.png
+
+
+[05/23/2026 22:07] polyfractal
+better screenshot
+
+{Attachments}
+2026-05_media/image-0CD69.png
+
+
+[05/24/2026 01:51] namibj
+Can't you use pmos devices instead and not need the dnwell?
+Also I still don't quite get where and how STI is litho'd. Like, what patterns/shapes even do that?
+
+Also, https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_07_04.html says:
+> Equi potential min space  0.86V
+
+{Attachments}
+2026-05_media/image-48382.png
+
+
+[05/24/2026 01:56] namibj
+Also maybe look at https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_10_07.html it feels like you may be doing things similar to those restrictions depending on biasing conditions?
+
+
 ==============================================================
-Exported 38 message(s)
+Exported 43 message(s)
 ==============================================================
