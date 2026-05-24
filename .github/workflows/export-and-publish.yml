@@ -109,6 +109,19 @@ jobs:
           uv run python scripts/generate_navigation.py
         id: navigation
 
+      # GitHub rejects any file >100MB on push and Pages can't serve files
+      # that big, so a single oversized Discord attachment (e.g. a 215MB GDS
+      # dump) blocks the entire gh-pages deploy. Hold such files back from
+      # public/ — recording a metadata sidecar and rewriting the chat link to
+      # the file's servable LFS URL — so the deploy push always succeeds.
+      - name: Hold back oversized media
+        env:
+          PYTHONPATH: .
+        run: |
+          echo "Checking for oversized media (>50MB)..."
+          uv run python scripts/large_media.py
+        id: large_media
+
       - name: Check for changes
         id: check_changes
         run: |
