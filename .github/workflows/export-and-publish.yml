@@ -156,10 +156,17 @@ jobs:
           Updated by GitHub Actions on $(date -u +%Y-%m-%d\ %H:%M\ UTC)"
 
             # Pull with rebase to handle concurrent workflow updates.
-            # If rebase fails due to state.json conflict, the merge script
-            # resolves it deterministically; --no-edit reuses the original
-            # commit message so `git rebase --continue` doesn't need an editor.
-            if ! git pull --rebase origin master; then
+            # --autostash is required: the earlier "Hold back oversized media"
+            # step overwrites the LFS *pointer* files in large_media/ (the tree
+            # is checked out with lfs:false) with the real export bytes, leaving
+            # unstaged working-tree changes. Without --autostash, git refuses
+            # with "cannot pull with rebase: You have unstaged changes" and the
+            # deploy is skipped. autostash shelves those large_media/ changes
+            # during the rebase and restores them for the later LFS-preserve step.
+            # If rebase fails due to a state.json conflict, the merge script
+            # resolves it deterministically; GIT_EDITOR=true lets
+            # `git rebase --continue` reuse the message without an editor.
+            if ! git pull --rebase --autostash origin master; then
               echo "Rebase failed, attempting automatic merge of state.json..."
               uv run python scripts/merge_state.py
               git add state.json
