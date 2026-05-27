@@ -135,6 +135,24 @@ jobs:
             echo "has_changes=true" >> $GITHUB_OUTPUT
           fi
 
+      # Publish the site BEFORE mutating master. Deploying gh-pages must not
+      # depend on the state.json commit succeeding — the commit step rebases
+      # onto master and has historically failed (rebase/autostash/editor),
+      # which, when it ran first, skipped the deploy and froze the live site
+      # for days. Same principle the LFS-preserve step already follows: do the
+      # user-visible publish first, then the best-effort master bookkeeping.
+      - name: Deploy to GitHub Pages
+        if: steps.check_changes.outputs.has_changes == 'true'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          publish_branch: gh-pages
+          user_name: 'Discord Archive Bot'
+          user_email: 'actions@github.com'
+          commit_message: 'chore: deploy updated logs'
+        id: deploy
+
       - name: Commit state.json to main
         if: steps.check_changes.outputs.has_changes == 'true'
         run: |
@@ -177,18 +195,6 @@ jobs:
           else
             echo "No changes to state.json, skipping commit"
           fi
-
-      - name: Deploy to GitHub Pages
-        if: steps.check_changes.outputs.has_changes == 'true'
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
-          publish_branch: gh-pages
-          user_name: 'Discord Archive Bot'
-          user_email: 'actions@github.com'
-          commit_message: 'chore: deploy updated logs'
-        id: deploy
 
       # Preserve the held-back oversized media in Git LFS on master so the bytes
       # survive even if Discord's CDN copy expires. This runs AFTER the deploy
