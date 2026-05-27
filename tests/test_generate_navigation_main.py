@@ -278,6 +278,45 @@ def test_organize_data_channel_without_threads_has_empty_thread_list() -> None:
         assert chan["total_messages"] == 3  # noqa: PLR2004
 
 
+def test_organize_data_channel_display_name_is_leaf_not_full_path() -> None:
+    """A channel nested under a category keeps the full path as its URL key
+    (`name`) but exposes a `display_name` of just the leaf segment and a
+    `category` of the parent. Without this the UI renders "#Information/general"
+    instead of "#general"."""
+    exports = [
+        {
+            "server": "wafer-space",
+            "channel": "Information/general",
+            "date": "2026-04",
+            "path": "wafer-space/Information/general/2026-04/2026-04.html",
+        },
+        {
+            "server": "wafer-space",
+            "channel": "welcome",
+            "date": "2026-04",
+            "path": "wafer-space/welcome/2026-04/2026-04.html",
+        },
+    ]
+    with tempfile.TemporaryDirectory() as tmpdir:
+        public_dir = Path(tmpdir) / "public"
+        public_dir.mkdir()
+        _write_json(
+            public_dir, "wafer-space/Information/general/2026-04/2026-04.json", "general", 2
+        )
+        _write_json(public_dir, "wafer-space/welcome/2026-04/2026-04.json", "welcome", 1)
+
+        channels = organize_data(exports, public_dir)["wafer-space"]["channels"]
+
+        nested = channels["Information/general"]
+        assert nested["name"] == "Information/general"  # URL key keeps full path
+        assert nested["display_name"] == "general"  # what the UI shows
+        assert nested["category"] == "Information"
+
+        top = channels["welcome"]
+        assert top["display_name"] == "welcome"
+        assert top["category"] == ""
+
+
 def test_organize_data_handles_empty_exports() -> None:
     """Test that organize_data handles empty exports list"""
     with tempfile.TemporaryDirectory() as tmpdir:

@@ -374,10 +374,18 @@ def _is_thread_path(p: str, path_set: set[str]) -> bool:
 
 
 def _build_channel_entry(name: str, raw_archives: list[dict]) -> dict:
-    """Build a channel/thread stats dict from its raw per-month archives."""
+    """Build a channel/thread stats dict from its raw per-month archives.
+
+    `name` is the full export path (e.g. "Information/general") and is the
+    URL key. `display_name` is the leaf segment shown in the UI ("general")
+    and `category` is the parent path ("Information", or "" when top-level)
+    so templates don't render the category prefix into the channel title.
+    """
     archives, archive_count, total = _finalize_archives(raw_archives)
     return {
         "name": name,
+        "display_name": name.split("/")[-1],
+        "category": _parent_path(name) or "",
         "archives": archives,
         "archive_count": archive_count,
         "message_count": archives[0]["message_count"] if archives else 0,
@@ -693,6 +701,9 @@ def main() -> None:  # noqa: C901, PLR0912, PLR0915  # Main orchestration functi
                 for thread in threads:
                     thread_view = {
                         "name": thread["path"],
+                        "display_name": thread["title"],
+                        "category": _parent_path(thread["path"]) or "",
+                        "is_thread": True,
                         "title": thread["title"],
                         "threads": [],
                     }

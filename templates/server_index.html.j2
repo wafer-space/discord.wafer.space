@@ -20,7 +20,8 @@
             <h2>Channels</h2>
             {% for channel in channels %}
             <div class="channel-card">
-                <h3><a href="/{{ server.name }}/{{ channel.name }}/index.html">{% if channel.is_forum %}📋 {% else %}#{% endif %}{{ channel.name }}</a></h3>
+                <h3><a href="/{{ server.name }}/{{ channel.name }}/index.html">{% if channel.is_forum %}📋 {% else %}#{% endif %}{{ channel.display_name or channel.name }}</a></h3>
+                {% if channel.category %}<p class="category">in {{ channel.category }}</p>{% endif %}
                 {% if channel.is_forum %}
                 <p class="stats">Forum with discussion threads</p>
                 <p><a href="/{{ server.name }}/{{ channel.name }}/index.html">View all threads →</a></p>
