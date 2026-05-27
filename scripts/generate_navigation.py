@@ -399,10 +399,40 @@ def _parent_path(p: str) -> str | None:
     return p.rsplit("/", 1)[0] if "/" in p else None
 
 
-def _is_thread_path(p: str, path_set: set[str]) -> bool:
-    """A path is a thread iff its parent path is itself an exported path."""
-    parent = _parent_path(p)
-    return parent is not None and parent in path_set
+def _category_paths(leaf_paths: set[str]) -> set[str]:
+    """Return the depth-1 prefixes that are categories (not channels/threads).
+
+    Discord categories are organizational containers: they never hold
+    messages, so they never have a month export of their own. Structurally
+    that means a top-level (single-segment) path that is a *prefix* of some
+    exported leaf but is NOT itself an exported leaf. Decoding this lets us
+    tell "Category/channel" apart from "forum/thread" without an API call.
+    """
+    categories: set[str] = set()
+    for p in leaf_paths:
+        first = p.split("/", 1)[0]
+        if "/" in p and first not in leaf_paths:
+            categories.add(first)
+    return categories
+
+
+def _channel_level_path(leaf: str, categories: set[str]) -> str:
+    """Return the channel/forum portion of an exported `leaf` path.
+
+    Strips a leading category segment, then the channel/forum is the first
+    remaining segment (under a category that's `category/channel`). Anything
+    deeper than the channel/forum is a thread; this returns just the
+    channel/forum prefix, which is the nav entry the thread belongs to.
+
+    Examples (with categories = {"Information"}):
+      Information/general                     -> Information/general   (channel)
+      Information/questions                   -> Information/questions (forum)
+      Information/questions/antenna-error     -> Information/questions (thread's forum)
+      welcome                                 -> welcome              (uncategorized channel)
+    """
+    segs = leaf.split("/")
+    keep = 2 if segs[0] in categories else 1
+    return "/".join(segs[:keep])
 
 
 def _build_channel_entry(name: str, raw_archives: list[dict]) -> dict:
@@ -428,10 +458,12 @@ def _build_channel_entry(name: str, raw_archives: list[dict]) -> dict:
 def organize_data(exports: list[dict], public_dir: Path) -> dict:
     """Organize exports into servers → channels, with threads nested.
 
-    A path is a THREAD when its parent path is *also* an exported path
-    (i.e., the parent is itself a channel with its own month exports).
-    Threads are nested under their parent channel's `threads` list rather
-    than listed as top-level channels. Everything else is a CHANNEL.
+    Classification is by category-aware depth (see `_category_paths` /
+    `_channel_level_path`): a leaf path resolves to a channel/forum level,
+    and anything deeper than that level is a THREAD nested under it.
+    Crucially this nests threads under FORUM channels too — a forum has no
+    month export of its own, so we SYNTHESIZE its entry from its threads
+    rather than dropping the threads in as top-level channels.
 
     Each channel dict gains: `archives`, `archive_count`, `message_count`
     (newest archive), `total_messages` (sum across months), and `threads`
@@ -454,6 +486,7 @@ def organize_data(exports: list[dict], public_dir: Path) -> dict:
     servers_data: dict[str, Any] = {}
     for server, paths in raw.items():
         path_set = set(paths)
+        categories = _category_paths(path_set)
         server_data: dict[str, Any] = {
             "name": server,
             "display_name": server.replace("-", " ").title(),
@@ -461,18 +494,20 @@ def organize_data(exports: list[dict], public_dir: Path) -> dict:
             "last_updated": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
         }
 
-        # Real channels first (a path whose parent is NOT an exported path).
-        for path in paths:
-            if _is_thread_path(path, path_set):
-                continue
-            entry = _build_channel_entry(path, paths[path]["archives"])
+        # Top-level entries = every distinct channel/forum level. A forum has
+        # no export of its own, so its entry is synthesized with empty
+        # archives; a regular channel reuses its own exported archives.
+        for cpath in {_channel_level_path(p, categories) for p in paths}:
+            raw_archives = paths[cpath]["archives"] if cpath in paths else []
+            entry = _build_channel_entry(cpath, raw_archives)
             entry["threads"] = []
-            server_data["channels"][path] = entry
+            server_data["channels"][cpath] = entry
 
-        # Attach threads to their parent channel.
+        # Anything deeper than its channel level is a thread; nest it.
         for path in paths:
-            if not _is_thread_path(path, path_set):
-                continue
+            cpath = _channel_level_path(path, categories)
+            if path == cpath:
+                continue  # this leaf IS the channel/forum, not a thread
             entry = _build_channel_entry(path, paths[path]["archives"])
             newest_date = entry["archives"][0]["date"] if entry["archives"] else ""
             thread = {
@@ -482,9 +517,7 @@ def organize_data(exports: list[dict], public_dir: Path) -> dict:
                 "title": _read_channel_title(public_dir, server, path, newest_date),
                 "last_activity": newest_date,
             }
-            parent_chan = server_data["channels"].get(_parent_path(path))
-            if parent_chan is not None:
-                parent_chan["threads"].append(thread)
+            server_data["channels"][cpath]["threads"].append(thread)
 
         # Sort each channel's threads newest-activity first.
         for chan in server_data["channels"].values():
