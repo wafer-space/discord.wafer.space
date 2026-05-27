@@ -141,6 +141,37 @@ def scan_completed_months(channel_dir: Path) -> set[str]:
     return completed
 
 
+# An empty DCE per-month JSON (0 messages) is the guild/channel/dateRange
+# scaffold only — measured at ~487-522 bytes on the live archive. A month
+# with even one message is multiple KB. 1500 bytes cleanly separates the
+# two without parsing the file (a cheap os.stat), which matters when
+# ranking hundreds of channels/threads by neediness every run.
+EMPTY_MONTH_JSON_MAX_BYTES = 1500
+
+
+def count_nonempty_months(channel_dir: Path) -> int:
+    """Count months in `channel_dir` whose JSON is larger than an empty export.
+
+    Used to rank backfill priority: an entry with 0 non-empty months is a
+    "starved" channel/thread (only an empty current-month export exists)
+    and must be backfilled before entries that already have real data.
+    Uses file size (os.stat) rather than parsing — fast at scale.
+    """
+    if not channel_dir.exists() or not channel_dir.is_dir():
+        return 0
+    count = 0
+    for entry in channel_dir.iterdir():
+        if not entry.is_dir() or not is_month_dir_name(entry.name):
+            continue
+        json_file = entry / f"{entry.name}.json"
+        try:
+            if json_file.stat().st_size > EMPTY_MONTH_JSON_MAX_BYTES:
+                count += 1
+        except OSError:
+            continue
+    return count
+
+
 def _json_is_month_pure(json_file: Path, month: str) -> bool:
     """Return True iff every message in the JSON is timestamped within `month`.
 

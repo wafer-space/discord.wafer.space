@@ -14,6 +14,7 @@ from typing import Any
 from scripts.channel_classifier import ChannelType, classify_channel, sanitize_thread_name
 from scripts.config import load_config
 from scripts.months import (
+    count_nonempty_months,
     current_month_utc,
     month_bounds,
     month_range_iter,
@@ -56,6 +57,33 @@ class MediaConfig:
     reuse_media: bool = False
 
 
+def _channel_identity(
+    channel: dict[str, str | None],
+    channel_type: ChannelType,
+    channel_id: str,
+    channel_path_map: dict[str, str],
+) -> tuple[str, str]:
+    """Pure (no filesystem) → (safe_name, forum_name) for a channel/thread.
+
+    `forum_name` is the parent forum's full hierarchical path for threads,
+    or "" for regular channels. Used both to place exports and to derive
+    the public path when ranking backfill priority (so it must NOT mkdir).
+    """
+    if channel_type == ChannelType.THREAD:
+        forum_name_raw = channel.get("parent_id")
+        forum_name_simple: str = forum_name_raw if forum_name_raw else "unknown-forum"
+        # If forum "cob" is inside "🏗️ - Designing", path_map maps
+        # "cob" -> "🏗️ - Designing/cob".
+        forum_full_path = channel_path_map.get(forum_name_simple, forum_name_simple)
+        channel_name_raw = channel.get("name")
+        safe_name = sanitize_thread_name(
+            channel_name_raw if channel_name_raw else "unknown", channel_id
+        )
+        return safe_name, forum_full_path
+    channel_name_raw = channel.get("name")
+    return (channel_name_raw if channel_name_raw else "unknown"), ""
+
+
 def _determine_export_location(
     channel: dict[str, str | None],
     channel_type: ChannelType,
@@ -65,39 +93,17 @@ def _determine_export_location(
 ) -> tuple[str, Path, str]:
     """Determine the per-channel export directory and the safe name.
 
-    Returns a tuple of (safe_name, channel_export_dir, forum_name):
-
-      - `safe_name`: filesystem-safe identifier for this channel/thread
-      - `channel_export_dir`: the directory inside `exports/` where this
-        channel's per-month files (`{YYYY-MM}.html` etc.) will be written.
-        For regular channels this is `exports/server/{channel}/`; for
-        threads it is `exports/server/{forum_path}/{thread}/`.
-      - `forum_name`: the parent forum's full path for threads, or ""
+    Returns (safe_name, channel_export_dir, forum_name). For regular
+    channels the dir is `exports/server/{channel}/`; for threads it is
+    `exports/server/{forum_path}/{thread}/`. Creates the directory.
     """
+    safe_name, forum_name = _channel_identity(channel, channel_type, channel_id, channel_path_map)
     if channel_type == ChannelType.THREAD:
-        forum_name_raw = channel.get("parent_id")
-        forum_name_simple: str = forum_name_raw if forum_name_raw else "unknown-forum"
-
-        # Look up the full hierarchical path for the forum
-        # If forum is "cob" inside "🏗️ - Designing", path_map will have "cob" -> "🏗️ - Designing/cob"
-        forum_full_path = channel_path_map.get(forum_name_simple, forum_name_simple)
-
-        channel_name_raw = channel.get("name")
-        safe_name = sanitize_thread_name(
-            channel_name_raw if channel_name_raw else "unknown", channel_id
-        )
-        # Per-month files go into exports/server/forum/thread-name/
-        thread_export_dir = server_dir / forum_full_path / safe_name
-        thread_export_dir.mkdir(parents=True, exist_ok=True)
-        return safe_name, thread_export_dir, forum_full_path
+        channel_export_dir = server_dir / forum_name / safe_name
     else:
-        # Regular channel
-        channel_name_raw = channel.get("name")
-        channel_name = channel_name_raw if channel_name_raw else "unknown"
-        # Per-month files go into exports/server/channel-name/
-        channel_export_dir = server_dir / channel_name
-        channel_export_dir.mkdir(parents=True, exist_ok=True)
-        return channel_name, channel_export_dir, ""
+        channel_export_dir = server_dir / safe_name
+    channel_export_dir.mkdir(parents=True, exist_ok=True)
+    return safe_name, channel_export_dir, forum_name
 
 
 def _public_channel_dir(
@@ -350,6 +356,63 @@ class _TimeBudget:
         return int(time.monotonic() - self.start)
 
 
+def _backfill_priority_key(
+    channel: dict[str, str | None],
+    channel_type: ChannelType,
+    server_key: str,
+    channel_path_map: dict[str, str],
+    public_dir: Path,
+) -> tuple[int, str]:
+    """Sort key for the backfill phase: starved entries first.
+
+    Returns (non_empty_month_count, channel_id). Sorting ascending puts
+    channels/threads with the LEAST real data first, so threads showing
+    only an empty current-month export ("empty threads" the user sees)
+    get their historical months backfilled before time is spent on
+    already-rich channels. Within a tie, sort by channel id for stable
+    ordering across runs.
+    """
+    chan_id = channel.get("id") or ""
+    if not chan_id:
+        return (0, chan_id)
+    try:
+        safe_name, forum_name = _channel_identity(channel, channel_type, chan_id, channel_path_map)
+    except Exception:  # noqa: BLE001 — never let sorting crash the run
+        return (0, chan_id)
+    pub = _public_channel_dir(public_dir, server_key, channel_type, safe_name, forum_name)
+    return (count_nonempty_months(pub), chan_id)
+
+
+def _ordered_channels_for_phase(  # noqa: PLR0913  # needs full per-server context
+    phase: str,
+    channels: list[dict[str, str | None]],
+    channel_classifications: dict[str, ChannelType],
+    server_key: str,
+    channel_path_map: dict[str, str],
+    public_dir: Path,
+) -> list[dict[str, str | None]]:
+    """Order `channels` for a phase, starved entries first when backfilling.
+
+    Phase 1 keeps the natural listing order (every channel gets its current
+    month; order doesn't affect completeness). Phase 2 (backfill) puts the
+    most-starved entries first so 'empty thread' cases get real data within
+    one or two runs rather than waiting for the fixed-order frontier to
+    crawl past.
+    """
+    if phase != PHASE_BACKFILL:
+        return channels
+    return sorted(
+        channels,
+        key=lambda c: _backfill_priority_key(
+            c,
+            channel_classifications.get(c.get("id") or "", ChannelType.REGULAR),
+            server_key,
+            channel_path_map,
+            public_dir,
+        ),
+    )
+
+
 def _run_export_phase(  # noqa: PLR0913  # phase runner needs the per-server context
     phase: str,
     channels: list[dict[str, str | None]],
@@ -367,7 +430,15 @@ def _run_export_phase(  # noqa: PLR0913  # phase runner needs the per-server con
     Returns False if the time budget was exhausted mid-phase (the caller
     should stop and let the next workflow run resume), True otherwise.
     """
-    for channel in channels:
+    ordered = _ordered_channels_for_phase(
+        phase,
+        channels,
+        channel_classifications,
+        context.server_key,
+        channel_path_map,
+        public_dir,
+    )
+    for channel in ordered:
         if budget.exhausted():
             summary["time_budget_exhausted"] = True
             print(
