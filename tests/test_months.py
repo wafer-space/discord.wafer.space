@@ -231,3 +231,42 @@ def test_scan_completed_months_treats_empty_json_as_complete(tmp_path: Path) -> 
 
     completed = scan_completed_months(channel_dir)
     assert completed == {"2026-03"}
+
+
+def test_count_nonempty_months_uses_json_size(tmp_path: Path) -> None:
+    """count_nonempty_months counts months whose JSON is bigger than an empty
+    DCE export (a cheap os.stat heuristic — empty 0-message JSON is ~500B,
+    one with messages is multi-KB). Used to prioritize starved entries.
+    """
+    from scripts.months import count_nonempty_months
+
+    chan = tmp_path / "thread-a"
+    # Empty current-month export: tiny JSON (DCE 0-message scaffold ~500B).
+    (chan / "2026-05").mkdir(parents=True)
+    (chan / "2026-05" / "2026-05.html").write_text("<html>0</html>")
+    (chan / "2026-05" / "2026-05.json").write_text('{"messages":[]}')  # ~15B
+    # A month with real messages: large JSON.
+    (chan / "2026-03").mkdir(parents=True)
+    (chan / "2026-03" / "2026-03.html").write_text("<html>real</html>")
+    (chan / "2026-03" / "2026-03.json").write_text("x" * 5000)
+
+    assert count_nonempty_months(chan) == 1  # only 2026-03 has real data
+
+
+def test_count_nonempty_months_zero_for_only_empty(tmp_path: Path) -> None:
+    """A thread that only has an empty current-month export counts as 0 —
+    this is exactly the 'empty thread' case that must be prioritized."""
+    from scripts.months import count_nonempty_months
+
+    chan = tmp_path / "starved-thread"
+    (chan / "2026-05").mkdir(parents=True)
+    (chan / "2026-05" / "2026-05.json").write_text('{"messages":[]}')
+
+    assert count_nonempty_months(chan) == 0
+
+
+def test_count_nonempty_months_missing_dir_is_zero(tmp_path: Path) -> None:
+    """No public dir yet → zero non-empty months (maximally starved)."""
+    from scripts.months import count_nonempty_months
+
+    assert count_nonempty_months(tmp_path / "nope") == 0

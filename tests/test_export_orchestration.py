@@ -909,3 +909,61 @@ commit_author = "Test Bot"
                                     assert thread_calls[0].kwargs["before_timestamp"] is None
 
         del os.environ["DISCORD_BOT_TOKEN"]
+
+
+class TestBackfillOrdering:
+    """The backfill phase must visit starved entries before data-rich ones.
+
+    This is the root-cause fix for "empty threads": with a fixed listing
+    order the time budget was exhausted long before the frontier reached
+    most threads, so they only ever got an empty current-month export.
+    Ordering Phase 2 by neediness means a thread with zero real data is
+    backfilled within a run or two instead of waiting for the crawl.
+    """
+
+    def _make_month(self, channel_dir: Path, month: str, json_bytes: int) -> None:
+        """Write a month export whose JSON is exactly `json_bytes` long."""
+        month_dir = channel_dir / month
+        month_dir.mkdir(parents=True, exist_ok=True)
+        (month_dir / f"{month}.html").write_text("<html></html>")
+        (month_dir / f"{month}.json").write_text("x" * json_bytes)
+
+    def test_backfill_orders_starved_channel_first(self, tmp_path: Path) -> None:
+        """A channel with only an empty current month sorts before a rich one."""
+        from scripts.channel_classifier import ChannelType
+        from scripts.export_channels import PHASE_BACKFILL, _ordered_channels_for_phase
+
+        public = tmp_path / "public"
+        server = "wafer-space"
+        # rich-channel already has a real (large JSON) past month.
+        self._make_month(public / server / "rich-channel", "2026-03", 5000)
+        # starved-channel only has a tiny empty current-month export.
+        self._make_month(public / server / "starved-channel", "2026-05", 15)
+
+        rich: dict[str, str | None] = {"id": "100", "name": "rich-channel"}
+        starved: dict[str, str | None] = {"id": "200", "name": "starved-channel"}
+        classifications = {"100": ChannelType.REGULAR, "200": ChannelType.REGULAR}
+
+        # Pass them rich-first so order is only correct if we actually sort.
+        ordered = _ordered_channels_for_phase(
+            PHASE_BACKFILL, [rich, starved], classifications, server, {}, public
+        )
+        assert [c["name"] for c in ordered] == ["starved-channel", "rich-channel"]
+
+    def test_current_phase_preserves_listing_order(self, tmp_path: Path) -> None:
+        """Phase 1 (current month) is left in natural order — order is irrelevant
+        to completeness there and re-sorting would just add cost every run."""
+        from scripts.channel_classifier import ChannelType
+        from scripts.export_channels import PHASE_CURRENT, _ordered_channels_for_phase
+
+        public = tmp_path / "public"
+        self._make_month(public / "wafer-space" / "rich-channel", "2026-03", 5000)
+
+        rich: dict[str, str | None] = {"id": "100", "name": "rich-channel"}
+        starved: dict[str, str | None] = {"id": "200", "name": "starved-channel"}
+        classifications = {"100": ChannelType.REGULAR, "200": ChannelType.REGULAR}
+
+        ordered = _ordered_channels_for_phase(
+            PHASE_CURRENT, [rich, starved], classifications, "wafer-space", {}, public
+        )
+        assert ordered == [rich, starved]
