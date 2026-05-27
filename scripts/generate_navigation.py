@@ -2,6 +2,7 @@
 """Generate navigation index pages from exported logs."""
 
 import json
+import shutil
 import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -15,6 +16,10 @@ from jinja2 import Environment, FileSystemLoader
 MIN_PATH_PARTS_FOR_CHANNEL = 3
 MIN_PATH_PARTS_FOR_EXPORT = 4  # server, channel, month, file
 YYYY_MM_FORMAT_LENGTH = 7  # Length of "YYYY-MM" date format
+
+# The version-controlled static assets (site stylesheet) live OUTSIDE public/
+# so they survive the deploy workflow's `rm -rf public` + gh-pages checkout.
+ASSETS_SOURCE_DIR = Path(__file__).resolve().parent.parent / "assets"
 
 
 @dataclass
@@ -237,6 +242,33 @@ def get_forum_channels(  # noqa: C901  # Complexity needed for directory type de
             # But only include if it's in state.json (don't auto-detect new forums)
 
     return forum_names
+
+
+def copy_static_assets(public_dir: Path) -> None:
+    """Emit the version-controlled stylesheet into `public_dir/assets/`.
+
+    The deploy workflow runs `rm -rf public` and then checks out the existing
+    gh-pages branch into `public/`, so a stylesheet committed *under* public/
+    never survives to the deploy. We keep the canonical copy in the repo's
+    top-level `assets/` (outside public/) and emit it here — navigation runs
+    after the gh-pages checkout and before the deploy, so this guarantees the
+    version-controlled CSS ships every run.
+
+    A failure to copy must NEVER abort navigation (and therefore the deploy);
+    the worst acceptable outcome is the previously-deployed stylesheet
+    remaining in place. So all errors are swallowed with a warning.
+    """
+    try:
+        src = ASSETS_SOURCE_DIR / "style.css"
+        if not src.exists():
+            print(f"  ⚠ No stylesheet source at {src}; leaving existing assets in place.")
+            return
+        dest_dir = public_dir / "assets"
+        dest_dir.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(src, dest_dir / "style.css")
+        print(f"  ✓ Emitted stylesheet to {dest_dir / 'style.css'}")
+    except OSError as e:
+        print(f"  ⚠ Could not emit static assets ({e}); leaving existing assets in place.")
 
 
 def generate_site_index(config: dict, servers: list[dict], output_path: Path) -> None:
@@ -650,6 +682,10 @@ def main() -> None:  # noqa: C901, PLR0912, PLR0915  # Main orchestration functi
 
         # Organize data by server and channel
         servers_data = organize_data(exports, public_dir)
+
+        # Emit the version-controlled stylesheet (see copy_static_assets for
+        # why this can't just be committed under public/).
+        copy_static_assets(public_dir)
 
         # Generate site index
         print("Generating site index...")

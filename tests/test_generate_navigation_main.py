@@ -317,6 +317,41 @@ def test_organize_data_channel_display_name_is_leaf_not_full_path() -> None:
         assert top["category"] == ""
 
 
+def test_copy_static_assets_emits_versioned_stylesheet() -> None:
+    """copy_static_assets writes the version-controlled stylesheet into
+    public/assets/. The deploy does `rm -rf public` then checks out gh-pages,
+    so a stylesheet committed under public/ never ships; emitting it from a
+    source outside public/ during the build is what gets it deployed. The
+    emitted CSS must include the rules for the navigation's own classes."""
+    from scripts.generate_navigation import copy_static_assets
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        public_dir = Path(tmpdir) / "public"
+        public_dir.mkdir()
+
+        copy_static_assets(public_dir)
+
+        css = public_dir / "assets" / "style.css"
+        assert css.exists()
+        text = css.read_text()
+        assert ".category" in text
+        assert ".thread-list" in text
+
+
+def test_copy_static_assets_never_raises_when_dest_unwritable(tmp_path: Path) -> None:
+    """A copy failure must NOT abort navigation/deploy — it is swallowed.
+
+    We point public_dir at a path whose `assets` is a regular file, so mkdir
+    fails; the function must warn and return rather than raise."""
+    from scripts.generate_navigation import copy_static_assets
+
+    public_dir = tmp_path / "public"
+    public_dir.mkdir()
+    (public_dir / "assets").write_text("not a directory")  # blocks mkdir
+
+    copy_static_assets(public_dir)  # must not raise
+
+
 def test_organize_data_handles_empty_exports() -> None:
     """Test that organize_data handles empty exports list"""
     with tempfile.TemporaryDirectory() as tmpdir:
