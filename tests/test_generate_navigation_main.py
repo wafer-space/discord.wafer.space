@@ -257,6 +257,76 @@ def test_organize_data_nests_threads_under_parent_channel() -> None:
         assert thread["archives"][0]["date"] == "2026-04"
 
 
+def test_organize_data_nests_threads_under_forum_with_no_own_export() -> None:
+    """A FORUM channel has no month export of its own — only its threads do.
+
+    This is the real-data case that the parent-must-be-an-exported-path rule
+    missed: `Information/questions` (a forum) has zero direct exports, so its
+    68 threads were wrongly rendered as top-level channels. The forum entry
+    must be SYNTHESIZED so threads nest under it, and the forum itself must
+    never appear nested as a thread, nor the category as a channel.
+    """
+    exports = [
+        {
+            "server": "wafer-space",
+            "channel": "Information/general",
+            "date": "2026-04",
+            "path": "wafer-space/Information/general/2026-04/2026-04.html",
+        },
+        {
+            "server": "wafer-space",
+            "channel": "Information/questions/antenna-error",
+            "date": "2026-04",
+            "path": "wafer-space/Information/questions/antenna-error/2026-04/2026-04.html",
+        },
+        {
+            "server": "wafer-space",
+            "channel": "Information/questions/cadence-pdk",
+            "date": "2026-03",
+            "path": "wafer-space/Information/questions/cadence-pdk/2026-03/2026-03.html",
+        },
+    ]
+    with tempfile.TemporaryDirectory() as tmpdir:
+        public_dir = Path(tmpdir) / "public"
+        public_dir.mkdir()
+        _write_json(
+            public_dir, "wafer-space/Information/general/2026-04/2026-04.json", "general", 5
+        )
+        _write_json(
+            public_dir,
+            "wafer-space/Information/questions/antenna-error/2026-04/2026-04.json",
+            "Antenna error on M3",
+            9,
+        )
+        _write_json(
+            public_dir,
+            "wafer-space/Information/questions/cadence-pdk/2026-03/2026-03.json",
+            "Cadence PDK access",
+            4,
+        )
+
+        servers_data = organize_data(exports, public_dir)
+        channels = servers_data["wafer-space"]["channels"]
+
+        # The forum is a synthesized top-level entry; its threads are NOT.
+        assert "Information/questions" in channels
+        assert "Information/questions/antenna-error" not in channels
+        assert "Information/questions/cadence-pdk" not in channels
+        # The category itself is never a channel.
+        assert "Information" not in channels
+        # Real top-level entries: the regular channel + the forum (threads excluded).
+        assert servers_data["wafer-space"]["channel_count"] == EXPECTED_ARCHIVE_COUNT_TWO
+
+        forum = channels["Information/questions"]
+        assert forum["total_messages"] == 0  # forum has no messages of its own
+        assert forum["display_name"] == "questions"
+        assert forum["category"] == "Information"
+        assert {t["name"] for t in forum["threads"]} == {"antenna-error", "cadence-pdk"}
+        # Threads keep their human titles and nest with their own message counts.
+        titles = {t["title"] for t in forum["threads"]}
+        assert titles == {"Antenna error on M3", "Cadence PDK access"}
+
+
 def test_organize_data_channel_without_threads_has_empty_thread_list() -> None:
     """A plain channel (no nested threads) still exposes an empty threads list."""
     exports = [

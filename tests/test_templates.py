@@ -31,9 +31,11 @@ def test_channel_index_template_exists() -> None:
 
 
 def test_css_file_exists() -> None:
-    """Test that style.css exists"""
-    css_path = Path("public/assets/style.css")
-    assert css_path.exists(), "style.css should exist"
+    """The canonical stylesheet lives in version control at assets/style.css
+    (outside public/, which is generated). generate_navigation emits it into
+    public/assets/ at build time — see copy_static_assets."""
+    css_path = Path("assets/style.css")
+    assert css_path.exists(), "assets/style.css should exist"
 
 
 def test_site_index_template_renders() -> None:
@@ -111,7 +113,7 @@ def test_channel_index_template_renders() -> None:
 
 def test_css_contains_discord_theme() -> None:
     """Test that CSS contains Discord-themed colors"""
-    css_path = Path("public/assets/style.css")
+    css_path = Path("assets/style.css")
     css_content = css_path.read_text()
 
     # Check for Discord dark theme colors
