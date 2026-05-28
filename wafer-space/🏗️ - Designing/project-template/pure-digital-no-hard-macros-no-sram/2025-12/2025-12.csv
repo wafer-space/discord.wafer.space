@@ -1,0 +1,149 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"738396032295108721","bailey8889","2025-12-02T00:32:56.7880000+00:00","","",""
+"738396032295108721","bailey8889","2025-12-02T00:32:57.7010000+00:00","Ok, so it's just a big design then. Can you tell which rule it's stuck on by looking at the current log file?","",""
+"1187141985530818611","ravenslofty","2025-12-02T00:33:20.9760000+00:00","```
+2025-12-01 13:25:53 +0000: Memory Usage (1206676K) : Starting deriving base layers.
+2025-12-01 13:28:27 +0000: Memory Usage (2314588K) : Construct connectivity for the design.
+2025-12-01 13:28:28 +0000: Memory Usage (2314588K) : Connectivity rules enabled, Netlist object will be generated.
+Chip' - Stage 68 - Design Rule Check (KLayout) ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸━━━━━ 67/77 11:58:20
+```","",""
+"738396032295108721","bailey8889","2025-12-02T00:33:40.5680000+00:00","Is it thrashing? How's your memory usage?","",""
+"1187141985530818611","ravenslofty","2025-12-02T00:33:54.9050000+00:00","57.1 GiB free memory","",""
+"1187141985530818611","ravenslofty","2025-12-02T00:34:05.3410000+00:00","4.17GiB used by klayout","",""
+"1187141985530818611","ravenslofty","2025-12-02T00:34:39.3390000+00:00","","2025-12_media/WindowsTerminal_FDNGlZY0Mx-04DD1.png",""
+"738396032295108721","bailey8889","2025-12-02T00:40:13.8570000+00:00","If you do a 
+```
+find openlane/<block>/runs/<timestamp>
+```
+you should see a lot of files generated at each step. If you look in the directory for klayout-drc (not sure of the name), there should be a real time log showing how much time was spent on each rule. Depending on the output buffering, you may be able to tell which rule is currently being checked.","",""
+"1187141985530818611","ravenslofty","2025-12-02T00:41:40.4080000+00:00","","2025-12_media/message-AD9A0.txt",""
+"738396032295108721","bailey8889","2025-12-02T01:28:55.8890000+00:00","@Lofty So that looks like it's been running for about 2 min. Maybe the step after that is where it's stuck. Might be helpful to look at the log after it completes.
+
+Is there a openlane configuration variable to do `deep` vs `flat` drc? All the configuration variables (including defaults) are in the `openlane/<block>/runs/<timestamp>/resolved.json` file.","",""
+"1187141985530818611","ravenslofty","2025-12-02T01:29:52.3720000+00:00","(I killed the run, because I didn't have any reason to believe it would complete after another twelve hours of runtime)","",""
+"738396032295108721","bailey8889","2025-12-02T01:30:48.1710000+00:00","@Lofty do you have any old runs still around in a different timestamp directory that completed?","",""
+"1187141985530818611","ravenslofty","2025-12-02T01:31:16.0830000+00:00","not anymore, no","",""
+"1187141985530818611","ravenslofty","2025-12-02T01:32:06.9510000+00:00","also, I should maybe point out the timezone there. it wasn't running for 2 minutes.","",""
+"738396032295108721","bailey8889","2025-12-02T01:40:16.6030000+00:00","@Lofty Not sure what you mean about timezone.
+Start time `2025-12-01 13:24:36`
+Last enty `2025-12-01 13:25:41`","",""
+"1187141985530818611","ravenslofty","2025-12-02T01:40:38.9020000+00:00","yes, and it is currently `2025-12-02 01:40`","","👍 (1)"
+"738396032295108721","bailey8889","2025-12-02T01:42:48.8500000+00:00","Ok, either the last few log entries were buffered or it prints after completion and it was stuck somewhere. Probably need a complete log to know for sure.","",""
+"1187141985530818611","ravenslofty","2025-12-02T01:43:02.8420000+00:00","that *was* the complete log","",""
+"738396032295108721","bailey8889","2025-12-02T01:44:40.6840000+00:00","Sorry, I mean a log file after klayout-drc has completely finished.","",""
+"1187141985530818611","ravenslofty","2025-12-02T01:46:29.5480000+00:00","like, even in stdout there were no rules mentioned; I genuinely don't think it made it far enough to get stuck on a rule","",""
+"738396032295108721","bailey8889","2025-12-02T01:57:06.8170000+00:00","You may be correct. I have seen log files that are piped or tee'd get buffered though.","",""
+"805909190333038612","trev5514","2025-12-02T06:54:30.6860000+00:00","Are you on macOS? I've been running into the same issue","",""
+"1187141985530818611","ravenslofty","2025-12-02T10:55:03.4020000+00:00","WSL","",""
+"1187141985530818611","ravenslofty","2025-12-02T10:56:31.6160000+00:00","well, I re-ran the flow overnight, and...it's stuck on klayout again","",""
+"323371864074485771","mole99","2025-12-02T11:52:03.9350000+00:00","@Lofty Did you came this far?","",""
+"323371864074485771","mole99","2025-12-02T11:52:06.6570000+00:00","","2025-12_media/image-30DF2.png",""
+"1187141985530818611","ravenslofty","2025-12-02T11:52:12.2630000+00:00","yes.","",""
+"1187141985530818611","ravenslofty","2025-12-02T11:52:16.1580000+00:00","and then it hangs.","",""
+"323371864074485771","mole99","2025-12-02T11:52:26.3890000+00:00","Alright, let's wait for a while.","",""
+"1187141985530818611","ravenslofty","2025-12-02T12:53:23.6840000+00:00","It's been an hour. Any luck?","",""
+"323371864074485771","mole99","2025-12-02T12:55:29.3050000+00:00","It's still generating the netlist object. For KianV this took 1-2h iirc. Since your design is all combinatorial I would assume it to take even longer.","",""
+"323371864074485771","mole99","2025-12-02T12:57:26.5750000+00:00","However, you can try something else on your end: Go to `gf180mcu/gf180mcuD/libs.tech/librelane` and open `config.tcl`.
+Set `conn_drc` to false: `dict set ::env(KLAYOUT_DRC_OPTIONS) conn_drc false`","",""
+"323371864074485771","mole99","2025-12-02T12:59:05.4390000+00:00","This will skip generating the netlist object. But this also means KLayout needs to consider the worst case for connectivity rules. Still, worth a try.","",""
+"1187141985530818611","ravenslofty","2025-12-02T13:19:37.8370000+00:00","okay, we have rules being executed now; this is great","","👌 (1)"
+"805909190333038612","trev5514","2025-12-02T15:57:46.5700000+00:00","FYI mine took 8+ hours and it didn't change from that step... I'll try that option","",""
+"323371864074485771","mole99","2025-12-02T15:58:33.3150000+00:00","You can try disabling `conn_drc` as well. But then you might get false positive DRC errors.","",""
+"1187141985530818611","ravenslofty","2025-12-02T15:58:34.4750000+00:00","```
+[15:53:43] VERBOSE  Running 'Checker.KLayoutDRC' at 'librelane/runs/RUN_2025-12-02_01-03-17/65-checker-klayoutdrc'…                                                  step.py:1138
+[15:53:43] ERROR    16 KLayout DRC errors found. - deferred                                                                                                        checker.py:124
+```
+urgh","",""
+"323371864074485771","mole99","2025-12-02T15:58:46.5270000+00:00","Nice, we can work with that.","",""
+"1187141985530818611","ravenslofty","2025-12-02T16:00:05.4180000+00:00","um, they seem to all be `NW.2b_MV` violations?","",""
+"1187141985530818611","ravenslofty","2025-12-02T16:02:53.2710000+00:00","""Min. Nwell Space (Outside DNWELL) [Different potential]""","",""
+"323371864074485771","mole99","2025-12-02T16:03:51.0000000+00:00","As expected, since Klayout does not have any connectivity information it needs to assume the worse.","",""
+"323371864074485771","mole99","2025-12-02T16:04:30.0310000+00:00","Can you open the violations in the KLayout Marker Browser and send me a screenshot where they are located?","",""
+"1187141985530818611","ravenslofty","2025-12-02T16:07:34.8710000+00:00","um, where's the marker database file to open?","",""
+"1187141985530818611","ravenslofty","2025-12-02T16:09:12.1050000+00:00","I think I found it, but it's giving me stuff like this","",""
+"1187141985530818611","ravenslofty","2025-12-02T16:09:13.0420000+00:00","https://fieldprogrammable.gay/files/5fa95bf6-ce10-487c-ac4b-327d6a770f3a.png","",""
+"1187141985530818611","ravenslofty","2025-12-02T16:11:13.0500000+00:00","^","",""
+"323371864074485771","mole99","2025-12-02T16:24:10.0500000+00:00","Is this with just the Nwell layer enabled?","",""
+"738396032295108721","bailey8889","2025-12-02T16:30:54.5920000+00:00","@lofty, turn on only nwel and then set the display levels to 0 - 20 (or hit the `+` key until all the cell frames disappear)","",""
+"1187141985530818611","ravenslofty","2025-12-02T16:41:58.9010000+00:00","https://fieldprogrammable.gay/files/1be1a3b6-04d2-4074-a2b8-3acb36408573.png
+um, like this?","",""
+"1187141985530818611","ravenslofty","2025-12-02T16:46:15.9070000+00:00","it seems like the DRC rules are generating pairs of errors for this","",""
+"1187141985530818611","ravenslofty","2025-12-02T16:46:26.8910000+00:00","so there are only like 8 actual conflicts?","",""
+"1187141985530818611","ravenslofty","2025-12-02T16:49:16.8870000+00:00","https://fieldprogrammable.gay/files/a664e04a-50dd-4b95-8ba4-4e808309e917.png
+https://fieldprogrammable.gay/files/8fe28588-7e40-46bb-a3f7-9886b62a5712.png
+https://fieldprogrammable.gay/files/95d36260-cf52-4a45-963f-7eefcda28188.png
+https://fieldprogrammable.gay/files/cd37610a-6153-4105-a78a-e879a1effaee.png","",""
+"1187141985530818611","ravenslofty","2025-12-02T16:49:42.3900000+00:00","https://fieldprogrammable.gay/files/25dab0b6-a805-45d3-9dce-f6da62b0346f.png
+https://fieldprogrammable.gay/files/af3b0b74-f785-4add-8416-b2ea3e45f585.png
+https://fieldprogrammable.gay/files/db6629bf-3154-4667-848e-081c97086263.png
+https://fieldprogrammable.gay/files/8c8630f9-3ed3-40a4-9bb0-06d2384e10fa.png","",""
+"1187141985530818611","ravenslofty","2025-12-02T16:50:08.6450000+00:00","cc @bailey @Leo Moser (mole99)","",""
+"323371864074485771","mole99","2025-12-02T18:58:41.7780000+00:00","@Lofty Sorry, I was afk.
+
+The next step is to make sure all devices use the ""Dualgate"" layer. These are the thick oxide transistors for 5V/6V. This should be the case anyways if you use the foundry provided I/O cells and standard cells. If so, it means we can actually use rule NW.2a (equi-potential).
+Now, just take a measurement between the edges and check that the spacing is >= 0.74um.
+
+I'll do the same before adding your design to the shuttle, but this way you can already be sure these are false positives :)","",""
+"323371864074485771","mole99","2025-12-02T18:59:51.9260000+00:00","FYI KLayout was not stuck, it just took a looong time:","",""
+"323371864074485771","mole99","2025-12-02T18:59:54.3250000+00:00","","2025-12_media/image-37D4A.png",""
+"323371864074485771","mole99","2025-12-02T19:00:08.4120000+00:00","This will make for a good test case for Matthias.","",""
+"323371864074485771","mole99","2025-12-02T20:43:13.5390000+00:00","","2025-12_media/Bildschirmfoto_vom_2025-12-02_21-41-45-9B062.png",""
+"323371864074485771","mole99","2025-12-02T20:43:50.6630000+00:00","Almost 9 hours, but we're done. The magic DRC errors are CO.3 and can be ignored.","",""
+"323371864074485771","mole99","2025-12-02T20:44:09.8200000+00:00","@Lofty Your design is DRC clean 🎉","",""
+"1187141985530818611","ravenslofty","2025-12-02T20:49:04.8900000+00:00","hurray; too bad that GDS has hold violations and I have spent the past several hours building a new GDS >.<","",""
+"1187141985530818611","ravenslofty","2025-12-02T20:54:16.1130000+00:00","all the same, I don't think I have much to worry about there.","",""
+"1187141985530818611","ravenslofty","2025-12-02T20:56:39.5640000+00:00","maybe I really do need a CPU upgrade though, if it takes me 12 hours to fail to achieve what you can complete in 9...","",""
+"323371864074485771","mole99","2025-12-03T07:23:44.1750000+00:00","At least you know that there isn't anything special DRC-wise about your design. So the next iteration will very likely also be DRC clean.
+
+I'm using a Ryzen 9 9900X and I'm running it natively on Linux. It may be that the emulation through WSL2 may cause you to lose some performance.","",""
+"1187141985530818611","ravenslofty","2025-12-05T16:30:06.6450000+00:00","well, now I have very slow antenna checking ^^;","",""
+"1187141985530818611","ravenslofty","2025-12-05T16:30:24.6360000+00:00","it's stuck on `2025-12-05 15:21:23 +0000: Memory Usage (3550244K) : Executing rule ANT.16_i_ANT.5`","",""
+"323371864074485771","mole99","2025-12-05T16:35:39.4570000+00:00","You can jump to the latest tag of the PDK: https://github.com/wafer-space/gf180mcu/releases/tag/1.4.3
+There have been two more changes that should speed up the antenna check, however, don't expect miracles.","",""
+"1187141985530818611","ravenslofty","2025-12-05T23:44:07.4740000+00:00","now I'm getting what seems to be an LVS failure?","",""
+"1187141985530818611","ravenslofty","2025-12-05T23:46:08.6010000+00:00","um, @bailey you seem to be the person to talk to about LVS?","",""
+"1187141985530818611","ravenslofty","2025-12-05T23:47:23.1440000+00:00","```
+Circuit 1 contains 137698 devices, Circuit 2 contains 140300 devices. *** MISMATCH ***
+Circuit 1 contains 133045 nets,    Circuit 2 contains 138947 nets. *** MISMATCH ***
+```","",""
+"1187141985530818611","ravenslofty","2025-12-05T23:49:12.5240000+00:00","oh. am I running into Magic issues because I have `autoname` on?","",""
+"738396032295108721","bailey8889","2025-12-06T00:42:22.4120000+00:00","@Lofty I have seen errors due to autoname. I've used klayout to manually removed them from the gds without having to rerun.
+
+From the limited information above, I'm guessing that there are unconnected power rails for some standard cell rows. Most probably between or at the edges where there's not enough room to intersect with power rails.
+
+If you share the cell list from the `lvs.report` that precedes the mismatch counts above, I might be able to suggest something else.","",""
+"1187141985530818611","ravenslofty","2025-12-06T00:44:10.7150000+00:00","","2025-12_media/netgen-lvs-2A496.log",""
+"738396032295108721","bailey8889","2025-12-06T00:52:11.6040000+00:00","@Lofty this one `lvs.netgen.rpt` has more information.","",""
+"1187141985530818611","ravenslofty","2025-12-06T00:52:29.8790000+00:00","","2025-12_media/lvs.netgen-828BD.rpt",""
+"738396032295108721","bailey8889","2025-12-06T00:59:33.0240000+00:00","... and how about the `lvs_config.json` file. Looks like the standard cell spice may not be loaded.
+
+Do you know what command is being used to run LVS?","",""
+"1187141985530818611","ravenslofty","2025-12-06T01:01:56.4860000+00:00","um, I don't have a file by that name?","",""
+"738396032295108721","bailey8889","2025-12-06T01:04:21.4240000+00:00","@Lofty ok. I'm not yet familiar with the wafer.space LVS setup. Is it run as part of precheck or a github action or is there a command to run LVS locally?","",""
+"1187141985530818611","ravenslofty","2025-12-06T01:04:42.1760000+00:00","it's librelane","",""
+"1187141985530818611","ravenslofty","2025-12-06T01:05:32.1930000+00:00","<https://github.com/librelane/librelane/blob/main/librelane/scripts/netgen/setup.tcl>","",""
+"1187141985530818611","ravenslofty","2025-12-06T01:06:16.2930000+00:00","<https://github.com/librelane/librelane/blob/main/librelane/steps/netgen.py#L127>","",""
+"738396032295108721","bailey8889","2025-12-06T01:25:26.9680000+00:00","@Lofty thanks, that explains a lot.
+
+Looks like the verilog and layout are out of sync. I'm seeing mismatches in standard cell counts that should not happen.
+```
+gf180mcu_fd_sc_mcu9t5v0__oai21_1 (12908)   |gf180mcu_fd_sc_mcu9t5v0__oai21_1 (13137) *
+gf180mcu_fd_sc_mcu9t5v0__mux2_1 (10908)    |gf180mcu_fd_sc_mcu9t5v0__mux2_1 (10942) **
+```
+The layout is the abstract extracted spice `runs/eco/29-magic-spiceextraction/chip_top.spice`, but unfortunately, I can't find what verilog netlist is being used.
+
+I'll create a PR that records that file in the log file.","",""
+"1187141985530818611","ravenslofty","2025-12-06T01:34:00.0050000+00:00","I did eco in some hold buffers, but...they should be in there? Hmm","",""
+"738396032295108721","bailey8889","2025-12-06T01:55:51.4200000+00:00","Here's the PR with the change. https://github.com/librelane/librelane/pull/831
+
+If you wanted to make the change locally, you could verify whether or not the expected top level verilog netlist is being used.","",""
+"1187141985530818611","ravenslofty","2025-12-06T07:05:50.5150000+00:00","```
+Circuit 1 contains 140296 devices, Circuit 2 contains 140296 devices.
+Circuit 1 contains 138946 nets,    Circuit 2 contains 138946 nets.
+
+Final result:
+Circuits match uniquely.
+```
+the issue is indeed Magic; this is using 8.3.578 which includes the 512-character maximum name length fix","","👍 (1)"
+"1187141985530818611","ravenslofty","2025-12-06T07:07:22.6730000+00:00","(@Leo Moser (mole99) maybe the flake.nix should be updated?)","",""
+"323371864074485771","mole99","2025-12-06T10:58:41.7470000+00:00","I'm on it!","",""

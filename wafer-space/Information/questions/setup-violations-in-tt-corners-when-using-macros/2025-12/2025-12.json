@@ -1,0 +1,404 @@
+{
+  "guild": {
+    "id": "1361349522684510449",
+    "name": "wafer.space Community",
+    "iconUrl": "2025-12_media/fb143eaa45770cbb40493d09b625e98b-09FD1.png"
+  },
+  "channel": {
+    "id": "1446150954536927232",
+    "type": "GuildPublicThread",
+    "categoryId": "1409660288822673408",
+    "category": "questions",
+    "name": "Setup Violations in tt corners when using macros",
+    "topic": null
+  },
+  "dateRange": {
+    "after": "2025-11-30T23:59:59.999+00:00",
+    "before": "2026-01-01T00:00:00+00:00"
+  },
+  "exportedAt": "2026-05-28T05:56:06.8813674+00:00",
+  "messages": [
+    {
+      "id": "1446150954536927232",
+      "type": "Default",
+      "timestamp": "2025-12-04T14:47:35.747+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi everyone, we are building our toplevel module out of several designs by using macros. We only have one clock input which is routed to all macros, but they do not run at the same clock frequency. Of course, the timing analysis finds Setup Violations in some macros if the toplevel period is smaller than the period of the macro. But how should we go about this? STA finds Setup Violations in the TT corners and then errors out. Is this fine if we know that the macro will never be used at this frequency or do we at least have to fix all errors?",
+      "author": {
+        "id": "1152597572385525871",
+        "name": "jonathan_ha_25034",
+        "discriminator": "0000",
+        "nickname": "Jonathan",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-12_media/4-4551A.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1446265210347458691",
+      "type": "Reply",
+      "timestamp": "2025-12-04T22:21:36.455+00:00",
+      "timestampEdited": "2025-12-04T22:22:00.578+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I'm pretty sure the precheck does **not** do any timing analysis.",
+      "author": {
+        "id": "169786952432746498",
+        "name": "mithro_",
+        "discriminator": "0000",
+        "nickname": "Tim 'mithro' Ansell",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-12_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1152597572385525871",
+          "name": "jonathan_ha_25034",
+          "discriminator": "0000",
+          "nickname": "Jonathan",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2025-12_media/4-4551A.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1446150954536927232",
+        "channelId": "1446150954536927232",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1446265704281280553",
+      "type": "Default",
+      "timestamp": "2025-12-04T22:23:34.218+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You might be able to do something trickly like put in a clock buffer per macro and use sdc to set the maximum frequency on the clock buffer output....",
+      "author": {
+        "id": "169786952432746498",
+        "name": "mithro_",
+        "discriminator": "0000",
+        "nickname": "Tim 'mithro' Ansell",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-12_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1446265812779405384",
+      "type": "Default",
+      "timestamp": "2025-12-04T22:24:00.086+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The Tiny Tapeout people like @tnt and @urish might have some other ideas?",
+      "author": {
+        "id": "169786952432746498",
+        "name": "mithro_",
+        "discriminator": "0000",
+        "nickname": "Tim 'mithro' Ansell",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-12_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "732347216412278825",
+          "name": "urish",
+          "discriminator": "0000",
+          "nickname": "urish",
+          "color": null,
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1423020172595298314",
+              "name": "Mod",
+              "color": null,
+              "position": 1
+            }
+          ],
+          "avatarUrl": "2025-12_media/2b6c3aac0ae09fc8a72a4b2e17d7f9c9-39032.png"
+        },
+        {
+          "id": "596068704471482370",
+          "name": "246tnt",
+          "discriminator": "0000",
+          "nickname": "tnt",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2025-12_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1446266546295934997",
+      "type": "Default",
+      "timestamp": "2025-12-04T22:26:54.97+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The pre-check doesn't do any STA indeed so if you're confident that the violations are false positives you can ignore it.  But you could also write a custom SDC that just sets up the constraints correctly for each submodule.",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-12_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1446412502681391195",
+      "type": "Reply",
+      "timestamp": "2025-12-05T08:06:53.684+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The precheck runs without problems. I was just concerned about the \"make librelane\" flow, since this one ends with an error due to Setup Violations in the tt corner in this case. Does an error prevent some part of the flow from being run? From the log files it seems that every step was executed",
+      "author": {
+        "id": "1152597572385525871",
+        "name": "jonathan_ha_25034",
+        "discriminator": "0000",
+        "nickname": "Jonathan",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-12_media/4-4551A.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "169786952432746498",
+          "name": "mithro_",
+          "discriminator": "0000",
+          "nickname": "Tim 'mithro' Ansell",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2025-12_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1446265210347458691",
+        "channelId": "1446150954536927232",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1446412929351286865",
+      "type": "Default",
+      "timestamp": "2025-12-05T08:08:35.41+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "No, STA errors won't prevent anything from running, they're just informations.",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-12_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1446412971134681203",
+      "type": "Default",
+      "timestamp": "2025-12-05T08:08:45.372+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "If you get something in the `final` subdir, then all the steps ran.",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-12_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1446413785215799448",
+      "type": "Reply",
+      "timestamp": "2025-12-05T08:11:59.464+00:00",
+      "timestampEdited": "2025-12-05T08:12:18.043+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You can add \"Checker.SetupViolations: null\" to the substituting_steps section of config.yaml to stop the LibreLane from failing a flow on timing violations.",
+      "author": {
+        "id": "709384666909507634",
+        "name": "egorxe",
+        "discriminator": "0000",
+        "nickname": "Egor Lukyanchenko",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-12_media/3-FB033.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1152597572385525871",
+          "name": "jonathan_ha_25034",
+          "discriminator": "0000",
+          "nickname": "Jonathan",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2025-12_media/4-4551A.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1446412502681391195",
+        "channelId": "1446150954536927232",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1446414131451269180",
+      "type": "Default",
+      "timestamp": "2025-12-05T08:13:22.013+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Okay, thanks very much. I will try that \ud83d\ude42",
+      "author": {
+        "id": "1152597572385525871",
+        "name": "jonathan_ha_25034",
+        "discriminator": "0000",
+        "nickname": "Jonathan",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-12_media/4-4551A.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\ud83d\ude42",
+          "code": "slight_smile",
+          "isAnimated": false,
+          "imageUrl": "2025-12_media/1f642-83E8A.svg"
+        }
+      ]
+    },
+    {
+      "id": "1446414877324218538",
+      "type": "Default",
+      "timestamp": "2025-12-05T08:16:19.843+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Oh, looks like my info is outdated, I wasn't even aware that flow failed on STA violation now, sorry about that.",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-12_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\ud83d\udc4d",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "2025-12_media/1f44d-27259.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "1152597572385525871",
+              "name": "jonathan_ha_25034",
+              "discriminator": "0000",
+              "nickname": "Jonathan",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2025-12_media/4-4551A.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    }
+  ],
+  "messageCount": 11
+}

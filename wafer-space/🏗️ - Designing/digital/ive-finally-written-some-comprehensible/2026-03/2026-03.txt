@@ -1,0 +1,79 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 🏗️ - Designing / digital / I've finally written some comprehensible
+After: 02/28/2026 23:59
+Before: 04/01/2026 00:00
+==============================================================
+
+[03/10/2026 15:22] mole99
+
+
+
+[03/10/2026 15:22] mole99
+
+
+{Attachments}
+2026-03_media/image-11929.png
+
+
+[03/10/2026 15:22] mole99
+Works wonderfully! Up and running in less than 5 minutes 👏
+
+
+[03/10/2026 15:34] egorxe
+All thanks to your nix environment :).
+
+{Reactions}
+❤️
+
+[03/10/2026 15:37] mole99
+@Egor Lukyanchenko It would be great to have an eFuse library included with the PDK (optionally at first).
+
+I suggest calling the repo gf180mcu_xx_efuse (where xx is your chosen IP code). 
+It would be useful to have a number of different configurations, such as synchronous/asynchronous and different widths and depths.
+
+For example, the structure could look like this, similar to gf180mcu_fd_io/gf180mcu_fd_sc_*:
+
+```
+gf180mcu_xx_efuse
+|-- gds
+|   |-- gf180mcu_xx_efuse__async_16x1.gds
+|   |-- ...
+|   `-- gf180mcu_xx_efuse__sync_128x8.gds
+|-- lef
+|-- ...
+|-- spice
+`-- verilog
+```
+
+And a README in the repository that points to your eFuse compiler for more advanced usage. What do you think?
+
+
+[03/10/2026 20:54] egorxe
+Sure, sounds good!
+
+> It would be useful to have a number of different configurations, such as synchronous/asynchronous and different widths and depths.
+
+I would suggest initially adding 6 configurations taped out during Run 1 to this PDK repo. The exact configurations can be found in the compiler repo releases. These ones will be the first to be verified in silicon (successfully I hope 😄), so it makes sense to use them in most cases.
+
+
+[03/11/2026 09:04] mole99
+Great!
+
+Yes, these 6 configurations sound sensible. I'm sure there will be a slot on Run 2 to put even more configurations for silicon testing 😉
+Let me know when you have created the repository, so that I can take a look and add it to open_pdks as an optional library 👍
+
+{Reactions}
+👍
+
+[03/12/2026 03:05] mithro_
+@Egor Lukyanchenko - That is super cool!
+
+
+[03/12/2026 06:55] egorxe
+Thanks! I hope it would be useful for future tapeouts.
+
+
+==============================================================
+Exported 9 message(s)
+==============================================================

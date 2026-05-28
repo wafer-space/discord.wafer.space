@@ -1,0 +1,514 @@
+{
+  "guild": {
+    "id": "1361349522684510449",
+    "name": "wafer.space Community",
+    "iconUrl": "2026-03_media/fb143eaa45770cbb40493d09b625e98b-09FD1.png"
+  },
+  "channel": {
+    "id": "1482918666042347791",
+    "type": "GuildPublicThread",
+    "categoryId": "1423348662318272592",
+    "category": "project-template",
+    "name": "chore: update to LibreLane dev (#55) \u00b7 w...",
+    "topic": null
+  },
+  "dateRange": {
+    "after": "2026-02-28T23:59:59.999+00:00",
+    "before": "2026-04-01T00:00:00+00:00"
+  },
+  "exportedAt": "2026-05-28T06:29:52.4743481+00:00",
+  "messages": [
+    {
+      "id": "1483013256057454793",
+      "type": "21",
+      "timestamp": "2026-03-16T08:05:13.298+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "2026-03_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "258871392840187904",
+          "name": ".monkeyonkeyboard.",
+          "discriminator": "0000",
+          "nickname": "monkey on keyboard",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-03_media/51495ed125b2a50870a5c9c27cee3467-8AF4F.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1482918666042347791",
+        "channelId": "1423348662318272592",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1483013259635327016",
+      "type": "Default",
+      "timestamp": "2026-03-16T08:05:14.151+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "In general, we trust KLayout. Passing magic DRC is not required for tapeout.\n\nIn some cases, such as for contacts, magic does not operate directly on the GDS layout (at least on gf180mcu), which can lead to false reports of DRC violations. That's why `ERROR_ON_MAGIC_DRC` is False in the LibreLane config.\n\nHowever, the issue you mentioned came up with the latest LibreLane (and thus magic) update. The errors are M2.2a/M3.2a/M4.2a violations on the bondpad, which look like false positives to me.\n\nI'll ask magic upstream about it. Thanks for reporting the issue!",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "2026-03_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\u2764\ufe0f",
+            "code": "heart",
+            "isAnimated": false,
+            "imageUrl": "2026-03_media/2764-A3D25.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "258871392840187904",
+              "name": ".monkeyonkeyboard.",
+              "discriminator": "0000",
+              "nickname": "monkey on keyboard",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-03_media/51495ed125b2a50870a5c9c27cee3467-8AF4F.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1483016184466243585",
+      "type": "Default",
+      "timestamp": "2026-03-16T08:16:51.485+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "is it possible to read the magic DRC logs/results from that #55 run?",
+      "author": {
+        "id": "376976238528692225",
+        "name": "nmz787",
+        "discriminator": "0000",
+        "nickname": "nmz787",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-03_media/3-FB033.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1483017423752925275",
+      "type": "Default",
+      "timestamp": "2026-03-16T08:21:46.954+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You can reproduce it locally, open the layout in KLayout (`make librelane-klayout`), and then load the .lyrdb marker database from `67-magic-drc/reports/` of the run folder.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "2026-03_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1483018261334331443",
+      "type": "Default",
+      "timestamp": "2026-03-16T08:25:06.649+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "basically running `gf180mcu-project-template/.github/workflows/ci.yml` locally?",
+      "author": {
+        "id": "376976238528692225",
+        "name": "nmz787",
+        "discriminator": "0000",
+        "nickname": "nmz787",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-03_media/3-FB033.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1483018383011352637",
+      "type": "Default",
+      "timestamp": "2026-03-16T08:25:35.659+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "oh, I see the root of the repo has run instructions",
+      "author": {
+        "id": "376976238528692225",
+        "name": "nmz787",
+        "discriminator": "0000",
+        "nickname": "nmz787",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-03_media/3-FB033.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\ud83d\udc4d",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "2026-03_media/1f44d-27259.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "323371864074485771",
+              "name": "mole99",
+              "discriminator": "0000",
+              "nickname": "Leo Moser (mole99)",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-03_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1483032214475116564",
+      "type": "Default",
+      "timestamp": "2026-03-16T09:20:33.337+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "cool cool, if needed i can also attach the log files, but it is also reproducible in CI or from the gf180mcu template repo",
+      "author": {
+        "id": "258871392840187904",
+        "name": ".monkeyonkeyboard.",
+        "discriminator": "0000",
+        "nickname": "monkey on keyboard",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-03_media/51495ed125b2a50870a5c9c27cee3467-8AF4F.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1483033629125771405",
+      "type": "Default",
+      "timestamp": "2026-03-16T09:26:10.616+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks, but I already managed to reproduce them locally.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "2026-03_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\ud83d\udc4d",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "2026-03_media/1f44d-27259.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "258871392840187904",
+              "name": ".monkeyonkeyboard.",
+              "discriminator": "0000",
+              "nickname": "monkey on keyboard",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-03_media/51495ed125b2a50870a5c9c27cee3467-8AF4F.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1483342982311575763",
+      "type": "Default",
+      "timestamp": "2026-03-17T05:55:26.163+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "it's odd that the errors only show up under 4 pads",
+      "author": {
+        "id": "376976238528692225",
+        "name": "nmz787",
+        "discriminator": "0000",
+        "nickname": "nmz787",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-03_media/3-FB033.png"
+      },
+      "attachments": [
+        {
+          "id": "1483342982118903901",
+          "url": "2026-03_media/image-C5F34.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 3212
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1483359811666972814",
+      "type": "Default",
+      "timestamp": "2026-03-17T07:02:18.594+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "KLayout has a limit on the number of markers it shows for a single rule. This is noted in the marker browser.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "2026-03_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1483473595119304744",
+      "type": "Default",
+      "timestamp": "2026-03-17T14:34:26.683+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The false positive DRC errors reported by magic have now been fixed: https://github.com/wafer-space/gf180mcu-project-template/actions/runs/23190573468?pr=56\n\nThis was related to a recent regression in magic and how offsets were calculated in instance arrays.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "2026-03_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "chore: update LibreLane dev \u00b7 wafer-space/gf180mcu-project-templat...",
+          "url": "https://github.com/wafer-space/gf180mcu-project-template/actions/runs/23190573468?pr=56",
+          "timestamp": null,
+          "description": "Project template for wafer.space MPW runs using the gf180mcu PDK - chore: update LibreLane dev \u00b7 wafer-space/gf180mcu-project-template@50b46ea",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "2026-03_media/gf180mcu-project-template-DD373",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": [],
+          "inlineEmojis": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\ud83e\udd73",
+            "code": "partying_face",
+            "isAnimated": false,
+            "imageUrl": "2026-03_media/1f973-88B39.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "258871392840187904",
+              "name": ".monkeyonkeyboard.",
+              "discriminator": "0000",
+              "nickname": "monkey on keyboard",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-03_media/51495ed125b2a50870a5c9c27cee3467-8AF4F.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1483674919958220922",
+      "type": "Default",
+      "timestamp": "2026-03-18T03:54:26.265+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "great to hear!! i'll merge this into my template",
+      "author": {
+        "id": "258871392840187904",
+        "name": ".monkeyonkeyboard.",
+        "discriminator": "0000",
+        "nickname": "monkey on keyboard",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-03_media/51495ed125b2a50870a5c9c27cee3467-8AF4F.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\ud83d\udc4d",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "2026-03_media/1f44d-27259.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "323371864074485771",
+              "name": "mole99",
+              "discriminator": "0000",
+              "nickname": "Leo Moser (mole99)",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-03_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    }
+  ],
+  "messageCount": 12
+}

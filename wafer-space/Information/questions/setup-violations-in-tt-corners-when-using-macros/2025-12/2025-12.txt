@@ -1,0 +1,56 @@
+==============================================================
+Guild: wafer.space Community
+Channel: Information / questions / Setup Violations in tt corners when using macros
+After: 11/30/2025 23:59
+Before: 01/01/2026 00:00
+==============================================================
+
+[12/04/2025 14:47] jonathan_ha_25034
+Hi everyone, we are building our toplevel module out of several designs by using macros. We only have one clock input which is routed to all macros, but they do not run at the same clock frequency. Of course, the timing analysis finds Setup Violations in some macros if the toplevel period is smaller than the period of the macro. But how should we go about this? STA finds Setup Violations in the TT corners and then errors out. Is this fine if we know that the macro will never be used at this frequency or do we at least have to fix all errors?
+
+
+[12/04/2025 22:21] mithro_
+I'm pretty sure the precheck does **not** do any timing analysis.
+
+
+[12/04/2025 22:23] mithro_
+You might be able to do something trickly like put in a clock buffer per macro and use sdc to set the maximum frequency on the clock buffer output....
+
+
+[12/04/2025 22:24] mithro_
+The Tiny Tapeout people like @tnt and @urish might have some other ideas?
+
+
+[12/04/2025 22:26] 246tnt
+The pre-check doesn't do any STA indeed so if you're confident that the violations are false positives you can ignore it.  But you could also write a custom SDC that just sets up the constraints correctly for each submodule.
+
+
+[12/05/2025 08:06] jonathan_ha_25034
+The precheck runs without problems. I was just concerned about the "make librelane" flow, since this one ends with an error due to Setup Violations in the tt corner in this case. Does an error prevent some part of the flow from being run? From the log files it seems that every step was executed
+
+
+[12/05/2025 08:08] 246tnt
+No, STA errors won't prevent anything from running, they're just informations.
+
+
+[12/05/2025 08:08] 246tnt
+If you get something in the `final` subdir, then all the steps ran.
+
+
+[12/05/2025 08:11] egorxe
+You can add "Checker.SetupViolations: null" to the substituting_steps section of config.yaml to stop the LibreLane from failing a flow on timing violations.
+
+
+[12/05/2025 08:13] jonathan_ha_25034
+Okay, thanks very much. I will try that 🙂
+
+
+[12/05/2025 08:16] 246tnt
+Oh, looks like my info is outdated, I wasn't even aware that flow failed on STA violation now, sorry about that.
+
+{Reactions}
+👍
+
+==============================================================
+Exported 11 message(s)
+==============================================================

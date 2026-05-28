@@ -1,0 +1,30 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"323371864074485771","mole99","2025-12-17T14:04:16.7170000+00:00","","",""
+"323371864074485771","mole99","2025-12-17T14:04:17.5280000+00:00","Hi @Trevor Peyton, this is from a new check I added yesterday to ensure that every design includes a sealring.","",""
+"323371864074485771","mole99","2025-12-17T14:04:32.6970000+00:00","This is without the sealring.","2025-12_media/Bildschirmfoto_vom_2025-12-17_15-03-39-4E893.png",""
+"323371864074485771","mole99","2025-12-17T14:04:45.5880000+00:00","And this is with the sealring.","2025-12_media/Bildschirmfoto_vom_2025-12-16_17-41-40-4C3A1.png",""
+"323371864074485771","mole99","2025-12-17T14:05:28.0180000+00:00","Can you confirm that your design includes a sealring? If not, you need to add one. The PDK includes a PCell to generate the sealring.","",""
+"805909190333038612","trev5514","2025-12-17T14:05:29.5290000+00:00","Let me look to see if I missed that step in the flow","","👌 (1)"
+"805909190333038612","trev5514","2025-12-17T14:05:42.8170000+00:00","I updated to 1.6.6 before running it this morning.","",""
+"805909190333038612","trev5514","2025-12-17T14:05:51.2160000+00:00","So if it's in the pdk I'm not sure.","",""
+"323371864074485771","mole99","2025-12-17T14:06:12.6420000+00:00","The sealring generation should be part of the default flow of the project template.","",""
+"805909190333038612","trev5514","2025-12-17T14:17:13.7480000+00:00","It is not in my design...","",""
+"805909190333038612","trev5514","2025-12-17T14:17:52.0950000+00:00","Where is it referenced in the flow?","",""
+"323371864074485771","mole99","2025-12-17T14:24:39.4770000+00:00","It is part of the ""Chip"" flow in LibreLane: https://github.com/librelane/librelane/blob/b113e3046d386f7ebbd8ccde014a7e43db91b92a/librelane/flows/chip.py#L103
+
+I have just checked whether the final GDS of the default template includes the sealring and it does. You can download the GDS from the CI at the bottom of this page: https://github.com/wafer-space/gf180mcu-project-template/actions/runs/20265648569
+
+Is your design digital or analog?","",""
+"805909190333038612","trev5514","2025-12-17T14:58:30.1340000+00:00","Digital. I see the step was run but nothings in the log. I wonder if it's because I used the klayout gds instead of the magic? I bypassed the final folder.","",""
+"805909190333038612","trev5514","2025-12-17T14:58:39.5560000+00:00","Let me check the magic one","",""
+"805909190333038612","trev5514","2025-12-17T15:05:05.6130000+00:00","That was not it","",""
+"323371864074485771","mole99","2025-12-17T15:08:29.5610000+00:00","Do you see a message like ""KLAYOUT_FILLER_SCRIPT is unset. KLayout.Filler may not be supported for the gf180mcuD PDK. This step will be skipped."" in the LibreLane flow log?","",""
+"805909190333038612","trev5514","2025-12-17T15:18:30.0510000+00:00","Which step should I look for that log? (or can I. view all logs on one)?","",""
+"323371864074485771","mole99","2025-12-17T15:20:12.2080000+00:00","You should find the warning under `librelane/runs/<timestamp>/warning.log`","",""
+"805909190333038612","trev5514","2025-12-17T15:40:25.7460000+00:00","Yeah I dont see that","",""
+"323371864074485771","mole99","2025-12-17T15:58:51.2130000+00:00","Then I don't know the answer either without looking at the project.
+
+Since the project template generates the GDS with the sealring, you could move your changes over to a fresh repository.","",""
+"805909190333038612","trev5514","2025-12-17T16:24:24.5990000+00:00","I found it, looking at the flow shows I grabbed the gds before it was placed.","",""
+"323371864074485771","mole99","2025-12-17T16:28:20.1290000+00:00","Great! Normally, the final GDS should be inside the folder `librelane/runs/<timestamp>/final/gds/`. If there is no file in this folder, it means that an error occurred during the process. Did you get any errors at the end of the flow?","",""
+"805909190333038612","trev5514","2025-12-17T16:30:24.1250000+00:00","I was rushing to get ahead and submit it to the queue. I did have an antenna violation so I'm trying to fix it right now.","","👌 (1)"

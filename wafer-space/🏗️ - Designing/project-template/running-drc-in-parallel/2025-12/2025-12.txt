@@ -1,0 +1,64 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 🏗️ - Designing / project-template / Running DRC in parallel
+After: 11/30/2025 23:59
+Before: 01/01/2026 00:00
+==============================================================
+
+[12/02/2025 06:43] urish
+
+
+
+[12/02/2025 06:43] urish
+Last time I asked Leo about it, his main concern was the memory requirements
+
+
+[12/02/2025 06:44] polyfractal
+ah, yeah that's fair as a default. would be nice to have the option though (I rented a beefy dedicated server for building/checks this month)
+
+{Reactions}
+👍
+
+[12/02/2025 06:44] urish
+Agreed
+
+
+[12/02/2025 08:39] mole99
+KLayout can run DRC in three different modes: flat, deep and tiled.
+Tiled is inherently multithreaded, and I believe deep is multithreaded in some parts.
+However, not all modes work equally. While deep is mostly compatible with flat, tiled mode needs careful considerations in the DRC rules.
+
+Why can't separate DRC operations be multithreaded?
+KLayout executes the DRC deck interactively, meaning one operation runs after another. This allows easy branching on calculated results, however, it does not allow operations to be parallelized, since dependencies are unknown.
+KLayout would need a flow graph based model to do that.
+
+A quick and dirty way to add parallelization would be to manually split the rule deck and start n processes of KLayout.
+This is what the `run_drc.py` script does, and I can integrate it into LibreLane for the second run.
+However, this also means n times the memory consumption.
+
+I think most of these issues also apply to magic. There the default DRC mode is also a kind of deep mode based on cells. As far as I know, there is no parallelization available.
+
+{Reactions}
+❤️
+
+[12/02/2025 15:02] polyfractal
+interesting, thanks for the extra details!
+
+I guess I don't know enough about the actual DRC rules themselves, why would it need branching? I assumed rules were like "if line width < X" or "If polygons too close together"
+
+
+[12/02/2025 15:18] mole99
+The KLayout DRC engine is actually just a Ruby interpreter with DRC functions: https://www.klayout.de/doc/manual/drc_basic.html
+
+> The DRC functionality is controlled by a DRC script. A DRC script is basically a piece of code which is executed in the context of the DRC engine. The script language is based on KLayout's integrated Ruby interpreter and wraps the underlying object model into a lean and expressive language. Script execution is immediate. That means, that it is possible to embed conditional statements or loops based on the result of a previous operation. It is also possible to code low-level operations on shapes inside the script, although this will be considerably slower than using the functions provided.
+
+It is quite versatile and it even handles connectivity e.g. for antenna checks and extraction for LVS.
+
+I don't think it would be necessary required to have this interactive/immediate operation mode, but this is simply due to the way it is implemented. However, it does allow for some useful tricks: e.g. iteratively filling until a target density is met, to name just one.
+
+Still, it would be great to have a non immediate mode as well, as it could parallelize execution, throw out unused expressions, automatically free memory after last use etc.
+
+
+==============================================================
+Exported 7 message(s)
+==============================================================

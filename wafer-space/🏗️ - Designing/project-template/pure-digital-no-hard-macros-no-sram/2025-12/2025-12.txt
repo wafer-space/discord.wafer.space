@@ -1,0 +1,496 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 🏗️ - Designing / project-template / pure digital, no hard macros, no SRAM.
+After: 11/30/2025 23:59
+Before: 01/01/2026 00:00
+==============================================================
+
+[12/02/2025 00:32] bailey8889
+
+
+
+[12/02/2025 00:32] bailey8889
+Ok, so it's just a big design then. Can you tell which rule it's stuck on by looking at the current log file?
+
+
+[12/02/2025 00:33] ravenslofty
+```
+2025-12-01 13:25:53 +0000: Memory Usage (1206676K) : Starting deriving base layers.
+2025-12-01 13:28:27 +0000: Memory Usage (2314588K) : Construct connectivity for the design.
+2025-12-01 13:28:28 +0000: Memory Usage (2314588K) : Connectivity rules enabled, Netlist object will be generated.
+Chip' - Stage 68 - Design Rule Check (KLayout) ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸━━━━━ 67/77 11:58:20
+```
+
+
+[12/02/2025 00:33] bailey8889
+Is it thrashing? How's your memory usage?
+
+
+[12/02/2025 00:33] ravenslofty
+57.1 GiB free memory
+
+
+[12/02/2025 00:34] ravenslofty
+4.17GiB used by klayout
+
+
+[12/02/2025 00:34] ravenslofty
+
+
+{Attachments}
+2025-12_media/WindowsTerminal_FDNGlZY0Mx-04DD1.png
+
+
+[12/02/2025 00:40] bailey8889
+If you do a 
+```
+find openlane/<block>/runs/<timestamp>
+```
+you should see a lot of files generated at each step. If you look in the directory for klayout-drc (not sure of the name), there should be a real time log showing how much time was spent on each rule. Depending on the output buffering, you may be able to tell which rule is currently being checked.
+
+
+[12/02/2025 00:41] ravenslofty
+
+
+{Attachments}
+2025-12_media/message-AD9A0.txt
+
+
+[12/02/2025 01:28] bailey8889
+@Lofty So that looks like it's been running for about 2 min. Maybe the step after that is where it's stuck. Might be helpful to look at the log after it completes.
+
+Is there a openlane configuration variable to do `deep` vs `flat` drc? All the configuration variables (including defaults) are in the `openlane/<block>/runs/<timestamp>/resolved.json` file.
+
+
+[12/02/2025 01:29] ravenslofty
+(I killed the run, because I didn't have any reason to believe it would complete after another twelve hours of runtime)
+
+
+[12/02/2025 01:30] bailey8889
+@Lofty do you have any old runs still around in a different timestamp directory that completed?
+
+
+[12/02/2025 01:31] ravenslofty
+not anymore, no
+
+
+[12/02/2025 01:32] ravenslofty
+also, I should maybe point out the timezone there. it wasn't running for 2 minutes.
+
+
+[12/02/2025 01:40] bailey8889
+@Lofty Not sure what you mean about timezone.
+Start time `2025-12-01 13:24:36`
+Last enty `2025-12-01 13:25:41`
+
+
+[12/02/2025 01:40] ravenslofty
+yes, and it is currently `2025-12-02 01:40`
+
+{Reactions}
+👍
+
+[12/02/2025 01:42] bailey8889
+Ok, either the last few log entries were buffered or it prints after completion and it was stuck somewhere. Probably need a complete log to know for sure.
+
+
+[12/02/2025 01:43] ravenslofty
+that *was* the complete log
+
+
+[12/02/2025 01:44] bailey8889
+Sorry, I mean a log file after klayout-drc has completely finished.
+
+
+[12/02/2025 01:46] ravenslofty
+like, even in stdout there were no rules mentioned; I genuinely don't think it made it far enough to get stuck on a rule
+
+
+[12/02/2025 01:57] bailey8889
+You may be correct. I have seen log files that are piped or tee'd get buffered though.
+
+
+[12/02/2025 06:54] trev5514
+Are you on macOS? I've been running into the same issue
+
+
+[12/02/2025 10:55] ravenslofty
+WSL
+
+
+[12/02/2025 10:56] ravenslofty
+well, I re-ran the flow overnight, and...it's stuck on klayout again
+
+
+[12/02/2025 11:52] mole99
+@Lofty Did you came this far?
+
+
+[12/02/2025 11:52] mole99
+
+
+{Attachments}
+2025-12_media/image-30DF2.png
+
+
+[12/02/2025 11:52] ravenslofty
+yes.
+
+
+[12/02/2025 11:52] ravenslofty
+and then it hangs.
+
+
+[12/02/2025 11:52] mole99
+Alright, let's wait for a while.
+
+
+[12/02/2025 12:53] ravenslofty
+It's been an hour. Any luck?
+
+
+[12/02/2025 12:55] mole99
+It's still generating the netlist object. For KianV this took 1-2h iirc. Since your design is all combinatorial I would assume it to take even longer.
+
+
+[12/02/2025 12:57] mole99
+However, you can try something else on your end: Go to `gf180mcu/gf180mcuD/libs.tech/librelane` and open `config.tcl`.
+Set `conn_drc` to false: `dict set ::env(KLAYOUT_DRC_OPTIONS) conn_drc false`
+
+
+[12/02/2025 12:59] mole99
+This will skip generating the netlist object. But this also means KLayout needs to consider the worst case for connectivity rules. Still, worth a try.
+
+
+[12/02/2025 13:19] ravenslofty
+okay, we have rules being executed now; this is great
+
+{Reactions}
+👌
+
+[12/02/2025 15:57] trev5514
+FYI mine took 8+ hours and it didn't change from that step... I'll try that option
+
+
+[12/02/2025 15:58] mole99
+You can try disabling `conn_drc` as well. But then you might get false positive DRC errors.
+
+
+[12/02/2025 15:58] ravenslofty
+```
+[15:53:43] VERBOSE  Running 'Checker.KLayoutDRC' at 'librelane/runs/RUN_2025-12-02_01-03-17/65-checker-klayoutdrc'…                                                  step.py:1138
+[15:53:43] ERROR    16 KLayout DRC errors found. - deferred                                                                                                        checker.py:124
+```
+urgh
+
+
+[12/02/2025 15:58] mole99
+Nice, we can work with that.
+
+
+[12/02/2025 16:00] ravenslofty
+um, they seem to all be `NW.2b_MV` violations?
+
+
+[12/02/2025 16:02] ravenslofty
+"Min. Nwell Space (Outside DNWELL) [Different potential]"
+
+
+[12/02/2025 16:03] mole99
+As expected, since Klayout does not have any connectivity information it needs to assume the worse.
+
+
+[12/02/2025 16:04] mole99
+Can you open the violations in the KLayout Marker Browser and send me a screenshot where they are located?
+
+
+[12/02/2025 16:07] ravenslofty
+um, where's the marker database file to open?
+
+
+[12/02/2025 16:09] ravenslofty
+I think I found it, but it's giving me stuff like this
+
+
+[12/02/2025 16:09] ravenslofty
+https://fieldprogrammable.gay/files/5fa95bf6-ce10-487c-ac4b-327d6a770f3a.png
+
+{Embed}
+https://fieldprogrammable.gay/files/5fa95bf6-ce10-487c-ac4b-327d6a770f3a.png
+2025-12_media/5fa95bf6-ce10-487c-ac4b-327d6a770f3a-4FE53.png
+
+
+[12/02/2025 16:11] ravenslofty
+^
+
+
+[12/02/2025 16:24] mole99
+Is this with just the Nwell layer enabled?
+
+
+[12/02/2025 16:30] bailey8889
+@lofty, turn on only nwel and then set the display levels to 0 - 20 (or hit the `+` key until all the cell frames disappear)
+
+
+[12/02/2025 16:41] ravenslofty
+https://fieldprogrammable.gay/files/1be1a3b6-04d2-4074-a2b8-3acb36408573.png
+um, like this?
+
+{Embed}
+https://fieldprogrammable.gay/files/1be1a3b6-04d2-4074-a2b8-3acb36408573.png
+2025-12_media/1be1a3b6-04d2-4074-a2b8-3acb36408573-D2766.png
+
+
+[12/02/2025 16:46] ravenslofty
+it seems like the DRC rules are generating pairs of errors for this
+
+
+[12/02/2025 16:46] ravenslofty
+so there are only like 8 actual conflicts?
+
+
+[12/02/2025 16:49] ravenslofty
+https://fieldprogrammable.gay/files/a664e04a-50dd-4b95-8ba4-4e808309e917.png
+https://fieldprogrammable.gay/files/8fe28588-7e40-46bb-a3f7-9886b62a5712.png
+https://fieldprogrammable.gay/files/95d36260-cf52-4a45-963f-7eefcda28188.png
+https://fieldprogrammable.gay/files/cd37610a-6153-4105-a78a-e879a1effaee.png
+
+{Embed}
+https://fieldprogrammable.gay/files/a664e04a-50dd-4b95-8ba4-4e808309e917.png
+2025-12_media/a664e04a-50dd-4b95-8ba4-4e808309e917-FE02A.png
+
+{Embed}
+https://fieldprogrammable.gay/files/8fe28588-7e40-46bb-a3f7-9886b62a5712.png
+2025-12_media/8fe28588-7e40-46bb-a3f7-9886b62a5712-CFE52.png
+
+{Embed}
+https://fieldprogrammable.gay/files/95d36260-cf52-4a45-963f-7eefcda28188.png
+2025-12_media/95d36260-cf52-4a45-963f-7eefcda28188-7044B.png
+
+{Embed}
+https://fieldprogrammable.gay/files/cd37610a-6153-4105-a78a-e879a1effaee.png
+2025-12_media/cd37610a-6153-4105-a78a-e879a1effaee-1029E.png
+
+
+[12/02/2025 16:49] ravenslofty
+https://fieldprogrammable.gay/files/25dab0b6-a805-45d3-9dce-f6da62b0346f.png
+https://fieldprogrammable.gay/files/af3b0b74-f785-4add-8416-b2ea3e45f585.png
+https://fieldprogrammable.gay/files/db6629bf-3154-4667-848e-081c97086263.png
+https://fieldprogrammable.gay/files/8c8630f9-3ed3-40a4-9bb0-06d2384e10fa.png
+
+{Embed}
+https://fieldprogrammable.gay/files/25dab0b6-a805-45d3-9dce-f6da62b0346f.png
+2025-12_media/25dab0b6-a805-45d3-9dce-f6da62b0346f-DC988.png
+
+{Embed}
+https://fieldprogrammable.gay/files/af3b0b74-f785-4add-8416-b2ea3e45f585.png
+2025-12_media/af3b0b74-f785-4add-8416-b2ea3e45f585-5DF43.png
+
+{Embed}
+https://fieldprogrammable.gay/files/db6629bf-3154-4667-848e-081c97086263.png
+2025-12_media/db6629bf-3154-4667-848e-081c97086263-CBB18.png
+
+{Embed}
+https://fieldprogrammable.gay/files/8c8630f9-3ed3-40a4-9bb0-06d2384e10fa.png
+2025-12_media/8c8630f9-3ed3-40a4-9bb0-06d2384e10fa-B704A.png
+
+
+[12/02/2025 16:50] ravenslofty
+cc @bailey @Leo Moser (mole99)
+
+
+[12/02/2025 18:58] mole99
+@Lofty Sorry, I was afk.
+
+The next step is to make sure all devices use the "Dualgate" layer. These are the thick oxide transistors for 5V/6V. This should be the case anyways if you use the foundry provided I/O cells and standard cells. If so, it means we can actually use rule NW.2a (equi-potential).
+Now, just take a measurement between the edges and check that the spacing is >= 0.74um.
+
+I'll do the same before adding your design to the shuttle, but this way you can already be sure these are false positives :)
+
+
+[12/02/2025 18:59] mole99
+FYI KLayout was not stuck, it just took a looong time:
+
+
+[12/02/2025 18:59] mole99
+
+
+{Attachments}
+2025-12_media/image-37D4A.png
+
+
+[12/02/2025 19:00] mole99
+This will make for a good test case for Matthias.
+
+
+[12/02/2025 20:43] mole99
+
+
+{Attachments}
+2025-12_media/Bildschirmfoto_vom_2025-12-02_21-41-45-9B062.png
+
+
+[12/02/2025 20:43] mole99
+Almost 9 hours, but we're done. The magic DRC errors are CO.3 and can be ignored.
+
+
+[12/02/2025 20:44] mole99
+@Lofty Your design is DRC clean 🎉
+
+
+[12/02/2025 20:49] ravenslofty
+hurray; too bad that GDS has hold violations and I have spent the past several hours building a new GDS >.<
+
+
+[12/02/2025 20:54] ravenslofty
+all the same, I don't think I have much to worry about there.
+
+
+[12/02/2025 20:56] ravenslofty
+maybe I really do need a CPU upgrade though, if it takes me 12 hours to fail to achieve what you can complete in 9...
+
+
+[12/03/2025 07:23] mole99
+At least you know that there isn't anything special DRC-wise about your design. So the next iteration will very likely also be DRC clean.
+
+I'm using a Ryzen 9 9900X and I'm running it natively on Linux. It may be that the emulation through WSL2 may cause you to lose some performance.
+
+
+[12/05/2025 16:30] ravenslofty
+well, now I have very slow antenna checking ^^;
+
+
+[12/05/2025 16:30] ravenslofty
+it's stuck on `2025-12-05 15:21:23 +0000: Memory Usage (3550244K) : Executing rule ANT.16_i_ANT.5`
+
+
+[12/05/2025 16:35] mole99
+You can jump to the latest tag of the PDK: https://github.com/wafer-space/gf180mcu/releases/tag/1.4.3
+There have been two more changes that should speed up the antenna check, however, don't expect miracles.
+
+
+[12/05/2025 23:44] ravenslofty
+now I'm getting what seems to be an LVS failure?
+
+
+[12/05/2025 23:46] ravenslofty
+um, @bailey you seem to be the person to talk to about LVS?
+
+
+[12/05/2025 23:47] ravenslofty
+```
+Circuit 1 contains 137698 devices, Circuit 2 contains 140300 devices. *** MISMATCH ***
+Circuit 1 contains 133045 nets,    Circuit 2 contains 138947 nets. *** MISMATCH ***
+```
+
+
+[12/05/2025 23:49] ravenslofty
+oh. am I running into Magic issues because I have `autoname` on?
+
+
+[12/06/2025 00:42] bailey8889
+@Lofty I have seen errors due to autoname. I've used klayout to manually removed them from the gds without having to rerun.
+
+From the limited information above, I'm guessing that there are unconnected power rails for some standard cell rows. Most probably between or at the edges where there's not enough room to intersect with power rails.
+
+If you share the cell list from the `lvs.report` that precedes the mismatch counts above, I might be able to suggest something else.
+
+
+[12/06/2025 00:44] ravenslofty
+
+
+{Attachments}
+2025-12_media/netgen-lvs-2A496.log
+
+
+[12/06/2025 00:52] bailey8889
+@Lofty this one `lvs.netgen.rpt` has more information.
+
+
+[12/06/2025 00:52] ravenslofty
+
+
+{Attachments}
+2025-12_media/lvs.netgen-828BD.rpt
+
+
+[12/06/2025 00:59] bailey8889
+... and how about the `lvs_config.json` file. Looks like the standard cell spice may not be loaded.
+
+Do you know what command is being used to run LVS?
+
+
+[12/06/2025 01:01] ravenslofty
+um, I don't have a file by that name?
+
+
+[12/06/2025 01:04] bailey8889
+@Lofty ok. I'm not yet familiar with the wafer.space LVS setup. Is it run as part of precheck or a github action or is there a command to run LVS locally?
+
+
+[12/06/2025 01:04] ravenslofty
+it's librelane
+
+
+[12/06/2025 01:05] ravenslofty
+<https://github.com/librelane/librelane/blob/main/librelane/scripts/netgen/setup.tcl>
+
+
+[12/06/2025 01:06] ravenslofty
+<https://github.com/librelane/librelane/blob/main/librelane/steps/netgen.py#L127>
+
+
+[12/06/2025 01:25] bailey8889
+@Lofty thanks, that explains a lot.
+
+Looks like the verilog and layout are out of sync. I'm seeing mismatches in standard cell counts that should not happen.
+```
+gf180mcu_fd_sc_mcu9t5v0__oai21_1 (12908)   |gf180mcu_fd_sc_mcu9t5v0__oai21_1 (13137) *
+gf180mcu_fd_sc_mcu9t5v0__mux2_1 (10908)    |gf180mcu_fd_sc_mcu9t5v0__mux2_1 (10942) **
+```
+The layout is the abstract extracted spice `runs/eco/29-magic-spiceextraction/chip_top.spice`, but unfortunately, I can't find what verilog netlist is being used.
+
+I'll create a PR that records that file in the log file.
+
+
+[12/06/2025 01:34] ravenslofty
+I did eco in some hold buffers, but...they should be in there? Hmm
+
+
+[12/06/2025 01:55] bailey8889
+Here's the PR with the change. https://github.com/librelane/librelane/pull/831
+
+If you wanted to make the change locally, you could verify whether or not the expected top level verilog netlist is being used.
+
+{Embed}
+https://github.com/librelane/librelane/pull/831
+Display top verilog file name in LVS log. by d-m-bailey · Pull Req...
+Currently, the top level verilog file name is not displayed in the netgen log.
+Here&amp;#39;s a sample
+Reading SPICE netlist file &amp;#39;/home/&amp;lt;user&amp;gt;/gf180mcu-chess/gf180mcu/gf180mc...
+
+
+[12/06/2025 07:05] ravenslofty
+```
+Circuit 1 contains 140296 devices, Circuit 2 contains 140296 devices.
+Circuit 1 contains 138946 nets,    Circuit 2 contains 138946 nets.
+
+Final result:
+Circuits match uniquely.
+```
+the issue is indeed Magic; this is using 8.3.578 which includes the 512-character maximum name length fix
+
+{Reactions}
+👍
+
+[12/06/2025 07:07] ravenslofty
+(@Leo Moser (mole99) maybe the flake.nix should be updated?)
+
+
+[12/06/2025 10:58] mole99
+I'm on it!
+
+
+==============================================================
+Exported 88 message(s)
+==============================================================

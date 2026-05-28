@@ -1,0 +1,118 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 🏗️ - Designing / project-template / Has anyone submitted since? My design I
+After: 11/30/2025 23:59
+Before: 01/01/2026 00:00
+==============================================================
+
+[12/17/2025 14:04] mole99
+
+
+
+[12/17/2025 14:04] mole99
+Hi @Trevor Peyton, this is from a new check I added yesterday to ensure that every design includes a sealring.
+
+
+[12/17/2025 14:04] mole99
+This is without the sealring.
+
+{Attachments}
+2025-12_media/Bildschirmfoto_vom_2025-12-17_15-03-39-4E893.png
+
+
+[12/17/2025 14:04] mole99
+And this is with the sealring.
+
+{Attachments}
+2025-12_media/Bildschirmfoto_vom_2025-12-16_17-41-40-4C3A1.png
+
+
+[12/17/2025 14:05] mole99
+Can you confirm that your design includes a sealring? If not, you need to add one. The PDK includes a PCell to generate the sealring.
+
+
+[12/17/2025 14:05] trev5514
+Let me look to see if I missed that step in the flow
+
+{Reactions}
+👌
+
+[12/17/2025 14:05] trev5514
+I updated to 1.6.6 before running it this morning.
+
+
+[12/17/2025 14:05] trev5514
+So if it's in the pdk I'm not sure.
+
+
+[12/17/2025 14:06] mole99
+The sealring generation should be part of the default flow of the project template.
+
+
+[12/17/2025 14:17] trev5514
+It is not in my design...
+
+
+[12/17/2025 14:17] trev5514
+Where is it referenced in the flow?
+
+
+[12/17/2025 14:24] mole99
+It is part of the "Chip" flow in LibreLane: https://github.com/librelane/librelane/blob/b113e3046d386f7ebbd8ccde014a7e43db91b92a/librelane/flows/chip.py#L103
+
+I have just checked whether the final GDS of the default template includes the sealring and it does. You can download the GDS from the CI at the bottom of this page: https://github.com/wafer-space/gf180mcu-project-template/actions/runs/20265648569
+
+Is your design digital or analog?
+
+
+[12/17/2025 14:58] trev5514
+Digital. I see the step was run but nothings in the log. I wonder if it's because I used the klayout gds instead of the magic? I bypassed the final folder.
+
+
+[12/17/2025 14:58] trev5514
+Let me check the magic one
+
+
+[12/17/2025 15:05] trev5514
+That was not it
+
+
+[12/17/2025 15:08] mole99
+Do you see a message like "KLAYOUT_FILLER_SCRIPT is unset. KLayout.Filler may not be supported for the gf180mcuD PDK. This step will be skipped." in the LibreLane flow log?
+
+
+[12/17/2025 15:18] trev5514
+Which step should I look for that log? (or can I. view all logs on one)?
+
+
+[12/17/2025 15:20] mole99
+You should find the warning under `librelane/runs/<timestamp>/warning.log`
+
+
+[12/17/2025 15:40] trev5514
+Yeah I dont see that
+
+
+[12/17/2025 15:58] mole99
+Then I don't know the answer either without looking at the project.
+
+Since the project template generates the GDS with the sealring, you could move your changes over to a fresh repository.
+
+
+[12/17/2025 16:24] trev5514
+I found it, looking at the flow shows I grabbed the gds before it was placed.
+
+
+[12/17/2025 16:28] mole99
+Great! Normally, the final GDS should be inside the folder `librelane/runs/<timestamp>/final/gds/`. If there is no file in this folder, it means that an error occurred during the process. Did you get any errors at the end of the flow?
+
+
+[12/17/2025 16:30] trev5514
+I was rushing to get ahead and submit it to the queue. I did have an antenna violation so I'm trying to fix it right now.
+
+{Reactions}
+👌
+
+==============================================================
+Exported 23 message(s)
+==============================================================

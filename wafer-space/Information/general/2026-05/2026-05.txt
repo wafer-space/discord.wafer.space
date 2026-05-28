@@ -3245,6 +3245,27 @@ But as far as the die can tell, those copper traces are fully exposed towards th
 This wouldn't be so hard if the guard ring was more than those 16um away from the pad edge. The coverlay would need about 150~250um gap to handle it well.
 
 
+[05/28/2026 01:00] mithro_
+@namibj - I think I understand the issue with the guard ring now, it is very close to the pads and whatever is trying to bond to pads is likely to accidentally connect with the guard ring and the guard ring would short everything together.
+
+
+[05/28/2026 01:01] mithro_
+@Leo Moser (mole99) - are you able to confirm that there is no polyimide/oxide over the top of the guard ring structure?
+
+
+[05/28/2026 01:07] namibj
+Notably it should look like pad not like PDN if I'm right.
+
+
+[05/28/2026 01:18] namibj
+Also it's much closer than the gap between pads (~3x) and right in the way of where one would want the lead frame traces to go from the pads. Without that you could take a PCB footprint like the wirebond fan out just all the way to the pads, flip the chip, put ACF between, and in theory a clothes iron set zu 2.5 for about 3 to 15 seconds. 
+
+In practice one wants a bit more precision in control to maintain good yield without dies delaminating from the board due to poorly hardened epoxy nor poor electrical contract/occasional shorts between adjacent pads.
+
+Also JLC AFAIK only sells that very fine pitch (102μm used on quarter slot) on 1/3oz FPC.
+But benefit, both FPC and ACF are see-through so no dedicated fiducials would be required.
+
+
 ==============================================================
-Exported 660 message(s)
+Exported 664 message(s)
 ==============================================================
