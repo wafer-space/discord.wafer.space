@@ -840,6 +840,227 @@ I pushed another update in which I got rid of the calls to DBPaint() and DBErase
 ok
 
 
+[05/25/2026 02:04] rtimothyedwards_19428
+I found another issue in the code and knocked down the time from 1 1/2 hours to 1 hour (so I cut another 50% off of the extraction time).  (Version 8.3.649).
+
+
+[05/25/2026 18:53] namibj
+Yay. 
+
+(I'm sorry the heatwave has impacted my productivity.)
+
+
+[05/25/2026 20:54] rtimothyedwards_19428
+You're way overproductive and the heat wave is allowing me to catch up.  : )
+
+
+[05/25/2026 23:03] mithro_
+Random fact, US circuits suck, so the only place I could plug in my server that provided enough power was the power point for my AC (which was 240V). 
+
+I either had A/C or a 2400 watt heater (IE the server), great for winter, terrible for summer 🙂
+
+I ended up building a mini-datacenter to deal with the heat and stuff....
+
+{Attachments}
+2026-05_media/AP1GczP81uPF2LpfXV3qBbqxBWsXeP9BRI1UAb5R-Y-DFCB9.png
+2026-05_media/AP1GczMS15Yv7UuQCuK3lNgI5-bdpW7mz-TZ3W1vdv-B2B79.png
+2026-05_media/AP1GczM9eOdA4ZhZYqiaXbi_1k5IVWUPxkvGlmkC5M-0BF46.png
+
+
+[05/25/2026 23:17] rtimothyedwards_19428
+I visited Tim in his apartment and I can attest to the fact that he was basically living in a server closet.
+
+
+[05/25/2026 23:20] rtimothyedwards_19428
+I can also attest to the fact that many (most?) houses and apartments in the Bay Area are built without either insulation or air conditioning, and when it hits 38C in San Jose (which is fortunately rare, but it does happen), it is a bit like living in an oven with no door.
+
+
+[05/26/2026 03:49] namibj
+I'm turning my shed into my data center, though it'll be fresh air intake (filtered) with just hot/cold aisle separation.
+
+
+[05/26/2026 03:52] namibj
+Gotta knock out the SAS and power cable hole between the two chassis and 3d print a baffle up front to make the top one suck it's air through the hdds caged in the bottom before hitting the ssds and then the fans and then the ram/CPUs, before meeting the rest.
+
+
+[05/26/2026 08:53] mithro_
+My dad is helping me turn an old shed into that right now too!
+
+{Attachments}
+2026-05_media/get_attachment_url-A151F.png
+
+{Reactions}
+💜
+
+[05/26/2026 21:12] rtimothyedwards_19428
+@namibj :  I looked into the problem with the "missing substrate" terminal detection, determined that it happens specifically on diodes, and specifically because diodes have 2 or 3 terminals, and there is code for "extresist" that still expects all devices to be 4-terminal FETs.  I previously (a long time ago) added some lines that ignore devices that have fewer than 4 terminals, as a way to avoid the problem while working on other things, but I forgot that was in there, and the handling of diodes has never been checked.  I started fixing that but am running into segfaults, and it looks like a not so easy problem to track down the places where two or three terminal devices are not being handled correctly.
+
+
+[05/26/2026 21:22] namibj
+oh. I'm unfortunately too busy to hunt down those memory bugs until towards end of next week, sadly.
+
+In similar extraction spirit, do you happent o have _any_ knwoledge of 3v3 native nmos existing on this process, and if so, whether there might be something vaguely-practical to mash existing nmos_03v3 and nmos_06v0_nvt models together considering that they at least claim to be physically-based and the only physical substantial difference should be the oxide thickness that's deposited?
+At least that's the only explanation I could come up with that wouldn't involve an extra physical mask to handle 3v3_nvt in addition to 6v0_nvt.
+
+
+[05/26/2026 21:41] rtimothyedwards_19428
+@namibj :
+(1)  No worries;  I am working through the problems and was just letting you know the status.
+
+(2) Yes, assuming that the NAT layer is included in the process options (which I think is true for Wafer.Space), then both 3.3V and 5/6V native nMOS devices exist.  That's according to the documentation:  "This process supports 3.3V and 5V/6V native Vt NMOS. The difference between 3.3V and 5V/6V native Vt transistor is that the 5V/6V native Vt NMOS need Dualgate layer."  The real problem here is that there is no _device model_ for the 3.3V native Vt nFET.  Given some test structures and somebody with a wafer probe station and the proper instrumentation, we could presumably generate a reasonable device model.
+
+
+[05/26/2026 22:17] namibj
+As we have models for the other siblings and those models are claimed to be physical models, would it be reasonable to interpolate into the `nfet_03v3_nvt` and hit approximately as (in-)accurately as the regular process corners (ff/fs/sf/ss) already are?
+I'd try to make it for this tt experimental shuttle at least to get the MCML VCO + NRZ serialiser completed drawn, and I'd quite like to use them in the upper level of the D-latch DIV2; bias current is externally supplied anyways and should cover a lot of potential variation, it's only really the strength of the memory pair vs. the input pair that really matters due to the tail current source so yeah...
+
+Honestly I am severely surprised they just left it out? Completely?
+I'd think we should at least get some etest data, that has to exist, right?
+
+
+[05/26/2026 23:36] namibj
+I haven't tested them _yet_ but that'll not be too long.
+Even if they don't model/simulate, they will have to extract even just for LVS to be possible; I believe the current state of silent swallowing /ignoring is the worst option; extracting a model that clashes for lack of spice library coverage should still be better than silently ignoring what to our understanding will become a non-negligible transistor.
+
+Oh, and just for completeness's sake, the gds I drew real quick in klayout with the `nfet_03v3_nvt` device structure that doesn't extract.
+
+{Attachments}
+2026-05_media/nfet_03_v_3_nvt_bins_6_10-42483.spice
+2026-05_media/nmos_03v3_nvt_test_flattened_01-95E66.gds
+
+
+[05/26/2026 23:38] namibj
+(Oh, yeah, disclaimer almost forgotten; that spice there was LLM'd out of the `nfet_06v0_nvt` and the `nfet_03v3`models.)
+
+
+[05/26/2026 23:40] rtimothyedwards_19428
+I can add a device model extraction to the tech file for magic.
+
+
+[05/26/2026 23:40] namibj
+Thanks. NO rush I won't get to use it before middle next week at the earliest.
+
+
+[05/26/2026 23:42] namibj
+If you dare look at the LLM-written .spice, I wouldn't hate an opinion on the uncertainty treatment/coding done in there; that was not the LLM's idea to be clear, that was my thought.
+
+
+[05/26/2026 23:43] namibj
+well, not get to use it  for anything productive, at least. I might be able to run it sooner 😄
+
+
+[05/26/2026 23:43] rtimothyedwards_19428
+@Tim 'mithro' Ansell :  Any chance of getting hold of a model for what should be `nfet_03v3_nvt`?  It did not exist in the original GF PDK.  It probably exists in other GF180 processes, where the model might even be similar enough to use as a placeholder until we can characterize the device ourselves.  Getting GF to open source that model is a separate question, though.
+
+
+[05/26/2026 23:47] namibj
+honestly some etest data ideally on a setup that also has `nfet_03v3` and `nfet_06v0` and `nfet_06v0_nvt` under presumed-same process corner and with sufficiently similar probing parasitics should allow narrowing in these uncertainties of the fairly-naive extrapolation into this missing model "corner"; it'd probably be functional after that.
+We already have all the sibling models in the PDK, after all; I don't see what beyond etest qualification ground-truth is missing to properly fit that model corner....
+
+
+[05/26/2026 23:50] rtimothyedwards_19428
+@namibj :  The SPICE model for `nfet_03v3_nvt` should not have parameters `s_sab` and `d_sab`.  Those parameters exist only for the "drain-side (un)salicided" devices which have the suffix `_dss`.  The `dss` devices are very different and the `nvt` device should not be derived from them.
+
+
+[05/26/2026 23:50] namibj
+(If I'm wrong please do tell. And I don't particularly see why they would have good reason to hide a dump of etest for the 4 symmetric nfet devices on gf180mcuD; unless they don't casually collect such data or the way they collect it involves too-secret transistor geometry choices.)
+
+
+[05/26/2026 23:51] namibj
+Oh thank you I will get that taken care of.
+
+
+[05/26/2026 23:51] namibj
+(But the general concept of the uncertainty modeling is not-bad, or?)
+
+
+[05/26/2026 23:54] rtimothyedwards_19428
+No idea, really.  I have to stare at the models for a lot longer.
+
+
+[05/26/2026 23:54] namibj
+oh.
+
+
+[05/27/2026 00:00] namibj
+Basically the idea was to instead of the normal mostly-2-dimensional "process corner" scheme (very separate from local missmatch) to add a bunch more dimensions to cover the independent knobs of the BSIM model that had to be mostly-guessed/extrapolated from the 3 other `nfet` variants, with the goal being that if one can at least give decent estimations for the range of values that would be plausible/realistic to have there given the other nfet models, then the monte carlo tactic would allow testing if across the ranges of realistic parameter values, the circuit in question would nonetheless stay functional (even if perhaps somewhat derated from the plans), which would allow using it quite liberally in the ttgf0p3 analog test die that goes in Run2.
+
+
+[05/27/2026 00:02] mithro_
+Any idea why it didn't exist in the original GF PDK?
+
+
+[05/27/2026 00:02] rtimothyedwards_19428
+No clue at all.
+
+
+[05/27/2026 00:05] namibj
+even `nfet_06v0_nvt` is only a singular bin..... also doesn't appear to have any missmatch modeling done to it.
+
+
+[05/27/2026 00:06] namibj
+(I'm low key surprised you're still paying for the `NAT` mask layer on the upcoming runs, but I guess it's easier than modifying the PDK tooling to get rid of it and change what exdact process is run at glofo.)
+
+
+[05/27/2026 00:07] mithro_
+From https://bit.ly/gf180mcu-names - I'm guessing it would be called something like nmos_3p3_nat in the original PDK.
+
+It does seem like it appears in the ULL and IC PDKs
+
+{Embed}
+https://bit.ly/gf180mcu-names
+GF180MCU (GlobalFoundries 180nm PDK) -- Primitive Model Naming [pub...
+2026-05_media/AHkbwyJDElPafZMJ8sTbC0W4IkbzaYDg2KXUCyW63R-9CA0A
+
+
+[05/27/2026 00:09] namibj
+Who with their "normal" mind wants "-0.32/-0.12/0.08 V (min/typ/max)" threshold voltage (`W/L= 10/1.8`; `VT0 (@Vds=0.1V,Vgs at Ids maximum Slope, Vt0=Vgs_intercept-0.5*Vds)`) after all....
+
+
+[05/27/2026 00:12] namibj
+only good for cascodes and _I think_ speed-pushed MCML buffers. If one happens to have a negative supply they can also be used as high-side power gating n-channel switches, but turning them off seems to need a negative gate bias of around 500~1000 mV.
+
+
+[05/27/2026 00:12] mithro_
+The details about mask layers that I have is at https://docs.google.com/spreadsheets/d/1RRPZ5prd2J3x1TO8l8eW8O50F2o9tF4JRuRT-NS01oU/edit?gid=2033140516#gid=2033140516 and https://docs.google.com/document/d/1Uf6xGZHpuA_G4iyAvxDwEENMjPBAf0Q16D0c8F0lbDQ/edit?tab=t.0
+
+{Embed}
+https://docs.google.com/document/d/1Uf6xGZHpuA_G4iyAvxDwEENMjPBAf0Q16D0c8F0lbDQ/edit?tab=t.0
+wafer.space - GF180MCU Cost Optimization
+Goal Figure out how to eliminate mask layers and reduce the cost of GF180MCU runs. Background The Google GF180MCU runs used a GF180MCU configuration called "1P5M26ML" which is a 5 metal, 26 mask layer configuration.  This configuration costs almost 50% more for both masks and wafers than the "1P3...
+2026-05_media/AHkbwyKWzUtTPSSgE4N7fL5Jr5N4gK-EN5iO0imgl0-55EF4
+
+{Embed}
+https://docs.google.com/spreadsheets/d/1RRPZ5prd2J3x1TO8l8eW8O50F2o9tF4JRuRT-NS01oU/edit?gid=2033140516
+wafer.space GF180MCU Configuration
+2026-05_media/AHkbwyLupzKGcid_zXmJMikEm8OVvuGZrDvay277UH-1B1E7
+
+
+[05/27/2026 00:19] namibj
+ahhh ok so is this mask 1L: `MVNVT`.... sadly https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_04_2.html smells like NDA wall to me
+
+
+[05/27/2026 05:59] 246tnt
+AFAIK/U "native" device don't really need another mask. You need a mask to know where to put Vt implants but you need that mask anyway for normal transistors. The `NAT` GDS layer just tells the mask generation to not put implants on that transistor ...
+
+
+[05/27/2026 08:33] namibj
+They say the devices are optional that implies to me they're not truly free at just not under all cheapenings of the process.
+
+
+[05/27/2026 08:36] namibj
+And if native devices were free why do only thick oxide native devices exist on sky130A?
+They use the same GDS drawing layer as the low (but still very non-zero) threshold voltage `nfet_1v8_lvt`.
+
+
+[05/27/2026 12:15] rtimothyedwards_19428
+@namibj :  I have used native Vt devices pretty much exclusively for cascodes.  The `05v0_nvt` device in sky130 works quite well as a cascode on top of a normal 3.3V nFET, and the gates of both devices can be driven with the same voltage, avoiding the need to set up a cascode voltage on the n side.
+
+
+[05/27/2026 12:17] namibj
+I'm looking to use them in especially upper tiers of an MCML pull-down-network.
+
+
 ==============================================================
-Exported 170 message(s)
+Exported 212 message(s)
 ==============================================================

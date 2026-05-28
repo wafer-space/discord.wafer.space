@@ -955,7 +955,359 @@ Doh.  Just finished routing my board.  For some reason at that point I decided t
 [05/24/2026 08:14] rebelmike
 Ah, this is the same thing that @BreakingTaps spotted last week!
 
+{Reactions}
+🫠
+
+[05/24/2026 10:55] mole99
+Started a thread.
+
+
+[05/24/2026 17:48] anfroholic
+Hey @Leo Moser (mole99) stuff seems to get lost in threads on discord.
+For starters, I don't think any of this 'should' happen for run2. I think it's too late for that. 
+
+> I'm not exactly sure what your diagram is showing?
+I just decided to make a rough thing to illustrate. @RebelMike you could probably imagine a ring of vias that do whatever on the bottom side, but all route cleanly on the top. 
+
+> I agree that we should harmonize what we can between the different slots sizes. What are your plans with regards to matching the pinout?
+If we want to keep that many pins on all the half slots and drop 2 from the 1x1 we end up with them all being identical. I don't know what this means in reality, but if someone wanted to prototype on a half slot, then move to a larger size, the pin/padout stays identical. 
+
+> PS: Looking at the CoB PCB for the 1x1 slot, pin 1 of the mezzanine connector seems to be in the top right corner rather than the top left. Why is that the case?
+KiCads generic connector library and most packages and connectors in general have pin1 in the top left. I would prefer, if someone were to take a generic mezzanine connector and use the footprint provided by the manufacturer, for pin1 to line up. There's already a lot of confusion when trying to go through all these maps to add one more translation.
+
+{Attachments}
+2026-05_media/harmonized_slot_1x1-7F68B.png
+2026-05_media/harmonized_slot_1x0p5-AB264.png
+2026-05_media/harmonized_slot_0p5x1-C10AE.png
+
+
+[05/24/2026 18:17] 246tnt
+But connectors is on the bottom of the PCB, opposite of die. And then the connector on the "user side" is also swapped because it's the other side of the connection ... they can't be all top left pin 1 footprint, at some point swap needs to occur ...
+
+
+[05/24/2026 18:20] anfroholic
+Agreed, when mentioning the connector above, I was referring to the connector a user would be sourcing (on their motherboard). The important one in my mind is the final connector and the die itself to match.
+
+
+[05/24/2026 18:37] 246tnt
+But the "manufacturer footprint" argument doesn't hold really. If you look at the kicad library ( in the Hirose library for DF12 that's the closest I have installed ), the `DS` side connector which would be the "user side" , they standardized indeed on pin 1 top left ... with the connector horizontal. Which means top right if you put it vertically ( or bottom left ) ...
+
+
+[05/24/2026 18:51] anfroholic
+Whatever, I'm not religious about this. Seems like others are. I also tend to make and throw a bunch of stuff against the wall to see what sticks. 
+
+More to the point of harmonizing. There is an error in my pictures from the last post. I am reposting more correct versions. 
+I have also created an example slot_size.yaml thing. 
+I am not sure how many people will be designing for multiple slot sizes, or how difficult that is. @RebelMike can maybe speak to that. 
+In the spirit of making more things, I propose a config that has a different shape. There is a single list of pads that doesn't change between slot sizes.
+
+{Attachments}
+2026-05_media/harmonized_slot_0p5x1-81F56.png
+2026-05_media/harmonized_slot_1x0p5-8229F.png
+2026-05_media/harmonized_slot_1x1-1ECF6.png
+2026-05_media/example_padring_0p5x1-1842D.yaml
+2026-05_media/example_padring_1x0p5-056A3.yaml
+2026-05_media/example_padring_1x1-D7C00.yaml
+
+
+[05/24/2026 18:52] anfroholic
+And for the record I am aware this obscures a starting pad even further
+
+
+[05/24/2026 19:25] namibj
+IMO what needs to be clear and uniform across all 3 slabs of multilayer routing is that there's exactly one clear orienting corner, and they all line up when assembled correctly. 
+Die, COB, motherboard's socket area.
+
+{Reactions}
+👍 (2)
+
+[05/24/2026 19:28] namibj
+That's easy to verify when looking at a layout and picking like 3-ish nets to highlight and visually check. 
+
+The top surface of all 3 is the same "up".
+
+{Reactions}
+👍 (2)
+
+[05/24/2026 19:30] namibj
+(in the sense of surface-normal-vector direction)
+
+
+[05/24/2026 20:06] rebelmike
+I was assuming power pads would stay where they were and this was simply an exercise in renaming the signal pads in the default template on the half (and quarter) slots.  That basically has no implications except for helping make the CoB pinout clearer as there would be a single mapping default template -> pins, which projects could compare their renamed pins against.
+
+But for run 3 obviously bigger changes could be considered - I'm not clear on what the implications of removing two power pads from the 1x1 pad ring would be.
+
+
+[05/24/2026 20:20] namibj
+Don't remove too many power pads, at least if we have a way to not fry chips as much as the avalon Run1 DACs are doing.
+
+
+[05/24/2026 20:20] namibj
+larger chip more consumption
+
+
+[05/24/2026 20:21] rebelmike
+My thoughts:
+- The wafer space logos should be in the same position as it's the obvious marker to align in assembly (I'd weakly suggest top right as aesthetically it looks most pleasing there - Andrew and Leo both put it there independently AFAICT) - this doesn't necessarily need to mean "pin 1".
+- To allow that without users having to change their run 2 designs, the CoB pinout should be changed (this would likely end up ~a 180 degree rotation on the current pinout, and maybe if it could be exactly that that would leave some compatibility between run 1 and run 2).
+- The project pad -> mezzanine pin mapping should be clearly documented, with reference to the pad names in the default template and the pin names on the mezzanine footprint for the user's motherboard.
+- The signal (and VDD?) pins on the default templates should be harmonized as much as possible, so the above documentation applies to all slot sizes
+
+Ideally that should be done for run 2, because the current state is a source of confusion and mistakes.
+
+
+[05/24/2026 20:24] rebelmike
+On the pin types in the templates, I suspect it would make sense to keep some analog and input ones to highlight their existence in the template, rather than just making everything bidir.  My principle of least change was suggesting make everything match the current 1x1 but that does have quite a large number of dedicated inputs
+
+
+[05/24/2026 20:28] anfroholic
+Think of all these as conceptual models rather than genuine proposals. 
+More power pins are perfectly acceptable. 
+
+An overarching goal expressed by @Tim 'mithro' Ansell is to look for ways to reduce cost in efforts towards accessibility.  
+This likely means moving away from the mezzanine all together, and taking any decoupling caps with it, since assembly is no longer an operation we're doing.
+No caps means more pins can be used for whatever purpose as they all become generic wires.
+
+
+[05/24/2026 20:29] namibj
+Yeah it's a good top right corner "arrow"
+
+
+[05/24/2026 20:30] namibj
+
+
+{Attachments}
+2026-05_media/image-941E6.png
+
+
+[05/24/2026 20:30] namibj
+qr code lacks coarse structure contrast
+
+
+[05/24/2026 20:31] namibj
+W.S logo or alternatively (if for some reason that has to not be there) an Intel LGA style triangle should be strongly recommended.
+
+
+[05/24/2026 20:32] namibj
+(The QR would work if the other corners were blank, but they aren't.)
+
+
+[05/24/2026 20:36] anfroholic
+I think all that sounds reasonable. 
+
+> The project pad -> mezzanine pin mapping should be clearly documented, with reference to the pad names in the default template and the pin names on the mezzanine footprint for the user's motherboard.
+I'm finally getting settled as I get home and plan to work on cleaning the repo with the current COB and better document the motherboard. 
+I think that will take away most of the confusion. 
+
+> The wafer space logos should be in the same position as it's the obvious marker to align in assembly (I'd weakly suggest top right as aesthetically it looks most pleasing there - Andrew and Leo both put it there independently AFAICT) - this doesn't necessarily need to mean "pin 1".
+The one request I did have, is whatever corner we are using as 'fiducial' has the opposing corner blank. This could happen this run, or not. 
+
+> To allow that without users having to change their run 2 designs, the CoB pinout should be changed (this would likely end up ~a 180 degree rotation on the current pinout, and maybe if it could be exactly that that would leave some compatibility between run 1 and run 2).
+I don't understand this one fully? Basically rotate all the copper 180? That would do it? (negating changes to the schematic)
+
+> The signal (and VDD?) pins on the default templates should be harmonized as much as possible, so the above documentation applies to all slot sizes
+This is a run3 thing?
+
+
+[05/24/2026 20:39] anfroholic
+> The signal (and VDD?) pins on the default templates should be harmonized as much as possible, so the above documentation applies to all slot sizes
+I think I see. When making all this I did not have that info. 
+I've been filling in this spreadsheet as I got more info
+https://docs.google.com/spreadsheets/d/1pI2BAEWEexXcXN3vah3SR85zPIV6eAXPGXc2bcvoSGU/edit?gid=0#gid=0
+You're saying to use the info in the `config.yaml` column?
+
+{Embed}
+https://docs.google.com/spreadsheets/d/1pI2BAEWEexXcXN3vah3SR85zPIV6eAXPGXc2bcvoSGU/edit?gid=0
+waferspace GF180 standard 74 pad padframe V1
+2026-05_media/AHkbwyLZAovCtMJvwciifhE2XeF27uR8LjNtmsKAVg-B5A78
+
+
+[05/24/2026 20:43] rebelmike
+> The one request I did have, is whatever corner we are using as 'fiducial' has the opposing corner blank. This could happen this run, or not. 
+The location is specified in the project's config, but I assume is validated by the submission system, so changing it and then advising people of the change should be possible?
+
+> Basically rotate all the copper 180? That would do it? (negating changes to the schematic)
+Yeah I think rotating everything through 180 but leaving the logo where it is would resolve it.
+
+> You're saying to use the info in the config.yaml column?
+Yes - while users will rename their pins, they will have started from this setup so it seems the most meaningful thing to me.  Maybe I'm putting too much weight on it though
+
+
+[05/24/2026 20:45] anfroholic
+Can you explain the reason they may be called `bidir\\[0\\].pad` and `inputs\\[0\\].pad` instead of something more generic if it's just overwritten anyways?
+
+
+[05/24/2026 20:47] rebelmike
+This is what's specified in https://github.com/wafer-space/gf180mcu-project-template/blob/main/librelane/slots/slot_1x1.yaml
+And the number of bidirs / analog / inputs match the defines in https://github.com/wafer-space/gf180mcu-project-template/blob/main/src/slot_defines.svh
+
+
+[05/24/2026 20:49] rebelmike
+Users may well change those to match their needs, but given wafer space is providing both the project template and the CoB, referring to things by those names seems like it should make sense to people
+
+{Reactions}
+👍
+
+[05/24/2026 20:52] rebelmike
+In my case, I was short on time and also didn't know what slot size you might have going spare, so I just fitted my design in to the template without changing any of the pad names.  Then you had spare slots of all half and quarter sizes so all 3 got produced!  That's what led to me wishing that the default pinout was harmonized back in run 1.  That's probably a pretty unique circumstance though so I think going forwards its more about documentation, but it would also reduce surprises if you do switch which slot you're targetting.
+
+
+[05/24/2026 20:57] anfroholic
+I'm going to go out on a limb and say I don't think switching slot sizes will be all that uncommon in the future. 
+More or less I think things are pretty entrenched as far as run1 goes. I'll try to make the changes listed above. 
+I would like to keep the conversation alive about run3 though. 
+Thanks for the input
+
+{Reactions}
+👍
+
+[05/24/2026 21:12] namibj
+oh, hmmmmm..... @BreakingTaps any hope for the idea of using ACF and DRC-pushed FPC (JLC just about lets you do 102 um pitch on the 5$ special)?
+Or is that too high resistance/would need fancy surface treatment on the die to connect to the aluminium topmetal?
+
+I'd expect AOI to reject even up to half the FPC production to be sufficiently practical to work from that POV; but it's not easy to find out if the commodity ACF would have sufficient performance to do the task of W.S default/bargain fan-out.
+
+It is my understanding that the traces are on top of the core and the lack of fine-pitch coverlay/soldermask would imply that these are bare metal strips on an underlying flat polyimide core; so that might be enough "bump"? It's about 12um thick there.
+
+
+[05/25/2026 00:02] namibj
+Ok I'll draw up a standard COB pinout FPC for that tomorrow.
+This.... _might just work._
+
+
+[05/25/2026 00:03] anfroholic
+What is this?
+
+
+[05/25/2026 00:09] namibj
+https://www.youtube.com/watch?v=0HZ35CyHVxQ
+https://web.archive.org/web/20190708182030/https://fsrkj.com/upfiles/201712/22/af0aa1f1cb2886b6f.pdf
+It's on aliexpress for like 7 USD a roll; seems to not be hard to get one's hands on, and it's just `190±10 C` for 10 s at 2 MPa via a hard-ish silicone sheet (200~300 um they say, shore 70+) with a thn teflon sheet (25~50 um) between that and the FPC, pressing the contact strip area down using a sufficciently solid anvil underneath to not harm the more-fragile die (or, in the original case, the LCD's glass; it works for dies too, though, "just" not well on aluminium at least with that standard metallurgy)
+
+{Embed}
+Breaking Taps
+https://www.youtube.com/watch?v=0HZ35CyHVxQ
+The Microspheres Hiding in your Phone's Screen
+The first 1,000 people to use the link will get a 1 month free trial of Skillshare https://skl.sh/breakingtaps07231
+
+Watch this video ad free on Nebula: https://nebula.tv/videos/breakingtaps-conducting-electricity-in-only-one-dimension
+
+-------------------------------------------------------
+
+Today we're looking at Anisotropic Conductive Film (A...
+2026-05_media/maxresdefault-4DA13.jpg
+
+
+[05/25/2026 00:16] anfroholic
+I've seen this video before. Super neat!! Good luck!
+
+
+[05/25/2026 00:18] namibj
+yeah same I remembered didn't even remember it was him but tbf, fits.
+
+
+[05/25/2026 17:42] polyfractal
+oh that's a fun idea! I'm not sure to be honest, might be dodgy for high frequency signals, but maybe fine for less demanding tasks? I dont actually have much experience with the stuff on real projects, just tearing down existing projects to get to the ACF for microscopy 🙂 But yeah it's used all over for displays
+
+Could be a really clever way to get flipchip without needing the fab to bump for us!
+
+{Reactions}
+🔥
+
+[05/25/2026 18:52] namibj
+It's actually waaaay better for high frequency it's a bit resistive but I'm sure that's easy to tune away in a transceiver as we talk like a couple Ohm at the terminus.
+
+That 3mm bond wire at 1 GHz is already 12 ohm though...
+
+If you have any idea how to get some test dies receptive to the nickel spheres....
+
+
+[05/25/2026 18:54] polyfractal
+ah interesting, why would more resistance help with higher frequency? I sorta assumed you'd want the shortest, most conductive path possible?
+
+
+[05/25/2026 18:55] polyfractal
+our topmetal is aluminum right? I just skimmed that old video of mine and they used Al on the glass connector side. So it was Al -> ACF -> Ni/P coated Cu fpc
+
+
+[05/25/2026 18:56] anfroholic
+As far as I understand, yes, it's aluminum.
+
+{Reactions}
+👍
+
+[05/25/2026 19:08] fossify_37988
+It's easier to control resonances with slight dampening. You lose a bit of Q but you get a more consistent response
+
+{Reactions}
+👍 (2)
+
+[05/25/2026 19:39] polyfractal
+gotcha, TIL!
+
+
+[05/26/2026 03:58] namibj
+It's got comparatively _zero_ inductance once you include the remaining parasitics.
+
+
+[05/26/2026 03:59] namibj
+Wait they they.... They did Al straight to the ACF???
+
+I'll get you a JLC special FPC layout/pinout for your die before the weekend if you'd be interested in trying.
+
+
+[05/26/2026 04:05] namibj
+Well it's more that you can tune the launch impedance a bit anyways once it matters and that'll easily cover the spread in series resistance from the ACF.
+Like you already need the structures in the PA (yeah it's digital but it's still a power amplifier, with tuned distortion, and sometimes integrally fused modulator if the output itself is naturally clocked instead of being a second stage after the clocked stage) and a bit more tuning range to cover increased stacking of variance is not really expensive at that point.
+
+So therefore you might as well just enjoy the much lower inductance.
+
+
+[05/26/2026 04:11] namibj
+If you have any special wishes on that provide a schematic.
+I'd plan for having the mezzanine connector off the side so you could bend it and have the entire thing barely taller/thicker than the original cob, but now with the die backside exposed to attach a heatsink.
+
+I'd probably do it on Thursday early Berlin time; if that's too early I'd get to it approximately a week later (that's Germanys closest thing to a comiket this coming weekend I'll be running on fumes by the end).
+
+
+[05/26/2026 08:59] mithro_
+What does ACF stand for?
+
+
+[05/26/2026 09:01] namibj
+https://discord.com/channels/1361349522684510449/1408134567491145728/1508260597412921375
+
+
+[05/26/2026 09:01] mithro_
+ACF is the tape stuff that @BreakingTaps is talking in the video you shared?
+
+
+[05/26/2026 09:01] namibj
+Yeah
+
+
+[05/26/2026 09:02] namibj
+It's what they use to bond to notably LCDs and other TFT-on-glass type active-matrix displays like OLED.
+
+
+[05/26/2026 09:03] namibj
+It's a 180~190C for 2~10 seconds thermoset epoxy used with about 2MPa pressure.
+
+
+[05/26/2026 14:28] polyfractal
+"Anisotropic Conductive Film" yep
+
+
+[05/26/2026 14:29] polyfractal
+At least for the glass-FPC interface, looks that way.  Copper FPC pad on top, glass on bottom. Thin film of aluminum on glass side.  (please excuse my shitty cross-section polishing I was in a rush 😄 ) Edit: also ignore the silver, iirc I sputtered a very thin layer on to help with charging on the glass
+
+{Attachments}
+2026-05_media/Image_3_analysis_1_map_C_O_Al_Si_P_Ca_Ni_C-0E452.png
+
+{Reactions}
+😍
 
 ==============================================================
-Exported 181 message(s)
+Exported 235 message(s)
 ==============================================================

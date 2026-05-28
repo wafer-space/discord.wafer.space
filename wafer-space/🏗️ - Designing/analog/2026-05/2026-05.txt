@@ -219,7 +219,194 @@ Also, https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design
 [05/24/2026 01:56] namibj
 Also maybe look at https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_10_07.html it feels like you may be doing things similar to those restrictions depending on biasing conditions?
 
+{Reactions}
+👀
+
+[05/24/2026 14:51] polyfractal
+Hmm I'll need to double check, but I don't think a normal pmos device would give the floating p-body that's needed. It'd be an nwell in the psub, and then p+ contacts
+
+
+[05/24/2026 14:52] polyfractal
+need to look into that equipotential thing, not sure how it's calculated. Would be great to use that spacing! I think because all the floating p-body sections are isolated, they are considered at different potentials by the DRC? not sure
+
+
+[05/24/2026 15:42] namibj
+No I mean like, the photodiode works regardless of whether it's illuminated from the P-side or the N-side, right?
+Voltages flip, sure, but I'd not think you'd need particularly high performance transistor channels in those pixels so that's not on it's own at least reason to go for N-channel device.
+
+
+[05/24/2026 15:48] namibj
+Well I'm pretty sure it's (only) a latchup concern; I'd guess this might cause charge-spillover to adjacent cells similar in visual effect to what we remember from old CCD digital cameras.
+
+Xyce has 2D TCAD on hand you could use to model the latchup behavior.
+I guess the biggest hurdle would be that it's potentially gonna blow the 4-electrode limit in their code.
+
+{Reactions}
+🤔
+
+[05/24/2026 15:50] polyfractal
+Ah I misunderstood. Yes, N or P is fine, although P is preferred because hole accumulation is (apparently) better for imaging. less noisy I think?
+
+But the main thing is that it needs a floating/isolated body of the diode. Light passes through the poly gate, creates electron/hole pairs, the electrons are swept away to drain and the holes remain which then alters the IV curve of the transistor when it is read out. That's how they get a "3T" pixel with one transistor, it acts as integration, readout and reset all in one. But needs the floating/isolated body to do it
+
+
+[05/24/2026 15:50] namibj
+1 source, 2 gate, 3 drain, 4 substrate, (maybe 5 next_drain), 5 next_gate, 6 next_source
+
+
+[05/24/2026 15:51] polyfractal
+I was a little confused why it was codified in DRC, it seems like a functional problem but not really a design rule / layout issue 🙁
+
+
+[05/24/2026 15:57] namibj
+> One should notice that in readout mode, some stored holes are displaced under the source due to shrink of charge storage region under the gate and source potential lowering. This shift of the charge storage region to the source and toward the pixel edge should be stopped to avoid electrical crosstalk. One solution to the problem is to employ STI (shallow trench isolation), as shown in Figure 2. It was adopted in our first design configuration.
+Yeah I for one don't quite get where the electrodes are in Fig.2 🙁
+
+Have you considered asking those researchers?
+
+
+[05/24/2026 15:58] namibj
+Me when I look at one too many sky130 DRC's again and go _huh...._
+
+{Reactions}
+😁
+
+[05/24/2026 15:59] namibj
+[insert villager sound effect]
+
+
+[05/24/2026 15:59] polyfractal
+might give them a ping! can't hurt
+
+
+[05/24/2026 15:59] namibj
+worst case they don't answer
+
+
+[05/24/2026 16:00] namibj
+well, worst worst case they snipe your slot on Run2 😄
+
+
+[05/25/2026 00:07] nmz787
+At work we definitely have some DRs that are just for electrical "dummyproofing", and since my team draws mechanical and litho designs, we often get waivers for some of those rules
+
+
+[05/25/2026 00:08] nmz787
+However we also can ask the process integration owners and ask questions like "how does the STI actually get patterned" if we're confused or just curious
+
+
+[05/25/2026 00:09] nmz787
+I need that GDS3D isometric view
+
+
+[05/25/2026 00:09] nmz787
+After 5 years drawing OASIS/GDS... I still get confused over all these layers on top of layers
+
+
+[05/25/2026 00:10] namibj
+same sadly KLayout PDK only has that for sky130A (and maybe ihp I don't know), not gf180mcuD 🙁
+
+
+[05/25/2026 00:10] nmz787
+It's easy (ish) to make a layerstack
+
+
+[05/25/2026 00:12] nmz787
+I should really publish my layerstack generator helper... basically just a CLI that takes the list of layers, already arranged in order in a text file, and asks you what Z and how thick you want it... And accumulates your overall height to the next Z default entry (in case you have two layers at the same Z, like the diffusions)
+
+
+[05/25/2026 00:13] nmz787
+Although I'm sure pointing AI at the existing gds3d layerstacks as examples and asking it to generate the helper I just said, would do it in one or two prompts
+
+
+[05/25/2026 00:14] nmz787
+I believe I already have a gf180 prop file for gds3d, but am not on my PC right now
+
+
+[05/25/2026 00:17] namibj
+feed it the https://gf180mcu-pdk.readthedocs.io/en/latest/analog/layout/inter_specs/inter_specs_3_30.html and https://gf180mcu-pdk.readthedocs.io/en/latest/analog/layout/inter_specs/inter_specs_3_30.html
+
+{Attachments}
+2026-05_media/2_cross_section_30-4B9DD.png
+2026-05_media/image-02803.png
+
+
+[05/25/2026 00:22] nmz787
+Need the dl;dt too, I think there's a layermap for klayout that I'd start with, but those images would be good to finish the details!
+
+
+[05/25/2026 00:22] namibj
+Sure
+
+
+[05/26/2026 09:47] 246tnt
+https://discord.com/channels/1009193568256135208/1015911926053740544/1508755468275814470
+
+
+[05/26/2026 09:47] 246tnt
+TT will be running an experimental slot in run2 for analog designs. See above for details.
+
+
+[05/26/2026 13:33] mithro_
+KLayout has some type of cross-sectioning mode - https://klayoutmatthias.github.io/xsection/
+
+{Embed}
+https://klayoutmatthias.github.io/xsection/
+XSection Project Home Page
+Former xsection@klayout project
+
+
+[05/26/2026 20:12] namibj
+https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_10_05.html
+
+I think I'm doing everything right, taking a `nmos_06v6_nvt` PCell that I confirm next to the DUT extracts just fine through magic, and _deleting just the dualgate layer rectangle_ on the DUT copy of the (all flattened) PCell structure, but magic doesn't spell complaints and the DUT just won't spawn in the extracted SPICE?
+I also have a tiny `nmos_03v3` and I just confirmed that deleting also the NAT box on the DUT makes it extract as the plain `nmos_03v3` it's then expected to extract as.
+
+Do we or do we not have those available at the GDS level? 
+
+I can understand (with much unhappyness) if there's no design support (LVS, other extraction, spice, xschem, etc.), but otherwise I'd quite very like to know where I would have been supposed to read about us explicitly not having `nmos_03v3_nvt`.
+
+
+[05/26/2026 20:49] bailey8889
+Maybe `grep _nvt $PDK_ROOT/gf180mcu/libs.tech/ngspice/*`
+
+
+[05/26/2026 21:01] 246tnt
+I guess you can tape one out and measure it and see if it actually works.
+
+
+[05/26/2026 21:03] namibj
+That's my fallback.
+
+
+[05/26/2026 23:59] mithro_
+I *believe* the GDSFactory people are hoping to do some test circuits to do some verification circuits.
+
+
+[05/27/2026 00:01] namibj
+@Thomas Pluck 2.1 `nfet_03v3_nvt` misses models and currently even extraction; it's only implied from some DRCs to exist. Etest if any of that happens would be _awesome_ to capture.
+
+
+[05/27/2026 10:26] namibj
+Oh and if anyone etests that one, don't only do L=1.8, go down towards the L=0.28.
+
+
+[05/27/2026 14:32] mole99
+Started a thread.
+
+
+[05/27/2026 16:14] tpluck_
+Plan was that we can generate test structures on a left over Run 2 half slot right?
+
+
+[05/27/2026 16:17] tpluck_
+No sense wasting a creative TT slot on device characterization.
+
+
+[05/27/2026 20:06] mithro_
+Correct!
+
 
 ==============================================================
-Exported 43 message(s)
+Exported 82 message(s)
 ==============================================================

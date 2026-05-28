@@ -16,7 +16,7 @@
     "after": null,
     "before": null
   },
-  "exportedAt": "2026-05-24T08:43:42.0577515+00:00",
+  "exportedAt": "2026-05-27T21:53:43.9936326+00:00",
   "messages": [
     {
       "id": "1501173863046709350",
@@ -183,7 +183,295 @@
         "guildId": "1361349522684510449"
       },
       "inlineEmojis": []
+    },
+    {
+      "id": "1509176448223674489",
+      "type": "Default",
+      "timestamp": "2026-05-27T12:48:24.399+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": true,
+      "content": "\ud83d\udce2 It's been a while since the last update to the project template, but we worked on a lot of improvements in the background, which I'm happy to share with you now!\n\nAll of the wafer.space PDK changes have finally been upstreamed to [open_pdks](https://github.com/RTimothyEdwards/open_pdks), which allows us to sunset the wafer.space PDK fork.\nThis is important since we want one common target for community efforts and avoid unnecessary fragmentation. Many of the community-created IPs are already part of open_pdks (SCL, PAD, SRAM and eFuse libraries).\nYou can now use [Ciel](https://github.com/fossi-foundation/ciel), the PDK manager, to manage your PDKs. The project template will use Ciel as well.\n\nIn addition, I have enabled support for the community-created 3v3/5v I/Os, the 3v3 SRAMs and the 3v3 standard cell library in the template. Not all of the IPs have been tested yet, so support for them is experimental!\n\nGive it a try in this pull request: https://github.com/wafer-space/gf180mcu-project-template/pull/60\nI plan to merge it soon and would appreciate any feedback beforehand.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "2026-05_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\ud83c\udf89",
+            "code": "tada",
+            "isAnimated": false,
+            "imageUrl": "2026-05_media/1f389-5C738.svg"
+          },
+          "count": 3,
+          "users": [
+            {
+              "id": "384390069412429834",
+              "name": "polyfractal",
+              "discriminator": "0000",
+              "nickname": "BreakingTaps",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-05_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+            },
+            {
+              "id": "543162393413287956",
+              "name": "h.tamas",
+              "discriminator": "0000",
+              "nickname": "htamas",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-05_media/1-B2132.png"
+            },
+            {
+              "id": "691780627338625077",
+              "name": "rebelmike",
+              "discriminator": "0000",
+              "nickname": "RebelMike",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-05_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\ud83d\udce2",
+          "code": "loudspeaker",
+          "isAnimated": false,
+          "imageUrl": "2026-05_media/1f4e2-C9D9D.svg"
+        }
+      ]
+    },
+    {
+      "id": "1509176501181087835",
+      "type": "Default",
+      "timestamp": "2026-05-27T12:48:37.025+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Another major change in this upcoming update is the new KLayout DRC runner by @Clyde Laforge.\nThanks to this, the KLayout DRC deck is now parallelized across rule decks while sharing some of the memory!\nThis makes it possible to build the 1x1 project template, including DRC checks, in 40 minutes on my machine (24 threads).\n\nCurrently, the number of workers is set to \"max\" in the LibreLane config. If RAM usage is too high, reduce the number of workers. For a best possible utilization choose: threads * workers = hardware threads.\n\nClyde also considerably improved the KLayout LVS setup, including the handling of substrate cuts. So if you are interested in doing an analog design with KLayout, now is the time to give this a try!\n\nPlease let me know if you have any questions regarding these changes.\nIf you plan to tape out on ws-run #2, you will need to use the updated template, since a few changes are required to pass the precheck. More on that once the update is live.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "2026-05_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1401841055975870476",
+          "name": "scafir",
+          "discriminator": "0000",
+          "nickname": "Clyde Laforge",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/e9fd582c6cd4273d01cbf5dfd4bb3455-27807.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1509176586190983168",
+      "type": "ChannelPinnedMessage",
+      "timestamp": "2026-05-27T12:48:57.293+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Pinned a message.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "2026-05_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "reference": {
+        "messageId": "1509176448223674489",
+        "channelId": "1423348662318272592",
+        "guildId": null
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1509177279438393545",
+      "type": "Default",
+      "timestamp": "2026-05-27T12:51:42.576+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Huh ... I'd like to know about those change because in TT we don't use the template at all and I'm working right now to finalize the run 2 builder.",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1509280353049776358",
+      "type": "Default",
+      "timestamp": "2026-05-27T19:41:17.24+00:00",
+      "timestampEdited": "2026-05-27T19:41:43.778+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I've hit a problem upgrading to this version of the template.  I've tracked it down to the new librelane version - if the only change I make is to switch nix to use the `leo/wafer-space` branch of librelane then I see the same issue.\n\nThe problem is undriven net errors, e.g.:\n```\nWarning: Wire tqvp_uart_tx.\\next_fsm_state$func$/home/mdb36/wafer-space/ws02-tinyQV/src/user_peripherals/uart/uart_tx.v:116$2738.tx_en is used but has no driver.\nWarning: Wire tqvp_uart_tx.\\next_fsm_state$func$/home/mdb36/wafer-space/ws02-tinyQV/src/user_peripherals/uart/uart_tx.v:116$2738.$result [3] is used but has no driver.\n```\nThis particular case is using a verilog function, and I tried changing the uart_tx module to remove the function (inlining it into the process that calls it), and that fixes that instance of the warnings.  So I suspect it's a regression in yosys.",
+      "author": {
+        "id": "691780627338625077",
+        "name": "rebelmike",
+        "discriminator": "0000",
+        "nickname": "RebelMike",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1509285266941153461",
+      "type": "Default",
+      "timestamp": "2026-05-27T20:00:48.803+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "ok, a minimal repro where I just wire up that uart module does hit the error.  See https://github.com/MichaelBell/wafer-space-repro/commit/76eb8c6123fbd1c241e89a2f7ca8dd394ea7112b",
+      "author": {
+        "id": "691780627338625077",
+        "name": "rebelmike",
+        "discriminator": "0000",
+        "nickname": "RebelMike",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "Minimal repro \u00b7 MichaelBell/wafer-space-repro@76eb8c6",
+          "url": "https://github.com/MichaelBell/wafer-space-repro/commit/76eb8c6123fbd1c241e89a2f7ca8dd394ea7112b",
+          "timestamp": null,
+          "description": "",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "2026-05_media/76eb8c6123fbd1c241e89a2f7ca8dd394ea7112b-37316",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": [],
+          "inlineEmojis": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1509289387740102661",
+      "type": "ThreadCreated",
+      "timestamp": "2026-05-27T20:17:11.278+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Started a thread.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "2026-05_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "reference": {
+        "messageId": null,
+        "channelId": "1509285266941153461",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
     }
   ],
-  "messageCount": 4
+  "messageCount": 11
 }
