@@ -3266,6 +3266,40 @@ Also JLC AFAIK only sells that very fine pitch (102μm used on quarter slot) on 
 But benefit, both FPC and ACF are see-through so no dedicated fiducials would be required.
 
 
+[05/28/2026 06:25] mole99
+Yes, there is a 9um wide glass cut in the seal ring/guard ring structure. Likely to prevent cracking during dicing.
+
+However, the guard ring for flip-chip packaging has no glass cut:
+
+> to be protected from chemical attack during solder bumping process.
+
+You can find both layouts here: https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_12_2.html
+
+
+[05/28/2026 06:49] 246tnt
+Interesting the DRM also says the guard ring should be directly connected to VSS pads. Not sure we do that.
+
+
+[05/28/2026 06:56] mole99
+No, we currently don't do that. I assume they the guard ring should be grounded due to ESD reasons?
+
+We could connect the VSS pads on the other side directly to the guard ring. However, KLayout DRC would throw an error since unrelated Nwell, COMP, Poly2, Metal must be 10um away. Not sure how they implemented that exception.
+
+
+[05/28/2026 06:57] mole99
+The other question is how to implement that in the template in an automated manner.
+
+
+[05/28/2026 06:58] namibj
+The DRC there claim it's mandatory to expose on non-flipchip and forbidden to expose on flipchip.
+
+I understand yield impact potential, but exposing the metal is as explained quite in the way of even trailing non-wire-bonded packaging approaches.
+
+
+[05/28/2026 06:59] namibj
+Also they say guard ring can be used for down-bonding if it's a little widened.
+
+
 ==============================================================
-Exported 664 message(s)
+Exported 670 message(s)
 ==============================================================
