@@ -16,7 +16,7 @@
     "after": null,
     "before": null
   },
-  "exportedAt": "2026-05-27T20:33:49.7715475+00:00",
+  "exportedAt": "2026-05-28T00:10:28.8995822+00:00",
   "messages": [
     {
       "id": "1499585191176306880",
@@ -22117,7 +22117,205 @@
       "reactions": [],
       "mentions": [],
       "inlineEmojis": []
+    },
+    {
+      "id": "1509294672718069760",
+      "type": "Default",
+      "timestamp": "2026-05-27T20:38:11.315+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Wouldn't the guard ring be under the passivation?",
+      "author": {
+        "id": "169786952432746498",
+        "name": "mithro_",
+        "discriminator": "0000",
+        "nickname": "Tim 'mithro' Ansell",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1509297037571788851",
+      "type": "Reply",
+      "timestamp": "2026-05-27T20:47:35.14+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Well I thought so but apparently the DRCs say that it is under passivation if and only if you select \"flip chip\" for the flavor of DRC deck.\nI do not know _why_ they consider it mandatory to expose it when not doing flip-chip, instead of just recommending.\nI have confirmed that the PAD layer in the GDS is drawn over the ring on several of the Run1 chips; you're in a position to see if any of them don't have it drawn over that ring. And to see or if needed ask whether they care about it being hidden (under passivation) for dies that get partial flip-chp treatment. This might not be a rule that is enforced at your submission stage, but just from the openPDK when trying to submit into your MPW.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "169786952432746498",
+          "name": "mithro_",
+          "discriminator": "0000",
+          "nickname": "Tim 'mithro' Ansell",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1509294672718069760",
+        "channelId": "1361349523724570941",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1509312063984500737",
+      "type": "Reply",
+      "timestamp": "2026-05-27T21:47:17.716+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Also, why does it matter if the guard ring was connected?",
+      "author": {
+        "id": "169786952432746498",
+        "name": "mithro_",
+        "discriminator": "0000",
+        "nickname": "Tim 'mithro' Ansell",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "262706220073222144",
+          "name": "namibj",
+          "discriminator": "0000",
+          "nickname": "namibj",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1509297037571788851",
+        "channelId": "1361349523724570941",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1509315647278944326",
+      "type": "Reply",
+      "timestamp": "2026-05-27T22:01:32.04+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "because it would short to every trace of the FPC; the FPC's solder mask is far far far from supporting being present on the 16um away guard ring exposed metal but having the metal of the IO pad nice and exposed for the ACF to contact.\nAlso it's not that thin, but that's a lesser problem to that.\n\nWhat should work actually now that I think about it is taking an FPC but fan out to the middle, glueing that FPC with soluble glue (e.g. PVA glue dissolved with water) to a stiff carrier, then carefully sanding down the edges until they no longer reach over the pads to the guard ring. I'd suggest a 1x1 slot and going for an easy to solder SMD connector placed in the middle; I don't think the current mezzazone connector is necessarily short enough to fit though. It might diagonally fit well enough?\nBut there would be little room to route. The connector would be soldered after the ACF is hot pressed.\nThe FPC would be optically aligned to the pads on grounds of being kinda see-through just orange-tinted, then lightly pressed down onto the ACF to use it's natural slight tackyness to transport it to the hot press equipment.\n\nI'd assume that the temperature and pressure are mildly sensitive but the time could be exceeded upwards fairly low-risk as far as yield goes, so a heavy thing on a lever arm (to keep it from putting uneven pressure on the die) pressing down through the recommended feflon foil over 0.2~0.3 mm of shore70+ silicone (onto the FPC; the die would be on a hard surface below), with one of the two sides being heated to the recommended 18~190C, should give functional results with ingredients on the level of \"cabinet hinge\"+\"2by4\"+\"soldering hotplate that doesn't get crushed\"+\"gallon jug (adjustable with water)\" to rig a 2 MPa-ish repeatable press.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "169786952432746498",
+          "name": "mithro_",
+          "discriminator": "0000",
+          "nickname": "Tim 'mithro' Ansell",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1509312063984500737",
+        "channelId": "1361349523724570941",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1509315904956268674",
+      "type": "Default",
+      "timestamp": "2026-05-27T22:02:33.475+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It's just that the escape to the inside style doesn't allow for increasing the IO to similar pad spacing as we have on the quarter tile, which would be the case for the escape outwards that needs the guard ring not shorting out all the bonds.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1509317653557416038",
+      "type": "Default",
+      "timestamp": "2026-05-27T22:09:30.374+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "the concept approximately for the escape-outwards is a \"leadframe\"-like structure litho'd onto the polyimide base of the FPC (just a regular FPC manufacturing), which is then flip-chip bonded to the pads of the die.\nBut as far as the die can tell, those copper traces are fully exposed towards the die. The polyimide is just on the back to keep them from moving and to provide further mechanical support and to allow it to be manufactured. Outside the die area it can then also cover up with the coperlay the traces, but that's not practical right at the pads.\nThis wouldn't be so hard if the guard ring was more than those 16um away from the pad edge. The coverlay would need about 150~250um gap to handle it well.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
     }
   ],
-  "messageCount": 654
+  "messageCount": 660
 }

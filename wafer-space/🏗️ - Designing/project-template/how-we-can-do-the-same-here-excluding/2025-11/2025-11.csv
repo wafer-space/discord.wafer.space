@@ -1,0 +1,18 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"323371864074485771","mole99","2025-11-20T16:00:51.4810000+00:00","","",""
+"323371864074485771","mole99","2025-11-20T16:00:52.5220000+00:00","You need to set [`SYNTH_EXCLUDED_CELL_FILE`](https://librelane.readthedocs.io/en/latest/reference/common_pdk_vars.html) to point to your exclude file.","",""
+"323371864074485771","mole99","2025-11-20T16:01:50.0450000+00:00","You can find the current one in `gf180mcu/gf180mcuD/libs.tech/librelane/gf180mcu_fd_sc_mcu7t5v0/synth_exclude.cells`","","❤️ (1)"
+"840182560252624916","logic_destroyer","2025-11-20T16:03:03.9250000+00:00","it is possible to overlay it?","",""
+"840182560252624916","logic_destroyer","2025-11-20T16:03:29.7820000+00:00","I don't want to touch the gf180mcu repo","",""
+"323371864074485771","mole99","2025-11-20T16:03:46.1590000+00:00","No, unfortunately not. Make a copy of the file in your repository and add the line.","","😢 (1)"
+"732347216412278825","urish","2025-11-20T16:07:38.8150000+00:00","Yes, that's what I did","",""
+"732347216412278825","urish","2025-11-20T16:07:54.7780000+00:00","But it'd be really nice to understand the actual issue","",""
+"840182560252624916","logic_destroyer","2025-11-20T16:08:07.4140000+00:00","But if they are changes in gf180mcu you will not recognize 🙂","",""
+"840182560252624916","logic_destroyer","2025-11-20T16:09:01.9620000+00:00","Today you know, but not tomorrow 🙂","",""
+"323371864074485771","mole99","2025-11-20T16:15:29.7780000+00:00","Yes, the proper solution is to fix the simulation model of the cell (if that is the issue).","",""
+"840182560252624916","logic_destroyer","2025-11-20T16:20:28.3560000+00:00","$ cat 06-yosys-synthesis/chip_top.nl.v  | grep gf180mcu_fd_sc_mcu7t5v0__oai21_1 | wc -l
+0
+lolo","",""
+"732347216412278825","urish","2025-11-20T16:55:01.9090000+00:00","There's a good chance the simulation model is not the issue, since there are many `gf180mcu_fd_sc_mcu7t5v0__oai21_2` instances in the design that does pass the GL tests","",""
+"840182560252624916","logic_destroyer","2025-11-20T22:30:55.3780000+00:00","what is the issue then?","",""
+"840182560252624916","logic_destroyer","2025-11-20T22:32:38.2300000+00:00","yosys?","",""

@@ -1,0 +1,83 @@
+==============================================================
+Guild: wafer.space Community
+Channel: Information / tinytapeout / tinyQV LVS errors
+After: 10/31/2025 23:59
+Before: 12/01/2025 00:00
+==============================================================
+
+[11/23/2025 18:40] bailey8889
+
+
+
+[11/23/2025 18:40] bailey8889
+@RebelMike For some reason, netgen is thinking that flattening these cells will make a better match
+```
+Flattening instances of gf180mcu_fd_sc_mcu7t5v0__mux2_2 in cell tt_um_MichaelBell_tinyQV (0) makes a better match
+Flattening instances of gf180mcu_fd_sc_mcu7t5v0__mux2_2 in cell tt_um_MichaelBell_tinyQV (1) makes a better match
+Flattening instances of gf180mcu_fd_sc_mcu7t5v0__aoi21_4 in cell tt_um_MichaelBell_tinyQV (0) makes a better match
+Flattening instances of gf180mcu_fd_sc_mcu7t5v0__aoi21_4 in cell tt_um_MichaelBell_tinyQV (1) makes a better match
+Flattening instances of gf180mcu_fd_sc_mcu7t5v0__nand2_1 in cell tt_um_MichaelBell_tinyQV (0) makes a better match
+Flattening instances of gf180mcu_fd_sc_mcu7t5v0__nand2_1 in cell tt_um_MichaelBell_tinyQV (1) makes a better match
+Flattening instances of gf180mcu_fd_sc_mcu7t5v0__nand2_4 in cell tt_um_MichaelBell_tinyQV (0) makes a better match
+Flattening instances of gf180mcu_fd_sc_mcu7t5v0__nand2_4 in cell tt_um_MichaelBell_tinyQV (1) makes a better match
+Flattening instances of gf180mcu_fd_sc_mcu7t5v0__oai21_2 in cell tt_um_MichaelBell_tinyQV (0) makes a better match
+Flattening instances of gf180mcu_fd_sc_mcu7t5v0__oai21_2 in cell tt_um_MichaelBell_tinyQV (1) makes a better match
+Flattening instances of gf180mcu_fd_sc_mcu7t5v0__oai21_4 in cell tt_um_MichaelBell_tinyQV (0) makes a better match
+Flattening instances of gf180mcu_fd_sc_mcu7t5v0__oai21_4 in cell tt_um_MichaelBell_tinyQV (1) makes a better match
+```
+
+
+[11/23/2025 18:42] bailey8889
+However, flattening the abstract lef views that don't contain any devices causes a device mismatch.
+```
+gf180mcu_fd_sc_mcu7t5v0__and3_4 (1)        |gf180mcu_fd_sc_mcu7t5v0__and3_4 (1)
+(no matching element)                      |nfet_06v0 (12656->10959)
+(no matching element)                      |pfet_06v0 (12656->10745)
+Number of devices: 17150 **Mismatch**      |Number of devices: 38854 **Mismatch**
+Number of nets: 20323 **Mismatch**         |Number of nets: 28705 **Mismatch**        
+```
+
+
+[11/23/2025 18:43] bailey8889
+As to why netgen wants to flatten those cells, there may be a clue in `62-magic-spiceextraction/magic-spiceextraction.log`
+```
+Warning: use i_peripherals.i_user_peri06.cordic_module.iter_stage.z\[0\]_gf180mcu_fd_sc_mcu7t5v0__dffq_1_Q_D_gf180mcu_fd_sc_mcu7t5v0__clkinv_1_ZN_I_gf180mcu_fd_sc_mcu7t5v0__oai211_1_ZN_B_gf180mcu_fd_sc_mcu7t5v0__oai221_1_ZN_A1_gf180mcu_fd_sc_mcu7t5v0__aoi21_1_ZN_A2_gf180mcu_fd_sc_mcu7t5v0__mux2_2_Z_I0_gf180mcu_fd_sc_mcu7t5v0__mux2_2_Z_I0_gf180mcu_fd_sc_mcu7t5v0__mux2_2_Z_I1_gf180mcu_fd_sc_mcu7t5v0__mux2_2_I0_Z_gf180mcu_fd_sc_mcu7t5v0__nand2_1_A2_ZN_gf180mcu_fd_sc_mcu7t5v0__oai21_1_B_ZN_gf180mcu_fd_sc_mcu7t5v0__mux2_2_I appears more than once in def!
+Warning: use i_peripherals.i_user_peri06.cordic_module.iter_stage.z\[0\]_gf180mcu_fd_sc_mcu7t5v0__dffq_1_Q_D_gf180mcu_fd_sc_mcu7t5v0__clkinv_1_ZN_I_gf180mcu_fd_sc_mcu7t5v0__oai211_1_ZN_B_gf180mcu_fd_sc_mcu7t5v0__oai221_1_ZN_A1_gf180mcu_fd_sc_mcu7t5v0__aoi21_1_ZN_A2_gf180mcu_fd_sc_mcu7t5v0__mux2_2_Z_I1_gf180mcu_fd_sc_mcu7t5v0__mux2_2_Z_I1_gf180mcu_fd_sc_mcu7t5v0__mux2_2_Z_I1_gf180mcu_fd_sc_mcu7t5v0__mux2_2_I0_Z_gf180mcu_fd_sc_mcu7t5v0__nand2_1_A2_ZN_gf180mcu_fd_sc_mcu7t5v0__oai21_1_B_ZN_gf180mcu_fd_sc_mcu7t5v0__oai21_1_ appears more than once in def!
+...
+```
+
+
+[11/23/2025 18:44] bailey8889
+I don't know why yosys is generating such long instance names, but that is what I'd suggest someone looking into.
+
+
+[11/23/2025 19:06] bailey8889
+Changed the channel name: tinyQV LVS errors
+
+
+[11/23/2025 19:17] bailey8889
+Actually, I think magic is truncating the def instance names at around 511 bytes. @Tim Edwards
+
+
+[11/23/2025 19:21] bailey8889
+I found this in the magic repo that looks suspicious.
+```
+./lef/defRead.c:    char usename[512];
+```
+
+
+[11/23/2025 20:30] bailey8889
+Looks like there's already a PR to fix this.
+
+{Reactions}
+👍
+
+[11/23/2025 22:09] rtimothyedwards_19428
+And I just merged the PR.  It will be available on github in about 10 hours, or you can get the update now from opencircuitdesign.com.
+
+{Reactions}
+👏 (2)
+
+==============================================================
+Exported 10 message(s)
+==============================================================

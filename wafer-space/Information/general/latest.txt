@@ -3210,6 +3210,41 @@ In acute cases of flip chip need, ball wire bonding can be used to form studs on
 I don't think that's an effective way forward that could beat the current COB pricing for a Run4/5, though. I'd expect it to be around twice as expensive as the current bonding, not speaking of the ease of finding a bone house that can do it economically at the volumes.
 
 
+[05/27/2026 20:38] mithro_
+Wouldn't the guard ring be under the passivation?
+
+
+[05/27/2026 20:47] namibj
+Well I thought so but apparently the DRCs say that it is under passivation if and only if you select "flip chip" for the flavor of DRC deck.
+I do not know _why_ they consider it mandatory to expose it when not doing flip-chip, instead of just recommending.
+I have confirmed that the PAD layer in the GDS is drawn over the ring on several of the Run1 chips; you're in a position to see if any of them don't have it drawn over that ring. And to see or if needed ask whether they care about it being hidden (under passivation) for dies that get partial flip-chp treatment. This might not be a rule that is enforced at your submission stage, but just from the openPDK when trying to submit into your MPW.
+
+
+[05/27/2026 21:47] mithro_
+Also, why does it matter if the guard ring was connected?
+
+
+[05/27/2026 22:01] namibj
+because it would short to every trace of the FPC; the FPC's solder mask is far far far from supporting being present on the 16um away guard ring exposed metal but having the metal of the IO pad nice and exposed for the ACF to contact.
+Also it's not that thin, but that's a lesser problem to that.
+
+What should work actually now that I think about it is taking an FPC but fan out to the middle, glueing that FPC with soluble glue (e.g. PVA glue dissolved with water) to a stiff carrier, then carefully sanding down the edges until they no longer reach over the pads to the guard ring. I'd suggest a 1x1 slot and going for an easy to solder SMD connector placed in the middle; I don't think the current mezzazone connector is necessarily short enough to fit though. It might diagonally fit well enough?
+But there would be little room to route. The connector would be soldered after the ACF is hot pressed.
+The FPC would be optically aligned to the pads on grounds of being kinda see-through just orange-tinted, then lightly pressed down onto the ACF to use it's natural slight tackyness to transport it to the hot press equipment.
+
+I'd assume that the temperature and pressure are mildly sensitive but the time could be exceeded upwards fairly low-risk as far as yield goes, so a heavy thing on a lever arm (to keep it from putting uneven pressure on the die) pressing down through the recommended feflon foil over 0.2~0.3 mm of shore70+ silicone (onto the FPC; the die would be on a hard surface below), with one of the two sides being heated to the recommended 18~190C, should give functional results with ingredients on the level of "cabinet hinge"+"2by4"+"soldering hotplate that doesn't get crushed"+"gallon jug (adjustable with water)" to rig a 2 MPa-ish repeatable press.
+
+
+[05/27/2026 22:02] namibj
+It's just that the escape to the inside style doesn't allow for increasing the IO to similar pad spacing as we have on the quarter tile, which would be the case for the escape outwards that needs the guard ring not shorting out all the bonds.
+
+
+[05/27/2026 22:09] namibj
+the concept approximately for the escape-outwards is a "leadframe"-like structure litho'd onto the polyimide base of the FPC (just a regular FPC manufacturing), which is then flip-chip bonded to the pads of the die.
+But as far as the die can tell, those copper traces are fully exposed towards the die. The polyimide is just on the back to keep them from moving and to provide further mechanical support and to allow it to be manufactured. Outside the die area it can then also cover up with the coperlay the traces, but that's not practical right at the pads.
+This wouldn't be so hard if the guard ring was more than those 16um away from the pad edge. The coverlay would need about 150~250um gap to handle it well.
+
+
 ==============================================================
-Exported 654 message(s)
+Exported 660 message(s)
 ==============================================================

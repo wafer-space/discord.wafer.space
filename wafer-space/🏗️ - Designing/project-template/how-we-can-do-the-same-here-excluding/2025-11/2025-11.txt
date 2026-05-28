@@ -1,0 +1,76 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 🏗️ - Designing / project-template / How we can do the same here, excluding
+After: 10/31/2025 23:59
+Before: 12/01/2025 00:00
+==============================================================
+
+[11/20/2025 16:00] mole99
+
+
+
+[11/20/2025 16:00] mole99
+You need to set [`SYNTH_EXCLUDED_CELL_FILE`](https://librelane.readthedocs.io/en/latest/reference/common_pdk_vars.html) to point to your exclude file.
+
+
+[11/20/2025 16:01] mole99
+You can find the current one in `gf180mcu/gf180mcuD/libs.tech/librelane/gf180mcu_fd_sc_mcu7t5v0/synth_exclude.cells`
+
+{Reactions}
+❤️
+
+[11/20/2025 16:03] logic_destroyer
+it is possible to overlay it?
+
+
+[11/20/2025 16:03] logic_destroyer
+I don't want to touch the gf180mcu repo
+
+
+[11/20/2025 16:03] mole99
+No, unfortunately not. Make a copy of the file in your repository and add the line.
+
+{Reactions}
+😢
+
+[11/20/2025 16:07] urish
+Yes, that's what I did
+
+
+[11/20/2025 16:07] urish
+But it'd be really nice to understand the actual issue
+
+
+[11/20/2025 16:08] logic_destroyer
+But if they are changes in gf180mcu you will not recognize 🙂
+
+
+[11/20/2025 16:09] logic_destroyer
+Today you know, but not tomorrow 🙂
+
+
+[11/20/2025 16:15] mole99
+Yes, the proper solution is to fix the simulation model of the cell (if that is the issue).
+
+
+[11/20/2025 16:20] logic_destroyer
+$ cat 06-yosys-synthesis/chip_top.nl.v  | grep gf180mcu_fd_sc_mcu7t5v0__oai21_1 | wc -l
+0
+lolo
+
+
+[11/20/2025 16:55] urish
+There's a good chance the simulation model is not the issue, since there are many `gf180mcu_fd_sc_mcu7t5v0__oai21_2` instances in the design that does pass the GL tests
+
+
+[11/20/2025 22:30] logic_destroyer
+what is the issue then?
+
+
+[11/20/2025 22:32] logic_destroyer
+yosys?
+
+
+==============================================================
+Exported 15 message(s)
+==============================================================

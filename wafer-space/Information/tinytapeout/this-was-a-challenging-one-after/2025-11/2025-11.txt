@@ -1,0 +1,178 @@
+==============================================================
+Guild: wafer.space Community
+Channel: Information / tinytapeout / This was a challenging one! After
+After: 10/31/2025 23:59
+Before: 12/01/2025 00:00
+==============================================================
+
+[11/22/2025 16:17] essen__
+
+
+
+[11/22/2025 16:17] essen__
+Nice, how did you guys go about changing the default cell library ?
+
+
+[11/22/2025 18:07] rzioma
+@Essen theoretically it should be just `"STD_CELL_LIBRARY": "gf180mcu_fd_sc_mcu9t5v0",` in `config.json`
+BUT there is a bug in the PDK that TT is using, so @htamas had to make a patch: https://github.com/TinyTapeout/tt-gds-action/compare/main...rejunity:tt-gds-action-gf180mcu_fd_sc_mcu9t5v0:main
+
+
+[11/22/2025 18:14] rzioma
+So basically you have to
+1) clone https://github.com/TinyTapeout/tt-gds-action apply the patch
+1.5) add a tag on your patched gds-action repo, I used `ttgf0p2_9t`
+2) route your gds.yaml to use patched gds-action repo. something like that: https://github.com/rejunity/tt08-vga-drop/commit/2ac440a4bd84136deccb49f6ed56c4ded1a0a8b7
+3) add "STD_CELL_LIBRARY": "gf180mcu_fd_sc_mcu9t5v0", to your `config.json`
+4) change Makefile so that Gate Level tests use correct cell library too: https://github.com/rejunity/tt08-vga-drop/commit/22135b09cfd3b970ce26098b89df31547c557192
+
+and you should be done
+
+
+[11/22/2025 18:16] rzioma
+You might get around 10..15% speedup from that
+
+
+[11/22/2025 18:16] essen__
+Nice, sounds like it was a fun ride. 👍
+
+
+[11/22/2025 18:16] rzioma
+(but loose in area)
+
+
+[11/22/2025 18:17] rzioma
+for some definition of fun...
+
+
+[11/22/2025 18:17] essen__
+I think we all here share a common twisted definition.
+
+{Reactions}
+partyblob
+
+[11/22/2025 18:18] essen__
+Haha, maybe I should. 
+For now I don't have any timing issues, at least, assuming the output io doesn't go faster than 50MHz ? 🤷
+
+
+[11/22/2025 18:19] rzioma
+I don't think this affects IO cells, only logic/dff
+
+
+[11/22/2025 18:19] essen__
+Yes, just to say that my timing is fine, and I am bottlenecked by the IO, so I have no motivation to up the frequency.
+
+
+[11/22/2025 18:20] essen__
+We need faster, open source IO so bad 🫠
+
+
+[11/22/2025 18:21] essen__
+Anyways, off to lunch 👋 see you around
+
+{Reactions}
+👍
+
+[11/22/2025 18:21] rzioma
+Yeah, for MAC-array/SystolicArray you bound to be IO bound, I suppose
+
+
+[11/22/2025 18:21] rzioma
+I added some "noob" input caches to my implementation, some time ago
+
+
+[11/22/2025 18:22] rzioma
+https://github.com/rejunity/tiny-asic-1_58bit-matrix-mul
+
+{Reactions}
+👀
+
+[11/22/2025 18:23] rzioma
+
+
+{Attachments}
+2025-11_media/image-58839.png
+
+
+[11/22/2025 18:25] rzioma
+And septenary version: https://github.com/rejunity/tt09-septenary-matrix-mul
+Unfortunately never got fab'd due to eFabless going bonk
+
+
+[11/22/2025 18:56] essen__
+Any plans on submitting it to a future shuttle ?
+
+
+[11/22/2025 19:33] rzioma
+Yes, for the next sky130 shuttle I would like to implementa input data cache with @tnt SRAM blocks.
+I am also very tempted to see how large of an array could fit onto the whole wafer.space chip... maybe even buy a wafer for that 😉 but I don't think I will have time for the first shuttle.
+
+{Reactions}
+🤣
+
+[11/22/2025 19:37] essen__
+Sounds like more fun incoming 🙂 
+Haha, an entire wafer, I would like to see you guys do that.
+
+
+[11/22/2025 19:41] rzioma
+ah, sorry, I didn't mean a wafer scale 😉 though that would be fun!!! Instead wafer.space has an option to get uncut wafer for $2000 with 40 chips of your design (but someone needs to cut and package them 😉)
+but still not a bad deal because that gives approximately 128 TinyTapeout tiles worth of an area.
+
+{Reactions}
+👀
+
+[11/22/2025 19:57] rzioma
+Back of envelope calculation gives me around 10..20 GOPs (something like 16x20 mac array) for a whole chip on 180nm still far from 1TOps 🙂
+
+
+[11/22/2025 19:59] essen__
+@EmbeddedKen this is for you : 
+> get uncut wafer for $2000 with 40 chips of your design (but someone needs to cut and package them 😉)
+
+
+[11/22/2025 20:00] essen__
+How did I miss that 👀 
+Damn, looks like I also need a die bonding machine now.
+
+
+[11/22/2025 20:01] essen__
+How are you planning on doing the cutting and packaging ? Does one of you own the die bonding machine or know someone that does ?
+
+
+[11/22/2025 20:02] 246tnt
+Well the 2000$ option is only as an addition to the 7000$ slot.
+
+
+[11/22/2025 20:03] 246tnt
+So it's just to get a neat souvenir ... or if you want to do wafer level probing I guess.
+
+
+[11/22/2025 20:09] essen__
+So sad, you got my hopes up there for a second. 🤣
+
+
+[11/22/2025 20:12] 246tnt
+There is a fixed number of slots in the reticle ...  so the price is pretty much production_cost / num_slots ...  2k$ is the cost to run one more wafer through the flow.
+
+
+[11/22/2025 20:13] 246tnt
+The production costs are (simplified)  maskset_cost  + n_wafer * wafer_processing_cost    and the mask costs is the big chunks and the part which has a limited number of slots.
+
+{Reactions}
+👍
+
+[11/22/2025 21:20] rzioma
+Sad 😉
+
+{Reactions}
+🫂
+
+[11/23/2025 18:59] essen__
+Still a great deal though
+
+
+==============================================================
+Exported 34 message(s)
+==============================================================

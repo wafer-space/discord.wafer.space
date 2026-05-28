@@ -1,0 +1,132 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 🏗️ - Designing / analog / But then I get this from the DRC. ( Only
+After: 10/31/2025 23:59
+Before: 12/01/2025 00:00
+==============================================================
+
+[11/25/2025 02:45] bailey8889
+
+
+
+[11/25/2025 02:45] bailey8889
+@tnt I agree with you that this rule looks incorrect.
+
+Currently it's
+```
+np12_l1 = nplus.interacting(nplus_edges.separation(pgate.edges.and(pcomp_edges), 0.32.um, euclidian).polygons(0.001.um))
+```
+which is (almost) nplus within 0.32um of pgate.
+
+A different rule might be
+```
+np12_l1 = nplus.interacting(pgate.sized(0.32.um, size_inside(poly2), steps(3)))
+```
+The minimum poly2 spacing is 0.24um, which means sizing by 0.12um or greater can merge polygons. By splitting into 3 steps, we ensure that each growth will be about 0.11um < 0.12um.
+
+
+[11/25/2025 07:06] mithro_
+@Tim Edwards & @Leo Moser (mole99) - Any ideas?
+
+
+[11/25/2025 07:14] bailey8889
+@Tim 'mithro' Ansell this is actually Mabrains, I think. I don't see Amro in this room though.
+
+
+[11/25/2025 07:35] mithro_
+@bailey - Yeah, but @Leo Moser (mole99) and @Tim Edwards have been the masters of trying to decode the cryptic docs 🙂
+
+
+[11/25/2025 07:39] 246tnt
+I thought that some of the sky130 rules were a bit weird but the Nplus/Pplus gf180 rules, they're up there too 😅
+
+
+[11/25/2025 07:41] mole99
+Also, I don't think Mabrains is interested in contributing to open source anymore: https://github.com/fossi-foundation/globalfoundries-pdk-libs-gf180mcu_fd_pr/pull/6#issuecomment-3380860581
+I've also had some unpleasant encounters with Amro in the past.
+
+
+[11/25/2025 07:42] mole99
+I'll take a look at the issue shortly. I agree that the rules are weird and that the docs could be written better too 😅
+
+
+[11/25/2025 08:03] mole99
+I agree with the interpretation of the rule here.
+@bailey's rule implementation looks correct to me. Thanks a lot!
+
+However, if we just want the gate extension as specified in the rule, we might want to remove the pgate after the sizing:
+
+```
+np12_l1 = nplus.interacting(pgate.sized(0.32.um, size_inside(poly2), steps(3)).not(pgate))
+```
+
+Not sure if that makes any difference here. What would you opt for?
+
+I'll try both implementations on a chip design to see if there are any regressions.
+
+
+[11/25/2025 08:11] 246tnt
+I don't think it's all that useful to remove `pgate` because `nplus` can't overlap `pcomp` at all so if it was over `pgate` it would trigger another rule anyway.
+
+{Reactions}
+👍
+
+[11/25/2025 08:11] 246tnt
+I'll check if the rule fix my issue.
+
+
+[11/25/2025 08:14] 246tnt
+Yup @bailey 's rule doesn't flag an error on my design anymore.
+
+
+[11/25/2025 08:15] mole99
+Great, PR is here: https://github.com/wafer-space/gf180mcu/pull/6
+I'll merge it once the design ran through.
+
+{Embed}
+https://github.com/wafer-space/gf180mcu/pull/6
+fix: reimplement NP.12 to match the docs by mole99 · Pull Request ...
+2025-11_media/6-382DF
+
+
+[11/25/2025 08:16] 246tnt
+I also just tried extending the poly so it _does_ hit nplus and it was correctly flagged as an error.
+
+{Reactions}
+👏 (2)
+
+[11/25/2025 08:16] 246tnt
+BTW there it PP.12 which is the same rule for PPlus 🙂
+
+
+[11/25/2025 08:16] mole99
+Thanks for the heads up, will change it as well 😄
+
+
+[11/25/2025 08:54] mole99
+@tnt The PR has been merged, and the head has been tagged as `1.1.1`.
+Taking a look at your other issue now.
+
+
+[11/25/2025 08:55] 246tnt
+Ah yeah thanks. I really don't understand why there is that false positive ... or maybe the `&` operator doesn't work like I think it does, but it should only take the overlap of the sized up version and the original metal and the original metal isn't close enough to cause a separation error ...
+
+
+[11/25/2025 09:11] mole99
+I think it's related to the 45° angle and the staircase pattern. I had a similar issue with filler generation where the minimum spacing was not respected.
+
+If you do the following:
+
+```
+layer.sized(5).sized(-5)
+```
+
+You would think the outline will be the same afterwards, only some holes will be closed. However, that may not necessarily be the case, as you can see here: https://www.klayout.de/forum/discussion/comment/12132#Comment_12132
+There might be something similar going on in our case.
+
+Anyways, doing a debug dump on the layers right now.
+
+
+==============================================================
+Exported 19 message(s)
+==============================================================

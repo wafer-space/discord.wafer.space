@@ -1,0 +1,50 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"509798510170865675","essen__","2025-11-22T16:17:51.9210000+00:00","","",""
+"509798510170865675","essen__","2025-11-22T16:17:53.3560000+00:00","Nice, how did you guys go about changing the default cell library ?","",""
+"538398807986274304","rzioma","2025-11-22T18:07:35.4970000+00:00","@Essen theoretically it should be just `""STD_CELL_LIBRARY"": ""gf180mcu_fd_sc_mcu9t5v0"",` in `config.json`
+BUT there is a bug in the PDK that TT is using, so @htamas had to make a patch: https://github.com/TinyTapeout/tt-gds-action/compare/main...rejunity:tt-gds-action-gf180mcu_fd_sc_mcu9t5v0:main","",""
+"538398807986274304","rzioma","2025-11-22T18:14:48.2800000+00:00","So basically you have to
+1) clone https://github.com/TinyTapeout/tt-gds-action apply the patch
+1.5) add a tag on your patched gds-action repo, I used `ttgf0p2_9t`
+2) route your gds.yaml to use patched gds-action repo. something like that: https://github.com/rejunity/tt08-vga-drop/commit/2ac440a4bd84136deccb49f6ed56c4ded1a0a8b7
+3) add ""STD_CELL_LIBRARY"": ""gf180mcu_fd_sc_mcu9t5v0"", to your `config.json`
+4) change Makefile so that Gate Level tests use correct cell library too: https://github.com/rejunity/tt08-vga-drop/commit/22135b09cfd3b970ce26098b89df31547c557192
+
+and you should be done","",""
+"538398807986274304","rzioma","2025-11-22T18:16:27.0390000+00:00","You might get around 10..15% speedup from that","",""
+"509798510170865675","essen__","2025-11-22T18:16:34.4570000+00:00","Nice, sounds like it was a fun ride. 👍","",""
+"538398807986274304","rzioma","2025-11-22T18:16:36.4990000+00:00","(but loose in area)","",""
+"538398807986274304","rzioma","2025-11-22T18:17:03.1930000+00:00","for some definition of fun...","",""
+"509798510170865675","essen__","2025-11-22T18:17:24.7790000+00:00","I think we all here share a common twisted definition.","","partyblob (1)"
+"509798510170865675","essen__","2025-11-22T18:18:51.5680000+00:00","Haha, maybe I should. 
+For now I don't have any timing issues, at least, assuming the output io doesn't go faster than 50MHz ? 🤷","",""
+"538398807986274304","rzioma","2025-11-22T18:19:17.6910000+00:00","I don't think this affects IO cells, only logic/dff","",""
+"509798510170865675","essen__","2025-11-22T18:19:57.8280000+00:00","Yes, just to say that my timing is fine, and I am bottlenecked by the IO, so I have no motivation to up the frequency.","",""
+"509798510170865675","essen__","2025-11-22T18:20:48.5720000+00:00","We need faster, open source IO so bad 🫠","",""
+"509798510170865675","essen__","2025-11-22T18:21:20.4720000+00:00","Anyways, off to lunch 👋 see you around","","👍 (1)"
+"538398807986274304","rzioma","2025-11-22T18:21:38.1100000+00:00","Yeah, for MAC-array/SystolicArray you bound to be IO bound, I suppose","",""
+"538398807986274304","rzioma","2025-11-22T18:21:57.4690000+00:00","I added some ""noob"" input caches to my implementation, some time ago","",""
+"538398807986274304","rzioma","2025-11-22T18:22:24.6530000+00:00","https://github.com/rejunity/tiny-asic-1_58bit-matrix-mul","","👀 (1)"
+"538398807986274304","rzioma","2025-11-22T18:23:05.4220000+00:00","","2025-11_media/image-58839.png",""
+"538398807986274304","rzioma","2025-11-22T18:25:01.6990000+00:00","And septenary version: https://github.com/rejunity/tt09-septenary-matrix-mul
+Unfortunately never got fab'd due to eFabless going bonk","",""
+"509798510170865675","essen__","2025-11-22T18:56:01.7380000+00:00","Any plans on submitting it to a future shuttle ?","",""
+"538398807986274304","rzioma","2025-11-22T19:33:25.9920000+00:00","Yes, for the next sky130 shuttle I would like to implementa input data cache with @tnt SRAM blocks.
+I am also very tempted to see how large of an array could fit onto the whole wafer.space chip... maybe even buy a wafer for that 😉 but I don't think I will have time for the first shuttle.","","🤣 (1)"
+"509798510170865675","essen__","2025-11-22T19:37:51.6380000+00:00","Sounds like more fun incoming 🙂 
+Haha, an entire wafer, I would like to see you guys do that.","",""
+"538398807986274304","rzioma","2025-11-22T19:41:12.4730000+00:00","ah, sorry, I didn't mean a wafer scale 😉 though that would be fun!!! Instead wafer.space has an option to get uncut wafer for $2000 with 40 chips of your design (but someone needs to cut and package them 😉)
+but still not a bad deal because that gives approximately 128 TinyTapeout tiles worth of an area.","","👀 (1)"
+"538398807986274304","rzioma","2025-11-22T19:57:17.1380000+00:00","Back of envelope calculation gives me around 10..20 GOPs (something like 16x20 mac array) for a whole chip on 180nm still far from 1TOps 🙂","",""
+"509798510170865675","essen__","2025-11-22T19:59:39.9550000+00:00","@EmbeddedKen this is for you : 
+> get uncut wafer for $2000 with 40 chips of your design (but someone needs to cut and package them 😉)","",""
+"509798510170865675","essen__","2025-11-22T20:00:29.7770000+00:00","How did I miss that 👀 
+Damn, looks like I also need a die bonding machine now.","",""
+"509798510170865675","essen__","2025-11-22T20:01:32.0580000+00:00","How are you planning on doing the cutting and packaging ? Does one of you own the die bonding machine or know someone that does ?","",""
+"596068704471482370","246tnt","2025-11-22T20:02:30.9000000+00:00","Well the 2000$ option is only as an addition to the 7000$ slot.","",""
+"596068704471482370","246tnt","2025-11-22T20:03:23.8530000+00:00","So it's just to get a neat souvenir ... or if you want to do wafer level probing I guess.","",""
+"509798510170865675","essen__","2025-11-22T20:09:55.5160000+00:00","So sad, you got my hopes up there for a second. 🤣","",""
+"596068704471482370","246tnt","2025-11-22T20:12:14.6390000+00:00","There is a fixed number of slots in the reticle ...  so the price is pretty much production_cost / num_slots ...  2k$ is the cost to run one more wafer through the flow.","",""
+"596068704471482370","246tnt","2025-11-22T20:13:13.1660000+00:00","The production costs are (simplified)  maskset_cost  + n_wafer * wafer_processing_cost    and the mask costs is the big chunks and the part which has a limited number of slots.","","👍 (1)"
+"538398807986274304","rzioma","2025-11-22T21:20:27.9850000+00:00","Sad 😉","","🫂 (1)"
+"509798510170865675","essen__","2025-11-23T18:59:04.0370000+00:00","Still a great deal though","",""

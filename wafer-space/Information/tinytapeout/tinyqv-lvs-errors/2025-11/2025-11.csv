@@ -1,0 +1,40 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"738396032295108721","bailey8889","2025-11-23T18:40:48.7530000+00:00","","",""
+"738396032295108721","bailey8889","2025-11-23T18:40:49.6510000+00:00","@RebelMike For some reason, netgen is thinking that flattening these cells will make a better match
+```
+Flattening instances of gf180mcu_fd_sc_mcu7t5v0__mux2_2 in cell tt_um_MichaelBell_tinyQV (0) makes a better match
+Flattening instances of gf180mcu_fd_sc_mcu7t5v0__mux2_2 in cell tt_um_MichaelBell_tinyQV (1) makes a better match
+Flattening instances of gf180mcu_fd_sc_mcu7t5v0__aoi21_4 in cell tt_um_MichaelBell_tinyQV (0) makes a better match
+Flattening instances of gf180mcu_fd_sc_mcu7t5v0__aoi21_4 in cell tt_um_MichaelBell_tinyQV (1) makes a better match
+Flattening instances of gf180mcu_fd_sc_mcu7t5v0__nand2_1 in cell tt_um_MichaelBell_tinyQV (0) makes a better match
+Flattening instances of gf180mcu_fd_sc_mcu7t5v0__nand2_1 in cell tt_um_MichaelBell_tinyQV (1) makes a better match
+Flattening instances of gf180mcu_fd_sc_mcu7t5v0__nand2_4 in cell tt_um_MichaelBell_tinyQV (0) makes a better match
+Flattening instances of gf180mcu_fd_sc_mcu7t5v0__nand2_4 in cell tt_um_MichaelBell_tinyQV (1) makes a better match
+Flattening instances of gf180mcu_fd_sc_mcu7t5v0__oai21_2 in cell tt_um_MichaelBell_tinyQV (0) makes a better match
+Flattening instances of gf180mcu_fd_sc_mcu7t5v0__oai21_2 in cell tt_um_MichaelBell_tinyQV (1) makes a better match
+Flattening instances of gf180mcu_fd_sc_mcu7t5v0__oai21_4 in cell tt_um_MichaelBell_tinyQV (0) makes a better match
+Flattening instances of gf180mcu_fd_sc_mcu7t5v0__oai21_4 in cell tt_um_MichaelBell_tinyQV (1) makes a better match
+```","",""
+"738396032295108721","bailey8889","2025-11-23T18:42:11.7860000+00:00","However, flattening the abstract lef views that don't contain any devices causes a device mismatch.
+```
+gf180mcu_fd_sc_mcu7t5v0__and3_4 (1)        |gf180mcu_fd_sc_mcu7t5v0__and3_4 (1)
+(no matching element)                      |nfet_06v0 (12656->10959)
+(no matching element)                      |pfet_06v0 (12656->10745)
+Number of devices: 17150 **Mismatch**      |Number of devices: 38854 **Mismatch**
+Number of nets: 20323 **Mismatch**         |Number of nets: 28705 **Mismatch**        
+```","",""
+"738396032295108721","bailey8889","2025-11-23T18:43:16.9810000+00:00","As to why netgen wants to flatten those cells, there may be a clue in `62-magic-spiceextraction/magic-spiceextraction.log`
+```
+Warning: use i_peripherals.i_user_peri06.cordic_module.iter_stage.z\[0\]_gf180mcu_fd_sc_mcu7t5v0__dffq_1_Q_D_gf180mcu_fd_sc_mcu7t5v0__clkinv_1_ZN_I_gf180mcu_fd_sc_mcu7t5v0__oai211_1_ZN_B_gf180mcu_fd_sc_mcu7t5v0__oai221_1_ZN_A1_gf180mcu_fd_sc_mcu7t5v0__aoi21_1_ZN_A2_gf180mcu_fd_sc_mcu7t5v0__mux2_2_Z_I0_gf180mcu_fd_sc_mcu7t5v0__mux2_2_Z_I0_gf180mcu_fd_sc_mcu7t5v0__mux2_2_Z_I1_gf180mcu_fd_sc_mcu7t5v0__mux2_2_I0_Z_gf180mcu_fd_sc_mcu7t5v0__nand2_1_A2_ZN_gf180mcu_fd_sc_mcu7t5v0__oai21_1_B_ZN_gf180mcu_fd_sc_mcu7t5v0__mux2_2_I appears more than once in def!
+Warning: use i_peripherals.i_user_peri06.cordic_module.iter_stage.z\[0\]_gf180mcu_fd_sc_mcu7t5v0__dffq_1_Q_D_gf180mcu_fd_sc_mcu7t5v0__clkinv_1_ZN_I_gf180mcu_fd_sc_mcu7t5v0__oai211_1_ZN_B_gf180mcu_fd_sc_mcu7t5v0__oai221_1_ZN_A1_gf180mcu_fd_sc_mcu7t5v0__aoi21_1_ZN_A2_gf180mcu_fd_sc_mcu7t5v0__mux2_2_Z_I1_gf180mcu_fd_sc_mcu7t5v0__mux2_2_Z_I1_gf180mcu_fd_sc_mcu7t5v0__mux2_2_Z_I1_gf180mcu_fd_sc_mcu7t5v0__mux2_2_I0_Z_gf180mcu_fd_sc_mcu7t5v0__nand2_1_A2_ZN_gf180mcu_fd_sc_mcu7t5v0__oai21_1_B_ZN_gf180mcu_fd_sc_mcu7t5v0__oai21_1_ appears more than once in def!
+...
+```","",""
+"738396032295108721","bailey8889","2025-11-23T18:44:17.0720000+00:00","I don't know why yosys is generating such long instance names, but that is what I'd suggest someone looking into.","",""
+"738396032295108721","bailey8889","2025-11-23T19:06:54.8290000+00:00","Changed the channel name: tinyQV LVS errors","",""
+"738396032295108721","bailey8889","2025-11-23T19:17:07.0200000+00:00","Actually, I think magic is truncating the def instance names at around 511 bytes. @Tim Edwards","",""
+"738396032295108721","bailey8889","2025-11-23T19:21:59.2650000+00:00","I found this in the magic repo that looks suspicious.
+```
+./lef/defRead.c:    char usename[512];
+```","",""
+"738396032295108721","bailey8889","2025-11-23T20:30:27.2860000+00:00","Looks like there's already a PR to fix this.","","👍 (1)"
+"1365118310701600900","rtimothyedwards_19428","2025-11-23T22:09:01.1420000+00:00","And I just merged the PR.  It will be available on github in about 10 hours, or you can get the update now from opencircuitdesign.com.","","👏 (2)"

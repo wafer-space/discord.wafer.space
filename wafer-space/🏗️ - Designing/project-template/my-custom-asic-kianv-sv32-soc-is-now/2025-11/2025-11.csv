@@ -1,0 +1,22 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"384390069412429834","polyfractal","2025-11-19T18:08:09.1670000+00:00","","",""
+"384390069412429834","polyfractal","2025-11-19T18:08:10.0400000+00:00","Super cool! 
+
+Newbie question: why is the sdram exposed via pins? to allow loading the memory/program externally directly instead of over something like uart?
+
+also what are the 20 some ""blocks"" in the image?","",""
+"840182560252624916","logic_destroyer","2025-11-19T18:21:49.2790000+00:00","Great questions — SDRAM is external because this process node doesn’t offer large embedded DRAM, only small SRAM blocks.To run Linux you need external memory.","",""
+"384390069412429834","polyfractal","2025-11-19T18:24:51.4400000+00:00","oooh right, makes sense!","",""
+"220639106915368960","tholin","2025-11-19T18:41:23.8930000+00:00","What kinda SDRAM can run at 5V?","",""
+"323371864074485771","mole99","2025-11-19T18:54:11.6720000+00:00","It runs at 3.3V with 20MHz 👌","",""
+"220639106915368960","tholin","2025-11-19T18:54:57.2060000+00:00","How much RAM is required to boot mainline Linux? Like, at minimum?","",""
+"220639106915368960","tholin","2025-11-19T18:55:21.7100000+00:00","I’ve done it with as little as 16MiB, booting to busybox with 12MiB free. So could maybe do 8MiB.","",""
+"220639106915368960","tholin","2025-11-19T19:20:17.3950000+00:00","1Mx16 Dynamic RAM with 5V power supply:
+https://www.issi.com/ww/pdf/41C16100.pdf
+4 of these and you get your 8MiB for busybox on mainline Linux at a much higher clockspeed","",""
+"220639106915368960","tholin","2025-11-19T19:21:01.5550000+00:00","I highly doubt 20MHz at 3.3V is realistic without wait states. My own testing put the switching speed of the GPIOs at 12.5MHz at 3.3V.","","❤️ (1)"
+"840182560252624916","logic_destroyer","2025-11-19T20:22:01.6990000+00:00","I mean, I did build the Tiny Tapeout Micro Linux SoC. With that thing I could boot Linux with just 8 MB. The SoC should support IPv6 and IPv4 and be comfortable to use — not just boot BusyBox and call it a day. I want to do more with it: MicroPython, C++, NFS, all kinds of stuff.","",""
+"220639106915368960","tholin","2025-11-19T20:31:12.6940000+00:00","BusyBox + Lua is a decent setup for me on embedded","",""
+"220639106915368960","tholin","2025-11-19T20:31:20.0510000+00:00","(I strongly dislike python)","",""
+"840182560252624916","logic_destroyer","2025-11-19T20:32:32.1750000+00:00","K","",""
+"220639106915368960","tholin","2025-11-19T20:42:31.4770000+00:00","But yeah, this project might be more interesting once we have a native 3.3V SCL and 3.3V IO pad structures.","","❤️ (1)"

@@ -1,0 +1,205 @@
+==============================================================
+Guild: wafer.space Community
+Channel: Information / questions / Release Checklist
+After: 10/31/2025 23:59
+Before: 12/01/2025 00:00
+==============================================================
+
+[11/03/2025 09:31] scafir
+Hi, is there a release checklist for the things to take into account before doing a submission? From what I see, I need to:
+1) Pass the  gf180mcu-precheck
+2) Make sure the QR code is correct (what info should it contain?)
+3) Are there naming conventions to follow?
+4) Are there special ways in which we should save the output file?
+5) Are there non DRC check we would need to run (e.g: zero size polygons)?
+
+For the IHP tapeout, there was an issue with different guidelines, maybe something similar could be made?
+I'm asking because I will do an analog tapeout and thus will not use the librelane flow. I will also have to modify the padring dimension and bond the chips myself.
+
+
+[11/03/2025 10:18] mole99
+Hi @Clyde Laforge!
+All of these checks should be handled by the precheck. The precheck runs both the magic and KLayout DRC setup, offgrid and angle checks, density checks etc. We might need to add a zero size polygon check.
+
+You only need to include the QR-Code cell in your design. During the precheck, its content will be replaced with the correct ID for your design.
+
+Currently, there is no check on the file and top-level cell naming, but we might require both to be named the same. I will also add a check for the die size, since for the first run all designs will be the same size.
+
+But other than that you are free to do what you want. You can create the GDS with LibreLane or any other software. Just make sure to pass the precheck.
+
+If anything is not caught by the precheck and flagged by the foundry, we will make sure to improve the precheck.
+Likewise, if you manage to break the precheck, please let us know so we can improve it :)
+
+{Reactions}
+👍
+
+[11/19/2025 22:00] rzioma
+Precheck- that is running gds against https://github.com/wafer-space/gf180mcu-precheck, is that correct @Leo Moser (mole99) ?
+
+{Reactions}
+👍
+
+[11/19/2025 22:03] rzioma
+I also wanted to ask how the submission process will look like?
+
+Will it be basically just copying GDS file?
+
+
+[11/19/2025 22:03] urish
+@Leo Moser (mole99) you may find this useful for the zero size polygons: <https://github.com/TinyTapeout/tt-support-tools/blob/main/precheck/tech-files/zeroarea.rb.drc>
+
+
+[11/19/2025 22:04] urish
+You need to submit a URL to the final GDS file
+
+
+[11/19/2025 22:04] urish
+(could be from a github repo)
+
+
+[11/19/2025 22:04] urish
+along with MD5 or SHA1 hash
+
+
+[11/19/2025 22:04] urish
+you can try it out at https://test-platform.wafer.space/
+
+{Embed}
+https://test-platform.wafer.space/
+Welcome to wafer.space
+…
+Platform for wafer.space low cost silicon manufacturing.
+
+{Reactions}
+🙏
+
+[11/19/2025 22:04] urish
+This is what the submission interface currenty looks like:
+
+
+[11/19/2025 22:04] urish
+
+
+{Attachments}
+2025-11_media/image-7A669.png
+
+
+[11/19/2025 22:19] rzioma
+Got it! Thanks
+
+
+[11/20/2025 08:22] mole99
+Yes
+
+
+[11/20/2025 08:40] mole99
+Thanks Uri! I'm torn between just reporting an error on zero size polygons (with a report), so the problem is fixed upstream/in the design. Or to delete these shapes as done in the script. I think I prefer to modify the original layout as little as possible.
+
+
+[11/20/2025 08:44] urish
+we are actually only using this script to report the error, but do not use the modified design
+
+
+[11/20/2025 08:59] mole99
+Good. I will do the same 👍
+
+
+[11/20/2025 13:50] rzioma
+Non Manufacturable! 🤯
+
+{Attachments}
+2025-11_media/image-3A3F4.png
+
+{Reactions}
+matt_oh_no (2)
+
+[11/20/2025 13:50] rzioma
+@Leo Moser (mole99) @urish any advice?
+
+
+[11/20/2025 13:50] rzioma
+What did I screw up?
+
+
+[11/20/2025 13:50] rzioma
+Precheck passed
+
+
+[11/20/2025 13:51] urish
+Maybe you need to add fill?
+
+
+[11/20/2025 13:51] urish
+(re the 2nd error)
+
+
+[11/20/2025 13:51] mole99
+The precheck is not yet integrated, what you see is AI generated afaik
+
+
+[11/20/2025 13:51] rzioma
+@Leo Moser (mole99) precheck has passed btw
+
+{Attachments}
+2025-11_media/image-7E30F.png
+
+{Reactions}
+👍
+
+[11/20/2025 13:53] mole99
+@Tim 'mithro' Ansell will be able to tell you when the precheck has been integrated into the online platform.
+
+
+[11/20/2025 13:53] rzioma
+In other words, should I worry right now about those messages?
+
+
+[11/20/2025 13:53] mole99
+Those are AI hallucinations, you don't have to worry about them :)
+
+{Reactions}
+🎉 ❤️
+
+[11/20/2025 21:58] mithro_
+AI hallucinations == stuff the AI just put in instead of the real precheck
+
+
+[11/20/2025 21:59] mithro_
+I'm working on the real manufacturing check integration @ https://github.com/wafer-space/platform.wafer.space/pull/43
+
+{Embed}
+https://github.com/wafer-space/platform.wafer.space/pull/43
+Add manufacturability checking system with Docker integration by mi...
+Summary
+Implements automated manufacturability checking for GDS design files using the gf180mcu-precheck tool in Docker containers. This includes export compliance certification requirements and co...
+2025-11_media/43-AF869
+
+{Reactions}
+❤️
+
+[11/20/2025 22:00] mithro_
+But I'm currently fighting with the download pathway
+
+
+[11/20/2025 22:00] mithro_
+@ https://github.com/wafer-space/platform.wafer.space/pull/45
+
+{Embed}
+https://github.com/wafer-space/platform.wafer.space/pull/45
+Add content extraction pipeline for GDS/OASIS file processing by mi...
+Summary
+This PR implements a comprehensive content extraction pipeline for processing GDS and OASIS files from various sources, including support for compressed archives and GitHub Actions artifact...
+2025-11_media/45-C93DE
+
+
+[11/21/2025 06:11] urish
+I thought about asking for support for GH action artifact submission
+
+
+[11/21/2025 06:12] urish
+But on second thought, they are empheral by nature, so it may not be such a great idea
+
+
+==============================================================
+Exported 33 message(s)
+==============================================================

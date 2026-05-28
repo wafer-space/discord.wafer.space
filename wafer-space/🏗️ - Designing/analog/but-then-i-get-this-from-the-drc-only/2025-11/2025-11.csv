@@ -1,0 +1,57 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"738396032295108721","bailey8889","2025-11-25T02:45:34.9770000+00:00","","",""
+"738396032295108721","bailey8889","2025-11-25T02:45:36.0950000+00:00","@tnt I agree with you that this rule looks incorrect.
+
+Currently it's
+```
+np12_l1 = nplus.interacting(nplus_edges.separation(pgate.edges.and(pcomp_edges), 0.32.um, euclidian).polygons(0.001.um))
+```
+which is (almost) nplus within 0.32um of pgate.
+
+A different rule might be
+```
+np12_l1 = nplus.interacting(pgate.sized(0.32.um, size_inside(poly2), steps(3)))
+```
+The minimum poly2 spacing is 0.24um, which means sizing by 0.12um or greater can merge polygons. By splitting into 3 steps, we ensure that each growth will be about 0.11um < 0.12um.","",""
+"169786952432746498","mithro_","2025-11-25T07:06:09.3880000+00:00","@Tim Edwards & @Leo Moser (mole99) - Any ideas?","",""
+"738396032295108721","bailey8889","2025-11-25T07:14:10.0580000+00:00","@Tim 'mithro' Ansell this is actually Mabrains, I think. I don't see Amro in this room though.","",""
+"169786952432746498","mithro_","2025-11-25T07:35:56.6030000+00:00","@bailey - Yeah, but @Leo Moser (mole99) and @Tim Edwards have been the masters of trying to decode the cryptic docs 🙂","",""
+"596068704471482370","246tnt","2025-11-25T07:39:13.8710000+00:00","I thought that some of the sky130 rules were a bit weird but the Nplus/Pplus gf180 rules, they're up there too 😅","",""
+"323371864074485771","mole99","2025-11-25T07:41:59.9530000+00:00","Also, I don't think Mabrains is interested in contributing to open source anymore: https://github.com/fossi-foundation/globalfoundries-pdk-libs-gf180mcu_fd_pr/pull/6#issuecomment-3380860581
+I've also had some unpleasant encounters with Amro in the past.","",""
+"323371864074485771","mole99","2025-11-25T07:42:18.0920000+00:00","I'll take a look at the issue shortly. I agree that the rules are weird and that the docs could be written better too 😅","",""
+"323371864074485771","mole99","2025-11-25T08:03:53.6580000+00:00","I agree with the interpretation of the rule here.
+@bailey's rule implementation looks correct to me. Thanks a lot!
+
+However, if we just want the gate extension as specified in the rule, we might want to remove the pgate after the sizing:
+
+```
+np12_l1 = nplus.interacting(pgate.sized(0.32.um, size_inside(poly2), steps(3)).not(pgate))
+```
+
+Not sure if that makes any difference here. What would you opt for?
+
+I'll try both implementations on a chip design to see if there are any regressions.","",""
+"596068704471482370","246tnt","2025-11-25T08:11:01.0370000+00:00","I don't think it's all that useful to remove `pgate` because `nplus` can't overlap `pcomp` at all so if it was over `pgate` it would trigger another rule anyway.","","👍 (1)"
+"596068704471482370","246tnt","2025-11-25T08:11:14.4440000+00:00","I'll check if the rule fix my issue.","",""
+"596068704471482370","246tnt","2025-11-25T08:14:17.1580000+00:00","Yup @bailey 's rule doesn't flag an error on my design anymore.","",""
+"323371864074485771","mole99","2025-11-25T08:15:48.4910000+00:00","Great, PR is here: https://github.com/wafer-space/gf180mcu/pull/6
+I'll merge it once the design ran through.","",""
+"596068704471482370","246tnt","2025-11-25T08:16:25.2300000+00:00","I also just tried extending the poly so it _does_ hit nplus and it was correctly flagged as an error.","","👏 (2)"
+"596068704471482370","246tnt","2025-11-25T08:16:38.0020000+00:00","BTW there it PP.12 which is the same rule for PPlus 🙂","",""
+"323371864074485771","mole99","2025-11-25T08:16:57.9950000+00:00","Thanks for the heads up, will change it as well 😄","",""
+"323371864074485771","mole99","2025-11-25T08:54:34.8790000+00:00","@tnt The PR has been merged, and the head has been tagged as `1.1.1`.
+Taking a look at your other issue now.","",""
+"596068704471482370","246tnt","2025-11-25T08:55:38.7110000+00:00","Ah yeah thanks. I really don't understand why there is that false positive ... or maybe the `&` operator doesn't work like I think it does, but it should only take the overlap of the sized up version and the original metal and the original metal isn't close enough to cause a separation error ...","",""
+"323371864074485771","mole99","2025-11-25T09:11:26.5440000+00:00","I think it's related to the 45° angle and the staircase pattern. I had a similar issue with filler generation where the minimum spacing was not respected.
+
+If you do the following:
+
+```
+layer.sized(5).sized(-5)
+```
+
+You would think the outline will be the same afterwards, only some holes will be closed. However, that may not necessarily be the case, as you can see here: https://www.klayout.de/forum/discussion/comment/12132#Comment_12132
+There might be something similar going on in our case.
+
+Anyways, doing a debug dump on the layers right now.","",""

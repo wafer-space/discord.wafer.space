@@ -1,0 +1,13 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"596068704471482370","246tnt","2025-11-25T13:04:14.4600000+00:00","Rule `Vn.2b` ""Vian Space in 4x4 or larger Vian array"".
+So is a 2x5   or a  2x10 array larger ? Like is it the number of via or the X/Y repeats (one or both?) that need to be larger ?","",""
+"596068704471482370","246tnt","2025-11-25T14:10:20.0430000+00:00","Both KLayout DRC deck and the magic via generation seem to agree that an array of 2xM (for any M) doesn't need the larger spacing.","",""
+"596068704471482370","246tnt","2025-11-25T14:10:52.9030000+00:00","However OpenROAD doesn't seem to agree and `pdngen` uses the larger spacing and it seem to use it all the time.","",""
+"323371864074485771","mole99","2025-11-25T16:36:24.2580000+00:00","Good question 😄
+OpenROAD uses what is defined in the techlef, right? So this is what came from GF. However, when they created the techlef, it may have been simpler for them to just use the larger spacing for all via arrays.
+
+We could give it a try and see if any DRC violations are flagged when we submit the design.","",""
+"323371864074485771","mole99","2025-11-25T16:37:09.5410000+00:00","PS: I would have interpreted it in the same way as KLayout and magic.","",""
+"596068704471482370","246tnt","2025-11-25T16:41:39.4740000+00:00","Yeah, I checked the techlef. It looks correct.","",""
+"596068704471482370","246tnt","2025-11-25T16:42:23.1780000+00:00","Or at least as correct as it can be ... turns out you can't define something special for > 4x4 arrays, it's _always_ 3x3 arrays ...","",""
+"596068704471482370","246tnt","2025-11-25T16:43:22.4430000+00:00","I was trying to follow the code that generates / selects the via in pdngen but ... I got lost and I have to finish the power gates first. I will resume digging into the OR code once I'm done with those.","","👌 (3)"

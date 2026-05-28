@@ -1,0 +1,43 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 🏗️ - Designing / project-template / how have people waived DRCs on past
+After: 10/31/2025 23:59
+Before: 12/01/2025 00:00
+==============================================================
+
+[11/27/2025 15:49] mole99
+
+
+
+[11/27/2025 15:49] mole99
+sky130 has the MR (manufacturing rules) deck. You had to pass those rules before submission. Unfortunately, gf180mcu does not have this distinction.
+We want to get the number of DRC violations down as much as possible when we submit to the foundry, that's why both the magic and KLayout DRC deck are enabled.
+
+
+[11/27/2025 15:58] _luke_w_
+All of my DRCs are inside of GF's own standard cells so hopefully they don't flag those.
+
+{Reactions}
+🤞
+
+[11/27/2025 16:07] mole99
+Yes, but if there are obvious issues in the cells compared to the docs (not interpretation issues of the rules), then we have to fix them beforehand.
+
+
+[11/27/2025 16:55] _luke_w_
+https://github.com/wafer-space/gf180mcu-project-template/issues/34
+
+I wrote them up here. The KLayout ones I'm certain are invalid, the Magic ones I'm not sure about but they seem harmless at least
+
+{Embed}
+https://github.com/wafer-space/gf180mcu-project-template/issues/34
+9-track foundry standard cells are not clean with KLayout or Magic ...
+KLayout violations The clock gating cell icgtp_1 is flagged with the following by klayout: CO.6a : (i) Metal1 (&lt; 0.34um) end-of-line overlap contact (Applies to all &lt; 0.34µm wide metal lines,...
+2025-11_media/34-64502
+
+{Reactions}
+👏
+
+==============================================================
+Exported 5 message(s)
+==============================================================

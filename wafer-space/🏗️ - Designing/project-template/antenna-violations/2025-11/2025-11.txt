@@ -1,0 +1,168 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 🏗️ - Designing / project-template / Antenna violations
+After: 10/31/2025 23:59
+Before: 12/01/2025 00:00
+==============================================================
+
+[11/19/2025 20:47] mithro_
+
+
+
+[11/19/2025 20:47] mithro_
+I think @Leo Moser (mole99) mentioned we need to look into why antenna violations are appearing.
+
+OpenROAD is suppose to produce DRC clean results and I believe it should be doing so for GF180MCU.
+
+
+[11/19/2025 21:43] rzioma
+I have a similar issue: 11 net and 10 pin violations.
+
+Couldn’t fix them regardless of parameters I have tried so far.
+
+
+[11/19/2025 21:44] rzioma
+AntennaRepair step reports that it fixed all the issues, but antenna check afterwards finds the same issues 🤷‍♂️
+
+
+[11/19/2025 21:49] rzioma
+Also I can’t seem to find a way to enable pass that does INSERT_ECO_DIODES
+
+
+[11/20/2025 08:19] mole99
+Before the second shuttle, I would like to investigate why these antenna violations occur. This can be either a limitation of OpenROAD or a misconfiguration in LibreLane. I will need to compare this with ORFS to see if it produces fewer or no antenna violations when using the open source PDKs.
+A small number of low-ratio antenna violations will most likely not cause any problems. Tiny Tapeout has been doing this from the start.
+
+Nevertheless, there are a few things you can do to reduce the antenna violations.
+
+1. You can increase the number of antenna insertion iterations and the margin to overfix them.
+
+These are the default values:
+
+```yaml
+GRT_ANTENNA_ITERS: 3
+GRT_ANTENNA_MARGIN: 10 # %
+```
+
+2. You can manually insert antenna diodes.
+
+```yaml
+# https://librelane.readthedocs.io/en/latest/reference/api/steps/index.html#librelane.steps.ECODiode
+INSERT_ECO_DIODES:
+ - target: "bidir[0].pad/A"
+ - target: "bidir[1].pad/A"
+```
+
+For this to take effect, you also need to add the `Odb.InsertECODiodes` step to the flow.
+
+```yaml
+meta:
+  version: 3
+  flow: Chip
+  substituting_steps:
+    ...
+    +OpenROAD.GlobalRouting: Odb.InsertECODiodes
+    ...
+    
+    (or after detailed routing)
+    
+    ...
+    +OpenROAD.DetailedRouting: Odb.InsertECODiodes
+    ...
+```
+
+
+[11/20/2025 11:32] mithro_
+@Leo Moser (mole99) - OpenROAD has a pretty big CI system
+
+
+[11/20/2025 11:32] mithro_
+https://dashboard.precisioninno.com/trends
+
+{Embed}
+https://dashboard.precisioninno.com/trends
+OpenROAD Dashboard
+OpenROAD Dashboard
+
+{Reactions}
+❤️ 👍
+
+[11/20/2025 11:58] rzioma
+
+
+{Attachments}
+2025-11_media/image-9E495.png
+
+
+[11/20/2025 11:59] rzioma
+@Leo Moser (mole99) it looks adding `DRT_ANTENNA_REPAIR_ITERS: 10` did the trick!
+Those elusive antennas were result of Detailed Routing. I think that explains why cranking up `GRT_ANTENNA_MARGIN` wouldn't do much for me.
+
+{Reactions}
+👍 (2)
+
+[11/20/2025 12:01] rzioma
+In contrast my awkward attempts at `INSERT_ECO_DIODES` eventually did fix the antennas, but made LVS to fail 😐
+
+
+[11/20/2025 12:01] rzioma
+@Leo Moser (mole99) Thanks for OpenROAD.**Detailed**Routing: Odb.InsertECODiodes tip. Got me thinking! 🙂
+
+
+[11/20/2025 12:04] rzioma
+@LukeW could you try `DRT_ANTENNA_REPAIR_ITERS: 10` and see if it helps you too?
+
+
+[11/20/2025 12:05] rzioma
+Now lets see if DRC is going to pass :awkwardsweat:
+
+
+[11/20/2025 12:43] _luke_w_
+Thanks, my report was with the unmodified template repo, I haven't been running the klayout DRC for development. I can take a look later on tonight.
+
+
+[11/20/2025 14:29] mole99
+@ReJ aka Renaldas Zioma I'm wondering how you found out about `DRT_ANTENNA_REPAIR_ITERS`? By chance?
+Because it's not yet in the docs, as it was a pretty recent addition to LibreLane :)
+
+The only reason I can think of for why `DRT_ANTENNA_REPAIR_ITERS` is 0 by default is because the whole rip-up and partial routing was quite buggy in OpenROAD until recently. But it seems that it works mostly fine now? If so, I can add this as a default option to the template and we can see how well it fixes antenna violations in different designs.
+
+
+[11/20/2025 14:33] rzioma
+@Leo Moser (mole99) by reading logs :awkwardsweat:
+
+There was a warning in the log after detailed routing that DRT_ANTENNA_REPAIR_ITERS is set to 0 and the pass going to be skipped.
+
+
+[11/20/2025 14:36] mole99
+Haha, I see 😄 Well done!
+I think I'll enable antenna repair after DRT in the template by default. If OpenROAD crashes, we can disable it again. If partial route produces strange results, LVS will alert us.
+
+{Reactions}
+👍
+
+[11/20/2025 21:55] mithro_
+@Leo Moser (mole99) - Do we have a tracking bug for the antenna stuff somewhere?
+
+
+[11/20/2025 21:57] mithro_
+@Leo Moser (mole99) - BTW The OpenROAD team owes me a few favours (but they are quite busy), so if we need anything from them it should be pretty easy to get fixes done.
+
+
+[11/21/2025 00:37] _luke_w_
+Just to confirm, `DRT_ANTENNA_REPAIR_ITERS: 10` fixes my antenna violations
+
+{Reactions}
+🎉 (2)
+
+[11/21/2025 06:02] mole99
+I will open a LibreLane PR to enable `DRT_ANTENNA_REPAIR_ITERS` by default so that we can track any regressions through the LibreLane CI.
+
+
+[11/21/2025 06:03] mole99
+There might be a different issue that I would like to get fixed by the OpenROAD team. I'll let you know 👌🏻
+
+
+==============================================================
+Exported 23 message(s)
+==============================================================

@@ -1,0 +1,48 @@
+==============================================================
+Guild: wafer.space Community
+Channel: Information / questions / Via arrays
+After: 10/31/2025 23:59
+Before: 12/01/2025 00:00
+==============================================================
+
+[11/25/2025 13:04] 246tnt
+Rule `Vn.2b` "Vian Space in 4x4 or larger Vian array".
+So is a 2x5   or a  2x10 array larger ? Like is it the number of via or the X/Y repeats (one or both?) that need to be larger ?
+
+
+[11/25/2025 14:10] 246tnt
+Both KLayout DRC deck and the magic via generation seem to agree that an array of 2xM (for any M) doesn't need the larger spacing.
+
+
+[11/25/2025 14:10] 246tnt
+However OpenROAD doesn't seem to agree and `pdngen` uses the larger spacing and it seem to use it all the time.
+
+
+[11/25/2025 16:36] mole99
+Good question 😄
+OpenROAD uses what is defined in the techlef, right? So this is what came from GF. However, when they created the techlef, it may have been simpler for them to just use the larger spacing for all via arrays.
+
+We could give it a try and see if any DRC violations are flagged when we submit the design.
+
+
+[11/25/2025 16:37] mole99
+PS: I would have interpreted it in the same way as KLayout and magic.
+
+
+[11/25/2025 16:41] 246tnt
+Yeah, I checked the techlef. It looks correct.
+
+
+[11/25/2025 16:42] 246tnt
+Or at least as correct as it can be ... turns out you can't define something special for > 4x4 arrays, it's _always_ 3x3 arrays ...
+
+
+[11/25/2025 16:43] 246tnt
+I was trying to follow the code that generates / selects the via in pdngen but ... I got lost and I have to finish the power gates first. I will resume digging into the OR code once I'm done with those.
+
+{Reactions}
+👌 (3)
+
+==============================================================
+Exported 8 message(s)
+==============================================================

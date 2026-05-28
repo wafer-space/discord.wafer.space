@@ -1,0 +1,54 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"1401841055975870476","scafir","2025-11-03T09:31:46.2460000+00:00","Hi, is there a release checklist for the things to take into account before doing a submission? From what I see, I need to:
+1) Pass the  gf180mcu-precheck
+2) Make sure the QR code is correct (what info should it contain?)
+3) Are there naming conventions to follow?
+4) Are there special ways in which we should save the output file?
+5) Are there non DRC check we would need to run (e.g: zero size polygons)?
+
+For the IHP tapeout, there was an issue with different guidelines, maybe something similar could be made?
+I'm asking because I will do an analog tapeout and thus will not use the librelane flow. I will also have to modify the padring dimension and bond the chips myself.","",""
+"323371864074485771","mole99","2025-11-03T10:18:57.6690000+00:00","Hi @Clyde Laforge!
+All of these checks should be handled by the precheck. The precheck runs both the magic and KLayout DRC setup, offgrid and angle checks, density checks etc. We might need to add a zero size polygon check.
+
+You only need to include the QR-Code cell in your design. During the precheck, its content will be replaced with the correct ID for your design.
+
+Currently, there is no check on the file and top-level cell naming, but we might require both to be named the same. I will also add a check for the die size, since for the first run all designs will be the same size.
+
+But other than that you are free to do what you want. You can create the GDS with LibreLane or any other software. Just make sure to pass the precheck.
+
+If anything is not caught by the precheck and flagged by the foundry, we will make sure to improve the precheck.
+Likewise, if you manage to break the precheck, please let us know so we can improve it :)","","👍 (1)"
+"538398807986274304","rzioma","2025-11-19T22:00:39.8430000+00:00","Precheck- that is running gds against https://github.com/wafer-space/gf180mcu-precheck, is that correct @Leo Moser (mole99) ?","","👍 (1)"
+"538398807986274304","rzioma","2025-11-19T22:03:41.6910000+00:00","I also wanted to ask how the submission process will look like?
+
+Will it be basically just copying GDS file?","",""
+"732347216412278825","urish","2025-11-19T22:03:47.8620000+00:00","@Leo Moser (mole99) you may find this useful for the zero size polygons: <https://github.com/TinyTapeout/tt-support-tools/blob/main/precheck/tech-files/zeroarea.rb.drc>","",""
+"732347216412278825","urish","2025-11-19T22:04:02.3150000+00:00","You need to submit a URL to the final GDS file","",""
+"732347216412278825","urish","2025-11-19T22:04:05.7380000+00:00","(could be from a github repo)","",""
+"732347216412278825","urish","2025-11-19T22:04:10.8920000+00:00","along with MD5 or SHA1 hash","",""
+"732347216412278825","urish","2025-11-19T22:04:19.9100000+00:00","you can try it out at https://test-platform.wafer.space/","","🙏 (1)"
+"732347216412278825","urish","2025-11-19T22:04:49.1980000+00:00","This is what the submission interface currenty looks like:","",""
+"732347216412278825","urish","2025-11-19T22:04:52.0910000+00:00","","2025-11_media/image-7A669.png",""
+"538398807986274304","rzioma","2025-11-19T22:19:39.6830000+00:00","Got it! Thanks","",""
+"323371864074485771","mole99","2025-11-20T08:22:18.7740000+00:00","Yes","",""
+"323371864074485771","mole99","2025-11-20T08:40:18.4200000+00:00","Thanks Uri! I'm torn between just reporting an error on zero size polygons (with a report), so the problem is fixed upstream/in the design. Or to delete these shapes as done in the script. I think I prefer to modify the original layout as little as possible.","",""
+"732347216412278825","urish","2025-11-20T08:44:12.9310000+00:00","we are actually only using this script to report the error, but do not use the modified design","",""
+"323371864074485771","mole99","2025-11-20T08:59:26.1350000+00:00","Good. I will do the same 👍","",""
+"538398807986274304","rzioma","2025-11-20T13:50:13.7160000+00:00","Non Manufacturable! 🤯","2025-11_media/image-3A3F4.png","matt_oh_no (2)"
+"538398807986274304","rzioma","2025-11-20T13:50:42.4660000+00:00","@Leo Moser (mole99) @urish any advice?","",""
+"538398807986274304","rzioma","2025-11-20T13:50:53.6800000+00:00","What did I screw up?","",""
+"538398807986274304","rzioma","2025-11-20T13:50:59.4890000+00:00","Precheck passed","",""
+"732347216412278825","urish","2025-11-20T13:51:02.1990000+00:00","Maybe you need to add fill?","",""
+"732347216412278825","urish","2025-11-20T13:51:08.9350000+00:00","(re the 2nd error)","",""
+"323371864074485771","mole99","2025-11-20T13:51:38.9830000+00:00","The precheck is not yet integrated, what you see is AI generated afaik","",""
+"538398807986274304","rzioma","2025-11-20T13:51:43.7080000+00:00","@Leo Moser (mole99) precheck has passed btw","2025-11_media/image-7E30F.png","👍 (1)"
+"323371864074485771","mole99","2025-11-20T13:53:02.6910000+00:00","@Tim 'mithro' Ansell will be able to tell you when the precheck has been integrated into the online platform.","",""
+"538398807986274304","rzioma","2025-11-20T13:53:10.1120000+00:00","In other words, should I worry right now about those messages?","",""
+"323371864074485771","mole99","2025-11-20T13:53:58.1630000+00:00","Those are AI hallucinations, you don't have to worry about them :)","","🎉 (1),❤️ (1)"
+"169786952432746498","mithro_","2025-11-20T21:58:51.4140000+00:00","AI hallucinations == stuff the AI just put in instead of the real precheck","",""
+"169786952432746498","mithro_","2025-11-20T21:59:44.0700000+00:00","I'm working on the real manufacturing check integration @ https://github.com/wafer-space/platform.wafer.space/pull/43","","❤️ (1)"
+"169786952432746498","mithro_","2025-11-20T22:00:20.0730000+00:00","But I'm currently fighting with the download pathway","",""
+"169786952432746498","mithro_","2025-11-20T22:00:48.9840000+00:00","@ https://github.com/wafer-space/platform.wafer.space/pull/45","",""
+"732347216412278825","urish","2025-11-21T06:11:27.5950000+00:00","I thought about asking for support for GH action artifact submission","",""
+"732347216412278825","urish","2025-11-21T06:12:16.3830000+00:00","But on second thought, they are empheral by nature, so it may not be such a great idea","",""
