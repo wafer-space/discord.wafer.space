@@ -203,6 +203,48 @@ chore: update nix-eda · librelane/librelane@3dec125
 ASIC implementation flow infrastructure, successor to OpenLane - chore: update nix-eda · librelane/librelane@3dec125
 
 
+[05/29/2026 06:43] mole99
+Thanks for pinpointing the faulty commit!
+
+
+[05/29/2026 06:44] mole99
+Let's see if this works:
+
+- https://github.com/fossi-foundation/nix-eda/pull/70
+- https://github.com/librelane/librelane/pull/916
+
+I also noticed a slight fmax regression as well, so I'll have to adjust the target frequency for some designs. But what can you do...
+
+
+[05/29/2026 07:12] 246tnt
+Not done yet, but looking so far ...
+
+
+[05/29/2026 08:31] mole99
+It seems that does the trick. Had to fix `CLOCK_PERIOD` slightly for two designs. `full_chip_sky130` now has issues which are likely due to a magic update, but I think those are valid issues. Looking into it.
+
+
+[05/29/2026 08:41] mole99
+If this runs through I can properly rebase everything and finally update nix-eda in LibreLane again.
+
+https://github.com/librelane/librelane/pull/916/changes/d867039ca70d301a784f5b65e206076372d635b0
+
+
+[05/29/2026 08:44] mole99
+The issue with `full_chip_sky130` was in the power ports. The sky130 pads have a separate port for the bondpad. But LibreLane would short all of the global connections for it. Until now I somehow managed to convince magic to short them during extraction as well. Not sure if this was actually buggy behavior or not? With a recent magic update this does not work anymore, so I've properly implemented power/ground busses in LibreLane.
+
+
+[05/29/2026 08:45] mole99
+
+
+{Attachments}
+2026-05_media/message-B818F.txt
+
+
+[05/29/2026 08:45] mole99
+LVS now looks like this. Instead of a single `VCCD_PAD` there is now `VCCD_PAD[0]` and `VCCD_PAD[1]`, as it should be.
+
+
 ==============================================================
-Exported 32 message(s)
+Exported 40 message(s)
 ==============================================================
