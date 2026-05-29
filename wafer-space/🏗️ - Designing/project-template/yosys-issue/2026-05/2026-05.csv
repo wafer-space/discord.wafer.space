@@ -43,3 +43,26 @@ Found and reported 5 problems.
 "323371864074485771","mole99","2026-05-28T06:31:32.2380000+00:00","I've pushed an update to the project template that overrides Yosys with version 0.62: https://github.com/wafer-space/gf180mcu-project-template/pull/60/changes/9f23d7e3dad93aba1b9c8d15c748cc486014628a
 However, before merging the PR I hope that the issue will be fixed upstream.","",""
 "323371864074485771","mole99","2026-05-28T07:04:51.8190000+00:00","Well, something else fails with this older version. So we might just have to wait for a fix :)","","😞 (1)"
+"596068704471482370","246tnt","2026-05-28T19:04:22.2030000+00:00","@Leo Moser (mole99) I see you got CI working on the PR now ?","",""
+"323371864074485771","mole99","2026-05-28T19:13:13.0570000+00:00","Yeah, it was already working before since the template does not trigger the regression in Yosys. When I backported Yosys to 0.62 something else broke, so I dropped that commit and am now waiting on a proper fix.","",""
+"691780627338625077","rebelmike","2026-05-28T19:55:55.9220000+00:00","Yosys 0.63 looks to be working for me - that might be worth a try","",""
+"596068704471482370","246tnt","2026-05-28T20:05:23.0330000+00:00","@RebelMike Which versions of oss cad did you try  that was 0.63+?","",""
+"691780627338625077","rebelmike","2026-05-28T20:07:14.6890000+00:00","20260331","",""
+"691780627338625077","rebelmike","2026-05-28T20:13:21.2680000+00:00","Ah hah, 20260307 fails","",""
+"691780627338625077","rebelmike","2026-05-28T20:14:11.9750000+00:00","So regression very early in dev after 0.63 release","",""
+"596068704471482370","246tnt","2026-05-28T20:17:04.4010000+00:00","What's the reported hash ?","",""
+"691780627338625077","rebelmike","2026-05-28T20:22:04.3060000+00:00","Yosys 0.63+87 (git sha1 2f1cdc2df, clang++ 18.1.8 -fPIC -O3)","",""
+"596068704471482370","246tnt","2026-05-28T20:23:00.4110000+00:00","```
+commit e9442194f27140e3e80cb3bf407c3259d562c449
+Author: likeamahoney <likeamahoney@gmail.com>
+Date:   Fri Feb 27 20:42:40 2026 +0300
+
+    support automatic lifetime qualifier on procedural variables
+```","",""
+"596068704471482370","246tnt","2026-05-28T20:23:10.4490000+00:00","this sounds like a possible culprit ?","",""
+"596068704471482370","246tnt","2026-05-28T20:35:15.6180000+00:00","```
+0.62+119        04113eb95       bad     20260304
+0.62+117        1d3f9b790       works   20260302
+```","","👀 (1)"
+"596068704471482370","246tnt","2026-05-28T21:03:08.9300000+00:00","@Leo Moser (mole99) You coul dtry reverting that","",""
+"596068704471482370","246tnt","2026-05-28T21:55:08.8460000+00:00","Confirmed. I reverted this on `master` and that fixed the issue.","",""

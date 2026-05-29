@@ -127,6 +127,73 @@ Well, something else fails with this older version. So we might just have to wai
 {Reactions}
 😞
 
+[05/28/2026 19:04] 246tnt
+@Leo Moser (mole99) I see you got CI working on the PR now ?
+
+
+[05/28/2026 19:13] mole99
+Yeah, it was already working before since the template does not trigger the regression in Yosys. When I backported Yosys to 0.62 something else broke, so I dropped that commit and am now waiting on a proper fix.
+
+
+[05/28/2026 19:55] rebelmike
+Yosys 0.63 looks to be working for me - that might be worth a try
+
+
+[05/28/2026 20:05] 246tnt
+@RebelMike Which versions of oss cad did you try  that was 0.63+?
+
+
+[05/28/2026 20:07] rebelmike
+20260331
+
+
+[05/28/2026 20:13] rebelmike
+Ah hah, 20260307 fails
+
+
+[05/28/2026 20:14] rebelmike
+So regression very early in dev after 0.63 release
+
+
+[05/28/2026 20:17] 246tnt
+What's the reported hash ?
+
+
+[05/28/2026 20:22] rebelmike
+Yosys 0.63+87 (git sha1 2f1cdc2df, clang++ 18.1.8 -fPIC -O3)
+
+
+[05/28/2026 20:23] 246tnt
+```
+commit e9442194f27140e3e80cb3bf407c3259d562c449
+Author: likeamahoney <likeamahoney@gmail.com>
+Date:   Fri Feb 27 20:42:40 2026 +0300
+
+    support automatic lifetime qualifier on procedural variables
+```
+
+
+[05/28/2026 20:23] 246tnt
+this sounds like a possible culprit ?
+
+
+[05/28/2026 20:35] 246tnt
+```
+0.62+119        04113eb95       bad     20260304
+0.62+117        1d3f9b790       works   20260302
+```
+
+{Reactions}
+👀
+
+[05/28/2026 21:03] 246tnt
+@Leo Moser (mole99) You coul dtry reverting that
+
+
+[05/28/2026 21:55] 246tnt
+Confirmed. I reverted this on `master` and that fixed the issue.
+
+
 ==============================================================
-Exported 17 message(s)
+Exported 31 message(s)
 ==============================================================
