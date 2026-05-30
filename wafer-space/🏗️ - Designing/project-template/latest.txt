@@ -143,6 +143,42 @@ As long as the vdd and vss pads were in the same place as the project template i
 @Tim 'mithro' Ansell :  Yes.  It was only the "openframe" where I was following the original Caravel padframe for reasons of compatibility with my original Efabless Caravel-GF development board.  The SRAM test chip just followed the template pad assignments.
 
 
+[05/30/2026 16:26] .dmv
+Hi everyone. First time commenter. I've tried to read all the discord first. I am working on a 1×1 slot design with a custom analog-heavy padring (18 'asig_5p0' pads total). LibreLane places everything without error, but I want to confirm the precheck won't flag the supply topology.
+
+My north side has 9 analog pads with 2 DVDD and 3 DVSS power pads interspersed. My east side has 9 analog pads with 4 DVDD and 3 DVSS. Is there any precheck rule that requires a minimum number of DVDD/DVSS pads per side, or a minimum ratio to analog pad count? Or does the precheck only validate physical DRC (spacing, overlap, well rules)?
+
+Right now, this is mostly a design/viability exercise (can I get this idea to simulate, working in a space I'm not very familiar with) so I'm probably going to have more questions about the practical bits. This is the first inquiry where just reading everyone else's progress wasn't enough to resolve. Thank you in advance.
+
+
+[05/30/2026 16:35] namibj
+You don't need that many supply pads; note that if you use a padframe that (beyond customizing what pad type a non-supply-pad is populated with) deviates from the reference, the plain standard COB offer doesn't work.
+
+{Reactions}
+❤️ 👆
+
+[05/30/2026 16:35] 246tnt
+@dmv Note if you change the power pad position, you will have to handle bonding yourself.
+
+{Reactions}
+❤️
+
+[05/30/2026 16:44] rebelmike
+When building my design, which is getting fairly full but from the render seems like there's a bit more space, the metrics now say ```
+    "design__instance__utilization": 1.06565,
+    "design__instance__utilization__stdcell": 1.1131,
+```
+I had thought that both of these would max out at 1.  What do these actually measure?  Might going above 1 related to using Tholin's 3v3 library, or is it expected anyway?
+
+
+[05/30/2026 16:47] namibj
+Do you have a density target set? I'd figure that it's reported relative to that?
+
+
+[05/30/2026 16:52] rebelmike
+Ah, possibly.  My density target is 60%.  Global placement is saying utilization 54.8%, but obviously once buffers, clock tree, etc have gone in utilization to be somewhat higher.
+
+
 ==============================================================
-Exported 21 message(s)
+Exported 27 message(s)
 ==============================================================
