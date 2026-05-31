@@ -81,6 +81,8 @@ GitHub - Detronyx-labs/gf180mcu-3v3-12t-2r2w-sram-macro: Open 12T 2...
 Open 12T 2R2W SRAM hard macro for GF180MCU 3.3V. Contribute to Detronyx-labs/gf180mcu-3v3-12t-2r2w-sram-macro development by creating an account on GitHub.
 2026-05_media/gf180mcu-3v3-12t-2r2w-sram-macro-F6DF1
 
+{Reactions}
+❤️
 
 [05/24/2026 02:42] namibj
 I've been working with Tim to get full-die PEX into a state that's reasonably considered "functional" for smoke testing with Xyce; a major block to using it for fancier behavioral testing is the need to use a separate digital logic simulator (verilator or so? not sure what exactly tbh.) to find FF/latch states of the entire chip at the desired jump-off point for a transient test run, and associating those to the individual signals in the chip to synthesize `.nodeset` commands that force the chip into that desired starting state with an initial DC-operating-point solution, from where it'd then continue settling a DC solution from that moment on that doesn't have the signals pegged to hard VDD/VSS anymore, followed by a few clocks of progress to let at least a bit of PDN parasitics settle in, before then doing the actual state changes of desired concern.
