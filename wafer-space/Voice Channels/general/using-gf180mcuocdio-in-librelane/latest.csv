@@ -1,11 +1,1 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
-"596068704471482370","246tnt","2026-05-03T16:37:08.4140000+00:00","Seems to happen in `io_inv_2i` inside the input path.","",""
-"596068704471482370","246tnt","2026-05-03T16:38:35.6750000+00:00","There is a pmos whose source is wired to `VDD` (core) and nwell is biased by `DVDD`.","",""
-"596068704471482370","246tnt","2026-05-04T08:05:21.2730000+00:00","As for 5V operation, doing some quick tests now. Seems all fine. I'm feeding 3.0V as Vcore and 5.0V as Vio and works just fine AFAICT.","",""
-"596068704471482370","246tnt","2026-05-04T09:03:59.3660000+00:00","There isn't any big change in performance. The measure rise time is longer but it's a bit of an artefact of the output shape.","",""
-"596068704471482370","246tnt","2026-05-04T09:04:26.3410000+00:00","","2026-05_media/shot_rise_time_hump_vio_3v3-BE94C.png",""
-"596068704471482370","246tnt","2026-05-04T09:05:56.1230000+00:00","There is a bit of a slow down right before hitting 80% and so that makes the measure point be almost twice as long ... I'd need to check if that's also in simulation. Could be non-linear capacitance/load on the line from the RP2350 chip being on that line.","",""
-"596068704471482370","246tnt","2026-05-04T19:04:55.9740000+00:00","@Tim Edwards ^^","",""
-"1365118310701600900","rtimothyedwards_19428","2026-05-04T23:48:14.5250000+00:00","Or it could be from the latching stage of the level shifter.","",""
-"596068704471482370","246tnt","2026-05-05T10:34:18.8260000+00:00","@Tim Edwards There is the same effect in the GF provided default IOs when powered at 3.3V so I don't think it's related to anything you did.","",""
-"596068704471482370","246tnt","2026-05-05T10:50:46.7870000+00:00","I think it's an artefact of the board layout, there is a small stuf to go to a 7 seg display and I think it's some reflection.  Probing another pin that doesn't go to the 7 seg doesn't show that hump and has a better looking rise time.","",""

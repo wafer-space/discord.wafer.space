@@ -1,17 +1,1 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
-"661042976646103116","tdextrous","2026-05-15T00:52:03.5530000+00:00","","",""
-"661042976646103116","tdextrous","2026-05-15T00:52:04.7750000+00:00","Without knowing any additional details, this sounds like it could be latch up. Does your design have sufficient well taps and substrate taps throughout the layout? Or are these included in the standard cells?","",""
-"220639106915368960","tholin","2026-05-15T00:58:59.0230000+00:00","They are included with the standard cells","","👍 (1)"
-"262706220073222144","namibj","2026-05-15T01:21:14.3370000+00:00","I guess the epoxy isn't transparent to thermal IR? You could otherwise maybe use a macro lens on a thermal camera to hunt for it","",""
-"262706220073222144","namibj","2026-05-15T14:58:41.3230000+00:00","Well, my offer of trying to reproduce in Xyce if it happens static from POR or external reset/reset-release after POR, does still stand.","",""
-"220639106915368960","tholin","2026-05-15T15:01:42.1460000+00:00","I think its the DACs","",""
-"220639106915368960","tholin","2026-05-15T15:02:04.3360000+00:00","The resistors in the R2R are small, requiring a buf_12 cell to drive and I have 11 DACs on here","",""
-"220639106915368960","tholin","2026-05-15T15:03:03.8970000+00:00","But I thought I wired each design that uses a DAC to send all 0s into the DAC when held in reset, to reduce the static power consumption to near zero","",""
-"220639106915368960","tholin","2026-05-15T15:03:39.7470000+00:00","But after checking with a multimeter, at least 4 of the analog outputs generate a non-zero voltage in reset","",""
-"220639106915368960","tholin","2026-05-15T15:03:55.3460000+00:00","So, I messed that up","",""
-"262706220073222144","namibj","2026-05-15T15:10:53.0630000+00:00","Ahhh. 
-
-I'd still offer to try on reproducing from GDS though. 
-I hope the rest of the chip is nicely held when in reset at least to not burden Xyce with changing things; I'd happily use your chip to learn how to get things like this working on layouts this large.","",""
-"262706220073222144","namibj","2026-05-15T15:12:53.9630000+00:00","I just don't like the idea of rebuilding the GDS from the GitHub repo because I'd expect it to not be a reproducible build given you didn't even hash-pin the PDK in the makefile (it's tag-pinned).","",""
-"262706220073222144","namibj","2026-05-15T15:43:52.7090000+00:00","Hey, at least the DACs aren't internally shorted to GND....","",""
