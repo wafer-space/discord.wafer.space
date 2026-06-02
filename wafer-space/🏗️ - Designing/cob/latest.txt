@@ -13,8 +13,32 @@ After: 05/31/2026 23:59
 2026-06_media/76725dd706011a5e8b5f7b526c66f59e-BDDB9.jpg
 
 {Reactions}
-🔥 🎉
+🔥 🎉 (2)
+
+[06/02/2026 13:10] chasees18
+Hi Andrew @Andrew Wingate and Tim @Tim 'mithro' Ansell , I have heard from Tim that there is a good method verifying the wire bond connections. Would you mind helping pointing me to the correct location where this verification method is discussed. This would help a lot in our chip debugging. Many thanks.
+
+
+[06/02/2026 13:56] rebelmike
+Was the ground fill on the region between the die and the pins intentional?  I think that was blocked originally.  And there was some discussion of putting soldermask in that region so the vias were covered, is that still something that we think we should try?
+
+
+[06/02/2026 14:15] namibj
+Oh as I see this now if they're done by JLCPCB, I'd propose using their serialization service that'll give per-individual silkscreen serials in plain text (+ (QR/datamatrix)), though for proper traceability beyond the bondhouse the die sorter would probably have to place the dies directly onto the COB and electronically record what specific die got placed onto that serial number COB?
+
+
+[06/02/2026 14:16] namibj
+Iirc we'd need those vias covered at the top or fully open to prevent air bubbles inside from going up through the encapsulation.
+
+
+[06/02/2026 14:17] namibj
+ESD diode of the pad can be easily checked for presence once you have a working GND and a working VDD pad.
+
+
+[06/02/2026 14:18] namibj
+Iirc you just carefully diode test with pad voltage below GND to see the diode to GND, and above VDD to see the diode to VDD.
+
 
 ==============================================================
-Exported 1 message(s)
+Exported 7 message(s)
 ==============================================================
