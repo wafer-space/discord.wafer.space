@@ -49,6 +49,165 @@ AFAIK the esd diode was the suggested check of bonding, shy of any testability i
 {Reactions}
 👍
 
+[06/02/2026 20:47] anfroholic
+Ooh, I don't think it has been talked about much in this discord, most of the conversation was in person when we were in China. 
+It seems that @namibj has filled you in. 
+Let me know if you have any other questions.
+
+
+[06/02/2026 20:52] anfroholic
+It did have a no fill region. This version was the one that I went in and relaxed some of the clearances and to do so, I needed to delete it for a moment as KiCad didn't allow me to select anything under it when it was there. After I finished I hit refill and it filled everywhere, since we had reduced this to 2 layers I thought the extra pour and ground wouldn't hurt anything so I left it. 
+-# For future reference, you're able to add keepout areas to the footprint itself and then you don't get the selection issues I was running into (I assume you did that last because of the same issues?)
+
+{Reactions}
+👍
+
+[06/02/2026 20:54] rebelmike
+Ah cool - yeah I don't think it should cause a problem, just wondered how it ended up like that
+
+{Reactions}
+👍
+
+[06/02/2026 20:54] anfroholic
+We did have another version where they did the serial numbers properly, not sure what happened this go.
+
+
+[06/02/2026 20:54] namibj
+Did you select the option in the interface?
+
+
+[06/02/2026 20:54] rebelmike
+I was using locking to resolve the not being able to select things problems, I feel like that is a regression in KiCAD 10?
+
+
+[06/02/2026 20:55] anfroholic
+Oh? Could be?
+
+
+[06/02/2026 20:56] namibj
+You can mask object types and layers from view and mouse interaction in kicad. Those two classifications are orthogonal.
+
+
+[06/02/2026 20:58] anfroholic
+Everything should have been the same. Again, not sure exactly what happened. We only got a few as these are the first ones for that form factor so should be ok. We'll get it next time. 
+I forgot about the type selection stuff. Good call
+
+
+[06/02/2026 20:59] namibj
+Yeah they do caution it's supposedly a best-effort thing. 
+I guess if you can take the day of delay you can do advanced instructions and tell them to complain if the serials somehow don't work.
+
+
+[06/02/2026 21:01] chasees18
+I see, thanks for letting me know. 
+
+I though there is a standard criteria you are using to determine if a wire is connected (physically or electrically) 
+Since I am trying to verify if bonding is correct, chip is functional and hopefully proceed with more units packaged.
+
+
+[06/02/2026 21:07] anfroholic
+So what we did when we were just testing with a multimeter was to apply 3.3v to VSS 
+Then we would go around the other pins and we saw the voltage across with the diode drop. If there was no connection, you would read nothing. 
+The VDD pads showed up a little differently because there was a decoupling cap on the wire as well. 
+
+But at the end of the day, you are correct, we can really only when if a wire is electrically connected. 
+
+To verify things actually work how you desire, you'll have to come up with your own testing procedures. 
+
+I think what @Tim 'mithro' Ansell is asking most specifically is: Does your silicon work as expected and good enough you want them all packaged?
+-# sorry meant to have this as reply to @xianglin_pu
+
+{Reactions}
+👍
+
+[06/02/2026 21:11] chasees18
+That makes sense, thanks for clarifying. When do you need our response on bonding the remaining units ?
+
+
+[06/02/2026 21:15] anfroholic
+Don't use my opinion to judge anything too specifically, but I would say there isn't a super huge rush? Deadline would be enough time the wirebonders get done before we want them for Run#2 😜 
+
+I'm really interested to see how these work for you all though. 
+Please share when you're doing your tests and have one working!
+
+{Reactions}
+👍
+
+[06/02/2026 21:31] 246tnt
+@Andrew Wingate Do you know what the difference is between the "COB v1" and "COB v2+" adapter for the bond tester card ?
+
+
+[06/02/2026 21:46] anfroholic
+Can you be a little more specific, I'm not sure I know what the bond tester card is?
+
+
+[06/02/2026 21:47] 246tnt
+The automatic bond tester jig thingie
+
+
+[06/02/2026 21:47] 246tnt
+Can't remember who made it 😅
+
+
+[06/02/2026 21:50] anfroholic
+Oh haha, yes, that would be @Lauri 
+I think the biggest difference is there was a v1 that used some multiplexers that could not be sourced easily. 
+The second version used new ones that were more readily available. 
+
+You're referring to this thing yes? 
+
+-# I should get better about sharing pictures, isn't that right @kris ;)
+
+{Attachments}
+2026-06_media/mmexport1779114257662-C5125.jpg
+2026-06_media/mmexport1779114250500-9B738.jpg
+2026-06_media/mmexport1779114243603-D0A84.jpg
+2026-06_media/mmexport1779114235810-87D54.jpg
+2026-06_media/mmexport1779114228913-0BC8B.jpg
+2026-06_media/mmexport1779114216463-40D01.mp4
+
+
+[06/02/2026 21:52] kris____
+the more the merrier :p
+
+{Reactions}
+💜
+
+[06/02/2026 21:52] 246tnt
+@Andrew Wingate Yes this thing.
+
+{Reactions}
+👍
+
+[06/02/2026 21:53] anfroholic
+I can try to answer some questions
+
+
+[06/02/2026 21:54] 246tnt
+I have a base board `r1` same as the picture but then I got two daugther boards, one with a `COBv1` sticker and one with a `COBv2+` sticker.
+
+
+[06/02/2026 21:57] anfroholic
+I will have to defer to @Lauri on this one. It's currently the middle of the night there. 
+The only COB differences that I am aware of, is the first ones he was testing were some of the originals that had the missing trace on the AUX_VDD pin. Beyond that, I left right before these came back from the PCB fab and have not had much involvement.
+
+
+[06/02/2026 22:08] anfroholic
+I just remembered there is a little i2c memory module on the daughter board. 
+I bet he was reading that to choose what program to run for a pass/fail thing without having to reflash or something?
+This is a guess, but an educated one.
+
+
+[06/02/2026 22:11] 246tnt
+Oh yeah maybe. Because PCB look identical. So different programming might make more sense.
+
+
+[06/02/2026 22:11] 246tnt
+I'll wait for them to confirm.
+
+{Reactions}
+👍
+
 ==============================================================
-Exported 9 message(s)
+Exported 36 message(s)
 ==============================================================
