@@ -37,3 +37,9 @@ The only place I can find 2.0fF in the documentation is on this page, which show
 It seems to incorrectly use the model names from the MOSCAP models: https://gf180mcu-pdk.readthedocs.io/en/latest/analog/model_parameters/LV/LV_1_4_5.html
 
 @Tim Edwards do you have any idea what's going on here?","",""
+"596068704471482370","246tnt","2026-06-03T06:38:08.3770000+00:00","@Leo Moser (mole99) Interestingly I was seeing that in the E-Test results.  The test result is named ""MIM15_A"" suggesting 1.5fF/um^2  but then the spec is 1.7 fF/um^2 minumum and 2.3 fF/um^2 maximum and we hit 1.92 fF/um^2 on run 1.","",""
+"323371864074485771","mole99","2026-06-03T06:54:33.1300000+00:00","That is indeed strange. I would also have expected ""B"" in the name, not ""A"".","",""
+"596068704471482370","246tnt","2026-06-03T07:31:13.6960000+00:00","@Leo Moser (mole99) Looking at https://mithro-gf180mcu-pdk.readthedocs.io/en/latest/analog/spice/elec_specs/elec_specs_6_4.html","",""
+"596068704471482370","246tnt","2026-06-03T07:36:51.6940000+00:00","I think there are two orthogonal options. Where the cap is in the metal and what thickness of dielecric.","",""
+"596068704471482370","246tnt","2026-06-03T07:38:10.2480000+00:00","So the ""A"" in tha test might refer to option `a` on that page which is indeed 1.5 f/F.
+Now why doesn't that match the option we think we have and the min/max value ... I'm starting to think the labels have been cut or only reflect the first option or somethign which would also explain why the label mention 9K top metal while we should have 11 K one.","",""
