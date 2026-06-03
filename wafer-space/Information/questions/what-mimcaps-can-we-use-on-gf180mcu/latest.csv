@@ -23,3 +23,17 @@ tbqh, i have a hard time finding the specific options chosen by wafer.space for 
 "596068704471482370","246tnt","2026-06-02T21:47:34.2090000+00:00","Like what ?","",""
 "596068704471482370","246tnt","2026-06-02T21:48:30.5910000+00:00","The PDK itself `gf180mcuD` variant will show most details when looking in the tech files.","",""
 "325334453213986816","were491.","2026-06-02T23:21:58.3940000+00:00","does that mention (for examples) which mimcap config is used and that the ppolyf_u_high_Rs is 1k? i could just have not read them properly","",""
+"323371864074485771","mole99","2026-06-03T06:23:35.5880000+00:00","For now, the best way to get that information is to read the magic techfile for gf180mcuD.
+
+> **Note that there are multiple mutually exclusive process options for the
+>  high sheet rho resistor and MiM capacitor.  This tech file assumes the
+>  options 1kOhm/sq for the resistor and 2fF/um for the MiM capacitor.
+
+However, this is a surprise to me, since I would have expected 1.5fF/um2 or 1.0fF/um2.
+
+The device is called cap_mim_2f0_m4m5_noshield, which would also suggest 2fF, but I don't even see that option the in the stackup?
+
+The only place I can find 2.0fF in the documentation is on this page, which shows strange model names for the MIM caps: https://gf180mcu-pdk.readthedocs.io/en/latest/analog/model_parameters/LV/LV_1_4_6.html
+It seems to incorrectly use the model names from the MOSCAP models: https://gf180mcu-pdk.readthedocs.io/en/latest/analog/model_parameters/LV/LV_1_4_5.html
+
+@Tim Edwards do you have any idea what's going on here?","",""

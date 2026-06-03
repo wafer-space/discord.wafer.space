@@ -61,6 +61,23 @@ The PDK itself `gf180mcuD` variant will show most details when looking in the te
 does that mention (for examples) which mimcap config is used and that the ppolyf_u_high_Rs is 1k? i could just have not read them properly
 
 
+[06/03/2026 06:23] mole99
+For now, the best way to get that information is to read the magic techfile for gf180mcuD.
+
+> **Note that there are multiple mutually exclusive process options for the
+>  high sheet rho resistor and MiM capacitor.  This tech file assumes the
+>  options 1kOhm/sq for the resistor and 2fF/um for the MiM capacitor.
+
+However, this is a surprise to me, since I would have expected 1.5fF/um2 or 1.0fF/um2.
+
+The device is called cap_mim_2f0_m4m5_noshield, which would also suggest 2fF, but I don't even see that option the in the stackup?
+
+The only place I can find 2.0fF in the documentation is on this page, which shows strange model names for the MIM caps: https://gf180mcu-pdk.readthedocs.io/en/latest/analog/model_parameters/LV/LV_1_4_6.html
+It seems to incorrectly use the model names from the MOSCAP models: https://gf180mcu-pdk.readthedocs.io/en/latest/analog/model_parameters/LV/LV_1_4_5.html
+
+@Tim Edwards do you have any idea what's going on here?
+
+
 ==============================================================
-Exported 9 message(s)
+Exported 10 message(s)
 ==============================================================
