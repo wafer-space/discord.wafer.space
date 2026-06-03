@@ -77,6 +77,8 @@ It seems to incorrectly use the model names from the MOSCAP models: https://gf18
 
 @Tim Edwards do you have any idea what's going on here?
 
+{Reactions}
+👍
 
 [06/03/2026 06:38] 246tnt
 @Leo Moser (mole99) Interestingly I was seeing that in the E-Test results.  The test result is named "MIM15_A" suggesting 1.5fF/um^2  but then the spec is 1.7 fF/um^2 minumum and 2.3 fF/um^2 maximum and we hit 1.92 fF/um^2 on run 1.
@@ -99,6 +101,14 @@ So the "A" in tha test might refer to option `a` on that page which is indeed 1.
 Now why doesn't that match the option we think we have and the min/max value ... I'm starting to think the labels have been cut or only reflect the first option or somethign which would also explain why the label mention 9K top metal while we should have 11 K one.
 
 
+[06/03/2026 13:41] rtimothyedwards_19428
+The choice of MiM capacitance and the choice of poly high sheet rho resistance is entirely by process option, and there is *no* indication in the way of layer ID markers to indicate which option is which, or to prevent the end user from designing to the wrong option and then submitting the design.  It is entirely up to everyone involved to be on the same page, which is honestly a bit scary.  This is why I have in the magic tech file the comment about "this tech file assumes the options. . .".  There is literally no other way to convey that information.  The only other place it's decided is when Wafer Space submits the form to GF.
+
+I expect that the E-test structures are just named the same thing without regard to the actual options chosen, which probably works better with the automation doing the testing.
+
+The actual options chosen are a bit arbitrary;  I made those choices in deciding what options Efabless would use for the Google/GF shuttle run.  My intent was to try to get the same MiM cap density as the double MiM structure on sky130.  In retrospect, the sky130 res_xhigh (2kohms/square) is used much more often than the res_high and would probably have been a better choice.
+
+
 ==============================================================
-Exported 15 message(s)
+Exported 16 message(s)
 ==============================================================
