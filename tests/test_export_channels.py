@@ -1,10 +1,15 @@
 # tests/test_export_channels.py
 import os
+from pathlib import Path
+from unittest.mock import Mock, patch
 
 import pytest
 
 from scripts.export_channels import (
+    ChannelExportContext,
+    ChannelInfo,
     MediaConfig,
+    _export_one_month,
     _is_permission_error,
     format_export_command,
     get_bot_token,
@@ -104,6 +109,8 @@ def test_format_export_command() -> None:
         "HtmlDark",
         "-o",
         "exports/test.html",
+        "--locale",
+        "en-CA",
     ]
 
     assert cmd == expected
@@ -121,6 +128,49 @@ def test_format_export_command_with_after() -> None:
 
     assert "--after" in cmd
     assert "2025-01-15T14:00:00Z" in cmd
+
+
+def test_format_export_command_includes_iso_locale() -> None:
+    """Every export must pass --locale so DCE formats dates ISO (en-CA →
+    YYYY-MM-DD), not the US default MM/dd/yyyy (issue #3)."""
+    cmd = format_export_command(
+        token="test_token",
+        channel_id="123456",
+        output_path="exports/test.html",
+        format_type="HtmlDark",
+        after_timestamp=None,
+    )
+    assert "--locale" in cmd
+    locale_value = cmd[cmd.index("--locale") + 1]
+    assert locale_value == "en-CA"
+
+
+def test_export_one_month_current_month_is_bounded(tmp_path: Path) -> None:
+    """The current month must be bracketed with --before too, so DCE renders a
+    bounded date range instead of an open-ended 'After ...' that reads as the
+    prior day (issue #4). before-bound is the next month's first instant UTC."""
+    captured: list[list[str]] = []
+
+    def _capture(cmd: list[str], *args: object, **kwargs: object) -> tuple[bool, str]:
+        captured.append(cmd)
+        return True, "ok"
+
+    context = ChannelExportContext(
+        config={"export": {"formats": ["html"]}},
+        token="test_token",
+        server_key="wafer-space",
+        state_manager=Mock(),
+    )
+    channel_info = ChannelInfo(
+        channel_id="123456", channel_name="general", safe_name="general", forum_name=""
+    )
+    with patch("scripts.export_channels.run_export", side_effect=_capture):
+        _export_one_month(context, channel_info, tmp_path, "2026-06", is_current_month=True)
+
+    assert captured, "expected at least one export command"
+    cmd = captured[0]
+    assert "--before" in cmd, "current month must be bracketed with --before"
+    assert "2026-07-01T00:00:00+00:00" in cmd
 
 
 def test_format_export_command_invalid_format() -> None:

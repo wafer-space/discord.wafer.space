@@ -203,9 +203,12 @@ def _export_one_month(
     Returns (exports_completed, failures, errors).
     """
     after, before_bound = month_bounds(month)
-    # For the current month we omit --before so newly-arrived messages are
-    # included (DCE captures everything from `after` up to its API "now").
-    before: str | None = None if is_current_month else before_bound
+    # Always bracket with --before, including the current month. before_bound is
+    # the next month's first instant UTC, and no current-month message can
+    # exceed it, so nothing is lost — but DCE's header now renders a bounded
+    # date range instead of an open-ended "After ..." that reads as the prior
+    # day's 23:59 (issue #4).
+    before: str = before_bound
 
     media_dir_path = channel_export_dir / f"{month}_media"
     download_media = context.config["export"].get("download_media", False)
@@ -655,6 +658,7 @@ def format_export_command(  # noqa: PLR0913
     after_timestamp: str | None = None,
     media_config: MediaConfig | None = None,
     before_timestamp: str | None = None,
+    locale: str = "en-CA",
 ) -> list[str]:
     """Format DiscordChatExporter CLI command.
 
@@ -667,6 +671,10 @@ def format_export_command(  # noqa: PLR0913
         media_config: Media download configuration
         before_timestamp: Optional upper-bound timestamp; paired with
             after_timestamp to bracket a single calendar month
+        locale: Locale DCE uses to format dates/numbers. Defaults to "en-CA",
+            whose short-date pattern is ISO YYYY-MM-DD — DCE's own default is
+            US "MM/dd/yyyy", and its `--dateformat` flag is a documented no-op,
+            so `--locale` is the only lever for date formatting.
 
     Returns:
         Command as list of arguments
@@ -697,6 +705,8 @@ def format_export_command(  # noqa: PLR0913
         format_type,
         "-o",
         output_path,
+        "--locale",
+        locale,
     ]
 
     if after_timestamp:
