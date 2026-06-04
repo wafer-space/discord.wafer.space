@@ -364,13 +364,18 @@ commit_author = "Test Bot"
                                     assert mock_format.call_count == EXPECTED_MONTHS_TWO
 
                                     # Current month (February) is processed FIRST,
-                                    # with --after at the January boundary and no
-                                    # --before so it captures messages up to "now".
+                                    # with --after at the January boundary and
+                                    # --before at the March boundary so DCE renders
+                                    # a bounded date range (issue #4) — no
+                                    # current-month message can exceed next-month
+                                    # start, so nothing is lost.
                                     feb_call = mock_format.call_args_list[0]
                                     assert feb_call.kwargs["after_timestamp"].startswith(
                                         "2026-01-31"
                                     )
-                                    assert feb_call.kwargs["before_timestamp"] is None
+                                    assert feb_call.kwargs["before_timestamp"].startswith(
+                                        "2026-03-01"
+                                    )
 
                                     # January backfill comes after, fully bracketed.
                                     jan_call = mock_format.call_args_list[1]
@@ -503,9 +508,13 @@ commit_author = "Test Bot"
         observed_months: list[str] = []
 
         def fake_format(**kwargs: object) -> list[str]:
-            before = kwargs.get("before_timestamp")
-            # Current month = the call with no --before (open-ended).
-            observed_months.append("current" if before is None else "backfill")
+            after = kwargs.get("after_timestamp")
+            # Both phases now pass --before (issue #4), so distinguish by the
+            # --after bound instead: the current month (Feb 2026) starts just
+            # after 2026-01-31; the backfill months (Dec 2025, Jan 2026) start
+            # earlier.
+            is_current = isinstance(after, str) and after.startswith("2026-01-31")
+            observed_months.append("current" if is_current else "backfill")
             return ["dce", "stub"]
 
         with fixed_months("2025-12", "2026-02"):
@@ -900,13 +909,18 @@ commit_author = "Test Bot"
                                     ]
                                     assert len(thread_calls) == 1
                                     # Current month bracket: --after just before
-                                    # 2026-02-01, --before is None (capture up to "now").
+                                    # 2026-02-01, --before at 2026-03-01 so DCE
+                                    # renders a bounded date range (issue #4).
                                     assert (
                                         thread_calls[0]
                                         .kwargs["after_timestamp"]
                                         .startswith("2026-01-31")
                                     )
-                                    assert thread_calls[0].kwargs["before_timestamp"] is None
+                                    assert (
+                                        thread_calls[0]
+                                        .kwargs["before_timestamp"]
+                                        .startswith("2026-03-01")
+                                    )
 
         del os.environ["DISCORD_BOT_TOKEN"]
 
