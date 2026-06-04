@@ -2,3 +2,13 @@ AuthorID,Author,Date,Content,Attachments,Reactions
 "1447738536638943333","dorythecat_v2","2026-06-01T06:43:14.6990000+00:00","Ah sorry I'm dumb then 😭","",""
 "1447738536638943333","dorythecat_v2","2026-06-01T06:43:34.8070000+00:00","Though you could probably still try with a double transistor constant current source","",""
 "1447738536638943333","dorythecat_v2","2026-06-01T06:43:45.6640000+00:00","I don't have any schematics available rn but they shouldn't be hard to find","",""
+"262706220073222144","namibj","2026-06-03T20:41:28.7260000+00:00","We don't by chance have any decent inductors let alone mutual ones available, I guess?
+I'd hope to use some gain peaking on the clock buffers, they aren't _that_ sensitive to precise inductor performance and honestly need so much parasitic resistance anyways that they can have fairly terrible Q so long as they are still very inductive (not capacitive) at the peak operating frequency.
+
+I think I'd mostly want them to sustain higher fan-out than what I'd be having sufficient-margin-above-unity gain with at whatever frequency I can squeeze out of the latches feeding MUX2's feeding the output buffers (final latch stage clocked at half the output bit rate, just like the output MUX2 that converts from 2 parallel SDR streams to the final singular DDR (NRZ) stream).
+
+And possibly even not using a latch on the full clock but rather a 4:1 MUX tree with selective clock phasing on the 3 involved selector bits and the 4 latches feeding directly into the input muxes.
+
+I'll try to get a basic (inductor-free) setup going in the coming hours to figure out if 10 Gbit/s is just wishful thinking or just an issue of thermal density/chip-cooling.
+fT of 25GHz at feasible drain current and low-frequency gain sounds like a mere 5 GHz fundamental with desire for clipping to be more square wave than sine wave shouldn't be _that_ bad to handle, that sounds like FO2~FO3 territory after basic parasitics...
+Sure it's _intense_ but in theory only a DIV2 and a MUX2 have to be driven at the full speed from the VCO and the MUX2's output has to go to an output buffer.","",""

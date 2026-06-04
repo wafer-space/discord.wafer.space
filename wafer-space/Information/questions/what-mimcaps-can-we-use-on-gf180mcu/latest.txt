@@ -109,6 +109,12 @@ I expect that the E-test structures are just named the same thing without regard
 The actual options chosen are a bit arbitrary;  I made those choices in deciding what options Efabless would use for the Google/GF shuttle run.  My intent was to try to get the same MiM cap density as the double MiM structure on sky130.  In retrospect, the sky130 res_xhigh (2kohms/square) is used much more often than the res_high and would probably have been a better choice.
 
 
+[06/03/2026 21:06] were491.
+Thanks, I totally missed that scrolling through/grepping for things I thought would match. Based on the defined subckts from `gf180mcuD/libs.tech/ngspice/sm141064_mim.ngspice` (the path as in IIC-OSIC-TOOLS), it seems the documentation is incorrect here. ('documentation' referring to the stackup page: https://gf180mcu-pdk.readthedocs.io/en/latest/analog/layout/inter_specs/inter_specs_3_43.html)
+
+So, I assume in layout (KLayout) I can use cap_mim with MIM-B and M4-M5 options selected, but expect the final capacitance to be ~2.0fF/um^2 for simulation purposes. Is this correct?
+
+
 ==============================================================
-Exported 16 message(s)
+Exported 17 message(s)
 ==============================================================
