@@ -33,6 +33,12 @@ LAST_MONTH = 12
 # YYYY-MM matches a 4-digit year, hyphen, 2-digit month (01-12).
 _MONTH_RE = re.compile(r"^(\d{4})-(0[1-9]|1[0-2])$")
 
+# DCE HtmlDark minifies attributes (no quotes), so each rendered message is
+# marked by `data-message-id=<snowflake>`. Counting these gives the number of
+# messages actually shown on the page, which we compare against the JSON's
+# message count to detect the issue-#1 JSON/HTML divergence.
+_HTML_MESSAGE_RE = re.compile(rb"data-message-id=(\d+)")
+
 
 def _parse_month(month: str) -> tuple[int, int]:
     """Parse a "YYYY-MM" string into (year, month) ints.
@@ -135,8 +141,14 @@ def scan_completed_months(channel_dir: Path) -> set[str]:
         if not html_file.exists() or html_file.stat().st_size == 0:
             continue
         json_file = entry / f"{entry.name}.json"
-        if json_file.exists() and not _json_is_month_pure(json_file, entry.name):
-            continue
+        if json_file.exists():
+            if not _json_is_month_pure(json_file, entry.name):
+                continue
+            # Complete only if the rendered HTML matches the JSON message count.
+            # When they disagree (issue #1: the JSON drifted above what the HTML
+            # renders), treat the month as incomplete so it re-exports and heals.
+            if not _month_is_consistent(json_file, html_file):
+                continue
         completed.add(entry.name)
     return completed
 
@@ -201,3 +213,59 @@ def _json_is_month_pure(json_file: Path, month: str) -> bool:
         if not isinstance(ts, str) or ts[:7] != month:
             return False
     return True
+
+
+def count_html_messages(html_file: Path) -> int:
+    """Count messages rendered in a DCE HtmlDark export.
+
+    Each message container carries `data-message-id=<snowflake>` (DCE minifies
+    attributes, so there are no quotes). Reading bytes keeps this fast on the
+    multi-MB HTML of a busy month.
+    """
+    try:
+        data = html_file.read_bytes()
+    except OSError:
+        return 0
+    return len(_HTML_MESSAGE_RE.findall(data))
+
+
+def _month_is_consistent(json_file: Path, html_file: Path) -> bool:
+    """True iff the JSON message count equals the count rendered in the HTML.
+
+    The published JSON drives the index/navigation message count; the HTML is
+    the page a reader sees. When they disagree (issue #1) the month must be
+    re-exported. Unreadable/malformed files return True so we don't force a
+    re-export we cannot reason about.
+    """
+    import json as _json
+
+    try:
+        with open(json_file, encoding="utf-8") as f:
+            json_count = len(_json.load(f).get("messages") or [])
+    except (OSError, _json.JSONDecodeError):
+        return True
+    return count_html_messages(html_file) == json_count
+
+
+def count_divergent_months(channel_dir: Path) -> int:
+    """Count months in `channel_dir` whose JSON and HTML message counts differ.
+
+    These are the issue-#1 damaged months (the JSON drifted above what the HTML
+    renders — e.g. a 758-message month showing a blank page). Used to rank
+    backfill priority so the visible damage heals before ordinary backfill.
+    """
+    if not channel_dir.exists() or not channel_dir.is_dir():
+        return 0
+    n = 0
+    for entry in channel_dir.iterdir():
+        if not entry.is_dir() or not is_month_dir_name(entry.name):
+            continue
+        json_file = entry / f"{entry.name}.json"
+        html_file = entry / f"{entry.name}.html"
+        if (
+            json_file.exists()
+            and html_file.exists()
+            and not _month_is_consistent(json_file, html_file)
+        ):
+            n += 1
+    return n

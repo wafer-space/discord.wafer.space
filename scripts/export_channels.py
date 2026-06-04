@@ -14,6 +14,7 @@ from typing import Any
 from scripts.channel_classifier import ChannelType, classify_channel, sanitize_thread_name
 from scripts.config import load_config
 from scripts.months import (
+    count_divergent_months,
     count_nonempty_months,
     current_month_utc,
     month_bounds,
@@ -365,25 +366,31 @@ def _backfill_priority_key(
     server_key: str,
     channel_path_map: dict[str, str],
     public_dir: Path,
-) -> tuple[int, str]:
-    """Sort key for the backfill phase: starved entries first.
+) -> tuple[int, int, str]:
+    """Sort key for the backfill phase: heal-needed and starved entries first.
 
-    Returns (non_empty_month_count, channel_id). Sorting ascending puts
-    channels/threads with the LEAST real data first, so threads showing
-    only an empty current-month export ("empty threads" the user sees)
-    get their historical months backfilled before time is spent on
-    already-rich channels. Within a tie, sort by channel id for stable
-    ordering across runs.
+    Returns (divergent_rank, non_empty_month_count, channel_id), sorted
+    ascending:
+
+      - divergent_rank is 0 for channels/threads with at least one month whose
+        JSON and HTML message counts disagree (issue #1 damage — e.g. a blank
+        page for a month with hundreds of messages), else 1. Damaged entries
+        re-export FIRST so the visible breakage heals fastest.
+      - within the same rank, the entry with the LEAST real data goes first, so
+        "empty threads" still get their history backfilled before already-rich
+        channels.
+      - channel id breaks ties for stable ordering across runs.
     """
     chan_id = channel.get("id") or ""
     if not chan_id:
-        return (0, chan_id)
+        return (1, 0, chan_id)
     try:
         safe_name, forum_name = _channel_identity(channel, channel_type, chan_id, channel_path_map)
     except Exception:  # noqa: BLE001 — never let sorting crash the run
-        return (0, chan_id)
+        return (1, 0, chan_id)
     pub = _public_channel_dir(public_dir, server_key, channel_type, safe_name, forum_name)
-    return (count_nonempty_months(pub), chan_id)
+    divergent_rank = 0 if count_divergent_months(pub) > 0 else 1
+    return (divergent_rank, count_nonempty_months(pub), chan_id)
 
 
 def _ordered_channels_for_phase(  # noqa: PLR0913  # needs full per-server context
