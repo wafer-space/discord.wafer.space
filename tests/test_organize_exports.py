@@ -9,7 +9,6 @@ from scripts.organize_exports import cleanup_exports, organize_exports
 # Test constants
 EXPECTED_FILES_ORGANIZED = 4
 EXPECTED_SERVERS_PROCESSED = 3
-EXPECTED_MERGED_MESSAGES = 3
 
 
 def test_organize_exports_creates_month_directory_from_filename() -> None:
@@ -396,8 +395,11 @@ def test_organize_exports_strips_cross_month_messages_during_merge() -> None:
         assert msg_300["content"] == "nov (edited)"
 
 
-def test_organize_exports_merges_json_messages_same_month() -> None:
-    """JSON merge deduplicates messages by ID for the same month."""
+def test_organize_latest_export_is_authoritative_and_drops_deleted() -> None:
+    """The latest successful export is authoritative: a message present in the
+    published archive but ABSENT from the new export is dropped (deleted on
+    Discord). This keeps the JSON consistent with the rendered HTML (issue #1);
+    the old by-ID union preserved deleted messages and desynced the count."""
     import json
 
     with tempfile.TemporaryDirectory() as tmpdir:
@@ -405,13 +407,11 @@ def test_organize_exports_merges_json_messages_same_month() -> None:
         exports = tmpdir_path / "exports"
         public = tmpdir_path / "public"
 
-        # Existing 2026-05 archive
         existing_dir = public / "test-server" / "general" / "2026-05"
         existing_dir.mkdir(parents=True)
         existing_json = {
             "guild": {"id": "123"},
             "channel": {"id": "456", "name": "general"},
-            "dateRange": {"after": None, "before": None},
             "messages": [
                 {"id": "1000", "content": "First", "timestamp": "2026-05-01T00:00:00"},
                 {"id": "1001", "content": "Second", "timestamp": "2026-05-02T00:00:00"},
@@ -420,7 +420,7 @@ def test_organize_exports_merges_json_messages_same_month() -> None:
         }
         (existing_dir / "2026-05.json").write_text(json.dumps(existing_json))
 
-        # New per-month export for same month with overlap
+        # New per-month export: 1000 edited, 1001 gone (deleted), 1002 added.
         channel_dir = exports / "test-server" / "general"
         channel_dir.mkdir(parents=True)
         new_json = {
@@ -437,10 +437,50 @@ def test_organize_exports_merges_json_messages_same_month() -> None:
 
         organize_exports(exports, public)
 
-        merged = json.loads((existing_dir / "2026-05.json").read_text())
-        assert merged["messageCount"] == EXPECTED_MERGED_MESSAGES
-        ids = [m["id"] for m in merged["messages"]]
-        assert ids == ["1000", "1001", "1002"]
-        # New version of message 1000 wins
-        msg_1000 = next(m for m in merged["messages"] if m["id"] == "1000")
+        result = json.loads((existing_dir / "2026-05.json").read_text())
+        ids = [m["id"] for m in result["messages"]]
+        # 1001 absent from the new export is dropped; no preservation.
+        assert ids == ["1000", "1002"]
+        msg_1000 = next(m for m in result["messages"] if m["id"] == "1000")
         assert msg_1000["content"] == "First (edited)"
+
+
+def test_organize_transient_empty_keeps_nonempty_month() -> None:
+    """A non-empty published month re-exporting to EMPTY is treated as a
+    transient/partial fetch: the existing export is kept and an error surfaced,
+    rather than blanking the page (issue #1 transient guard)."""
+    import json
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        tmpdir_path = Path(tmpdir)
+        exports = tmpdir_path / "exports"
+        public = tmpdir_path / "public"
+
+        existing_dir = public / "test-server" / "general" / "2026-05"
+        existing_dir.mkdir(parents=True)
+        existing_json = {
+            "channel": {"id": "456"},
+            "messages": [
+                {"id": "1000", "content": "kept", "timestamp": "2026-05-01T00:00:00"},
+                {"id": "1001", "content": "kept2", "timestamp": "2026-05-02T00:00:00"},
+            ],
+            "messageCount": 2,
+        }
+        (existing_dir / "2026-05.json").write_text(json.dumps(existing_json))
+        (existing_dir / "2026-05.html").write_text("<html>real content</html>")
+
+        # New export of the same month is EMPTY (a transient/partial fetch).
+        channel_dir = exports / "test-server" / "general"
+        channel_dir.mkdir(parents=True)
+        empty_json = {"channel": {"id": "456"}, "messages": [], "messageCount": 0}
+        (channel_dir / "2026-05.json").write_text(json.dumps(empty_json))
+        (channel_dir / "2026-05.html").write_text("<html>empty</html>")
+
+        stats = organize_exports(exports, public)
+
+        # Existing JSON and HTML are untouched (not blanked).
+        result = json.loads((existing_dir / "2026-05.json").read_text())
+        assert [m["id"] for m in result["messages"]] == ["1000", "1001"]
+        assert (existing_dir / "2026-05.html").read_text() == "<html>real content</html>"
+        # And the regression is surfaced as an error.
+        assert any("transient" in e for e in stats["errors"])

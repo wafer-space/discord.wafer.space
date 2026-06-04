@@ -204,10 +204,12 @@ def test_scan_completed_months_skips_cross_month_jsons(tmp_path: Path) -> None:
         )
     )
 
-    # A correctly-partitioned month next to it
+    # A correctly-partitioned month next to it. The HTML must render the same
+    # one message the JSON holds (data-message-id) so the consistency gate
+    # counts it as complete.
     pure_month = channel_dir / "2026-05"
     pure_month.mkdir()
-    (pure_month / "2026-05.html").write_text("<html>clean</html>")
+    (pure_month / "2026-05.html").write_text("<html><div data-message-id=10>hi</div></html>")
     (pure_month / "2026-05.json").write_text(
         _json.dumps({"messages": [{"id": "10", "timestamp": "2026-05-02T00:00:00+00:00"}]})
     )
@@ -215,6 +217,66 @@ def test_scan_completed_months_skips_cross_month_jsons(tmp_path: Path) -> None:
     completed = scan_completed_months(channel_dir)
     # 2025-11 must be re-exported; 2026-05 is honest and skipped.
     assert completed == {"2026-05"}
+
+
+def test_scan_completed_months_excludes_divergent_month(tmp_path: Path) -> None:
+    """A month whose JSON holds more messages than the HTML renders (issue #1
+    divergence) is NOT complete, so it re-exports and heals."""
+    import json as _json
+
+    from scripts.months import scan_completed_months
+
+    chan = tmp_path / "general"
+    month = chan / "2026-04"
+    month.mkdir(parents=True)
+    # JSON says 3 messages; HTML renders only 1 → divergent.
+    (month / "2026-04.json").write_text(
+        _json.dumps(
+            {
+                "messages": [
+                    {"id": "1", "timestamp": "2026-04-01T00:00:00+00:00"},
+                    {"id": "2", "timestamp": "2026-04-02T00:00:00+00:00"},
+                    {"id": "3", "timestamp": "2026-04-03T00:00:00+00:00"},
+                ]
+            }
+        )
+    )
+    (month / "2026-04.html").write_text("<html><div data-message-id=1>only one</div></html>")
+
+    assert scan_completed_months(chan) == set()
+
+
+def test_count_html_messages_counts_data_message_id(tmp_path: Path) -> None:
+    """count_html_messages counts DCE's unquoted data-message-id= markers and
+    ignores the chatlog__message-container- tokens in CSS/JS."""
+    from scripts.months import count_html_messages
+
+    ids = ["111", "222"]
+    html = tmp_path / "m.html"
+    html.write_text(
+        "".join(f"<div data-message-id={i}>x</div>" for i in ids)
+        + "<style>.chatlog__message-container--pinned{}</style>"
+    )
+    assert count_html_messages(html) == len(ids)
+
+
+def test_count_divergent_months(tmp_path: Path) -> None:
+    """count_divergent_months counts months where JSON and HTML counts differ."""
+    import json as _json
+
+    from scripts.months import count_divergent_months
+
+    chan = tmp_path / "general"
+    ok = chan / "2026-05"
+    ok.mkdir(parents=True)
+    (ok / "2026-05.json").write_text(_json.dumps({"messages": [{"id": "1"}]}))
+    (ok / "2026-05.html").write_text("<div data-message-id=1>x</div>")
+    bad = chan / "2026-04"
+    bad.mkdir()
+    (bad / "2026-04.json").write_text(_json.dumps({"messages": [{"id": "1"}, {"id": "2"}]}))
+    (bad / "2026-04.html").write_text("<html>blank</html>")
+
+    assert count_divergent_months(chan) == 1
 
 
 def test_scan_completed_months_treats_empty_json_as_complete(tmp_path: Path) -> None:
