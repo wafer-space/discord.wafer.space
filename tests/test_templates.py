@@ -69,25 +69,27 @@ def test_server_index_template_renders() -> None:
     env = Environment(loader=FileSystemLoader("templates"))
     template = env.get_template("server_index.html.j2")
 
+    channel = {
+        "name": "general",
+        "display_name": "general",
+        "message_count": 100,
+        "archive_count": 3,
+        "archives": [
+            {"date": "2025-01", "message_count": 50},
+            {"date": "2024-12", "message_count": 30},
+        ],
+    }
     html = template.render(
         site={"title": "Test Site"},
         server={"name": "test-server", "display_name": "Test Server"},
-        channels=[
-            {
-                "name": "general",
-                "message_count": 100,
-                "archive_count": 3,
-                "archives": [
-                    {"date": "2025-01", "message_count": 50},
-                    {"date": "2024-12", "message_count": 30},
-                ],
-            }
-        ],
+        channels=[channel],
+        categories=[{"name": "Information", "channels": [channel]}],
     )
 
     assert "<!DOCTYPE html>" in html
     assert "Test Server" in html
     assert "#general" in html
+    assert "Information" in html  # category heading (issue #5)
 
 
 def test_channel_index_template_renders() -> None:

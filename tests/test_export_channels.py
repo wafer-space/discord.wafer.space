@@ -173,6 +173,42 @@ def test_export_one_month_current_month_is_bounded(tmp_path: Path) -> None:
     assert "2026-07-01T00:00:00+00:00" in cmd
 
 
+def test_write_channel_order_captures_guild_order_and_category(tmp_path: Path) -> None:
+    """write_channel_order records non-thread channels in guild order with their
+    category, so navigation can group + sort like the server (issue #5)."""
+    import json
+
+    from scripts.channel_classifier import ChannelType
+    from scripts.export_channels import write_channel_order
+
+    channels: list[dict[str, str | None]] = [
+        {"name": "general", "id": "1", "parent_id": "Information"},
+        {"name": "questions", "id": "2", "parent_id": "Information"},
+        {"name": "How to?", "id": "3", "parent_id": "questions"},  # a thread
+        {"name": "analog", "id": "4", "parent_id": "Designing"},
+    ]
+    classifications = {
+        "1": ChannelType.REGULAR,
+        "2": ChannelType.FORUM,
+        "3": ChannelType.THREAD,
+        "4": ChannelType.REGULAR,
+    }
+    path_map = {
+        "general": "Information/general",
+        "questions": "Information/questions",
+        "analog": "Designing/analog",
+    }
+    write_channel_order(tmp_path, "wafer-space", channels, classifications, path_map)
+
+    order = json.loads((tmp_path / "wafer-space" / "_order.json").read_text())
+    # Threads excluded; guild order preserved; category derived from the path.
+    assert order == [
+        {"path": "Information/general", "category": "Information"},
+        {"path": "Information/questions", "category": "Information"},
+        {"path": "Designing/analog", "category": "Designing"},
+    ]
+
+
 def test_format_export_command_invalid_format() -> None:
     """Test that invalid format_type raises ValueError"""
     with pytest.raises(ValueError, match="Invalid format_type"):

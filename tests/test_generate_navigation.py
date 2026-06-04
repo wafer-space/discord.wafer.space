@@ -415,3 +415,53 @@ def test_collect_forum_threads_empty_directory() -> None:
         threads = collect_forum_threads(forum_dir)
 
         assert threads == []
+
+
+def test_group_channels_by_category_orders_by_guild_order() -> None:
+    """Channels group under their category, categories and channels ordered the
+    way the guild lists them (issue #5)."""
+    from scripts.generate_navigation import group_channels_by_category
+
+    channels = [
+        {"name": "Information/general", "category": "Information"},
+        {"name": "Designing/analog", "category": "Designing"},
+        {"name": "Information/questions", "category": "Information"},
+    ]
+    order = ["Information/general", "Information/questions", "Designing/analog"]
+
+    groups = group_channels_by_category(channels, order)
+
+    assert [g["name"] for g in groups] == ["Information", "Designing"]
+    assert [c["name"] for c in groups[0]["channels"]] == [
+        "Information/general",
+        "Information/questions",
+    ]
+    assert [c["name"] for c in groups[1]["channels"]] == ["Designing/analog"]
+
+
+def test_group_channels_unknown_sorts_last_alphabetically() -> None:
+    """A channel missing from the guild order (e.g. brand new) sorts to the end
+    of its category alphabetically — never dropped."""
+    from scripts.generate_navigation import group_channels_by_category
+
+    channels = [
+        {"name": "Information/zeta", "category": "Information"},
+        {"name": "Information/alpha", "category": "Information"},  # not in order
+        {"name": "Information/general", "category": "Information"},
+    ]
+    order = ["Information/general", "Information/zeta"]
+
+    groups = group_channels_by_category(channels, order)
+
+    assert [c["name"] for c in groups[0]["channels"]] == [
+        "Information/general",
+        "Information/zeta",
+        "Information/alpha",
+    ]
+
+
+def test_load_channel_order_missing_is_empty(tmp_path: Path) -> None:
+    """A missing sidecar yields an empty order (alphabetical fallback)."""
+    from scripts.generate_navigation import load_channel_order
+
+    assert load_channel_order(tmp_path, "nope") == []

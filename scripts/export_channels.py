@@ -871,6 +871,46 @@ def fetch_guild_channels(  # noqa: C901  # Complex parsing of DiscordChatExporte
         raise RuntimeError(f"Channel fetching failed: {str(e)}") from e
 
 
+def write_channel_order(
+    public_dir: Path,
+    server_key: str,
+    channels: list[dict[str, str | None]],
+    classifications: dict[str, ChannelType],
+    channel_path_map: dict[str, str],
+) -> None:
+    """Persist the guild's channel order + category for the navigation index.
+
+    DCE lists channels in the guild's own order; navigation otherwise rederives
+    structure from the filesystem and loses it (issue #5). We record the ordered
+    list of non-thread channel paths with their category so navigation can group
+    channels by category and sort them the way the server does. Threads are
+    excluded — they nest under their channel, not at the top level. Best-effort:
+    a write failure must never abort the export.
+    """
+    import json as _json
+
+    order: list[dict[str, str]] = []
+    for ch in channels:
+        cid = ch.get("id")
+        name = ch.get("name")
+        if not cid or not name:
+            continue
+        if classifications.get(cid) == ChannelType.THREAD:
+            continue
+        path = channel_path_map.get(name, name)
+        category = path.rsplit("/", 1)[0] if "/" in path else ""
+        order.append({"path": path, "category": category})
+
+    try:
+        server_pub = public_dir / server_key
+        server_pub.mkdir(parents=True, exist_ok=True)
+        with open(server_pub / "_order.json", "w", encoding="utf-8") as f:
+            _json.dump(order, f, indent=2)
+        print(f"  ✓ Wrote channel order ({len(order)} channels) for navigation")
+    except OSError as e:
+        print(f"  ⚠ could not write channel order sidecar: {e}")
+
+
 def export_all_channels(  # noqa: C901,PLR0915  # Orchestration top-level
     public_dir: Path | None = None,
     max_runtime_seconds: int | None = None,
@@ -976,6 +1016,12 @@ def export_all_channels(  # noqa: C901,PLR0915  # Orchestration top-level
                 continue
             channel_type = classify_channel(channel, forum_list, channels)
             channel_classifications[chan_id] = channel_type
+
+        # Persist the guild's channel order so navigation can group channels by
+        # category and sort them the way the server does (issue #5).
+        write_channel_order(
+            public_dir, server_key, channels, channel_classifications, channel_path_map
+        )
 
         # Two-phase processing so the live site stays fresh everywhere even
         # when the historical backfill can't finish in one workflow window:
