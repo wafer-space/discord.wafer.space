@@ -14,3 +14,12 @@ fT of 25GHz at feasible drain current and low-frequency gain sounds like a mere 
 Sure it's _intense_ but in theory only a DIV2 and a MUX2 have to be driven at the full speed from the VCO and the MUX2's output has to go to an output buffer.","",""
 "384390069412429834","polyfractal","2026-06-03T23:49:03.0540000+00:00","I don't think I've seen anyone post an inductor layout yet. Would probably have to DIY one with GDSFactory's spiral loop generator or something? And then sim it to see how works 😕","",""
 "262706220073222144","namibj","2026-06-04T00:05:17.1750000+00:00","Yeah that fasthenry script https://github.com/diadatp/sky130_rf_tools/blob/main/fasthenry/iterate_fh.py should port decently to gf180mcuD, but that's half-finished work (like, for sky130) and not particularly what I quite have time to work on in these rather limited days until the ttgf0p3 deadline.","",""
+"262706220073222144","namibj","2026-06-04T12:19:22.7860000+00:00","Now that I've done some _Gain-Bandwidth Product_ maths I _really_ want some T-coil's for bandwidth enhancement.
+
+I low key have trouble believing these numbers, for that they suggest it's _technically possible_ to yeet a lane of `25GBASE-KR-S` out of a wafer.space die without necessarily melting said die as long as one ensures good cooling.
+
+Without effective inductive peaking it's gonna involve rather lifetime-limiting hot carrier injection conditions, though, as the `nfet_3v3_dss` probably won't quite reach enough native GBW.
+
+Yes I'm aware that prospect sounds kinda ridiculous.
+I'm just getting the numbers/down-clocking-support cooked a little more before I go see how to get anywhere close to the abstract numbers I've been looking at since last night.
+Even if that's too much it does suggest `10GBASE-KR` to be actually quite realistic to pull off (even post-layout).","",""
