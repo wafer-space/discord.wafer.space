@@ -1,0 +1,153 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 🏗️ - Designing / cob / Hi all, I'm wondering if anyone sees the
+After: 2026-05-31 11:59 p.m.
+Before: 2026-07-01 12:00 a.m.
+==============================================================
+
+[2026-06-04 7:18 a.m.] mole99
+
+
+
+[2026-06-04 7:18 a.m.] mole99
+I'm currently designing the PCB for my chip on wsrun #1, but I can't quite wrap my head around the pinout of the mezzanine connectors.
+
+This is from the [1x1-cob](https://github.com/wafer-space/chip-on-board-wire-bonded-pcbs/tree/main/run-1/1x1-cob):
+
+
+[2026-06-04 7:18 a.m.] mole99
+
+
+{Attachments}
+2026-06_media/Bildschirmfoto_vom_2026-06-02_15-53-36-02D0A.png
+2026-06_media/Bildschirmfoto_vom_2026-06-02_15-53-47-30D07.png
+
+
+[2026-06-04 7:18 a.m.] mole99
+The connector is on the backside, and viewing the backside from above (through the PCB), pad7 to pad0 are in the top right corner.
+Now, when I take this CoB PCB and plug it into a female mezzanine connector on the motherboard, I would still expect pad7 to pad0 to be in the top right corner, since the mezzanine connector doesn't swap sides, right?
+
+
+[2026-06-04 7:18 a.m.] mole99
+Taking a look at the [motherboards](https://github.com/wafer-space/chip-on-board-wire-bonded-pcbs/tree/main/run-1/motherboards) in the same folder, I can see that pad7 to pad0 are suddenly in the top left corner on the motherboard.
+
+
+[2026-06-04 7:19 a.m.] mole99
+
+
+{Attachments}
+2026-06_media/Bildschirmfoto_vom_2026-06-02_15-54-17-8F7F4.png
+2026-06_media/Bildschirmfoto_vom_2026-06-02_15-54-39-5F289.png
+
+
+[2026-06-04 7:19 a.m.] mole99
+Why is that the case? If the mezzanine connector simply connects down, they should be in the top right corner?
+
+Does anyone see the same thing, or am I missing some important point :)
+
+
+[2026-06-04 7:24 a.m.] anfroholic
+Browser viewable link: https://kicanvas.org/?repo=https%3A%2F%2Fgithub.com%2Fwafer-space%2Fchip-on-board-wire-bonded-pcbs%2Ftree%2Fmain%2Frun-1%2F1x1-cob
+
+The mezzanine is on the back side. So the first schematic is backwards if you're looking *through the cob* only correct if you're looking *from the back* 
+
+When you plug it into the motherboard you're looking *through the cob* making the second schematic the correct version of *what to look at*
+
+-# the copper (and more to the point labels) on the second post are incorrect! I need to make a new symbol that has pin1 in the correct location with respect to the mezzanine connector and **not** the cob itself. 
+
+Again sorry for the confusion.
+
+
+[2026-06-04 7:26 a.m.] 246tnt
+No. There is something wrong with the connector footprints.
+
+
+[2026-06-04 7:27 a.m.] anfroholic
+Really?
+
+
+[2026-06-04 7:27 a.m.] 246tnt
+When looking at the footprints in the footprint editors, they are both horizontal and _both_ have pin 1  in the bottom left.
+
+
+[2026-06-04 7:27 a.m.] 246tnt
+In reality, one of them should have pin 1 in the upper left because one of them will be flipped when connecting them ...
+
+
+[2026-06-04 7:28 a.m.] anfroholic
+I see, I'm referring more to the connector on the motherboard. 
+This is the one people would be interfacing with more directly.
+
+
+[2026-06-04 7:29 a.m.] anfroholic
+I didn't make any footprints and just used whatever came from the original creator
+
+
+[2026-06-04 7:30 a.m.] 246tnt
+Kicad has other examples of DP / DS connectors footprints like Hirose DF12.  
+DP should have pin 1 on the lower left and DS should have pin 1 on the upper left.
+
+
+[2026-06-04 7:31 a.m.] anfroholic
+I didn't make the footprints
+
+
+[2026-06-04 7:32 a.m.] 246tnt
+Sure, I'm not saying you did, I'm just saying if we fix them to actually be coherent with each other, of the two options, we should pick the one that matches what kicad standard lib does 😅
+
+
+[2026-06-04 7:32 a.m.] anfroholic
+Now as far as the symbols. I did make that and they *are the same symbol* between the two files. One needs to be flipped.
+
+
+[2026-06-04 7:34 a.m.] anfroholic
+All of KiCad's standard generic connectors look like this
+
+{Attachments}
+2026-06_media/image-3738A.png
+
+
+[2026-06-04 7:36 a.m.] 246tnt
+Hirose_DF12_DF12C3.0-20DS-0.5V_2x10_P0.50mm_Vertical
+
+
+[2026-06-04 7:36 a.m.] 246tnt
+Look at that
+
+
+[2026-06-04 7:36 a.m.] 246tnt
+and then the same but DP variant of the same connector.
+
+
+[2026-06-04 7:38 a.m.] 246tnt
+
+
+{Attachments}
+2026-06_media/2026-06-04_1887x575_scrot-69AD9.png
+2026-06_media/2026-06-04_1871x571_scrot-C46D0.png
+
+
+[2026-06-04 7:38 a.m.] anfroholic
+That's a footprint. These are symbols.
+
+
+[2026-06-04 7:38 a.m.] anfroholic
+I don't seem to have that one in my library?
+
+
+[2026-06-04 7:39 a.m.] 246tnt
+Huh ... I afaik I have the default kicad 10.0.0 library.
+
+
+[2026-06-04 7:39 a.m.] anfroholic
+I don't have the default.
+
+
+[2026-06-04 7:43 a.m.] anfroholic
+I am likely going to flip it for run2? IDK we'll see how people feel about it. 
+We're likely going to be rethinking from first principles run3+ and the padring pinouts will likely be changing to better suit the different sizes more harmoniously.
+
+
+==============================================================
+Exported 28 message(s)
+==============================================================
