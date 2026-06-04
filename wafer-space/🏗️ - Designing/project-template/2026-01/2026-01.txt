@@ -1,9 +1,102 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / project-template
-After: 01/31/2026 20:23
+Topic: [template-github](https://github.com/wafer-space/gf180mcu-project-template)
+After: 2025-12-31 11:59 p.m.
+Before: 2026-02-01 12:00 a.m.
 ==============================================================
 
+[2026-01-02 8:48 p.m.] ethanmahintorabi
+Also just fyi Yosys has a clockgate command https://yosyshq.readthedocs.io/projects/yosys/en/0.46/cmd/clockgate.html
+
+
+[2026-01-02 8:49 p.m.] ethanmahintorabi
+You need to run opt_dff before it to make sure all the flops are turned into enables and then you can use that command to convert some portion of them to clock gates
+
+
+[2026-01-05 9:29 a.m.] tholin
+What is the metal slot thing about? What are metal slots?
+
+
+[2026-01-05 9:34 a.m.] 246tnt
+You can't have any too large metal area.
+
+
+[2026-01-05 9:35 a.m.] 246tnt
+If you have a very large metal without "holes" and so the "solution" is to add elongated holes in it that are called "slots".
+
+
+[2026-01-05 9:36 a.m.] tholin
+That’s not gonna look good
+
+
+[2026-01-05 9:36 a.m.] tholin
+I am frustrated that so much is stacked against me putting art on my die and I’m tired of pretending I’m not
+
+
+[2026-01-05 9:37 a.m.] tholin
+I just don’t understand. This exact macro was fine during GFMPW, but now it needs slots?
+
+{Attachments}
+2026-01_media/image-9BDA2.png
+
+
+[2026-01-05 9:37 a.m.] 246tnt
+Well sorry to say but "art" isn't a primary target of the foundry 😅
+
+
+[2026-01-05 9:40 a.m.] 246tnt
+One solution is to not have a solid metal zone, but instead have "pixels" with a small gap between them. Or horizontal/vertical lines like scan lines. Looking at the die without magnification with the naked eye, it will still look solid and uniform (compared to random small slots in an otherwise solid plane).
+
+
+[2026-01-05 9:42 a.m.] tholin
+Both the Metal5 and Metal4 layers are visible visually. If the slots in Metal5 and Metal4 were horizontally offset from each other, it would look a little better.
+
+
+[2026-01-05 9:43 a.m.] 246tnt
+We had the same in tt-ihp 0p1
+
+{Attachments}
+2026-01_media/2026-01-05_744x599_scrot-2AFC4.png
+
+{Reactions}
+😮
+
+[2026-01-05 9:44 a.m.] tholin
+😬
+
+
+[2026-01-05 9:53 a.m.] 246tnt
+Is that some modified GDS you got back from ws/gf btw ?
+
+
+[2026-01-05 9:57 a.m.] tholin
+Yes
+
+
+[2026-01-05 9:57 a.m.] tholin
+I downloaded it from the wafer.space platform
+
+
+[2026-01-05 10:48 a.m.] 246tnt
+@urish Did you check ? Do a xor with the submitted one ?
+
+
+[2026-01-05 10:51 a.m.] urish
+Nope, wasn't aware that it would be modified
+
+
+[2026-01-05 12:24 p.m.] urish
+Started a thread.
+
+
+[2026-01-05 5:44 p.m.] mole99
+Only some projects had issues with metal slots. The project authors were contacted by email.
+None of the Tiny Tapeout projects were affected.
+
+{Reactions}
+👍 (4)
+
 ==============================================================
-Exported 0 message(s)
+Exported 20 message(s)
 ==============================================================

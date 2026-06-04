@@ -1,1 +1,16 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
+"384390069412429834","polyfractal","2025-12-27T19:40:24.1640000+00:00","given how big GF's SRAM blocks are at the small end (64 words is half the size of 512!), do you think it'd end up being more area-efficient to just use registers/flip flops for small ""sram-like"" banks? say 16 words / 128 bits?","",""
+"384390069412429834","polyfractal","2025-12-27T19:44:10.4160000+00:00","just criminal 😄","2025-12_media/image-E88FB.png",""
+"384390069412429834","polyfractal","2025-12-27T19:52:30.5610000+00:00","(suppose it's easy enough to try it out heh)","",""
+"596068704471482370","246tnt","2025-12-27T20:44:39.7180000+00:00","You can just take the are of a FF and multiply it and see how close you are.","",""
+"596068704471482370","246tnt","2025-12-27T20:45:22.2620000+00:00","For wide shallow  mem, the muxing/addr decode won't be too bad so it's a good first rough estimate.","",""
+"384390069412429834","polyfractal","2025-12-28T00:07:28.7660000+00:00","aha ok. so with some generous assumptions on the overhead plumbing, a 16x8 might looks something like this (albeit witih flexibility to smoosh into odd corners due to being not a macro block)","2025-12_media/image-AB3D7.png",""
+"274535015969456128","greg.hashtag.9468","2025-12-28T04:25:40.1700000+00:00","Have you seen: https://github.com/AUCOHL/DFFRAM
+Their approach is to create a macro block containing standard cells for different memory configurations. This can be more dense than just having a large FF based RAM along with your RTL, and in theory speeds up synth/PnR. I'd suspect the final QoR ends up slightly worse.","","👀 (1)"
+"274535015969456128","greg.hashtag.9468","2025-12-28T04:26:32.5220000+00:00","Might be handy for size comparisions","",""
+"384390069412429834","polyfractal","2025-12-28T17:52:17.2530000+00:00","oh awesome, I had not seen that. cheers for the link!","",""
+"169786952432746498","mithro_","2025-12-30T02:31:18.0900000+00:00","@BreakingTaps - https://docs.google.com/spreadsheets/d/1fW5ecBsLSec4hXBMaOjMUHQGslm4y-QUILgrxqS8MpA/edit?gid=0#gid=0","",""
+"169786952432746498","mithro_","2025-12-30T02:31:56.5240000+00:00","@BreakingTaps - I believe @Tim Edwards's 3v3 SRAM is quite a bit smaller?","",""
+"1365118310701600900","rtimothyedwards_19428","2025-12-30T02:40:47.8450000+00:00","@BreakingTaps :  One reason the GF SRAMs don't scale well is that they all contain the same 10-bit address decoder and sense amps designed for a 128-row array.","","💀 (1)"
+"384390069412429834","polyfractal","2025-12-30T17:07:24.6890000+00:00","oof 😄","",""
+"384390069412429834","polyfractal","2025-12-30T20:54:59.4620000+00:00","generated a few latch and dff banks using dffram, neat project! latches were consistently 10-15% smaller than dff, and as expected they are all quite a bit bigger than the foundry optimized banks. Not really a fair comparison, will probably run some tests comparing it against a dumb register array since that's a lot closer to the use case","2025-12_media/image-7646F.png,2025-12_media/image-A5ADE.png,2025-12_media/chip_top_black-1778D.png",""

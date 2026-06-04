@@ -2,9 +2,177 @@
 Guild: wafer.space Community
 Channel: Information / fomu
 Topic: Channel for the FPGA Tomu aka Fomu (https://fomu.im).
-After: 01/31/2026 19:35
+After: 2025-12-31 11:59 p.m.
+Before: 2026-02-01 12:00 a.m.
 ==============================================================
 
+[2026-01-19 3:29 a.m.] mithro_
+@Xobs - FYI
+
+{Reactions}
+👍 (2)
+
+[2026-01-26 3:20 p.m.] carlfk
+MicroPython v1.10-308-g421dcd2 on 2020-01-03; fomu with vexriscv
+
+
+[2026-01-26 3:21 p.m.] carlfk
+this is from fomu-workshop tar or something I have from years ago
+
+
+[2026-01-26 3:23 p.m.] carlfk
+if I am runing some py code, and then ^c, it stops but I don't get KeyboardInterrupt like I do on uP on Pico
+
+
+[2026-01-26 3:24 p.m.] carlfk
+really I want to know where uP print('foo') data is buffered
+
+
+[2026-01-26 3:24 p.m.] carlfk
+this code consumes it: https://github.com/CarlFK/dolly/blob/main/logr/consume1.py
+
+{Embed}
+https://github.com/CarlFK/dolly/blob/main/logr/consume1.py
+dolly/logr/consume1.py at main · CarlFK/dolly
+dal - data aquision loger . Contribute to CarlFK/dolly development by creating an account on GitHub.
+2026-01_media/dolly-9D7A7
+
+
+[2026-01-26 3:25 p.m.] carlfk
+but s.reset_input_buffer()
+doesn't seem to do much as the next while loop spits out a bunch of lines
+
+
+[2026-01-26 3:26 p.m.] carlfk
+if I put a sleep(.5), then s.reset_input_buffer() seems to work.
+
+
+[2026-01-26 3:27 p.m.] carlfk
+so I'm guessing I need to wait for the print() data to get into the buffer that cP can reset_, but I'm wonderin where it is pooling up
+
+
+[2026-01-26 3:30 p.m.] rebelmike
+If you can find the source for the build, you'll probably want to look in `ports/<whatever it's called>/uart_core.c`
+
+
+[2026-01-26 3:31 p.m.] rebelmike
+Ctrl-C handling is port specific, as it requires the uart driver to be able to flag a Ctrl-C character has been seen before uP has processed the buffer
+
+
+[2026-01-26 4:26 p.m.] carlfk
+#tomu channel on irc.freenode.net  https://workshop.fomu.im/en/latest/help.html
+
+
+[2026-01-26 4:26 p.m.] carlfk
+I can't find the uP fomu port
+
+
+[2026-01-26 4:27 p.m.] carlfk
+yes I can.  https://github.com/im-tomu/micropython/tree/fomu/ports/fomu
+
+{Embed}
+https://github.com/im-tomu/micropython/tree/fomu/ports/fomu
+micropython/ports/fomu at fomu · im-tomu/micropython
+The Micro Python project. Contribute to im-tomu/micropython development by creating an account on GitHub.
+
+
+[2026-01-26 4:49 p.m.] carlfk
+// Send string of given length
+void mp_hal_stdout_tx_strn(const char *str, mp_uint_t len) {
+https://github.com/im-tomu/micropython/blob/fomu/ports/fomu/src/uart-core.c
+
+{Embed}
+https://github.com/im-tomu/micropython/blob/fomu/ports/fomu/src/uart-core.c
+micropython/ports/fomu/src/uart-core.c at fomu · im-tomu/micropython
+The Micro Python project. Contribute to im-tomu/micropython development by creating an account on GitHub.
+
+
+[2026-01-26 4:50 p.m.] carlfk
+is this how uP print() gets sent  up the usb serial ?
+
+
+[2026-01-26 4:50 p.m.] carlfk
+I'm still curious where stuff is buffered
+
+
+[2026-01-26 6:12 p.m.] rebelmike
+Yes, that's how the output gets to the serial, I don't think there's any other buffering.  That function just loops until it's managed to give all the characters to `usb_write`, and it is called directly from `mp_print_*` functions (via the `MP_PLAT_PRINT_STRN` macro).
+
+
+[2026-01-26 6:38 p.m.] carlfk
+Somewhere is a 256 byte buffer, and then I think a 2nd larger one.   which may be on the Linux/host and then cPython
+
+
+[2026-01-26 6:39 p.m.] carlfk
+cPython/linux I open the connection, serial.in_waiting shows  0, sleep .1' in_waiting is either 256 or 294 (256 + len(one line of data)
+
+
+[2026-01-26 9:12 p.m.] mithro_
+@carlfk - It would be awesome to update micropython on the Fomu....
+
+
+[2026-01-26 9:12 p.m.] mithro_
+@jimmo might be able to help with that....
+
+
+[2026-01-26 9:12 p.m.] mithro_
+@carlfk - I also found a couple more of the EVT Pi hat boards. I'd love to get them onto https://fpgas.online and convince people to play with them...
+
+
+[2026-01-26 9:19 p.m.] carlfk
+what is a EVT Pi hat board ?
+
+
+[2026-01-26 9:20 p.m.] mithro_
+That blue RPi Hat board which has the same hardware in an easier to look at form factor
+
+
+[2026-01-26 9:23 p.m.] carlfk
+ah - fomu
+
+
+[2026-01-26 9:29 p.m.] jimmo_
+it looks like fomu does some buffering on the usb endpoint too? (i.e. in usb_write - as far as i can tell multiple calls can be coalesced into one endpoint transmission, as opposed to usb_send)
+
+
+[2026-01-26 9:31 p.m.] mithro_
+@Xobs might be able to explain how the USB core works more....
+
+
+[2026-01-26 9:32 p.m.] mithro_
+The "eptri" is a keyword there
+
+
+[2026-01-27 1:30 a.m.] mithro_
+@carlfk - maybe we should do a Fomu like this -> https://www.hackster.io/news/the-arduino-uno-now-in-extra-large-7a15236d9e8a
+
+{Embed}
+https://www.hackster.io/news/the-arduino-uno-now-in-extra-large-7a15236d9e8a
+The Arduino UNO, Now in Extra-Large
+UncleStem just built a massive, fully functional Arduino UNO that is scaled up seven times its original size.
+2026-01_media/_TSej6mbQRl-A44EB.blob
+
+{Reactions}
+😆 (2)
+
+[2026-01-27 3:44 a.m.] xobs
+The canonical documentation for eptri is what's generated by lxsocdoc: https://rm.fomu.im/usb.html
+
+
+[2026-01-27 7:45 a.m.] rebelmike
+There’s also https://shop.pimoroni.com/products/pico-jumbo?variant=42095185821779
+
+{Embed}
+https://shop.pimoroni.com/products/pico-jumbo?variant=42095185821779
+Pico Jumbo (Pico 2 Aboard)
+A hilariously oversized but fully functional Raspberry Pi Pico 2 for demos, japes and shenanigans.
+2026-01_media/jumbo-931B8.png
+
+
+[2026-01-27 9:19 p.m.] mithro_
+Makes me also think of https://monster6502.com/
+
+
 ==============================================================
-Exported 0 message(s)
+Exported 33 message(s)
 ==============================================================

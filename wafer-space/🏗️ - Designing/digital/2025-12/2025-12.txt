@@ -1,9 +1,93 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / digital
-After: 12/31/2025 21:42
+After: 2025-11-30 11:59 p.m.
+Before: 2026-01-01 12:00 a.m.
 ==============================================================
 
+[2025-12-27 7:40 p.m.] polyfractal
+given how big GF's SRAM blocks are at the small end (64 words is half the size of 512!), do you think it'd end up being more area-efficient to just use registers/flip flops for small "sram-like" banks? say 16 words / 128 bits?
+
+
+[2025-12-27 7:44 p.m.] polyfractal
+just criminal 😄
+
+{Attachments}
+2025-12_media/image-E88FB.png
+
+
+[2025-12-27 7:52 p.m.] polyfractal
+(suppose it's easy enough to try it out heh)
+
+
+[2025-12-27 8:44 p.m.] 246tnt
+You can just take the are of a FF and multiply it and see how close you are.
+
+
+[2025-12-27 8:45 p.m.] 246tnt
+For wide shallow  mem, the muxing/addr decode won't be too bad so it's a good first rough estimate.
+
+
+[2025-12-28 12:07 a.m.] polyfractal
+aha ok. so with some generous assumptions on the overhead plumbing, a 16x8 might looks something like this (albeit witih flexibility to smoosh into odd corners due to being not a macro block)
+
+{Attachments}
+2025-12_media/image-AB3D7.png
+
+
+[2025-12-28 4:25 a.m.] greg.hashtag.9468
+Have you seen: https://github.com/AUCOHL/DFFRAM
+Their approach is to create a macro block containing standard cells for different memory configurations. This can be more dense than just having a large FF based RAM along with your RTL, and in theory speeds up synth/PnR. I'd suspect the final QoR ends up slightly worse.
+
+{Embed}
+https://github.com/AUCOHL/DFFRAM
+GitHub - AUCOHL/DFFRAM: Standard Cell Library based Memory Compiler...
+Standard Cell Library based Memory Compiler using FF/Latch cells - AUCOHL/DFFRAM
+2025-12_media/DFFRAM-01085
+
+{Reactions}
+👀
+
+[2025-12-28 4:26 a.m.] greg.hashtag.9468
+Might be handy for size comparisions
+
+
+[2025-12-28 5:52 p.m.] polyfractal
+oh awesome, I had not seen that. cheers for the link!
+
+
+[2025-12-30 2:31 a.m.] mithro_
+@BreakingTaps - https://docs.google.com/spreadsheets/d/1fW5ecBsLSec4hXBMaOjMUHQGslm4y-QUILgrxqS8MpA/edit?gid=0#gid=0
+
+{Embed}
+https://docs.google.com/spreadsheets/d/1fW5ecBsLSec4hXBMaOjMUHQGslm4y-QUILgrxqS8MpA/edit?gid=0
+GF180MCU SRAM Sizing
+2025-12_media/AHkbwyJoFG8TDUxYDGXsHLp06bFE4p8DK_Ok7xLij_-F9622
+
+
+[2025-12-30 2:31 a.m.] mithro_
+@BreakingTaps - I believe @Tim Edwards's 3v3 SRAM is quite a bit smaller?
+
+
+[2025-12-30 2:40 a.m.] rtimothyedwards_19428
+@BreakingTaps :  One reason the GF SRAMs don't scale well is that they all contain the same 10-bit address decoder and sense amps designed for a 128-row array.
+
+{Reactions}
+💀
+
+[2025-12-30 5:07 p.m.] polyfractal
+oof 😄
+
+
+[2025-12-30 8:54 p.m.] polyfractal
+generated a few latch and dff banks using dffram, neat project! latches were consistently 10-15% smaller than dff, and as expected they are all quite a bit bigger than the foundry optimized banks. Not really a fair comparison, will probably run some tests comparing it against a dumb register array since that's a lot closer to the use case
+
+{Attachments}
+2025-12_media/image-7646F.png
+2025-12_media/image-A5ADE.png
+2025-12_media/chip_top_black-1778D.png
+
+
 ==============================================================
-Exported 0 message(s)
+Exported 14 message(s)
 ==============================================================

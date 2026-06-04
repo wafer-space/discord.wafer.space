@@ -4,17 +4,244 @@ Channel: 🏗️ - Designing / die-sorter
 Topic: Discussion about the "wafer.space design sorter" that Andrew Wingate / evezor is designing to enable the service.
 
 See more @ https://github.com/evezor/waferspace_die_sorter
-After: 01/31/2026 20:20
+After: 2025-12-31 11:59 p.m.
+Before: 2026-02-01 12:00 a.m.
 ==============================================================
 
-[01/31/2026 21:54] anfroholic
+[2026-01-09 12:47 a.m.] mithro_
+@Andrew Wingate - Bad news -- myself and @Leo Moser (mole99) got to see the mask GDS that GF is sending off to be manufactured and the layout didn't quite match what we expected. 
+
+We are now less convinced we know the right layout for how things will look on the wafer.
+
+{Reactions}
+👍
+
+[2026-01-09 12:49 a.m.] anfroholic
+Alright. The overall die sizes should be accurate per https://mithro.github.io/gf180mcu-project-template/
+Their exact placement within the the larger 32x26 pattern should not be a problem.
+
+
+[2026-01-09 7:28 a.m.] 246tnt
+@Tim 'mithro' Ansell So that means it's all been accepted for fabrication now ?
+
+
+[2026-01-09 7:37 a.m.] mole99
+We still need to make a proper announcement, but let's say a cautious yes :)
+
+{Reactions}
+🎉 (4)
+
+[2026-01-09 7:45 a.m.] mole99
+We had expected the total reticle size to be 3.2x2.6 as it was back at Efabless. This would have left a 1 mm margin on all sides of our 3.0 x 2.4 mm design. However, the margin was much smaller than this (the test structures don't occupy much area).
+
+Thus, it is not clear whether there is some spacing between the reticle shots to match the 3.2x2.6 size, or if there is no gap between the shots. Given the density rules, I assume there will be no gap.
+
+
+[2026-01-09 7:46 a.m.] mole99
+The die sizes are rounded to two decimal places on this website. You can find the correct die size for the 1x1 slot here: https://github.com/wafer-space/gf180mcu-project-template/blob/01d1540414fefce2d3c8fca2086c425688fe389a/librelane/slots/slot_1x1.yaml#L5
+And all of the other slots: https://github.com/wafer-space/gf180mcu-project-template/tree/main/librelane/slots
+
+
+[2026-01-09 7:50 a.m.] 246tnt
+I thought you were the one gluing all the designs together into a single GDS ?
+
+
+[2026-01-09 8:09 a.m.] mole99
+Yes, for our purposes, we are. That's the 3.0cmx2.4cm "reticle" layout. I'll post the final layout soon after I have obfuscated the proprietary projects.
+
+However, we don't have access to the SLM (Scribe Line Monitor) Etest and reliability test patterns. These are normally placed inbetween the scribe lines of the designs.
+
+So in our case, these structures will be placed around our 3.0x2.4 layout. That's why we were told that our reticle size is 3.0x2.4 instead of the 3.2x2.6 that Efabless had available. (Efabless did not assemble the reticle, but GF did it for them.)
+As it turns the SLM structures don't occupy that much area, which makes sense given that they are normally placed inbetween the scribe lines. Thus the final reticle size is less than 3.2x2.6.
+
+{Reactions}
+👍
+
+[2026-01-09 6:38 p.m.] anfroholic
+Yes @Leo Moser (mole99) I should have been more specific. 
+The exact placement of *our_reticle* within the *gf_reticle* is going to be whatever it is. 
+The spacing from die center to center on *our_reticle* is what I've been asking should be what I have drawn
+Note these numbers are not rounded
+
+{Attachments}
+2026-01_media/image-D8BA1.png
+
+{Reactions}
+😮
+
+[2026-01-10 10:40 a.m.] mole99
+Hi Andrew, did you see my comment here: https://discord.com/channels/1361349522684510449/1454997849543802971/1455290401886834739
+
+
+[2026-01-12 10:54 p.m.] GitHub
+
+
+{Embed}
+splinedrive
+https://github.com/evezor/waferspace_die_sorter
+[evezor/waferspace_die_sorter] New star added
+
+{Reactions}
+💜 (2)
+
+[2026-01-19 10:19 a.m.] anfroholic
+Got some more revisions on the tape feeder mechanism. 
+I'm pretty happy with how well it works!
+
+Also bonus, toolless cover tape tensioner/holder 🙂 
+
+-# There's more designed, but I have not fabricated any of them yet. more coming soon
+
+{Attachments}
+2026-01_media/20260119_041230-E11A9.jpg
+2026-01_media/20260119_041239-3482B.jpg
+2026-01_media/20260119_041304-C4E46.jpg
+2026-01_media/20260119_040455-39190.jpg
+
+{Reactions}
+❤️
+
+[2026-01-20 6:01 a.m.] mithro_
+@Andrew Wingate - Cool!
+
+{Reactions}
+💜 (2)
+
+[2026-01-20 6:04 a.m.] mithro_
+@Andrew Wingate - You shared a circle design thingy...
+
+
+[2026-01-20 6:14 a.m.] anfroholic
+Yeah, so. I was a little embarrassed to share such raw stuff. @asic destroyer may understand a bit 😜 
+
+When I design, I usually like to do things and learn about the design space. Lot's and lots of terrible things that are then used to validate small ideas and concepts. 
+Breadth first search 🙂 
+
+So this was one of the first designs and it uses 13" reels. I have decided they are too big and have since retooled for 7" reels. Quite a few iterations
+
+{Attachments}
+2026-01_media/try_4_60_3-BED6B.png
+2026-01_media/20260120_000924-CEA15.jpg
+
+{Reactions}
+❤️ (2)
+
+[2026-01-20 6:15 a.m.] mithro_
+I was wondering why that picture had all the reels in a circle rather than a square?
+
+
+[2026-01-20 6:19 a.m.] anfroholic
+The original outline for this project called for 40 unique projects to be sorted. 
+Since that time it seems we are wanting to have 1/2 and maybe 1/4 sizes which explodes the number of reels that we need. 
+Just a reticle like the one shown is already 56 unique projects. 
+@Tim 'mithro' Ansell is asking about these pictures, where  I was taking these reels and attempting to see how many I could squeeze into the available footprint. 
+Here we have 60reels. For a lot of reasons I don't think this is a viable route to continue, but I'll keep posting
+
+{Attachments}
+2026-01_media/try_4_60_1-98A9C.png
+2026-01_media/try_4_60_2-89264.png
+
+
+[2026-01-20 6:42 a.m.] mithro_
+@Andrew Wingate - Yeah I was wondering why that was layed out in a circle rather than 3 sides of a rectangle?
+
+
+[2026-01-21 5:48 a.m.] polyfractal
+these look great! Really nifty nice mechanism you've cooked up 🙂
+
+{Reactions}
+💜
+
+[2026-01-21 5:51 a.m.] anfroholic
+That compliment coming from someone who has made really awesome mechanisms, that means a whole lot. 
+Thank you!
+
+{Reactions}
+❤️
+
+[2026-01-21 5:53 a.m.] polyfractal
+gonna be really neat seeing the final build chugging away sorting dies
+
+
+[2026-01-21 5:53 a.m.] anfroholic
+Yes! Many 10s of thousands of dies
+
+
+[2026-01-22 11:14 a.m.] mattvenn
+I sincerely hope you don't have a die mixup situation where you have to manually sort a big pile of dies!
+
+
+[2026-01-22 11:23 a.m.] tholin
+Question: why was a QR code used to mark each die with its ID rather than a standard barcode, which might be easier to read since its 1D?
+
+
+[2026-01-22 11:36 a.m.] anfroholic
+Crazy how long ago all those decisions seem. From what I remember there were a number of reasons. 
+First was just that the original character code was too hard to resolve with low quality optics, so something bigger was wanted. 
+Second was just to have something that was easily machine readable from any orientation. 
+We also wanted this to double as a macro pin1 designator.
+
+
+[2026-01-22 11:40 a.m.] anfroholic
+Lol, I don't want to think about that 😜 From what I'm learning about everything, it's doubtful that would be a realistic scenario. 
+
+That said; if there was a giant pile, it would be an interesting CS type problem with QR codes and everything @Tholin was just mentioning.
+
+
+[2026-01-22 11:41 a.m.] mattvenn
+then you have to make another machine that can load the dies and identify them through a microscope
+
+{Reactions}
+😭
+
+[2026-01-22 12:06 p.m.] 246tnt
+Reminds me when I dropped a tray of mpw1 wlcsp on the floor ... and then spent like an hour finding them all ...
+
+{Reactions}
+🫣 (2)
+
+[2026-01-22 1:12 p.m.] mattvenn
+yeah, I dropped one of those little trays and it was very hard getting them back inside with the right orientation
+
+
+[2026-01-22 1:12 p.m.] mattvenn
+not on the floor luckily
+
+
+[2026-01-22 2:45 p.m.] ravenslofty
+space, as I understand it :p
+
+
+[2026-01-26 9:31 p.m.] mithro_
+I believe @Leo Moser (mole99) made the call about QRcode ID?
+
+
+[2026-01-27 3:47 p.m.] mole99
+Yes, you can search the server for "qrcode" to find discussions about it.
+It fits the corner space well, has markers for the orientation and redundancy in the encoding.
+
+
+[2026-01-27 9:38 p.m.] mithro_
+I'm not sure if it is working, but I was also trying to get a searchable public archive of the discord @ https://discord.wafer.space/
+
+{Embed}
+https://discord.wafer.space/
+wafer.space Discord Logs
+Public archive of wafer.space Discord server
+
+{Reactions}
+💚
+
+[2026-01-31 9:54 p.m.] anfroholic
 I'll share some more pictures before our meeting that starts in a few
 
 {Attachments}
-die-sorter_media/image-53BA1.png
-die-sorter_media/20260131_155119-09BE1.jpg
+2026-01_media/image-53BA1.png
+2026-01_media/20260131_155119-09BE1.jpg
 
+{Reactions}
+❤️
 
 ==============================================================
-Exported 1 message(s)
+Exported 35 message(s)
 ==============================================================

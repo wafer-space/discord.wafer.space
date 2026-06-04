@@ -1,0 +1,230 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 🏗️ - Designing / project-template
+Topic: [template-github](https://github.com/wafer-space/gf180mcu-project-template)
+After: 2025-09-30 11:59 p.m.
+Before: 2025-11-01 12:00 a.m.
+==============================================================
+
+[2025-10-02 4:40 p.m.] mole99
+📢 Major update to the [gf180mcu-project-template](https://github.com/wafer-space/gf180mcu-project-template)! 
+
+The example design now runs through the complete flow, including:
+
+- Sealring insertion
+- Filler generation
+
+... and is DRC and LVS clean, according to the open source PDK.
+
+There is now also a [cocotb](https://www.cocotb.org/) testbench available in the repository. We use the newly released cocotb 2.0.0.
+You can run RTL as well as GL simulations, after implementing the design.
+
+To ensure your design will be accepted for tapeout, you will be able to run the [gf180mcu-precheck](https://github.com/wafer-space/gf180mcu-precheck).
+At the moment it is still a work in progress.
+
+Further updates will follow, but you can use the current state as a stable basis for implementing your design.
+If you encounter any issues, please report them so that we can improve both the template and the PDK.
+
+PS: Special thanks to @Tim Edwards for his help in solving the uncovered PDK and tool-related issues.
+
+Leo
+
+{Reactions}
+👍 (2)
+
+[2025-10-02 4:45 p.m.] rtimothyedwards_19428
+Tim Edwards has only barely begun to address all the issues that have surfaced over the past few weeks. . .
+
+
+[2025-10-02 4:48 p.m.] tholin
+Its that bad?
+
+
+[2025-10-02 4:48 p.m.] mole99
+Haha, I also have to upstream a number of LibreLane related patches 😄
+
+
+[2025-10-02 4:51 p.m.] mole99
+Also I forgot to mention that it is now possible to adjust the padring directly from the LibreLane configuration file.
+
+
+[2025-10-02 5:09 p.m.] h.tamas
+Started a thread.
+
+
+[2025-10-02 6:04 p.m.] rtimothyedwards_19428
+@Tholin :  Well, it means there's a lot to do if we want people to have successful tapeouts.
+
+
+[2025-10-02 6:10 p.m.] tholin
+Bad time for me to be designing analog layouts?
+
+
+[2025-10-02 6:15 p.m.] rtimothyedwards_19428
+@Tholin :  Great time for you to be designing analog layouts!  That will help flush out a lot of issues.  Make sure that you spot-check designs against the documented rules occasionally and let me know about anything that looks wrong.  Feel free to post a layout to me if you want me to double-check it for issues.
+
+
+[2025-10-02 6:16 p.m.] mithro_
+See what @Tim Edwards said! 🙂
+
+
+[2025-10-02 6:20 p.m.] tholin
+Alright, sounds good.
+
+
+[2025-10-02 6:20 p.m.] tholin
+I'll keep going.
+
+
+[2025-10-04 1:11 a.m.] xintingjiang_36756
+I'm curious what is the current problem of this template, is this made the nov gf180 mpw shuttle
+
+
+[2025-10-04 1:23 a.m.] mithro_
+@Evansika - It should be usable but just keep it up to date as you go.
+
+{Reactions}
+👍
+
+[2025-10-04 7:35 a.m.] mole99
+Exactly. You can already get started with your design, just make sure to keep it up to date with the upstream template.
+
+{Reactions}
+👍
+
+[2025-10-11 3:01 a.m.] asc9742
+@Leo Moser (mole99) Hi Leo, I am trying to replace all 56 user pads with analog pads (gf180mcu_fd_io_asig_5p0). Got this error "No shape in terminal analog[0\].pad/ASIG5V found on layer Metal5". Any ideas on this issue? Attached a screenshot + the yaml and system verilog files.
+
+{Attachments}
+2025-10_media/image-B347D.png
+2025-10_media/config_sv_files-19959.zip
+
+
+[2025-10-11 8:20 a.m.] mole99
+Hi @asc, there was a port missing for the bondpad BTerm in the `gf180mcu_fd_io__asig_5p0` cell.
+If you update your PDK, it should run through now.
+
+{Reactions}
+👍
+
+[2025-10-11 4:52 p.m.] asc9742
+Thank you @Leo Moser (mole99) Ran into a new problem with the global routing. I had exchanged all user pads with analog pads, including the clk and rst pad. Could that be causing an issue?
+
+{Attachments}
+2025-10_media/image-6899C.png
+
+
+[2025-10-12 5:21 a.m.] mole99
+Yes, that will be a problem. The SDC expects at least one clock. Can you share a repository with your current state? I will take a look tomorrow.
+
+
+[2025-10-13 11:59 a.m.] mole99
+Started a thread.
+
+
+[2025-10-16 1:48 p.m.] mole99
+The [precheck](https://github.com/wafer-space/gf180mcu-precheck) has been updated to finish cleanly with the example project.
+The precheck is your gateway to fabrication and will need to be completed via the online platform (coming soon).
+You can, of course, run it locally to more easily debug failures.
+
+If you are working on a design, please give it a try and let us know how it goes (SRAMs should still throw errors, that's being worked on next).
+Most importantly: please let us know if you can "cheat" your way through the precheck 😉
+
+
+[2025-10-16 2:07 p.m.] tholin
+@Leo Moser (mole99) I just updated my project with the changes from the template and since one of the commits reads "Update LibreLane", I tried running LL on example_project again to see if the error during GLB is gone. Instead, it now fails even earlier during STA.
+
+
+[2025-10-16 2:35 p.m.] mole99
+Started a thread.
+
+
+[2025-10-16 8:46 p.m.] jalf_47390
+@Leo Moser (mole99) Is there any ESD protection in the IO pins in the template or is it required to be added? If it is in there already, what did you include? Same for all pins differences between them?
+
+
+[2025-10-17 4:56 a.m.] mole99
+Started a thread.
+
+
+[2025-10-20 1:08 a.m.] polyfractal
+how much memory does the `make librelane` step need (roughly)? I fired up an old linux laptop to play around with everything and it crashed after eating 16gb RAM + 4gb swap 🙂  Curious if I should just increase swap and let it run, or if it really needs like 32 or 64gb?
+
+
+[2025-10-20 3:58 a.m.] polyfractal
+more swap did the trick 🙂
+
+{Reactions}
+waferspace 👍
+
+[2025-10-20 6:32 a.m.] mole99
+It depends on your design 😁
+Yesterday, I implemented the example template on my laptop, which also has 16 GB of RAM, and it had to use swap as well.
+
+The step that uses the most memory atm is most likely the filler generation.
+There you can easily trade off memory consumption by changing the number of tiles (threads) and their size.
+I will add some LibreLane configuration variables so that this can be easily tweaked directly from the config.
+In the meantime, you can pass the `--jobs` argument to LibreLane to limit the global thread limit across all steps.
+
+{Reactions}
+👍
+
+[2025-10-20 7:40 a.m.] mole99
+Never mind, none of that will be necessary anymore 😅
+
+I've just fixed an embarrassing bug in the filler generation script: https://github.com/wafer-space/gf180mcu/commit/57a5725eb4a722cb148ff8cf84c5f22ce0be8d64
+Now, filler generation uses only a fraction of the memory and completes much faster.
+Always double check how functions are supposed to be used (the naming actually said it all 😄).
+
+{Embed}
+https://github.com/wafer-space/gf180mcu/commit/57a5725eb4a722cb148ff8cf84c5f22ce0be8d64
+bugfix!: specify the tile margin as just the tile margin without th...
+…tile size
+
+Signed-off-by: Leo Moser <leomoser99@gmail.com>
+2025-10_media/57a5725eb4a722cb148ff8cf84c5f22ce0be8d64-8D20B
+
+
+[2025-10-20 7:42 a.m.] mole99
+📢 Please update your project templates and pull the latest changes from the PDK!
+
+
+[2025-10-20 1:51 p.m.] polyfractal
+awesome, thanks @Leo Moser (mole99)!
+
+{Reactions}
+👌
+
+[2025-10-20 10:17 p.m.] mattvenn
+when will the submission system be open?
+
+{Reactions}
+💜
+
+[2025-10-21 6:22 a.m.] mole99
+That's for @Tim 'mithro' Ansell to say.
+
+
+[2025-10-21 8:53 a.m.] mithro_
+@Matt Venn - Hopefully in the next week.
+
+
+[2025-10-26 7:54 p.m.] tholin
+That's quite a lot of VDD and VSS pads on the template. Like 10 each. That seems a bit excessive. What is the max current per pad?
+
+
+[2025-10-27 2:50 a.m.] mithro_
+
+
+
+[2025-10-27 2:51 a.m.] mithro_
+@Tholin - That was from @tnt in the #cob channel.
+
+
+[2025-10-27 8:12 a.m.] tholin
+Ah, I see. Thank you.
+
+
+==============================================================
+Exported 38 message(s)
+==============================================================

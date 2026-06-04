@@ -4,9 +4,843 @@ Channel: 🏗️ - Designing / die-sorter
 Topic: Discussion about the "wafer.space design sorter" that Andrew Wingate / evezor is designing to enable the service.
 
 See more @ https://github.com/evezor/waferspace_die_sorter
-After: 12/31/2025 21:39
+After: 2025-11-30 11:59 p.m.
+Before: 2026-01-01 12:00 a.m.
 ==============================================================
 
+[2025-12-05 8:48 p.m.] essen__
+Hey guys, I have a terrible idea : https://www.govdeals.com/en/asset/23504/20379
+
+
+[2025-12-05 8:48 p.m.] essen__
+
+
+{Attachments}
+2025-12_media/20379_23504_ea1adef1-11c3-4172-a9e1-256f16-F9268.png
+
+{Reactions}
+🎉
+
+[2025-12-06 7:42 a.m.] mithro_
+Sadly -- Wafer Size: 2-4 inches -- I get 8inch wafers.
+
+
+[2025-12-10 7:35 a.m.] anfroholic
+The SMT tape has been manufactured. We should have it in our hands in a couple weeks.
+
+{Attachments}
+2025-12_media/Carrier_tape-2E8B4.jpg
+
+
+[2025-12-11 1:36 a.m.] mithro_
+Hopefully these are the right size.
+
+{Attachments}
+2025-12_media/image-2469D.png
+
+
+[2025-12-11 3:30 a.m.] anfroholic
+This is to scale, so looks like it
+-# die image credit to @Tholin Looks great thank you
+
+{Attachments}
+2025-12_media/image-15666.png
+
+
+[2025-12-11 6:40 a.m.] anfroholic
+@Leo Moser (mole99) or @Tim 'mithro' Ansell 
+When you guys get a chance can you share some of the outputs from https://github.com/wafer-space/reticle-stitcher
+and/or `manifest-wsmpw1.csv` or  `tilemap-wsmpw1.csv` or whatever I can use for die size/project/location/etc..
+
+It probably would be beneficial if whatever this is could also be used to create a dicing plan. 
+
+Thanks
+
+{Embed}
+https://github.com/wafer-space/reticle-stitcher
+GitHub - wafer-space/reticle-stitcher: Tool for stitcher an MPW int...
+Tool for stitcher an MPW into a full reticle for delivery to a foundry. - wafer-space/reticle-stitcher
+2025-12_media/reticle-stitcher-E4704
+
+
+[2025-12-11 1:59 p.m.] mole99
+Started a thread.
+
+
+[2025-12-11 2:43 p.m.] anfroholic
+Still a work in progress, but think I have updated my wafer mapper to the new reticle sizes and die shapes. 
+-# I also know there is a dead area near the edges I need to account for
+
+{Attachments}
+2025-12_media/image-5FA4A.png
+2025-12_media/image-552E3.png
+
+
+[2025-12-11 5:58 p.m.] carlfk
+Somewhere @Tim 'mithro' Ansell said something like "same number of reticle shots, but the reticle is smaller"
+
+
+[2025-12-11 5:59 p.m.] mithro_
+reticle is the same size, we just can't use as much of it.
+
+
+[2025-12-11 5:59 p.m.] carlfk
+ok - does that might mean there is dead areas between the shots?
+
+
+[2025-12-11 6:00 p.m.] mithro_
+No
+
+
+[2025-12-11 6:00 p.m.] mithro_
+There are just some larger cut lines
+
+
+[2025-12-11 6:01 p.m.] carlfk
+something doesn't fit.
+
+
+[2025-12-11 6:01 p.m.] carlfk
+if all of the reticle was used, would there be overlap across shots?
+
+
+[2025-12-11 6:03 p.m.] carlfk
+is the size of the shot on the wafer constant?
+
+
+[2025-12-11 6:28 p.m.] mole99
+The size of the reticle is 32000x26000, the size of the usable area is 30000x24000.
+I think Andrew is aware that he isn't done yet, as he mentioned above:
+
+> I also know there is a dead area near the edges I need to account for
+
+
+[2025-12-12 5:11 a.m.] anfroholic
+No, I was only referring to the edge of the wafer. 
+I didn't know at the time the reticle was the same size, we were only allowed to use part of it. 
+I have an example here, the blue lines are still considered 'cuts' here, but I'll look deeper into that later. 
+At any rate the die locations should all be accurate now, thank you for the clarifications
+
+{Attachments}
+2025-12_media/image-61961.png
+
+
+[2025-12-12 5:27 a.m.] anfroholic
+
+
+{Attachments}
+2025-12_media/wafer_map-1CDF2.png
+
+
+[2025-12-12 6:53 a.m.] GitHub
+
+
+{Embed}
+anfroholic
+https://github.com/evezor/waferspace_die_sorter/compare/a4d92bc6716a...87c5395c3a36
+[waferspace_die_sorter:main] 3 new commits
+[`e0fe19a`](https://github.com/evezor/waferspace_die_sorter/commit/e0fe19aeb2bae86512904cdf1604bb57eebe4620) change reticle map - anfroholic
+[`9f96dc6`](https://github.com/evezor/waferspace_die_sorter/commit/9f96dc6f34d924df91d302135dafdae303c601c6) add center dots - anfroholic
+[`87c5395`](https://github.com/evezor/waferspace_die_sorter/commit/87c5395c3a367c234444aee553d001cdfd8b2f72) prettier dots - anfroholic
+
+
+[2025-12-12 6:53 a.m.] anfroholic
+Forgot this repo was tied here
+
+
+[2025-12-12 7:02 a.m.] mithro_
+@Andrew Wingate - I /think/ the cuts will probably end up in exactly the same size despite the weird slot sizes around the corner......
+
+
+[2025-12-12 7:06 a.m.] anfroholic
+There are extra 1mm wide dies that are on here that will not actually be dies, but will still be on the wafer. 
+@Leo Moser (mole99) said
+> The size of the reticle is 32000x26000, the size of the usable area is 30000x24000.
+which leaves 1mm around all the edges of *our reticle* but the reticle shots will still be spaced on the 32000x26000 spacing. 
+
+At least that's how I'm reading this right now. 
+I know there's some cleanup to do but overall this is correct yes?
+
+
+[2025-12-12 7:09 a.m.] anfroholic
+@Tim 'mithro' Ansell 
+Is this a little more clear?
+
+{Attachments}
+2025-12_media/wafer_map-45070.png
+
+
+[2025-12-12 7:10 a.m.] mithro_
+What are the red dots?
+
+
+[2025-12-12 7:10 a.m.] anfroholic
+Those are my pick locations
+
+
+[2025-12-12 7:11 a.m.] anfroholic
+The green ones will be ignored.
+
+
+[2025-12-12 7:12 a.m.] anfroholic
+better?
+
+{Attachments}
+2025-12_media/wafer_map-C8518.png
+
+
+[2025-12-12 7:13 a.m.] mithro_
+I ***suspect*** the layout to look like that original reticle diagram, with our portion of the reticle aligned with the bottom left edge of the reticle. That then means that even though we only get to use a percentage of the small slots the die still end up as the same size.
+
+
+[2025-12-12 7:15 a.m.] anfroholic
+That's an easy fix, for now I'll just assume it's centered, but the patterning will still be on the 32000x26000 spacing, correct?
+
+
+[2025-12-12 7:17 a.m.] mithro_
+@Andrew Wingate - Does carl still have the GFMPW-0 / GFMPW-1 wafers around?
+
+
+[2025-12-12 7:18 a.m.] anfroholic
+I have this
+
+{Attachments}
+2025-12_media/rn_image_picker_lib_temp_2bd03c48-40d7-4be-E2EEF.jpg
+
+
+[2025-12-12 7:19 a.m.] mithro_
+Is that a gf180mcu or sky130 wafer?
+
+
+[2025-12-12 7:19 a.m.] anfroholic
+I don't know, sorry
+
+
+[2025-12-12 7:20 a.m.] anfroholic
+Does this help?
+
+{Attachments}
+2025-12_media/20251212_012000-3B23A.jpg
+
+
+[2025-12-12 7:20 a.m.] anfroholic
+@algofoogle (Anton Maurovic) and @Tholin both have dies on this wafer I believe?
+
+
+[2025-12-12 7:22 a.m.] anfroholic
+Also, yes, I think @carlfk has one in his foop
+
+
+[2025-12-12 7:22 a.m.] algofoogle
+That’s not a sky130, because it is too golden
+
+{Reactions}
+💜
+
+[2025-12-12 7:23 a.m.] algofoogle
+Oh yeah, there’s my die 🙂
+
+{Attachments}
+2025-12_media/image-BACBD.png
+
+
+[2025-12-12 7:27 a.m.] mithro_
+I expect it will look like the following
+
+{Attachments}
+2025-12_media/image-CC5D2.png
+
+
+[2025-12-12 7:29 a.m.] anfroholic
+Lower left could just be the reference frame. There isn't enough information here to say either way.
+
+
+[2025-12-12 7:30 a.m.] anfroholic
+Looking at it, I think it would be cool to get one of the small scribe type cutters and get whole single reticle shots. Mount them in a picture frame or something :)
+
+
+[2025-12-12 7:31 a.m.] mithro_
+
+
+{Attachments}
+2025-12_media/image-F8224.png
+
+
+[2025-12-12 7:31 a.m.] anfroholic
+That's the dicing plan?
+
+
+[2025-12-12 7:31 a.m.] anfroholic
+oh, nvm.
+
+
+[2025-12-12 7:32 a.m.] mithro_
+
+
+{Attachments}
+2025-12_media/image-555B3.png
+
+
+[2025-12-12 7:33 a.m.] mithro_
+So the blue squares are all the same size even though we are only allowed to use part of those
+
+
+[2025-12-12 7:33 a.m.] anfroholic
+
+
+{Attachments}
+2025-12_media/wafer_map-1ACAE.png
+
+{Reactions}
+😮
+
+[2025-12-12 7:36 a.m.] mithro_
+
+
+{Attachments}
+2025-12_media/image-0F9BB.png
+
+{Reactions}
+😮
+
+[2025-12-12 7:37 a.m.] mithro_
+Yeah, something like that
+
+
+[2025-12-12 7:37 a.m.] mithro_
+But I could be totatly wrong....
+
+
+[2025-12-12 7:38 a.m.] anfroholic
+The real question is: are the green lines cut lines. 
+If not that makes my life so much easier :D
+
+{Attachments}
+2025-12_media/image-BE890.png
+
+{Reactions}
+😮
+
+[2025-12-12 7:39 a.m.] mithro_
+Probably not....
+
+
+[2025-12-12 7:40 a.m.] anfroholic
+Wooh Hoo!!
+
+
+[2025-12-12 7:40 a.m.] mole99
+For future shuttles, yes. Otherwise it won't be possible to get more of the smaller slot sizes.
+
+
+[2025-12-12 7:40 a.m.] mithro_
+Yeah, maybe in the future.
+
+
+[2025-12-12 7:40 a.m.] mole99
+Even for this shuttle I was thinking we cut the dies in the correct size.
+
+
+[2025-12-12 7:40 a.m.] mole99
+I'm not sure how the bonding works if you need to go across half the die.
+
+
+[2025-12-12 7:41 a.m.] mithro_
+Yeah
+
+
+[2025-12-12 7:42 a.m.] mole99
+Probably it wouldn't work, because the bond wires would touch the die.
+
+
+[2025-12-12 7:43 a.m.] mole99
+Started a thread.
+
+
+[2025-12-12 7:46 a.m.] mole99
+So yes, we need to cut the green lines to get the correct die size.
+
+
+[2025-12-12 7:47 a.m.] mole99
+@Andrew Wingate It's a good preparation for the next shuttle, where we might want to add another cut here.
+
+{Attachments}
+2025-12_media/Bildschirmfoto_vom_2025-11-07_14-47-44-2-DA56C.png
+
+{Reactions}
+😀 😮
+
+[2025-12-12 7:48 a.m.] anfroholic
+I've been reorganizing my code to accommodate these kinds of shenanigans ;) 
+I have figured
+
+{Reactions}
+👌
+
+[2025-12-12 7:49 a.m.] anfroholic
+we will start to run into some problems with the sheer amount of projects on a single ~~die~~ wafer, I haven't quite figured that one out, but am keeping an eye on it.
+
+
+[2025-12-12 7:55 a.m.] mole99
+Solving this problem would definitely be the holy grail of shuttle services 😉
+This way, wafer.space can accommodate the slots that customers actually need instead of the other way around.
+
+
+[2025-12-12 7:56 a.m.] mole99
+By the way @Andrew Wingate, when you have the time, could you also create CoB PCBs for the other slot sizes?
+
+You can find the pad assignments here: https://github.com/wafer-space/gf180mcu-project-template/tree/main/librelane/slots
+If you want to take a look at the GDS, you can download it at the bottom of each CI run: https://github.com/wafer-space/gf180mcu-project-template/actions/runs/20094869649
+(Can be opened with [KLayout](https://www.klayout.de/).)
+
+Let me know if you have any questions.
+
+
+[2025-12-12 7:58 a.m.] anfroholic
+I spoke with @Tim 'mithro' Ansell a bit ago saying that sometime after this shuttle has lauched to the fab, at least you, Tim, and I have a conversation about run2 and how we should position ourselves for best results. 
+This topic was one that's obviously on the list
+
+
+[2025-12-12 7:58 a.m.] anfroholic
+*like a conference call or something*
+
+
+[2025-12-12 8:15 a.m.] mole99
+Sure. We can do that right after the reticle has been sent out.
+
+{Reactions}
+waferspace (2)
+
+[2025-12-12 10:30 p.m.] carlfk
+@Tim 'mithro' Ansell Miniapolos die cutter intro.  Next week is the week we should go
+
+{Reactions}
+💜
+
+[2025-12-14 12:50 a.m.] logic_destroyer
+crazy
+
+
+[2025-12-16 5:29 p.m.] polyfractal
+any chance of getting fewer but larger dies in the future? or woudl that mess up the dicing patterns too much?
+
+
+[2025-12-16 5:30 p.m.] polyfractal
+(or even the same number, larger and more expensive. I just want more SRAM 😅 )
+
+
+[2025-12-16 5:40 p.m.] 246tnt
+Well, you can start by using the 3v3 SRAM 😁
+
+
+[2025-12-16 5:40 p.m.] polyfractal
+i did forget about that! is that in a working state?
+
+
+[2025-12-16 5:40 p.m.] polyfractal
+_searches backlog_
+
+
+[2025-12-16 5:41 p.m.] 246tnt
+After that you could do multi-die ? You have one die of _just_ SRAM and you bond it directly to your "compute" die 😁
+
+{Reactions}
+🤔
+
+[2025-12-16 5:41 p.m.] 246tnt
+chiplets FTW.
+
+
+[2025-12-16 5:41 p.m.] 246tnt
+"working"  is unknown, we'll see after this tapeout.
+
+{Reactions}
+👍
+
+[2025-12-16 5:42 p.m.] mole99
+Let me just clear a few things up: The photo masks are produced for the reticle, which is 30x24mm (actually 32x26mmm, but we can't use the full area atm). We subdivide this area into 40 slots, some are full size, others are smaller.
+
+The photo mask is exposed and moved across the wafer multiple times to cover the whole wafer. wafer.space ordered a fixed number of wafers from GF, which means we end up with a certain number of dies.
+Giving you fewer dies won't increase the size of your project, we would have to throw them away as they are produced anyway.
+
+However, we can increase the size of your project by merging two 1x1 slots. This would be possible if wafer.space uses laser dicing (which we don't use for run 1), as otherwise we would cut through your project.
+
+So, yes, it's possible in theory, but it would be more expensive.
+
+PS: For this special first run, we actually duplicated all paid projects so that wafer.space could order less wafers, but can still fullfil the 1000 dies per project. In this case we could have actually doubled the area for your design and you would have received the half amount of dies. However, we still don't use laser dicing ^^
+
+
+[2025-12-16 5:43 p.m.] polyfractal
+gotcha, thanks! yeah the "cut through the project with a saw" was the part I was worried about, didn't think of laser dicing though. perhaps in the future after a few successful runs and wafer.space is solidly established 🙂
+
+{Reactions}
+👌
+
+[2025-12-16 5:48 p.m.] polyfractal
+out of curiosity, what's the order-of-magnitude cost difference for laser dicing vs saw?
+
+
+[2025-12-16 5:49 p.m.] polyfractal
+are they just nanosecond 1064nm fiber lasers, or something fancier ("stealth dicing" with femtosecond or whatever)
+
+
+[2025-12-16 6:03 p.m.] mithro_
+@BreakingTaps - See some diagrams earlier in this channel....
+
+
+[2025-12-22 5:49 a.m.] mithro_
+@Andrew Wingate - How many retcile shots does a complete wafer have again?
+
+
+[2025-12-22 5:50 a.m.] anfroholic
+I think only 20 full ones
+https://discord.com/channels/1361349522684510449/1419841819138854993/1448940763705643051
+
+
+[2025-12-22 5:54 a.m.] mithro_
+Seems like you were saying ~28 here?
+
+
+[2025-12-22 5:56 a.m.] anfroholic
+I guess I don't really know what you're asking
+some of them may be just short of full
+
+{Attachments}
+2025-12_media/image-822C7.png
+
+
+[2025-12-22 5:58 a.m.] anfroholic
+@Tim 'mithro' Ansell I guess there may be 28
+https://discord.com/channels/1361349522684510449/1419841819138854993/1420230271302762526
+I don't quite know where all my offsets away from the edge are supposed to stay. 
+I guess I was being a little too conservative
+
+
+[2025-12-23 3:32 a.m.] anfroholic
+We're looking to get some wafers diced and needed to get some drawings out for quotes. 
+Figured I'd share here with you all as well.
+
+{Attachments}
+2025-12_media/waferspace_dicing_detail-CE98D.pdf
+
+
+[2025-12-24 8:23 a.m.] anfroholic
+Hey all, got a few updates. 
+First off, the SMT tape and reel components have arrived. 
+
+I hadn't realized the 13" reels come unassembled, which is nice for shipping I guess. 
+I'm also not sure anyone would be getting their components on these reels or not. There are a lot of questions in the air about actual yields, but a 7" reel would *barely fit* so am opting to design with larger reels just in case. 
+
+Got boxes of the pressure sensitive cover tape. I have attached some to some tape and think it should work well. 
+
+We also got a bundle of 7" reels, they were packed very pretty. This is likely how your dies arrive if you order bare dies.
+
+{Attachments}
+2025-12_media/20251223_234922-A0CD3.jpg
+2025-12_media/20251223_235041-75FB3.jpg
+2025-12_media/20251223_234928-E33A8.jpg
+2025-12_media/20251223_235011-D987F.jpg
+2025-12_media/20251223_234939-0223C.jpg
+2025-12_media/20251224_021415-A975C.jpg
+2025-12_media/20251224_021420-6F76C.jpg
+
+
+[2025-12-24 8:25 a.m.] anfroholic
+We also got the tape, it's 12mm wide and seems to be very nice. 
+I have a few chips from the old GF run and they seem to fit well!
+
+{Attachments}
+2025-12_media/0012-6ACDE.JPG
+2025-12_media/0016-2FA86.JPG
+2025-12_media/20251223_232305-16CCB.jpg
+2025-12_media/20251223_232053-1252B.jpg
+
+
+[2025-12-24 9:16 a.m.] 246tnt
+But did you find any wire bonder that takes die on reels ?
+Granted I only talked to a few, but they all wanted gel packs basically.
+
+
+[2025-12-24 9:37 a.m.] mithro_
+@tnt - if they are only bonding like 10 or 100 gel packs work, but when it gets to 1,000 units things change a bit.
+
+{Reactions}
+👍
+
+[2025-12-24 9:39 a.m.] mithro_
+What is that last fan looking picture?
+
+
+[2025-12-24 9:40 a.m.] anfroholic
+2 reels worth of the carrier tape came on paper 13" reels. It was just the look at it from the side. 
+Thought it looked neat
+
+{Reactions}
+video
+
+[2025-12-24 9:40 a.m.] mithro_
+It also depends on where in the production pipeline they are doing the wire bonding. If they do the glueing with more typical PNP style machines, then tape works pretty well.
+
+
+[2025-12-24 9:41 a.m.] mithro_
+Oh, you're looking through a hole in the paper reel side.
+
+{Reactions}
+👍
+
+[2025-12-24 9:41 a.m.] anfroholic
+Yeah, I've been hoping whatever we do, there's a panel that has 40+ dies. I have to imagine they can work with tape as it's a pcb?
+
+
+[2025-12-24 9:44 a.m.] mithro_
+At the high end they pick the dies directly from the diced wafer.
+
+
+[2025-12-24 9:45 a.m.] anfroholic
+When there aren't 40 different projects at once 😜
+
+
+[2025-12-24 10:05 a.m.] mithro_
+Yes - that is the rub 🙂
+
+
+[2025-12-24 10:14 a.m.] anfroholic
+some more updates on progress. 
+I made all these a bit ago, but have note posted (sorry)
+
+
+[2025-12-24 10:14 a.m.] anfroholic
+## Tape & Reel Mechanisms
+
+The goal is to support at least 40 tape-and-reel mechanisms, with the ability to add more in the future (including half-width or other variants). To keep things flexible and manageable, I’m avoiding putting actuators on each mechanism. Instead, the plan is to use a base-mounted actuator that can drive each unit as needed.
+
+Since we don’t yet know how many parts each feeder will need to hold, I’m standardizing on 13" reels so we can handle just about any reasonable tape quantity in one setup.
+
+With 40 feeders, setup time matters. Even one minute per reel turns into an hour very quickly, so minimizing loading effort is an important design consideration.
+
+
+[2025-12-24 10:15 a.m.] anfroholic
+## V1: Lever Pusher
+
+This design is based on a lever-and-spring-finger mechanism I’ve used successfully in SMT feeders.
+
+While it works well there, I’m concerned it may not have enough grip for a tape-and-reel machine. In addition to moving the tape, it has to deal with cover tape forces and the take-up reel. Additionally as these tapes will be used by others after we're done, we can't have any damage to the tape. 
+
+I built a simple prototype mainly to check fit and get a feel for how it behaves in the real world.
+
+{Attachments}
+2025-12_media/reeler_v1_2-B54A1.png
+2025-12_media/20251224_024843-BC327.jpg
+2025-12_media/20251224_024849-25B68.jpg
+2025-12_media/reeler_v1-5D987.png
+2025-12_media/reeler_v1_1-C11EB.png
+2025-12_media/0026-73E50.JPG
+2025-12_media/0023-9E4D7.JPG
+
+
+[2025-12-24 10:17 a.m.] anfroholic
+## V2: Ratcheting Mechanism
+
+This version uses a toothed wheel to drive the tape, acting like a ratchet. A spring-loaded drive pushes it forward, and reverse teeth prevent it from backing up on the return stroke.
+
+The current prototypes are very rough and made from inexpensive sheet material, chosen mainly because it’s fast and cheap for early testing (referred to by @Tim 'mithro' Ansell  as “nasty fuzzy particle board stuff” 😂 ).
+
+One issue I’ve noticed is that the drive gear may be a bit small, creating a tighter bend radius than I’d like. That’s something to refine.
+
+So far, this design feels the most promising in terms of grip and overall robustness.
+
+{Attachments}
+2025-12_media/reeler_v2_1-897BA.png
+2025-12_media/0027-C49ED.JPG
+2025-12_media/20251224_025232-35B5A.jpg
+2025-12_media/20251224_025242-73F0E.jpg
+2025-12_media/reeler_v2-F1497.png
+2025-12_media/0020-DD288.JPG
+
+
+[2025-12-24 10:18 a.m.] anfroholic
+## V3: All-Gear Design
+
+I also explored an all-gear approach, but this is the least appealing option. Keeping everything aligned and properly indexed would add a lot of complexity, and it doesn’t seem worth the effort compared to the other designs. The feed gear is too big and more.
+
+{Attachments}
+2025-12_media/reeler_v3_2-D830E.png
+2025-12_media/0021-8D298.JPG
+2025-12_media/20251224_025028-90E2A.jpg
+2025-12_media/reeler_v3-FDBF4.png
+2025-12_media/reeler_v3_1-EE951.png
+
+
+[2025-12-27 2:42 a.m.] anfroholic
+Hey @Leo Moser (mole99) 
+Hope you had a nice holiday. 
+I made some drawings to get quotes on wafer dicing. 
+Can you verify that my dimensions line up with what we're doing. 
+Page 3 is likely what is most important for you. 
+
+Thanks
+edit: add link to drawings https://discord.com/channels/1361349522684510449/1419841819138854993/1452866337335410698
+
+
+[2025-12-27 5:10 a.m.] GitHub
+
+
+{Embed}
+anfroholic
+https://github.com/evezor/waferspace_die_sorter/commit/afcb28c2b7aa59f7f469da0f41240433ff318146
+[waferspace_die_sorter:main] 1 new commit
+[`afcb28c`](https://github.com/evezor/waferspace_die_sorter/commit/afcb28c2b7aa59f7f469da0f41240433ff318146) die_yield_helper now exports csv with reticle i... - anfroholic
+
+
+[2025-12-27 5:15 a.m.] anfroholic
+Discord compresses images a lot. 
+Link to full res [image](https://raw.githubusercontent.com/evezor/waferspace_die_sorter/afcb28c2b7aa59f7f469da0f41240433ff318146/helper_scripts/waferspace_run1_test.svg)
+
+This now also exports a csv with reticle data and row/col
+```csv
+X ,Y ,RETICLE_SHOT, COL|ROW
+-94.276,-12.092,S-4_-1,C8R2
+-94.276,-6.998,S-4_-1,C8R3
+-94.276,-3.171,S-4_-1,C8R4
+-94.276,-0.94,S-4_-1,C8R5
+-94.276,2.535,S-4_0,C8R0
+-94.276,7.629,S-4_0,C8R1
+-94.276,12.723,S-4_0,C8R2
+```
+
+I have been going through in my mind how I want to actually pick these. 
+I think I'm leaning towards `project x project` as apposed to `reticle x reticle` or rows, or cols. 
+
+Is anyone even interested in getting info on whatwafer/where their dies come from? Not sure how possible it even would be.
+
+{Attachments}
+2025-12_media/waferspace_run1_test-33A08.png
+
+
+[2025-12-27 5:19 a.m.] anfroholic
+@Leo Moser (mole99) or @Tim 'mithro' Ansell 
+Can I get these files that were used in the [stitcher](https://github.com/wafer-space/reticle-stitcher)
+tilemap.csv
+manifest.csv
+
+Might be nice to just unify some of this
+
+{Embed}
+https://github.com/wafer-space/reticle-stitcher
+GitHub - wafer-space/reticle-stitcher: Tool for stitcher an MPW int...
+Tool for stitcher an MPW into a full reticle for delivery to a foundry. - wafer-space/reticle-stitcher
+2025-12_media/reticle-stitcher-F4D43
+
+
+[2025-12-27 1:32 p.m.] GitHub
+
+
+{Embed}
+anfroholic
+https://github.com/evezor/waferspace_die_sorter/commit/3ae88a99b9764effa18b50a81792f161990ce224
+[waferspace_die_sorter:main] 1 new commit
+[`3ae88a9`](https://github.com/evezor/waferspace_die_sorter/commit/3ae88a99b9764effa18b50a81792f161990ce224) add label maker and pick mapper - anfroholic
+
+
+[2025-12-27 1:33 p.m.] anfroholic
+add some more helper scripts, 
+Most notably a label maker so we can label reels for shipping and/or other downstream services
+
+{Attachments}
+2025-12_media/image-1104F.png
+
+
+[2025-12-27 2:19 p.m.] GitHub
+
+
+{Embed}
+anfroholic
+https://github.com/evezor/waferspace_die_sorter/commit/259081cf4895b259bac2024571cef3bb0c3847ec
+[waferspace_die_sorter:main] 1 new commit
+[`259081c`](https://github.com/evezor/waferspace_die_sorter/commit/259081cf4895b259bac2024571cef3bb0c3847ec) add pick planner - anfroholic
+
+
+[2025-12-27 2:22 p.m.] anfroholic
+bare bones pick and place feature added. 
+I will be generating a few utilities to aid in this, like a mapper for the tape&reel machines and more. 
+
+Not a whole lot to look at in my viewer lol. So many paths
+
+{Attachments}
+2025-12_media/image-452F9.png
+2025-12_media/image-7ED0D.png
+
+
+[2025-12-28 2:12 p.m.] mole99
+@Andrew Wingate I hope you had nice holidays too.
+
+I had a look at page 3 of the doc, but I'm not sure how you arrived at the numbers of 0, 4, 8mm etc.
+
+The die dimensions are 3932um by 5122um as specified here: https://github.com/wafer-space/reticle-stitcher/blob/105a0e45197eaa245cb68fc87eff127567c4bef6/reticle_stitcher.py#L25
+
+It seems that you specified the raw project dimensions without the sealring on page 4.
+
+{Embed}
+https://github.com/wafer-space/reticle-stitcher/blob/105a0e45197eaa245cb68fc87eff127567c4bef6/reticle_stitcher.py
+reticle-stitcher/reticle_stitcher.py at 105a0e45197eaa245cb68fc87ef...
+Tool for stitcher an MPW into a full reticle for delivery to a foundry. - wafer-space/reticle-stitcher
+
+
+[2025-12-28 2:13 p.m.] mole99
+It is probably best to send you the stitched reticle so that you can take any measurements you need.
+I can also share the tilemap and manifest CSV files with you.
+
+However, not all of the designs on wafer.space are open source, some are proprietary. Therefore, I cannot share the complete reticle here.
+
+If you could share your email, I can send you all the files.
+
+
+[2025-12-29 12:41 a.m.] anfroholic
+> I had a look at page 3 of the doc, but I'm not sure how you arrived at the numbers of 0, 4, 8mm etc.
+The original dimensions I was given were 3.88mm x 5.07mm
+The original reticle size was 32mm x 26mm
+Divide that into the 40 original slots that gives 4mm x 5.2mm as the absolute die size
+Given the amount of cuts, this leaves 0.125mm for saw kerf and whatever. 
+
+I'm digging through all this as I'm writing this. So what you're telling me is that I never actually had the real size if the dies and the tape we just got wasn't made for the correct dimensions, correct?
+
+I think the part the dicing house cares about the most would be the drawing on page 3 and what I posted here. 
+These are the centerlines for where the saw cuts. We kindof get whatever is left after that (although we may get to choose some different blade thicknesses.) Those numbers should be accurate correct?
+
+{Attachments}
+2025-12_media/image-CE9F9.png
+
+
+[2025-12-29 11:05 a.m.] anfroholic
+I made another revision of the second carrier tape indexing mechanism. 
+I have the specific bearings on order and they should arrive in a couple days, but so far, I think I really like how this is turning out. 
+Should be fairly trivial to add a pushbutton of sorts to do the indexing.
+
+{Attachments}
+2025-12_media/Screenshot_2025-12-29_045700-5C9E9.png
+2025-12_media/20251229_044215-A3F17.jpg
+2025-12_media/20251229_044104-6AD8C.jpg
+
+
+[2025-12-29 8:04 p.m.] mole99
+Started a thread.
+
+
+[2025-12-31 4:32 p.m.] GitHub
+
+
+{Embed}
+anfroholic
+https://github.com/evezor/waferspace_die_sorter/compare/259081cf4895...51e3145b270d
+[waferspace_die_sorter:main] 2 new commits
+[`d21d808`](https://github.com/evezor/waferspace_die_sorter/commit/d21d808a161fdd01c0b7b71b61fe12cb7d617656) create manifest_importer and ignore files - anfroholic
+[`51e3145`](https://github.com/evezor/waferspace_die_sorter/commit/51e3145b270d93a7a9dcd02749a3c82c7f57d071) Update manifest_importer.py - anfroholic
+
+
+[2025-12-31 4:33 p.m.] anfroholic
+I don't think there's really anything that can be shared with this one, but reticle data from wafer.space can now be parsed and put into the stream.
+
+
 ==============================================================
-Exported 0 message(s)
+Exported 124 message(s)
 ==============================================================

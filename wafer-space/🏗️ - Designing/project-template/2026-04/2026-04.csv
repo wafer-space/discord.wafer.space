@@ -1,0 +1,32 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"169786952432746498","mithro_","2026-04-01T00:42:25.3360000+00:00","Yeah, there are a bunch of NDA stuff in it if I understand correctly.","",""
+"252198343764213760","dnaltews","2026-04-07T18:13:04.3010000+00:00","sqlite has something along those lines (but not *only* that)
+> The Test Harness #3 (TH3) is a suite of test cases for SQLite that provide 100% branch test coverage (and 100% modified condition/decision coverage) for the core SQLite in an as-deployed configuration using only published and documented interfaces. TH3 is designed for use with embedded devices, and is compatible with DO-178B. Every release of the public-domain SQLite is tested using TH3, and so all users benefit from the TH3 tests. But the TH3 tests are not themselves public. Hardware or system manufactures who want to have TH3 test run on their systems can negotiate a service agreement to have the SQLite Developers run those tests.","",""
+"384390069412429834","polyfractal","2026-04-08T16:36:06.4500000+00:00","wow, TIL!","",""
+"236632873782738944",".pogeg","2026-04-09T20:22:32.6610000+00:00","In the project template, is there `slot_defines.svh` for maximum, all edges pin configuration variant?","",""
+"236632873782738944",".pogeg","2026-04-09T20:23:01.2800000+00:00","The slot_defines  in the template seems to be defined for the default configuration, which makes sense","",""
+"323371864074485771","mole99","2026-04-10T06:29:18.9750000+00:00","Yes, those are the default configurations for each slot.
+
+You can try increasing the number of pads to see what fits. Make sure to update the [yaml config](https://github.com/wafer-space/gf180mcu-project-template/tree/main/librelane/slots) for your slot accordingly.
+
+However, you need to consider both the minimum pitch of the bondpads and the capabilities of your PCB supplier.
+This depends on the bonding service you are targeting and where you manufacture your PCB.","",""
+"169786952432746498","mithro_","2026-04-11T03:20:06.0660000+00:00","I did an exploration of what IOs options might be possible at https://mithro.github.io/gf180mcu-project-template/","",""
+"220639106915368960","tholin","2026-04-30T14:26:37.1030000+00:00","@Leo Moser (mole99) Setting NUM_ANALOG_PADS to 0 doesn’t work in the project template. Might need to guard some lines with `if NUM_ANALOG_PADS != 0` (is that even valid syntax?)","2026-04_media/image-64C6E.png",""
+"220639106915368960","tholin","2026-04-30T14:27:16.5780000+00:00","I think setting it to exactly 1 will also break since that generates `[0:0]`","",""
+"220639106915368960","tholin","2026-04-30T14:27:32.1000000+00:00","Same for all of them, actually, but this one feels the most likely to get set to 0","",""
+"596068704471482370","246tnt","2026-04-30T14:27:33.6780000+00:00","`[0:0]` should be valid AFAIK.","",""
+"1447738536638943333","dorythecat_v2","2026-04-30T14:29:27.7050000+00:00","I already reported this a whileago. This is because the generation code is not in an ifdef","",""
+"1447738536638943333","dorythecat_v2","2026-04-30T14:29:41.3280000+00:00","I believe I had said I would open an issue and try to fix it...","",""
+"1447738536638943333","dorythecat_v2","2026-04-30T14:29:43.9770000+00:00","And never did...","",""
+"1447738536638943333","dorythecat_v2","2026-04-30T14:29:45.9630000+00:00","Oops...","",""
+"323371864074485771","mole99","2026-04-30T15:06:21.9110000+00:00","Yeah, please open an issue so that I remember to fix it (or anyone that comes before me).","",""
+"1447738536638943333","dorythecat_v2","2026-04-30T15:06:59.0140000+00:00","I will open an issue and try to fix it myself, since I said I would I now feel a bit obligated lol","",""
+"1447738536638943333","dorythecat_v2","2026-04-30T15:07:00.1310000+00:00","Brb","",""
+"169786952432746498","mithro_","2026-04-30T15:10:32.6490000+00:00","I suggest opening the issue, then even if you fix it or not you are half way there 🙂","",""
+"1447738536638943333","dorythecat_v2","2026-04-30T15:14:40.7940000+00:00","Yeah I already opened it","",""
+"1447738536638943333","dorythecat_v2","2026-04-30T15:15:01.1620000+00:00","[#58](https://github.com/wafer-space/gf180mcu-project-template/issues/58)","",""
+"1447738536638943333","dorythecat_v2","2026-04-30T15:17:02.3230000+00:00","Seeing if a quick fix does it (it should but always gotta test xd)","",""
+"1447738536638943333","dorythecat_v2","2026-04-30T15:35:55.1950000+00:00","@Leo Moser (mole99) please test and lmk if [this pull request](https://github.com/wafer-space/gf180mcu-project-template/pull/59) fixes it! :D","",""
+"323371864074485771","mole99","2026-04-30T16:40:14.4640000+00:00","Thank you, I will take a look soon.","",""
+"1447738536638943333","dorythecat_v2","2026-04-30T16:43:02.8620000+00:00","No worries;","",""

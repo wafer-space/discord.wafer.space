@@ -1,2 +1,224 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
-"147848641153990657","kris____","2025-11-30T22:42:36.1580000+00:00","a ceramic package would be so pretty","",""
+"323874444344950794","markemer","2025-11-01T19:18:47.3080000+00:00","NIST lets you rent dicing saws and wire bonders by the hour. So does RPI in Troy, NY.","","👍 (1)"
+"169786952432746498","mithro_","2025-11-04T00:02:51.0310000+00:00","@Andrew Wingate / @carlfk -^","",""
+"252198343764213760","dnaltews","2025-11-04T00:18:35.4520000+00:00","So the <https://github.com/wafer-space/chip-on-board-wire-bonded-pcbs> repository talks about ""default"" designs that must share the wirebonding layout, PCB size (14mm x 16mm), connector location (if present).  Is the implication here that the crowd supply run will allow one to provide their own design that fits those constraints or is it expected that there will be one specific layout selected to be used by all COB orders?","",""
+"169786952432746498","mithro_","2025-11-04T00:34:20.2240000+00:00","@Brian Swetland - The expectation is that a number of designs will be selected as supported by the crowd supply run.","",""
+"756011607603019777","anfroholic","2025-11-04T01:13:31.4800000+00:00","I did see that. Where is NIST?","",""
+"169786952432746498","mithro_","2025-11-04T01:14:48.1310000+00:00","No idea 🙂","",""
+"323371864074485771","mole99","2025-11-07T11:41:08.0650000+00:00","@Tim 'mithro' Ansell @Andrew Wingate Could you please tell me what the minimum spacing between the bondpads is for CoB packaging? The bondpads are 60µm x 60µm.","",""
+"756011607603019777","anfroholic","2025-11-07T11:42:17.0910000+00:00","Are you talking about the PCB? Or the die?","",""
+"323371864074485771","mole99","2025-11-07T11:42:29.7660000+00:00","About the die.","",""
+"756011607603019777","anfroholic","2025-11-07T11:46:07.8980000+00:00","I really have no idea other than the document Tim sent me. 
+https://drive.google.com/file/d/1touEQHWAOTon_98TdiVLKKqsQ8RJJ1tP/view
+Looks like 15µm between pads","2025-11_media/image-6CFCD.png",""
+"323371864074485771","mole99","2025-11-07T11:49:49.5760000+00:00","Thanks! That's much better than I had expected.
+@Tim 'mithro' Ansell can you confirm?","","👍 (1)"
+"169786952432746498","mithro_","2025-11-07T11:52:24.8110000+00:00","Weren't you going to bed? 😛","","😭 (1)"
+"169786952432746498","mithro_","2025-11-07T11:53:33.7450000+00:00","I don't have any actual specs from the Chinese vendors at the moment -- the more spacing we can get the better I think? 
+
+@stuart - What are the requirements for your vendor?","",""
+"169786952432746498","mithro_","2025-11-09T03:39:13.9920000+00:00","https://www.youtube.com/watch?v=_xRH6R4bn-4","",""
+"169786952432746498","mithro_","2025-11-09T03:51:25.9830000+00:00","Seems like the full talk can be found at https://www.youtube.com/watch?v=dNBwY7L6niI (with worse audio it seems)","","😮 (1)"
+"492702620759228416","mattvenn","2025-11-13T10:02:48.7940000+00:00","@stuart 's doing some TT COB today, and I wanted to share this lovely photo!","2025-11_media/cob-9EFF7.jpg","❤️ (7),😍 (3)"
+"409936578606006273","ddddbbbb","2025-11-13T13:04:09.8830000+00:00","looks nice! is that by manual wirebonder or programmed?","",""
+"1184268085822238821","saladchap","2025-11-13T15:30:38.5830000+00:00","Programmed, we'll be sharing some more photos and info about the process soon 🦋","",""
+"1184268085822238821","saladchap","2025-11-13T15:32:14.1330000+00:00","","2025-11_media/IMG_20251113_161143348-C8DE2.jpg",""
+"1184268085822238821","saladchap","2025-11-13T15:32:19.3630000+00:00","Here's one post-glob","",""
+"409936578606006273","ddddbbbb","2025-11-13T15:57:43.6290000+00:00","programmed is the dream. I've assembled a lot of parts with a west-bond but someday I hope to find an affordable programmable bonder","",""
+"220639106915368960","tholin","2025-11-13T16:28:59.4610000+00:00","Yes, please share! I need to learn more about wire bonding if I wanna be able to bond my own chips one day soon.","",""
+"169786952432746498","mithro_","2025-11-14T21:41:05.7050000+00:00","Who's padring and die is that?","",""
+"596068704471482370","246tnt","2025-11-14T21:47:42.7130000+00:00","@Tim 'mithro' Ansell It's TT08, sky130 default pad ring.","",""
+"169786952432746498","mithro_","2025-11-14T22:08:39.8670000+00:00","I guess I actually ment the cob ring","",""
+"596068704471482370","246tnt","2025-11-15T07:14:59.2670000+00:00","Ah, it was done by @htamas  ( https://github.com/htfab/breakout-tt08-cob )","",""
+"538398807986274304","rzioma","2025-11-21T16:37:26.1690000+00:00","Hello, I am really late to the party, just finished reading the channel contents. On the plus side Z80 is all dandy and passing prechecks without violations.
+
+Similar to @Tholin I am interested in the DIP PCB.
+
+DIP is for Z80. That means only 40 pins all digital 5V. Classical DIP40.
+
+My preferences:
+1) first would be **small LGN** pcb as long as it can be soldered onto DIP PCB without destroying the wirebonding.
+2) second would be binding chip directly to **DIP40 PCB** where I can route GND **(to pin 29)** and VDD** (to pin 11 of the DIP40)**.
+
+Mezzanine - while very flexible I am worried that it would make the final package look ""weird"" and too high, also I still not sure what would that mean to the final cost. So for Z80 I would say it as a Plan C.
+
+**Just to clarify, is LGN option still on the table?**","",""
+"220639106915368960","tholin","2025-11-21T16:38:35.8500000+00:00","On a PCB, you can route any pad on the COB footprint to any pin on the headers - that’s no problem.
+I am trying to keep compatibility with DIP-40 ceramic carriers where those connections are fixed.","",""
+"220639106915368960","tholin","2025-11-21T16:38:45.9370000+00:00","So I had to move around some VDD/VSS pads","",""
+"220639106915368960","tholin","2025-11-21T16:39:08.8870000+00:00","And can thus no longer use the mezzanine breakout as it makes assumptions about the locations of the ground pads and wires them all to a ground plane.","",""
+"220639106915368960","tholin","2025-11-21T16:39:21.1160000+00:00","So, I’m also interested in other options.","",""
+"538398807986274304","rzioma","2025-11-21T16:40:14.2170000+00:00","Just to clarify VDD/VSS pads - you had to move them on the chip ring layout or outside (on PCB)?","",""
+"220639106915368960","tholin","2025-11-21T16:40:20.6960000+00:00","The chip ring layout","","👍 (1)"
+"538398807986274304","rzioma","2025-11-21T16:47:25.0910000+00:00","I looked at your reference to DIP-40 ceramic carrier and I wonder how did they managed to put Z80 in ceramic back in the day, because they have VDD/GND not on 40/20 pins.
+
+Did they have special ceramic packages for them? (unfortunately I don't have Z80 in ceramic for inspection)","",""
+"220639106915368960","tholin","2025-11-21T16:48:19.0330000+00:00","The ceramic carrier makes no assumptions about the location of the power pins. It simply breaks the 40 pins out to 40 bonding pads.","",""
+"220639106915368960","tholin","2025-11-21T16:49:11.4370000+00:00","There is a metal plane at the base of the cavity, but you have to bond it to the ground pin yourself by running a wire from the carrier’s bond bad to the plane.","",""
+"220639106915368960","tholin","2025-11-21T16:49:15.5200000+00:00","At least, that is how I understand it.","",""
+"220639106915368960","tholin","2025-11-21T16:49:48.0710000+00:00","But I still had to customize my die’s padring since I am replicating existing chips and thus need specific ground/power connections.","",""
+"538398807986274304","rzioma","2025-11-21T16:54:36.8020000+00:00","OK, I think I understood what you are saying. Ceramic unlike PCB enforces a very strict wiring between the padring and DIP pins.
+
+So you have to match the pin locations to the original chip essentially.","",""
+"220639106915368960","tholin","2025-11-21T16:55:27.0080000+00:00","Yes. And now I can’t use the mezzanine breakout because it assumes that the ground pads are in specific locations.","",""
+"538398807986274304","rzioma","2025-11-21T16:55:59.5740000+00:00","Yes, makes sense.","",""
+"220639106915368960","tholin","2025-11-21T16:56:32.0970000+00:00","This could technically be solved by creating a ""dumb"" version of that breakout that just routes each pad to a pin on the mezzanine without making any assumptions, with the PCB ground plane unconnected to any chip pads and routed to a spare mezzanine pin. This I *could* use for prototyping, as long as I also still get raw dies for my ceramic carrier experiments!","","👍 (1)"
+"220639106915368960","tholin","2025-11-21T16:57:07.5070000+00:00","But ultimately, I resigned myself to coming up with my own solution.","",""
+"538398807986274304","rzioma","2025-11-21T17:13:00.6030000+00:00","For LGN option, I also wonder, if it would be possible to have a narrower LGN board? (while keeping bonding pattern in the same way as “normal” LGN if it reduced the price / headache. Some internal pads would simply left unconnected for some pads)","",""
+"538398807986274304","rzioma","2025-11-21T17:13:12.6850000+00:00","Sorry for extremely crude art","",""
+"538398807986274304","rzioma","2025-11-21T17:13:58.6970000+00:00","","2025-11_media/image0-00B42.jpg",""
+"538398807986274304","rzioma","2025-11-21T17:17:38.4000000+00:00","The reasoning here is that it might not fit on DIP otherwise.
+
+Classic DIP has less than 14 mm on the top and “fake” PCB DIPs might have protruding pins from below","",""
+"538398807986274304","rzioma","2025-11-21T17:17:43.0280000+00:00","","2025-11_media/image0-A27F5.jpg",""
+"756011607603019777","anfroholic","2025-11-21T19:52:58.1940000+00:00","I will be taking one more pass at the cob PCB, I will try to be more amenable to changes with this revision. 
+Ultimately there are more pins on the die than there are on the mezzanine, so there will be some considerations needed there. 
+
+Afaik we still have not had any real conversations with wirebonders so are still not sure on what they are willing to accept for deviations from the norm. 
+I still think that as long as bonding locations and overall form factor remain constant we should be able to have a lot of variations.","",""
+"756011607603019777","anfroholic","2025-11-21T20:00:02.0600000+00:00","The LGA version is temporarily abandoned given concerns over reflowing and types of epoxies after wirebonding.
+I have also ordered some 50pin mezzanine connectors to play with for a lower pin count version. The cost for these connectors is quite affordable even at quantity. 
+
+https://www.lcsc.com/product-detail/C2763977.html","",""
+"538398807986274304","rzioma","2025-11-21T20:41:15.5110000+00:00","Is there a prototype bonding plan for 50pin mezzanine connector somewhere I could take a look? I think I only found a 70pin version in the repo.","",""
+"756011607603019777","anfroholic","2025-11-21T20:41:47.2920000+00:00","Sorry, no, It's just something I've been talking about doing.","",""
+"756011607603019777","anfroholic","2025-11-21T20:42:32.9240000+00:00","There is no padring yet, so not sure what anything will look like.","",""
+"538398807986274304","rzioma","2025-11-21T20:45:59.4410000+00:00","For retro DIP40 I am gravitating to use primarily North and South side (32 pins) of the padring and the rest put as close to the corner as possible.
+
+Dunno if that might be a stupid idea?
+
+The reasoning is to keep sides as empty as possible in case LGA comes back and I could keep it narrow.","",""
+"538398807986274304","rzioma","2025-11-21T20:48:41.3720000+00:00","Would / could that be compatible with 50pin mezzanine layout you are thinking about?","",""
+"756011607603019777","anfroholic","2025-11-21T20:55:13.5690000+00:00","That sounds close to what I had in mind. 
+Like I said above to @Tholin I think for now the safest bet could be to consider this a subset of the standard wirebonding frame. 
+I have ordered the board you see posted here and I'll be taking another pass at it and probably be shrinking some parts making the whole thing more narrow. 
+Also hopefully soon we will have open dialogs with wirebonders and we'll get a lot more info about what's best/possible/etc.","2025-11_media/image-81CA6.png",""
+"538398807986274304","rzioma","2025-11-21T21:22:57.1140000+00:00","Could you explain why do you say that it is a *subset* of a wirebonding scheme?
+
+I think I see all the pads from the chip pad frame (at least @Leo Moser (mole99)’s template) exposed and bondable. I am I missing something?","",""
+"756011607603019777","anfroholic","2025-11-21T21:30:50.4860000+00:00","I mean (and this is still my opinion only) that toolchains could remain more simple if we only change a few things at a time with the wirebonders, so the wirebonding frame would still have bonds at the same locations. Again, I don't know a lot of things, and what constitutes *different* as far as their pattern matching and other toolchains consider the same or not. 
+With the deadline looming, I don't know how many variations there will be in this run. But will try to keep everyone updated as I go along.","","👍 (1)"
+"538398807986274304","rzioma","2025-11-22T08:39:02.8270000+00:00","@Leo Moser (mole99) what is more advisable & future proof when **defining the mapping between the core signals and pads on a padring**?
+ Imagine I have 16-bit address bus of the retro chip and I want to assign them to a particular physical pads, should I better 
+a) change the binding order in `config.yaml` modifying `PAD_SOUTH`,`PAD_EAST` ...
+NOT changing power pad locations! Those stay always the same as in the template.","",""
+"538398807986274304","rzioma","2025-11-22T08:39:34.2480000+00:00","","2025-11_media/image-4CA82.png",""
+"538398807986274304","rzioma","2025-11-22T08:42:10.4620000+00:00","or
+b) only change how it is defined in Verilog file, say in `chip_core.sv`, but never touch `config.yaml` PADs","",""
+"538398807986274304","rzioma","2025-11-22T08:42:14.4330000+00:00","","2025-11_media/image-72036.png",""
+"323371864074485771","mole99","2025-11-22T11:20:23.7270000+00:00","Hi ReJ! I'm not sure what you mean by ""future proof"". Do you mean in regards to code changes to the template?
+
+The easier way is to change it in the RTL, as you only need to connect your signals to the bidir vector. However, it may be confusing to keep track of all the signals in bidir.
+
+That's why I think the better apporach would be to make another `generate` loop that instantiates the pads for the address bus and give it a better name than `bidir`, e.g. `addr_bus`. You would then need to reduce the number of bidir pins accordingly.
+Finally, you can add the `addr_bus\\[x\\].pad` instances to the yaml (and remove some of the bidir instances).
+
+Unfortunately, when the upstream template changes, this approach may lead to more conflicts.","",""
+"538398807986274304","rzioma","2025-11-22T12:55:41.0990000+00:00","TBH, I am mostly worried that if touch something in `config.yaml` the pad's physical locations will change 😓  maybe an unfound fear","",""
+"803213471402688522","_luke_w_","2025-11-22T13:19:37.1260000+00:00","I did update my pad config (here https://github.com/Wren6991/RISCBoy-180/blob/b3dc3bb41600123395ae37ca25f37694c35ff448/librelane/config.yaml#L150-L260) and left in lots of comments for the fixed locations of the VDD/VSS pads. Still quite paranoid and it's on my list of things to re-check before submission, but I thought this was less painful overall because I can use the correct pad names in IO constraints etc.","",""
+"803213471402688522","_luke_w_","2025-11-22T13:19:59.0010000+00:00","Are there any automated checks for VDD/VSS locations remaining compatible with the COB breakout?","","❤️ (1)"
+"323371864074485771","mole99","2025-11-22T13:47:45.2150000+00:00","As long as you keep the same number of pads on each side, you will be fine :)
+All of the I/O pads in gf180mcu are the same width. So, when LibreLane places them equidistant from each other, you will always get the same bondpad loactions.","","👍 (1)"
+"323371864074485771","mole99","2025-11-22T13:50:38.4680000+00:00","There aren't any checks for that yet.
+
+I could add one based on the XOR of the pad layer. However, this would probably only be for the second shuttle, as it requires information from the online platform on whether the user has selected the CoB option or not.","",""
+"323371864074485771","mole99","2025-11-22T13:54:45.1850000+00:00","If you mean checking whether there are actual VDD/VSS cells at these locations. This would require checking the cells themselves, which would be impratical. Someone could do a custom design which uses a different kind of power/ground cells.","",""
+"803213471402688522","_luke_w_","2025-11-22T14:07:45.4520000+00:00","Ok, I'll do a ""manual DRC"" for this run 😄","","👌 (1)"
+"538398807986274304","rzioma","2025-11-23T10:52:20.0760000+00:00","Please excuse my ASCII art, but I am struggling to map the names from the https://github.com/wafer-space/gf180mcu-project-template to the https://github.com/wafer-space/chip-on-board-wire-bonded-pcbs","",""
+"538398807986274304","rzioma","2025-11-23T10:52:55.8270000+00:00","```
+                              52  50  48  46  44  42  40  38
+                            53| 51| 49| 47| 45| 43| 41| 39| 37
+                            | | | | | | | | | | | | | | | | |
+                     ,------v-v-v-v-v-v-v-v---v-v-v-v-v-v-v-v-------.
+                     |      a a b b b b b b G b b b b b b b b       |
+               54 -->|i_0   1 0 3 3 3 3 3 3 N 3 3 3 3 2 2 2 2   VDD |+-- 36
+               55 -->|i_1       9 8 7 6 5 4 D 3 2 1 0 9 8 7 6   GND |--- 35
+               56 ---|GND                                       VDD |+-- 34
+               57 --+|VDD                                       GND |--- 33
+               58 -->|i_2                                       b_25|<-> 32
+               59 -->|i_3                                       b_24|<-> 31
+               60 -->|i_4                                       b_23|<-> 30
+               61 -->|i_5                   |                   b_22|<-> 29
+               62 ---|GND                 WAFER                 b_21|<-> 28
+               63 --+|VDD                -SPACE-                b_20|<-> 27
+               64 -->|i_6                 GF180                 GND |--- 26
+               65 -->|i_7                   |                   VDD |+-- 25
+               66 -->|i_8                                       b_19|<-> 24
+               67 -->|i_9                                       b_18|<-> 23
+               68 -->|i_10                                      b_17|<-> 22
+               69 -->|i_11                                      b_16|<-> 21
+               70 ---|GND                                       b_15|<-> 20
+               71 --+|VDD                                       b_14|<-> 19
+               72 ---|GND   c r b b b b b b G b b b b b b b b   GND |--- 18
+               73 --+|VDD   l s 0 1 2 3 4 5 N 6 7 8 9 1 1 1 1   VDD |+-- 17
+                     |      k t             D         0 1 2 3       |
+                     `------^-^-^-^-^-^-^-^---^-^-^-^-^-^-^-^-------'
+                            | | | | | | | | | | | | | | | | |
+                            0 | 2 | 4 | 6 | 8 | 10| 12| 14| 16
+                              1   3   5   7   9  11  13  15
+```
+
+Is this reasonable?","",""
+"538398807986274304","rzioma","2025-11-23T10:55:59.0870000+00:00","`i_0` .. `i_11` input_PADs
+`b_0` .. `b_39` bidir_PADs
+`a_0`, `a_1` analog_PADs
+based on the template default configuration","",""
+"538398807986274304","rzioma","2025-11-23T10:56:48.7790000+00:00","@Andrew Wingate , @Leo Moser (mole99) could you please validate if I didn't screw up the orientation here?","",""
+"596068704471482370","246tnt","2025-11-23T11:00:14.2680000+00:00","pad 0 is what you called pad 20 on the drawing above. But the position of power pads seems to match at least.","",""
+"756011607603019777","anfroholic","2025-11-23T11:01:05.4130000+00:00","You unfortunately did. You made the same mistake I did when I was originally trying to unwind all this. 
+I will continue to push that something similar to what you have here should be the standard, but the way it is now is that pin 0 is at the bottom left and then goes counterclockwise. 
+I have a spreadsheet here that may help you to unwind it. 
+https://docs.google.com/spreadsheets/d/1pI2BAEWEexXcXN3vah3SR85zPIV6eAXPGXc2bcvoSGU/edit?gid=0#gid=0
+My brain thinks it's backwards as well","2025-11_media/image-BEB7E.png","🙏 (1)"
+"538398807986274304","rzioma","2025-11-23T11:06:37.7570000+00:00","fixing","",""
+"538398807986274304","rzioma","2025-11-23T11:13:42.7310000+00:00","","2025-11_media/image-4C30C.png",""
+"538398807986274304","rzioma","2025-11-23T11:14:25.5570000+00:00","@Andrew Wingate thanks for adding template pin names in that spreadsheet! That's very helpful!","",""
+"756011607603019777","anfroholic","2025-11-23T11:15:02.2540000+00:00","I'm trying to but things are still backwards..... ugh...","",""
+"756011607603019777","anfroholic","2025-11-23T11:27:50.8800000+00:00","@tnt can you look at my spreadsheet and tell me if I got this right? 
+I am pretty sure I have east and west correct, but not sure if north and south line up. 
+https://docs.google.com/spreadsheets/d/1pI2BAEWEexXcXN3vah3SR85zPIV6eAXPGXc2bcvoSGU/edit?gid=0#gid=0","",""
+"756011607603019777","anfroholic","2025-11-23T11:28:39.8320000+00:00","I'm trying to match them up from the pad instance names from the template https://github.com/wafer-space/gf180mcu-project-template/blob/main/librelane/config.yaml","",""
+"538398807986274304","rzioma","2025-11-23T11:46:48.6690000+00:00","Now if I put it into COB orientation (**that is the most important part for me**):","2025-11_media/image-9EE1C.png",""
+"756011607603019777","anfroholic","2025-11-23T11:49:56.8350000+00:00","~~I'm going to say that  I think you have what  is the bottom row mirrored here.~~
+@ReJ aka Renaldas Zioma sorry no, I think this is correct","",""
+"756011607603019777","anfroholic","2025-11-23T11:51:04.5370000+00:00","But **do not** take my word for it","",""
+"538398807986274304","rzioma","2025-11-23T12:26:35.6860000+00:00","So the chip is **180 degrees rotated** (in relation to GDS orientation) when put on COB PCB and is NOT flipped, is that correct?","",""
+"756011607603019777","anfroholic","2025-11-23T12:28:15.0960000+00:00","Yes, I should update the picture. 
+The schematic symbol could be more useful.","2025-11_media/default_74pad_wirebond_symbol-318D6.png",""
+"756011607603019777","anfroholic","2025-11-23T12:29:28.6810000+00:00","You can have this one if you like","2025-11_media/image-9FCB4.png","👍 (1)"
+"756011607603019777","anfroholic","2025-11-23T12:44:35.2180000+00:00","This is maybe more in line with what you're thinking. 
+Now things are *landscape* but the numbering fits convention a little better. 
+Conventions are hard and not everyone will always agree on things. 
+
+Another one that has thrown me many times using CAD packages is *top*
+
+Americans think of the screen as a window to a virtual world and top is Z+ and does not matter which way *you* are facing
+Germans have *top* as Y+ as if you're imagining the virtual world extending from the tip of your nose. 
+It's hard to say that one is *the correct* way of doing things.","2025-11_media/image-F41AB.png","👍 (1)"
+"538398807986274304","rzioma","2025-11-23T17:35:53.6270000+00:00","@Tholin FYI, for fun I put chip on top of the diagram for ceramic package that you shared. Although some Z80 wires seems to be problematically bent, maybe it is not too bad.
+I don't think ceramic package is in the books for this run, but still interesting to entertain the idea.
+
+Z80 here has a certain advantage of VDD being on the side of DIP40 (pin 11) rather than 20/40.","",""
+"538398807986274304","rzioma","2025-11-23T17:35:58.5010000+00:00","","2025-11_media/image-70F58.png",""
+"805909190333038612","trev5514","2025-11-24T22:41:15.0920000+00:00","I'll give this channel a read over tonight, but I'm curious if anyone could answer this faster. Are there any considerations for wirebonding > 70 pins? My design will be roughly 128 pins. I'm swamped currently with the tapeout finalizing my design, but I would be willing to look into doing a dual 70 pin mezzanine connector OR a larger pin mezzanine connector if that might help after the tapeout.","",""
+"756011607603019777","anfroholic","2025-11-24T22:45:23.7360000+00:00","The standard padframe is 74 pins. You are free to do whatever you like, but going against the standard will likely end up with you having to make your own solutions.
+There are larger pin versions, but 70 seemed good at that fit the needs of most at the time. 
+There were conversations about using multiple connectors, but there were concerns over tolerances and like I said above, 70pins was adequate.","",""
+"805909190333038612","trev5514","2025-11-24T22:47:27.0950000+00:00","@Andrew Wingate Understood I'll try to find those conversations and read them over.","",""
+"756011607603019777","anfroholic","2025-11-24T22:48:50.7130000+00:00","sure, I posted quite a few pictures around those conversations, so searching `has: images` and maybe `from: @Andrew Wingate` could help
+*edit* also add `in: cob` as it's in this channel","","👍 (1)"
+"805909190333038612","trev5514","2025-11-24T22:58:44.8980000+00:00","Man this is so close. My design needs bare minimum 64 parallel pin bus + a clock signal and rst... Everything else I can cut. It looks like there are exactly 64 GPIO pins free which means I'm two short for the design to work! I'll read later and see if I can change some things around my design, I'd like to use the standard wirebond option if I can make it work.
+
+Scratch that it looks like a little less I just eyeballed it.","",""
+"756011607603019777","anfroholic","2025-11-24T23:03:37.8270000+00:00","There are something like 10 ground pins on the standard cob, it isn't necessary to have the routing down the cob stay the same as the default. 
+The part (for now) that seems most important is to keep the wirebonding pads (qty74) and the 74 pads in the default padring, then also the actual PCB to keep the 14x16mm size and the 70pin mezzanine. 
+@xianglin_pu and the Mosbius team have created their own routing to gain some extra pins by not having so many vss/vcc etc. 
+https://discord.com/channels/1361349522684510449/1429068742108909638/1429520076536811622","",""
+"805909190333038612","trev5514","2025-11-24T23:10:33.2320000+00:00","That is perfect! 68 Signal Pins would do it. I'm not framiliar with wirebond process. I'm assuming it's the mapping from the pads to the PCB, are you saying it's possible for us to design our own routing for the PCB and just use the pads as needed?","",""
+"756011607603019777","anfroholic","2025-11-24T23:12:50.2630000+00:00","A lot is still unknown, we're trying to keep as much standard as is practical possible, but for now, yes, you can have your own routing on the PCB. 
+
+Keep in mind that I'll likely be taking another pass and there will be some small changes, so you may want to hold off on designing something now, but overall yes, you can have your own routing on the PCB itself.","",""
+"805909190333038612","trev5514","2025-11-24T23:16:53.6940000+00:00","Sounds good. If the 68 signal pin version is available, I'll just bank on that for now and keep my design. After the tapeout I'll see where everyone is at and go from there, I haven't had time to look at the PCB design yet anyways. I'll give this channel a read later and hopefully be a little more informed. Thanks for the discussion.","","👍 (1)"
+"538398807986274304","rzioma","2025-11-30T13:57:31.5340000+00:00","@Leo Moser (mole99) FYI, Z80 in quarter size would be almost ceramic package-able, if not for 1 ground that is in the way...","2025-11_media/image-ABA6C.png",""
+"323371864074485771","mole99","2025-11-30T14:01:31.0190000+00:00","We might redo the default pinout for the second shuttle, since we may require additional power/ground pads. Perhaps we could find a pinout that works for ceramic as well.","","👍 (1)"
+"147848641153990657","kris____","2025-11-30T22:42:36.1580000+00:00","a ceramic package would be so pretty","","❤️ (1)"

@@ -1,0 +1,111 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"376976238528692225","nmz787","2026-04-01T01:40:25.1650000+00:00","Are there instructions for linking xschem to the pdk symbol+schematic libraries and bsim models ?","",""
+"376976238528692225","nmz787","2026-04-01T01:40:46.9570000+00:00","(or maybe the bsim models are more relevant to ngspice and or xyce)","",""
+"262706220073222144","namibj","2026-04-15T18:24:27.4870000+00:00","If you haven't figured it out yet I'm happy to share my setup I got a lil help from tnt on with you if you'd write it into a brief blog post like ""tutorial/instructions"", like this weekend.","",""
+"262706220073222144","namibj","2026-04-15T18:44:06.5120000+00:00","In other ""topic"", how high-order of a delta-sigma DAC would be reasonable to pull off for on-die bias generation?
+
+I'd prefer to get by with a modest oversampling ratio to keep decent loop bandwidth even with the digital PLL being ""limited"" to CMOS logic speeds instead of the core's MCML (there's no way I finish enough of a cell library to make even just the delta sigma modulator (probably MASH?) out of MCML, before the deadline) speeds...
+It'd already look at doing the fast side of the time-to-digital converter in the little amount of MCML (as that way it would at least be able to directly count quarter clocks of timing, I think...).","",""
+"376976238528692225","nmz787","2026-04-15T19:05:34.4810000+00:00","I would love to... But I'm on vacation away from laptop with my setup until Monday","",""
+"376976238528692225","nmz787","2026-04-15T19:06:12.9590000+00:00","And no I didn't figure it out. I spent time trying to kick openAI codex to build something for me lol","",""
+"262706220073222144","namibj","2026-04-15T20:14:34.7110000+00:00","wednesday daytime berlin time should work, probably","",""
+"262706220073222144","namibj","2026-04-20T16:23:43.9230000+00:00","Anyone happen to have some examples for ""parametric cells"" that try to do analog ""buffer""/""amplifier""?
+I.... _kinda_ need to quickly figure out how to automate layout-parasitics-including tuning so I can get it running. I have sufficiently-ish conquered xschem on the matter but that's ignorant of layout parasitics.","",""
+"292840623634120707","davidbuzz","2026-04-21T06:29:38.1090000+00:00","honest Q, is a MEMS device considered analog.?","",""
+"292840623634120707","davidbuzz","2026-04-21T06:32:51.2500000+00:00","I'm thinking , naturally of somethuing like a MEMS gyro or a MEMS accelerometer, eg, a ADXL213 https://www.richis-lab.de/images/ADXL213/03.jpg  https://www.richis-lab.de/images/ADXL213/06.jpg  https://www.richis-lab.de/images/ADXL213/07.jpg","",""
+"292840623634120707","davidbuzz","2026-04-21T06:33:25.7120000+00:00","reference: https://www.eevblog.com/forum/projects/mems-nice-die-pictures/","",""
+"292840623634120707","davidbuzz","2026-04-21T06:40:21.6400000+00:00","i believe 'laser ablation' of the wafer to make thru-trenches *after* its been processed like regular silicon for the electronic parts, and before packaging,  is the usual process , sometimes they are back-ground to make them thinner too.","",""
+"169786952432746498","mithro_","2026-04-21T06:42:33.1370000+00:00","Kinda but not really. MEMS generally requires things like undercuts which are not something supported on silicon process technologies - the circuits driving / reading the MEMS structures are frequently analog ADC/DACs. If you are interested in MEMS maybe check out science.xyz - they had credit card orderable MEMS processes.","",""
+"292840623634120707","davidbuzz","2026-04-21T06:59:25.2830000+00:00","https://www.analog.com/en/resources/technical-articles/accelerometer-and-gyroscopes-sensors-operation-sensing-and-applications.html
+a mems gyro is usually in constant oscillation and a mems accelerometer is usually not, but they are fundamentally compatible technologies.","",""
+"292840623634120707","davidbuzz","2026-04-21T07:00:11.1480000+00:00","its basically measuring capacitance change over time","",""
+"292840623634120707","davidbuzz","2026-04-21T07:01:06.2500000+00:00","anyway, dont mine me, ive got a thing for sensors. 🙂","",""
+"169786952432746498","mithro_","2026-04-22T11:18:48.5290000+00:00","https://science.xyz/docs/c/mems-pdk","",""
+"768095480264917023","ghaithalsabagh","2026-04-23T05:46:12.0440000+00:00","I am not that expert, but this one seems to be like silicon technologies.
+https://science.xyz/docs/d/mems-soi/index
+IHP as far as I know offers LBE (localized backside etching) too.","",""
+"596068704471482370","246tnt","2026-04-23T05:48:11.8370000+00:00","IHP does  LBE but not on the cost reduced runs, you'll have to go through their full commercial service for that.","",""
+"768095480264917023","ghaithalsabagh","2026-04-23T05:48:44.1940000+00:00","Actually it depends I think
+It is wafer post-processing","",""
+"768095480264917023","ghaithalsabagh","2026-04-23T05:49:05.4230000+00:00","You can still make a normal wafer on reduced cost, then send it to LBE","",""
+"768095480264917023","ghaithalsabagh","2026-04-23T05:49:09.7940000+00:00","I assume","",""
+"596068704471482370","246tnt","2026-04-23T05:49:25.1940000+00:00","No, because on reduced cost the wafer is shared ... you don't get a full wafer 🙂","",""
+"596068704471482370","246tnt","2026-04-23T05:50:01.2680000+00:00","Unless you can do LBE yourself on individual sliced dies.","",""
+"596068704471482370","246tnt","2026-04-23T05:50:36.2950000+00:00","And LBE not being on the cost reduced runs is what IHP themselves said because that question was asked at some point.","",""
+"768095480264917023","ghaithalsabagh","2026-04-23T05:52:41.1210000+00:00","The question is if an open-source community make a run for MEMS. Then they can share the wafer, but after LBE. What I mean is that It would be possible to handle such issue for a whole wafer after discussing with IHP. It would cost somehow more yes","",""
+"169786952432746498","mithro_","2026-04-23T05:53:45.4980000+00:00","Could you potentially get wafers.space wafers LBE? I do offer purchase of full wafers.","",""
+"768095480264917023","ghaithalsabagh","2026-04-23T05:54:53.2000000+00:00","Do you offer LBE?","",""
+"169786952432746498","mithro_","2026-04-23T14:21:00.6320000+00:00","I do not.","",""
+"942931661094531153","joaquinmatres","2026-04-27T05:09:17.6950000+00:00","For MEMs we have some open source structures here
+https://gdsfactory.github.io/gdsfactory/components.html#gdsfactory.components.mems.gear
+
+@namibj For amplifiers
+you can check out
+https://gdsfactory.github.io/IHP/cells.html","",""
+"384390069412429834","polyfractal","2026-04-27T17:03:52.6960000+00:00","I didn't realize gdsfactory had such a wide array of pcells!","",""
+"1331673337616793672","tpluck_","2026-04-27T17:56:09.1680000+00:00","So looks like Danube River is out of gas and we need someone to measure the test structures, anybody able and willing with a probe station to make it happen?","",""
+"1331673337616793672","tpluck_","2026-04-27T17:57:09.0340000+00:00","https://wiki.libresilicon.com/index.php?title=Danube_River","",""
+"1331673337616793672","tpluck_","2026-04-27T17:58:52.8760000+00:00","(unless you're some kind of corporate shill)","",""
+"384390069412429834","polyfractal","2026-04-27T18:06:24.8980000+00:00","*keyence enters chat*","",""
+"1331673337616793672","tpluck_","2026-04-27T18:34:27.3510000+00:00","","2026-04_media/889303a7353ff99448498e633be0e9afb7c9a0cc-B0A9C.png",""
+"262706220073222144","namibj","2026-04-27T21:03:51.7520000+00:00","_looks at beloved https://www.iptest.com/ mousepad_","",""
+"169786952432746498","mithro_","2026-04-28T07:30:14.4280000+00:00","Probably out of our price range, but CoolCAD did a bunch of the testing for the SKY130 raw data repo in conjunction with NIST.","",""
+"384390069412429834","polyfractal","2026-04-28T19:13:14.2470000+00:00","still poking at my GF180 pdk for ALIGN. starting to see light at the end of the tunnel, most (synthetic) generated designs are coming out LVS and DRC clean. Still needs some human sanity checking to make sure the schematics are what they are actually supposed to be. But from just skimming designs they are looking better than before, respecting constraints like symmetry now, etc","2026-04_media/image-B4C06.png","ferrisCatOwO (1)"
+"384390069412429834","polyfractal","2026-04-28T19:14:35.7810000+00:00","still some issues with spacing but it's a constant battle against overzealous packing and DRC violations 🫠","",""
+"169786952432746498","mithro_","2026-04-29T00:02:05.1180000+00:00","When you say ALIGN - do you mean the project that came out of the DARPA IDEA/POSH program?","",""
+"384390069412429834","polyfractal","2026-04-29T00:09:40.9720000+00:00","possibly? This: https://github.com/ALIGN-analoglayout/ALIGN-public","",""
+"384390069412429834","polyfractal","2026-04-29T00:14:04.9270000+00:00","(yes seems to be from that DARPA IDEA/ERI ""no humans in the loop"" project)","",""
+"169786952432746498","mithro_","2026-04-29T00:17:22.7510000+00:00","Yeap!","",""
+"169786952432746498","mithro_","2026-04-29T00:18:17.8520000+00:00","@BreakingTaps - We should most certainly send GF180MCU support upstream if you get it working.","",""
+"169786952432746498","mithro_","2026-04-29T00:18:45.1720000+00:00","@BreakingTaps - I met the people behind ALIGN a few times at the DARPA workshops.","",""
+"384390069412429834","polyfractal","2026-04-29T02:02:57.8470000+00:00","will try to tidy things up when I get everything in working order! I did make some changes to ALIGN itself which may be difficult to upstream but we can have a chat with them. There are a number of assumptions baked into how it places cells, mostly assuming you're on a finfet node. So it standardizes row height, adds dummy poly fingers after cells, stuff like that. Ended up wasting a ton of space on a big node like GF180
+
+Loosening some of those rules then puts cells in potential corner-contact between rows, so added some constraints to the ILP solver to avoid corner touches etc etc","",""
+"384390069412429834","polyfractal","2026-04-29T02:03:21.0820000+00:00","that said, I think the GF180 PDK itself should be portable to ""stock"" ALIGN, it'll just be bulky","",""
+"169786952432746498","mithro_","2026-04-29T06:20:45.6570000+00:00","@BreakingTaps - They have some demonstration bulk node PDKs","",""
+"384390069412429834","polyfractal","2026-04-29T16:14:46.4000000+00:00","yeah there's a sky130 in there. i haven't looked at it for a while but iirc it also had a ton of wasted space","",""
+"384390069412429834","polyfractal","2026-04-29T16:31:57.5280000+00:00","The biggest problem was multiple dummy fingers get appended to edges of cells. The hardcoded values in ALIGN uses gateDummy=3, which adds 3.2um per cell of ""wasted"" poly strips per cell (multiplied by the number of x_cells the transistor is being split into). Cells are also rounded to multiples of M3 pitch (800nm) which can interact badly with the finger widths too and bulk it even more
+
+Row heights are pinned to the tallest cell, so you can also get big empty rows despite the solver trying to minimize area. 
+
+None of it is _wrong_ per se, but it's definitely optimized for a node that has discrete diffusion/fin widths and tight gate pitches (at least from my outsider, relative newcomer 🙂 )","",""
+"384390069412429834","polyfractal","2026-04-29T16:36:52.8140000+00:00","but luckily, open source! so easy enough to tweak and experiment with 🙂","",""
+"262706220073222144","namibj","2026-04-29T20:53:52.5250000+00:00","got a schematic to go wtih that layout by chance?","",""
+"384390069412429834","polyfractal","2026-04-29T23:24:30.1590000+00:00","Believe it was this one. Caveat that this schematic was synthetically generated and very possibly nonsensical 🙂
+
+```
+* Folded Cascode OTA: W=1.32u, NF=2
+.SUBCKT OTA_FOLDED_W1P32U_NF2 VSS VDD INP INN OUT VBIAS VCASN VCASP
+* PMOS input differential pair
+M1 N1 INP TAIL VDD pfet_03v3 w=1.32u l=280n nf=2 m=1
+M2 N2 INN TAIL VDD pfet_03v3 w=1.32u l=280n nf=2 m=1
+* Tail current source
+M0 TAIL VBIAS VSS VSS nfet_03v3 w=2.64u l=280n nf=2 m=2
+* Folded NMOS cascode
+M3 N1 VCASN N3 VSS nfet_03v3 w=1.32u l=280n nf=2 m=1
+M4 N2 VCASN N4 VSS nfet_03v3 w=1.32u l=280n nf=2 m=1
+* NMOS current source
+M9 N3 VBIAS VSS VSS nfet_03v3 w=1.32u l=280n nf=2 m=1
+M10 N4 VBIAS VSS VSS nfet_03v3 w=1.32u l=280n nf=2 m=1
+* PMOS cascode loads
+M5 N1 VCASP N5 VDD pfet_03v3 w=1.32u l=280n nf=2 m=1
+M6 N5 N5 VDD VDD pfet_03v3 w=1.32u l=280n nf=2 m=1
+M7 N2 VCASP OUT VDD pfet_03v3 w=1.32u l=280n nf=2 m=1
+M8 OUT N5 VDD VDD pfet_03v3 w=1.32u l=280n nf=2 m=1
+.ENDS OTA_FOLDED_W1P32U_NF2
+```","",""
+"262706220073222144","namibj","2026-04-29T23:25:10.1390000+00:00","as long as it reasonably confidently corresponds to the layout I'm fine","",""
+"384390069412429834","polyfractal","2026-04-29T23:26:11.8090000+00:00","(there's also a constraint file that goes along with that somewhere, which specifies stuff like symmetry. would need to hunt for that when i get home)","",""
+"262706220073222144","namibj","2026-04-29T23:26:18.7770000+00:00","i'd happily take a ""fresh"" pair btw if that's easier to givew with confidence","",""
+"262706220073222144","namibj","2026-04-29T23:26:40.1760000+00:00","oh I'm going to bed now, they took my teeth yesterday 🙁","",""
+"384390069412429834","polyfractal","2026-04-29T23:26:58.1630000+00:00","😩  oof, feel better!","",""
+"262706220073222144","namibj","2026-04-29T23:27:03.8050000+00:00","thx","",""
+"262706220073222144","namibj","2026-04-29T23:27:28.2140000+00:00","I'd expect to look at things now sooner than 20 hours from now fyi","",""
+"169786952432746498","mithro_","2026-04-30T03:19:52.5640000+00:00","@BreakingTaps - IIRC The ALIGN team had outstanding success with FinFET nodes due to the very limited type of transistors that you are allowed on them and then struggled with extending it back to planar technologies.","","👍 (1)"
+"384390069412429834","polyfractal","2026-04-30T04:44:01.7190000+00:00","ahh interesting. that makes sense, tracks with the sorts of limitations i'm seeing. on the upside, claude/codex are helping me beat back the edge cases by just throwing tons of samples at it and iterating on failures. bit tedious but making progress","",""
+"169786952432746498","mithro_","2026-04-30T09:34:17.6760000+00:00","""bit tedious but making progress"" I think describe all software development a lot of the time 😉","","😁 (1)"
+"1331673337616793672","tpluck_","2026-04-30T14:04:13.1080000+00:00","Welp, that one's dead on arrival - hope there's something left on Run 2 to get this done for real without ideological strings attached","",""
+"384390069412429834","polyfractal","2026-04-30T14:26:22.5570000+00:00","huh? ideological strings attached?","",""
+"384390069412429834","polyfractal","2026-04-30T14:26:28.7640000+00:00","feel like I'm missing a ton of context here 😄","",""
+"169786952432746498","mithro_","2026-04-30T15:09:42.9930000+00:00","@BreakingTaps - @Thomas Pluck 2.1 was offering to figure out characterization of existing test structures taped out on the GF180MCU process technology (see https://siliconpr0n.org/archive/doku.php?id=mcmaster:efabless:gf180mcu-mpw18h1-18100001&s[]=gf180mcu) -- The idea that having some data from these structures would mean better/more advanced ones could then be created for Run #2 and allow even better understanding of the process technology. Sadly the people who currently possess the die are unwilling to share them.","","👍 (2)"
+"384390069412429834","polyfractal","2026-04-30T15:11:42.7620000+00:00","ahh, booo 🙁","","ferrisCatPensive (3)"

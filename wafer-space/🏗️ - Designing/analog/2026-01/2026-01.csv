@@ -1,1 +1,20 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
+"384390069412429834","polyfractal","2026-01-16T17:55:15.8240000+00:00","Been dabbling with analog recently and was curiosu if any of the automated analog layout tools worked well. ALIGN (https://github.com/ALIGN-analoglayout/ALIGN-public) looked most promising and had a Sky130 PDK, so I threw Claude Code at it. Sorta have a working GF180 PDK now? Takes in a spice netlist, constraints (matching, symmetry, etc) and spits out GDS
+
+Found some pretty serious limitations though, namely that ALIGN was built with finfet nodes in mind so there are a lot of restrictive routing/placement constraints baked into the core. Had to modify the core to get even moderately compact layouts and it's still a lot of wasted space. DRC and LVS match, but haven't run simulations on the generated output yet... could be hot garbage 😅 
+
+Still, neato tool. Kinda want to start working on something that's tailored for big legacy nodes that have less restrictive DRC.
+
+(screenshot is a CSA + Discriminator + Krummenacher feedback circuit that i've been playing around with)","2026-01_media/Screenshot202026-01-1620084816-8E5A4.png","❤️ (2),👍 (2)"
+"492702620759228416","mattvenn","2026-01-17T13:18:36.3300000+00:00","Harald pretl also tested an automatic layout tool on tt05","",""
+"492702620759228416","mattvenn","2026-01-17T13:20:01.2560000+00:00","https://tinytapeout.com/chips/tt05/tt_um_tt05_analog_test","","👀 (1),😮 (1)"
+"169786952432746498","mithro_","2026-01-20T07:23:55.3430000+00:00","@BreakingTaps - Take a look at OpenFASoC from Mehdi","",""
+"169786952432746498","mithro_","2026-01-20T07:24:18.9810000+00:00","@BreakingTaps - https://www.crowdsupply.com/wafer-space/gf180mcu-run-1/updates/openfasoc","","😮 (1)"
+"1401841055975870476","scafir","2026-01-20T17:38:04.7720000+00:00","Finally got the LVS working end-to-end from xschem to klayout without any manual  conversion steps from a user point of view 🎉 
+Just need to wait for @Leo Moser (mole99)  to upstream the improvements from wafer space now 🙂","2026-01_media/image-C2647.png","🎉 (4)"
+"596068704471482370","246tnt","2026-01-20T17:53:00.1720000+00:00","And did you check you didn't break the xschem / magic / netgen flow ? (like if you changed anything in the xschem symbols for instance that could break the other flows ... )","",""
+"1401841055975870476","scafir","2026-01-20T17:58:08.7660000+00:00","The changes are fully contained in the klayout directory, so likelihood of breaking other flows is rather low","","👌 (1)"
+"323371864074485771","mole99","2026-01-20T19:03:56.4870000+00:00","Awesome Clyde 🥳
+I'll start upstreaming the wafer.space changes to the FOSSi repos soon. However, you don't necessarily have to wait for that, since your LVS changes should be standalone?","",""
+"1401841055975870476","scafir","2026-01-20T20:39:39.0610000+00:00","It is slightly dependent, as it adds new GUI options, but let's discuss it when I open the MR, maybe they are not necessary","","👍 (2)"
+"384390069412429834","polyfractal","2026-01-21T05:47:14.5620000+00:00","oh neat! Will give this a closer read tomorrow","",""

@@ -2,9 +2,210 @@
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / cob
 Topic: Channel for discussing chip-on-board packaging options for wafer.space bare die.
-After: 02/23/2026 03:18
+After: 2026-01-31 11:59 p.m.
+Before: 2026-03-01 12:00 a.m.
 ==============================================================
 
+[2026-02-08 10:21 p.m.] logic_destroyer
+crazy
+
+https://x.com/matthewvenn/status/2020521149713600550
+
+{Embed}
+Matthew Venn (@matthewvenn)
+https://twitter.com/matthewvenn/status/2020521149713600550
+I'm with @Zeptobars and we're going to try a FIB \(focused ion beam\) edit on a @tinytapeout chip\.
+
+Here's the incredible machine that can do it\.\.\.
+2026-02_media/HApVIsibkAAEfBg-6F432.jpg%3Alarge
+X
+
+{Reactions}
+waferspace (2)
+
+[2026-02-16 2:15 a.m.] arabidsquid
+Hey, so I was making a bunch of add-on boards for the upcoming next version of [Barnacle Board](https://github.com/Architeuthis-Flux/Barnacle_Board) and figured I'd make one that maps your 70 pin mezzanine connector to a breadboard. 
+Before I finish routing (and adding labels for the COB pads), I figured I should ask y'all some stuff:
+- Do you even want this? 
+- How likely is it that you want `VDD_CORE`, `VDD_IO`, and `PWR_AUX` separate?
+- What do you generally do with `PWR_AUX`?
+- Is there anything you can think of that would make this more awesome?
+
+{Attachments}
+2026-02_media/ws-4-400E5.jpg
+2026-02_media/ws-1-26A9B.jpg
+2026-02_media/ws-2-79FDA.jpg
+2026-02_media/IMG_2511-88F28.jpeg
+2026-02_media/Screenshot_2026-02-15_at_6.00.03_PM-11DCF.png
+
+{Reactions}
+❤️
+
+[2026-02-16 2:19 a.m.] anfroholic
+Awesome!!
+
+> Do you even want this?
+Not sure, but it looks super cool!!
+
+> How likely is it that you want VDD_CORE, VDD_IO, and PWR_AUX separate?
+This was a spec pulled from Tiny Tapeout. Currently they have them all bridged on the die, but that may change in the future. Use your own judgement here. 
+
+> What do you generally do with PWR_AUX?
+Again, this is likely more power pins than a *regular* design would need. We needed a standard and they had the most robust needs and had the most documentation, so that's how we ended up here. 
+
+> Is there anything you can think of that would make this more awesome?
+Artwork! 😉 
+
+Looks great though. Super cool, thanks for sharing!
+
+{Reactions}
+🔥 (2)
+
+[2026-02-16 2:23 a.m.] arabidsquid
+What do you mean, I do have artwork on there. jk I'll definitely add some
+
+{Attachments}
+2026-02_media/Screenshot_2026-02-15_at_6.21.51_PM-AE225.png
+
+{Reactions}
+❤️
+
+[2026-02-16 2:23 a.m.] anfroholic
+The whole board is a piece of art. It looks great!
+
+{Reactions}
+ColorJumpLogo
+
+[2026-02-16 2:24 a.m.] arabidsquid
+Thanks for that, so I can treat all those power pins as a single node?
+
+
+[2026-02-16 2:28 a.m.] anfroholic
+We're still working to harden the standard. 
+This will likely come sometime after the first run is complete. 
+I designed a couple tests. 
+https://kicanvas.org/?repo=https%3A%2F%2Fgithub.com%2Fwafer-space%2Fchip-on-board-wire-bonded-pcbs%2Ftree%2Fmain%2Fscratch%2Fmotherboards%2Fmotherboards
+
+https://github.com/wafer-space/chip-on-board-wire-bonded-pcbs/tree/main/scratch/motherboards/motherboards
+It looks like I did **Not** bridge them.
+
+{Embed}
+https://github.com/wafer-space/chip-on-board-wire-bonded-pcbs/tree/main/scratch/motherboards/motherboards
+chip-on-board-wire-bonded-pcbs/scratch/motherboards/motherboards at...
+Wire bonded chip on board PCB designs. Contribute to wafer-space/chip-on-board-wire-bonded-pcbs development by creating an account on GitHub.
+2026-02_media/chip-on-board-wire-bonded-pcbs-66450
+
+
+[2026-02-16 2:29 a.m.] anfroholic
+Really I have no idea what others have done. 
+Getting a concensus on what people actually *did* would be good
+
+
+[2026-02-16 2:30 a.m.] anfroholic
+And when I say I did not bridge them, I mean VDD_IO <==> VDD_CORE 
+The ones on the same nets are bridged
+
+{Reactions}
+❤️
+
+[2026-02-16 2:33 a.m.] arabidsquid
+Legit. That's good news because it can fit on a half size breadboard that way.
+
+{Reactions}
+👍
+
+[2026-02-16 2:36 a.m.] arabidsquid
+And eventually you'll be able to plug these into a [Jumperless](https://jumperless.org/) crossbar matrix for some automated testing or whatever
+
+{Embed}
+https://jumperless.org/
+Home - Jumperless Docs
+Learn how to use your Jumperless
+2026-02_media/ExplodraftWords-3C48D.png
+
+{Reactions}
+❤️
+
+[2026-02-16 2:36 a.m.] anfroholic
+Sweet! I recongnized one of those from your pic above
+
+{Reactions}
+❤️
+
+[2026-02-16 2:47 p.m.] tholin
+Hmmmm...
+
+{Attachments}
+2026-02_media/image-68A99.png
+
+{Reactions}
+💜
+
+[2026-02-16 2:49 p.m.] anfroholic
+Awesome!
+Are the dipswitches for project selection on your multiproject die?
+
+
+[2026-02-16 2:50 p.m.] tholin
+Yes
+
+{Reactions}
+👍
+
+[2026-02-16 4:07 p.m.] tholin
+And mezzanine version, which I’d actually prefer
+
+{Attachments}
+2026-02_media/image-CDDF4.png
+
+
+[2026-02-16 5:59 p.m.] arabidsquid
+Oh sick, which pads did you use for project selection? and is there any consensus on that? (I'm guessing no)
+
+
+[2026-02-16 6:26 p.m.] tholin
+No, no consensus
+
+
+[2026-02-17 10:02 p.m.] mithro_
+@Architeuthis Flux - So you going to give creating a custom replacement for your analog muxes a go on the next wafer.space run?
+
+
+[2026-02-17 10:03 p.m.] mithro_
+@Architeuthis Flux - It might be worth chatting with @peterkinget and the MOSBius team, they kind of already doing something in the same type of category.
+
+
+[2026-02-17 10:07 p.m.] arabidsquid
+Yeah, I'm definitely toying with that idea.
+
+
+[2026-02-17 10:09 p.m.] arabidsquid
+Yeah I watched that stream you did a few months ago, super rad. I've been meaning to hit you up @peterkinget and chat.
+
+
+[2026-02-27 9:07 p.m.] egorxe
+@Andrew Wingate Which glue is planned to be used to glue the die to the cob, the conductive or non-conductive type? I guess it's conductive so the die bulk will be grounded, right?
+
+
+[2026-02-27 9:30 p.m.] anfroholic
+This is something that's a little outside my expertise. 
+Part of me says there seems to be little reason why we would have anything other than conductive, so would imagine that would be what we ask for. 
+I also imagine we can have whatever we ask for. 
+
+Is there anyone out there who feels strongly either way?
+@Tim 'mithro' Ansell
+
+
+[2026-02-27 9:47 p.m.] mithro_
+@stuart - what has Tiny Tapeout been using?
+
+
+[2026-02-27 9:52 p.m.] 246tnt
+We use conductive epoxy.
+
+{Reactions}
+💜 👍 (3)
+
 ==============================================================
-Exported 0 message(s)
+Exported 26 message(s)
 ==============================================================

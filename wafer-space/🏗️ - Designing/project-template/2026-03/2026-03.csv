@@ -1,0 +1,77 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"258871392840187904",".monkeyonkeyboard.","2026-03-16T01:49:21.2810000+00:00","heya, i noticed that magic and klayout have different DRC errors, and this is reproducible in the upstream template https://github.com/wafer-space/gf180mcu-project-template/actions/runs/22961298626/job/66652405640
+```
+3503
+* DRC
+Failed 𐄂
+KLayout DRC errors: 0
+Magic DRC errors: 126743
+Check the report directories of KLayout.DRC and Magic.DRC.
+```
+is this an issue? do we trust klayout or magic?","",""
+"376976238528692225","nmz787","2026-03-16T03:40:39.5530000+00:00","In my experience at ""corporate semiconductor"", different tools reporting differently can either be real runset issues, or just differences in how they report errors","",""
+"323371864074485771","mole99","2026-03-16T08:05:13.2980000+00:00","Started a thread.","",""
+"376976238528692225","nmz787","2026-03-16T09:02:42.9460000+00:00","I'm seeing a lot of warnings like `Error while reading cell ""METAL1_FILL"" (byte position 144857526): Warning: cell ""Metal1_fill_cell"" placed on top of itself.  Ignoring the extra one.` that I don't see in the github actions #55","",""
+"376976238528692225","nmz787","2026-03-17T05:36:41.0050000+00:00","is there no layerprops/layermap in klayout format (usually lyp, I think)?","",""
+"376976238528692225","nmz787","2026-03-17T05:41:46.1450000+00:00","ah i got it","",""
+"376976238528692225","nmz787","2026-03-17T05:59:00.7810000+00:00","the seal ring is interesting, in that the vias are not drawn to be hermetic... I guess GF is swapping that part of the database after they tape-in","",""
+"323371864074485771","mole99","2026-03-17T07:03:47.4620000+00:00","If you open the layout through librelane (`make librelane-klayout`), they layer map will already be loaded.","",""
+"323371864074485771","mole99","2026-03-17T07:04:21.8990000+00:00","No, that's just the structure of the seal ring as specified by the [PDK documentation](https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_12_2.html).","",""
+"376976238528692225","nmz787","2026-03-17T07:04:57.0410000+00:00","I am fairly positive the fab is swapping out the via layers under the sealring ID","",""
+"376976238528692225","nmz787","2026-03-17T07:05:03.4680000+00:00","they are not hermetic as-is","",""
+"376976238528692225","nmz787","2026-03-17T07:05:13.7230000+00:00","(Intel does this)","",""
+"376976238528692225","nmz787","2026-03-17T07:06:07.5470000+00:00","in that case, depending on the node, they do or do not show the customer the real design... due to process churn and violating DRC","",""
+"376976238528692225","nmz787","2026-03-17T07:07:10.3120000+00:00","unless they have some other very different way of ensuring hermeticity","",""
+"376976238528692225","nmz787","2026-03-17T07:09:04.9120000+00:00","has anyone delayered one of these?","",""
+"323371864074485771","mole99","2026-03-17T07:10:32.1470000+00:00","I can guarantee you, they don't - I saw the final mask data.
+
+Why would they specify the exact placement of vias in the guard ring documentation **and** have custom DRC rules for them when they're going to replace it anyway?","",""
+"376976238528692225","nmz787","2026-03-17T07:14:17.0920000+00:00","Intel does the same","",""
+"376976238528692225","nmz787","2026-03-17T07:14:38.2850000+00:00","but cross-section and teardown show 100% continuous perimeter rings on every level, metal and via","",""
+"376976238528692225","nmz787","2026-03-17T07:16:52.0580000+00:00","you saw post-OPC database?","",""
+"323371864074485771","mole99","2026-03-17T07:17:02.2110000+00:00","yes","",""
+"376976238528692225","nmz787","2026-03-17T07:17:13.0050000+00:00","including synthesized layers, etc?","",""
+"323371864074485771","mole99","2026-03-17T07:18:05.1680000+00:00","The final mask data for the complete reticle, yes.","",""
+"376976238528692225","nmz787","2026-03-17T07:18:48.4530000+00:00","huh, I feel like I'm missing something now","",""
+"376976238528692225","nmz787","2026-03-17T07:24:20.8730000+00:00","GPT says there's orders of magnitude less risk of ""moisture-induced Vt drift"" for such a large planar process, hmm","",""
+"376976238528692225","nmz787","2026-03-17T07:29:44.3550000+00:00","I suppose you have a point about PDK rules for vias... Intel doesn't have those, they supply X/Y/corner cells for customer to place","",""
+"728516105680846892","chips4makers","2026-03-17T10:06:32.9080000+00:00","Don't know where you get the hermeticity requirement for the vias in the seal ring from ?
+AFAIK main purpose of seal ring is to protect the design from cracks and stress caused by wafer sawing. This can be done with normal sized vias in a ring.","",""
+"376976238528692225","nmz787","2026-03-17T15:35:20.4340000+00:00","I am on team that owns seal ring collateral design. Crack arrest is only once function for us","",""
+"169786952432746498","mithro_","2026-03-18T02:52:23.1760000+00:00","@nmz787 - This process is from the late 1990's / early 2000's -- I'm pretty things have changed a lot since then.","",""
+"323371864074485771","mole99","2026-03-26T14:09:04.2870000+00:00","📢 Project Template Update!
+
+Version 1.4.0 has been tagged, which includes an upgrade to LibreLane 3.0 🎉
+Read the blog post to find out more about LibreLane 3.0: https://www.librelane.org/blog/2026-03-25-website_release_3-0
+
+- Project Template [1.4.0](https://github.com/wafer-space/gf180mcu-project-template/releases/tag/1.4.0)","","❤️ (1),🥳 (1),waferspace (1)"
+"323371864074485771","mole99","2026-03-26T14:09:17.9470000+00:00","Pinned a message.","",""
+"384390069412429834","polyfractal","2026-03-29T20:36:36.7300000+00:00","kinda related, started to work on a dashboard to make my life easier in the next time I tape something out. right now it's mostly just spewing out the saved metrics, but I'd like it to be my centralized ""build manager"". Kick off new builds, ""fork"" existing builds with new settings, investigate performance and metrics, help manage ECO steps, comparisons, etc","2026-03_media/image-4692F.png,2026-03_media/Screenshot_2026-03-29_132711-3BF80.png,2026-03_media/Screenshot_2026-03-29_132722-3FCDC.png,2026-03_media/Screenshot_2026-03-29_132741-663C1.png","😎 (1),👍 (1)"
+"384390069412429834","polyfractal","2026-03-29T22:15:15.3210000+00:00","as an aside, it's kinda tragic how OpenRoad is _close_ to being a nice set of modular tools... but then they baked it all into one binary and duct tape it all together with tcl and odb monstrosity 🙁","",""
+"1187141985530818611","ravenslofty","2026-03-29T22:26:15.3020000+00:00","The problem they had was spending so much time serialising and deserialising information between commands.","",""
+"1187141985530818611","ravenslofty","2026-03-29T22:28:28.7360000+00:00","Because it *was* a ""nice set of modular tools"" and it was completely unusable.","",""
+"384390069412429834","polyfractal","2026-03-29T22:31:11.5900000+00:00","aha, interesting! i should do some more reading on the history/context so i'm less judgmental 🙂","",""
+"384390069412429834","polyfractal","2026-03-29T22:31:14.2920000+00:00","You can battle serdes cost with mmap'ing zero-copy serialization though","",""
+"384390069412429834","polyfractal","2026-03-29T22:32:03.3770000+00:00","(which isn't far from what odb is doing anyway from my understanding)","",""
+"1187141985530818611","ravenslofty","2026-03-29T22:33:33.3720000+00:00","For the sake of a thought experiment, how would you imagine openroad should be split up?","",""
+"384390069412429834","polyfractal","2026-03-29T22:36:43.0780000+00:00","well in a nice world where everything behaves, all the modules (rsz, gpl, ifp, tap, etc) would be individual tools that LibreLane can bolt together at will. and if you wanted to say develop a new rsz you just drop in your own version that speaks to the shared odb backend.
+
+But right now if you wanted to do that you have to rebuild the whole thing. and the whole orchestration between librelane and openroad seems very fraught. python -> env variables -> tcl -> openroad binary and back
+
+That said, I recognize it's not a nice world and most things don't behave as we'd like 🙂 so just grumping","",""
+"1187141985530818611","ravenslofty","2026-03-29T22:41:23.1750000+00:00","Well, I would argue the most core part of openroad is actually sta, because everything needs to reference sta for timing calculations.
+
+But there are a lot of rather intricate connections between the two; if you've ever looked at things like LL's `Odb.InsertECOBuffers`, it relies on being able to modify a pre-placed/routed netlist, insert netlist modifications, and then incrementally re-place and route only the new buffers, rather than ripping up the whole run and starting from scratch.","",""
+"384390069412429834","polyfractal","2026-03-29T22:46:56.1440000+00:00","I haven't to be fair, will take a look! Good points about how intertwined things can be, and not so easy to ""just"" modularize everything","",""
+"1187141985530818611","ravenslofty","2026-03-29T22:50:53.7940000+00:00","I did ask donn about this; there's a native python API for OR, but it's something of a second-class citizen to the main Tcl API, so it has missing things.","","😕 (1)"
+"169786952432746498","mithro_","2026-03-29T23:12:37.5370000+00:00","My understanding is that multiple groups have been pushing for the Python API to be the first class citizen and the TCL API to be an afterthought - but I don't know the current state of that.","",""
+"169786952432746498","mithro_","2026-03-29T23:14:07.5060000+00:00","The great thing about open source is that you can help fix them unlike with the proprietary tooling where groups like Google who are paying hundreds of millions can barely get anything fixed.","",""
+"384390069412429834","polyfractal","2026-03-29T23:21:56.0630000+00:00","hehe part of my grumping is because I've been trying a few experiments, and in the process slowly working ""down"" the stack discovering how things work and how tightly coupled everything is 🙂","",""
+"384390069412429834","polyfractal","2026-03-30T00:36:37.8320000+00:00","huh interestig bit in OpenSTA. What's the story around Parallax SW? Their website is quite bare (http://www.parallaxsw.com/)
+
+> However, OpenSTA is not supported by a public community of developers as many other open source projects are. The copyright and development are exclusive to Parallax Software.","",""
+"596068704471482370","246tnt","2026-03-30T07:08:34.2490000+00:00","Both TCL and python are swig generated bindings, it's not that hard to add things if something you need is missing, I had to go through it a couple of times. ( Although both times it was missing in both TCL and python, I think in general when adding things they try to add bindings for both at once to keep them in sync ).","",""
+"596068704471482370","246tnt","2026-03-30T07:11:10.1540000+00:00","And yeah, in MPW1 times, OpenRoad was different tools ... and it was a nightmare 😅    I much prefer the current version.   AFAIU They need to pass quite a bit of info between tools to get good QoR, a lot of which doesn't ""map"" to standard format, so you ended up with needing the exact right combination of tools so they could talk properly to each other.","",""
+"169786952432746498","mithro_","2026-03-31T02:19:37.0950000+00:00","OpenSTA is used in a number of proprietary solutions. The full test suite for the tool is sadly closed source as well.","",""
+"384390069412429834","polyfractal","2026-03-31T17:58:07.3650000+00:00","rude 😐","",""
+"384390069412429834","polyfractal","2026-03-31T17:58:26.3450000+00:00","never heard of a closed test suite before. I guess maybe they have snippets / test cases from customers under NDA In there?","",""

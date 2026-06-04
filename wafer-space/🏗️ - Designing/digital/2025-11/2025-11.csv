@@ -1,1 +1,82 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
+"220639106915368960","tholin","2025-11-01T04:30:13.1100000+00:00","So, about the fab SRAM macros: they have their VDD/VSS power straps on the Metal3 layer in the form of horizontal strips. However, the vertical Metal4 strips in chip_top’s power grid will not connect to them. Why?","2025-11_media/image-18AAD.png",""
+"220639106915368960","tholin","2025-11-01T04:44:49.9750000+00:00","Also, the SRAM macros have DRC errors.","",""
+"596068704471482370","246tnt","2025-11-01T06:15:20.2460000+00:00","Are you sure they do ?  AFAIR Magic thinks they do because the tech file doesn't know about sram rules. But if you checks they are all false positive","",""
+"691780627338625077","rebelmike","2025-11-01T08:39:34.3770000+00:00","I believe the SRAM macro in https://github.com/MichaelBell/ttgf0p2-tinyQV/actions/runs/18697252507 is connected correctly, though would appreciate a double check on that!","",""
+"691780627338625077","rebelmike","2025-11-01T08:41:15.8950000+00:00","However, that project is a bit stalled, both because of the DRC errors (which should be ignorable), and because when I increased the utilisation I started getting LVS errors.","",""
+"596068704471482370","246tnt","2025-11-01T09:29:47.0810000+00:00","It's connected through power but only on the end. The only reason I can think of for that is that the LEF only defines the end zone as pins for connections.","",""
+"596068704471482370","246tnt","2025-11-01T09:29:53.7460000+00:00","","2025-11_media/2025-11-01_1022x479_scrot-FD631.png",""
+"596068704471482370","246tnt","2025-11-01T09:31:57.1390000+00:00","It's also connected in the center control zone. So maybe they wanted to avoid random vias in the SRAM core zone, maybe it can distord metal a bit or cause some stress that they didn't want to risk given the tighter rules they use in there.","",""
+"691780627338625077","rebelmike","2025-11-01T10:27:05.7170000+00:00","Yeah, I had to be fairly precise aligning the met4 stripes to get the connections to align with the pins.","",""
+"220639106915368960","tholin","2025-11-02T14:45:49.7870000+00:00","Any reason why only those end zones are valid pins? Could the LEF be updated to label the whole horizontal strips?","",""
+"596068704471482370","246tnt","2025-11-02T16:50:38.5960000+00:00","As stated above, the only reason I can think of is avoid any disturbance in the sram core area ...","",""
+"691780627338625077","rebelmike","2025-11-14T21:45:48.5420000+00:00","I'm trying to do a quick port of TinyQV to the wafer space template.  I've hit the problem that a lot of the verilog has declaration after use, which isn't supported by iverilog 13.  Is there an easy way to get iverilog 12 in the nix environment to get the tests passing?  I tried simply commenting out the iverilog line in the nix.flake (in the hope of picking up the version from the system) but that didn't seem to help (or possibly I need to do something to pick up the change - I am new to nix)","",""
+"169786952432746498","mithro_","2025-11-14T22:09:25.1720000+00:00","@Leo Moser (mole99) ^","",""
+"323371864074485771","mole99","2025-11-15T10:34:44.8090000+00:00","The template uses iverilog from nix-eda: https://github.com/fossi-foundation/nix-eda/blob/main/nix/iverilog.nix
+We can simply override the version and hash using an overlay:
+
+```diff
+diff --git a/flake.nix b/flake.nix
+index 637792a..4e53bc1 100644
+--- a/flake.nix
++++ b/flake.nix
+@@ -31,7 +31,18 @@
+       system:
+         import nixpkgs {
+           inherit system;
+-          overlays = [nix-eda.overlays.default devshell.overlays.default librelane.overlays.default];
++          overlays = [nix-eda.overlays.default devshell.overlays.default librelane.overlays.default (final: prev: {
++              iverilog = (prev.iverilog.override {
++                version = ""12.0"";
++                rev = null;
++                sha256 = ""sha256-J9hedSmC6mFVcoDnXBtaTXigxrSCFa2AhhFd77ueo7I="";
++              }).overrideAttrs {
++                env = {
++                  NIX_CFLAGS_COMPILE = ""-Wno-error=format-security"";
++                };
++              };
++            })
++          ];
+         }
+     );
+```
+
+(I also had to add a cflag in order for it to compile.)
+The first time you enable the Nix shell, iverilog will be built, after that, it is cached.","",""
+"691780627338625077","rebelmike","2025-11-15T11:12:43.5960000+00:00","Thank you! I’ll give that a try","","👍 (1)"
+"596068704471482370","246tnt","2025-11-15T16:54:24.4140000+00:00","@Leo Moser (mole99) AFAICT for the PAD_xxx config you need exact names you can't use regexps 😢","",""
+"323371864074485771","mole99","2025-11-15T17:03:47.8750000+00:00","You mean in the LibreLane pad ring config? Yeah, that would be a nice feature. I'll see if I can add it in https://github.com/librelane/librelane/pull/806. I'm quite busy at the moment, though 😅","",""
+"384390069412429834","polyfractal","2025-11-15T22:20:41.3120000+00:00","the SRAM verilog macros in the PDK are fully functional, right? Debugging an issue in my code and want to verify that they do, infact, work as intended 🙂  
+
+(I've successfully stored and retrieved, but when writing to same address twice there are problems. Fairly sure it's my fault elsewhere though)","",""
+"169786952432746498","mithro_","2025-11-16T03:02:23.1990000+00:00","Yes, I believe @Tholin has demonstrated them working?","",""
+"169786952432746498","mithro_","2025-11-16T03:02:48.5130000+00:00","https://www.crowdsupply.com/wafer-space/gf180mcu-run-1/updates/tholin-feature","","❤️ (2)"
+"384390069412429834","polyfractal","2025-11-16T15:12:39.9070000+00:00","aha, missed that. thanks! most definitely a me-problem then 🙂","",""
+"803213471402688522","_luke_w_","2025-11-24T10:38:31.6560000+00:00","Are you still having trouble with the RAM @BreakingTaps? If you post some waves then I can have a squint at them","",""
+"803213471402688522","_luke_w_","2025-11-24T10:38:53.0110000+00:00","Ah, that message was older than I thought 😅","",""
+"384390069412429834","polyfractal","2025-11-24T16:13:48.7230000+00:00","yah all good now, thanks for checking! was indeed a ""me-problem"" in my code 🙂","","👍 (1)"
+"538398807986274304","rzioma","2025-11-24T17:09:27.5950000+00:00","Need advice! I would like to add 16KB of RAM (32 macro x SRAM 512 5V), I have quite a lot of free space, so it should fit. Any gotchas for laying out 32 blocks in a good manner for memory?
+
+*(Z80 design I am working on has a lot of free space, I want to put 16KB of RAM. That particular combinations Z80+16KB RAM is useful for fixing DRAM in old computers)*","",""
+"803213471402688522","_luke_w_","2025-11-24T19:45:05.6840000+00:00","If the bus was wider than 8 bits I'd say keep all the RAMs for the same byte lane in the same row or column, but that doesn't really apply here 😅","",""
+"803213471402688522","_luke_w_","2025-11-24T19:47:08.2680000+00:00","Make sure to leave enough gap in between the RAMs for the tools to insert buffers. Generally pick one pair of orientations (N/S only or W/E only) so that fly-by routing over the top of the RAMs on M4/M5 does a better job of hooking up the address bus. It can be useful to alternate N-S-N-S because iirc the D connections are all on one side of the RAM, and the Q are all on the other side","","🙏 (1)"
+"803213471402688522","_luke_w_","2025-11-24T19:47:31.5350000+00:00","oh, and try to leave space in the middle of your RAM array for your design, so it's routing across half the chip (worst case) not the whole chip","","🙏 (1)"
+"169786952432746498","mithro_","2025-11-25T07:07:14.9540000+00:00","Fixing DRAM in old computers? Do you mean emulating DRAM using SRAM or something else?","",""
+"538398807986274304","rzioma","2025-11-25T07:55:08.5160000+00:00","Yes. The fix is to use onchip SRAM block connected directly to Z80 instead of external DRAM (which usually were multiple of ICs with high chance of failure during the long lifetime). External DRAM ICs are simply pulled from the mainboard of the computer.
+
+Adding 64KB would be better and more generic, but I can't fit them right now.","",""
+"538398807986274304","rzioma","2025-11-25T07:58:23.9370000+00:00","16KB is good enough to fix that common breakage in ZX Spectrum family (allegedly the most sold Z80 home computer). They had 16KB (in 8ICs) of slightly faster memory which would die more often.","",""
+"538398807986274304","rzioma","2025-11-25T08:06:26.3930000+00:00","@Tim 'mithro' Ansell I am also adding a couple of companion chips that were common in combination with Z80.","",""
+"538398807986274304","rzioma","2025-11-25T08:14:53.8970000+00:00","Not yet sure it is worth the additional risk though 🙂","",""
+"538398807986274304","rzioma","2025-11-25T08:41:45.0020000+00:00","Thank you!","",""
+"596068704471482370","246tnt","2025-11-27T12:44:36.7810000+00:00","Huh ... so as part of testing I wanted to remove the `DualGate` layer from the standar cells to make the transistors 3v3 instead of 5V. Yes, they're gate would be longer than needed because I'm not resizing them, just changing the oxide thickness, hoping for them to get faster basically.","",""
+"596068704471482370","246tnt","2025-11-27T12:44:57.7760000+00:00","But ... simulation shows they get _slower_ ....","",""
+"596068704471482370","246tnt","2025-11-27T12:46:07.8750000+00:00","First theory is of course, thinner oxide means more gate capacitance and whatever gain we have from the thinner oxide forming better channel gets overwhelmed by the higher gate capacitance.","",""
+"596068704471482370","246tnt","2025-11-27T12:46:25.8950000+00:00","I could also have screwed up my simulation somewhere ...","",""
+"220639106915368960","tholin","2025-11-27T12:49:49.6550000+00:00","I'd say its because the gate lengths are still the same","",""
+"596068704471482370","246tnt","2025-11-27T12:55:45.6540000+00:00","Well yeah, I know it's because their length is the same, but through what effect.","",""
+"596068704471482370","246tnt","2025-11-27T12:56:36.8750000+00:00","At 3.3V Vg and Vds, Ids is higher for 3v3 one (as expected) so it's better at passing current. (same W/L)","",""
+"596068704471482370","246tnt","2025-11-27T12:57:02.0420000+00:00","Although looking at the curve, it's really not _that_ much better.","",""
+"738396032295108721","bailey8889","2025-11-27T13:05:51.3980000+00:00","@tnt For a given gate size, wouldn't lower voltages mean slower circuits?","",""
+"596068704471482370","246tnt","2025-11-27T13:06:43.5370000+00:00","@bailey I'm changing the transistor type, but both get powered using 3v3 .","","👍 (1)"
+"596068704471482370","246tnt","2025-11-27T13:07:19.0560000+00:00","Of course if I'm powering the 5V with 5V they go faster 😁","","🎉 (1),😀 (1),😮 (1)"

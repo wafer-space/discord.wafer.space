@@ -2,10 +2,11 @@
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / cob
 Topic: Channel for discussing chip-on-board packaging options for wafer.space bare die.
-After: 05/31/2026 23:59
+After: 2026-05-31 11:59 p.m.
+Before: 2026-07-01 12:00 a.m.
 ==============================================================
 
-[06/02/2026 03:57] anfroholic
+[2026-06-02 3:57 a.m.] anfroholic
 @RebelMike the 1xp5 boards have arrived. Pretty sure some will be bonded shortly. 
 @Tim Edwards I think yours and @Greg will also be bonded in this run.
 
@@ -15,97 +16,97 @@ After: 05/31/2026 23:59
 {Reactions}
 🔥 🎉 (2)
 
-[06/02/2026 13:10] chasees18
+[2026-06-02 1:10 p.m.] chasees18
 Hi Andrew @Andrew Wingate and Tim @Tim 'mithro' Ansell , I have heard from Tim that there is a good method verifying the wire bond connections. Would you mind helping pointing me to the correct location where this verification method is discussed. This would help a lot in our chip debugging. Many thanks.
 
 
-[06/02/2026 13:56] rebelmike
+[2026-06-02 1:56 p.m.] rebelmike
 Was the ground fill on the region between the die and the pins intentional?  I think that was blocked originally.  And there was some discussion of putting soldermask in that region so the vias were covered, is that still something that we think we should try?
 
 
-[06/02/2026 14:15] namibj
+[2026-06-02 2:15 p.m.] namibj
 Oh as I see this now if they're done by JLCPCB, I'd propose using their serialization service that'll give per-individual silkscreen serials in plain text (+ (QR/datamatrix)), though for proper traceability beyond the bondhouse the die sorter would probably have to place the dies directly onto the COB and electronically record what specific die got placed onto that serial number COB?
 
 
-[06/02/2026 14:16] namibj
+[2026-06-02 2:16 p.m.] namibj
 Iirc we'd need those vias covered at the top or fully open to prevent air bubbles inside from going up through the encapsulation.
 
 
-[06/02/2026 14:17] namibj
+[2026-06-02 2:17 p.m.] namibj
 ESD diode of the pad can be easily checked for presence once you have a working GND and a working VDD pad.
 
 
-[06/02/2026 14:18] namibj
+[2026-06-02 2:18 p.m.] namibj
 Iirc you just carefully diode test with pad voltage below GND to see the diode to GND, and above VDD to see the diode to VDD.
 
 
-[06/02/2026 16:54] chasees18
+[2026-06-02 4:54 p.m.] chasees18
 Thanks for the suggestion it’s good idea to check the bonding by testing the ESD diode. I am not sure the method mentioned by Tim is same as this, or there are other method verifying it (physically or electrically)
 
 
-[06/02/2026 17:09] namibj
+[2026-06-02 5:09 p.m.] namibj
 AFAIK the esd diode was the suggested check of bonding, shy of any testability instrumentation in the chip itself.
 
 {Reactions}
 👍
 
-[06/02/2026 20:47] anfroholic
+[2026-06-02 8:47 p.m.] anfroholic
 Ooh, I don't think it has been talked about much in this discord, most of the conversation was in person when we were in China. 
 It seems that @namibj has filled you in. 
 Let me know if you have any other questions.
 
 
-[06/02/2026 20:52] anfroholic
+[2026-06-02 8:52 p.m.] anfroholic
 It did have a no fill region. This version was the one that I went in and relaxed some of the clearances and to do so, I needed to delete it for a moment as KiCad didn't allow me to select anything under it when it was there. After I finished I hit refill and it filled everywhere, since we had reduced this to 2 layers I thought the extra pour and ground wouldn't hurt anything so I left it. 
 -# For future reference, you're able to add keepout areas to the footprint itself and then you don't get the selection issues I was running into (I assume you did that last because of the same issues?)
 
 {Reactions}
 👍
 
-[06/02/2026 20:54] rebelmike
+[2026-06-02 8:54 p.m.] rebelmike
 Ah cool - yeah I don't think it should cause a problem, just wondered how it ended up like that
 
 {Reactions}
 👍
 
-[06/02/2026 20:54] anfroholic
+[2026-06-02 8:54 p.m.] anfroholic
 We did have another version where they did the serial numbers properly, not sure what happened this go.
 
 
-[06/02/2026 20:54] namibj
+[2026-06-02 8:54 p.m.] namibj
 Did you select the option in the interface?
 
 
-[06/02/2026 20:54] rebelmike
+[2026-06-02 8:54 p.m.] rebelmike
 I was using locking to resolve the not being able to select things problems, I feel like that is a regression in KiCAD 10?
 
 
-[06/02/2026 20:55] anfroholic
+[2026-06-02 8:55 p.m.] anfroholic
 Oh? Could be?
 
 
-[06/02/2026 20:56] namibj
+[2026-06-02 8:56 p.m.] namibj
 You can mask object types and layers from view and mouse interaction in kicad. Those two classifications are orthogonal.
 
 
-[06/02/2026 20:58] anfroholic
+[2026-06-02 8:58 p.m.] anfroholic
 Everything should have been the same. Again, not sure exactly what happened. We only got a few as these are the first ones for that form factor so should be ok. We'll get it next time. 
 I forgot about the type selection stuff. Good call
 
 
-[06/02/2026 20:59] namibj
+[2026-06-02 8:59 p.m.] namibj
 Yeah they do caution it's supposedly a best-effort thing. 
 I guess if you can take the day of delay you can do advanced instructions and tell them to complain if the serials somehow don't work.
 
 
-[06/02/2026 21:01] chasees18
+[2026-06-02 9:01 p.m.] chasees18
 I see, thanks for letting me know. 
 
 I though there is a standard criteria you are using to determine if a wire is connected (physically or electrically) 
 Since I am trying to verify if bonding is correct, chip is functional and hopefully proceed with more units packaged.
 
 
-[06/02/2026 21:07] anfroholic
+[2026-06-02 9:07 p.m.] anfroholic
 So what we did when we were just testing with a multimeter was to apply 3.3v to VSS 
 Then we would go around the other pins and we saw the voltage across with the diode drop. If there was no connection, you would read nothing. 
 The VDD pads showed up a little differently because there was a decoupling cap on the wire as well. 
@@ -120,11 +121,11 @@ I think what @Tim 'mithro' Ansell is asking most specifically is: Does your sili
 {Reactions}
 👍
 
-[06/02/2026 21:11] chasees18
+[2026-06-02 9:11 p.m.] chasees18
 That makes sense, thanks for clarifying. When do you need our response on bonding the remaining units ?
 
 
-[06/02/2026 21:15] anfroholic
+[2026-06-02 9:15 p.m.] anfroholic
 Don't use my opinion to judge anything too specifically, but I would say there isn't a super huge rush? Deadline would be enough time the wirebonders get done before we want them for Run#2 😜 
 
 I'm really interested to see how these work for you all though. 
@@ -133,23 +134,23 @@ Please share when you're doing your tests and have one working!
 {Reactions}
 👍
 
-[06/02/2026 21:31] 246tnt
+[2026-06-02 9:31 p.m.] 246tnt
 @Andrew Wingate Do you know what the difference is between the "COB v1" and "COB v2+" adapter for the bond tester card ?
 
 
-[06/02/2026 21:46] anfroholic
+[2026-06-02 9:46 p.m.] anfroholic
 Can you be a little more specific, I'm not sure I know what the bond tester card is?
 
 
-[06/02/2026 21:47] 246tnt
+[2026-06-02 9:47 p.m.] 246tnt
 The automatic bond tester jig thingie
 
 
-[06/02/2026 21:47] 246tnt
+[2026-06-02 9:47 p.m.] 246tnt
 Can't remember who made it 😅
 
 
-[06/02/2026 21:50] anfroholic
+[2026-06-02 9:50 p.m.] anfroholic
 Oh haha, yes, that would be @Lauri 
 I think the biggest difference is there was a v1 that used some multiplexers that could not be sourced easily. 
 The second version used new ones that were more readily available. 
@@ -167,62 +168,104 @@ You're referring to this thing yes?
 2026-06_media/mmexport1779114216463-40D01.mp4
 
 
-[06/02/2026 21:52] kris____
+[2026-06-02 9:52 p.m.] kris____
 the more the merrier :p
 
 {Reactions}
 💜
 
-[06/02/2026 21:52] 246tnt
+[2026-06-02 9:52 p.m.] 246tnt
 @Andrew Wingate Yes this thing.
 
 {Reactions}
 👍
 
-[06/02/2026 21:53] anfroholic
+[2026-06-02 9:53 p.m.] anfroholic
 I can try to answer some questions
 
 
-[06/02/2026 21:54] 246tnt
+[2026-06-02 9:54 p.m.] 246tnt
 I have a base board `r1` same as the picture but then I got two daugther boards, one with a `COBv1` sticker and one with a `COBv2+` sticker.
 
 
-[06/02/2026 21:57] anfroholic
+[2026-06-02 9:57 p.m.] anfroholic
 I will have to defer to @Lauri on this one. It's currently the middle of the night there. 
 The only COB differences that I am aware of, is the first ones he was testing were some of the originals that had the missing trace on the AUX_VDD pin. Beyond that, I left right before these came back from the PCB fab and have not had much involvement.
 
 
-[06/02/2026 22:08] anfroholic
+[2026-06-02 10:08 p.m.] anfroholic
 I just remembered there is a little i2c memory module on the daughter board. 
 I bet he was reading that to choose what program to run for a pass/fail thing without having to reflash or something?
 This is a guess, but an educated one.
 
 
-[06/02/2026 22:11] 246tnt
+[2026-06-02 10:11 p.m.] 246tnt
 Oh yeah maybe. Because PCB look identical. So different programming might make more sense.
 
 
-[06/02/2026 22:11] 246tnt
+[2026-06-02 10:11 p.m.] 246tnt
 I'll wait for them to confirm.
 
 {Reactions}
 👍
 
-[06/03/2026 03:15] lauri4332
+[2026-06-03 3:15 a.m.] lauri4332
 Yes, the adapter boards are the same, only the EEPROM configuration differs. The v1 COB adapter skips the missing trace pad check. I've attached a picture showing which black COB is v1 and which is v2.
 
 {Attachments}
 2026-06_media/image-263B2.png
 
 
-[06/03/2026 06:34] 246tnt
+[2026-06-03 6:34 a.m.] 246tnt
 @Lauri Thanks, makes perfect sense. I had forgotten there was a track missing 😅
 
 
-[06/03/2026 15:48] zorin1384
+[2026-06-03 3:48 p.m.] zorin1384
 Is there anyone looking for a full stack and ai engineer?
 
 
+[2026-06-04 3:52 a.m.] mithro_
+@Lauri - This is pretty cool!
+
+{Attachments}
+2026-06_media/6a88dba9f4706b9a4537a887c2f6754d-1F627.png
+
+{Reactions}
+💯 (2)
+
+[2026-06-04 4:13 a.m.] anfroholic
+Hey all, 
+For the first run, originally we thought we would only have a single die size, so only had a single size tape. 
+I would like to give myself as much clearance as possible to land the dies in the tape, hopefully we'll be able to do this blind saving the time of having a camera step. 
+Any PNP should be able to pick up the components no problem. 
+Does anyone have opinions on 0.5mm clearance on all sides?
+
+{Attachments}
+2026-06_media/image-A2954.png
+
+
+[2026-06-04 4:49 a.m.] namibj
+Is the camera a throughput issue or an engineering complexity issue?
+
+
+[2026-06-04 4:50 a.m.] anfroholic
+Throughput
+
+
+[2026-06-04 4:50 a.m.] anfroholic
+Again, not really an issue, but at 50k dies the seconds add up.
+
+
+[2026-06-04 5:05 a.m.] mithro_
+@Andrew Wingate - I just randomly found https://www.digikey.com/en/articles/how-to-improve-chiplet-and-wlcsp-assembly-yields-using-precision-tape-and-reel-carriers while searching for information about tape and reel for through hole headers
+
+{Reactions}
+👍
+
+[2026-06-04 5:20 a.m.] anfroholic
+I've also looked through our conversations to see what kind of material they used, I didn't find an answer. We can ask what they offer when we talk again.
+
+
 ==============================================================
-Exported 39 message(s)
+Exported 46 message(s)
 ==============================================================

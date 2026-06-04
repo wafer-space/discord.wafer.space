@@ -1,4 +1,234 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
+"169786952432746498","mithro_","2026-01-19T03:20:12.0760000+00:00","This is a channel dedicated to the continued development of https://fpgas.online/ which has previously primarily been developed by @carlfk with the funding provided by @Tim 'mithro' Ansell 
+
+The two current highest priority items for development are:
+ * Getting all Tiny Tapeout boards onto the site in similar manner as existing Tiny Tapeout 6 board.
+ * Getting @bunnie's NeTV2 boards into the site
+
+Other lower priority items include:
+ * Getting Tim's other FPGAs into the site, these include @Xobs's Fomu (Tim has pratically unlimited), @Greg's Butterstick (Tim has 8 devices) and @GoranMahovlic's ULX3S (Tim has ~12 devices), GreatScottGadget's Cythion (Tim has ~12 devices) hardware onto the site.
+ * Actually using fpgas.online for testing open source FPGA projects.
+
+If anyone has ideas on how to get more people to use the site, that is also something we are very interested in.","","👍 (1),💜 (3),🎉 (1)"
+"169786952432746498","mithro_","2026-01-19T03:20:28.8410000+00:00","Pinned a message.","",""
+"169786952432746498","mithro_","2026-01-19T03:20:53.6290000+00:00","FYI - @Tisham Dhar (CSIRO EASI) / @carlfk / @asic destroyer / @Greg","",""
+"169786952432746498","mithro_","2026-01-19T03:21:54.7550000+00:00","@carlfk - @Tisham Dhar (CSIRO EASI) is looking at trying to get my NeTV2 hardware into https://fpgas.online","",""
+"169786952432746498","mithro_","2026-01-19T03:22:28.9570000+00:00","@carlfk - IIRC I left a bunch of NiteFury with RPi Compute modules and Compute Cluster blades with you?","",""
+"169786952432746498","mithro_","2026-01-19T03:24:29.5230000+00:00","@LukeW - @Tisham Dhar (CSIRO EASI) is having some issues with programming the NeTV2 using an RPi 5 because the GPIO have moved from the Broadcom device to the RP1 hardware. I believe the PIO hardware in the RP1 should allow us to do significantly better JTAG driver than what is currently in OpenOCD / openfpgaloader.","","🎉 (1)"
+"746955286274900120","tishamdhar","2026-01-19T03:32:03.2830000+00:00","","2026-01_media/PXL_20260119_002410371-70678.jpg",""
+"746955286274900120","tishamdhar","2026-01-19T03:32:30.7690000+00:00","My stack looks like this now, since I am loading gateware using RPi 4 and accessing PCI-e from Rpi5","",""
+"746955286274900120","tishamdhar","2026-01-19T03:35:21.1480000+00:00","The current pin assignments are here using the old driver : https://github.com/AlphamaxMedia/netv2mvp-scripts/blob/master/alphamax-rpi.cfg","","👀 (1)"
+"756011607603019777","anfroholic","2026-01-19T03:50:46.7610000+00:00","This is awesome! Way to go @carlfk! 
+I've been seeing a lot of work being done here on other channels. Looking forward to seeing more.","",""
+"756011607603019777","anfroholic","2026-01-19T03:52:16.9470000+00:00","I was having a thought the other day. 
+I know that @asic destroyer ran a whole simulation of his new linux asic, and was curious what size FPGA you would need to do that same thing, and if that would even be applicable here. 
+I assume that is something larger than you could load on to one of the ARTYboards?","",""
+"746955286274900120","tishamdhar","2026-01-19T08:42:43.6160000+00:00","Captured rpi4 working config here : https://github.com/AlphamaxMedia/netv2mvp-scripts/pull/1","",""
+"746955286274900120","tishamdhar","2026-01-19T08:43:44.3690000+00:00","May need a kernel module to make pcileech arrive as a device on the raspi5 pci bus, I will try an M2 Sata to make sure PCI is indeed connected.","",""
+"746955286274900120","tishamdhar","2026-01-19T08:50:44.1350000+00:00","I think a NiteFury / 200T can run a Linux ASIC gateware, depends how complicated it is.","",""
+"746955286274900120","tishamdhar","2026-01-19T09:20:02.1470000+00:00","This looks useful for the NeTV2 to slot in : https://geekworm.com/en-au/products/x1010?srsltid=AfmBOopO2oOKLbdXuqHiQd1Poq-Cz4X5Bp7eHgrN7mOhQquOnVFMYTlX","",""
+"746955286274900120","tishamdhar","2026-01-19T09:35:11.6510000+00:00","Will need a ribbon to wire up the JTAG","",""
+"443147704126668801","carlfk","2026-01-19T20:21:41.3410000+00:00","What are you jtag-ing?","",""
+"443147704126668801","carlfk","2026-01-19T20:21:54.7870000+00:00","I have a pi hat with a pico on it that does jtag things","",""
+"443147704126668801","carlfk","2026-01-19T20:22:37.3960000+00:00","https://github.com/CarlFK/pj","",""
+"746955286274900120","tishamdhar","2026-01-19T20:23:15.6600000+00:00","I am jtaging the NeTV2","",""
+"746955286274900120","tishamdhar","2026-01-19T20:23:49.0560000+00:00","The bitbang JTAG from old references no longer works on Raspi 5.","",""
+"443147704126668801","carlfk","2026-01-19T20:36:07.4840000+00:00","my pj project above was mean to debug pi boot - the pico PIO pins are routed to the Pi jgag.  but I also added a header so they could be hooked to somethint else (like NeTV2)","",""
+"443147704126668801","carlfk","2026-01-19T20:36:41.4680000+00:00","I have no idea if this is helpful, and now I am wondering if being hoked to both will be a problem (seems like it)","",""
+"443147704126668801","carlfk","2026-01-19T20:37:12.6540000+00:00","oh right, the idea was don't plug the hat into the pi, then it isn't hooked to the pi jtag.","",""
+"443147704126668801","carlfk","2026-01-19T20:51:09.1290000+00:00","er.. looking at it in Kicad, there is no jtag header.  I guess the idea is I can use the pi hat header holes for something else if it isn't on a pi","",""
+"443147704126668801","carlfk","2026-01-19T20:54:33.1970000+00:00","I am ordering some other boards this week, $5 for boards, $20 shipping.  I can tweek and add more PJ boards if you think there is some chance of being useful","",""
+"443147704126668801","carlfk","2026-01-19T20:55:08.0940000+00:00","I am 1/2 thnking I need that jgag header I thought was there. but not if no one wants it.","",""
+"746955286274900120","tishamdhar","2026-01-19T21:12:28.7790000+00:00","We already have a mezzanine in the current stack that breaks out the PCI Express, ideally we need a board under like the sample PCI express above and a JTAG like yours wired from the top to the JTAG pins of the NeTV and perhaps RX / TX , power etc.","",""
+"746955286274900120","tishamdhar","2026-01-19T21:13:38.1160000+00:00","","2026-01_media/PXL_20260119_211321797-5D41A.jpg",""
+"746955286274900120","tishamdhar","2026-01-19T21:14:53.4180000+00:00","NeTV JTAG that wires itself to the Pi looks like this. This was a good idea for older pi's, since you could bitbang JTAG on those.","",""
+"746955286274900120","tishamdhar","2026-01-19T21:15:23.0060000+00:00","And have RX/TX to debug or shell into it after gateware loads.","",""
+"746955286274900120","tishamdhar","2026-01-19T21:18:29.2720000+00:00","Out of interest, what kind of cable does the RPi PIO JTAG look like to openOCD and openfpgaloader?","",""
+"443147704126668801","carlfk","2026-01-19T21:24:53.7340000+00:00","I am going to plead ignorance.  consider me just the board manufacture that doesn't really know how it works","",""
+"443147704126668801","carlfk","2026-01-19T21:25:31.4270000+00:00","the pico/pio -> pi was desinged by Clever who is makign an open source boot loder to replace broadcom's boot.bin","",""
+"443147704126668801","carlfk","2026-01-19T21:26:26.3520000+00:00","hea had a tangle of wires on his work bench connecting pico to pi, and I made something nice","",""
+"443147704126668801","carlfk","2026-01-19T21:27:35.8350000+00:00","do you have the netv2 schematic URL handy?","",""
+"746955286274900120","tishamdhar","2026-01-19T22:24:20.4520000+00:00","Hard to find : https://github.com/AlphamaxMedia/netv2-mainboard/blob/master/netv2mvp-pvt1.pdf","",""
+"169786952432746498","mithro_","2026-01-20T06:00:38.6710000+00:00","I believe you can use the ulx3s to simulate his design.","",""
+"756011607603019777","anfroholic","2026-01-20T06:03:32.4080000+00:00","I guess, I was wondering if someone would be able to easily use your guy's internet facing FPGA's to validate designs somehow. 
+Seems they aren't up to the task.","",""
+"169786952432746498","mithro_","2026-01-20T06:05:22.3620000+00:00","Well, it's kind of complicated. The big issue is that the Arty has DDR3 memory but @asic destroyer's design only supports SDRAM (which is what is on the ULX3S).","","💜 (2)"
+"169786952432746498","mithro_","2026-01-20T06:06:16.6580000+00:00","The actually stuff he is putting on the ASIC should work fine on both FPGAs in theory","",""
+"169786952432746498","mithro_","2026-01-20T06:06:45.2260000+00:00","But really you want something like https://fires.im/ -- that makes the FPGA be an ASIC simulation accelerator","",""
+"169786952432746498","mithro_","2026-01-20T06:09:27.0790000+00:00","@Andrew Wingate - I have a bunch of the high end boards which people use for things like that. But as they are like $20k USD each I'm less happy to put them randomly on the internet for anyone to access.","",""
+"169786952432746498","mithro_","2026-01-20T06:10:04.5320000+00:00","The NeTV2 and NiteFury cards that @Tisham Dhar (CSIRO EASI) is playing with might be a good option for doing small firesim like stuff with the PCIe connection.","",""
+"756011607603019777","anfroholic","2026-01-20T06:11:36.9010000+00:00","Gotcha, thanks. I *correctly* assumed they weren't quite sized for the task, but figured I'd ask anyways. 
+Cool to see the toolchain exists!","",""
+"169786952432746498","mithro_","2026-01-20T06:12:13.5930000+00:00","I mean, the designs you are doing on wafer.space probably are pretty reasonable to fit on the Arty / Netv2 / ULX3S sized FPGAs.","",""
+"756011607603019777","anfroholic","2026-01-20T06:12:35.3380000+00:00","Oh! Amazing!!","",""
+"169786952432746498","mithro_","2026-01-20T07:22:20.9790000+00:00","I'm guessing the NiteFury II mentioned @ https://docs.fires.im/en/latest/Getting-Started-Guides/On-Premises-FPGA-Getting-Started/RHS-Research-Nitefury-II-FPGAs.html is probably Ultrascale+ based rather than Series 7 like the original Nitefury?","",""
+"746955286274900120","tishamdhar","2026-01-20T11:13:04.5720000+00:00","Seems to work with FireSim","",""
+"746955286274900120","tishamdhar","2026-01-20T21:01:51.9170000+00:00","Does this indicate the NeTV2 I have is a 100T ? 0x13631093 is the IDCODE for a Xilinx Artix-7 FPGA","",""
+"443147704126668801","carlfk","2026-01-20T21:17:45.2880000+00:00","","2026-01_media/rn_image_picker_lib_temp_a801e0f3-f5c3-428-991AE.jpg","💖 (2)"
+"443147704126668801","carlfk","2026-01-20T21:19:22.4980000+00:00","I was going to frame it and hang it on the wall.","",""
+"443147704126668801","carlfk","2026-01-20T21:25:07.7380000+00:00","https://github.com/AlphamaxMedia/netv2-mainboard/blob/master/hdmi_m2m_jumper-v2.PrjPcb#L92  DocumentPath=C:\Program Files (x86)\Altium\Altium Designer  grumble :p","",""
+"746955286274900120","tishamdhar","2026-01-20T21:28:31.1220000+00:00","@Tim 'mithro' Ansell can probably get sources fully uploaded by Bunny and we can get it all converted to KiCAD and make more , I have found the SQRL Acorn quite affordable due to crypto craze. Just need to reverse engineer and open it.","",""
+"169786952432746498","mithro_","2026-01-20T21:30:34.6020000+00:00","According to AI - The JTAG IDCODE 0x13631093 decodes specifically to a Xilinx Artix-7 XC7A100T FPGA. 
+
+I'm guessing you have one of the special ""dev"" NeTV2 which had the 100T rather than the 35T part?","",""
+"169786952432746498","mithro_","2026-01-20T21:31:24.3780000+00:00","I believe KiCAD can open Altium Designer files these days?","",""
+"169786952432746498","mithro_","2026-01-20T21:31:52.5460000+00:00","We should put it on fpgas.online instead 🙂","",""
+"443147704126668801","carlfk","2026-01-20T21:41:17.8310000+00:00","Where is the jtag header?","",""
+"746955286274900120","tishamdhar","2026-01-20T22:14:47.2640000+00:00","@carlfk","2026-01_media/Screenshot_20260121-084415-C87BB.png",""
+"746955286274900120","tishamdhar","2026-01-20T22:16:54.7500000+00:00","We need an RPi hat that attaches a dirty JTAG to those pins, passes through power and Rx TX and may be interrupts , not sure what those do. And also has a PCIe ribbon cable M2 thingie or just an oculink connector at the edge.","",""
+"746955286274900120","tishamdhar","2026-01-20T22:17:33.1960000+00:00","But it will be specific to the NETV2","",""
+"746955286274900120","tishamdhar","2026-01-20T22:17:43.5680000+00:00","Not sure how many of those are out in the wild.","",""
+"746955286274900120","tishamdhar","2026-01-20T22:19:31.7470000+00:00","I suspect the Pci-leech gateware I am loading is for a 35T precompiled and I am loading on a 100T so it is barfing. I have to setup litex and Vivado and all that jazz to compile gateware for the 100T and do a hello world and see.","",""
+"746955286274900120","tishamdhar","2026-01-20T22:20:09.3640000+00:00","I wish OpenOCD had the cross-walk to tell me the FPGA type without giving me a hex.","",""
+"746955286274900120","tishamdhar","2026-01-20T22:20:36.7890000+00:00","Would a 35T gateware run on a 100T ?","",""
+"443147704126668801","carlfk","2026-01-20T22:45:18.4810000+00:00","what is dirty JTAG ?","",""
+"746955286274900120","tishamdhar","2026-01-20T22:46:16.9670000+00:00","https://github.com/dirtyjtag/DirtyJTAG","","💚 (1)"
+"443147704126668801","carlfk","2026-01-20T22:48:28.2990000+00:00","ah - runs on the pico https://github.com/phdussud/pico-dirtyJtag","",""
+"443147704126668801","carlfk","2026-01-20T22:49:40.0200000+00:00","more on this tomorrow - I need to get to PS1 to tell them we have lots of money.  (I'm the treasurer and we have lots of money)","",""
+"746955286274900120","tishamdhar","2026-01-21T04:49:07.7460000+00:00","Sketch of the mess to simplify or something. Feel like NeTV2 need a custom pi hat","2026-01_media/2026_01_21_15_17_Office_Lens-19550.jpg",""
+"746955286274900120","tishamdhar","2026-01-21T05:27:51.0190000+00:00","Rebuilding NeTV2 gateware to target the 100T is hard, a lot of the submodules pointed to here are gone : https://github.com/AlphamaxMedia/netv2-fpga","",""
+"746955286274900120","tishamdhar","2026-01-21T05:29:03.4360000+00:00","Wonder if I can get a pre-built stock gateware for 100T or get that repo maintained for 2026. Last commit from Bunnie points towards the shifting sands of sourcing toolchains at the bleeding edge","",""
+"481315203930128384","ewenmcneill","2026-01-21T06:17:14.3300000+00:00","Bunnie's on Discord, in the baochip Discord (his current project -- https://www.crowdsupply.com/baochip/dabao) and a few others.","",""
+"481315203930128384","ewenmcneill","2026-01-21T06:17:36.6610000+00:00","I'd guess he still has a checkout of the dependencies, and probably could rebuild it for the 100T variant.","",""
+"481315203930128384","ewenmcneill","2026-01-21T06:19:01.8500000+00:00","This post from Bunnie has an invite link for the baochip Discord if you're interested -- https://social.treehouse.systems/@bunnie/115716761132172776","",""
+"746955286274900120","tishamdhar","2026-01-21T07:30:13.9310000+00:00","Not sure I can ask for things 😕","",""
+"169786952432746498","mithro_","2026-01-21T07:43:15.7700000+00:00","@bunnie is right here too....","","🎉 (1)"
+"169786952432746498","mithro_","2026-01-21T07:46:02.2480000+00:00","@Tisham Dhar (CSIRO EASI) - I probably have 35T versions of the NeTV2 too....","",""
+"746955286274900120","tishamdhar","2026-01-21T11:35:24.8330000+00:00","@bunnie would it be possible to update the netv-fpga repo compile the gateware fixing the sub module linkage etc.","",""
+"758346146204090390","bunnievorpal","2026-01-21T16:09:59.2910000+00:00","this is a good question. unfortunately litex has been a moving target and i haven't been able to keep up with it on NeTV","",""
+"758346146204090390","bunnievorpal","2026-01-21T16:10:33.3220000+00:00","the best bet is...i need to get back from traveling (currently not at home) and then I have to access my archive machine and dig up the virtual machine I used to build the NeTv2 firmwares","",""
+"758346146204090390","bunnievorpal","2026-01-21T16:10:51.1790000+00:00","i stopped schlepping that around years ago since the project had been pretty dormant and it took like 40 gigs on my hard drive","",""
+"758346146204090390","bunnievorpal","2026-01-21T16:11:40.5390000+00:00","if i can resurrect the VM it' should have a snapshot of everything as it was back then and may be able to build some things modulo the fact that i've totally forgotten how to use it and hopefully i even remember the password to log into it","",""
+"758346146204090390","bunnievorpal","2026-01-21T16:13:21.9030000+00:00","might be a few days before i can try this...i'm kind of compressed until chinese new year. how urgent is it to get a 100T firmware","",""
+"169786952432746498","mithro_","2026-01-21T22:13:01.7760000+00:00","@Tisham Dhar (CSIRO EASI) - It should be pretty trivial to get the latest LitePCIe going on the NeTV2 once you have a working Vivado environment.","",""
+"746955286274900120","tishamdhar","2026-01-21T22:14:48.6840000+00:00","I will get the Vivado going , then come back here. Last time AMD site would not let me register and download Vivado.","",""
+"169786952432746498","mithro_","2026-01-21T22:16:35.0610000+00:00","@Tisham Dhar (CSIRO EASI) - Yeah, know that feeling. It would be nice if f4pga was able to do LitePCIe -- https://github.com/openxc7 *might* be able to do it -- but I wouldn't start with that.","",""
+"746955286274900120","tishamdhar","2026-01-21T22:19:06.5080000+00:00","Overall though it points to a distribution challenge with FPGA / Litex toolchains. I am sure you are working on a solution.","",""
+"746955286274900120","tishamdhar","2026-01-21T22:20:36.0860000+00:00","I remember I proposed docker instead of VM's long time ago, but at that time they were not hardware exposure friendly and images would be too big. Which is what we are trying to solve with FPGAs online, instead of distribution of toolchains we can let users come to a pre-installed stack.","",""
+"746955286274900120","tishamdhar","2026-01-21T22:21:45.3410000+00:00","Which for context is what I do in my day job, maintain science coding environments for astronomers and earth observation people.","",""
+"169786952432746498","mithro_","2026-01-21T23:10:06.9990000+00:00","@Tisham Dhar (CSIRO EASI) - https://bit.ly/edda-conda-eda-spec","",""
+"169786952432746498","mithro_","2026-01-21T23:10:53.5920000+00:00","@Tisham Dhar (CSIRO EASI) - https://docs.google.com/document/d/10_MqFjTIYVVuOJlusJydsp4KOcmrrHk03__7ME5thOI/edit?tab=t.0","",""
+"169786952432746498","mithro_","2026-01-21T23:11:45.4910000+00:00","@Tisham Dhar (CSIRO EASI) - https://docs.google.com/document/d/1fWV259IbgnenwjRswE9dqCMBfyg8NC2Ily3pGQcw5ck/edit?tab=t.0#heading=h.pocyih7al6a4","",""
+"169786952432746498","mithro_","2026-01-21T23:12:06.8730000+00:00","I think packaging and distribution is still one of the unsolved problems in computer science 🙂","",""
+"169786952432746498","mithro_","2026-01-21T23:12:31.5960000+00:00","https://github.com/YosysHQ/oss-cad-suite-build","",""
+"169786952432746498","mithro_","2026-01-22T05:46:36.1460000+00:00","@Tisham Dhar (CSIRO EASI) - I just randomly found a PicoEVB in one of my boxes - https://www.crowdsupply.com/rhs-research/picoevb","",""
+"746955286274900120","tishamdhar","2026-01-22T06:23:36.5460000+00:00","Why does it have so many ufl ?","",""
+"746955286274900120","tishamdhar","2026-01-22T06:24:28.4700000+00:00","I have been trawling Ali and found these : https://a.aliexpress.com/_mrgWC0h","",""
+"746955286274900120","tishamdhar","2026-01-22T06:24:48.5660000+00:00","https://a.aliexpress.com/_m0qC88D","",""
+"169786952432746498","mithro_","2026-01-22T06:31:24.9520000+00:00","I don't think you want an ECP3 board","",""
+"443147704126668801","carlfk","2026-01-22T06:39:38.4060000+00:00","https://kicanvas.org/?repo=https%3A%2F%2Fgithub.com%2FCarlFK%2Fpj%2Fblob%2Fmain%2Fproject%2Fpj.kicad_pro","",""
+"443147704126668801","carlfk","2026-01-22T06:40:24.1140000+00:00","I suspect I can hack my design to do what you sketched","",""
+"443147704126668801","carlfk","2026-01-22T06:40:52.6740000+00:00","https://github.com/CarlFK/pj","",""
+"746955286274900120","tishamdhar","2026-01-22T06:44:13.6480000+00:00","The Xilinix one is interesting, it is for cheating at games","",""
+"746955286274900120","tishamdhar","2026-01-22T06:47:48.4450000+00:00","https://www.reddit.com/r/FPGA/comments/1im47cm/are_the_captain_dma_75t_boards_only_for_cheating/","",""
+"746955286274900120","tishamdhar","2026-01-22T06:52:17.3300000+00:00","Not in a rush if the netv-fpga repo is updated such that it points to the right submodules I can take it from there. Hopefully that doesn't require dusting off your Vivado VM.","",""
+"758346146204090390","bunnievorpal","2026-01-22T11:04:14.8350000+00:00","I can't even register and get it now. I think they might just be blocking everything now....","",""
+"758346146204090390","bunnievorpal","2026-01-22T11:05:55.6020000+00:00","I think what happened is Litex restructured its repos in a fundamental way so the submodules are dangling due to that. what I might be able to do is just vendor in a copy of the stuff ""detaching"" it from the history, since it sort of doesn't matter because they broke the chain of commits by restructuring the repo","",""
+"758346146204090390","bunnievorpal","2026-01-22T11:06:21.7510000+00:00","like i think they actually deleted some repos and paths so there's nothing to even refer to","",""
+"746955286274900120","tishamdhar","2026-01-22T11:50:30.5830000+00:00","Repo rot and Tool chain rot","",""
+"169786952432746498","mithro_","2026-01-22T23:08:16.8670000+00:00","@carlfk - Did we ever explore things like this -> https://52pi.com/collections/sales/products/52pi-19-inch-2u-rack-mount-for-raspberry-pi5-4b-with-10-pcie-nvme-expansion-board-supports-m-2-nvme-ssds ?","",""
+"169786952432746498","mithro_","2026-01-22T23:09:00.6170000+00:00","@Tisham Dhar (CSIRO EASI) - Was this the board you were showing me? https://52pi.com/collections/sales/products/deskpi-super6c-raspberry-pi-cm4-cluster-mini-itx-board-kit-6-rpi-cm4-supported ?","",""
+"169786952432746498","mithro_","2026-01-22T23:10:32.5810000+00:00","They also have https://52pi.com/collections/sales/products/rs01-1u-rack-mount-for-raspberry-pi5-4b-with-four-rs-p11-expansion-board-for-rs-p22-raspberry-pi5","",""
+"746955286274900120","tishamdhar","2026-01-22T23:11:11.2930000+00:00","No, I have a Turing Pi, same idea, shared power and ethernet backplane and custom BMC","",""
+"746955286274900120","tishamdhar","2026-01-22T23:12:49.0240000+00:00","https://turingpi.com/product/turing-pi-2-5/","",""
+"746955286274900120","tishamdhar","2026-01-22T23:14:24.8090000+00:00","Either way the M2 is great for adding our FPGA's on","",""
+"746955286274900120","tishamdhar","2026-01-22T23:15:49.2580000+00:00","I have ordered one of the game hacking 75T's with preloaded firmware (Pci-leech) , will see if it shows up on lspci off the bat.","",""
+"169786952432746498","mithro_","2026-01-22T23:25:54.0200000+00:00","@Tisham Dhar (CSIRO EASI) - I was pondering https://www.amazon.com/erounder-Raspberry-Female-Computer-Accessories/dp/B08H26LY71/ref=sr_1_51","",""
+"746955286274900120","tishamdhar","2026-01-22T23:28:31.2670000+00:00","Hmm they are not super useful since Pi-5 GPIO drive for FPGA access is stunted we are better served with cheap dirtyJTAG's, they will be useful for stacking pi4's and more flexible layout, but without the PCI-e , do we really want pi-4's.","",""
+"1284040080859856968","marymarsh52975440","2026-01-23T00:09:10.1910000+00:00","@everyone","2026-01_media/JGtbZoLviBd-F195F.jpg,2026-01_media/OB6kUftr7g-8E2EF.jpg,2026-01_media/f3c4lvOZ0v-12CC2.jpg,2026-01_media/KmgtuoX4JcU-62577.jpg",""
+"443147704126668801","carlfk","2026-01-23T00:33:36.5110000+00:00","no - but I don't think it helps, and might be worse than the current thing","",""
+"443147704126668801","carlfk","2026-01-23T00:34:30.4710000+00:00","the FPGA board and camera need to be mounted somewhere - adding onto that pi holder seems harder than the little bundle of pi+camera+fpga board","",""
+"443147704126668801","carlfk","2026-01-23T00:36:22.2200000+00:00","never mind harder - routing the usb and eathernet is impracticable - they would have to go over the top, and the dongle cables aren't long enough","",""
+"746955286274900120","tishamdhar","2026-01-23T01:07:54.7090000+00:00","Now I am down the game hacking with FPGA rabbit hole and the whole ecosystem there : https://captaindma.com/product/captain-dma-100t-7th/","",""
+"746955286274900120","tishamdhar","2026-01-23T01:08:13.7870000+00:00","Should release the NeTV2 to that crowd","",""
+"758346146204090390","bunnievorpal","2026-01-23T07:10:10.2170000+00:00","(just dropping a note here that someone should @bunnie me if i don't get back to this thread by middle/late next week, my head's L1 cache is full so this might get written to swap shortly and I'll need a tickle to bring this back into my working set)","","💜 (2)"
+"746955286274900120","tishamdhar","2026-01-23T14:10:35.5510000+00:00","So turns out I have to be outside the CSIRO network to download Vivado from AMD, I have it downloaded installed and now synthing 100T bitstream, turns out the pre-built one I was loading was indeed for 35T and failed to launch. OpenOCD performed the board-scan and did not stop me from loading the wrong bitstream 🙂","",""
+"746955286274900120","tishamdhar","2026-01-23T14:11:06.6640000+00:00","Receipts : Vivado% source vivado_build.tcl -notrace
+-------------------------------------------------------
+ STARTING SYNTHESIS STEP.
+-------------------------------------------------------
+INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'pcie_7x_0'...
+INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'bram_pcie_cfgspace'...
+INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'fifo_66_66'...
+INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'fifo_41_41_clk2_tlptapcfgspace'...
+INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'fifo_55_55_clk2_tlptapcfgspace'...
+INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'fifo_68_34'...
+INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'fifo_32_32_clk2'...
+INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'fifo_64_64'...
+INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'fifo_64_64_clk1_fifocmd'...
+INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'fifo_34_34'...
+INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'fifo_256_32_clk2_comtx'...
+INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'fifo_32_32_clk1_comtx'...
+INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'fifo_64_64_clk2_comrx'...
+INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'clk_wiz'...
+INFO: [IP_Flow 19-1686] Generating 'Implementation' target for IP 'clk_wiz'...","",""
+"746955286274900120","tishamdhar","2026-01-23T14:12:54.2800000+00:00","There are warnings like this, which I assume are a bad thing, will see if synth results work : INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/opt/xilinix/2025.2/data/ip'.
+WARNING: [IP_Flow 19-2162] IP 'bram_pcie_cfgspace' is locked:
+* IP definition 'Block Memory Generator (8.4)' for IP 'bram_pcie_cfgspace' (customized with software release 2020.2) has a different revision in the IP Catalog. * Current project part 'xc7a100tfgg484-2' and the part 'xc7a35tfgg484-2' used to customize the IP 'bram_pcie_cfgspace' do not match.
+WARNING: [IP_Flow 19-2162] IP 'fifo_41_41_clk2_tlptapcfgspace' is locked:
+* IP definition 'FIFO Generator (13.2)' for IP 'fifo_41_41_clk2_tlptapcfgspace' (customized with software release 2020.2) has a different revision in the IP Catalog. * Current project part 'xc7a100tfgg484-2' and the part 'xc7a35tfgg484-2' used to customize the IP 'fifo_41_41_clk2_tlptapcfgspace' do not match.
+WARNING: [IP_Flow 19-2162] IP 'fifo_55_55_clk2_tlptapcfgspace' is locked:","",""
+"746955286274900120","tishamdhar","2026-01-23T14:30:51.4410000+00:00","AND DONE !! k8s@node10:~ $ lspci
+0001:00:00.0 PCI bridge: Broadcom Inc. and subsidiaries BCM2712 PCIe Bridge (rev 21)
+0001:01:00.0 Ethernet controller: Xilinx Corporation Device 0666 (rev 02)<- Devil Device ?
+0002:00:00.0 PCI bridge: Broadcom Inc. and subsidiaries BCM2712 PCIe Bridge (rev 21)
+0002:01:00.0 Ethernet controller: Raspberry Pi Ltd RP1 PCIe 2.0 South Bridge","",""
+"746955286274900120","tishamdhar","2026-01-23T14:31:28.7330000+00:00","Time to give it a crack with litepcie","",""
+"169786952432746498","mithro_","2026-01-23T23:10:50.5180000+00:00","@Tisham Dhar (CSIRO EASI) - Great progress!","",""
+"746955286274900120","tishamdhar","2026-01-23T23:12:00.3110000+00:00","This weekend I am playing with the Blackhole from Tenstorrent and recovering from the heat and COVID. Remind me next weekend where the goal posts are.","",""
+"169786952432746498","mithro_","2026-01-23T23:14:40.9600000+00:00","How is the BlackHole connected to your computers?","",""
+"746955286274900120","tishamdhar","2026-01-24T01:07:04.9160000+00:00","PCIe over thunderbolt","",""
+"746955286274900120","tishamdhar","2026-01-24T23:17:28.0840000+00:00","I have discovered and used this file with installed Litex toolchain. I am going to try the synthesised bitstream and see what I get : https://github.com/litex-hub/litex-boards/blob/master/litex_boards/targets/kosagi_netv2.py it also produces a driver. Need to read up on what it exactly does in the kernel. Because JTAG loader and synthesis toolchains are on different machines , I have to create a bin file and copy it over. I will also add the working 100T pci-leech bin file to the wiki where I got the pre-built 35T one from. Stuck on my tenstorrent card , so I have dropped that from my working set while I rustle up some help","",""
+"746955286274900120","tishamdhar","2026-01-25T05:49:10.8790000+00:00","@Tim 'mithro' Ansell @bunnie you can leave off the VM dusting Litex has kept the NeTV2 support maintained, at least upto 2 years ago and I can build from their end with this command `python3 -m litex_boards.targets.kosagi_netv2 --build --with-pcie --variant a7-100 --with-ethernet --driver --with-sdcard`","","🎉 (1)"
+"746955286274900120","tishamdhar","2026-01-25T05:50:12.8350000+00:00","Bitstream when loaded shows up with this Xilinix device on PCI-e Bus of Raspberry pi 5: 
+0001:00:00.0 PCI bridge: Broadcom Inc. and subsidiaries BCM2712 PCIe Bridge (rev 21)
+0001:01:00.0 Memory controller: Xilinx Corporation Device 7024
+0002:00:00.0 PCI bridge: Broadcom Inc. and subsidiaries BCM2712 PCIe Bridge (rev 21)
+0002:01:00.0 Ethernet controller: Raspberry Pi Ltd RP1 PCIe 2.0 South Bridge","",""
+"758346146204090390","bunnievorpal","2026-01-25T05:59:55.4080000+00:00","oh wow. what? I had no idea that Litex was maintaining a port. That's pretty awesome.","","🚀 (1)"
+"758346146204090390","bunnievorpal","2026-01-25T06:00:07.2160000+00:00","Thank you florent","",""
+"169786952432746498","mithro_","2026-01-25T23:21:45.0190000+00:00","@carlfk - So I have the tweed gateway box plugged in now and can access it's BMC. The only problem is that I currently have a single IPv4 IP address.","",""
+"169786952432746498","mithro_","2026-01-26T03:33:13.7480000+00:00","@carlfk - Looks like I can connect to the machine using the IPv6 address","",""
+"169786952432746498","mithro_","2026-01-26T21:02:09.8980000+00:00","@carlfk - I was hoping to get tweed up and running but I ended up fighting with vlans and stuff","",""
+"443147704126668801","carlfk","2026-01-26T21:25:35.8050000+00:00","it might be a good time to rebuild the box - there is a new version of Debian and RaspiOS and figure out how to support more than just Arty which I think is all the ansible stuff sets up","",""
+"169786952432746498","mithro_","2026-01-26T21:49:13.5090000+00:00","@carlfk - How are the two sites handled again?","",""
+"443147704126668801","carlfk","2026-01-26T21:50:27.2310000+00:00","both dns point to the same IP, nginx did a reditect","",""
+"746955286274900120","tishamdhar","2026-01-26T22:52:29.9650000+00:00","I got a one of the DMA game hacking cards off Amazon (a 75T) it comes with a built in CH347 UART + JTAG interface. So can upload things to it via newer openOCD , did upload Pci-leech and that works. Will see if I can register it as a board under Litex and make it do something. Next weekend will document the NeTV2 status in Litex Wiki. CH347 seems to be the easiest / cheapest UART + JTAG in the current setup.  Dirty JTAG's work too I guess. I have some Raspi's Pico's floating around looking for a purpose in life.","",""
+"169786952432746498","mithro_","2026-01-27T20:34:03.4560000+00:00","@Tisham Dhar (CSIRO EASI) - Do you have a link to the DMA game hacking cards?","",""
+"169786952432746498","mithro_","2026-01-27T20:34:30.1030000+00:00","I also have a box of about 30 x CH347 UARTs here.","",""
+"443147704126668801","carlfk","2026-01-27T20:51:28.9040000+00:00","guessing https://captaindma.com/product/captain-dma-75t/","","🚀 (1)"
+"746955286274900120","tishamdhar","2026-01-27T21:00:24.9770000+00:00","I bought an unbranded hardware on Amazon","",""
+"746955286274900120","tishamdhar","2026-01-27T21:01:54.9410000+00:00","https://www.amazon.com.au/Synpinya-Blender-High-Performance-Direct-Memory/dp/B0FQJ92MX1/","",""
+"746955286274900120","tishamdhar","2026-01-27T21:02:07.2200000+00:00","Available on AliExpress as well","",""
+"746955286274900120","tishamdhar","2026-01-27T21:03:12.7120000+00:00","I will take a few and develop a recipe with Raspberry Pi 5 and NeTV2 then you can use that stack to wire up all the boards.","",""
+"169786952432746498","mithro_","2026-01-27T21:15:01.3270000+00:00","No DDR memory on that board?","",""
+"169786952432746498","mithro_","2026-01-27T21:16:37.9950000+00:00","Guess if you have a decent PCIe link going, you can just use the host's memory....","",""
+"746955286274900120","tishamdhar","2026-01-27T21:40:22.4670000+00:00","It is a super simple card ch347, FPGA, spi flash and ftdi for output if things back to host. It captures game frames and does stuff automatically (target lock for FPS(.","",""
+"106534716710080512","in1pe","2026-01-27T21:55:36.3230000+00:00","For what they're meant for x4 is already pretty good","",""
+"106534716710080512","in1pe","2026-01-27T21:56:50.5770000+00:00","Though I think they generally use USB / Eth to exfiltrate the data","",""
+"106534716710080512","in1pe","2026-01-27T21:57:28.6450000+00:00","Anticheats will prematurely blacklist drivers and prevent the pages from getting mmio mapped if it looks off","",""
+"169786952432746498","mithro_","2026-01-29T04:11:28.5760000+00:00","@carlfk - Did you end up writing up instructions on how to use the stuff in the Pici supplies to mount RPis?","",""
+"169786952432746498","mithro_","2026-01-29T04:13:56.2000000+00:00","I think I should be using these","2026-01_media/PXL_20260129_041323083-2929F.jpg",""
+"443147704126668801","carlfk","2026-01-29T17:00:10.7800000+00:00","https://github.com/CarlFK/pici/wiki/Card-Assembly-Procedure","",""
+"443147704126668801","carlfk","2026-01-29T17:00:36.1980000+00:00","that bag of holes is ""secure with 4 donuts""","",""
+"443147704126668801","carlfk","2026-01-29T17:03:40.2730000+00:00","There should be 4 assembled ... cards?  sets?  bundles.","",""
+"443147704126668801","carlfk","2026-01-29T17:04:22.2690000+00:00","get those on line, and figue out if you want to add more Arty or add new stuf like NeTV2 or fomu","",""
+"443147704126668801","carlfk","2026-01-29T18:23:13.3550000+00:00","also: Pi5 will need a heat sink and fan - the cpu based video encoding heats it up enough to trip some shutdown thing","",""
+"169786952432746498","mithro_","2026-01-30T03:11:03.6660000+00:00","@carlfk - Thanks past Carl for writing that up!","",""
+"443147704126668801","carlfk","2026-01-30T04:32:59.0070000+00:00","well... I'm curious if someone can make sense of it.","",""
+"443147704126668801","carlfk","2026-01-30T04:33:49.8620000+00:00","it's good once you have done it a few times and can't remember what order to do things in","",""
+"169786952432746498","mithro_","2026-01-30T04:34:01.4740000+00:00","@carlfk - I think I've almost got tweed reconfigured, going to get you a pull request with the changes needed","","👍 (1)"
+"758346146204090390","bunnievorpal","2026-01-30T09:28:31.7890000+00:00","I'm just circling back to this thread - it looks like the NeTV2 bitrot issue was resolved, so I don't need to dust off the old VM and try to figure that out any more, correct?","",""
+"746955286274900120","tishamdhar","2026-01-30T11:48:19.1940000+00:00","Yep Litex works fine and you can make a post somewhere to that effect. I will be testing the 35T this week.","","👍 (1)"
+"746955286274900120","tishamdhar","2026-01-30T11:50:04.9430000+00:00","This CH347 in mode 3 does UART + jtag","2026-01_media/PXL_20260130_114659237-9E824.jpg",""
+"758346146204090390","bunnievorpal","2026-01-30T12:36:21.9340000+00:00","I'll try to catch up on some PRs etc on the repo then, thanks for working through this!","",""
+"443147704126668801","carlfk","2026-01-30T19:09:53.2350000+00:00","@Tim 'mithro' Ansell you changed ""hardcoded 10.21.0.1""  which looks like it should work fine, but I am wondering why?","",""
+"169786952432746498","mithro_","2026-01-30T23:37:19.8500000+00:00","@carlfk - The AI decided it wanted to 😛","",""
+"443147704126668801","carlfk","2026-01-30T23:39:19.4600000+00:00","that makes things harder to keep track of, so no.","",""
+"443147704126668801","carlfk","2026-01-30T23:40:00.8560000+00:00","please don't make me spend time on AI stuff you have't scrutinized","","💯 (1)"
+"443147704126668801","carlfk","2026-01-31T17:27:39.2340000+00:00","I hate to ask.. and it bothers me that we are having this conversation - is any of your PR  needed?","",""
 "169786952432746498","mithro_","2026-01-31T21:02:17.4340000+00:00","The description seems reasonable to me:
 
     cmdline.txt and fstab had hardcoded 10.21.0.1 NFS server IPs.
@@ -8,3 +238,19 @@ AuthorID,Author,Date,Content,Attachments,Reactions
 
 The IP address range 10.31.X.X is what I'm using for the fpgas.online in my network.","",""
 "169786952432746498","mithro_","2026-01-31T21:33:52.7910000+00:00","@carlfk - Can you `ssh -6 root@tweed.welland.mithis.com` ?","",""
+"443147704126668801","carlfk","2026-01-31T22:05:34.6330000+00:00","ssh: connect to host tweed.welland.mithis.com port 22: Network is unreachable","",""
+"443147704126668801","carlfk","2026-01-31T22:05:54.0890000+00:00","carl@x1:~$ host tweed.welland.mithis.com 
+tweed.welland.mithis.com has address 87.121.95.37
+tweed.welland.mithis.com has IPv6 address 2404:e80:a137:3100::2","",""
+"169786952432746498","mithro_","2026-01-31T22:06:07.1690000+00:00","@carlfk - Did you use the `-6` ?","",""
+"443147704126668801","carlfk","2026-01-31T22:06:13.7000000+00:00","yup","",""
+"169786952432746498","mithro_","2026-01-31T22:06:20.3670000+00:00","@carlfk - Can you ping6 that address then?","",""
+"443147704126668801","carlfk","2026-01-31T22:06:39.1130000+00:00","carl@x1:~$ ping6 2404:e80:a137:3100::2 
+ping6: connect: Network is unreachable","",""
+"169786952432746498","mithro_","2026-01-31T22:06:56.2230000+00:00","@carlfk - Can you try a `ping6 www.google.com` ?","",""
+"443147704126668801","carlfk","2026-01-31T22:07:08.3240000+00:00","I have no idea and I would be surprised if I have v6 here on my home lan","",""
+"443147704126668801","carlfk","2026-01-31T22:07:18.6520000+00:00","carl@x1:~$ ping6 www.google.com 
+ping6: connect: Network is unreachable","",""
+"443147704126668801","carlfk","2026-01-31T22:07:47.7020000+00:00","my router is long overdue for an overhaul - maybe this is the bump I need to do something","",""
+"169786952432746498","mithro_","2026-01-31T22:08:46.6530000+00:00","Does PS1 have IPv6 setup?","",""
+"443147704126668801","carlfk","2026-01-31T22:49:53.3690000+00:00","I think so.  cchecking...","",""

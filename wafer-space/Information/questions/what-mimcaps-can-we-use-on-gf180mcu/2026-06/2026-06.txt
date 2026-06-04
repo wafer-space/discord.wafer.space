@@ -1,10 +1,11 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: Information / questions / What mimcaps can we use on gf180mcu?
-After: 05/31/2026 23:59
+After: 2026-05-31 11:59 p.m.
+Before: 2026-07-01 12:00 a.m.
 ==============================================================
 
-[06/02/2026 04:15] were491.
+[2026-06-02 4:15 a.m.] were491.
 *Insert obligatory "Sorry if this was really obvious..." here.*
 
 When placing mimcaps in layout, we have the option for mimcap option MIM-A or MIM-B, and also the option to choose which layers we place between.
@@ -20,48 +21,48 @@ The docs page [referenced](https://gf180mcu-pdk.readthedocs.io/en/latest/analog/
 Thanks.
 
 
-[06/02/2026 05:28] 246tnt
+[2026-06-02 5:28 a.m.] 246tnt
 Yes, MIM-B is what you can use.
 
 
-[06/02/2026 05:28] 246tnt
+[2026-06-02 5:28 a.m.] 246tnt
 1.5 fF / um^2 is the config used
 
 {Reactions}
 ❤️
 
-[06/02/2026 05:31] 246tnt
+[2026-06-02 5:31 a.m.] 246tnt
 This is for a full wafer.space slot right ? Not for tinytapeout ?
 
 {Reactions}
 ✅
 
-[06/02/2026 07:31] mole99
+[2026-06-02 7:31 a.m.] mole99
 Stackup can be found here: https://gf180mcu-pdk.readthedocs.io/en/latest/analog/layout/inter_specs/inter_specs_3_43.html
 (Sorry, already linked above).
 
 {Reactions}
 ❤️
 
-[06/02/2026 21:39] were491.
+[2026-06-02 9:39 p.m.] were491.
 it's half height on wafer.space. it's not tinytapeout
 
 tbqh, i have a hard time finding the specific options chosen by wafer.space for gf180mcu, is there a more organized doc anywhere that lists all details of the specific configuration?
 
 
-[06/02/2026 21:47] 246tnt
+[2026-06-02 9:47 p.m.] 246tnt
 Like what ?
 
 
-[06/02/2026 21:48] 246tnt
+[2026-06-02 9:48 p.m.] 246tnt
 The PDK itself `gf180mcuD` variant will show most details when looking in the tech files.
 
 
-[06/02/2026 23:21] were491.
+[2026-06-02 11:21 p.m.] were491.
 does that mention (for examples) which mimcap config is used and that the ppolyf_u_high_Rs is 1k? i could just have not read them properly
 
 
-[06/03/2026 06:23] mole99
+[2026-06-03 6:23 a.m.] mole99
 For now, the best way to get that information is to read the magic techfile for gf180mcuD.
 
 > **Note that there are multiple mutually exclusive process options for the
@@ -80,28 +81,28 @@ It seems to incorrectly use the model names from the MOSCAP models: https://gf18
 {Reactions}
 👍
 
-[06/03/2026 06:38] 246tnt
+[2026-06-03 6:38 a.m.] 246tnt
 @Leo Moser (mole99) Interestingly I was seeing that in the E-Test results.  The test result is named "MIM15_A" suggesting 1.5fF/um^2  but then the spec is 1.7 fF/um^2 minumum and 2.3 fF/um^2 maximum and we hit 1.92 fF/um^2 on run 1.
 
 
-[06/03/2026 06:54] mole99
+[2026-06-03 6:54 a.m.] mole99
 That is indeed strange. I would also have expected "B" in the name, not "A".
 
 
-[06/03/2026 07:31] 246tnt
+[2026-06-03 7:31 a.m.] 246tnt
 @Leo Moser (mole99) Looking at https://mithro-gf180mcu-pdk.readthedocs.io/en/latest/analog/spice/elec_specs/elec_specs_6_4.html
 
 
-[06/03/2026 07:36] 246tnt
+[2026-06-03 7:36 a.m.] 246tnt
 I think there are two orthogonal options. Where the cap is in the metal and what thickness of dielecric.
 
 
-[06/03/2026 07:38] 246tnt
+[2026-06-03 7:38 a.m.] 246tnt
 So the "A" in tha test might refer to option `a` on that page which is indeed 1.5 f/F.
 Now why doesn't that match the option we think we have and the min/max value ... I'm starting to think the labels have been cut or only reflect the first option or somethign which would also explain why the label mention 9K top metal while we should have 11 K one.
 
 
-[06/03/2026 13:41] rtimothyedwards_19428
+[2026-06-03 1:41 p.m.] rtimothyedwards_19428
 The choice of MiM capacitance and the choice of poly high sheet rho resistance is entirely by process option, and there is *no* indication in the way of layer ID markers to indicate which option is which, or to prevent the end user from designing to the wrong option and then submitting the design.  It is entirely up to everyone involved to be on the same page, which is honestly a bit scary.  This is why I have in the magic tech file the comment about "this tech file assumes the options. . .".  There is literally no other way to convey that information.  The only other place it's decided is when Wafer Space submits the form to GF.
 
 I expect that the E-test structures are just named the same thing without regard to the actual options chosen, which probably works better with the automation doing the testing.
@@ -109,13 +110,13 @@ I expect that the E-test structures are just named the same thing without regard
 The actual options chosen are a bit arbitrary;  I made those choices in deciding what options Efabless would use for the Google/GF shuttle run.  My intent was to try to get the same MiM cap density as the double MiM structure on sky130.  In retrospect, the sky130 res_xhigh (2kohms/square) is used much more often than the res_high and would probably have been a better choice.
 
 
-[06/03/2026 21:06] were491.
+[2026-06-03 9:06 p.m.] were491.
 Thanks, I totally missed that scrolling through/grepping for things I thought would match. Based on the defined subckts from `gf180mcuD/libs.tech/ngspice/sm141064_mim.ngspice` (the path as in IIC-OSIC-TOOLS), it seems the documentation is incorrect here. ('documentation' referring to the stackup page: https://gf180mcu-pdk.readthedocs.io/en/latest/analog/layout/inter_specs/inter_specs_3_43.html)
 
 So, I assume in layout (KLayout) I can use cap_mim with MIM-B and M4-M5 options selected, but expect the final capacitance to be ~2.0fF/um^2 for simulation purposes. Is this correct?
 
 
-[06/03/2026 23:26] namibj
+[2026-06-03 11:26 p.m.] namibj
 Once I have PCells for the R-4R (or possibly closer to R-3R; it will depend on yield target and demands on output impedance/how-buffered the output is; e.g. current-mode feeds a virtual ground instead of directly the load) DAC and some replica-bias based MCML logic gates, I'd happily provide comparisons on performance and area impact of instead instantiating them with different sheet resistor option; ofc. assuming them to be re-tuned to make the most of the different option.
 
 I.e., comparing 1000 Ω/□ vs. 2000 Ω/□ vs. 3000 Ω/□ noting the 3k option has +-25% while the two other have just +-20% (at leas tso listed in the PDK).
