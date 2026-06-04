@@ -310,21 +310,76 @@ def generate_cname_file(config: dict, output_path: Path) -> None:
         print(f"✓ Generated CNAME file for {parsed.hostname}")
 
 
+def load_channel_order(public_dir: Path, server_name: str) -> list[str]:
+    """Return channel paths in guild order from the export's `_order.json`.
+
+    Empty list if the sidecar is absent or unreadable — navigation then falls
+    back to alphabetical ordering, so a missing sidecar degrades gracefully.
+    """
+    order_file = public_dir / server_name / "_order.json"
+    try:
+        with open(order_file, encoding="utf-8") as f:
+            data = json.load(f)
+    except (OSError, json.JSONDecodeError):
+        return []
+    return [e["path"] for e in data if isinstance(e, dict) and e.get("path")]
+
+
+def group_channels_by_category(channels: list[dict], order: list[str]) -> list[dict]:
+    """Group channels under their category, ordered the way the guild is.
+
+    `order` is the list of channel paths in guild order (from the export
+    sidecar). Categories appear in the order their first channel appears.
+    Channels missing from `order` (e.g. brand new, not yet in the latest
+    export) sort to the end of their category alphabetically, so nothing is
+    ever dropped. Returns `[{"name": category, "channels": [...]}, ...]`.
+    """
+    pos = {path: i for i, path in enumerate(order)}
+    fallback = len(order)
+
+    groups: dict[str, list[dict]] = {}
+    cat_order: list[str] = []
+    for ch in sorted(channels, key=lambda c: (pos.get(c["name"], fallback), c["name"])):
+        cat = ch.get("category") or ""
+        if cat not in groups:
+            groups[cat] = []
+            cat_order.append(cat)
+        groups[cat].append(ch)
+
+    return [{"name": cat, "channels": groups[cat]} for cat in cat_order]
+
+
 def generate_server_index(
-    config: dict, server: dict, channels: list[dict], output_path: Path
+    config: dict,
+    server: dict,
+    channels: list[dict],
+    output_path: Path,
+    categories: list[dict] | None = None,
 ) -> None:
     """Generate server index page.
 
     Args:
         config: Site configuration
         server: Server info dict
-        channels: List of channel info dicts
+        channels: List of channel info dicts (flat; kept for back-compat)
         output_path: Where to write index.html
+        categories: Channels grouped by category in guild order (issue #5);
+            the template renders these as labelled sections.
     """
     env = Environment(loader=FileSystemLoader("templates"))
     template = env.get_template("server_index.html.j2")
 
-    html = template.render(site=config["site"], server=server, channels=channels)
+    # Self-sufficient: with no explicit guild order, group channels by their
+    # own category field (alphabetical) so the page still renders grouped.
+    if categories is None:
+        categories = group_channels_by_category(channels, [])
+
+    html = template.render(
+        site=config["site"],
+        server=server,
+        channels=channels,
+        categories=categories,
+    )
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(html)
@@ -743,11 +798,17 @@ def main() -> None:  # noqa: C901, PLR0912, PLR0915  # Main orchestration functi
                 channel["is_forum"] = channel["total_messages"] == 0 and len(channel["threads"]) > 0
                 channel["thread_count"] = len(channel["threads"])
 
+            # Group channels by category in the guild's own order (issue #5);
+            # falls back to the alphabetical channels_list when no sidecar.
+            order = load_channel_order(public_dir, server_name)
+            categories = group_channels_by_category(channels_list, order)
+
             generate_server_index(
                 config,
                 server_data,
                 channels_list,
                 public_dir / server_name / "index.html",
+                categories=categories,
             )
 
             thread_pages = 0
