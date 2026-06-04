@@ -33,68 +33,40 @@ from scripts.months import is_month_dir_name
 VALID_EXTENSIONS = {".html", ".txt", ".json", ".csv"}
 
 
-def _merge_json_exports(source_file: Path, dest_file: Path) -> bool:
-    """Merge new JSON export into the existing archive, deduplicating by ID.
-
-    Both source and destination are expected to belong to a single month
-    (encoded in the dest filename — `2026-05.json` means May 2026). We
-    discard any messages in the *existing* file whose timestamp is from
-    a different month: those are leftovers from the legacy current-month-
-    dump bug and would otherwise propagate forever through merges.
-
-    Within-month edits and deletions are preserved by ID-keyed merge, so
-    nothing legitimate is lost. DCE message IDs are snowflakes, which sort
-    chronologically, so we sort by integer ID at the end.
-    """
-    expected_month = dest_file.stem  # filename like "2026-05.json" → "2026-05"
+def _json_message_count(json_file: Path) -> int:
+    """Number of messages in a DCE JSON export (0 if missing/unreadable)."""
     try:
-        with open(source_file, encoding="utf-8") as f:
-            new_data = json.load(f)
+        with open(json_file, encoding="utf-8") as f:
+            return len(json.load(f).get("messages", []))
+    except (OSError, json.JSONDecodeError):
+        return 0
 
-        if not dest_file.exists():
-            with open(dest_file, "w", encoding="utf-8") as f:
-                json.dump(new_data, f, indent=2)
-            return True
 
-        with open(dest_file, encoding="utf-8") as f:
-            existing_data = json.load(f)
+def _accept_month_export(source_json: Path, dest_json: Path) -> tuple[bool, str | None]:
+    """Decide whether a freshly-exported month may replace the published one.
 
-        def _in_month(msg: dict[str, Any]) -> bool:
-            ts = msg.get("timestamp", "")
-            return isinstance(ts, str) and ts[:7] == expected_month
+    The latest *successful* export is authoritative: deletions propagate, so we
+    do NOT preserve published messages absent from the new export. (The old
+    by-ID union kept messages the latest HTML no longer rendered, which is what
+    desynced the index count from the page — issue #1.)
 
-        existing_messages = [m for m in existing_data.get("messages", []) if _in_month(m)]
-        new_messages = new_data.get("messages", [])
-
-        messages_by_id: dict[str, Any] = {}
-        for msg in existing_messages:
-            msg_id = msg.get("id")
-            if msg_id:
-                messages_by_id[msg_id] = msg
-        # New messages override existing entries with the same ID (edits).
-        for msg in new_messages:
-            msg_id = msg.get("id")
-            if msg_id:
-                messages_by_id[msg_id] = msg
-
-        sorted_messages = sorted(messages_by_id.values(), key=lambda m: int(m.get("id", 0)))
-
-        merged_data = new_data.copy()
-        merged_data["messages"] = sorted_messages
-        merged_data["messageCount"] = len(sorted_messages)
-
-        # Since we keep history across runs, the merged file represents the
-        # full month range, not the bracket of any single export.
-        merged_data["dateRange"] = {"after": None, "before": None}
-
-        with open(dest_file, "w", encoding="utf-8") as f:
-            json.dump(merged_data, f, indent=2)
-
-        return True
-
-    except Exception as e:
-        print(f"    ⚠ JSON merge failed for {source_file}: {e}")
-        return False
+    The single guard: a non-empty published month re-exporting to EMPTY is
+    almost certainly a transient/partial fetch — a channel does not lose a whole
+    month of messages to ordinary deletion in one run — so we keep the existing
+    export and surface an error instead of blanking the page.
+    """
+    if not source_json.exists() or not dest_json.exists():
+        return True, None
+    new_count = _json_message_count(source_json)
+    existing_count = _json_message_count(dest_json)
+    if new_count == 0 and existing_count > 0:
+        return (
+            False,
+            f"{source_json.name}: new export has 0 messages but the published month "
+            f"has {existing_count} — treating as a transient/partial fetch and keeping "
+            "the existing export (issue #1 transient guard)",
+        )
+    return True, None
 
 
 def _copy_media_directory(source_media_dir: Path, dest_media_dir: Path) -> bool:
@@ -105,19 +77,6 @@ def _copy_media_directory(source_media_dir: Path, dest_media_dir: Path) -> bool:
         if dest_media_dir.exists():
             shutil.rmtree(dest_media_dir)
         shutil.copytree(source_media_dir, dest_media_dir)
-        return True
-    except Exception:
-        return False
-
-
-def _copy_month_file(source_file: Path, dest_file: Path) -> bool:
-    """Copy a single per-month file, merging if JSON."""
-    extension = source_file.suffix
-    dest_file.parent.mkdir(parents=True, exist_ok=True)
-    try:
-        if extension == ".json":
-            return _merge_json_exports(source_file, dest_file)
-        shutil.copy2(source_file, dest_file)
         return True
     except Exception:
         return False
@@ -219,12 +178,15 @@ def _walk_paths(top: Path) -> Iterator[tuple[Path, list[str], list[str]]]:
         stack.extend(dirs)
 
 
-def _organize_channel_directory(
+def _organize_channel_directory(  # noqa: C901  # per-month atomic publish is branchy
     channel_export_dir: Path,
     exports_root: Path,
     public_root: Path,
 ) -> tuple[int, list[str]]:
     """Move all per-month files in a channel directory into `public_root`.
+
+    Each month is published atomically: all of its formats come from the same
+    (latest) export, or none do — see `_accept_month_export`.
 
     Returns (files_organized, errors).
     """
@@ -235,20 +197,38 @@ def _organize_channel_directory(
     errors: list[str] = []
     months_touched: set[str] = set()
 
+    # Group this run's per-month files by month so each month publishes
+    # ATOMICALLY: all of its formats come from the same (latest) export, or none
+    # do. The old path merged JSON by ID while overwriting HTML wholesale, so a
+    # month's JSON count could drift above what the HTML rendered (issue #1).
+    by_month: dict[str, list[Path]] = {}
     for entry in sorted(channel_export_dir.iterdir()):
         if not entry.is_file():
             continue
-        stem = entry.stem
-        ext = entry.suffix
-        if ext not in VALID_EXTENSIONS or not is_month_dir_name(stem):
+        if entry.suffix not in VALID_EXTENSIONS or not is_month_dir_name(entry.stem):
             continue
-        dest_file = public_channel_dir / stem / f"{stem}{ext}"
-        if _copy_month_file(entry, dest_file):
-            files_organized += 1
-            months_touched.add(stem)
-            print(f"  ✓ {relative}/{entry.name} → {dest_file.relative_to(public_root)}")
-        else:
-            errors.append(f"Failed to copy {entry}")
+        by_month.setdefault(entry.stem, []).append(entry)
+
+    for month, files in sorted(by_month.items()):
+        dest_month_dir = public_channel_dir / month
+        accept, err = _accept_month_export(
+            channel_export_dir / f"{month}.json", dest_month_dir / f"{month}.json"
+        )
+        if not accept:
+            if err:
+                errors.append(err)
+                print(f"  ⚠ {relative}/{month}: {err}")
+            continue
+        dest_month_dir.mkdir(parents=True, exist_ok=True)
+        for src in files:
+            dest_file = dest_month_dir / src.name
+            try:
+                shutil.copy2(src, dest_file)
+                files_organized += 1
+                months_touched.add(month)
+                print(f"  ✓ {relative}/{src.name} → {dest_file.relative_to(public_root)}")
+            except OSError:
+                errors.append(f"Failed to copy {src}")
 
     # Per-month media directories sit alongside the per-month files
     for month in months_touched:
