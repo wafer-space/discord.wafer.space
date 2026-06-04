@@ -1,0 +1,1 @@
+{"message":"Invalid resource \"https://images-ext-1.discordapp.net/external/mfxcYSxRi1yNdQ738WX91FPHJYzrzDZpxOFms9FXfA4/%3Fh1%3DWorld%2520Clock%26h2%3DLocal%2520Time%2520Around%2520the%2520World/https/www.timeanddate.com/scripts/worldclock_og.php\""}
