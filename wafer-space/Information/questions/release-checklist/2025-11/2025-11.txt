@@ -1,11 +1,11 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: Information / questions / Release Checklist
-After: 10/31/2025 23:59
-Before: 12/01/2025 00:00
+After: 2025-10-31 11:59 p.m.
+Before: 2025-12-01 12:00 a.m.
 ==============================================================
 
-[11/03/2025 09:31] scafir
+[2025-11-03 9:31 a.m.] scafir
 Hi, is there a release checklist for the things to take into account before doing a submission? From what I see, I need to:
 1) Pass the  gf180mcu-precheck
 2) Make sure the QR code is correct (what info should it contain?)
@@ -17,7 +17,7 @@ For the IHP tapeout, there was an issue with different guidelines, maybe somethi
 I'm asking because I will do an analog tapeout and thus will not use the librelane flow. I will also have to modify the padring dimension and bond the chips myself.
 
 
-[11/03/2025 10:18] mole99
+[2025-11-03 10:18 a.m.] mole99
 Hi @Clyde Laforge!
 All of these checks should be handled by the precheck. The precheck runs both the magic and KLayout DRC setup, offgrid and angle checks, density checks etc. We might need to add a zero size polygon check.
 
@@ -33,35 +33,35 @@ Likewise, if you manage to break the precheck, please let us know so we can impr
 {Reactions}
 👍
 
-[11/19/2025 22:00] rzioma
+[2025-11-19 10:00 p.m.] rzioma
 Precheck- that is running gds against https://github.com/wafer-space/gf180mcu-precheck, is that correct @Leo Moser (mole99) ?
 
 {Reactions}
 👍
 
-[11/19/2025 22:03] rzioma
+[2025-11-19 10:03 p.m.] rzioma
 I also wanted to ask how the submission process will look like?
 
 Will it be basically just copying GDS file?
 
 
-[11/19/2025 22:03] urish
+[2025-11-19 10:03 p.m.] urish
 @Leo Moser (mole99) you may find this useful for the zero size polygons: <https://github.com/TinyTapeout/tt-support-tools/blob/main/precheck/tech-files/zeroarea.rb.drc>
 
 
-[11/19/2025 22:04] urish
+[2025-11-19 10:04 p.m.] urish
 You need to submit a URL to the final GDS file
 
 
-[11/19/2025 22:04] urish
+[2025-11-19 10:04 p.m.] urish
 (could be from a github repo)
 
 
-[11/19/2025 22:04] urish
+[2025-11-19 10:04 p.m.] urish
 along with MD5 or SHA1 hash
 
 
-[11/19/2025 22:04] urish
+[2025-11-19 10:04 p.m.] urish
 you can try it out at https://test-platform.wafer.space/
 
 {Embed}
@@ -73,38 +73,38 @@ Platform for wafer.space low cost silicon manufacturing.
 {Reactions}
 🙏
 
-[11/19/2025 22:04] urish
+[2025-11-19 10:04 p.m.] urish
 This is what the submission interface currenty looks like:
 
 
-[11/19/2025 22:04] urish
+[2025-11-19 10:04 p.m.] urish
 
 
 {Attachments}
 2025-11_media/image-7A669.png
 
 
-[11/19/2025 22:19] rzioma
+[2025-11-19 10:19 p.m.] rzioma
 Got it! Thanks
 
 
-[11/20/2025 08:22] mole99
+[2025-11-20 8:22 a.m.] mole99
 Yes
 
 
-[11/20/2025 08:40] mole99
+[2025-11-20 8:40 a.m.] mole99
 Thanks Uri! I'm torn between just reporting an error on zero size polygons (with a report), so the problem is fixed upstream/in the design. Or to delete these shapes as done in the script. I think I prefer to modify the original layout as little as possible.
 
 
-[11/20/2025 08:44] urish
+[2025-11-20 8:44 a.m.] urish
 we are actually only using this script to report the error, but do not use the modified design
 
 
-[11/20/2025 08:59] mole99
+[2025-11-20 8:59 a.m.] mole99
 Good. I will do the same 👍
 
 
-[11/20/2025 13:50] rzioma
+[2025-11-20 1:50 p.m.] rzioma
 Non Manufacturable! 🤯
 
 {Attachments}
@@ -113,31 +113,31 @@ Non Manufacturable! 🤯
 {Reactions}
 matt_oh_no (2)
 
-[11/20/2025 13:50] rzioma
+[2025-11-20 1:50 p.m.] rzioma
 @Leo Moser (mole99) @urish any advice?
 
 
-[11/20/2025 13:50] rzioma
+[2025-11-20 1:50 p.m.] rzioma
 What did I screw up?
 
 
-[11/20/2025 13:50] rzioma
+[2025-11-20 1:50 p.m.] rzioma
 Precheck passed
 
 
-[11/20/2025 13:51] urish
+[2025-11-20 1:51 p.m.] urish
 Maybe you need to add fill?
 
 
-[11/20/2025 13:51] urish
+[2025-11-20 1:51 p.m.] urish
 (re the 2nd error)
 
 
-[11/20/2025 13:51] mole99
+[2025-11-20 1:51 p.m.] mole99
 The precheck is not yet integrated, what you see is AI generated afaik
 
 
-[11/20/2025 13:51] rzioma
+[2025-11-20 1:51 p.m.] rzioma
 @Leo Moser (mole99) precheck has passed btw
 
 {Attachments}
@@ -146,25 +146,25 @@ The precheck is not yet integrated, what you see is AI generated afaik
 {Reactions}
 👍
 
-[11/20/2025 13:53] mole99
+[2025-11-20 1:53 p.m.] mole99
 @Tim 'mithro' Ansell will be able to tell you when the precheck has been integrated into the online platform.
 
 
-[11/20/2025 13:53] rzioma
+[2025-11-20 1:53 p.m.] rzioma
 In other words, should I worry right now about those messages?
 
 
-[11/20/2025 13:53] mole99
+[2025-11-20 1:53 p.m.] mole99
 Those are AI hallucinations, you don't have to worry about them :)
 
 {Reactions}
 🎉 ❤️
 
-[11/20/2025 21:58] mithro_
+[2025-11-20 9:58 p.m.] mithro_
 AI hallucinations == stuff the AI just put in instead of the real precheck
 
 
-[11/20/2025 21:59] mithro_
+[2025-11-20 9:59 p.m.] mithro_
 I'm working on the real manufacturing check integration @ https://github.com/wafer-space/platform.wafer.space/pull/43
 
 {Embed}
@@ -177,11 +177,11 @@ Implements automated manufacturability checking for GDS design files using the g
 {Reactions}
 ❤️
 
-[11/20/2025 22:00] mithro_
+[2025-11-20 10:00 p.m.] mithro_
 But I'm currently fighting with the download pathway
 
 
-[11/20/2025 22:00] mithro_
+[2025-11-20 10:00 p.m.] mithro_
 @ https://github.com/wafer-space/platform.wafer.space/pull/45
 
 {Embed}
@@ -192,11 +192,11 @@ This PR implements a comprehensive content extraction pipeline for processing GD
 2025-11_media/45-C93DE
 
 
-[11/21/2025 06:11] urish
+[2025-11-21 6:11 a.m.] urish
 I thought about asking for support for GH action artifact submission
 
 
-[11/21/2025 06:12] urish
+[2025-11-21 6:12 a.m.] urish
 But on second thought, they are empheral by nature, so it may not be such a great idea
 
 

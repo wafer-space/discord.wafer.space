@@ -16,7 +16,7 @@
     "after": "2025-10-31T23:59:59.999+00:00",
     "before": "2025-12-01T00:00:00+00:00"
   },
-  "exportedAt": "2026-05-28T02:30:29.899557+00:00",
+  "exportedAt": "2026-06-05T10:15:49.0837835+00:00",
   "messages": [
     {
       "id": "1435007106859405472",
@@ -264,7 +264,7 @@
         {
           "emoji": {
             "id": "",
-            "name": "\ud83d\udc4d",
+            "name": "\uD83D\uDC4D",
             "code": "thumbsup",
             "isAnimated": false,
             "imageUrl": "2025-11_media/1f44d-27259.svg"
@@ -850,7 +850,7 @@
       "timestampEdited": null,
       "callEndedTimestamp": null,
       "isPinned": false,
-      "content": "Hold on tight! The reason I still got DRC errors, even after setting `MAGIC_DRC_MAGLEFS` in LibreLane was that I hadn't loaded the maglef views. I had loaded the mag views \ud83e\udd26\u200d\u2642\ufe0f\n\nBy loading the maglef views, all the DRC errors are resolved. Well, actually, not all of them. By using the maglefs from the current PDK I still got some Metal3 spacing errors in the SRAM periphery. Using the no `-hide` maglefs resolved all of the DRC errors within the SRAM macro.\nCould you run magic DRC on the PDK maglefs on your end to confirm my suspicion?\n\nStill, the question is whether we really want to distribute 10MB maglefs for the SRAMs just to avoid checking the DRC rules inside it?\nEven if we don't implement the 5V/3.3V SRAM rules, it probably makes more sense to use the `SramCore` layer to skip these DRC checks in the area.\nThis way I don't need to update the wafer.space precheck every time a new SRAM is generated, and users could generate their own SRAMs.\nEven if we don't implement the 5V/3.3V SRAM rules in magic, in the worst case violations should get caught by KLayout.\nHow difficult would it be to disable specific rules in a certain layer through the magic tech file?",
+      "content": "Hold on tight! The reason I still got DRC errors, even after setting `MAGIC_DRC_MAGLEFS` in LibreLane was that I hadn't loaded the maglef views. I had loaded the mag views \uD83E\uDD26‍♂️\n\nBy loading the maglef views, all the DRC errors are resolved. Well, actually, not all of them. By using the maglefs from the current PDK I still got some Metal3 spacing errors in the SRAM periphery. Using the no `-hide` maglefs resolved all of the DRC errors within the SRAM macro.\nCould you run magic DRC on the PDK maglefs on your end to confirm my suspicion?\n\nStill, the question is whether we really want to distribute 10MB maglefs for the SRAMs just to avoid checking the DRC rules inside it?\nEven if we don't implement the 5V/3.3V SRAM rules, it probably makes more sense to use the `SramCore` layer to skip these DRC checks in the area.\nThis way I don't need to update the wafer.space precheck every time a new SRAM is generated, and users could generate their own SRAMs.\nEven if we don't implement the 5V/3.3V SRAM rules in magic, in the worst case violations should get caught by KLayout.\nHow difficult would it be to disable specific rules in a certain layer through the magic tech file?",
       "author": {
         "id": "323371864074485771",
         "name": "mole99",
@@ -876,7 +876,7 @@
       "inlineEmojis": [
         {
           "id": "",
-          "name": "\ud83e\udd26",
+          "name": "\uD83E\uDD26",
           "code": "person_facepalming",
           "isAnimated": false,
           "imageUrl": "2025-11_media/1f926-E188B.svg"
@@ -1013,7 +1013,7 @@
         {
           "emoji": {
             "id": "",
-            "name": "\ud83d\udc4d",
+            "name": "\uD83D\uDC4D",
             "code": "thumbsup",
             "isAnimated": false,
             "imageUrl": "2025-11_media/1f44d-27259.svg"
@@ -1421,7 +1421,7 @@
       "timestampEdited": null,
       "callEndedTimestamp": null,
       "isPinned": false,
-      "content": "I would really rather avoid pre-filling the SRAM \ud83d\ude2c\n\nFor now, the maglef without the `-hide` option works well, and 10MB more isn't the end of the world (ciel can even deduplicate the PDK variants).\nIdeally, magic could also run directly on the GDS of the SRAM. Initially, by ignoring the 5V/3.3V SRAM rules, and later maybe even by implementing them.\nHow would the first part be implemented, i.e. how would certain rules be ignored in the `SramCore` layer?",
+      "content": "I would really rather avoid pre-filling the SRAM \uD83D\uDE2C\n\nFor now, the maglef without the `-hide` option works well, and 10MB more isn't the end of the world (ciel can even deduplicate the PDK variants).\nIdeally, magic could also run directly on the GDS of the SRAM. Initially, by ignoring the 5V/3.3V SRAM rules, and later maybe even by implementing them.\nHow would the first part be implemented, i.e. how would certain rules be ignored in the `SramCore` layer?",
       "author": {
         "id": "323371864074485771",
         "name": "mole99",
@@ -1463,7 +1463,7 @@
       "inlineEmojis": [
         {
           "id": "",
-          "name": "\ud83d\ude2c",
+          "name": "\uD83D\uDE2C",
           "code": "grimacing",
           "isAnimated": false,
           "imageUrl": "2025-11_media/1f62c-CE43C.svg"
@@ -1559,7 +1559,7 @@
       "timestampEdited": null,
       "callEndedTimestamp": null,
       "isPinned": false,
-      "content": "Oh, it seems we've been talking past each other all this time! \ud83d\ude04\n\nI absolutely agree, the DRC shouldn't be based on cells. That's why the PDK provides the `SramCore` layer (108/5). The foundry SRAMs use this layer to mark the SRAM bit cells.\n\nYes, I would rather not generate a detailed abstract view. But this is the only way we can generate the fill afterwards. It would be possible to clean up the detailed views slightly by replacing the the bitcell array with an obstruction.\n\nIdeally, magic could use the GDS directly. I assume people want to create their own SRAM macros for educational purposes, or, in the case of Staf's generator, to generate new SRAM configurations.",
+      "content": "Oh, it seems we've been talking past each other all this time! \uD83D\uDE04\n\nI absolutely agree, the DRC shouldn't be based on cells. That's why the PDK provides the `SramCore` layer (108/5). The foundry SRAMs use this layer to mark the SRAM bit cells.\n\nYes, I would rather not generate a detailed abstract view. But this is the only way we can generate the fill afterwards. It would be possible to clean up the detailed views slightly by replacing the the bitcell array with an obstruction.\n\nIdeally, magic could use the GDS directly. I assume people want to create their own SRAM macros for educational purposes, or, in the case of Staf's generator, to generate new SRAM configurations.",
       "author": {
         "id": "323371864074485771",
         "name": "mole99",
@@ -1585,7 +1585,7 @@
       "inlineEmojis": [
         {
           "id": "",
-          "name": "\ud83d\ude04",
+          "name": "\uD83D\uDE04",
           "code": "smile",
           "isAnimated": false,
           "imageUrl": "2025-11_media/1f604-BF863.svg"
@@ -1617,7 +1617,7 @@
         {
           "emoji": {
             "id": "",
-            "name": "\ud83d\udc4d",
+            "name": "\uD83D\uDC4D",
             "code": "thumbsup",
             "isAnimated": false,
             "imageUrl": "2025-11_media/1f44d-27259.svg"
@@ -2006,7 +2006,7 @@
       "timestampEdited": null,
       "callEndedTimestamp": null,
       "isPinned": false,
-      "content": "Oh, wow \ud83d\ude2f\nMy PC has 64GB of memory too, but I haven't noticed it filling up yet.",
+      "content": "Oh, wow \uD83D\uDE2F\nMy PC has 64GB of memory too, but I haven't noticed it filling up yet.",
       "author": {
         "id": "323371864074485771",
         "name": "mole99",
@@ -2032,7 +2032,7 @@
       "inlineEmojis": [
         {
           "id": "",
-          "name": "\ud83d\ude2f",
+          "name": "\uD83D\uDE2F",
           "code": "hushed",
           "isAnimated": false,
           "imageUrl": "2025-11_media/1f62f-F0C30.svg"
