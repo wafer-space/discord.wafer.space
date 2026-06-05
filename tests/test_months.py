@@ -332,3 +332,42 @@ def test_count_nonempty_months_missing_dir_is_zero(tmp_path: Path) -> None:
     from scripts.months import count_nonempty_months
 
     assert count_nonempty_months(tmp_path / "nope") == 0
+
+
+def test_html_uses_american_dates(tmp_path: Path) -> None:
+    """Detect the dominant date format: US MM/DD/YYYY vs ISO YYYY-MM-DD (#3)."""
+    from scripts.months import _html_uses_american_dates
+
+    us = tmp_path / "us.html"
+    us.write_text("After 04/30/2026 23:59 ... 05/01/2026 ... 05/02/2026")
+    assert _html_uses_american_dates(us) is True
+
+    iso = tmp_path / "iso.html"
+    iso.write_text("Between 2026-04-30 and 2026-06-01 ... 2026-05-02 ... 2026-05-03")
+    assert _html_uses_american_dates(iso) is False
+
+    # An otherwise-ISO page with one date typed into a message stays ISO.
+    mixed = tmp_path / "mixed.html"
+    mixed.write_text("2026-05-01 2026-05-02 2026-05-03 see you 12/25/2024")
+    assert _html_uses_american_dates(mixed) is False
+
+
+def test_scan_completed_excludes_american_date_month(tmp_path: Path) -> None:
+    """A consistent month still rendered with American dates is incomplete, so
+    it re-exports and converts to ISO (issue #3)."""
+    import json as _json
+
+    from scripts.months import scan_completed_months
+
+    chan = tmp_path / "general"
+    month = chan / "2026-05"
+    month.mkdir(parents=True)
+    (month / "2026-05.json").write_text(
+        _json.dumps({"messages": [{"id": "1", "timestamp": "2026-05-02T00:00:00+00:00"}]})
+    )
+    # HTML is consistent (1 rendered message) but American-style dates.
+    (month / "2026-05.html").write_text(
+        "<div data-message-id=1>After 04/30/2026 23:59 - 05/02/2026 6:39</div>"
+    )
+
+    assert scan_completed_months(chan) == set()
