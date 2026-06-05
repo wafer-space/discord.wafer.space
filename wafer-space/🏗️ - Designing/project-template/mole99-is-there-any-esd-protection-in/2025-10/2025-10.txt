@@ -1,15 +1,15 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / project-template / @mole99 Is there any ESD protection in
-After: 09/30/2025 23:59
-Before: 11/01/2025 00:00
+After: 2025-09-30 11:59 p.m.
+Before: 2025-11-01 12:00 a.m.
 ==============================================================
 
-[10/17/2025 04:56] mole99
+[2025-10-17 4:56 a.m.] mole99
 
 
 
-[10/17/2025 04:56] mole99
+[2025-10-17 4:56 a.m.] mole99
 @Alf The template project uses the pad cells as provided by the PDK. All of the digital pads have ESD protection. See here for example: https://gf180mcu-pdk.readthedocs.io/en/latest/IPs/IO/gf180mcu_fd_io/tri_state_2.html
 
 This should cover HBM, CDM and MM: https://gf180mcu-pdk.readthedocs.io/en/latest/IPs/IO/gf180mcu_fd_io/esd.html
@@ -19,21 +19,21 @@ Each power/ground pad has one ESD protection circuit, the corners have two: http
 The analog pad has only HBM protection diodes, additional ESD protection must be added: https://gf180mcu-pdk.readthedocs.io/en/latest/IPs/IO/gf180mcu_fd_io/analog.html
 
 
-[10/18/2025 11:48] jalf_47390
+[2025-10-18 11:48 a.m.] jalf_47390
 Great, thanks!
 
 {Reactions}
 👍
 
-[10/23/2025 20:49] jalf_47390
+[2025-10-23 8:49 p.m.] jalf_47390
 Hi again, just to clarify, are the "input" pins in the template what you refer to as analog inputs?
 
 
-[10/23/2025 20:52] jalf_47390
+[2025-10-23 8:52 p.m.] jalf_47390
 Also, the clock and reset line are a bit oddly placed in the package, down in the corner. A mid chip location feels like a better place for routing and minimize clock/reset delta over the chip. Was there some particular thinking of the location?
 
 
-[10/24/2025 06:42] mole99
+[2025-10-24 6:42 a.m.] mole99
 Hi @Alf, no, the `NUM_INPUT` parameter controls the number of `gf180mcu_fd_io__in_c` pads, which is a digital input pad. https://github.com/wafer-space/gf180mcu-project-template/blob/a4805b8bb19a960c107ed6f199936e6442d52207/src/chip_top.sv#L242C9-L242C29
 The analog pad is `gf180mcu_fd_io__asig_5p0`. I will add another parameter `NUM_ANALOG` that instantiates analog pads.
 
@@ -43,11 +43,11 @@ It might make sense to move those closer to the center in the template. Just do 
 Could it be because the clock root buffer for the clock tree is located somewhere in the middle of the chip, and the reset does not form a tree?
 
 
-[10/24/2025 07:58] jalf_47390
+[2025-10-24 7:58 a.m.] jalf_47390
 Hi, tnx!   I was not thinking of delta between clock and reset but overall clock propagation. Perhaps it is less critical for these nodes and frequencies but in general it is desirable to try and clock the whole chip as simultaneous as possible. If the clock comes in at lower corner then those blocks will clock sooner than the ones at the top.
 
 
-[10/24/2025 08:16] mole99
+[2025-10-24 8:16 a.m.] mole99
 Hi Alf, that won't happen since OpenROAD builds up a balanced clock tree that is fed from root clock buffer which will be located somewhere in the middle of the chip. You can view the clock tree using the OpenROAD GUI. OpenSTA runs to ensure that setup/hold is met for all flip-flops.
 So the only difference would be the distance from the pad to the root clock buffer. Of course, it is better if that distance is smaller, but I don't know how critical that really is.
 

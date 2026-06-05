@@ -1,33 +1,33 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / project-template / @mole99 I just updated my project with
-After: 09/30/2025 23:59
-Before: 11/01/2025 00:00
+After: 2025-09-30 11:59 p.m.
+Before: 2025-11-01 12:00 a.m.
 ==============================================================
 
-[10/16/2025 14:35] mole99
+[2025-10-16 2:35 p.m.] mole99
 
 
 
-[10/16/2025 14:35] mole99
+[2025-10-16 2:35 p.m.] mole99
 Yes, I rebased leo/gf180mcu on top of the latest dev branch. The OpenROAD version, however, is still the same, so I wouldn't expect any changes regarding GPL.
 For now, the best way forward with GPL is to set `PL_TIME_DRIVEN: False`.
 
 Could you post your STA error? Even better if you could share your repository with the latest changes. Is it still https://github.com/AvalonSemiconductors/ws-submission-2025?
 
 
-[10/17/2025 07:42] tholin
+[2025-10-17 7:42 a.m.] tholin
 I updated the repo
 
 
-[10/17/2025 07:44] tholin
+[2025-10-17 7:44 a.m.] tholin
 
 
 {Attachments}
 2025-10_media/image-73A55.png
 
 
-[10/17/2025 08:35] mole99
+[2025-10-17 8:35 a.m.] mole99
 Thanks for uploading the changes to your repo. I was able to reproduce the failure and trace it back to my latest changes to the `pdk_compat` code in LibreLane. `pdk_compat` migrates old PDK variables to newer formats, however, for gf180mcu a number of variables were simply overwritten instead of checking whether they already existed. This makes it impossible to update the PDK variables to the newer format.
 Therefore, I added some logic that checks whether the new variables already exist before setting their values.
 
@@ -36,7 +36,7 @@ This worked fine, except for `SYNTH_CLK_DRIVING_CELL`, which it is not a new var
 As the project template uses a custom SDC file, this issue did not appear there.
 
 
-[10/17/2025 08:35] mole99
+[2025-10-17 8:35 a.m.] mole99
 I've updated the leo/gf180mcu branch as well as the template project. With the latest changes and this config.yaml I was able to build your project:
 
 ```
@@ -73,11 +73,11 @@ PL_TIME_DRIVEN: False
 ```
 
 
-[10/17/2025 08:35] mole99
+[2025-10-17 8:35 a.m.] mole99
 Note that if you wish to use KLayout DRC in LibreLane, you need the PDK fork of wafer.space, since the changes haven't been upstreamed yet.
 
 
-[10/17/2025 08:36] mole99
+[2025-10-17 8:36 a.m.] mole99
 Btw. in your update from upstream you missed:
 
 ```
@@ -87,23 +87,23 @@ CLOCK_NET: clk_pad/Y
 in librelane/config.yaml
 
 
-[10/17/2025 08:37] tholin
+[2025-10-17 8:37 a.m.] tholin
 No, I have it. Did it not end up in the commit?
 
 {Attachments}
 2025-10_media/image-D5879.png
 
 
-[10/17/2025 08:37] mole99
+[2025-10-17 8:37 a.m.] mole99
 All good! I missed it while looking at the diff in GitHub.
 
 
-[10/17/2025 08:39] mole99
+[2025-10-17 8:39 a.m.] mole99
 Regarding `SYNTH_STRATEGY`, from the LibreLane docs: "Please note that there is no way to know which strategy is the best before trying them."
 So it really depends on the design you implement.
 
 
-[10/17/2025 08:50] tholin
+[2025-10-17 8:50 a.m.] tholin
 I find DELAY does work to enhance max clock rate greatly, though the difference in DELAY 3 and DELAY 4 is negligible.
 
 

@@ -1,14 +1,15 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: 🏗️ - Designing / analog
-After: 04/30/2026 23:59
+After: 2026-04-30 11:59 p.m.
+Before: 2026-06-01 12:00 a.m.
 ==============================================================
 
-[05/06/2026 03:17] tishamdhar
+[2026-05-06 3:17 a.m.] tishamdhar
 I am interested in designing a metering ASIC for energy. Design block suggestions and toolchains welcome. Looking to use Tiny Tapeout or Wafer Space given space required.
 
 
-[05/11/2026 21:46] polyfractal
+[2026-05-11 9:46 p.m.] polyfractal
 world's least optimized pixel array 😂
 
 {Attachments}
@@ -16,55 +17,55 @@ world's least optimized pixel array 😂
 2026-05_media/Screenshot_2026-05-11_144447-6B6D8.png
 
 
-[05/11/2026 23:26] namibj
+[2026-05-11 11:26 p.m.] namibj
 Are you doing photoelectronics for Run2/3?
 
 
-[05/11/2026 23:27] namibj
+[2026-05-11 11:27 p.m.] namibj
 (also that's why back illumination and what microlenses are for)
 
 
-[05/12/2026 00:36] polyfractal
+[2026-05-12 12:36 a.m.] polyfractal
 If I can get a bit more of it done in the next week or two, yep! Would love to tape this out for Run2.  it's an "event pixel" design, where each pixel fires asynchronously when its threshold is breached. They register changes in a scene rather than a clocked frame
 
 
-[05/12/2026 00:50] namibj
+[2026-05-12 12:50 a.m.] namibj
 ahhhhh.
 I was about to say, at that lack of density, might almost go for SPAD (but the DRCs likely prevent the necessary field-smoothing rounding).
 
 
-[05/12/2026 01:32] polyfractal
+[2026-05-12 1:32 a.m.] polyfractal
 I should be able to get density higher, ALIGN freaked out once I added the photodiode into the circuit. Either needs some tweaks, or just pull the diode out and hand-place them. but otoh 32x32 is plenty for demonstration and it'll probably make the rest of the project easier so 🤷‍♂️ 🙂
 
 
-[05/12/2026 01:33] polyfractal
+[2026-05-12 1:33 a.m.] polyfractal
 SPADs would be neat though!
 
 
-[05/12/2026 01:34] polyfractal
+[2026-05-12 1:34 a.m.] polyfractal
 think I saw a paper somewhere with a SPAD done in skywater 130? or maybe even GF 180? will try to find it
 
 
-[05/12/2026 02:39] namibj
+[2026-05-12 2:39 a.m.] namibj
 I'm just a little sad that silicon's indirect bandgap means you can't just use a photodiode for bidirectional communications like you can with e.g. a 405nm-pumped COTS blue LED (load modulation in photovoltaic biasing severely varies how much shunt current in the diode produces electroluminescence; this is fairly easy to separate at the end with the 405nm source and can be used as a back-channel there).
 Unless you happen to know some clever trick that'd allow one to do vertical surface emitting data back channel from on top of a gf180mcuD die to some "beefier" system. I mean I guess tbf things like osram/ams's `PLPVYL1 940A_E` 20~60ct/each (depending on quantity) VCSEL do exist... (wish there was a SPICE for it, or even just capacitance information, but oh well....)
 
 
-[05/12/2026 02:41] namibj
+[2026-05-12 2:41 a.m.] namibj
 ohhh, it even hits nicely into peak Si photodiode A/W efficiency....
 
 
-[05/12/2026 04:57] polyfractal
+[2026-05-12 4:57 a.m.] polyfractal
 could abuse resistive elements or even just big gates and emit IR 😅  
 
 I think porous silicon can be used to make an LED without any other materials, but it's a pretty crapp LED iirc (and far red)
 
 
-[05/12/2026 05:00] namibj
+[2026-05-12 5:00 a.m.] namibj
 tho apparently you can just buy VCSEL for so cheap if you buy ones marketed to lower power IR illumination; I should get one next time and try to measure capacitance.
 
 
-[05/14/2026 20:09] nmz787
+[2026-05-14 8:09 p.m.] nmz787
 AnalogCoder: Analog Circuit Design via Training-Free Code Generation
 https://arxiv.org/pdf/2405.14918
 
@@ -76,118 +77,118 @@ Tutorial and Perspectives on MAGICAL: A Silicon-Proven Open-Source Analog IC Lay
 https://par.nsf.gov/servlets/purl/10356326
 
 
-[05/14/2026 20:09] nmz787
+[2026-05-14 8:09 p.m.] nmz787
 @BreakingTaps  ^
 
 
-[05/14/2026 20:09] nmz787
+[2026-05-14 8:09 p.m.] nmz787
 ever come across them?
 
 
-[05/14/2026 20:11] polyfractal
+[2026-05-14 8:11 p.m.] polyfractal
 I've seen MAGICAL before! MAGICAL and ALIGN were both funded by the same DARPA program and were sort of sibling projects. After looking over them, it seemed that MAGICAL is abandoned/not-very-active and looked harder to extend to other PDKs (the paper or project had a note about how it was difficult to port).
 
 Dunno about the other two, will take a look!
 
 
-[05/18/2026 18:47] mithro_
+[2026-05-18 6:47 p.m.] mithro_
 Stupid idea, but could the metal layers be used as reflectors and/or diffraction gratings/etc ?
 
 
-[05/18/2026 18:48] namibj
+[2026-05-18 6:48 p.m.] namibj
 sure, kinda static tho
 
 
-[05/18/2026 18:48] namibj
+[2026-05-18 6:48 p.m.] namibj
 and I at least don't know how good the absolute scale tolerance of the litho is
 
 
-[05/18/2026 19:10] polyfractal
+[2026-05-18 7:10 p.m.] polyfractal
 I was actually looking into using the metal lines as gratings / structural color recently. Unfortunately the min pitch is pretty large. M1 could get you some mid-visible color, but M2+ is all pretty far red. 🙁 
 
 I wonder if you could throw a resistive element under a metal reflector layer and use the thermal expansion though? be sort of like a deformable mirror but fully monolithic 🤔
 
 
-[05/18/2026 19:11] namibj
+[2026-05-18 7:11 p.m.] namibj
 Just don't do what tholin seems to have accidentally done (crack dies after first power cycle)
 
 {Reactions}
 😬
 
-[05/18/2026 19:11] mithro_
+[2026-05-18 7:11 p.m.] mithro_
 That is why you get 1,000 of them 😉
 
 
-[05/18/2026 19:12] mithro_
+[2026-05-18 7:12 p.m.] mithro_
 Could you use some type of pattern between the layers or something?
 
 
-[05/18/2026 19:13] namibj
+[2026-05-18 7:13 p.m.] namibj
 I'd guess the silicon could be modulated in transparency via presence of minority carriers, for some wavelength at least?
 
 
-[05/18/2026 19:13] polyfractal
+[2026-05-18 7:13 p.m.] polyfractal
 quite possibly! afraid that's approaching the end of my photonics knowledge. probably easy enough to simulate though
 
 
-[05/18/2026 19:14] mithro_
+[2026-05-18 7:14 p.m.] mithro_
 The simulation itself might be an interesting video? 😛
 
 
-[05/18/2026 19:23] namibj
+[2026-05-18 7:23 p.m.] namibj
 ahhh yeah internet says _Free-Carrier Plasma Dispersion Effect_
 
 
-[05/18/2026 19:24] namibj
+[2026-05-18 7:24 p.m.] namibj
 modulate refractive index usable on 1310/1550 nm light in silicon photonics waveguides.
 
 
-[05/18/2026 19:25] namibj
+[2026-05-18 7:25 p.m.] namibj
 just have a pn/pin junction and either reverse bias the former to desired width of depletion zone or forward bias the latter to desired minority carrier density
 
 
-[05/18/2026 19:36] namibj
+[2026-05-18 7:36 p.m.] namibj
 as silicon should be pretty transparent there normally, it might work having it be in the resonator and to use it to minutely shift the resonance peak to doa  little FM modulation
 
 
-[05/18/2026 20:37] polyfractal
+[2026-05-18 8:37 p.m.] polyfractal
 heh ran some numbers on this, _very roughly_ you could get 5-10nm of vertical displacement so 10-20nm of reflected displacement. Not nothing!
 
 
-[05/18/2026 20:41] namibj
+[2026-05-18 8:41 p.m.] namibj
 consider comparing to carrier density effects in vertical transmission perhaps for the iirc fairly accessible 1310nm
 
 
-[05/19/2026 16:13] mattvenn
+[2026-05-19 4:13 p.m.] mattvenn
 or use multiple metal layers with offsets?
 
 
-[05/20/2026 12:02] tholin
+[2026-05-20 12:02 p.m.] tholin
 Muuuuch better!
 
 {Attachments}
 2026-05_media/image-B32AB.png
 
 
-[05/20/2026 12:04] tholin
+[2026-05-20 12:04 p.m.] tholin
 And can still drive a 1K load
 
 
-[05/20/2026 12:05] tholin
+[2026-05-20 12:05 p.m.] tholin
 Yes, I could still make it use less current by optimizing it to drive smaller loads, but this is a nice tradeoff
 
 
-[05/20/2026 12:05] tholin
+[2026-05-20 12:05 p.m.] tholin
 My next chip is only going to have 2 of these anyways
 
 
-[05/21/2026 01:26] mithro_
+[2026-05-21 1:26 a.m.] mithro_
 @Tholin - Invest in power gating anyway 😛
 
 {Reactions}
 😂
 
-[05/23/2026 22:04] polyfractal
+[2026-05-23 10:04 p.m.] polyfractal
 Welp, defeated by DRC again 🙃  
 
 working on a 1T pixel design based off of this paper (https://www.mdpi.com/1424-8220/9/1/131). Needs a floating P body which I figured you could build with DNWell -> LVPWell -> NPlus. Got everything dialed into minimum size that would make DRC happy, then arrayed it and discovered another DRC rule: LVPWell to LVPWell must be >1.4um. There goes my pixel density! 😂  
@@ -198,14 +199,14 @@ Should still work, but I was hoping for <2-3um pitch so I could play with sub-di
 2026-05_media/sensors-09-00131f8-FBF72.png
 
 
-[05/23/2026 22:07] polyfractal
+[2026-05-23 10:07 p.m.] polyfractal
 better screenshot
 
 {Attachments}
 2026-05_media/image-0CD69.png
 
 
-[05/24/2026 01:51] namibj
+[2026-05-24 1:51 a.m.] namibj
 Can't you use pmos devices instead and not need the dnwell?
 Also I still don't quite get where and how STI is litho'd. Like, what patterns/shapes even do that?
 
@@ -216,26 +217,26 @@ Also, https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design
 2026-05_media/image-48382.png
 
 
-[05/24/2026 01:56] namibj
+[2026-05-24 1:56 a.m.] namibj
 Also maybe look at https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_10_07.html it feels like you may be doing things similar to those restrictions depending on biasing conditions?
 
 {Reactions}
 👀
 
-[05/24/2026 14:51] polyfractal
+[2026-05-24 2:51 p.m.] polyfractal
 Hmm I'll need to double check, but I don't think a normal pmos device would give the floating p-body that's needed. It'd be an nwell in the psub, and then p+ contacts
 
 
-[05/24/2026 14:52] polyfractal
+[2026-05-24 2:52 p.m.] polyfractal
 need to look into that equipotential thing, not sure how it's calculated. Would be great to use that spacing! I think because all the floating p-body sections are isolated, they are considered at different potentials by the DRC? not sure
 
 
-[05/24/2026 15:42] namibj
+[2026-05-24 3:42 p.m.] namibj
 No I mean like, the photodiode works regardless of whether it's illuminated from the P-side or the N-side, right?
 Voltages flip, sure, but I'd not think you'd need particularly high performance transistor channels in those pixels so that's not on it's own at least reason to go for N-channel device.
 
 
-[05/24/2026 15:48] namibj
+[2026-05-24 3:48 p.m.] namibj
 Well I'm pretty sure it's (only) a latchup concern; I'd guess this might cause charge-spillover to adjacent cells similar in visual effect to what we remember from old CCD digital cameras.
 
 Xyce has 2D TCAD on hand you could use to model the latchup behavior.
@@ -244,86 +245,86 @@ I guess the biggest hurdle would be that it's potentially gonna blow the 4-elect
 {Reactions}
 🤔
 
-[05/24/2026 15:50] polyfractal
+[2026-05-24 3:50 p.m.] polyfractal
 Ah I misunderstood. Yes, N or P is fine, although P is preferred because hole accumulation is (apparently) better for imaging. less noisy I think?
 
 But the main thing is that it needs a floating/isolated body of the diode. Light passes through the poly gate, creates electron/hole pairs, the electrons are swept away to drain and the holes remain which then alters the IV curve of the transistor when it is read out. That's how they get a "3T" pixel with one transistor, it acts as integration, readout and reset all in one. But needs the floating/isolated body to do it
 
 
-[05/24/2026 15:50] namibj
+[2026-05-24 3:50 p.m.] namibj
 1 source, 2 gate, 3 drain, 4 substrate, (maybe 5 next_drain), 5 next_gate, 6 next_source
 
 
-[05/24/2026 15:51] polyfractal
+[2026-05-24 3:51 p.m.] polyfractal
 I was a little confused why it was codified in DRC, it seems like a functional problem but not really a design rule / layout issue 🙁
 
 
-[05/24/2026 15:57] namibj
+[2026-05-24 3:57 p.m.] namibj
 > One should notice that in readout mode, some stored holes are displaced under the source due to shrink of charge storage region under the gate and source potential lowering. This shift of the charge storage region to the source and toward the pixel edge should be stopped to avoid electrical crosstalk. One solution to the problem is to employ STI (shallow trench isolation), as shown in Figure 2. It was adopted in our first design configuration.
 Yeah I for one don't quite get where the electrodes are in Fig.2 🙁
 
 Have you considered asking those researchers?
 
 
-[05/24/2026 15:58] namibj
+[2026-05-24 3:58 p.m.] namibj
 Me when I look at one too many sky130 DRC's again and go _huh...._
 
 {Reactions}
 😁
 
-[05/24/2026 15:59] namibj
+[2026-05-24 3:59 p.m.] namibj
 [insert villager sound effect]
 
 
-[05/24/2026 15:59] polyfractal
+[2026-05-24 3:59 p.m.] polyfractal
 might give them a ping! can't hurt
 
 
-[05/24/2026 15:59] namibj
+[2026-05-24 3:59 p.m.] namibj
 worst case they don't answer
 
 
-[05/24/2026 16:00] namibj
+[2026-05-24 4:00 p.m.] namibj
 well, worst worst case they snipe your slot on Run2 😄
 
 
-[05/25/2026 00:07] nmz787
+[2026-05-25 12:07 a.m.] nmz787
 At work we definitely have some DRs that are just for electrical "dummyproofing", and since my team draws mechanical and litho designs, we often get waivers for some of those rules
 
 
-[05/25/2026 00:08] nmz787
+[2026-05-25 12:08 a.m.] nmz787
 However we also can ask the process integration owners and ask questions like "how does the STI actually get patterned" if we're confused or just curious
 
 
-[05/25/2026 00:09] nmz787
+[2026-05-25 12:09 a.m.] nmz787
 I need that GDS3D isometric view
 
 
-[05/25/2026 00:09] nmz787
+[2026-05-25 12:09 a.m.] nmz787
 After 5 years drawing OASIS/GDS... I still get confused over all these layers on top of layers
 
 
-[05/25/2026 00:10] namibj
+[2026-05-25 12:10 a.m.] namibj
 same sadly KLayout PDK only has that for sky130A (and maybe ihp I don't know), not gf180mcuD 🙁
 
 
-[05/25/2026 00:10] nmz787
+[2026-05-25 12:10 a.m.] nmz787
 It's easy (ish) to make a layerstack
 
 
-[05/25/2026 00:12] nmz787
+[2026-05-25 12:12 a.m.] nmz787
 I should really publish my layerstack generator helper... basically just a CLI that takes the list of layers, already arranged in order in a text file, and asks you what Z and how thick you want it... And accumulates your overall height to the next Z default entry (in case you have two layers at the same Z, like the diffusions)
 
 
-[05/25/2026 00:13] nmz787
+[2026-05-25 12:13 a.m.] nmz787
 Although I'm sure pointing AI at the existing gds3d layerstacks as examples and asking it to generate the helper I just said, would do it in one or two prompts
 
 
-[05/25/2026 00:14] nmz787
+[2026-05-25 12:14 a.m.] nmz787
 I believe I already have a gf180 prop file for gds3d, but am not on my PC right now
 
 
-[05/25/2026 00:17] namibj
+[2026-05-25 12:17 a.m.] namibj
 feed it the https://gf180mcu-pdk.readthedocs.io/en/latest/analog/layout/inter_specs/inter_specs_3_30.html and https://gf180mcu-pdk.readthedocs.io/en/latest/analog/layout/inter_specs/inter_specs_3_30.html
 
 {Attachments}
@@ -331,23 +332,23 @@ feed it the https://gf180mcu-pdk.readthedocs.io/en/latest/analog/layout/inter_sp
 2026-05_media/image-02803.png
 
 
-[05/25/2026 00:22] nmz787
+[2026-05-25 12:22 a.m.] nmz787
 Need the dl;dt too, I think there's a layermap for klayout that I'd start with, but those images would be good to finish the details!
 
 
-[05/25/2026 00:22] namibj
+[2026-05-25 12:22 a.m.] namibj
 Sure
 
 
-[05/26/2026 09:47] 246tnt
+[2026-05-26 9:47 a.m.] 246tnt
 https://discord.com/channels/1009193568256135208/1015911926053740544/1508755468275814470
 
 
-[05/26/2026 09:47] 246tnt
+[2026-05-26 9:47 a.m.] 246tnt
 TT will be running an experimental slot in run2 for analog designs. See above for details.
 
 
-[05/26/2026 13:33] mithro_
+[2026-05-26 1:33 p.m.] mithro_
 KLayout has some type of cross-sectioning mode - https://klayoutmatthias.github.io/xsection/
 
 {Embed}
@@ -356,7 +357,7 @@ XSection Project Home Page
 Former xsection@klayout project
 
 
-[05/26/2026 20:12] namibj
+[2026-05-26 8:12 p.m.] namibj
 https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_10_05.html
 
 I think I'm doing everything right, taking a `nmos_06v6_nvt` PCell that I confirm next to the DUT extracts just fine through magic, and _deleting just the dualgate layer rectangle_ on the DUT copy of the (all flattened) PCell structure, but magic doesn't spell complaints and the DUT just won't spawn in the extracted SPICE?
@@ -367,47 +368,47 @@ Do we or do we not have those available at the GDS level?
 I can understand (with much unhappyness) if there's no design support (LVS, other extraction, spice, xschem, etc.), but otherwise I'd quite very like to know where I would have been supposed to read about us explicitly not having `nmos_03v3_nvt`.
 
 
-[05/26/2026 20:49] bailey8889
+[2026-05-26 8:49 p.m.] bailey8889
 Maybe `grep _nvt $PDK_ROOT/gf180mcu/libs.tech/ngspice/*`
 
 
-[05/26/2026 21:01] 246tnt
+[2026-05-26 9:01 p.m.] 246tnt
 I guess you can tape one out and measure it and see if it actually works.
 
 
-[05/26/2026 21:03] namibj
+[2026-05-26 9:03 p.m.] namibj
 That's my fallback.
 
 
-[05/26/2026 23:59] mithro_
+[2026-05-26 11:59 p.m.] mithro_
 I *believe* the GDSFactory people are hoping to do some test circuits to do some verification circuits.
 
 
-[05/27/2026 00:01] namibj
+[2026-05-27 12:01 a.m.] namibj
 @Thomas Pluck 2.1 `nfet_03v3_nvt` misses models and currently even extraction; it's only implied from some DRCs to exist. Etest if any of that happens would be _awesome_ to capture.
 
 
-[05/27/2026 10:26] namibj
+[2026-05-27 10:26 a.m.] namibj
 Oh and if anyone etests that one, don't only do L=1.8, go down towards the L=0.28.
 
 
-[05/27/2026 14:32] mole99
+[2026-05-27 2:32 p.m.] mole99
 Started a thread.
 
 
-[05/27/2026 16:14] tpluck_
+[2026-05-27 4:14 p.m.] tpluck_
 Plan was that we can generate test structures on a left over Run 2 half slot right?
 
 
-[05/27/2026 16:17] tpluck_
+[2026-05-27 4:17 p.m.] tpluck_
 No sense wasting a creative TT slot on device characterization.
 
 
-[05/27/2026 20:06] mithro_
+[2026-05-27 8:06 p.m.] mithro_
 Correct!
 
 
-[05/30/2026 00:32] mithro_
+[2026-05-30 12:32 a.m.] mithro_
 @BreakingTaps - You might find https://docs.google.com/presentation/d/e/2PACX-1vS2jJzvahcR7M6YPl6omPSDk7ZW6sFhqpsh4mxRzwc5JhHkUPudI62qpevA1WWu2g/pub?start=false&loop=false&delayms=3000 interesting.
 
 {Embed}
@@ -416,31 +417,54 @@ https://docs.google.com/presentation/d/e/2PACX-1vS2jJzvahcR7M6YPl6omPSDk7ZW6sFhq
 IEEE-SSCS Chipathon 2026 Track D: AI/LLM-assisted circuits gLayout Design Walkthrough Presented by: Anhang Li (anhangli@umich.edu) Track Leads: Mehdi Saligane, Saptarshi Ghosh, Osama Khan, Trio Adiono/Nur, Mauricio Montanares, Muhammed Luqman Jukaku, Luighi Viton 1
 
 
-[05/30/2026 03:41] anfroholic
+[2026-05-30 3:41 a.m.] anfroholic
 That's a private repo
 
 
-[05/30/2026 05:58] mithro_
+[2026-05-30 5:58 a.m.] mithro_
 I think that fixes it?
 
 
-[05/30/2026 05:59] anfroholic
+[2026-05-30 5:59 a.m.] anfroholic
 Yes, fixed
 
 
-[05/30/2026 17:46] polyfractal
+[2026-05-30 5:46 p.m.] polyfractal
 ooh neat, thanks for the ping!
 
 
-[05/30/2026 18:59] namibj
+[2026-05-30 6:59 p.m.] namibj
 Oh yes thanks for the link.
 If anyone has a link to how that LLM assitance there happens to be practically usable, I'd appreciate to see if it appers to be effective for my MCML efforts that way.
 
 
-[05/31/2026 20:49] 246tnt
+[2026-05-31 8:49 p.m.] 246tnt
 I need a quick&dirty current reference. Nominal would be 30 uA at 3.3V but should be usable at 5V and acceptable range would be 20~60 uA. Anyone got something easy to propose ? 😅
 
 
+[2026-05-31 10:05 p.m.] dorythecat_v2
+
+
+{Attachments}
+2026-05_media/A-circuit-diagram-showing-a-transistor-act-EFF5C.png
+
+
+[2026-05-31 10:06 p.m.] dorythecat_v2
+ive used this circuit before and on a punch it's good enough
+
+
+[2026-05-31 10:06 p.m.] dorythecat_v2
+otherwise, a high enough voltage and a high enough resistor should work
+
+
+[2026-05-31 10:07 p.m.] 246tnt
+I meant an on-chip reference ... you can't make zener in gf180mcu
+
+
+[2026-05-31 11:05 p.m.] tdextrous
+Started a thread.
+
+
 ==============================================================
-Exported 89 message(s)
+Exported 94 message(s)
 ==============================================================

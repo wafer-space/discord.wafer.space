@@ -1,159 +1,159 @@
 ==============================================================
 Guild: wafer.space Community
 Channel: Information / off-topic
-After: 09/30/2025 23:59
-Before: 11/01/2025 00:00
+After: 2025-09-30 11:59 p.m.
+Before: 2025-11-01 12:00 a.m.
 ==============================================================
 
-[10/01/2025 13:26] mole99
+[2025-10-01 1:26 p.m.] mole99
 
 
 {Attachments}
 2025-10_media/image-F7B07.png
 
 
-[10/01/2025 13:26] mole99
+[2025-10-01 1:26 p.m.] mole99
 There's just something so funny about this 😆
 
 {Reactions}
 😄 🥺
 
-[10/01/2025 14:30] algofoogle
+[2025-10-01 2:30 p.m.] algofoogle
 Such a cute little core!
 
 {Reactions}
 ❤️ (2)
 
-[10/01/2025 18:23] 246tnt
+[2025-10-01 6:23 p.m.] 246tnt
 Do you really need 4 ground pins ? 😅
 
 
-[10/01/2025 18:27] rebelmike
+[2025-10-01 6:27 p.m.] rebelmike
 That's ~1mm^2?  Makes it obvious why I was wondering about just having pins on a single side, you could probably fit 11 of the 12 pins while massively increasing the core area
 
 
-[10/01/2025 18:29] mole99
+[2025-10-01 6:29 p.m.] mole99
 Who doesn't? 😄  No, that was just a quick chip for creating a reproducible for Tim E.
 
 
-[10/01/2025 18:34] mole99
+[2025-10-01 6:34 p.m.] mole99
 Yes, the ratio between padring and core is massive in this case. You might be able to use the LibreLane padring script as a starting point to adjust the padring to only a single side. If this is already possible in OpenROAD today, I can then adjust the default script to allow this directly.
 
 {Reactions}
 👍
 
-[10/01/2025 18:40] rebelmike
+[2025-10-01 6:40 p.m.] rebelmike
 Needing this is a little way off as we'd need to have options to subdivide the dies first, but it's on my list of things to play with at some point 🙂
 
 
-[10/01/2025 18:48] mole99
+[2025-10-01 6:48 p.m.] mole99
 Well, you can already subdivide a die yourself and submit several of your sub-dies at once.
 The individual dies won't be separated, of course, but we should still be able to bond the ones around the edges 😉
 
 
-[10/01/2025 19:16] mithro_
+[2025-10-01 7:16 p.m.] mithro_
 Even though it is super funny, it is also super cool!
 
 {Reactions}
 🙌
 
-[10/01/2025 19:29] tholin
+[2025-10-01 7:29 p.m.] tholin
 Chip with just 4 pads. Power, ground, two bidir (clock provided by ring oscillator).
 
 {Reactions}
 ❤️
 
-[10/01/2025 19:36] mole99
+[2025-10-01 7:36 p.m.] mole99
 I think you can team up with @RebelMike  and share a subdivided die 😁
 
 
-[10/01/2025 19:36] tholin
+[2025-10-01 7:36 p.m.] tholin
 I don't know what I would even put on there
 
 
-[10/01/2025 19:37] tholin
+[2025-10-01 7:37 p.m.] tholin
 Something I²C, I guess?
 
 
-[10/01/2025 19:38] urish
+[2025-10-01 7:38 p.m.] urish
 USB
 
 
-[10/01/2025 19:39] tholin
+[2025-10-01 7:39 p.m.] tholin
 That sounds like a challenge. Doesn't that require precise timing? Out of a ring oscillator?
 
 
-[10/01/2025 19:39] urish
+[2025-10-01 7:39 p.m.] urish
 (Precisely Clocking 12 MHz internally is a challenge left to the reader)
 
 
-[10/01/2025 19:40] tholin
+[2025-10-01 7:40 p.m.] tholin
 I mean, how does the USB protocol work? Surely, there is some pre-defined discovery packet that is sent by the host? That could be used to tune the ring oscillator.
 
 
-[10/01/2025 19:40] urish
+[2025-10-01 7:40 p.m.] urish
 ATtiny85's internal RC osc can somehow manage USB
 
 
-[10/01/2025 19:41] tholin
+[2025-10-01 7:41 p.m.] tholin
 Oh, yeah, USB packets literally start with a bunch of even pulses as a clock sync.
 
 
-[10/01/2025 19:42] tholin
+[2025-10-01 7:42 p.m.] tholin
 But not sure how you'd tune a ring oscilator off of that
 
 
-[10/01/2025 19:42] tholin
+[2025-10-01 7:42 p.m.] tholin
 THAT I will leave as a challenge to the reader
 
 {Reactions}
 😉
 
-[10/01/2025 19:43] urish
+[2025-10-01 7:43 p.m.] urish
 I guess you could also try to get a clock through VDD somehow
 
 
-[10/01/2025 19:44] urish
+[2025-10-01 7:44 p.m.] urish
 like swing it between 3V and 3V3 at 12MHz (or whatever you need), and then use that internally to generate the clock
 
 
-[10/01/2025 19:45] urish
+[2025-10-01 7:45 p.m.] urish
 an easy-ish way to create it would be to connect the VDD pin to the power supply through a FET in parallel with a diode
 
 
-[10/01/2025 19:45] urish
+[2025-10-01 7:45 p.m.] urish
 then you feed the clock to the FET, and whenever the FET is off, the voltage will drop by the diode forward voltage drop
 
 
-[10/01/2025 19:48] rebelmike
+[2025-10-01 7:48 p.m.] rebelmike
 We have OTP, right?  So, you first start in a mode where you can blow OTP bits somehow to tune the ring oscillator.  Then once that's within tolerances you blow a bit that permanently turns the device into a USB
 
 
-[10/01/2025 19:48] tholin
+[2025-10-01 7:48 p.m.] tholin
 One way a ring oscillator could be made tuneable is by using transmission gates to bypass some of the inverters. Have one path that goes through the inverters and one path that goes around them. I'm not sure if that'll provide ultra fine control, but it doesn't need to be perfect. The clock only needs to line up with the USB data bits for one packet before the next one re-tunes the oscillator.
 
 
-[10/01/2025 19:48] tholin
+[2025-10-01 7:48 p.m.] tholin
 Okay, now I'll stop!
 
 
-[10/01/2025 19:49] tholin
+[2025-10-01 7:49 p.m.] tholin
 (The idea of using a NFET and DAC as a digitally controllable impedance to speed down the oscillator also occured to me, but I'm not sure how well that'd work, actually)
 
 
-[10/01/2025 19:51] tholin
+[2025-10-01 7:51 p.m.] tholin
 Not really feasible, since you need to dynamically account for drift of the oscillator by supply voltage and temperature.
 
 
-[10/01/2025 20:41] mithro_
+[2025-10-01 8:41 p.m.] mithro_
 Reminds me of some very old 4 pin PIC10F devices which had a shared GPIO/VDD pin and a large internal capacitor with specs of how long you could pull the GPIO line low.....
 
 
-[10/01/2025 20:42] mithro_
+[2025-10-01 8:42 p.m.] mithro_
 PLL on the USB packet with oscillator as initial frequency input is how the SiLab HappyGecko parts are able to meet spec without an external crystal
 
 
-[10/01/2025 20:53] tholin
+[2025-10-01 8:53 p.m.] tholin
 
 
 {Attachments}
@@ -161,15 +161,15 @@ PLL on the USB packet with oscillator as initial frequency input is how the SiLa
 2025-10_media/image-151C8.png
 
 
-[10/01/2025 20:54] mithro_
+[2025-10-01 8:54 p.m.] mithro_
 😛
 
 
-[10/03/2025 19:22] tholin
+[2025-10-03 7:22 p.m.] tholin
 I finished developing a software network stack to run on my RISC-V core on my GFMPW-1 chips.
 
 
-[10/03/2025 19:22] tholin
+[2025-10-03 7:22 p.m.] tholin
 
 
 {Attachments}
@@ -178,7 +178,7 @@ I finished developing a software network stack to run on my RISC-V core on my GF
 {Reactions}
 ❤️ (2)
 
-[10/03/2025 19:25] tholin
+[2025-10-03 7:25 p.m.] tholin
 Powering on the board does this
 
 {Attachments}
@@ -188,25 +188,25 @@ Powering on the board does this
 {Reactions}
 🎉 (2)
 
-[10/03/2025 19:26] tholin
+[2025-10-03 7:26 p.m.] tholin
 I need to turn this around and make it capable of accepting incoming TCP connections.
 
 
-[10/03/2025 19:26] tholin
+[2025-10-03 7:26 p.m.] tholin
 Will I be the first person to get open-source custom silicon connected to the internet? Or host a website with it?
 
 {Reactions}
 👍
 
-[10/03/2025 19:30] tholin
+[2025-10-03 7:30 p.m.] tholin
 I went the extra mile to support both IPv4 *and* IPv6 **and** auto-configuration for both.
 
 
-[10/03/2025 21:56] rtimothyedwards_19428
+[2025-10-03 9:56 p.m.] rtimothyedwards_19428
 This is impressive.
 
 
-[10/03/2025 22:07] tholin
+[2025-10-03 10:07 p.m.] tholin
 https://github.com/AvalonSemiconductors/gfmpw1-multi-bringup/tree/main/TholinRISCV/Software/Ethernet
 
 {Embed}
@@ -216,120 +216,120 @@ Bring-up of GFMPW-1 multi-project submission. Contribute to AvalonSemiconductors
 2025-10_media/gfmpw1-multi-bringup-4D790
 
 
-[10/03/2025 22:07] tholin
+[2025-10-03 10:07 p.m.] tholin
 The source code is here, btw
 
 
-[10/03/2025 22:11] mithro_
+[2025-10-03 10:11 p.m.] mithro_
 @Tholin - That is super cool!
 
 
-[10/03/2025 22:12] mithro_
+[2025-10-03 10:12 p.m.] mithro_
 I guess depends on how you define that -- @carlfk put the Tiny Tapeout board on the internet but I think that is cheating. I wonder if you could run ppp over the uart to the Linux core.....
 
 
-[10/03/2025 22:13] tholin
+[2025-10-03 10:13 p.m.] tholin
 Due to the fact that dial-up modems once existed, you can actually pipe a network connection over UART to this day with some basic Linux utilities.
 
 
-[10/03/2025 22:17] mithro_
+[2025-10-03 10:17 p.m.] mithro_
 @Tholin - I think the Tiny Tapeout Linux core might be too slow? I think there are some real time requirements for PPP? I've forgotten what was the thing that we used before PPP.
 
 
-[10/03/2025 22:19] mithro_
+[2025-10-03 10:19 p.m.] mithro_
 Also, I wouldn't say your work above is particularly off-topic, seems very much on topic to me.
 
 
-[10/03/2025 22:27] tholin
+[2025-10-03 10:27 p.m.] tholin
 Well, its more software dev on a RISC-V core
 
 
-[10/03/2025 22:27] tholin
+[2025-10-03 10:27 p.m.] tholin
 Its just that the core happens to be custom silicon
 
 
-[10/04/2025 03:51] urish
+[2025-10-04 3:51 a.m.] urish
 The original one only supports 8mb PSRAM, so it's not sufficient to run the TCP/IP stack
 
 
-[10/04/2025 03:52] urish
+[2025-10-04 3:52 a.m.] urish
 I recently patched it to support 16mb so the future version (on ttsky25a/ttihp25b) might be able to
 
 
-[10/04/2025 03:59] mithro_
+[2025-10-04 3:59 a.m.] mithro_
 @urish - Cool!
 
 
-[10/04/2025 04:00] urish
+[2025-10-04 4:00 a.m.] urish
 Hirosh is also currently working on adding FIFO to the UART to make it more reliable
 
 
-[10/04/2025 08:37] algofoogle
+[2025-10-04 8:37 a.m.] algofoogle
 Are you thinking of SLIP? I remember THOSE good ol’ days 😉
 
 
-[10/04/2025 08:38] algofoogle
+[2025-10-04 8:38 a.m.] algofoogle
 Btw @Tholin , awesome and exciting work as usual 🙂 What I really want to know is how you managed to crack the usual limit of 24 hours per day in order to get all of this done 😉
 
 {Reactions}
 😆
 
-[10/04/2025 09:22] xobs
+[2025-10-04 9:22 a.m.] xobs
 SLIP is still very much alive. The ESP32 uses it to communicate with its bootloader, for example.
 
 {Reactions}
 ❤️ (2)
 
-[10/04/2025 10:03] algofoogle
+[2025-10-04 10:03 a.m.] algofoogle
 Oh cool, and unexpected 🙂
 
 
-[10/04/2025 17:02] mithro_
+[2025-10-04 5:02 p.m.] mithro_
 Probably!
 
 
-[10/08/2025 02:09] carlfk
+[2025-10-08 2:09 a.m.] carlfk
 > 40000 / 3600
 > 11.11111111111111
 
 
-[10/08/2025 02:09] carlfk
+[2025-10-08 2:09 a.m.] carlfk
 11 hours for 40,000 seconds?   I thought it was nore like 20 hours?
 
 
-[10/08/2025 02:10] carlfk
+[2025-10-08 2:10 a.m.] carlfk
 or mayb eit was 3 sec per die = 33 hours
 
 
-[10/08/2025 02:44] anfroholic
+[2025-10-08 2:44 a.m.] anfroholic
 You may have had part of my calculation in your head when it was
 28 reticles * 40 projects * 50 wafers = 56000 dies
 56000/3600 = 15.55
 
 
-[10/08/2025 03:03] carlfk
+[2025-10-08 3:03 a.m.] carlfk
 that sounds about right
 
 
-[10/11/2025 20:00] tholin
+[2025-10-11 8:00 p.m.] tholin
 https://testing.tholin.dev/
 
 
-[10/11/2025 20:00] tholin
+[2025-10-11 8:00 p.m.] tholin
 Now hosting a website on my custom silicon
 
 {Reactions}
 waferspace (2) 🎉 (3) 🔥
 
-[10/11/2025 20:00] tholin
+[2025-10-11 8:00 p.m.] tholin
 It'll remain online for as long as the 18650 powering it lasts.
 
 
-[10/11/2025 20:01] mrmadbrain
+[2025-10-11 8:01 p.m.] mrmadbrain
 it's kinda meta 😛
 
 
-[10/23/2025 19:11] hardwall
+[2025-10-23 7:11 p.m.] hardwall
 I'm curious what people here make of this: https://tenstorrent.com/vision/tenstorrent-announces-open-chiplet-atlas-ecosystem
 
 {Embed}
@@ -339,7 +339,7 @@ Tenstorrent is launching the Open Chiplet Atlas™ (OCA™) Ecosystem — includ
 2025-10_media/7566e14a668c757b9ae863937ce810bb877b49aa-2-F6ADA.png
 
 
-[10/24/2025 20:16] mithro_
+[2025-10-24 8:16 p.m.] mithro_
 @HardWall - Multiple people have attempted this - none have succeeded. https://antmicro.com/blog/2020/10/open-chiplet-initiative/
 
 {Embed}
@@ -347,19 +347,19 @@ https://antmicro.com/blog/2020/10/open-chiplet-initiative/
 zGlue teams up with Antmicro and Google in Open Chiplet Initiative
 
 
-[10/24/2025 20:22] hardwall
+[2025-10-24 8:22 p.m.] hardwall
 It's true until it's not. I have a bit of a bias since I'm kind of a keller fanboy, but I really don't understand the industry enough to make an educated guess.
 
 
-[10/24/2025 20:24] hardwall
+[2025-10-24 8:24 p.m.] hardwall
 My understanding though is that chiplet designs will be by their nature inferior to the same design but integrated on the same die. But more composable and faster turnaround. ( again, i'm not sure I even understand properly what I'm talking about)
 
 
-[10/24/2025 20:32] hardwall
+[2025-10-24 8:32 p.m.] hardwall
 Wow, threw Claude a request to do some research, You weren't kidding, the world is littered with the bodies of chiplet interconnect initiatives.
 
 
-[10/25/2025 00:00] anfroholic
+[2025-10-25 12:00 a.m.] anfroholic
 If this were ever to be a thing, I think the first step would be an open source [SerDes](https://en.wikipedia.org/wiki/SerDes) for ASIC design. 
 I was speaking with @carlfk the other day about putting HDMI on an ASIC design and he said this part was still a current hurdle.
 Chiplets--at least the current versions from AMD--all communicate over SerDes.
@@ -370,11 +370,11 @@ SerDes
 A Serializer/Deserializer (SerDes) is a pair of functional blocks commonly used in high speed communications to compensate for limited input/output. These blocks convert data between serial data and parallel interfaces in each direction. The term "SerDes" generically refers to interfaces used in various technologies and applications. The primary...
 
 
-[10/25/2025 01:32] mithro_
+[2025-10-25 1:32 a.m.] mithro_
 The problem turns out to be economics -- at the moment chiplets makes sense when things are very expensive -- but to get an ROI you need to sell a lot of units, thus if you are selling lots of units you want the chiplets to be customized for your use case.....
 
 
-[10/25/2025 06:01] anfroholic
+[2025-10-25 6:01 a.m.] anfroholic
 I was under the impression that some of the economics came from just yield gains?
 I also personally think some of the coolest stuff (other than wafer.space) happening right now is in the packaging space. 
 
@@ -382,7 +382,7 @@ I also personally think some of the coolest stuff (other than wafer.space) happe
 Also something else, is if you start to think of things like PCBs where you have a series of components on a PCB, a similar concept would be a series of dies on a silicon interposer.
 
 
-[10/26/2025 03:06] mithro_
+[2025-10-26 3:06 a.m.] mithro_
 @Andrew Wingate - Below 5nm, chiplets ***do*** make sense for making these high end chips (for yield and other cost reasons). 
 
 The problem is the chiplet marketplace / reuse idea. 
