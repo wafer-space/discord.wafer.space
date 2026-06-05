@@ -39,6 +39,12 @@ _MONTH_RE = re.compile(r"^(\d{4})-(0[1-9]|1[0-2])$")
 # message count to detect the issue-#1 JSON/HTML divergence.
 _HTML_MESSAGE_RE = re.compile(rb"data-message-id=(\d+)")
 
+# DCE renders dates per --locale: the en-CA fix produces ISO yyyy-MM-dd, while
+# pre-fix exports produced US MM/dd/yyyy. We compare counts (not mere presence)
+# so a stray date typed into a message never misclassifies an otherwise-ISO page.
+_ISO_DATE_RE = re.compile(rb"\d{4}-\d{2}-\d{2}")
+_US_DATE_RE = re.compile(rb"\d{1,2}/\d{1,2}/\d{4}")
+
 
 def _parse_month(month: str) -> tuple[int, int]:
     """Parse a "YYYY-MM" string into (year, month) ints.
@@ -149,6 +155,10 @@ def scan_completed_months(channel_dir: Path) -> set[str]:
             # renders), treat the month as incomplete so it re-exports and heals.
             if not _month_is_consistent(json_file, html_file):
                 continue
+        # Re-export months still rendered with American dates so they convert to
+        # ISO (issue #3) — the --locale fix only reaches a month on re-export.
+        if _html_uses_american_dates(html_file):
+            continue
         completed.add(entry.name)
     return completed
 
@@ -227,6 +237,21 @@ def count_html_messages(html_file: Path) -> int:
     except OSError:
         return 0
     return len(_HTML_MESSAGE_RE.findall(data))
+
+
+def _html_uses_american_dates(html_file: Path) -> bool:
+    """True if the HTML's dominant date format is US MM/DD/YYYY rather than ISO.
+
+    A pre-`--locale en-CA` export rendered dates American-style and must be
+    re-exported to convert to ISO (issue #3), since the date fix only reaches a
+    month on re-export. We compare US vs ISO date counts so a single date typed
+    into a message never flips an otherwise-ISO page.
+    """
+    try:
+        data = html_file.read_bytes()
+    except OSError:
+        return False
+    return len(_US_DATE_RE.findall(data)) > len(_ISO_DATE_RE.findall(data))
 
 
 def _month_is_consistent(json_file: Path, html_file: Path) -> bool:
