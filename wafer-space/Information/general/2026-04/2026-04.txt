@@ -5,22 +5,22 @@ Topic: Welcome to [wafer.space](https://wafer.space/) -
 documentation at [wafer.space github](https://github.com/wafer-space) - 
 buy at [buy.wafer.space](https://buy.wafer.space) - 
 archives at [discord.wafer.space](https://discord.wafer.space/)
-After: 03/31/2026 23:59
-Before: 05/01/2026 00:00
+After: 2026-03-31 11:59 p.m.
+Before: 2026-05-01 12:00 a.m.
 ==============================================================
 
-[04/01/2026 00:41] mithro_
+[2026-04-01 12:41 a.m.] mithro_
 
 
 
-[04/01/2026 13:54] rtimothyedwards_19428
+[2026-04-01 1:54 p.m.] rtimothyedwards_19428
 @Tim 'mithro' Ansell :  I noticed that the "Technical specifications" of the GF180MCU process on the wafer.space web page claim that the process has "MIM & PIP" capacitors.  That is not true.  A PIP capacitor (poly-insulator-poly) by definition requires two layers of poly.  There are processes out there with double poly layers (particularly good for floating-gate devices, and yes, they do make good linear capacitors).  GF180MCU is not one of them.
 
 {Attachments}
 2026-04_media/wafer_space-90B8F.png
 
 
-[04/02/2026 01:21] .pogeg
+[2026-04-02 1:21 a.m.] .pogeg
 Is anyone currently, or was able to utilize [litedram](https://github.com/enjoy-digital/litedram) for their project involving off-chip DRAMs? I'm currently working with it for a project I'm taping out here.
 So far I got some results, but it doesn't seem to be designed for working with ASICs. Neither does litex in general.
 
@@ -31,32 +31,32 @@ Small footprint and configurable DRAM core. Contribute to enjoy-digital/litedram
 2026-04_media/litedram-29E73
 
 
-[04/02/2026 03:10] mithro_
+[2026-04-02 3:10 a.m.] mithro_
 I think I thought Poly-Insulator-Poly was side-by-side?
 
 
-[04/02/2026 03:11] mithro_
+[2026-04-02 3:11 a.m.] mithro_
 LiteX & LiteDRAM was/is definitely designed primarily for FPGAs
 
 
-[04/02/2026 13:25] rtimothyedwards_19428
+[2026-04-02 1:25 p.m.] rtimothyedwards_19428
 @Tim 'mithro' Ansell :  No, you don't do poly side-by-side.  Poly is very thin and has practically no sidewall.  It's also sitting right on top of the substrate, so you'd end up with parasitic capacitance dominating.  Double poly caps are quite nice, although MiM caps still have the advantage that you can still put transistors and other components underneath them.
 
 
-[04/02/2026 13:30] mithro_
+[2026-04-02 1:30 p.m.] mithro_
 Will fix that tomorrow, poke me if I forget
 
 
-[04/02/2026 15:07] tholin
+[2026-04-02 3:07 p.m.] tholin
 I don’t think I’m gonna do much for this next shuttle. I want to tape out a RISC-V core with my custom SCL for sure, but only since I already have proven RTL for that. Probably a good idea to not expect another completely crammed die from me, I’m afraid.
 I will, however, do some long-needed maintenance on my SCL and get some more silicon art in the pipeline.
 
 
-[04/02/2026 15:08] tholin
+[2026-04-02 3:08 p.m.] tholin
 I do have ideas for custom silicon projects, but they are so big at this point, 90 days is not enough time to finish even one of them, I believe.
 
 
-[04/03/2026 00:30] mithro_
+[2026-04-03 12:30 a.m.] mithro_
 The video from my talk at Hackware here in Singapore is up on YouTube @ https://www.youtube.com/watch?v=t6Z0_Krhshc
 
 {Embed}
@@ -73,31 +73,31 @@ Produced by Engineers.SG
 {Reactions}
 👍 (5)
 
-[04/03/2026 20:20] _mwelling_
+[2026-04-03 8:20 p.m.] _mwelling_
 Is there a guide for the minimum system requirements for generating gds?
 
 
-[04/03/2026 20:22] _mwelling_
+[2026-04-03 8:22 p.m.] _mwelling_
 At the scale of complexity of a high utilization full chip
 
 
-[04/03/2026 20:23] _mwelling_
+[2026-04-03 8:23 p.m.] _mwelling_
 I remember that @tnt had to have a fairly high end machine when he was working on pyfive
 
 
-[04/03/2026 20:24] _mwelling_
+[2026-04-03 8:24 p.m.] _mwelling_
 Raw per core horsepower and lots of ram
 
 
-[04/03/2026 20:30] _mwelling_
+[2026-04-03 8:30 p.m.] _mwelling_
 If I were to buy a build machine to make a chip, what kind of machine would I want?
 
 
-[04/03/2026 20:33] _mwelling_
+[2026-04-03 8:33 p.m.] _mwelling_
 Also do we have similar hardware specs for an emulator of a similar design complexity?
 
 
-[04/03/2026 21:21] polyfractal
+[2026-04-03 9:21 p.m.] polyfractal
 highest single-threaded performance possible (unfortunately). A lot of the steps are multithreaded and will take advantage of having a lot of cores, a few steps can be reasonably memory-heavy (30-60gb for a bigger design), but the bottleneck is usually DRC which has a lot of single-threaded sections. So the best single core performance you can get is most useful.
 
 I rented a "gaming server" from OVH with a Ryzen 9950x3d. My avg build time was 2-3hrs
@@ -111,29 +111,29 @@ Compare 25+ dedicated servers optimized for single-threaded EDA workloads like K
 2026-04_media/claude_ogimage-1F4D7.png
 
 
-[04/03/2026 21:23] polyfractal
+[2026-04-03 9:23 p.m.] polyfractal
 on the upside, since most builds are bottlenecked on single core sections, you can kick off many parallel builds that each have slightly different setting tweaks when optimizing.
 
 
-[04/03/2026 21:23] polyfractal
+[2026-04-03 9:23 p.m.] polyfractal
 (or use a cheaper machine for non-DRC part of the pipeline)
 
 
-[04/04/2026 00:56] mithro_
+[2026-04-04 12:56 a.m.] mithro_
 I believe the website should be fixed now?
 
 {Reactions}
 👍
 
-[04/04/2026 01:18] tholin
+[2026-04-04 1:18 a.m.] tholin
 My multi-project die contains both a RISC-V core and analog (DACs)
 
 
-[04/04/2026 01:18] tholin
+[2026-04-04 1:18 a.m.] tholin
 Small correction
 
 
-[04/04/2026 03:00] mithro_
+[2026-04-04 3:00 a.m.] mithro_
 I also E-Test data provided by GF can be found @ https://docs.google.com/spreadsheets/d/10zQF_L-KsV-n5zMISB8C67llsldodtbSALWoNdpY17Y/edit?gid=1771808804#gid=1771808804 -- anyone see anything interesting?
 
 {Embed}
@@ -142,157 +142,157 @@ wafer.space - WSRUN-1 - FAB3_ETEST_3SHE07245.1
 2026-04_media/AHkbwyKW059hsylcmDbYp_kU0-NgTui0Rz0YrNmX7T-F699E
 
 
-[04/04/2026 04:44] nmz787
+[2026-04-04 4:44 a.m.] nmz787
 The template completed in 4 hours on my intel Lenovo t16 with 40GB RAM
 
 
-[04/04/2026 04:44] nmz787
+[2026-04-04 4:44 a.m.] nmz787
 Actually just generating GDS should be trivial on any system of the last 2 decades
 
 
-[04/04/2026 04:45] nmz787
+[2026-04-04 4:45 a.m.] nmz787
 And you said at this price point there's no testing!
 
 
-[04/04/2026 04:47] nmz787
+[2026-04-04 4:47 a.m.] nmz787
 Having a lookup table for the test names to description would be helpful to make sense of things aside from guessing and looking at standard deviations of the values for a given unit of measure
 
 
-[04/04/2026 05:12] _mwelling_
+[2026-04-04 5:12 a.m.] _mwelling_
 yeah I guess the big thing is being able to run DRC in a reasonable amount of time without running out of RAM
 
 
-[04/04/2026 05:26] _mwelling_
+[2026-04-04 5:26 a.m.] _mwelling_
 so it is looks like I am looking at around ~$3K  if I bought something off the shelf; ram being a big part of the cost
 
 
-[04/04/2026 05:40] _mwelling_
+[2026-04-04 5:40 a.m.] _mwelling_
 my laptop is probably not going to cut it, only has 16GB of RAM
 
 
-[04/04/2026 06:13] 246tnt
+[2026-04-04 6:13 a.m.] 246tnt
 There are data for 25 wafers, I though you had only run half a lot.
 
 
-[04/04/2026 06:18] 246tnt
+[2026-04-04 6:18 a.m.] 246tnt
 Very nice to get the ETest data though. Doing a few spot check vs the PDK values, it's pretty close to typical.
 
 
-[04/04/2026 06:55] 246tnt
+[2026-04-04 6:55 a.m.] 246tnt
 @Tim 'mithro' Ansell One thing that bugs me though is the name of the test "TM5L9K" ... I though we were using the 11K top metal thickness option. ( I rechecked https://discord.com/channels/1361349522684510449/1423053988210675852/1423076158219489300 )
 
 
-[04/04/2026 06:59] 246tnt
+[2026-04-04 6:59 a.m.] 246tnt
 Something else a bit weird is the MiM cap data.  SPEC is between 1.7 fF/um^2 and 2.3 fF/um^2  but the pdk lists nominal at 1.5 fF/um^2. ( Although I guess they might be compensating for some measurement setup thing ... )
 
 
-[04/04/2026 08:15] nmz787
+[2026-04-04 8:15 a.m.] nmz787
 There's always disk swapping :/
 
 
-[04/04/2026 08:17] nmz787
+[2026-04-04 8:17 a.m.] nmz787
 I'd suggest trying to run the template through to completion, to benchmark. $3k sounds a bit crazy if you're doing this for the first time and haven't done any benchmarking first
 
 
-[04/04/2026 08:17] nmz787
+[2026-04-04 8:17 a.m.] nmz787
 Even renting a cloud host for a few hours or days will be massively cheaper
 
 
-[04/04/2026 16:06] _mwelling_
+[2026-04-04 4:06 p.m.] _mwelling_
 Well this isn't exactly the first time I tried the tools.
 
 
-[04/04/2026 16:07] _mwelling_
+[2026-04-04 4:07 p.m.] _mwelling_
 I have run it on my laptop and it was fine for smaller benchmarks.
 
 
-[04/04/2026 16:13] _mwelling_
+[2026-04-04 4:13 p.m.] _mwelling_
 I was part of the pyfive team and was building most of the work that tnt did. By the end I had a borrowed machine with more ram.
 
 
-[04/04/2026 16:14] nmz787
+[2026-04-04 4:14 p.m.] nmz787
 Ah
 
 
-[04/04/2026 16:15] _mwelling_
+[2026-04-04 4:15 p.m.] _mwelling_
 It was my project idea but tnt did all of the work.
 
 
-[04/04/2026 16:16] _mwelling_
+[2026-04-04 4:16 p.m.] _mwelling_
 Any funding that was raised all went to him.
 
 
-[04/04/2026 16:19] polyfractal
+[2026-04-04 4:19 p.m.] polyfractal
 i'd ++ the cloud rental route. The OVH server I rented was $200/month. I really only needed it for one month of intensive builds, two at the most. Unless you need/want the machine for other stuff it's hard to beat a cloud rental for short term usage
 
 
-[04/04/2026 16:54] 246tnt
+[2026-04-04 4:54 p.m.] 246tnt
 I think RAM is the main thing. For a full chip 64G is definitely  needed I think.
 
 
-[04/04/2026 16:54] 246tnt
+[2026-04-04 4:54 p.m.] 246tnt
 I'm still using an older AM4 cpu with DDR4.
 
 
-[04/04/2026 18:16] _mwelling_
+[2026-04-04 6:16 p.m.] _mwelling_
 I was looking at 96GB
 
 
-[04/04/2026 18:17] 246tnt
+[2026-04-04 6:17 p.m.] 246tnt
 Should be fine. I was running DRC on 64G for the whole TT chip.
 
 
-[04/04/2026 18:18] _mwelling_
+[2026-04-04 6:18 p.m.] _mwelling_
 Looking at this like I am starting a company and want to see what it would cost to have basic infrastructure.
 
 
-[04/04/2026 18:19] _mwelling_
+[2026-04-04 6:19 p.m.] _mwelling_
 What do you guys use to run the checks for the shuttles?
 
 
-[04/04/2026 18:21] 246tnt
+[2026-04-04 6:21 p.m.] 246tnt
 github actions 😅
 
 
-[04/04/2026 18:25] urish
+[2026-04-04 6:25 p.m.] urish
 We did hit the memory limits there a few times, but eventually we engineer our ways around it
 
 
-[04/05/2026 14:24] tholin
+[2026-04-05 2:24 p.m.] tholin
 I got by with as little as 16GiB RAM on my laptop for my multi-project die, including running the prechecks locally. Memory usage really improved a ton during the last few days before tapeout deadline.
 
 
-[04/05/2026 14:25] tholin
+[2026-04-05 2:25 p.m.] tholin
 It just takes *forever* on a laptop
 
 
-[04/05/2026 14:26] tholin
+[2026-04-05 2:26 p.m.] tholin
 Would recommend having one PC with a CPU that scores high single-core perf to run the prechecks.
 
 
-[04/05/2026 14:32] tholin
+[2026-04-05 2:32 p.m.] tholin
 Also, re. 22:55 in the presentation: 480 LUTs doesn’t sound like a lot for an FPGA, but that is actually twice the amount of the 240 LUT MAX II CPLDs I have a big pile of because they keep coming in handy in projects (and I fit a whole DDR2 controller in one of those once!). And they would be even more useful to me if they were 5V tolerant. So, actually, I’d REALLY love to get my hands on a bunch of the Fabulous FPGA for whatever 5V systems I still build sometimes.
 
 {Reactions}
 💯 (2)
 
-[04/05/2026 16:13] dshadoff
+[2026-04-05 4:13 p.m.] dshadoff
 The value of 5V compatibility shouldn't be underestimated
 
 
-[04/05/2026 22:38] _mwelling_
+[2026-04-05 10:38 p.m.] _mwelling_
 Yeah apparently now is a bad time to buy a new PC.
 
 
-[04/05/2026 22:52] _mwelling_
+[2026-04-05 10:52 p.m.] _mwelling_
 One thing to consider would be a libre silicon compute infrastructure. Timeshared remote systems for a structured development environments and infrastructure for the drc/lvs grind on the way the shuttles.
 
 
-[04/05/2026 22:56] _mwelling_
+[2026-04-05 10:56 p.m.] _mwelling_
 Guessing that there is no money for such a thing but it would be nice.
 
 
-[04/06/2026 08:15] mithro_
+[2026-04-06 8:15 a.m.] mithro_
 You can also run the DRC checks through https://platform.wafer.space
 
 {Embed}
@@ -304,7 +304,7 @@ Platform for wafer.space low cost silicon manufacturing.
 {Reactions}
 👍
 
-[04/06/2026 08:20] mithro_
+[2026-04-06 8:20 a.m.] mithro_
 Looks like @Leo Moser (mole99) has some competition -> https://github.com/MidstallSoftware/aegis and https://news.ycombinator.com/item?id=47646472
 
 {Embed}
@@ -320,39 +320,39 @@ Aegis – open-source FPGA silicon
 Hacker News
 
 
-[04/06/2026 08:21] mithro_
+[2026-04-06 8:21 a.m.] mithro_
 They are claiming 2880 LUT4's
 
 
-[04/06/2026 09:34] mithro_
+[2026-04-06 9:34 a.m.] mithro_
 If compute infrastructure is what is blocking you, I'm sure we can find someone who is willing to lend you time on some hardware.
 
 
-[04/06/2026 14:15] thecomputerguy
+[2026-04-06 2:15 p.m.] thecomputerguy
 Hi Tim
 
 
-[04/06/2026 14:16] mithro_
+[2026-04-06 2:16 p.m.] mithro_
 Hi!
 
 
-[04/06/2026 14:16] thecomputerguy
+[2026-04-06 2:16 p.m.] thecomputerguy
 Great to see you share the project
 
 
-[04/06/2026 14:18] mithro_
+[2026-04-06 2:18 p.m.] mithro_
 Are you planning on taping out on run #2?
 
 
-[04/06/2026 14:19] thecomputerguy
+[2026-04-06 2:19 p.m.] thecomputerguy
 Idk yet but I do want to do tapeout
 
 
-[04/06/2026 14:19] thecomputerguy
+[2026-04-06 2:19 p.m.] thecomputerguy
 I'm currently doing some improvements to the tapeout workflow. I got it down from over 6 hours to just 3.
 
 
-[04/06/2026 14:24] mole99
+[2026-04-06 2:24 p.m.] mole99
 Hi @The Computer Guy, impressive project! Especially hitting 2,880 LUT4's on GF180MCU using the default standard cell library.
 
 I've tried increasing the LUT count in my FPGA, but it would require simplifying the switch matrix of the tiles, which would impact the complexity of the designs that could be implemented.
@@ -360,43 +360,43 @@ I've tried increasing the LUT count in my FPGA, but it would require simplifying
 I'm wondering if you have tried implementing some real-world designs that make use of most of the 2,880 LUTs?
 
 
-[04/06/2026 14:25] thecomputerguy
+[2026-04-06 2:25 p.m.] thecomputerguy
 Hey so I do plan on trying a RISC-V core on it at some point. Or it would be Fourth.
 
 
-[04/06/2026 14:27] mole99
+[2026-04-06 2:27 p.m.] mole99
 That would make a great benchmark. Besides the blinky in your repository, have you tried implementing any other designs yet?
 
 
-[04/06/2026 14:28] thecomputerguy
+[2026-04-06 2:28 p.m.] thecomputerguy
 Not yet, it's mainly blinky and the test suite
 
 
-[04/06/2026 14:53] mithro_
+[2026-04-06 2:53 p.m.] mithro_
 @The Computer Guy / @Leo Moser (mole99) - Have you considered putting a serv core in spare space around SRAM tiles? 😛
 
 
-[04/06/2026 14:54] thecomputerguy
+[2026-04-06 2:54 p.m.] thecomputerguy
 No lol
 
 
-[04/06/2026 14:54] mole99
+[2026-04-06 2:54 p.m.] mole99
 I did so in a previous chip, not exactly SERV though: https://github.com/mole99/greyhound-ihp
 
 
-[04/06/2026 15:04] mithro_
+[2026-04-06 3:04 p.m.] mithro_
 @Leo Moser (mole99) / @The Computer Guy - You should also get a corescore.store for your parts 🙂
 
 
-[04/06/2026 15:10] mole99
+[2026-04-06 3:10 p.m.] mole99
 True! Greyhound has a core score of at least 1 😀
 
 
-[04/06/2026 15:21] thecomputerguy
+[2026-04-06 3:21 p.m.] thecomputerguy
 Lol, how would I do that?
 
 
-[04/06/2026 15:21] mithro_
+[2026-04-06 3:21 p.m.] mithro_
 https://github.com/olofk/corescore?tab=readme-ov-file#quick-start
 
 {Embed}
@@ -406,234 +406,234 @@ CoreScore. Contribute to olofk/corescore development by creating an account on G
 2026-04_media/5d0b9b00-9070-11ea-9991-c82e29049589-76584
 
 
-[04/06/2026 15:22] thecomputerguy
+[2026-04-06 3:22 p.m.] thecomputerguy
 Ah
 
 
-[04/06/2026 15:22] mole99
+[2026-04-06 3:22 p.m.] mole99
 However, I think you need silicon first.
 
 
-[04/06/2026 15:23] thecomputerguy
+[2026-04-06 3:23 p.m.] thecomputerguy
 I'm not too worried about Aegis Terra 1's performance since it's meant to be a starting point lol
 
 
-[04/06/2026 15:23] thecomputerguy
+[2026-04-06 3:23 p.m.] thecomputerguy
 It kinda seems like it, I don't think it would be too happy with the simulator.
 
 
-[04/06/2026 16:46] _mwelling_
+[2026-04-06 4:46 p.m.] _mwelling_
 Right now I am in the scoping process preparing a machine to do development. Since the drc can be offloaded I might be able to use an old decommissioned gaming pc for dev.
 
 
-[04/06/2026 21:59] thecomputerguy
+[2026-04-06 9:59 p.m.] thecomputerguy
 OpenROAD is using 330GB of RAM out of my 512GB lol
 
 
-[04/06/2026 23:04] ravenslofty
+[2026-04-06 11:04 p.m.] ravenslofty
 @The Computer Guy hi, I'm lofty, one of the yosys/nextpnr devs. I did have some thoughts on the FPGA architecture side of things.
 
 
-[04/06/2026 23:04] thecomputerguy
+[2026-04-06 11:04 p.m.] thecomputerguy
 Oh cool
 
 
-[04/06/2026 23:05] thecomputerguy
+[2026-04-06 11:05 p.m.] thecomputerguy
 I've definitely had thoughts about yosys and nextpnr being more optimized for systems like Ampere. I daily drive Arm hardware so it would be nice if yosys and nextpnr could take advantage of my 128 cores. I wish OpenROAD could as well heh.
 
 
-[04/06/2026 23:06] ravenslofty
+[2026-04-06 11:06 p.m.] ravenslofty
 multithreading is something we're working on to one extent or another; neither codebase is ideal for such things (Yosys's RTLIL core representation is not thread-safe, and nextpnr achieves local threading by layering over the arch API)
 
 
-[04/06/2026 23:07] thecomputerguy
+[2026-04-06 11:07 p.m.] thecomputerguy
 Yeah, I've seen some of the issues and code. I know in general this is hard to get multithreaded.
 
 
-[04/06/2026 23:07] ravenslofty
+[2026-04-06 11:07 p.m.] ravenslofty
 I will ask: are you using router1 or router2?
 
 
-[04/06/2026 23:08] thecomputerguy
+[2026-04-06 11:08 p.m.] thecomputerguy
 I've been using viaduct with nextpnr
 
 
-[04/06/2026 23:08] thecomputerguy
+[2026-04-06 11:08 p.m.] thecomputerguy
 <https://github.com/MidstallSoftware/aegis/tree/master/nextpnr-aegis>
 
 
-[04/06/2026 23:08] ravenslofty
+[2026-04-06 11:08 p.m.] ravenslofty
 yes. I saw.
 
 
-[04/06/2026 23:09] ravenslofty
+[2026-04-06 11:09 p.m.] ravenslofty
 after all, I was the one who proposed viaduct :p
 
 
-[04/06/2026 23:09] thecomputerguy
+[2026-04-06 11:09 p.m.] thecomputerguy
 Ah
 
 
-[04/06/2026 23:09] ravenslofty
+[2026-04-06 11:09 p.m.] ravenslofty
 when nextpnr-aegis runs, does it use router1 or router2
 
 
-[04/06/2026 23:10] thecomputerguy
+[2026-04-06 11:10 p.m.] thecomputerguy
 Lemme run it and see
 
 
-[04/06/2026 23:10] thecomputerguy
+[2026-04-06 11:10 p.m.] thecomputerguy
 It would be cool for the Aegis backend to be upstreamed into nextpnr so I don't have to do the overlay
 
 
-[04/06/2026 23:11] ravenslofty
+[2026-04-06 11:11 p.m.] ravenslofty
 we are relatively flexible with accepting such architectures, but you would likely need to port your code to himbaechel instead of viaduct
 
 
-[04/06/2026 23:11] thecomputerguy
+[2026-04-06 11:11 p.m.] thecomputerguy
 Ah
 
 
-[04/06/2026 23:12] thecomputerguy
+[2026-04-06 11:12 p.m.] thecomputerguy
 I think I remember seeing both and wasn't sure which to use
 
 
-[04/06/2026 23:12] ravenslofty
+[2026-04-06 11:12 p.m.] ravenslofty
 use himbaechel.
 
 
-[04/06/2026 23:13] thecomputerguy
+[2026-04-06 11:13 p.m.] thecomputerguy
 Ok, after the tapeout improvements I'll do that
 
 
-[04/06/2026 23:14] ravenslofty
+[2026-04-06 11:14 p.m.] ravenslofty
 (since the joke is likely lost: viaduct is called such because it a bridge API for small arch(itectur)es. [himbaechel](<https://de.wikipedia.org/wiki/Himb%C3%A4chel-Viadukt>) is a bridge API based on viaduct for large architectures)
 
 
-[04/06/2026 23:14] thecomputerguy
+[2026-04-06 11:14 p.m.] thecomputerguy
 Gotcha
 
 
-[04/06/2026 23:15] thecomputerguy
+[2026-04-06 11:15 p.m.] thecomputerguy
 Himbaechel is a better fit for Aegis?
 
 
-[04/06/2026 23:15] thecomputerguy
+[2026-04-06 11:15 p.m.] thecomputerguy
 I don't see anything from nextpnr which indicates if its router1 or router2
 
 
-[04/06/2026 23:16] ravenslofty
+[2026-04-06 11:16 p.m.] ravenslofty
 Viaduct won't see any future improvements that Himbaechel receives from our own work on it
 
 
-[04/06/2026 23:16] thecomputerguy
+[2026-04-06 11:16 p.m.] thecomputerguy
 Ah, that makes sense
 
 
-[04/06/2026 23:17] ravenslofty
+[2026-04-06 11:17 p.m.] ravenslofty
 for the scale of your FPGA, Viaduct is *fine*, but I think you'll appreciate having to build the architecture database once at build time rather than on every run
 
 
-[04/06/2026 23:17] thecomputerguy
+[2026-04-06 11:17 p.m.] thecomputerguy
 Ah
 
 
-[04/06/2026 23:18] thecomputerguy
+[2026-04-06 11:18 p.m.] thecomputerguy
 Ig that's a good time to also make things a bit more streamlined. I made it where the parameters for the design is just passed in. When switching to Himbaechel, I could use the descriptor JSON for the chip.
 
 
-[04/06/2026 23:19] ravenslofty
+[2026-04-06 11:19 p.m.] ravenslofty
 there are messages such as [this one](<https://github.com/YosysHQ/nextpnr/blob/764c6a6696923949a043fb35ccf71f6525e9a074/common/route/router1.cc#L1282>)
 
 
-[04/06/2026 23:19] thecomputerguy
+[2026-04-06 11:19 p.m.] thecomputerguy
 Ok, yeah I see that
 
 
-[04/06/2026 23:19] ravenslofty
+[2026-04-06 11:19 p.m.] ravenslofty
 also if the router output has `|`s, it's router1, if it has `=`s, it's router2
 
 
-[04/06/2026 23:19] thecomputerguy
+[2026-04-06 11:19 p.m.] thecomputerguy
 Ah, so it is router1
 
 
-[04/06/2026 23:20] thecomputerguy
+[2026-04-06 11:20 p.m.] thecomputerguy
 What's the difference between router1 and router2?
 
 
-[04/06/2026 23:20] ravenslofty
+[2026-04-06 11:20 p.m.] ravenslofty
 try running again with `--router router2`
 
 
-[04/06/2026 23:20] ravenslofty
+[2026-04-06 11:20 p.m.] ravenslofty
 r1, when properly tuned, produces higher Fmax results. r2 produces worse Fmax results, but requires very little tuning and runs much faster.
 
 
-[04/06/2026 23:21] thecomputerguy
+[2026-04-06 11:21 p.m.] thecomputerguy
 Ah
 
 
-[04/06/2026 23:21] ravenslofty
+[2026-04-06 11:21 p.m.] ravenslofty
 also r2 is multithreaded-ish and r1 is not.
 
 
-[04/06/2026 23:23] thecomputerguy
+[2026-04-06 11:23 p.m.] thecomputerguy
 Gotcha, with r1 it did say it ran for 0.11s for the blinky example
 
 
-[04/06/2026 23:24] thecomputerguy
+[2026-04-06 11:24 p.m.] thecomputerguy
 Oh, r2 did it in 0.02s
 
 
-[04/06/2026 23:25] ravenslofty
+[2026-04-06 11:25 p.m.] ravenslofty
 <https://github.com/YosysHQ/prjpeppercorn-test-cases/tree/main/018-attosoc>
 see if you can get this one to synth. that should begin to differentiate the two.
 
 
-[04/06/2026 23:25] thecomputerguy
+[2026-04-06 11:25 p.m.] thecomputerguy
 Ah
 
 
-[04/06/2026 23:30] ravenslofty
+[2026-04-06 11:30 p.m.] ravenslofty
 also, on a personal note:
 > Existing open-source FPGA efforts either reverse-engineer proprietary architectures (Project IceStorm, Apicula) or build tooling around closed silicon (Yosys, nextpnr)
 I think it's perhaps worth pointing out Cologne Chip GateMate as a half-proprietary architecture. it's true the HDL is closed, but we're their official toolchain, and we can publish information from their confidential docs as long as it's not verbatim.
 
 
-[04/06/2026 23:30] ravenslofty
+[2026-04-06 11:30 p.m.] ravenslofty
 e.g. [this](<https://github.com/YosysHQ/prjpeppercorn/blob/main/schematics/cpe/cpe.pdf>)
 
 
-[04/06/2026 23:30] thecomputerguy
+[2026-04-06 11:30 p.m.] thecomputerguy
 Oh cool
 
 
-[04/06/2026 23:33] thecomputerguy
+[2026-04-06 11:33 p.m.] thecomputerguy
 If I can get the nextpnr support upstreamed, it would be cool to do that with yosys as well. A `synth_aegis` command would be cool, it would only really need the JSON descriptor I think.
 
 
-[04/06/2026 23:34] ravenslofty
+[2026-04-06 11:34 p.m.] ravenslofty
 you would be expected to provide tests and maintain it to some degree though
 
 
-[04/06/2026 23:34] thecomputerguy
+[2026-04-06 11:34 p.m.] thecomputerguy
 Oh
 
 
-[04/06/2026 23:34] thecomputerguy
+[2026-04-06 11:34 p.m.] thecomputerguy
 Fair
 
 
-[04/06/2026 23:35] ravenslofty
+[2026-04-06 11:35 p.m.] ravenslofty
 nextpnr's standards for architectures are a bit lower than yosys'.
 
 
-[04/06/2026 23:36] thecomputerguy
+[2026-04-06 11:36 p.m.] thecomputerguy
 I was thinking both would have high standards
 
 
-[04/07/2026 01:52] mithro_
+[2026-04-07 1:52 a.m.] mithro_
 I think everyone, including the OpenROAD devs would love to figure out how to take advantage of many-core systems. 
 
 Almost all the existing research and effort has been focused on trying to produce the best solutions when measured by number of cpu cycles / instructions (mainly due to the perverse incentives when you license your software per CPU core) rather than solutions which might consume overall more CPU in the end but have a shorter wall run time.
@@ -641,7 +641,7 @@ Almost all the existing research and effort has been focused on trying to produc
 Most software people at Google were very interested in trying to figure out how we could do something more map-reduce style which allowed the expensive steps complete in minutes but we where never quite able to get the resources needed to do that effort when still being behind on other functionality.
 
 
-[04/07/2026 01:53] mithro_
+[2026-04-07 1:53 a.m.] mithro_
 @The Computer Guy - BTW I would love to know more about your SERDES. Have you seen my talk @ https://bit.ly/open-pipe-talk at all?
 
 {Embed}
@@ -651,15 +651,15 @@ SERDES, PIPE and protocols Pathway to fully open source implementations... Prese
 2026-04_media/AHkbwyICsZbiUWdmvUCPynaYUNBoJ68s01WRykfMtf-0C45B
 
 
-[04/07/2026 01:56] thecomputerguy
+[2026-04-07 1:56 a.m.] thecomputerguy
 I haven't seen your talk on serdes lol
 
 
-[04/07/2026 02:01] thecomputerguy
+[2026-04-07 2:01 a.m.] thecomputerguy
 Alright lol
 
 
-[04/07/2026 02:01] mithro_
+[2026-04-07 2:01 a.m.] mithro_
 @The Computer Guy - If you are procrastinating, I have plenty of reading material (much which is out of date) at https://bit.ly/tim-silicon-2024 
 
 I have a *very* old presentation at http://bit.ly/goog-fpga-22q3 which has a bunch of your "competition".
@@ -676,23 +676,23 @@ Open source (e)FPGA generators Why they are included by default in Google’s pr
 2026-04_media/AHkbwyLthAfOpOLTmUpRPkvBkhQzGumW2U4nYWktSn-66CB2
 
 
-[04/07/2026 02:02] mithro_
+[2026-04-07 2:02 a.m.] mithro_
 There was someone else on this server that was working on SERDES type things too....
 
 
-[04/07/2026 02:04] mithro_
+[2026-04-07 2:04 a.m.] mithro_
 
 
 
-[04/07/2026 02:04] mithro_
+[2026-04-07 2:04 a.m.] mithro_
 @The Computer Guy - This seems to be that discussion. (poke @EmbeddedKen).
 
 
-[04/07/2026 02:04] thecomputerguy
+[2026-04-07 2:04 a.m.] thecomputerguy
 Huh
 
 
-[04/07/2026 03:39] thecomputerguy
+[2026-04-07 3:39 a.m.] thecomputerguy
 https://github.com/MidstallSoftware/aegis/pull/8
 
 {Embed}
@@ -701,49 +701,49 @@ chore(readme): clarify other projects by RossComputerGuy · Pull Re...
 2026-04_media/8-D7F7F
 
 
-[04/07/2026 03:41] ravenslofty
+[2026-04-07 3:41 a.m.] ravenslofty
 Yeah this seems much fairer
 
 
-[04/07/2026 03:42] thecomputerguy
+[2026-04-07 3:42 a.m.] thecomputerguy
 Great
 
 
-[04/07/2026 03:43] thecomputerguy
+[2026-04-07 3:43 a.m.] thecomputerguy
 Gonna work on an architecture documentation while I wait for the tapeout workflow to finish
 
 
-[04/07/2026 03:45] polyfractal
+[2026-04-07 3:45 a.m.] polyfractal
 speaking of multi-threading, last weekend I realized that there are some threading knobs left at 1 when running librelane/project template. most notably the resizing steps. gave me a 2-3x speedup going from 1 to 16 cores (presumably a lot of synchronization losses keeping it from linear)
 
  I also started to play around with implementing nvidia's INSTA idea (https://ieeexplore.ieee.org/document/11132858) and it was 2-5x faster although the QoR wasn't always comparable. Worked well to get to TNS = 0, but didn't really like pushing positive slack margins for some reason, probably just my bad code
 
 
-[04/07/2026 03:47] thecomputerguy
+[2026-04-07 3:47 a.m.] thecomputerguy
 Oh cool, you're here lol. I remember seeing you followed me on Twitter a bit ago which was funny because that was after I saw one of your videos.
 
 {Reactions}
 😁
 
-[04/07/2026 03:48] polyfractal
+[2026-04-07 3:48 a.m.] polyfractal
 hi hi! yes I was excited to see you pop into my twitter feed, folks working on silicon and fpgas are rare 🙂 try to follow whenever a good project pops up!
 
 
-[04/07/2026 03:49] thecomputerguy
+[2026-04-07 3:49 a.m.] thecomputerguy
 Awesome, yeah I've got some even cooler projects in the pipeline after Aegis
 
 {Reactions}
 🥳
 
-[04/07/2026 03:52] thecomputerguy
+[2026-04-07 3:52 a.m.] thecomputerguy
 Ik I'm one of the few people doing this stuff on NixOS, I'm even doing it all on Arm lol
 
 
-[04/07/2026 07:09] mole99
+[2026-04-07 7:09 a.m.] mole99
 Started a thread.
 
 
-[04/07/2026 21:29] thecomputerguy
+[2026-04-07 9:29 p.m.] thecomputerguy
 Woah https://x.com/i/status/2041619342647754787
 
 {Embed}
@@ -756,11 +756,11 @@ https://t.co/8MiDBkSsy3
 X
 
 
-[04/08/2026 02:08] thecomputerguy
+[2026-04-08 2:08 a.m.] thecomputerguy
 Is there a way to make OpenROAD not take 6 hours for detailed routing & placement?
 
 
-[04/08/2026 02:23] h.tamas
+[2026-04-08 2:23 a.m.] h.tamas
 - Make your design less congested
   - Decrease the density (allow more area for the same amount of logic)
   - Decrease your target clock frequency (increase the clock period)
@@ -768,101 +768,101 @@ Is there a way to make OpenROAD not take 6 hours for detailed routing & placemen
 - Make sure you have enough RAM, otherwise you may end up using swap / virtual memory which is substantially slower
 
 
-[04/08/2026 02:24] thecomputerguy
+[2026-04-08 2:24 a.m.] thecomputerguy
 I have 512GB of RAM
 
 {Reactions}
 👍
 
-[04/08/2026 02:24] thecomputerguy
+[2026-04-08 2:24 a.m.] thecomputerguy
 Turns out apparently you can tell OpenROAD to use multiple threads, it's only been using 1 of my 128 cores
 
 {Reactions}
 😮
 
-[04/08/2026 02:25] h.tamas
+[2026-04-08 2:25 a.m.] h.tamas
 - Make your design modular, harden smaller parts and use them as macros at the top level
 
 
-[04/08/2026 02:25] thecomputerguy
+[2026-04-08 2:25 a.m.] thecomputerguy
 I do a macro based tapeout
 
 {Reactions}
 👍
 
-[04/08/2026 02:26] thecomputerguy
+[2026-04-08 2:26 a.m.] thecomputerguy
 I don't think I can decrease things without decreasing the tiles I have. Which I kinda need those because they define the capability of the FPGA.
 
 
-[04/08/2026 02:29] h.tamas
+[2026-04-08 2:29 a.m.] h.tamas
 Are you calling OpenROAD directly? If you use librelane, detailed routing should already run with `DRT_THREADS` set to the number of machine threads, and many other parts of the flow are single-threaded.
 
 
-[04/08/2026 02:30] thecomputerguy
+[2026-04-08 2:30 a.m.] thecomputerguy
 I'm calling it directly
 
 {Reactions}
 👍
 
-[04/08/2026 02:31] thecomputerguy
+[2026-04-08 2:31 a.m.] thecomputerguy
 I'll try `-threads $NIX_BUILD_CORES`
 
 
-[04/08/2026 02:36] thecomputerguy
+[2026-04-08 2:36 a.m.] thecomputerguy
 Huh, all of my small tiles went from 2 minutes to 20 seconds
 
 {Reactions}
 👍
 
-[04/08/2026 02:37] thecomputerguy
+[2026-04-08 2:37 a.m.] thecomputerguy
 The SerDes and "tile" tiles still take a good chunk of time
 
 
-[04/08/2026 12:39] tholin
+[2026-04-08 12:39 p.m.] tholin
 I know it gets mentioned a lot during talks, but what actually is the story behind PCB manufacturing becoming accessible? When I first got deep enough into EE to want to make my own PCBs, JLCPCB was already a thing, so I missed the beginning part of all that.
 
 
-[04/08/2026 12:40] tholin
+[2026-04-08 12:40 p.m.] tholin
 I keep hearing there is parallels between that story and the direction open source silicon is going in, but I have no context to get it.
 
 
-[04/08/2026 12:44] mithro_
+[2026-04-08 12:44 p.m.] mithro_
 @Tholin - I don't know if there is any official history.
 
 
-[04/08/2026 12:45] mithro_
+[2026-04-08 12:45 p.m.] mithro_
 @Tholin - The first ever PCB that I ever got made commercially was in University and the PCB house only allowed me to submit a design because they did other work for the university. They definately had a "Call us for a sales call and set up an account" type setup.
 
 
-[04/08/2026 12:46] mithro_
+[2026-04-08 12:46 p.m.] mithro_
 @Tholin - The big change was then OHS Park which was then followed by Dirty PCB. They where services which would pool together designs and then them to the PCB house and such.
 
 
-[04/08/2026 12:47] mithro_
+[2026-04-08 12:47 p.m.] mithro_
 At that point I could get PCBs made for the same cost of shipping to Australia, the turn around time was like maybe 6 weeks however as they designs only went to the PCB house like every couple of weeks and shipping to Australia was aweful 🙂
 
 
-[04/08/2026 12:48] mithro_
+[2026-04-08 12:48 p.m.] mithro_
 Dirty PCB was cheaper because you didn't get things like solder mask or silk screen or anything, OHS PCB was better but more expensive. Neither group would hold your hand or help you fix DRCs or stuff. They manufactured what you sent them and if it wasn't correct it was your own fault.
 
 
-[04/08/2026 12:48] mithro_
+[2026-04-08 12:48 p.m.] mithro_
 Then a bunch of the Chinese PCB houses like JLC, Seeed and PCB Way started offering services to the rest of the world.
 
 
-[04/08/2026 12:49] mithro_
+[2026-04-08 12:49 p.m.] mithro_
 And that is my short story of my own experiences, don't know what is was like for others.
 
 
-[04/08/2026 12:51] tholin
+[2026-04-08 12:51 p.m.] tholin
 Huh
 
 
-[04/08/2026 12:53] mithro_
+[2026-04-08 12:53 p.m.] mithro_
 The big thing that OHS Park and Dirty PCB did was they accepted design file upload and a credit card via the web.
 
 
-[04/08/2026 13:26] h.tamas
+[2026-04-08 1:26 p.m.] h.tamas
 You might be interested in this video with Tim: https://www.siliconimist.com/p/waferspace-tim-mithro-ansell
 
 {Embed}
@@ -874,53 +874,53 @@ Open Silicon Access From an Innovative Business Model
 {Reactions}
 ❤️ (3)
 
-[04/08/2026 15:30] dshadoff
+[2026-04-08 3:30 p.m.] dshadoff
 It's likely (at least mildly) related to new features added to the manufacturers' software which allowed them to panelize disparate designs more easily.
 
 
-[04/08/2026 15:41] 246tnt
+[2026-04-08 3:41 p.m.] 246tnt
 I still have emails from 2011 when it wasn't osh park yet and you were just emailing "pcb-order@laen.org" to get added to a panel and you were manually sending paying through paypal transfer ...
 
 {Reactions}
 💯 👍
 
-[04/08/2026 19:07] thecomputerguy
+[2026-04-08 7:07 p.m.] thecomputerguy
 Dang, Aegis Terra 1 is way too big from the sound of it for wafer.space. I did plan on eventually starting another family of FPGA's. Good time to do Aegis Luna 1. The Luna series is meant to be small scale while Terra is meant to be the leading series. If I do 19 x 19, 2 tracks, 2 DSP column iteration, 1 BRAM column iteration, and 1 SerDes then I fill up the die by like 80% - 90%.
 
 {Reactions}
 😮
 
-[04/08/2026 21:48] logic_destroyer
+[2026-04-08 9:48 p.m.] logic_destroyer
 What kind of machine do you have? I’m a little bit jealous.
 
 
-[04/08/2026 21:48] thecomputerguy
+[2026-04-08 9:48 p.m.] thecomputerguy
 Ampere Altra M128-26 with 512GB of RAM
 
 {Reactions}
 😮
 
-[04/08/2026 21:54] logic_destroyer
+[2026-04-08 9:54 p.m.] logic_destroyer
 I bought an i9 14700K because Yosys and nextpnr care more about single core performance.
 
 
-[04/08/2026 21:56] thecomputerguy
+[2026-04-08 9:56 p.m.] thecomputerguy
 Huh, yosys and nextpnr are still pretty fast for me
 
 
-[04/08/2026 21:58] thecomputerguy
+[2026-04-08 9:58 p.m.] thecomputerguy
 I mainly went to Ampere because I switched from a power hungry gaming laptop to an M1 Pro running NixOS a few years back. The problem with the M1 is not enough RAM for compilation, I was using it to maintain LLVM in nixpkgs and the 16GB was just not enough. Also, you had to compile things like Mesa for NixOS Asahi. I was told about Ampere and switched my desktop over. It's very good when I have like 20k ninja or make jobs to run lol.
 
 {Reactions}
 😮
 
-[04/09/2026 06:08] mole99
+[2026-04-09 6:08 a.m.] mole99
 @The Computer Guy Maybe you could move your posts to #digital or start a thread?
 
 {Reactions}
 👍
 
-[04/09/2026 09:04] mithro_
+[2026-04-09 9:04 a.m.] mithro_
 Interesting interview with Julia Desmazes on the Amp Hour - https://theamphour.com/721-chip-design-for-fun-and-waffles-with-julia-desmazes/
 
 {Embed}
@@ -931,37 +931,37 @@ Julia Desmazes joins Chris to discuss designing chips for fun and getting an ent
 {Reactions}
 👍 (2) 🚀 🎉
 
-[04/09/2026 09:24] mattvenn
+[2026-04-09 9:24 a.m.] mattvenn
 @Essen ^^
 
 {Reactions}
 😅
 
-[04/09/2026 15:49] essen__
+[2026-04-09 3:49 p.m.] essen__
 Now everyone knows of my love for waffle house! 🧇
 
 
-[04/09/2026 16:00] nmz787
+[2026-04-09 4:00 p.m.] nmz787
 I see typo in what should be accelerators
 
 
-[04/09/2026 16:01] nmz787
+[2026-04-09 4:01 p.m.] nmz787
 Not sure where the discord summary comes from, must be some hidden element
 
 {Reactions}
 🤣
 
-[04/09/2026 16:06] essen__
+[2026-04-09 4:06 p.m.] essen__
 It's my trap to make other people think I am normal.
 
 
-[04/10/2026 09:35] mithro_
+[2026-04-10 9:35 a.m.] mithro_
 I want to get wafer.space branded Stroopwafel swag 😛
 
 {Reactions}
 👀 🧇 (2)
 
-[04/11/2026 03:19] mithro_
+[2026-04-11 3:19 a.m.] mithro_
 Things are progressing here in Singapore!
 
 {Attachments}
@@ -970,11 +970,11 @@ Things are progressing here in Singapore!
 {Reactions}
 👍 (8) ❤️ (4) 🥳 (6) waferspace (5) 😍 🔥
 
-[04/11/2026 17:35] polyfractal
+[2026-04-11 5:35 p.m.] polyfractal
 exciting!
 
 
-[04/13/2026 22:41] tholin
+[2026-04-13 10:41 p.m.] tholin
 Just yesterday, I gave a long presentation called "3½ years of open-source-silicon: a retrospective, and why you should care" to a general audience. It just goes over my personal views and experience with open source before I give a introduction on what it is that I actually do as a chip designer. The video still has to be edited and processed to be uploaded to the YouTube channel, but luckily for ya’ll, I got a hold of the raw recording for your viewing pleasure. Unfortunately, I had some slight microphone issues that were only pointed out to me until *after* I was done. Sorry for that. I also had to rush towards the end as a scheduling mishap left me low on time, so there will certainly be a part 2 to this at some point where I go into more depth, so look forward to that!
 https://www.dropbox.com/scl/fi/dqd3k0f2vvihynpw3gv26/Tholin-s-IC-Panel.mp4?rlkey=dhxsf5dm97i549e0z3kyvf20g&st=em4kqi1n&dl=0
 
@@ -985,15 +985,15 @@ Shared with Dropbox
 2026-04_media/dqd3k0f2vvihynpw3gv26-E0A37
 
 
-[04/13/2026 22:41] tholin
+[2026-04-13 10:41 p.m.] tholin
 Let me know if there are any facts I got wrong, I can get corrections inserted into the youtube upload.
 
 
-[04/14/2026 02:15] mithro_
+[2026-04-14 2:15 a.m.] mithro_
 @Tholin - Cool!
 
 
-[04/14/2026 02:26] mithro_
+[2026-04-14 2:26 a.m.] mithro_
 People might find @bunnie talking about his Baochip with Hackster.io at https://www.youtube.com/watch?v=dBod87GMk6Y interesting.
 
 {Embed}
@@ -1006,7 +1006,7 @@ Andrew “bunnie” Huang is a guiding light in the world of privacy-friendly, v
 {Reactions}
 💚 (2)
 
-[04/14/2026 02:26] thecomputerguy
+[2026-04-14 2:26 a.m.] thecomputerguy
 I've got something which should fit on wafer.space. I'm running verification on it.
 
 {Attachments}
@@ -1015,43 +1015,43 @@ I've got something which should fit on wafer.space. I'm running verification on 
 {Reactions}
 💯 💜
 
-[04/14/2026 02:27] thecomputerguy
+[2026-04-14 2:27 a.m.] thecomputerguy
 Good timing, I was needing something new to watch while I start dinner lol
 
 
-[04/14/2026 06:12] mole99
+[2026-04-14 6:12 a.m.] mole99
 40x17=680 LUTs?
 
 
-[04/14/2026 06:13] thecomputerguy
+[2026-04-14 6:13 a.m.] thecomputerguy
 40 x 19
 
 
-[04/14/2026 06:13] thecomputerguy
+[2026-04-14 6:13 a.m.] thecomputerguy
 It's 760 LUTs
 
 
-[04/14/2026 06:14] mole99
+[2026-04-14 6:14 a.m.] mole99
 I thought the previous chip you shared with 2,880 LUTs was targeting wafer.space?
 
 
-[04/14/2026 06:16] thecomputerguy
+[2026-04-14 6:16 a.m.] thecomputerguy
 I couldn't get Terra 1 to fit
 
 
-[04/14/2026 06:16] thecomputerguy
+[2026-04-14 6:16 a.m.] thecomputerguy
 So Luna 1 was made
 
 
-[04/14/2026 06:21] mole99
+[2026-04-14 6:21 a.m.] mole99
 Then I misunderstood. I thought you had already fitted your previous design into the wafers.space template.
 
 
-[04/14/2026 06:22] thecomputerguy
+[2026-04-14 6:22 a.m.] thecomputerguy
 No because I didn't know of that until I was working on improving the tapeout
 
 
-[04/14/2026 22:18] futaris
+[2026-04-14 10:18 p.m.] futaris
 Great interview @Essen . I did some work on Cirrus Logic MaverickCrunch gcc compilers about 20 years ago. I think their HQ is/was in Austin, TX.
 
 Listened to the pod cast whilst driving and doing other errands.
@@ -1059,7 +1059,7 @@ Listened to the pod cast whilst driving and doing other errands.
 Your bfloat16 implementation and blog posts are great for someone who has a deep understanding of the software and not so much of the hardware implementation of floating point.
 
 
-[04/14/2026 22:20] futaris
+[2026-04-14 10:20 p.m.] futaris
 https://youtu.be/L-QVgbdt_qg
 
 Is another gem on floating point, for anyone interested in how the Intel 8087 was designed.
@@ -1072,18 +1072,18 @@ William Kahan, winner of the Association for Computing Machinery's A.M. Turing A
 2026-04_media/maxresdefault-914C7.jpg
 
 
-[04/14/2026 23:57] namibj
+[2026-04-14 11:57 p.m.] namibj
 > [Run] Evaluating: WP_C=0.81, WP_D=0.88, WN_MAIN=1.81, WN_CC=0.42, WN_TAIL=5.51, LP_C=0.20, LP_D=0.42, LN_MAIN=0.15, LN_CC=0.15, LN_TAIL=0.15, V3=0.00                                                                                                                                                                          
 >   --> Success: Freq = 4.982 GHz, V_pp = 2.141 V
 sky130; no reactive elements; xschem (no layout parasitics accounted for yet); not really tuned yet though.
 Search algo is ongoing at the task of figuring out the relevant area of physically possible parameter space (like, from manufacturable transistor sizes down to those that result in oscillations).
 
 
-[04/15/2026 06:13] mithro_
+[2026-04-15 6:13 a.m.] mithro_
 Hi everyone, could people bug me about getting announcements out about Run 1 and Run 2? I've been really slack and keep getting distracted.
 
 
-[04/15/2026 12:04] mole99
+[2026-04-15 12:04 p.m.] mole99
 For all you FPGA enthusiasts here, I've brought up the FPGA of Greyhound: https://www.linkedin.com/posts/leo-moser_fpga-asic-opensource-activity-7450118975205593088-17B8
 
 I'm looking forward to testing my FPGA on wafer.space run #1! 👏
@@ -1102,87 +1102,87 @@ Greyhound is an open-source RISC-V SoC with tightly coupled eFPGA. The chip was 
 {Reactions}
 🎉 (6)
 
-[04/15/2026 13:29] dshadoff
+[2026-04-15 1:29 p.m.] dshadoff
 Will anybody be going to (or presenting at ?) the Latch-Up conference in Waterloo Ontario (Canada) in a couple of weeks ?
 
 
-[04/15/2026 14:44] mithro_
+[2026-04-15 2:44 p.m.] mithro_
 I was hoping to make it but I don't think I will end up doing so
 
 
-[04/15/2026 20:12] thecomputerguy
+[2026-04-15 8:12 p.m.] thecomputerguy
 I didn't know about that conference until just now lol.
 
 
-[04/16/2026 10:47] dorythecat_v2
+[2026-04-16 10:47 a.m.] dorythecat_v2
 Hello! I was wondering if I could get a hand with setting up my workflow to design the chip for this process? Rn I managed to get most of the template set up, but on runnng my code Yosys is throwing 130 check errors at me, and I can't find what they actually are?
 
 
-[04/16/2026 10:50] ravenslofty
+[2026-04-16 10:50 a.m.] ravenslofty
 Did you look in the runs directory?
 
 
-[04/16/2026 10:51] dorythecat_v2
+[2026-04-16 10:51 a.m.] dorythecat_v2
 yep, but the log just says 130 Yosys check errors found
 
 
-[04/16/2026 10:52] ravenslofty
+[2026-04-16 10:52 a.m.] ravenslofty
 The librelane log will say that, but in the runs directory will be the actual Yosys output
 
 
-[04/16/2026 10:52] dorythecat_v2
+[2026-04-16 10:52 a.m.] dorythecat_v2
 Not really, the step only contains a config.json and state_in.json
 
 
-[04/16/2026 10:53] dorythecat_v2
+[2026-04-16 10:53 a.m.] dorythecat_v2
 I am very new to LibreLane so I'm not quite the best at knowing where to find stuff tho xd
 
 
-[04/16/2026 12:26] tholin
+[2026-04-16 12:26 p.m.] tholin
 So many PCBs for my bring-ups...
 
 {Attachments}
 2026-04_media/image-EF04D.png
 
 
-[04/16/2026 13:08] dorythecat_v2
+[2026-04-16 1:08 p.m.] dorythecat_v2
 Fixed the issues I had with Yosys (I think) but now I get
 ```ERROR    add_global_connections failed to make any connections for 'rst_n_pad/DVDD' to VDD.    ```
 
 
-[04/16/2026 13:30] dorythecat_v2
+[2026-04-16 1:30 p.m.] dorythecat_v2
 For some reason it canot connect power to the rst pad huh...
 
 
-[04/16/2026 13:30] dorythecat_v2
+[2026-04-16 1:30 p.m.] dorythecat_v2
 Weird...
 
 
-[04/16/2026 13:47] mole99
+[2026-04-16 1:47 p.m.] mole99
 Started a thread.
 
 
-[04/16/2026 14:49] dorythecat_v2
+[2026-04-16 2:49 p.m.] dorythecat_v2
 Some feedback: On the template on the github it would be neat if setting any pad count to 0 would disable the generation code for that pad type, which should be doable with an if block
 
 
-[04/16/2026 15:07] mole99
+[2026-04-16 3:07 p.m.] mole99
 Started a thread.
 
 
-[04/18/2026 11:11] fossify_37988
+[2026-04-18 11:11 a.m.] fossify_37988
 Bit of a bump, is this something that could be played with on a TT or similar? If it's not a decent task for a motivated beginner then it's not for me, but it would be pretty cool to learn
 
 
-[04/18/2026 19:44] nmz787
+[2026-04-18 7:44 p.m.] nmz787
 Isn't tt much much smaller usable area? Silicon capacitors are nothing new, the PDK parasitics models should include capacitance already. I'm not sure what the mention of "AI" in the google doc is about
 
 
-[04/18/2026 19:48] fossify_37988
+[2026-04-18 7:48 p.m.] fossify_37988
 there's probably some best-fit model that exists for a given capacitance, or if you can accept some other higher parasitics. The idea for trying it out on TT is to test out a few caps without going broke though heh.
 
 
-[04/18/2026 22:56] namibj
+[2026-04-18 10:56 p.m.] namibj
 >  deep trench 
 from the linked muRata datasheet.
 
@@ -1192,231 +1192,231 @@ Sounds like it's based on DRAM storage capacitor manufacturing technology; we do
 2026-04_media/XBSC_UBSC_BBSC_ULSC_DS-76D82.pdf
 
 
-[04/18/2026 22:57] namibj
+[2026-04-18 10:57 p.m.] namibj
 TT doesn't have the structures that are used for these highly linear capacitors
 
 
-[04/18/2026 22:58] fossify_37988
+[2026-04-18 10:58 p.m.] fossify_37988
 High aspect ratio caps are something completely different
 
 
-[04/18/2026 22:58] fossify_37988
+[2026-04-18 10:58 p.m.] fossify_37988
 They dont use standard processes
 
 
-[04/18/2026 22:58] namibj
+[2026-04-18 10:58 p.m.] namibj
 (Also lacking the packaging but that's just a non-selected process option (WLCSP bumping) that could probably be taken for wafer.space based on a cost tradeoff if the process had access to the deep trench capacitor structures needed.)
 
 
-[04/18/2026 22:59] namibj
+[2026-04-18 10:59 p.m.] namibj
 well, look at the linked muRata datasheet first page 1st prose paragraph
 
 
-[04/18/2026 23:00] namibj
+[2026-04-18 11:00 p.m.] namibj
 err, 1st body paragraph
 
 
-[04/18/2026 23:00] fossify_37988
+[2026-04-18 11:00 p.m.] fossify_37988
 I know what you're getting at, I don't know how that's at all relevant
 
 
-[04/18/2026 23:00] namibj
+[2026-04-18 11:00 p.m.] namibj
 > hese deep trench silicon capacitors have been developed with a semiconductor MOS process. They provide
 > very high reliability and capacitance stability over voltage (0.1%/V) and temperature (60 ppm/K).
 
 
-[04/18/2026 23:00] fossify_37988
+[2026-04-18 11:00 p.m.] fossify_37988
 What does this have to do with testing capacitors on the gf process
 
 
-[04/18/2026 23:02] namibj
+[2026-04-18 11:02 p.m.] namibj
 The reason these silicon capacitors are worth something on the market of passive SMD parts is because their dielectric is afaik grown silicon dioxide on a surface area enhancing trench structure.
 That dielectric is awesome electrically.
 That structure patterning provides suffiiciently low parasitics to be worth the cost of semiconductor patterning for a mere SMD capacitor, considering the electrical awesomness of the SiO2
 
 
-[04/18/2026 23:03] fossify_37988
+[2026-04-18 11:03 p.m.] fossify_37988
 Yes, and they use ALD & SoI to achieve their aspect ratios, but that doesn't mean you can't test MiM caps on gf180
 
 
-[04/18/2026 23:04] namibj
+[2026-04-18 11:04 p.m.] namibj
 ok buy a slot have some externally contacted quite shitty MIM caps?
 
 
-[04/18/2026 23:04] namibj
+[2026-04-18 11:04 p.m.] namibj
 wafer.space doesn't give you WLCSP.
 
 
-[04/18/2026 23:05] namibj
+[2026-04-18 11:05 p.m.] namibj
 Without that the packaging parasitics make these practically useless, also MIM caps are not really that good comparatively.
 
 
-[04/18/2026 23:05] namibj
+[2026-04-18 11:05 p.m.] namibj
 (Use non-litho manufacturing instead....)
 
 
-[04/18/2026 23:06] namibj
+[2026-04-18 11:06 p.m.] namibj
 The MIM are good... if you need on-die caps that don't eat active area and are pretty linear. Yeah.
 
 
-[04/18/2026 23:12] fossify_37988
+[2026-04-18 11:12 p.m.] fossify_37988
 I'll hold off for someone else's opinion. Noted.
 
 
-[04/19/2026 01:16] mithro_
+[2026-04-19 1:16 a.m.] mithro_
 @bunnie was explaining the reason silicon caps are useful is because of how thin they can be.
 
 
-[04/19/2026 01:17] mithro_
+[2026-04-19 1:17 a.m.] mithro_
 The idea would be to build structures on all of the silicon layers, metal layers and mim layers which try to produce the highest possible capacitance.
 
 {Reactions}
 👍
 
-[04/19/2026 01:19] mithro_
+[2026-04-19 1:19 a.m.] mithro_
 It's basically an optimization problem.
 
 
-[04/19/2026 01:19] fossify_37988
+[2026-04-19 1:19 a.m.] fossify_37988
 Yeah, I figured part of the challenge is finding a way to do the inverse problem solving
 
 
-[04/19/2026 01:24] fossify_37988
+[2026-04-19 1:24 a.m.] fossify_37988
 The other benefit I could see would be the ability to generate proven caps for other purposes
 
 
-[04/19/2026 01:40] mithro_
+[2026-04-19 1:40 a.m.] mithro_
 Correct
 
 
-[04/19/2026 01:41] mithro_
+[2026-04-19 1:41 a.m.] mithro_
 GDSFactory has a bunch of modes which have been used for silicon photonics optimization in a similar manner
 
 
-[04/19/2026 03:17] azonenberg
+[2026-04-19 3:17 a.m.] azonenberg
 yeah i remember reading recently about some of these advanced packages for chiplet interconnects
 
 
-[04/19/2026 03:17] azonenberg
+[2026-04-19 3:17 a.m.] azonenberg
 apparently they have trench caps in them for decoupling on the interposer
 
 
-[04/19/2026 03:18] azonenberg
+[2026-04-19 3:18 a.m.] azonenberg
 Also, finally (after waaaay too long) managed to install the PDK
 
 
-[04/19/2026 03:18] azonenberg
+[2026-04-19 3:18 a.m.] azonenberg
 and i have some of the library cells open in klayout and.... wow these look weird lol
 
 
-[04/19/2026 03:19] azonenberg
+[2026-04-19 3:19 a.m.] azonenberg
 the fine metal features and huge poly just seem so bizarre
 
 
-[04/19/2026 03:19] azonenberg
+[2026-04-19 3:19 a.m.] azonenberg
 i'm used to looking at poly that is like double patterned or something and is pushing litho limits and metal is enormous by comparison
 
 
-[04/19/2026 03:22] azonenberg
+[2026-04-19 3:22 a.m.] azonenberg
 so seeing signal lines on M1 that are like half the size of the poly is just confusing to me lol
 
 
-[04/19/2026 03:27] azonenberg
+[2026-04-19 3:27 a.m.] azonenberg
 buuut i need to not get nerdsniped too much on this until i get some chores done :p
 
 {Reactions}
 😂 (2)
 
-[04/19/2026 03:30] azonenberg
+[2026-04-19 3:30 a.m.] azonenberg
 for reference if anybody is curious... this is a nand2 on UMC 180nm
 
 {Attachments}
 2026-04_media/xc2c32a_02_se_20kV_25kx_9mm-31A39.jpg
 
 
-[04/19/2026 03:31] azonenberg
+[2026-04-19 3:31 a.m.] azonenberg
 the chip had 3.3V compatible IOs and a 1.8V core, this particular cell is from a closeup image that I don't have any context for so unsure if in the IO area or core
 
 
-[04/19/2026 03:31] azonenberg
+[2026-04-19 3:31 a.m.] azonenberg
 (i took the photo in 2014 and have no notes from it)
 
 
-[04/19/2026 03:35] azonenberg
+[2026-04-19 3:35 a.m.] azonenberg
 it had a lot of custom layout so this isnt part of a standard cell
 
 
-[04/19/2026 04:26] fossify_37988
+[2026-04-19 4:26 a.m.] fossify_37988
 very bouba
 
 
-[04/19/2026 04:43] azonenberg
+[2026-04-19 4:43 a.m.] azonenberg
 no matter how kiki your layout is, after litho and etch it's gonna turn out bouba if it's a min-sized feature :p
 
 
-[04/19/2026 04:48] dnaltews
+[2026-04-19 4:48 a.m.] dnaltews
 straight lines and 90 degree angles are lies perpetuated by big geometry
 
 {Reactions}
 😆 (2)
 
-[04/19/2026 20:51] namibj
+[2026-04-19 8:51 p.m.] namibj
 huh.... I thought you said you're not gonna look until you get 1.8V oxide 😄
 
 
-[04/19/2026 20:52] namibj
+[2026-04-19 8:52 p.m.] namibj
 ~~embrace ring shaped ring oscillators~~
 
 
-[04/20/2026 06:36] mithro_
+[2026-04-20 6:36 a.m.] mithro_
 Shhhhhhh....
 
 
-[04/20/2026 06:36] mithro_
+[2026-04-20 6:36 a.m.] mithro_
 I would love to get SEM imaging of various GF180MCU stuff. I think at some point I sent you some samples. I have a lot more potential samples now.
 
 
-[04/20/2026 06:38] mithro_
+[2026-04-20 6:38 a.m.] mithro_
 @azonenberg - I'm actually talking to Lattice about getting known good die of Lattice FPGAs to offer co-packaged/wire bonded GF180MCU parts with cheap open source supported FPGAs. That might be a gateway option for exploring PCIe type things further.
 
 
-[04/20/2026 06:40] azonenberg
+[2026-04-20 6:40 a.m.] azonenberg
 Interesting. But my goal here is not so much "I want to build an asic on gf180 with pcie" as it is pathfinding for future gen e.g. pcie gen3/4/5 on $FAB 90/65/45
 
 
-[04/20/2026 06:40] azonenberg
+[2026-04-20 6:40 a.m.] azonenberg
 my realistic "I think we can actually do this" near term goal is to build a pcie "gen 0.5" PHY on gf180mcu
 
 
-[04/20/2026 06:40] azonenberg
+[2026-04-20 6:40 a.m.] azonenberg
 something that is protocol compatible with gen1 but underclocked to 1/2 or 1/4 or 1/8 rate
 
 
-[04/20/2026 06:41] azonenberg
+[2026-04-20 6:41 a.m.] azonenberg
 and can talk to an fpga transceiver running in sub rate mode
 
 
-[04/20/2026 06:41] azonenberg
+[2026-04-20 6:41 a.m.] azonenberg
 but the idea being that the same circuit would hopefully lay the groundwork for a faster one on a more modern node
 
 
-[04/20/2026 06:43] azonenberg
+[2026-04-20 6:43 a.m.] azonenberg
 so while i'm sure there might be other projects that could benefit from such a copackaged design with fpga + asic, it doesn't fill my goal here where development of the phy/protocol IP itself is the point
 
 
-[04/20/2026 06:44] azonenberg
+[2026-04-20 6:44 a.m.] azonenberg
 I think i have some samples from you in my microscope food bin from skywater but i need to see what might be gf180. i've been too busy to get to them so far
 
 
-[04/20/2026 06:44] azonenberg
+[2026-04-20 6:44 a.m.] azonenberg
 I'd need work's signoff to image them in their lab, alternatively if my friends across town get any of their sems working i can use theirs with no issue
 
 
-[04/20/2026 06:44] azonenberg
+[2026-04-20 6:44 a.m.] azonenberg
 i can definitely image optically on my home setup on the labsmore X1
 
 
-[04/20/2026 06:45] mithro_
+[2026-04-20 6:45 a.m.] mithro_
 I was thinking of it as a way to experiment with different parts of the system split between ASIC and FPGA side - like what I describe in https://bit.ly/open-pipe-talk
 
 {Embed}
@@ -1426,351 +1426,351 @@ SERDES, PIPE and protocols Pathway to fully open source implementations... Prese
 2026-04_media/AHkbwyJ54kLpDfZyWjAuYIO5sYwKD22NBX-c6XaHj3-F4B4A
 
 
-[04/20/2026 06:46] azonenberg
+[2026-04-20 6:46 a.m.] azonenberg
 Fair, that is definitely a possibility and i absolutely like the idea
 
 
-[04/20/2026 06:46] azonenberg
+[2026-04-20 6:46 a.m.] azonenberg
 also for zynq-style cooperation flows
 
 
-[04/20/2026 06:47] 246tnt
+[2026-04-20 6:47 a.m.] 246tnt
 Well SGMII would be nice 🙂
 
 
-[04/20/2026 06:47] azonenberg
+[2026-04-20 6:47 a.m.] azonenberg
 e.g. maybe you could run something like 16-bit APB/AHB between the asic and fpga die or something
 
 
-[04/20/2026 06:48] azonenberg
+[2026-04-20 6:48 a.m.] azonenberg
 yeah i think even sgmii is going to be hard, from what i have seen from you and other folks, without the 1.8v fets. with them, it's probably doable
 
 
-[04/20/2026 06:48] azonenberg
+[2026-04-20 6:48 a.m.] azonenberg
 i think 1/4 rate pcie as a sandbox is likely doable though
 
 
-[04/20/2026 06:48] azonenberg
+[2026-04-20 6:48 a.m.] azonenberg
 try to build out a full flow with VCO, CDR, equalizers, etc
 
 
-[04/20/2026 06:49] azonenberg
+[2026-04-20 6:49 a.m.] azonenberg
 i.e. 625 Mbps instead of 2.5 Gbps
 
 
-[04/20/2026 06:49] azonenberg
+[2026-04-20 6:49 a.m.] azonenberg
 that's just barely around Fmin of xilinx GTP/GTXs
 
 
-[04/20/2026 06:49] 246tnt
+[2026-04-20 6:49 a.m.] 246tnt
 I wouldn't necessarily based anything on my results ... I'm a novice analog designer 😅
 
 
-[04/20/2026 06:49] azonenberg
+[2026-04-20 6:49 a.m.] azonenberg
 and i have a computer science degree :p
 
 
-[04/20/2026 06:49] azonenberg
+[2026-04-20 6:49 a.m.] azonenberg
 Not an EE
 
 
-[04/20/2026 06:50] azonenberg
+[2026-04-20 6:50 a.m.] azonenberg
 i need to learn a ton of analog to be able to actually build CMOS analog that does anything
 
 
-[04/20/2026 06:50] azonenberg
+[2026-04-20 6:50 a.m.] azonenberg
 i'm reasonably confident i could build digital standard cells without a lot of trouble since i've RE'd so many of them by now
 
 
-[04/20/2026 06:50] azonenberg
+[2026-04-20 6:50 a.m.] azonenberg
 one of the things i want to do soonish, and will probably be asking for some handholding at some point, is building some 3.3V cells for gf180mcu
 
 
-[04/20/2026 06:51] azonenberg
+[2026-04-20 6:51 a.m.] azonenberg
 i know other people are doing it but i want to learn and i figure i should build an inverter before i build a VCO :p
 
 
-[04/20/2026 06:54] 246tnt
+[2026-04-20 6:54 a.m.] 246tnt
 There are some. Tholin made a library.
 
 
-[04/20/2026 06:54] 246tnt
+[2026-04-20 6:54 a.m.] 246tnt
 It's not silicon proven yet but some proto should be on WS1 run.
 
 
-[04/20/2026 06:54] azonenberg
+[2026-04-20 6:54 a.m.] azonenberg
 Well, i'll look after i've done a few on my own
 
 
-[04/20/2026 06:55] azonenberg
+[2026-04-20 6:55 a.m.] azonenberg
 and see how much better theirs are :p
 
 
-[04/20/2026 06:55] azonenberg
+[2026-04-20 6:55 a.m.] azonenberg
 i dont want to end up unconsciously copying, i want to start from just the design rules and see what i come up with
 
 
-[04/20/2026 06:55] azonenberg
+[2026-04-20 6:55 a.m.] azonenberg
 then compare after
 
 
-[04/20/2026 06:56] 246tnt
+[2026-04-20 6:56 a.m.] 246tnt
 Oh ... I misread the sentence ... I thought you'd be asking for someone to do it, not that you wanted to do it yourself, my bad.
 
 
-[04/20/2026 06:56] azonenberg
+[2026-04-20 6:56 a.m.] azonenberg
 no i want to do it as a learning exercise
 
 
-[04/20/2026 06:56] azonenberg
+[2026-04-20 6:56 a.m.] azonenberg
 and probably put it on a TT because why not
 
 
-[04/20/2026 06:56] 246tnt
+[2026-04-20 6:56 a.m.] 246tnt
 Yeah make sense.
 
 
-[04/20/2026 06:56] azonenberg
+[2026-04-20 6:56 a.m.] azonenberg
 and if mine end up being good enoguh other people can use the lib, great
 
 
-[04/20/2026 06:56] azonenberg
+[2026-04-20 6:56 a.m.] azonenberg
 the goal is both for practice with the tools, and to prep for eventually building a 1.8v lib if we manage to get full gf180bcd or whatever it's called one day
 
 
-[04/20/2026 06:57] azonenberg
+[2026-04-20 6:57 a.m.] azonenberg
 first step is going to be figuring out what tools i still need to set up and learning how to integrate them to do simulations etc
 
 
-[04/20/2026 06:57] azonenberg
+[2026-04-20 6:57 a.m.] azonenberg
 i've used yosys before but my copy is probably hopelessly out of date, i have klayout installed already for other reasons
 
 
-[04/20/2026 06:57] azonenberg
+[2026-04-20 6:57 a.m.] azonenberg
 i installed the gf180mcu PDK
 
 
-[04/20/2026 06:58] azonenberg
+[2026-04-20 6:58 a.m.] azonenberg
 i installed magic but the UI is so horrible i want to stick with klayout if at all possible
 
 
-[04/20/2026 06:58] azonenberg
+[2026-04-20 6:58 a.m.] azonenberg
 i do not have any extraction or P&R tools installed to my knowledge
 
 
-[04/20/2026 06:58] azonenberg
+[2026-04-20 6:58 a.m.] azonenberg
 or timing
 
 
-[04/20/2026 06:58] azonenberg
+[2026-04-20 6:58 a.m.] azonenberg
 i assume most or all of that is part of openlane which i havent set up yet
 
 
-[04/20/2026 06:58] 246tnt
+[2026-04-20 6:58 a.m.] 246tnt
 extraction is actually done with magic ...
 
 
-[04/20/2026 06:59] azonenberg
+[2026-04-20 6:59 a.m.] azonenberg
 ah ok, well then i'm going to have to suck it up and deal with the pain lol
 
 
-[04/20/2026 06:59] 246tnt
+[2026-04-20 6:59 a.m.] 246tnt
 klayout is starting to have basic extraction, but it's new and basic ATM, never tried it.
 
 
-[04/20/2026 06:59] azonenberg
+[2026-04-20 6:59 a.m.] azonenberg
 last time i poked at it i turned off some layers and couldnt figure out how to turn them back on
 
 
-[04/20/2026 06:59] azonenberg
+[2026-04-20 6:59 a.m.] azonenberg
 i tried various combinations of left/right/middle click, double click, ctrl/alt/shift on the layers window
 
 
-[04/20/2026 07:00] azonenberg
+[2026-04-20 7:00 a.m.] azonenberg
 and nothing turned them back on
 
 
-[04/20/2026 07:00] azonenberg
+[2026-04-20 7:00 a.m.] azonenberg
 but yeah basically before i do much of anything else i want to get all of the tooling installed, draw an inverter, and figure out how to simulate it. then do a ring oscillator, then some more cells
 
 
-[04/20/2026 07:01] 246tnt
+[2026-04-20 7:01 a.m.] 246tnt
 I actually like magic . The learning curve is steep but after a few hours, I end up way more productive than with point and click in klayout.
 
 
-[04/20/2026 07:02] 246tnt
+[2026-04-20 7:02 a.m.] 246tnt
 There was a "cheat sheet" around with the default keyboard short cuts.
 
 
-[04/20/2026 07:02] azonenberg
+[2026-04-20 7:02 a.m.] azonenberg
 I would like to see a new tool with a UI from this century and GPU accelerated rendering one day. Maybe it'll just be a frontend around magic's geometry kernels and extractions and stuff
 
 
-[04/20/2026 07:02] azonenberg
+[2026-04-20 7:02 a.m.] azonenberg
 klayout has no gpu acceleration at all afaik, magic is opengl but not as much as i would hope to see
 
 
-[04/20/2026 07:02] azonenberg
+[2026-04-20 7:02 a.m.] azonenberg
 klayout gets reeeeally slow on big gds's
 
 
-[04/20/2026 07:02] azonenberg
+[2026-04-20 7:02 a.m.] azonenberg
 years back i opened a TS28HPC+ GDS on it
 
 
-[04/20/2026 07:02] azonenberg
+[2026-04-20 7:02 a.m.] azonenberg
 it... was navigable, with difficulty
 
 
-[04/20/2026 07:03] azonenberg
+[2026-04-20 7:03 a.m.] azonenberg
 but not what i would consider acceptable performance for actually doing any kind of engineering
 
 
-[04/20/2026 07:03] azonenberg
+[2026-04-20 7:03 a.m.] azonenberg
 obviously the kinds of things we're doing on gf180mcu will have much less polygons
 
 
-[04/20/2026 07:03] azonenberg
+[2026-04-20 7:03 a.m.] azonenberg
 and not 50+ GB GDS's
 
 
-[04/20/2026 07:04] mithro_
+[2026-04-20 7:04 a.m.] mithro_
 @azonenberg - I've always thought that you could load the GDS into something like the Google Maps API 😛
 
 
-[04/20/2026 07:05] azonenberg
+[2026-04-20 7:05 a.m.] azonenberg
 Sooo i would actually like to see something along those lines that does tile based rendering and caches a texture for each layer as a png on disk
 
 
-[04/20/2026 07:05] azonenberg
+[2026-04-20 7:05 a.m.] azonenberg
 precomputing stuff so the drawing is ~instantaneous
 
 
-[04/20/2026 07:05] azonenberg
+[2026-04-20 7:05 a.m.] azonenberg
 i have experienec building such stuff for GIS in years back
 
 
-[04/20/2026 07:06] azonenberg
+[2026-04-20 7:06 a.m.] azonenberg
 but my long term vision for what i want to see in a next-gen layout editor/viewer is something using vulkan which seems to be the way of the future for cross platform, and the ability to use it for both rendering and compute acceleration
 
 
-[04/20/2026 07:06] azonenberg
+[2026-04-20 7:06 a.m.] azonenberg
 i want GPU LVS/DRC/extractions, field solver, etc :p
 
 
-[04/20/2026 07:06] 246tnt
+[2026-04-20 7:06 a.m.] 246tnt
 Grid is 5 nm, chip is 3x5 mm tha'ts one 600k x 1000k PNG per layer.
 
 
-[04/20/2026 07:06] azonenberg
+[2026-04-20 7:06 a.m.] azonenberg
 no not a single image
 
 
-[04/20/2026 07:07] azonenberg
+[2026-04-20 7:07 a.m.] azonenberg
 you do a pyramid like google maps
 
 
-[04/20/2026 07:07] azonenberg
+[2026-04-20 7:07 a.m.] azonenberg
 max zoom is say 512 x 512 5nm pixels per tile
 
 
-[04/20/2026 07:07] azonenberg
+[2026-04-20 7:07 a.m.] azonenberg
 then you'd have power of 2 or 4 reductions from that
 
 
-[04/20/2026 07:07] azonenberg
+[2026-04-20 7:07 a.m.] azonenberg
 one set of tiles per layer
 
 
-[04/20/2026 07:08] azonenberg
+[2026-04-20 7:08 a.m.] azonenberg
 And you don't have to render them all in advance. you can rough decimate and render low res of the whole chip, then as the user pans and zooms render things just off screen in anticipation of them coming into view soon
 
 
-[04/20/2026 07:08] azonenberg
+[2026-04-20 7:08 a.m.] azonenberg
 this is what I did in a GIS app years back, we'd prefetch and decompress tiles in th edirection you were panning and zooming before they got on screen
 
 
-[04/20/2026 07:08] 246tnt
+[2026-04-20 7:08 a.m.] 246tnt
 Sure but eventually you still end up with that full resolution stored on disk. Even if split.   Even if you manage to compress 100:1 that's still 500 Mbytes per layer.
 
 
-[04/20/2026 07:08] azonenberg
+[2026-04-20 7:08 a.m.] azonenberg
 no popping and LOD delays like google maps has
 
 
-[04/20/2026 07:09] azonenberg
+[2026-04-20 7:09 a.m.] azonenberg
 Well yes, but it can be sparse. you won't be looking at every tile all the time
 
 
-[04/20/2026 07:09] azonenberg
+[2026-04-20 7:09 a.m.] azonenberg
 you can cap the cache to however many GB the user wants to allocate
 
 
-[04/20/2026 07:09] azonenberg
+[2026-04-20 7:09 a.m.] azonenberg
 and re-render tiles as needed
 
 
-[04/20/2026 07:09] azonenberg
+[2026-04-20 7:09 a.m.] azonenberg
 also realistically for ASIC design a couple GB of disk space is not an unreasonable ask
 
 
-[04/20/2026 07:11] azonenberg
+[2026-04-20 7:11 a.m.] azonenberg
 anyway, i have way too many things on my plate already and i am not attempting to replace magic or klayout any time soon
 
 
-[04/20/2026 07:11] azonenberg
+[2026-04-20 7:11 a.m.] azonenberg
 but I *am* tempted to try to make a gpu accelerated view-only GDS display tool as a PoC some time to feel out the idea
 
 
-[04/20/2026 07:12] azonenberg
+[2026-04-20 7:12 a.m.] azonenberg
 and if it turns out to be something we can start porting editing functionality from the other tools into, great. if not, maybe it'll just be the asic version of gerbview
 
 
-[04/20/2026 07:12] mole99
+[2026-04-20 7:12 a.m.] mole99
 There's "THE CHIPMAP™: VISUALIZING LARGE VLSI PHYSICAL DESIGN DATASETS" by Jeff Solomon, December 2002.
 
 It implements a mipmapping pyramid, as you described.
 
 
-[04/20/2026 07:23] azonenberg
+[2026-04-20 7:23 a.m.] azonenberg
 i've worked with some heavily CLI/keyboard based tools and dont like them much
 
 
-[04/20/2026 07:23] azonenberg
+[2026-04-20 7:23 a.m.] azonenberg
 i like menu/mouse driven stuff that have keyobard shortcuts for common actions but it's not the main/only way to do things
 
 
-[04/20/2026 11:26] namibj
+[2026-04-20 11:26 a.m.] namibj
 Are the 3.3V devices even too bad to squeeze 2.5 GBaud out of them?
 
 
-[04/20/2026 11:30] namibj
+[2026-04-20 11:30 a.m.] namibj
 I'd consider asking them about what IO buffer performance you'd get with that co-packaging so you can at least try to match it with the connected ASIC pad.
 A fairly known wire bond has far more constrained parasitics than some "generic" PCB trace.
 
 
-[04/20/2026 11:34] namibj
+[2026-04-20 11:34 a.m.] namibj
 Are the models for gf180mcu at least decent quality, unlike the sky130 ones?
 
 
-[04/20/2026 11:36] 246tnt
+[2026-04-20 11:36 a.m.] 246tnt
 No idea, never tried ...
 And the sky130 ones aren't all that bad, they're just not designed with subthreshold operation in mind because at the time they were made, nobody was doing that ...
 
 
-[04/20/2026 11:38] namibj
+[2026-04-20 11:38 a.m.] namibj
 Any reason why I shouldn't switch to klayout for my efforts before I sit myself down to watch 6 hours of tutorial(s) in hopes of getting the hang of it without really spare time to "just" dabble "playfully" until I no longer need the manual more than once every 5 minutes?
 
 
-[04/20/2026 11:40] namibj
+[2026-04-20 11:40 a.m.] namibj
 Left/right click on the smol square button with the layer draw style "tile" on it.
 
 
-[04/20/2026 11:41] namibj
+[2026-04-20 11:41 a.m.] namibj
 Link before I wake up again in ~20 hours pls?
 
 
-[04/20/2026 11:42] 246tnt
+[2026-04-20 11:42 a.m.] 246tnt
 https://github.com/iic-jku/osic-multitool/blob/main/magic-cheatsheet/magic_cheatsheet.pdf
 
 {Embed}
@@ -1780,473 +1780,473 @@ JKU IIC OSIC-Multitool for open-source IC (OSIC) design for SKY130. - iic-jku/os
 2026-04_media/osic-multitool-1874E
 
 
-[04/20/2026 11:44] 246tnt
+[2026-04-20 11:44 a.m.] 246tnt
 In magic I never use anything else than the `box` mode and a few time the `wiring` mode. Never use import from spice or the other mode .....
 
 
-[04/20/2026 11:44] namibj
+[2026-04-20 11:44 a.m.] namibj
 ... What _is_ the mask pixel size, anyways?
 Or do they not quantize at granularity visible in e.g. standard cell design?
 
 
-[04/20/2026 11:45] 246tnt
+[2026-04-20 11:45 a.m.] 246tnt
 The manufacturing grid is 5 nm ... that's all we know. The rest is details that are not public/available/specified ...
 
 
-[04/20/2026 11:45] namibj
+[2026-04-20 11:45 a.m.] namibj
 ~~I think we're supposed to write more TCL and use less mouse with magic~~
 
 
-[04/20/2026 11:46] 246tnt
+[2026-04-20 11:46 a.m.] 246tnt
 But different masks have different resolution, the poly mask is much finer than the implant mask for instance ... they only reserve the finer thing for stuff that needs it.
 
 
-[04/20/2026 11:47] namibj
+[2026-04-20 11:47 a.m.] namibj
 That's the "lossless" pixel size of handing the gds layers as bitmaps instead of their normal vector-shape-stuff?
 
 
-[04/20/2026 11:47] 246tnt
+[2026-04-20 11:47 a.m.] 246tnt
 Pretty much. All coordinates need to be aligned to the grid.
 
 
-[04/20/2026 11:48] namibj
+[2026-04-20 11:48 a.m.] namibj
 I know actual features will be larger, but alignment isn't bound by the same optical resolution laws :ferrisCatOwO:
 
 
-[04/20/2026 11:48] namibj
+[2026-04-20 11:48 a.m.] namibj
 (only gf180mcu or is sky130 the same/do you remember the number for it?)
 
 
-[04/20/2026 11:51] 246tnt
+[2026-04-20 11:51 a.m.] 246tnt
 Same grid for both.
 
 
-[04/20/2026 11:51] 246tnt
+[2026-04-20 11:51 a.m.] 246tnt
 And IHP too
 
 
-[04/20/2026 11:57] namibj
+[2026-04-20 11:57 a.m.] namibj
 :ferrisSquee:
 
 
-[04/20/2026 16:26] polyfractal
+[2026-04-20 4:26 p.m.] polyfractal
 ++ the general sentiment against KLayout. Everytime I have to use it seriously it makes me angry. I know I shouldn't get mad at OSS, but it's like they looked at all the normal UI conventions and went "Ehh, what if we just change it slightly so everything is just a bit different". also yeah it bogs down fast under bigger designs
 
 
-[04/20/2026 16:28] polyfractal
+[2026-04-20 4:28 p.m.] polyfractal
 fwiw I'll be doing imaging of my chip, but not sure if or how many cross-sections. We'll see how lazy I feel. Not sure I'm skilled enough at lapping to de-layer either. Probably need @azonenberg's magic touch for that 🙂
 
 
-[04/20/2026 16:29] mithro_
+[2026-04-20 4:29 p.m.] mithro_
 We got some pretty nice sky130 cross sections with some fine grit sandpaper IIRC - @digshadow - Do you remember the method we used?
 
 
-[04/20/2026 16:31] namibj
+[2026-04-20 4:31 p.m.] namibj
 magic's excuse at least is "back in my day we had to use X10, because X11 wasn't invented yet" or something 🙁
 
 
-[04/20/2026 16:34] polyfractal
+[2026-04-20 4:34 p.m.] polyfractal
 we actually have a nice little lapping station here at work i'll probably use after hours. epoxy molds, full set of grits, water flushing etc. mostly a laziness problem haha 😄  i'll do at least a few, the cross-sections I did of a i486 were a huge hit on the channel a few years ago (ditto to ion etching xsections)
 
 
-[04/20/2026 16:35] polyfractal
+[2026-04-20 4:35 p.m.] polyfractal
 hoping to get some 3d surface profilometry data too
 
 
-[04/20/2026 16:37] namibj
+[2026-04-20 4:37 p.m.] namibj
 Have you considered trying the diamond mirror tactics on chips?
 If they have enough layer adhesion it should be possible to cut them with a defined edge (not just sand them off with undefined edges) without delaminating it?
 
 
-[04/20/2026 16:38] polyfractal
+[2026-04-20 4:38 p.m.] polyfractal
 oh that's a fun idea! I don't think my machine would have the accuracy needed, it's "only" +/- a few microns positioning accuracy. But I might be able to convince some diamond lathe friends to try that 🤔
 
 
-[04/20/2026 16:40] polyfractal
+[2026-04-20 4:40 p.m.] polyfractal
 will have to think about the material stack, there are some materials that diamonds don't like to cut. mostly ferrous materials so probably ok, but will need to think about the nitrides and silicides
 
 
-[04/20/2026 16:40] namibj
+[2026-04-20 4:40 p.m.] namibj
 Actually I was particularly thinking towards cross-section ability, possibly of a trench/angled nature
 
 
-[04/20/2026 16:40] polyfractal
+[2026-04-20 4:40 p.m.] polyfractal
 ahh I see, which wouldn't care about positioning at all. hmmmmm
 
 
-[04/20/2026 16:41] namibj
+[2026-04-20 4:41 p.m.] namibj
 Well, would, but that "only" should suffice
 
 
-[04/20/2026 16:41] polyfractal
+[2026-04-20 4:41 p.m.] polyfractal
 yah
 
 
-[04/20/2026 16:43] namibj
+[2026-04-20 4:43 p.m.] namibj
 For scraping off BEOL though I'd assume supervision with just a medium-power optical microscope (NA=0.3 or around) to be plenty for controlling how much more needs to go.
 
 
-[04/20/2026 16:46] polyfractal
+[2026-04-20 4:46 p.m.] polyfractal
 think so yeah. my fixturing system has a few microns of repeatability error which might cause issues if I have to pull it off the machine to check under a scope, but can probably make things work
 
 
-[04/20/2026 16:46] namibj
+[2026-04-20 4:46 p.m.] namibj
 dud chips are cheap and plenty, don't be afraid to try
 
 
-[04/20/2026 16:46] polyfractal
+[2026-04-20 4:46 p.m.] polyfractal
 hehe yes, I have a whole pile of wafers and chips to destroy as needed 😄
 
 
-[04/20/2026 16:47] namibj
+[2026-04-20 4:47 p.m.] namibj
 > pull it off the machine to check under a scop
 just slide it off to the side and affix the objective such that it can look at the work site without having to release the fixture
 
 
-[04/20/2026 16:49] polyfractal
+[2026-04-20 4:49 p.m.] polyfractal
 yeah was thinking something to that effect. it's a bit tricky since there's not really space to mount anything inside the machine, and you have to defeat some door interlocks if you want to run the machine with the door open and stuff hanging out. but i've done it before, just a PITA to get setup 🙂
 
 
-[04/20/2026 16:58] namibj
+[2026-04-20 4:58 p.m.] namibj
 I still have to get my handful of V2S200D soldered to try them out... they took a regular PDM asic and swapped the membrane for a probe mass.
 
 
-[04/20/2026 17:00] namibj
+[2026-04-20 5:00 p.m.] namibj
 (After I've shipped the best high speed serializer I can fit into the little space on my small sky26a 1x2 tile, so in 3 weeks.)
 
 
-[04/20/2026 17:05] fossify_37988
+[2026-04-20 5:05 p.m.] fossify_37988
 Im actually looking at doing this for training a CNN for those capacitors heh
 
 
-[04/20/2026 19:02] azonenberg
+[2026-04-20 7:02 p.m.] azonenberg
 no idea. i'm gonna make it as fast as I can whenever i get to it on whatever PDK is available at that time
 
 
-[04/20/2026 19:03] azonenberg
+[2026-04-20 7:03 p.m.] azonenberg
 and if i have to downclock it by a few powers of two, it'll still let me prove out the architecture, digital protocol stuff, and learn things
 
 
-[04/20/2026 19:19] namibj
+[2026-04-20 7:19 p.m.] namibj
 hmmm
 
 
-[04/20/2026 19:21] namibj
+[2026-04-20 7:21 p.m.] namibj
 You gonna use scripted "cells" for the differential high speed logic parts (I don't mean the output power stage, but rather the mux/latch/serializer)?
 
 
-[04/20/2026 19:23] namibj
+[2026-04-20 7:23 p.m.] namibj
 (I don't think it's wise to hand-draw the MCML for my trials, and I haven't yet found anything vaguely represenative to learn from.)
 
 
-[04/20/2026 19:32] azonenberg
+[2026-04-20 7:32 p.m.] azonenberg
 I have no experience doing that but should probably learn at some point
 
 
-[04/20/2026 19:32] azonenberg
+[2026-04-20 7:32 p.m.] azonenberg
 i've never done ASIC layout at all so everything is new to me :p
 
 
-[04/20/2026 19:32] azonenberg
+[2026-04-20 7:32 p.m.] azonenberg
 i've looked at a ton of other people's layout since I do silicon RE as part of $dayjob
 
 
-[04/20/2026 19:33] azonenberg
+[2026-04-20 7:33 p.m.] azonenberg
 (but entirely digital focused)
 
 
-[04/20/2026 19:33] namibj
+[2026-04-20 7:33 p.m.] namibj
 I didn't expect the tooling to be this.... obtuse
 
 
-[04/20/2026 19:33] azonenberg
+[2026-04-20 7:33 p.m.] azonenberg
 i've done RTL design for both FPGA and ASIC
 
 
-[04/20/2026 19:33] azonenberg
+[2026-04-20 7:33 p.m.] azonenberg
 and a lot of custom floorplanning for FPGA, plus working with physical designers on ASIC to do high level floorplanning and looking at the resulting GDS (in klayout because they didn't want to buy me a synopsys tool seat for some silly reason, not like they're expensive or anything :P)
 
 
-[04/20/2026 19:34] namibj
+[2026-04-20 7:34 p.m.] namibj
 it ehhhh... latches.....
 
 {Attachments}
 2026-04_media/image-C67CB.png
 
 
-[04/20/2026 19:34] azonenberg
+[2026-04-20 7:34 p.m.] azonenberg
 but never actually drawn mask layer polygons by hand
 
 
-[04/20/2026 19:34] namibj
+[2026-04-20 7:34 p.m.] namibj
 nono I don't want to draw by hand
 
 
-[04/20/2026 19:34] azonenberg
+[2026-04-20 7:34 p.m.] azonenberg
 (or done any scripted cell generation)
 
 
-[04/20/2026 19:35] azonenberg
+[2026-04-20 7:35 p.m.] azonenberg
 also, the default colors in the techfiles are so confusing to me lol
 
 
-[04/20/2026 19:35] azonenberg
+[2026-04-20 7:35 p.m.] azonenberg
 or not sure if the color comes from techfile or if its klayout/magic prefs?
 
 
-[04/20/2026 19:36] azonenberg
+[2026-04-20 7:36 p.m.] azonenberg
 in the RE space i'm used to drawing p diffusion as dark yellow-brown, n diffusion as green, not drawing P+ or N+ explicitly, poly as red, metal1 as dark blue, other colors for higher metal layers
 
 
-[04/20/2026 19:39] namibj
+[2026-04-20 7:39 p.m.] namibj
 (Like, that's the issue..... I know I could just sit down and power through and just draw by hand or hard-code-script by hand in magic with bare rectangles on the relevant layers until I get the couple cells needed.... but there's no decent way to make that style of "cell design" undergo some nightly batch optimization for e.g. symmetrizing edges, favoring as much missmatch tolerance as needed for usable yield, and making sure logic levels are set so that symmetrized loads can provide their PSRR benefits.)
 
 
-[04/20/2026 19:41] namibj
+[2026-04-20 7:41 p.m.] namibj
 I do expect this work to be largely portable between the gf180mcu and the sky130a processes, even if some layout arrangements have to swap due to the massive transistor size difference (yet IIUC basically same metal sizes), so... yeah.
 
 
-[04/20/2026 19:42] azonenberg
+[2026-04-20 7:42 p.m.] azonenberg
 are the 3.3v fets any bigger?
 
 
-[04/20/2026 19:42] azonenberg
+[2026-04-20 7:42 p.m.] azonenberg
 or are you using 5v for this?
 
 
-[04/20/2026 19:42] azonenberg
+[2026-04-20 7:42 p.m.] azonenberg
 i thought the 5v fets were huge but the 3.3 were about the same size as the 1.8 just slower
 
 
-[04/20/2026 19:42] azonenberg
+[2026-04-20 7:42 p.m.] azonenberg
 but i never actually looked into it
 
 
-[04/20/2026 19:43] azonenberg
+[2026-04-20 7:43 p.m.] azonenberg
 or are the 3.3 still longer channels?
 
 
-[04/20/2026 19:43] namibj
+[2026-04-20 7:43 p.m.] namibj
 You mean between the two processes?
 
 
-[04/20/2026 19:44] namibj
+[2026-04-20 7:44 p.m.] namibj
 > Note that the minimum gate length for 3V operation is 0.5 µm.
 
 
-[04/20/2026 19:44] namibj
+[2026-04-20 7:44 p.m.] namibj
 > The 5V device has minimum gate length of 0.9 µm.
 
 
-[04/20/2026 19:44] namibj
+[2026-04-20 7:44 p.m.] namibj
 "huge" isn't the word I'd use
 
 
-[04/20/2026 19:44] azonenberg
+[2026-04-20 7:44 p.m.] azonenberg
 900nm wow no wonder they chomnk
 
 
-[04/20/2026 19:44] namibj
+[2026-04-20 7:44 p.m.] namibj
 but 1.8V devices are 0.15 minimum
 
 
-[04/20/2026 19:44] azonenberg
+[2026-04-20 7:44 p.m.] azonenberg
 that's still quite large lol
 
 
-[04/20/2026 19:45] azonenberg
+[2026-04-20 7:45 p.m.] azonenberg
 this is going to be a wierd process to design for with how "cheap" high density metal is compared to transistors
 
 
-[04/20/2026 19:45] namibj
+[2026-04-20 7:45 p.m.] namibj
 that's to get the safe operating area up to gate fully on and 5V difference between source and drain
 
 
-[04/20/2026 19:46] azonenberg
+[2026-04-20 7:46 p.m.] azonenberg
 are those specs for the thick oxide? we have two oxide thicknesses available right?
 
 
-[04/20/2026 19:46] azonenberg
+[2026-04-20 7:46 p.m.] azonenberg
 or is "3v operation" assuming thin oxide
 
 
-[04/20/2026 19:46] namibj
+[2026-04-20 7:46 p.m.] namibj
 e.g. _11V/16V NMOS FET_
 
 {Attachments}
 2026-04_media/image-96612.png
 
 
-[04/20/2026 19:46] azonenberg
+[2026-04-20 7:46 p.m.] azonenberg
 aiui there's 3 oxide thicknesses total on gf180 family and we only have the two thicker available on gf180mcu?
 
 
-[04/20/2026 19:46] namibj
+[2026-04-20 7:46 p.m.] namibj
 there's a 1.8 oxide and a 5.5 oxide
 
 
-[04/20/2026 19:46] azonenberg
+[2026-04-20 7:46 p.m.] azonenberg
 oh
 
 
-[04/20/2026 19:47] azonenberg
+[2026-04-20 7:47 p.m.] azonenberg
 i thought there were two oxides and you had the choice of 1.8 and 3.3 or 3.3 and 5
 
 
-[04/20/2026 19:47] azonenberg
+[2026-04-20 7:47 p.m.] azonenberg
 and gf180mcu was the latter
 
 
-[04/20/2026 19:47] azonenberg
+[2026-04-20 7:47 p.m.] azonenberg
 so the 3. 3 and 5v fets are the same oxide and you just draw longer channels to get 5v vds?
 
 
-[04/20/2026 19:47] azonenberg
+[2026-04-20 7:47 p.m.] azonenberg
 so vgs max is the same for either?
 
 
-[04/20/2026 19:49] ravenslofty
+[2026-04-20 7:49 p.m.] ravenslofty
 yes
 
 
-[04/20/2026 19:49] azonenberg
+[2026-04-20 7:49 p.m.] azonenberg
 Interesting, i must have misunderstood what i was reading on the pdk docs then
 
 
-[04/20/2026 19:50] azonenberg
+[2026-04-20 7:50 p.m.] azonenberg
 i thought we still had two thicknesses, just that our "thin" was the normal 1.8v process's "thick"
 
 
-[04/20/2026 19:50] azonenberg
+[2026-04-20 7:50 p.m.] azonenberg
 and our "thick" was extra-thiccc
 
 
-[04/20/2026 19:50] azonenberg
+[2026-04-20 7:50 p.m.] azonenberg
 well that explains some things then
 
 
-[04/20/2026 19:50] azonenberg
+[2026-04-20 7:50 p.m.] azonenberg
 i guess that means our 3.3 fets and the normal process's 3.3 fets are not the same then?
 
 
-[04/20/2026 19:51] azonenberg
+[2026-04-20 7:51 p.m.] azonenberg
 or do their 3.3 use this same thick oxide?
 
 
-[04/20/2026 19:57] namibj
+[2026-04-20 7:57 p.m.] namibj
 ok huh
 
 
-[04/20/2026 19:58] namibj
+[2026-04-20 7:58 p.m.] namibj
 apparently only 1 gate oxide but there's also a field oxide
 
 
-[04/20/2026 19:58] namibj
+[2026-04-20 7:58 p.m.] namibj
 oh sorry I thought you meant "my" (short-term) pdk situation
 
 
-[04/20/2026 19:59] namibj
+[2026-04-20 7:59 p.m.] namibj
 sorry the numbers I just quoted were sky130a
 
 
-[04/20/2026 19:59] namibj
+[2026-04-20 7:59 p.m.] namibj
 gf180mcu does have two oxide thicknesses used for different voltage devices in a single process
 
 
-[04/20/2026 20:00] azonenberg
+[2026-04-20 8:00 p.m.] azonenberg
 OK so i was right
 
 
-[04/20/2026 20:00] namibj
+[2026-04-20 8:00 p.m.] namibj
 (afaik only ever 2)
 
 
-[04/20/2026 20:00] azonenberg
+[2026-04-20 8:00 p.m.] azonenberg
 there are 3 thicknesses available and gf180mcu has the two thicker
 
 
-[04/20/2026 20:00] azonenberg
+[2026-04-20 8:00 p.m.] azonenberg
 and the 1.8v version has the thinnest plus one of the two thicker for io
 
 
-[04/20/2026 20:00] namibj
+[2026-04-20 8:00 p.m.] namibj
 dunno how exactly sky130a manages to have both 1.8V devices of IIUC quite decent performance as well as (up to) 20V FETs, but oh well
 
 
-[04/20/2026 20:02] azonenberg
+[2026-04-20 8:02 p.m.] azonenberg
 so how big are the 3.3 fets on gf180mcu then?
 
 
-[04/20/2026 20:02] azonenberg
+[2026-04-20 8:02 p.m.] azonenberg
 and the 5
 
 
-[04/20/2026 20:02] namibj
+[2026-04-20 8:02 p.m.] namibj
 https://gf180mcu-pdk.readthedocs.io/en/latest/
 
 
-[04/20/2026 20:03] azonenberg
+[2026-04-20 8:03 p.m.] azonenberg
 i poked around there and didnt see dimensional rules for poly, got a direct link?
 
 
-[04/20/2026 20:03] namibj
+[2026-04-20 8:03 p.m.] namibj
 https://gf180mcu-pdk.readthedocs.io/en/latest/analog/model_parameters/LV/LV_1_5_1.html
 
 
-[04/20/2026 20:04] namibj
+[2026-04-20 8:04 p.m.] namibj
 0.22 0.28
 
 
-[04/20/2026 20:04] namibj
+[2026-04-20 8:04 p.m.] namibj
 W L
 
 
-[04/20/2026 20:04] azonenberg
+[2026-04-20 8:04 p.m.] azonenberg
 ok so 280nm channel length for the 3.3 fets
 
 
-[04/20/2026 20:04] azonenberg
+[2026-04-20 8:04 p.m.] azonenberg
 and looks like 500/600 for the 5v?
 
 
-[04/20/2026 20:05] namibj
+[2026-04-20 8:05 p.m.] namibj
 nfet 06v0 0.3 0.6
 pfet 06v0 0.3 0.5
 nfet_06v0_nvt 0.8 1.8
 
 
-[04/20/2026 20:06] azonenberg
+[2026-04-20 8:06 p.m.] azonenberg
 whats the difference between _nvt and normal nfet? is that a high vt low leakage one? or higher vds max?
 
 
-[04/20/2026 20:06] namibj
+[2026-04-20 8:06 p.m.] namibj
 
 
 {Attachments}
 2026-04_media/image-25962.png
 
 
-[04/20/2026 20:06] namibj
+[2026-04-20 8:06 p.m.] namibj
 for cascodes I think?
 
 
-[04/20/2026 20:06] namibj
+[2026-04-20 8:06 p.m.] namibj
 native threshold voltage
 
 
-[04/20/2026 20:07] namibj
+[2026-04-20 8:07 p.m.] namibj
 uses light P doping of wafer for the channel with no implants in the channel
 
 
-[04/20/2026 20:07] namibj
+[2026-04-20 8:07 p.m.] namibj
 as you can see, it's effectively a depletion-mode nmos
 
 
-[04/20/2026 20:08] namibj
+[2026-04-20 8:08 p.m.] namibj
 (i.e. gate voltages are more like a jfet than a "normal" mosfet in operation; it's still a mosfet though so the gate _is_ floating and isolated in both polarities)
 
 
-[04/20/2026 20:11] namibj
+[2026-04-20 8:11 p.m.] namibj
 https://en.wikipedia.org/wiki/Native_transistor huh
 
 {Embed}
@@ -2256,92 +2256,92 @@ For electronic semiconductor devices, a native transistor (or sometimes natural 
 Historically, native transistors were referred to as MOSFETs without specially grown oxide, only ...
 
 
-[04/20/2026 20:14] azonenberg
+[2026-04-20 8:14 p.m.] azonenberg
 interesting. i'm used to just having lvt/svt/hvt implants
 
 
-[04/20/2026 20:14] azonenberg
+[2026-04-20 8:14 p.m.] azonenberg
 just to trade leakage against speed
 
 
-[04/20/2026 20:15] azonenberg
+[2026-04-20 8:15 p.m.] azonenberg
 but i know very little about anything like this which seems like what you'd use in more analog stuff
 
 
-[04/20/2026 20:23] namibj
+[2026-04-20 8:23 p.m.] namibj
 apparently they're good as current sources because you can tie the gate to source and they behave as a current source
 
 
-[04/20/2026 20:24] namibj
+[2026-04-20 8:24 p.m.] namibj
 (ofc in that case the absolute current isn't PT stable but it _is_ fairly V stable as it obviously should)
 
 
-[04/20/2026 20:25] namibj
+[2026-04-20 8:25 p.m.] namibj
 and at times thay may have lower resistance probably due to the absurdly low threshold voltage giving insane overdrive
 
 
-[04/20/2026 20:25] namibj
+[2026-04-20 8:25 p.m.] namibj
 You've seen some nmos cascodes before, right?
 
 
-[04/20/2026 20:27] azonenberg
+[2026-04-20 8:27 p.m.] azonenberg
 i've heard the term and have probably seen them but cant remember specifics
 
 
-[04/20/2026 20:27] azonenberg
+[2026-04-20 8:27 p.m.] azonenberg
 the vast majority of what i do is just standard cell logic
 
 
-[04/20/2026 20:33] namibj
+[2026-04-20 8:33 p.m.] namibj
 
 
 {Attachments}
 2026-04_media/1280px-CascodeWithNegative.svg-BFE2D.png
 
 
-[04/20/2026 20:34] namibj
+[2026-04-20 8:34 p.m.] namibj
 if the top one has convenient threshold you can apparently tie it's gate to the bottom one's gate? they say, calling that "self-cascode"...  weird anyways; but yeah, should be easier to bias as you can tie it off to ground
 
 
-[04/21/2026 04:55] azonenberg
+[2026-04-21 4:55 a.m.] azonenberg
 @Tim 'mithro' Ansell btw looking at the wafer photos it looks like a grid of normal sized dies, then short and skinny on one side and tall and skinny on the other
 
 
-[04/21/2026 04:55] azonenberg
+[2026-04-21 4:55 a.m.] azonenberg
 then there's an ultra small spot in the corner
 
 
-[04/21/2026 04:55] azonenberg
+[2026-04-21 4:55 a.m.] azonenberg
 i didn't see that ultra small spot as an orderable option, is that foundry test or your personal projects or what?
 
 
-[04/21/2026 04:55] dnaltews
+[2026-04-21 4:55 a.m.] dnaltews
 Double Secret 0.5 x 0.5 Die
 
 
-[04/21/2026 04:55] azonenberg
+[2026-04-21 4:55 a.m.] azonenberg
 (or is that tinytapeout lol)
 
 
-[04/21/2026 04:55] dnaltews
+[2026-04-21 4:55 a.m.] dnaltews
 !
 
 
-[04/21/2026 04:57] _saltypretzel
+[2026-04-21 4:57 a.m.] _saltypretzel
 Are natives supported on this process? I worked with some other fab and they had to be special requested
 
 
-[04/21/2026 05:20] rebelmike
+[2026-04-21 5:20 a.m.] rebelmike
 I guess it’s not orderable because there’s only one of them - it basically exists as a consequence of the half slots existing. The usable area is similar to the largest design you can put on Tiny Tapeout.
 
 On run 1 that has my TinyQV SoC in it as a test. I’m not sure if it’ll actually get bonded though as it would require a different setup just for that one slot.
 
 
-[04/21/2026 06:24] mole99
+[2026-04-21 6:24 a.m.] mole99
 In wsrun #2, there are actually three quarter slots, as we're adding one more horizontal cut. But yes, Tim wanted to keep those for other purposes.
 
 
-[04/21/2026 06:38] mithro_
+[2026-04-21 6:38 a.m.] mithro_
 You can compare to https://github.com/wafer-space/ws-run1
 
 {Embed}
@@ -2351,68 +2351,68 @@ wafer.space GF180MCU Run 1. Contribute to wafer-space/ws-run1 development by cre
 2026-04_media/ws-run1-CF17D
 
 
-[04/21/2026 06:39] mithro_
+[2026-04-21 6:39 a.m.] mithro_
 I think @Leo Moser (mole99) or @Tim Edwards might know...
 
 
-[04/21/2026 06:40] 246tnt
+[2026-04-21 6:40 a.m.] 246tnt
 See https://discord.com/channels/1361349522684510449/1425483172166238410
 
 
-[04/21/2026 06:53] mithro_
+[2026-04-21 6:53 a.m.] mithro_
 Also https://mithro.github.io/gf180mcu-project-template/
 
 {Reactions}
 ❤️
 
-[04/21/2026 23:22] tholin
+[2026-04-21 11:22 p.m.] tholin
 I have never seen this before
 
 {Attachments}
 2026-04_media/image-9957C.png
 
 
-[04/22/2026 03:38] mithro_
+[2026-04-22 3:38 a.m.] mithro_
 @Tholin - That is weird it says "1. Shipper or Importer must provide a completed Commercial Invoice." but there was a completed Commercial Invoice uploaded to the electronic documentation and included in the fedex pouch.
 
 
-[04/22/2026 06:12] 246tnt
+[2026-04-22 6:12 a.m.] 246tnt
 Heh, I also got FedEx import trouble this morning ( unrelated shipment ), they're asking for 3 times more than I was expecting as import fee ...
 
 
-[04/22/2026 16:00] tholin
+[2026-04-22 4:00 p.m.] tholin
 I can even view the invoice. But I clicked the button and all they actually wanted was for me to agree to accept any additional fees and import charges that might come up. I just had to click a checkbox.
 
 
-[04/22/2026 16:08] tholin
+[2026-04-22 4:08 p.m.] tholin
 It may be a while until I have my dies. Fedex is extremely unaccommodating to people who are never home during their delivery times its always a days-long back and forth that usually ends in me having to waste a PTO day just to be home for the delivery.
 
 
-[04/22/2026 16:28] dorythecat_v2
+[2026-04-22 4:28 p.m.] dorythecat_v2
 Yeaaah FedEx ain't the best. They sent me a letter to my house threatening legal action because I didn't pay 24€... Turns out I paid it, they just rejected it without giving any reasons and never told me to resend it... Fun...
 
 
-[04/22/2026 17:36] 246tnt
+[2026-04-22 5:36 p.m.] 246tnt
 Others are not much better. I had UPS forget the decimal point when doing a custom declaration ... requesting VAT on a value of >6000$ instead of 60.xx $ ...
 
 
-[04/22/2026 17:38] dorythecat_v2
+[2026-04-22 5:38 p.m.] dorythecat_v2
 GLS sending my package to their office, in the other side of the city, because "I wasn't home" (I was home)
 
 
-[04/22/2026 17:39] dorythecat_v2
+[2026-04-22 5:39 p.m.] dorythecat_v2
 NAtional post telling me they would deliver a package after the weekend because I "wasn't home" (I watched the mailman take a smoke break in front of my house and then leave as I got the message)
 
 
-[04/22/2026 17:39] dorythecat_v2
+[2026-04-22 5:39 p.m.] dorythecat_v2
 Idk why but postal services seem fucked up at some kind of base level
 
 
-[04/22/2026 17:39] dorythecat_v2
+[2026-04-22 5:39 p.m.] dorythecat_v2
 Worthy of a dissertation on both economy of logistics companies, and the psychology of the morons running and working for them
 
 
-[04/23/2026 11:15] namibj
+[2026-04-23 11:15 a.m.] namibj
 Longer-term the economy of actually specifically such a "high voltage" capable process with low per-die cost makes me want to go for my "MVDC-tamer" project again, getting back into it around next year it seems (looks at schedule of active projects).
 It's a switched capacitor converter around 13.56 MHz (or half/double; for interference mitigation reasons) with a central FPGA brain and optically isolated floating drivers that yeet out digital pre-distortion waveforms to an expected class-B "vaguely linear PA" that then actually wobbles the gate of a 10s of mm² WBG "power switch"-class transistor.
 
@@ -2426,11 +2426,11 @@ But a P2 is like 12$ in quantity plus the up5k and importantly not yet including
 I know the sky130 process allows on-die photodiodes; if that's also on gf180mcu the optical receiver could also be on-die.
 
 
-[04/23/2026 11:17] namibj
+[2026-04-23 11:17 a.m.] namibj
 Probably the most relevant aspect to using wafer.space ASIC would be if they could be less thick, I guess.
 
 
-[04/23/2026 12:28] mole99
+[2026-04-23 12:28 p.m.] mole99
 The first bare dies have arrived! 🥳
 
 All that hard work has paid off when you finally hold the chips in your hands ✨
@@ -2443,15 +2443,15 @@ All that hard work has paid off when you finally hold the chips in your hands �
 {Reactions}
 🎉 (8)
 
-[04/23/2026 13:03] mithro_
+[2026-04-23 1:03 p.m.] mithro_
 The die people just received are ~250um thick.
 
 
-[04/23/2026 13:05] namibj
+[2026-04-23 1:05 p.m.] namibj
 ohhhh yeah that would be fine
 
 
-[04/23/2026 14:18] meinhard
+[2026-04-23 2:18 p.m.] meinhard
 Arrived! 🥳🎉  It’s so exciting to see the actual dies. Thanks everyone at wafer.space and everyone involved for making that possible 😊
 
 https://github.com/meiniKi/gf180mcu-fazyrv-hachure
@@ -2467,47 +2467,47 @@ Can’t wait to make some more close up photos under a better microscope and bri
 {Reactions}
 ❤️
 
-[04/23/2026 14:18] tholin
+[2026-04-23 2:18 p.m.] tholin
 I will get home in two hours. I know my dies and a microscope I impulse-purchased are waiting for me there.
 
 {Reactions}
 💯 (2)
 
-[04/23/2026 14:19] tholin
+[2026-04-23 2:19 p.m.] tholin
 Stay tuned!
 
 
-[04/23/2026 14:20] mithro_
+[2026-04-23 2:20 p.m.] mithro_
 Please share your project ID and links to your project on GitHub with things like photos so that we know what we are looking at! 🙂
 
 
-[04/23/2026 14:29] meinhard
+[2026-04-23 2:29 p.m.] meinhard
 Added. Thanks for the hint 😊
 
 
-[04/23/2026 14:30] mithro_
+[2026-04-23 2:30 p.m.] mithro_
 
 
 
-[04/23/2026 14:32] mithro_
+[2026-04-23 2:32 p.m.] mithro_
 Bed time for me, hope to wake up to more exciting photos and reports 🙂
 
 
-[04/23/2026 14:33] azonenberg
+[2026-04-23 2:33 p.m.] azonenberg
 Awesome to see
 
 
-[04/23/2026 14:33] azonenberg
+[2026-04-23 2:33 p.m.] azonenberg
 y'all are making it very hard for me to focus on $dayjob stuff and not drop everything to start playing with layout for one of my projects :p
 
 
-[04/23/2026 14:56] rebelmike
+[2026-04-23 2:56 p.m.] rebelmike
 It looks like mine (TQVA/TQVB/TQVC) have successfully been delivered to my office, but I'm away until 12th May so it'll be a while before I see them!
 
 {Reactions}
 🥲 (3) ❤️
 
-[04/23/2026 16:05] simi150500
+[2026-04-23 4:05 p.m.] simi150500
 Our bare die also arrived! 🎉 
 Such a good feeling. Thanks again! 🙌
 
@@ -2517,57 +2517,57 @@ Such a good feeling. Thanks again! 🙌
 {Reactions}
 💯 (3) 🎉 (6)
 
-[04/23/2026 16:26] namibj
+[2026-04-23 4:26 p.m.] namibj
 Does this look like the pad ring is technically excessively wide, as only the immediate surroundings of the silvery pads "need" to be reserved?
 Like, sure, that gives space for the IO transistors associated with that pad, but that's the only "necessity", or not?
 
 
-[04/23/2026 16:48] dorythecat_v2
+[2026-04-23 4:48 p.m.] dorythecat_v2
 It is said somewhere on the docs that using a custom pad you can get some extra usable area
 
 
-[04/23/2026 16:51] azonenberg
+[2026-04-23 4:51 p.m.] azonenberg
 Yeah I mean there's ESD structures and such too. but yeah if you did custom you could probably steal a bit of additional space
 
 
-[04/23/2026 16:54] azonenberg
+[2026-04-23 4:54 p.m.] azonenberg
 But it doesnt look unreasonable from what I have seen on other 180nm nodes
 
 
-[04/23/2026 16:55] azonenberg
+[2026-04-23 4:55 p.m.] azonenberg
 see this (somewhat dirty but it was the first photo I had handy Xilinx XC2C32A on UMC 180nm
 
 {Attachments}
 2026-04_media/1c3_xilinx_xc2c32a_mz_mit20x_rotated_4k-35931.jpg
 
 
-[04/23/2026 16:55] azonenberg
+[2026-04-23 4:55 p.m.] azonenberg
 this is a smaller die so the padring dominates more
 
 
-[04/23/2026 16:57] azonenberg
+[2026-04-23 4:57 p.m.] azonenberg
 or the XC2C384 which is... i dont have measurements off the top of my head but probably a bit taller and ~twice as wide as a waferspace tile?
 
 {Attachments}
 2026-04_media/xilinx_xc2c384_mit20x_rotated_4k-3DDF5.jpg
 
 
-[04/23/2026 16:58] azonenberg
+[2026-04-23 4:58 p.m.] azonenberg
 On most of these older nodes with less metal layers, inboard of the pad itself it's common to have a set of large multilayer metal rings for vccio, vcore, and ground. And that does eat area, so might as well put your esd diodes and pad drivers and such on the lower layers underneath
 
 
-[04/23/2026 17:02] thecomputerguy
+[2026-04-23 5:02 p.m.] thecomputerguy
 Huh that pre check repo on GH seems to do DRC better than running it through KLayout for GF180MCU. Hopefully I can get the DRC to pass this week.
 
 
-[04/23/2026 17:09] tholin
+[2026-04-23 5:09 p.m.] tholin
 Something happened there
 
 {Attachments}
 2026-04_media/20260423_190842-5975F.jpg
 
 
-[04/23/2026 17:34] chasees18
+[2026-04-23 5:34 p.m.] chasees18
 First round dies arrived for MOSbius chip. Thanks @Tim 'mithro' Ansell @Andrew Wingate 
 
 Some dies are off the grid
@@ -2578,7 +2578,7 @@ Some dies are off the grid
 {Reactions}
 ❤️ 🎉
 
-[04/23/2026 18:00] tholin
+[2026-04-23 6:00 p.m.] tholin
 
 
 {Attachments}
@@ -2589,317 +2589,317 @@ Some dies are off the grid
 {Reactions}
 🎉 (11)
 
-[04/23/2026 18:05] tholin
+[2026-04-23 6:05 p.m.] tholin
 AS03
 
 
-[04/23/2026 18:05] tholin
+[2026-04-23 6:05 p.m.] tholin
 https://github.com/AvalonSemiconductors/ws-submission-2025/
 
 
-[04/23/2026 18:15] tholin
+[2026-04-23 6:15 p.m.] tholin
 NEED to get these to someone with a better microscope. I got some connections I can try and use for this.
 
 
-[04/23/2026 19:21] mattvenn
+[2026-04-23 7:21 p.m.] mattvenn
 Amazing!
 
 
-[04/23/2026 19:26] mavmaster
+[2026-04-23 7:26 p.m.] mavmaster
 The art is unreal!
 
 
-[04/23/2026 19:29] rebelmike
+[2026-04-23 7:29 p.m.] rebelmike
 Awesome! I wish I’d put some art on mine now!
 
 
-[04/23/2026 21:01] azonenberg
+[2026-04-23 9:01 p.m.] azonenberg
 If anybody wants to send me dies to image, I can run them on my Labsmore X1 CNC optical microscope at 20x easily
 
 
-[04/23/2026 21:01] azonenberg
+[2026-04-23 9:01 p.m.] azonenberg
 Since there's no decap involved it's like 5 minutes of work for me to put a bare die under the scope, focus on the corners, and let it rip
 
 
-[04/23/2026 21:01] azonenberg
+[2026-04-23 9:01 p.m.] azonenberg
 then another 5 to stitch and crop afterwards
 
 
-[04/23/2026 21:06] azonenberg
+[2026-04-23 9:06 p.m.] azonenberg
 If I get to upload the images to siliconprawn i'll do it for free, just send me a prepaid return shipping label if you want the silicon back
 
 
-[04/23/2026 21:07] azonenberg
+[2026-04-23 9:07 p.m.] azonenberg
 ^
 
 
-[04/23/2026 21:09] tholin
+[2026-04-23 9:09 p.m.] tholin
 You just need one die? Or two or three, in case something goes wrong?
 
 
-[04/23/2026 21:09] azonenberg
+[2026-04-23 9:09 p.m.] azonenberg
 I only need one, and these are big/thick enough I do not anticipate problems. If you want to send a few for insurance, that's fine though
 
 
-[04/23/2026 21:18] azonenberg
+[2026-04-23 9:18 p.m.] azonenberg
 Just to avoid a second shipment in case I drop one or chip a corner with tweezers or something
 
 
-[04/23/2026 21:38] tholin
+[2026-04-23 9:38 p.m.] tholin
 Alright. Do I have to ship it far from here in the EU?
 
 
-[04/23/2026 21:39] azonenberg
+[2026-04-23 9:39 p.m.] azonenberg
 I'm in the US but postage for something that small/light will probably not be too bad
 
 
-[04/23/2026 21:44] azonenberg
+[2026-04-23 9:44 p.m.] azonenberg
 near Seattle if you wanted to get a rough price and decide based on that
 
 
-[04/23/2026 21:55] namibj
+[2026-04-23 9:55 p.m.] namibj
 actually pretty bad because you have to go for full fedex-class shipment unless it changed in the past few months again; reason being the mandate for DDP shipping.
 
 Err, apparently private gifts up to 100$ are allowed. 16 EUR uninsured; 26.5 EUR insured, from Germany via DHL; delivery should be through USPS.
 
 
-[04/23/2026 21:57] azonenberg
+[2026-04-23 9:57 p.m.] azonenberg
 yeah i would expect post office, if you shipped as commercial samples or gifts, since no money is changing hands, would be the cheapest option
 
 
-[04/23/2026 21:58] dorythecat_v2
+[2026-04-23 9:58 p.m.] dorythecat_v2
 Huh I would just send it as a padded letter. If they're within dimensions they should not be more than 5€
 
 
-[04/23/2026 21:58] azonenberg
+[2026-04-23 9:58 p.m.] azonenberg
 yeah thats what I was assuming you would do
 
 
-[04/23/2026 21:58] azonenberg
+[2026-04-23 9:58 p.m.] azonenberg
 padded bubble mailer
 
 
-[04/23/2026 21:58] dorythecat_v2
+[2026-04-23 9:58 p.m.] dorythecat_v2
 And they also would not need to be declared afaik
 
 
-[04/23/2026 21:58] azonenberg
+[2026-04-23 9:58 p.m.] azonenberg
 not a box
 
 
-[04/23/2026 22:02] vegard_e
+[2026-04-23 10:02 p.m.] vegard_e
 probably needs a CN22 but doesn't need to say more than e.g. «gift, semiconductor sample» and some realistic sounding value
 
 
-[04/23/2026 22:03] azonenberg
+[2026-04-23 10:03 p.m.] azonenberg
 yeah, decalre it as $4 or $7 or whatever the per die cost is
 
 
-[04/23/2026 22:03] azonenberg
+[2026-04-23 10:03 p.m.] azonenberg
 that should easily fit under the gift limit
 
 
-[04/23/2026 22:03] namibj
+[2026-04-23 10:03 p.m.] namibj
 Your country still allows goods in international letters?
 
 
-[04/23/2026 22:03] dorythecat_v2
+[2026-04-23 10:03 p.m.] dorythecat_v2
 Yeah lol
 
 
-[04/23/2026 22:03] dorythecat_v2
+[2026-04-23 10:03 p.m.] dorythecat_v2
 I used to ship stickers that way
 
 
-[04/23/2026 22:04] namibj
+[2026-04-23 10:04 p.m.] namibj
 Germany ceased in like 2018 or so
 
 
-[04/23/2026 22:04] dorythecat_v2
+[2026-04-23 10:04 p.m.] dorythecat_v2
 As long as it's within parameters it counts as mail, and therefore there's no legal need to declare it or any way to have it inspected unless they feta you have ricin inside or similar biohazards/radioactive samples/flammable materials
 
 
-[04/23/2026 22:05] dorythecat_v2
+[2026-04-23 10:05 p.m.] dorythecat_v2
 If it's not in the illegal items list and it fits, a post stamp will get the job done
 
 
-[04/23/2026 22:05] namibj
+[2026-04-23 10:05 p.m.] namibj
 ehhhh that's not true for international
 
 
-[04/23/2026 22:05] namibj
+[2026-04-23 10:05 p.m.] namibj
 because you do need customs declaration if it's goods
 
 
-[04/23/2026 22:05] namibj
+[2026-04-23 10:05 p.m.] namibj
 (this may well be "gift", but it's still declaration)
 
 
-[04/23/2026 22:06] vegard_e
+[2026-04-23 10:06 p.m.] vegard_e
 CN22 is the declaration sticker you can put on small padded envelopes
 
 
-[04/23/2026 22:06] namibj
+[2026-04-23 10:06 p.m.] namibj
 There are few exceptions to that outside of customs unions.
 The issue outbound from Germany e.g. is that you can't send mere letters with customs declaration on them.
 
 
-[04/23/2026 22:07] namibj
+[2026-04-23 10:07 p.m.] namibj
 The packaging literally doesn't matter beyond that some thicker parcel classes (not the small 2kg class ones I'm referring to here) mandate hard boxes to ship without surcharge; the small class allows envelope class packaging.
 
 
-[04/23/2026 22:07] azonenberg
+[2026-04-23 10:07 p.m.] azonenberg
 In years past I have definitely sent ordinary postal envelopes from the US in envelopes with a customs form that covered almost the whole thing
 
 
-[04/23/2026 22:08] namibj
+[2026-04-23 10:08 p.m.] namibj
 Oh you could in the past from Germany too
 
 
-[04/23/2026 22:08] azonenberg
+[2026-04-23 10:08 p.m.] azonenberg
 but it was allowed and not absurdly priced, single digit USD postage
 
 
-[04/23/2026 22:08] azonenberg
+[2026-04-23 10:08 p.m.] azonenberg
 i cant remember how recently i last did it
 
 
-[04/23/2026 22:09] namibj
+[2026-04-23 10:09 p.m.] namibj
 They no longer allow that with just a 1.25 EUR (20g)/1.8 EUR (50g)/3.3 EUR (500g)/6.5 EUR (1000g) stamp value though.
 
 
-[04/23/2026 22:09] namibj
+[2026-04-23 10:09 p.m.] namibj
 I don't know if the US has ceased outbound letters from having customs declarations
 
 
-[04/23/2026 22:10] tholin
+[2026-04-23 10:10 p.m.] tholin
 Alright. Lemme know where to send it to and I’ll see about it tomorrow.
 
 
-[04/23/2026 22:10] azonenberg
+[2026-04-23 10:10 p.m.] azonenberg
 yeah the only customs changes I *know* about in the US the last few years were inbound
 
 
-[04/23/2026 22:10] azonenberg
+[2026-04-23 10:10 p.m.] azonenberg
 as i buy a lot more stuff from overseas than the other way around
 
 
-[04/23/2026 22:10] vegard_e
+[2026-04-23 10:10 p.m.] vegard_e
 hmm, I think this is what we're all talking about, DHL is just charging more for it than other countries:
 
 {Attachments}
 2026-04_media/image-1892C.png
 
 
-[04/23/2026 22:10] namibj
+[2026-04-23 10:10 p.m.] namibj
 also, azonenberg, it's REALLY difficult to get a return stamp from the US
 
 
-[04/23/2026 22:11] namibj
+[2026-04-23 10:11 p.m.] namibj
 yeah that's the small parcel
 
 
-[04/23/2026 22:11] vegard_e
+[2026-04-23 10:11 p.m.] vegard_e
 in norway, roughly the same dimensions costs me half of that
 
 
-[04/23/2026 22:11] azonenberg
+[2026-04-23 10:11 p.m.] azonenberg
 If the shipment is that expensive it's probably better if the sample makes a one-way trip
 
 
-[04/23/2026 22:11] azonenberg
+[2026-04-23 10:11 p.m.] azonenberg
 especially if these are from the early "roughly handled you don't want to use these for real" test batch
 
 
-[04/23/2026 22:12] namibj
+[2026-04-23 10:12 p.m.] namibj
 yeah
 
 
-[04/23/2026 22:12] namibj
+[2026-04-23 10:12 p.m.] namibj
 though the other direction would be whatever USPS charges, if they still allow letters it'd be best to paypal you that return postage because usps does not sell that to foreigners
 
 
-[04/23/2026 22:13] namibj
+[2026-04-23 10:13 p.m.] namibj
 well, people in foreign
 
 
-[04/23/2026 22:24] namibj
+[2026-04-23 10:24 p.m.] namibj
 that said, for microscoping it, you could argue it's a "document" given that personally taken pictures (not commercial prints of works with royalties) are also very much "documents".
 Worst case they take the one chip and eat it.
 Send registered mail mayhaps still under 10 EUR.
 
 
-[04/23/2026 22:25] vegard_e
+[2026-04-23 10:25 p.m.] vegard_e
 «microfiche» 🙂
 
 
-[04/23/2026 22:39] namibj
+[2026-04-23 10:39 p.m.] namibj
 well, yeah
 
 
-[04/23/2026 23:25] mithro_
+[2026-04-23 11:25 p.m.] mithro_
 FYI - I was planning to send you and a few other people a set of die with one or two samples from every project.
 
 
-[04/23/2026 23:26] tholin
+[2026-04-23 11:26 p.m.] tholin
 Oh. I guess that solves that
 
 {Reactions}
 ferrisCatOwO
 
-[04/23/2026 23:26] mithro_
+[2026-04-23 11:26 p.m.] mithro_
 That is part of the reason I want people to get back 1,000 parts even if they think they only need like 20. With that many you can thrown a few in an envelope and if it gets lost, who cares?
 
 
-[04/23/2026 23:27] mithro_
+[2026-04-23 11:27 p.m.] mithro_
 I'm still catching up with all the activity from last night! Great to see everyone is getting chips and such.
 
 
-[04/23/2026 23:29] mithro_
+[2026-04-23 11:29 p.m.] mithro_
 I would love someone to explore on-die photo diodes on GF180MCU. I don't think they are supported in any way by default but I'm sure people could find ways to make /something/ work.
 
 
-[04/23/2026 23:29] mithro_
+[2026-04-23 11:29 p.m.] mithro_
 Great to hear! 😛
 
 
-[04/23/2026 23:31] namibj
+[2026-04-23 11:31 p.m.] namibj
 well, how hard can it be 😄
 
 
-[04/23/2026 23:32] namibj
+[2026-04-23 11:32 p.m.] namibj
 take the approach/tactics from sky130's photodiode pcell, port to gf180mcu?
 
 
-[04/23/2026 23:36] azonenberg
+[2026-04-23 11:36 p.m.] azonenberg
 I can probably do some characterization if someone sends me a sample, i have a spectrometer i could measure various light sources against
 
 
-[04/23/2026 23:36] azonenberg
+[2026-04-23 11:36 p.m.] azonenberg
 makes sense
 
 
-[04/23/2026 23:36] azonenberg
+[2026-04-23 11:36 p.m.] azonenberg
 related: @Tim 'mithro' Ansell what percentage of the overall order cost is the mask set vs the wafer lot?
 
 
-[04/23/2026 23:37] azonenberg
+[2026-04-23 11:37 p.m.] azonenberg
 like, hypothetically if someone wanted more dies after the first order and was OK with getting everyone else's projects manufactured in higher volume too
 
 
-[04/23/2026 23:37] azonenberg
+[2026-04-23 11:37 p.m.] azonenberg
 how much would you save doing a second wafer lot on the same mask set
 
 
-[04/23/2026 23:37] namibj
+[2026-04-23 11:37 p.m.] namibj
 a lot for Run1; less lot for Run2 😄
 
 
-[04/23/2026 23:40] namibj
+[2026-04-23 11:40 p.m.] namibj
 do you happen to have any understanding of their design? There's probably some friendly Run2 users with some spare space that could fit such structures.
 
 
-[04/24/2026 00:10] mithro_
+[2026-04-24 12:10 a.m.] mithro_
 Don't know if this made it here -> https://www.linkedin.com/feed/update/urn:li:activity:7443670533818204161/ -- Would love to see if someone could figure out how to simulate the patterns we see from things like gf180mcu silicon top layers....
 
 {Embed}
@@ -2909,16 +2909,16 @@ Sign in or join now to see posts like this one and more.
 2026-04_media/1774702464449-B5486
 
 
-[04/24/2026 00:12] namibj
+[2026-04-24 12:12 a.m.] namibj
 luxrender should probably be able to handle it, I guess.
 Might struggle with lateral diffractive structures though, but those aren't as much of an issue on gf180 as with smaller ones.
 
 
-[04/24/2026 00:21] namibj
+[2026-04-24 12:21 a.m.] namibj
 
 
 
-[04/24/2026 00:21] namibj
+[2026-04-24 12:21 a.m.] namibj
 (progress on MCML P-Cells is going decently; next step is (after sleep) sit down and figure out how I want the routing to be organized, and then go and set that up. This obviously isn't DRC-compliant.
 
 There is no good reason why those resulting P-Cells shouldn't quite directly translate to gf180mcu, though.
@@ -2928,45 +2928,45 @@ Without parasitics this buffer, well, two of this plus some P-MOS loads, simulat
 When I have routing finished I'll see about resuming the optimizer loop with parasitics extraction.)
 
 
-[04/24/2026 01:22] mithro_
+[2026-04-24 1:22 a.m.] mithro_
 About 60% to 80%  is the mask cost.
 
 {Reactions}
 😮
 
-[04/24/2026 03:03] azonenberg
+[2026-04-24 3:03 a.m.] azonenberg
 honeslty i'm surprised its not like 90% lol
 
 
-[04/24/2026 03:03] azonenberg
+[2026-04-24 3:03 a.m.] azonenberg
 masks are expensive
 
 
-[04/24/2026 03:03] azonenberg
+[2026-04-24 3:03 a.m.] azonenberg
 i guess not so much on 180
 
 
-[04/24/2026 03:41] azonenberg
+[2026-04-24 3:41 a.m.] azonenberg
 from what i've heard especially on newer nodes when you order a mask set you practically get the first wafer lot free :p
 
 
-[04/24/2026 03:41] azonenberg
+[2026-04-24 3:41 a.m.] azonenberg
 i mean you pay for it but the cost is negligible compared to the masks
 
 
-[04/24/2026 07:24] mithro_
+[2026-04-24 7:24 a.m.] mithro_
 @azonenberg - I'm buying 25 or 50 wafers
 
 
-[04/24/2026 07:50] azonenberg
+[2026-04-24 7:50 a.m.] azonenberg
 yeah i was mostly just curious, i dont actually plan to mass produce anything on gf180mcu any time soon
 
 
-[04/24/2026 07:51] azonenberg
+[2026-04-24 7:51 a.m.] azonenberg
 one batch would be plenty for all of my near term needs
 
 
-[04/24/2026 11:35] ravenslofty
+[2026-04-24 11:35 a.m.] ravenslofty
 G801CHES.
 
 (It's a nightmare to take photos of these...)
@@ -2979,20 +2979,20 @@ G801CHES.
 {Reactions}
 💯 (2) 🎉 (3)
 
-[04/24/2026 15:09] namibj
+[2026-04-24 3:09 p.m.] namibj
 pol filter to cancel specular reflections of the cover tape?
 "Take one out and stick it to a base that can be handled and have/provision a lid to close over it when not actively imaging"? E.g. say microscope slide and some 3d-printed lid, possibly based on another microscope slide if it should be see-through?
 
 
-[04/24/2026 15:09] ravenslofty
+[2026-04-24 3:09 p.m.] ravenslofty
 first I would need access to a microscope.
 
 
-[04/24/2026 15:09] namibj
+[2026-04-24 3:09 p.m.] namibj
 Neither of those are microscope-required.
 
 
-[04/24/2026 15:21] namibj
+[2026-04-24 3:21 p.m.] namibj
 I'm assuming this is pending clearance (to be allowed to send these off to him) given by all your customers, at least those where the GDSII is not under a license that would allow you to do such anyways (e.g. TT's Apache2)?
 Though it's probably easy for ya two to just pull some stock NDA template you'd have around and just ship under conditions of not doing anything with the chips that don't release clearance, at least if you don't want to have to wait with that shipment until all customers had reasonable time to opt-in to the siliconprawn.
 
@@ -3001,11 +3001,11 @@ OFC if it turns out there are no chips left that are expected to have siliconpra
 Maybe the die sorter control scripting is easy enough to be instructed to just make a tape of round-robin-picks with as many dies of each design as you'd want to allocate to this usage, from which you could later cut continuos strips of (integer multiples of) how-many-designs-there-are to have "sample sets"?
 
 
-[04/25/2026 00:41] mithro_
+[2026-04-25 12:41 a.m.] mithro_
 Yeap! I mean one way to think about it is that I charge $7k USD per customer and I can have ~40 customers, so my costs must be under 40*$7k == $280k USD
 
 
-[04/25/2026 00:47] mithro_
+[2026-04-25 12:47 a.m.] mithro_
 platform.wafer.space lets you set if I'm allow to share your project publically with everyone.
 
 As well, the license agreement when submitting your project generally gives wafer.space the right to use things created from your design (IE photos, the full wafer, etc) in marketing and other purposes.
@@ -3013,7 +3013,7 @@ As well, the license agreement when submitting your project generally gives wafe
 If you want to keep your project super secret and have NDAs and such, then wafer.space isn't the right service for you.
 
 
-[04/25/2026 00:47] mithro_
+[2026-04-25 12:47 a.m.] mithro_
 See also https://github.com/wafer-space/ws-run1
 
 {Embed}
@@ -3023,57 +3023,57 @@ wafer.space GF180MCU Run 1. Contribute to wafer-space/ws-run1 development by cre
 2026-04_media/ws-run1-C7B62
 
 
-[04/25/2026 00:48] mithro_
+[2026-04-25 12:48 a.m.] mithro_
 And I also only provide free silicon to people who are sharing things under open source licenses.
 
 
-[04/25/2026 00:50] namibj
+[2026-04-25 12:50 a.m.] namibj
 ahh fair wasn't aware there's such broad license for marketing given to you; that should cover these things I think.
 
 
-[04/25/2026 00:51] thecomputerguy
+[2026-04-25 12:51 a.m.] thecomputerguy
 I've been running into a ton of DRC problems but I see there's been issues with DRC in the PDK. I cannot tell if I have real DRC issues or if they're not valid. I've been trying to search around and have seen discussions on this topic and a few issues on the buggy DRC.
 
 
-[04/25/2026 00:52] namibj
+[2026-04-25 12:52 a.m.] namibj
 (I do have good "news" to report though, in that it does seem kinda practical to vibe code custom PCells on top of gdsfactory.)
 
 
-[04/25/2026 00:53] mithro_
+[2026-04-25 12:53 a.m.] mithro_
 Yeah, @Andrew Wingate machine is pretty flexible for doing things like that and he will continue to iterate on things before Run #2.
 
 {Reactions}
 👍
 
-[04/25/2026 00:55] mithro_
+[2026-04-25 12:55 a.m.] mithro_
 @The Computer Guy - BTW There are currently a few pending new DRC rules that @Leo Moser (mole99) is working on right now.
 
 
-[04/25/2026 00:56] thecomputerguy
+[2026-04-25 12:56 a.m.] thecomputerguy
 Great, I've been trying to get 0 DRC issues but it seems no matter what I do nothing works. Hopefully those new DRC rules fixes things.
 
 
-[04/25/2026 00:56] mithro_
+[2026-04-25 12:56 a.m.] mithro_
 I ***believe*** that the GDSFactory team has been working pretty hard to get AI to work with their tooling as part of their proprietary "GDSFactory+" platform.
 
 
-[04/25/2026 00:57] mithro_
+[2026-04-25 12:57 a.m.] mithro_
 I think these new DRC rules will give you more new DRC errors that you didn't see before.
 
 
-[04/25/2026 00:57] thecomputerguy
+[2026-04-25 12:57 a.m.] thecomputerguy
 Oh...
 
 
-[04/25/2026 00:57] mithro_
+[2026-04-25 12:57 a.m.] mithro_
 So you should share the DRC issues you are seeing on discord and ask for help.
 
 
-[04/25/2026 00:58] thecomputerguy
+[2026-04-25 12:58 a.m.] thecomputerguy
 Cool, I'll post something in #questions here in a bit once I can commit.
 
 
-[04/25/2026 00:58] namibj
+[2026-04-25 12:58 a.m.] namibj
 clearly not DRC-compliant yet, but "correct netlist and correct general geometry/layout-topology" (from where e.g. iteratively increasing DRC minimums from 0 to actual ones to gradually push out e.g. vias to be far enough apart from each other) is almost there (forgot to move an m1-m2 via when moving the rest of the via stack; somehow cut diffusion in the GDSII under the gates (should only happen by the actual gate itself during FEOL processing 😉 )..), so.... yeah.
 
 Good chances thus for the MCML I'm hoping to get done by the ttsky26a deadline to be easily portable to WS Run2, with mostly scripted tuning to the quite different process, but somewhat manual adaption to the different stackup.
@@ -3082,33 +3082,33 @@ Good chances thus for the MCML I'm hoping to get done by the ttsky26a deadline t
 2026-04_media/image-172D4.png
 
 
-[04/25/2026 00:58] namibj
+[2026-04-25 12:58 a.m.] namibj
 so far only at higher levels at least as far as I've been told
 
 
-[04/25/2026 00:58] mithro_
+[2026-04-25 12:58 a.m.] mithro_
 Also check out glayout by the FASoC and @Mehdi
 
 {Reactions}
 ❤️
 
-[04/25/2026 00:59] namibj
+[2026-04-25 12:59 a.m.] namibj
 I could have scripted magic Tcl but that seems like something neither I want to write nor feel like it gives functional results if vibe-coded, unlike this which gives decently sensible geometry with around 70~80% hit rate.
 
 
-[04/25/2026 00:59] enited
+[2026-04-25 12:59 a.m.] enited
 Look good. Is it manual layout?
 
 
-[04/25/2026 01:00] namibj
+[2026-04-25 1:00 a.m.] namibj
 No fully vibe coded pcell
 
 
-[04/25/2026 01:00] namibj
+[2026-04-25 1:00 a.m.] namibj
 (Like, Google Jules.)
 
 
-[04/25/2026 01:00] mithro_
+[2026-04-25 1:00 a.m.] mithro_
 @namibj - I have an outdated presentation about their work at https://bit.ly/goog-analog and https://bit.ly/goog-nist - I wish @Mehdi was better at advertising his work to the community.
 
 {Embed}
@@ -3122,81 +3122,81 @@ Google + NIST Handout - 1st June 2023 - https://bit.ly/goog-nist
 bit.ly/goog-nist
 
 
-[04/25/2026 01:00] namibj
+[2026-04-25 1:00 a.m.] namibj
 bottom section of an MCML ring oscillator's differential delay cell
 
 
-[04/25/2026 01:01] namibj
+[2026-04-25 1:01 a.m.] namibj
 hits like 10 GHz with decent amplitude befrore layout parasitics on sky130
 
 {Reactions}
 👍
 
-[04/25/2026 01:01] enited
+[2026-04-25 1:01 a.m.] enited
 Cool! We have building a framework called glayout that builds libs of pcells, composite cells and blocks, in hierarchical way.
 
 {Reactions}
 👍
 
-[04/25/2026 01:02] namibj
+[2026-04-25 1:02 a.m.] namibj
 Does it have enough flexibility/low-level to handle this kind of stuff?
 
 
-[04/25/2026 01:02] mithro_
+[2026-04-25 1:02 a.m.] mithro_
 @namibj - I would say that OpenFASoC's approach is to build "auxiliary cells" which fit into the digital place and route flow (despite being analog designs). Which makes it very easy to do like 100s of different variants.
 
 
-[04/25/2026 01:02] namibj
+[2026-04-25 1:02 a.m.] namibj
 
 
 
-[04/25/2026 01:02] namibj
+[2026-04-25 1:02 a.m.] namibj
 the other parallel vibe coded branch/attempt
 
 
-[04/25/2026 01:03] mithro_
+[2026-04-25 1:03 a.m.] mithro_
 @Mehdi - Do you have a more recent presentation you could share here?
 
 
-[04/25/2026 01:03] namibj
+[2026-04-25 1:03 a.m.] namibj
 I mean these are technically digital cells.... just not CMOS logic, but rather MCML.
 
 
-[04/25/2026 01:03] mithro_
+[2026-04-25 1:03 a.m.] mithro_
 @Mehdi - My presentations are from like 2022 and you have done a huge amount of work since then.
 
 
-[04/25/2026 01:04] enited
+[2026-04-25 1:04 a.m.] enited
 Yes, I am on my phone right now. But I can share one soon
 
 
-[04/25/2026 01:04] namibj
+[2026-04-25 1:04 a.m.] namibj
 don't worry about "right now", I'm not gonna get to it before I'm done sleeping.
 
 {Reactions}
 👍
 
-[04/25/2026 01:04] enited
+[2026-04-25 1:04 a.m.] enited
 Yes, that helps.
 
 
-[04/25/2026 01:04] mithro_
+[2026-04-25 1:04 a.m.] mithro_
 @namibj - The coolest thing about OpenFASoC approach is that by making it progrmatic they have taped out the same solution on old process nodes like GF180MCU/SKY130 and more modern stuff lke GF12LP/Intel 16 with very little effort.
 
 
-[04/25/2026 01:05] namibj
+[2026-04-25 1:05 a.m.] namibj
 I sorta "just" have to make enough cell library to get a PoC done in 2 weeks 😄
 
 
-[04/25/2026 01:05] mithro_
+[2026-04-25 1:05 a.m.] mithro_
 All with open source tools!
 
 
-[04/25/2026 01:06] namibj
+[2026-04-25 1:06 a.m.] namibj
 Well this is not possibly gonna be the same-ish on gf180mcu; the concepts stay but the cell layout is going to change substantially from the sky130 example to gf180mcu; 45nm; fin-fet
 
 
-[04/25/2026 01:06] mithro_
+[2026-04-25 1:06 a.m.] mithro_
 https://github.com/idea-fasoc/openfasoc-tapeouts
 
 {Embed}
@@ -3205,132 +3205,132 @@ GitHub - idea-fasoc/openfasoc-tapeouts: Tapeouts done using OpenFASOC
 Tapeouts done using OpenFASOC. Contribute to idea-fasoc/openfasoc-tapeouts development by creating an account on GitHub.
 
 
-[04/25/2026 01:06] enited
+[2026-04-25 1:06 a.m.] enited
 @LuighiV can you provide more help on glayout if needed.
 
 
-[04/25/2026 01:07] namibj
+[2026-04-25 1:07 a.m.] namibj
 no idea about past-fin-fet/EUV territory, things get weird there.
 
 
-[04/25/2026 01:07] enited
+[2026-04-25 1:07 a.m.] enited
 A few papers:
 View article https://share.google/VupFnwveCtD8YzFdi
 
 
-[04/25/2026 01:08] enited
+[2026-04-25 1:08 a.m.] enited
 Reinforcement Learning-Enhanced Cloud-Based Open Source Analog Circuit Generator for Standard and Cryogenic Temperatures in 130-nm and 180-nm OpenPDKs | Proceedings of the 43rd IEEE/ACM International Conference on Computer-Aided Design https://share.google/Ws4S9nqpX29eiGCm0
 
 
-[04/25/2026 01:09] luighiv
+[2026-04-25 1:09 a.m.] luighiv
 Sure I can help 🙌
 
 
-[04/25/2026 01:09] namibj
+[2026-04-25 1:09 a.m.] namibj
 5v6 is finalizing; the auto code review has confirmed it to have fixed the glaring LVS/extraction breaking fails of [the linked is 5v5]
 
 
-[04/25/2026 01:12] namibj
+[2026-04-25 1:12 a.m.] namibj
 5v6
 
 {Attachments}
 2026-04_media/image-0DF7B.png
 
 
-[04/25/2026 01:12] namibj
+[2026-04-25 1:12 a.m.] namibj
 if you're curious?
 
 {Attachments}
 2026-04_media/mcml_nmos_block_5_v6-704E1.gds
 
 
-[04/25/2026 01:15] namibj
+[2026-04-25 1:15 a.m.] namibj
 some DRC from those vias there in the center being way too close, and the poly corners underneath not being "fat", but otherwise....
 
 {Attachments}
 2026-04_media/image-E9167.png
 
 
-[04/25/2026 01:20] namibj
+[2026-04-25 1:20 a.m.] namibj
 yeah, the DRC `poly.2` about min spacing was fixable by just adding a few poly boxes; the otheres are basically via pushing though, I don't do that by hand.
 
 
-[04/25/2026 01:50] fossify_37988
+[2026-04-25 1:50 a.m.] fossify_37988
 The biggest hurdle I can see from an optimization perspective is a differentiable DRC engine - where appropriate. I've been looking into training a DRC surrogate for the time being
 
 
-[04/25/2026 02:12] namibj
+[2026-04-25 2:12 a.m.] namibj
 DRC can't be that hard to run...
 
 
-[04/25/2026 02:13] namibj
+[2026-04-25 2:13 a.m.] namibj
 Like, as in, writing a plain DRC engine.
 
 
-[04/25/2026 02:15] namibj
+[2026-04-25 2:15 a.m.] namibj
 Just swap comparisons for ReLU and add up. 
 
 Write in a language with auto diff.
 
 
-[04/25/2026 02:15] mithro_
+[2026-04-25 2:15 a.m.] mithro_
 It would be easier if DRC rules came from the foundry with better descriptions and examples and unit tests
 
 
-[04/25/2026 02:15] namibj
+[2026-04-25 2:15 a.m.] namibj
 Oh sure.
 
 
-[04/25/2026 02:17] mithro_
+[2026-04-25 2:17 a.m.] mithro_
 I'm 100% sure that there are plenty of wrong assumptions and (software tooling) implementation specific details in all foundries current DRC decks
 
 
-[04/25/2026 02:18] namibj
+[2026-04-25 2:18 a.m.] namibj
 Actually yeah I feel it's possible an existing DRC engine could just be transcribed to a language with auto diff support and the ReLU swap done.
 
 Gradients won't be the nicest, but what else other than comparisons that aggregate to a go/no-go Boolean do they do anyways....
 
 
-[04/25/2026 02:18] namibj
+[2026-04-25 2:18 a.m.] namibj
 Yeah 🙁
 
 
-[04/25/2026 02:20] namibj
+[2026-04-25 2:20 a.m.] namibj
 (this effort is for after the sky26a deadline)
 
 
-[04/25/2026 02:23] namibj
+[2026-04-25 2:23 a.m.] namibj
 Actually the optimization efforts I've been doing are not differential, they're line-search; it's hard to measure oscillator performance in spice in a way that's differentiable 🙁
 
 There definitely is optimization work that differentiates through spice though.
 
 
-[04/25/2026 02:31] namibj
+[2026-04-25 2:31 a.m.] namibj
 (I hope to maybe get a full MCML standard library into ttsky26b; probably not gonna make it in time for WS Run 2 but some testing cells should be ready in time for that.)
 They are of particular interest for their combination of speed and low PDN ripple. Density is not effectively comparable for a while; likely around 20~60% though vs. regular high speed CMOS logic cells.)
 
 
-[04/25/2026 03:38] thecomputerguy
+[2026-04-25 3:38 a.m.] thecomputerguy
 Is the DRC using KLayout supposed to take a few hours?
 
 
-[04/25/2026 03:38] thecomputerguy
+[2026-04-25 3:38 a.m.] thecomputerguy
 `nix ps` shows the klayout command has been running for 9017.5s
 
 
-[04/25/2026 05:33] tpluck_
+[2026-04-25 5:33 a.m.] tpluck_
 Hey. Honestly whatever you're seeing via AI on electrical PDKs appears to be entirely emergent from just injesting a lot of Python and chip design lingo - we also have an embedded agent in GF+ which is even better at this, but the capabilities are just they like Python and we finally cleaned up the cells, lol.
 
 
-[04/25/2026 05:49] tpluck_
+[2026-04-25 5:49 a.m.] tpluck_
 
 
 
-[04/25/2026 05:50] tpluck_
+[2026-04-25 5:50 a.m.] tpluck_
 
 
 
-[04/25/2026 06:06] tpluck_
+[2026-04-25 6:06 a.m.] tpluck_
 Things like differentiable DRC are on the cards for GDSFactory+ as a part of our differentiable everything initiative - I just paid Nitro for this lol
 
 {Attachments}
@@ -3339,17 +3339,17 @@ https://media.githubusercontent.com/media/wafer-space/discord.wafer.space/master
 {Reactions}
 ❤️
 
-[04/25/2026 08:15] mole99
+[2026-04-25 8:15 a.m.] mole99
 Started a thread.
 
 
-[04/25/2026 08:40] ml_sudo
+[2026-04-25 8:40 a.m.] ml_sudo
 Hi!
 
 {Reactions}
 💜 💯
 
-[04/25/2026 09:07] anfroholic
+[2026-04-25 9:07 a.m.] anfroholic
 I don't think I've seen these posted. 
 Pictures from @Tim 'mithro' Ansell and @stuart in Shenzhen with some if the first COB
 They are beautiful!!
@@ -3364,7 +3364,7 @@ They are beautiful!!
 {Reactions}
 🎉 (7) 🤩 (2)
 
-[04/25/2026 09:27] ravenslofty
+[2026-04-25 9:27 a.m.] ravenslofty
 It's becoming a cliché but I had to try.
 
 {Attachments}
@@ -3373,22 +3373,22 @@ It's becoming a cliché but I had to try.
 {Reactions}
 🫰 💜
 
-[04/25/2026 13:09] namibj
+[2026-04-25 1:09 p.m.] namibj
 Do standard cell PnR ever feel like mirroring cells for more favourable routing?
 
 
-[04/25/2026 13:30] namibj
+[2026-04-25 1:30 p.m.] namibj
 here I say that yet I've just let the agent run loose on the klayout codebase to write planning documentation for such refactoring 😄
 
 
-[04/25/2026 14:07] namibj
+[2026-04-25 2:07 p.m.] namibj
 ok some rules are gonna be easy to differentiable DRC; some like e.g. sky130a's `via.5a`: `via.5a : min. m1 enclosure of 0.15um via of 2 adjacent edges : 0.085um` aren't as easy because e.g. that one seems to only blame the via's perimeter for that rule violation, despite it actually being the surrounding geometry on m1 that is too close. Sure, if the via wasn't minimum size it could be shrunk and if m1 would suffice then it would then resolve.
 But yeah, needs better attribution of blame to the actual vertices that are too close.
 
 @Leo Moser (mole99) your/ @Clyde Laforge 's work on the KLayout DRC refactor, does that touch the concept of attributing DRC violations to ALL the responsible source vertices, or is it orthogonal to introduction of such a concept?
 
 
-[04/25/2026 14:41] namibj
+[2026-04-25 2:41 p.m.] namibj
 https://gist.github.com/namibj/92be46ba3aeff8a1758669d6342f4723
 
 {Embed}
@@ -3398,20 +3398,20 @@ Lightweight, but limited differentiable DRC proposal for KLayout - DRC_AUTODIFF_
 2026-04_media/gist-og-image-54fd7dc0713e-84C3B.png
 
 
-[04/25/2026 14:44] namibj
+[2026-04-25 2:44 p.m.] namibj
 Won't work effectively for e.g. `via.5a` with KLayout though as that just blames the edges of the via not mentioning the metal to put/extend there.
 Does work for e.g. `m2.2 : min. m2 spacing : 0.14um` though, at least the ones that are min-distance-between-`EdgePair`'s.
 
 
-[04/25/2026 14:54] mole99
+[2026-04-25 2:54 p.m.] mole99
 Started a thread.
 
 
-[04/25/2026 17:32] rebelmike
+[2026-04-25 5:32 p.m.] rebelmike
 Yes I’m pretty sure the librelane flow does this - there’s a log about mirrored cells from the resizer iirc
 
 
-[04/25/2026 20:28] polyfractal
+[2026-04-25 8:28 p.m.] polyfractal
 Initial photo dump from my BTAP chip! 
 
 We have a nice keyence at work, but apparently no one bought the polarizer for it 🤦‍♂️  Should be able to get some nicer stitches once we get one. Ditto to a polarizer that fits my macro camera lens. Hoping to do some de-layering but not holding my breath that I'll get usable results from that
@@ -3428,31 +3428,31 @@ We have a nice keyence at work, but apparently no one bought the polarizer for i
 {Reactions}
 ferrisCatOwO ❤️ (4) 💜 (2) waferspace
 
-[04/25/2026 20:29] polyfractal
+[2026-04-25 8:29 p.m.] polyfractal
 echo'ing everyone else: huge thanks to the wafer.space team! Such a cool feeling to hold chips that you've designed, really appreciate all of the team's hard work to make this possible!
 
 
-[04/25/2026 20:47] namibj
+[2026-04-25 8:47 p.m.] namibj
 What's that golden dot pattern on the top left of the last one (the central close-up one)?
 
 
-[04/25/2026 20:47] polyfractal
+[2026-04-25 8:47 p.m.] polyfractal
 slightly out of focus dummy metal fill pattern. just the stuff that get's added to satisfy the DRC metal density rules
 
 
-[04/25/2026 20:47] namibj
+[2026-04-25 8:47 p.m.] namibj
 I guess top metal but can't understand why.
 
 
-[04/25/2026 20:48] namibj
+[2026-04-25 8:48 p.m.] namibj
 Ohh fill that explains sure.
 
 
-[04/25/2026 20:49] polyfractal
+[2026-04-25 8:49 p.m.] polyfractal
 it really obscures details elsewhere 🙁 hopefully a light lapping of the top layer will remove all the fill and help show more details
 
 
-[04/25/2026 20:56] namibj
+[2026-04-25 8:56 p.m.] namibj
 I'd expect it to fairly easily come off on a nice flat grinding surface as e.g. used by over lockers in "die lapping" (post-packaging diy back grinding for improving thermals).
 You probably have some of the equipment options those people recommend.
 I think it's just float glass plus extremely fine sandpaper or dispersion-bound lapping powder/paste (c.f. optical polishing of telescope mirrors with pitch on a negative to embed the grit in).
@@ -3462,65 +3462,65 @@ If the surface is flat you just have to balance pressure on the die along two ax
 [Edit: I initially read it as "light tapping" and was a bit confused about your plan... I only read "lapping" after hitting send.]
 
 
-[04/25/2026 21:02] tholin
+[2026-04-25 9:02 p.m.] tholin
 Me and my two artists have been hyperanalyzing all the die shots people have been sending to try and elevate silicon art to the next level
 
 {Reactions}
 💯 (4)
 
-[04/25/2026 21:08] polyfractal
+[2026-04-25 9:08 p.m.] polyfractal
 hehe light tap breaking 😄 
 
 We have a surface plate at work that generally gets abused for sanding/lapping so I'm thinking to grab that + some fine diamond paper? Trying to figure out the best way to fixture it to prevent rounding/tilt though. I dont have a tripod fixture, although I guess I could DIY without much hassle? Maybe just glue 3-4 chips onto a flat piece of metal and hope it's fairly planar across all of them
 
 
-[04/25/2026 21:09] polyfractal
+[2026-04-25 9:09 p.m.] polyfractal
 I've been scrolling through the siliconprawn discord IC photos, really impressed with what some of those folks can do! amazing microscope shots
 
 
-[04/25/2026 21:11] tholin
+[2026-04-25 9:11 p.m.] tholin
 We believe that silicon art can be more than just shapes in a single metal layer
 
 
-[04/25/2026 21:12] tholin
+[2026-04-25 9:12 p.m.] tholin
 May even go as far as abusing quantum effects since we can manufacture structures smaller than wavelengths of visible light
 
 
-[04/25/2026 21:15] polyfractal
+[2026-04-25 9:15 p.m.] polyfractal
 ah yeah, could definitely engineer the features to give you diffraction patterns that you want, rather than randomly. real structural color stuff
 
 
-[04/25/2026 21:15] polyfractal
+[2026-04-25 9:15 p.m.] polyfractal
 cool idea!
 
 
-[04/25/2026 21:16] tholin
+[2026-04-25 9:16 p.m.] tholin
 https://cdn.discordapp.com/attachments/1496181588277330002/1497702295608234024/image.png?ex=69ee7b75&is=69ed29f5&hm=86b8c888d35306345706763a2a538da5f144563ff969da26c0e5bdd29e104c5c&
 
 {Embed}
 https://cdn.discordapp.com/attachments/1496181588277330002/1497702295608234024/image.png?ex=69ee7b75&is=69ed29f5&hm=86b8c888d35306345706763a2a538da5f144563ff969da26c0e5bdd29e104c5c&
-2026-04_media/image-BD97D.png
+2026-04_media/image-2659D.png
 
 
-[04/25/2026 21:16] tholin
+[2026-04-25 9:16 p.m.] tholin
 Look at that green glow in-between the metal5 stripes here
 
 
-[04/25/2026 21:16] tholin
+[2026-04-25 9:16 p.m.] tholin
 I wonder what the significance of that is
 
 {Reactions}
 👍
 
-[04/25/2026 21:16] tholin
+[2026-04-25 9:16 p.m.] tholin
 What is the spacing between them?
 
 
-[04/25/2026 21:17] polyfractal
+[2026-04-25 9:17 p.m.] polyfractal
 lemme pop it into imagej, one s. i think that might just be out-of-focus aberration blur in this case, the stitching auto-focuser algorithm was preferring to focus on the middle layers it seems
 
 
-[04/25/2026 21:20] polyfractal
+[2026-04-25 9:20 p.m.] polyfractal
 1.37um ish
 
 {Attachments}
@@ -3529,27 +3529,27 @@ lemme pop it into imagej, one s. i think that might just be out-of-focus aberrat
 {Reactions}
 😮
 
-[04/25/2026 21:21] tholin
+[2026-04-25 9:21 p.m.] tholin
 Is this just the horizontal stripes of the default top-level power grid?
 
 
-[04/25/2026 21:22] tholin
+[2026-04-25 9:22 p.m.] tholin
 https://cdn.discordapp.com/attachments/1496181588277330002/1497707786979639446/image.png?ex=69ee8092&is=69ed2f12&hm=a6e549cb0bc4d859c137343e47a67c22d04e6b0f5cd60b0006ab591d93c88049&
 
 {Embed}
 https://cdn.discordapp.com/attachments/1496181588277330002/1497707786979639446/image.png?ex=69ee8092&is=69ed2f12&hm=a6e549cb0bc4d859c137343e47a67c22d04e6b0f5cd60b0006ab591d93c88049&
-2026-04_media/image-4A455.png
+2026-04_media/image-AED25.png
 
 
-[04/25/2026 21:23] tholin
+[2026-04-25 9:23 p.m.] tholin
 Because then, it should be closer to 1µm
 
 
-[04/25/2026 21:24] tholin
+[2026-04-25 9:24 p.m.] tholin
 Which I would like to note is twice the wavelength of green light
 
 
-[04/25/2026 21:25] polyfractal
+[2026-04-25 9:25 p.m.] polyfractal
 yeah it's just the power stripes. from this region
 
 {Attachments}
@@ -3558,19 +3558,19 @@ yeah it's just the power stripes. from this region
 {Reactions}
 ❤️ 😮
 
-[04/25/2026 21:26] tholin
+[2026-04-25 9:26 p.m.] tholin
 Btw, what is the difference between the photos where its all colorful and the ones where its just shades of orange?
 
 
-[04/25/2026 21:27] polyfractal
+[2026-04-25 9:27 p.m.] polyfractal
 the orange is coaxial light, and the colorful one was something closer to ring lighting + some DIY polarizer (which didn't work particularly well)
 
 
-[04/25/2026 21:28] polyfractal
+[2026-04-25 9:28 p.m.] polyfractal
 off-center lighting definitely helps make more colors pop, i assume from the thin film interferences of different layers
 
 
-[04/25/2026 21:32] polyfractal
+[2026-04-25 9:32 p.m.] polyfractal
 my evening yesterday, trying to find a good combo of lighting and settings 😂
 
 {Attachments}
@@ -3579,7 +3579,7 @@ my evening yesterday, trying to find a good combo of lighting and settings 😂
 {Reactions}
 😮
 
-[04/25/2026 23:38] namibj
+[2026-04-25 11:38 p.m.] namibj
 You're not gonna round against a flat reference if you put any proper attempt into flattening the motion-force vector to be more in-plane than plane-normal, say by sticking the chip to something as simple as a microscope slide with a dab of not-too-shear-strong (so you can shear it off later to release) glue. I'd try fairly shitty superglue for that, I'd expect to be able to release that if necessary, but you probably have a better idea.
 
 The thought is to inspect the progress and adjust tilt-bias (e.g. by shifting where exactly into the chip's backing plate you introduce the friction-generating "force") as necessary.
@@ -3588,19 +3588,19 @@ I'd just try on one by hand tbh... the skills/nuances should be fairly close to 
 This is top metal, not some low thin layers, the flatness we target is on the order of several lambda... and pretty sure it's not _that_ hard to hand-lap a parallel plate glass disc to sub-lambda flatness if you have a good flat reference to just copy the surface curvature from.
 
 
-[04/25/2026 23:45] namibj
+[2026-04-25 11:45 p.m.] namibj
 pretty sure for proper polarizer explotation of the "specular reflections maintain polarization, if the light source is polarized you can filter the reflections out if you adjust the angles correctly" that photographers use outdoors with sunlight against e.g. water surfaces and glass panes would want the light source to also be polarized and the polarizer angle between the source and the scope to be adjusted for the illumination angle? Might need collimated illumination to work well, I haven't gotten back to the local microscope to test that theory out on actual hardware (with 3D goggles and a collimated flashlight, and a hand-held (if it doesn't by chance screw in) DSLR polarizer on the soldering microscope).
 
 
-[04/26/2026 00:16] mithro_
+[2026-04-26 12:16 a.m.] mithro_
 Excited to see that! Any thoughts on if you could simulate the behaviour with things like that optical simulation / ray tracing tooling?
 
 
-[04/26/2026 00:17] tholin
+[2026-04-26 12:17 a.m.] tholin
 Maybe? Ray tracing has the best chances of actually simulating the effects of different light angles accurately.
 
 
-[04/26/2026 00:21] mithro_
+[2026-04-26 12:21 a.m.] mithro_
 Did I paste this here in the end? https://www.linkedin.com/feed/update/urn:li:activity:7443670533818204161/
 
 {Embed}
@@ -3612,15 +3612,15 @@ Sign in or join now to see posts like this one and more.
 {Reactions}
 😮
 
-[04/26/2026 00:26] tholin
+[2026-04-26 12:26 a.m.] tholin
 What would be cool is if we had control over layer thicknesses in gf180. I actually know someone who produced the old rainbow apple logo on a silicon die in all its colorful glory by manipulating etching depths. But they needed a lab and DIYing the process to do it.
 
 
-[04/26/2026 00:41] needsadrink
+[2026-04-26 12:41 a.m.] needsadrink
 Please don't break our fabs though 😆 us process engineers get cranky when we have to go to quality meetings because of these sorts of things lol... your best bet is probably to abuse the oxide nonuniformity caused by pattern density during CMP, but unpredictable is categorizing the result lightly 🫠 . What you're likely seeing in that 1.37um gap between lines is thicker oxide than the field due to local polish rate difference
 
 
-[04/26/2026 00:41] mithro_
+[2026-04-26 12:41 a.m.] mithro_
 I was just searching for the open source litho simulation and came across https://github.com/TorchOPC/TorchLitho - "Differentiable Computational Lithogrpahy Framework"
 
 {Embed}
@@ -3632,15 +3632,15 @@ Differentiable Computational Lithogrpahy Framework - TorchOPC/TorchLitho
 {Reactions}
 ❤️
 
-[04/26/2026 00:42] mithro_
+[2026-04-26 12:42 a.m.] mithro_
 You don't have to worry, this stuff is going to GF 😉
 
 
-[04/26/2026 00:43] needsadrink
+[2026-04-26 12:43 a.m.] needsadrink
 I have eng peeps who work there haha, thinking of their mental health too 😁
 
 
-[04/26/2026 00:50] mithro_
+[2026-04-26 12:50 a.m.] mithro_
 Randomly ended up at https://ai4eda.github.io/
 
 {Embed}
@@ -3649,37 +3649,37 @@ Awesome AI for EDA
 This is a curated paper list of existing Artificial Intelligence (AI) for Electronic Design Automation (EDA) studies.
 
 
-[04/26/2026 00:56] namibj
+[2026-04-26 12:56 a.m.] namibj
 computational litho is for OPC or rather, calculating the structures from the masks, not simulating how things look under a microscope?
 
 
-[04/26/2026 01:11] mithro_
+[2026-04-26 1:11 a.m.] mithro_
 @namibj - Yes, but there were people talking about litho simulation in https://discord.com/channels/1361349522684510449/1495683592762953758 and other people here talking about Differentiable Computation stuff
 
 
-[04/26/2026 01:35] mithro_
+[2026-04-26 1:35 a.m.] mithro_
 Anyway, off to the airport again!
 
 
-[04/26/2026 01:40] fossify_37988
+[2026-04-26 1:40 a.m.] fossify_37988
 If it passes DRC it shouldnt break the fab, right?
 
 
-[04/26/2026 02:01] needsadrink
+[2026-04-26 2:01 a.m.] needsadrink
 hopefully not! lol
 
 {Reactions}
 👀
 
-[04/26/2026 02:45] dnaltews
+[2026-04-26 2:45 a.m.] dnaltews
 I am so enthused watching all of this.  Need to get the Great 2026 Compiler Project to a point where I'm happy with the overall progress so I can investigate possible projects for future wafer.space runs.
 
 
-[04/26/2026 02:47] dnaltews
+[2026-04-26 2:47 a.m.] dnaltews
 watching hobby/indie ASIC development starting to approach the kind of accessibility that hobby PCB production did in the early 2000s has me very excited
 
 
-[04/26/2026 03:01] mithro_
+[2026-04-26 3:01 a.m.] mithro_
 That is exactly what I'm hoping to make happen! 
 
 The first PCB I did was a "call us for a quote" and the only reason I got an answer was that my University had big orders with them and they owed my supervisor a favour or two.
@@ -3687,221 +3687,221 @@ The first PCB I did was a "call us for a quote" and the only reason I got an ans
 {Reactions}
 👍
 
-[04/26/2026 03:02] mithro_
+[2026-04-26 3:02 a.m.] mithro_
 In theory, practice and theory are the same, in practice they are not 🙂
 
 {Reactions}
 😂 (2)
 
-[04/26/2026 03:04] fossify_37988
+[2026-04-26 3:04 a.m.] fossify_37988
 Perhaps what I really meant to ask was "If it passes DRC, are you contractually protected if something at the fab breaks"  😂
 
 
-[04/26/2026 03:04] dnaltews
+[2026-04-26 3:04 a.m.] dnaltews
 yeah... compare with projects I've done in the last couple years, where it's a few tens of dollars to get 5-10 boards in 3-4 *days*.  Just mind blowing.
 
 
-[04/26/2026 03:05] namibj
+[2026-04-26 3:05 a.m.] namibj
 along with "it's their fault for the DRC not being rigurous enough to cover their manufacturing line's requirements for process control"
 
 {Reactions}
 👍
 
-[04/26/2026 03:05] dnaltews
+[2026-04-26 3:05 a.m.] dnaltews
 this kind of stuff makes me feel optimistic for the future, which is impressive considering how completely fucked bigtech appears to be at the moment (and working to destroy itself at a crazy pace)
 
 
-[04/26/2026 03:06] namibj
+[2026-04-26 3:06 a.m.] namibj
 sadly pretty much the same still for HDI.
 They haven't figured out how to do blind/buried vias without paying human engineers several hours of labor 🙁
 
 
-[04/26/2026 03:06] mithro_
+[2026-04-26 3:06 a.m.] mithro_
 I remember how much of a difference just OHSPark doing runs every few weeks even with it taking like ~8 weeks for stuff to turn up in Australia was.
 
 
-[04/26/2026 03:07] dnaltews
+[2026-04-26 3:07 a.m.] dnaltews
 yeah 2 week spins from OSHPark (west coast US was Easy Mode for that) was still absolutely revolutionary at the time
 
 
-[04/26/2026 03:08] namibj
+[2026-04-26 3:08 a.m.] namibj
 That's a subset of the "DRC are there so you can be confident netlist extraction/device recognition output will correspond to system behavior", but these latter more stringent rules are far more flexible, mostly just affecting yield of the specific structures that are in violating without a blast radius as large as antenna violations.
 
 
-[04/26/2026 03:08] mithro_
+[2026-04-26 3:08 a.m.] mithro_
 Dunno, I'm pretty sure if you mess up their machines frequently despite DRC passing they would just start refusing all your orders.
 
 
-[04/26/2026 03:08] fossify_37988
+[2026-04-26 3:08 a.m.] fossify_37988
 I would too
 
 
-[04/26/2026 03:09] dnaltews
+[2026-04-26 3:09 a.m.] dnaltews
 there are actual equipment-damaging failure modes possible?
 
 
-[04/26/2026 03:09] namibj
+[2026-04-26 3:09 a.m.] namibj
 I'd expect them to charge me for them to write DRC rules that actually hold on grounds of me being the first one daring enough to feed DRC-exploit-laden GDSII in high enough quantity.
 
 
-[04/26/2026 03:10] mithro_
+[2026-04-26 3:10 a.m.] mithro_
 No idea. I know that metal lifting off and floating around can be bad... But unclear if that hurts machines or all just your wafers...
 
 
-[04/26/2026 03:11] mithro_
+[2026-04-26 3:11 a.m.] mithro_
 And it's not really like we can introduce exotic contaminants with GDS file 😛
 
 
-[04/26/2026 03:11] namibj
+[2026-04-26 3:11 a.m.] namibj
 antenna violation AFAIK risks blasting chunks into the sputtering chamber and contaminating the walls; needs cleaning of the machine that is vaguely similar to like a high school classroom getting puked in: not normally needed, kinda can't be ignored without problems, technically things could progress but there will be issues downstream, and the cleaning is _intense._ No lasting damage to the building/facility though.
 
 {Reactions}
 ✅ 😆
 
-[04/26/2026 03:12] dnaltews
+[2026-04-26 3:12 a.m.] dnaltews
 I can definitely imagine failures that could damage the overall wafer and DRC to avoid that being especially important for shared shuttle runs and the like, but was unsure if it could be worse than that
 
 
-[04/26/2026 03:12] mithro_
+[2026-04-26 3:12 a.m.] mithro_
 @needsadrink|woke - I think you just found a new analogy to use 😛
 
 
-[04/26/2026 03:12] namibj
+[2026-04-26 3:12 a.m.] namibj
 I don't know how often antenna violations cause that failure mode vs. just frying a couple gates into being very leaky
 
 
-[04/26/2026 03:13] dnaltews
+[2026-04-26 3:13 a.m.] dnaltews
 not surprising though that these very expensive manufacturing processes have very conservative pre-run checks
 
 
-[04/26/2026 03:15] namibj
+[2026-04-26 3:15 a.m.] namibj
 and well ofc density violations mess with CMP flatness and will cause fairly predictable/expected iiuc litho failures downstream from I assume out-of-focus/DoF effects?
 @needsadrink|woke can you share what exactly is the problem from CMP being done on uneven density, because I doubt it's the CMP itself breaking, but rather that subsequent processing takes issue with the surface flatness (lack thereof) from CMP being done on uneven density?
 
 
-[04/26/2026 03:16] needsadrink
+[2026-04-26 3:16 a.m.] needsadrink
 well yeah its rarely a single point of failure, nonuniformities will always cause 2nd, 3rd order etc effects
 
 
-[04/26/2026 03:16] namibj
+[2026-04-26 3:16 a.m.] namibj
 afaik there are negligible machine risks to DRC-illegally-narrow transistors on planar technologies (like >=45nm standard CMOS processes)
 
 
-[04/26/2026 03:18] namibj
+[2026-04-26 3:18 a.m.] namibj
 They're just gonna get increasingly varied transimpedance, to the point where it becomes essentially unusable.
 
 
-[04/26/2026 03:19] needsadrink
+[2026-04-26 3:19 a.m.] needsadrink
 its hard to know what has the possibility of breaking without having the process flow spec to look at
 
 
-[04/26/2026 03:20] namibj
+[2026-04-26 3:20 a.m.] namibj
 fair.
 I assume those documents are NDA even for these "open" PDKs, though?
 
 
-[04/26/2026 03:20] needsadrink
+[2026-04-26 3:20 a.m.] needsadrink
 yeah, they are the secret sauce usually
 
 
-[04/26/2026 03:20] namibj
+[2026-04-26 3:20 a.m.] namibj
 figures.
 
 
-[04/26/2026 03:20] needsadrink
+[2026-04-26 3:20 a.m.] needsadrink
 especially in full objective spec form haha... kept in safes, etc
 
 
-[04/26/2026 03:21] namibj
+[2026-04-26 3:21 a.m.] namibj
 yeah 😄
 
 
-[04/26/2026 03:21] namibj
+[2026-04-26 3:21 a.m.] namibj
 fab is just a cleanroom full of process control
 
 
-[04/26/2026 03:22] namibj
+[2026-04-26 3:22 a.m.] namibj
 (and wired+plumbed up machines, but that seems to mostly not be the big cost factor overall just to "plug them in", relative to the rest)
 
 
-[04/26/2026 03:24] needsadrink
+[2026-04-26 3:24 a.m.] needsadrink
 yep its a nonstop futile exercise in keeping entropy at bay lol
 
 
-[04/26/2026 03:27] needsadrink
+[2026-04-26 3:27 a.m.] needsadrink
 stumbled across a linkedin post about the concept a while ago
 
 {Attachments}
 2026-04_media/image-03647.png
 
 
-[04/26/2026 03:30] dnaltews
+[2026-04-26 3:30 a.m.] dnaltews
 that's not terribly surprising.  there's an awful lot of "it's amazing anything *ever* works at all" in various places across a number of industries ^^
 
 {Reactions}
 💯
 
-[04/26/2026 03:30] needsadrink
+[2026-04-26 3:30 a.m.] needsadrink
 "constant rescue" is just the perfect way to put it. every morning is just an exercise in keeping calm as you read about the various disasters that hav transpired since you clocked out 😆
 
 
-[04/26/2026 03:33] namibj
+[2026-04-26 3:33 a.m.] namibj
 aren't they mostly pre-disasters on grounds of not yet having hit any severe yield impact, but are about to do so?
 
 
-[04/26/2026 03:37] needsadrink
+[2026-04-26 3:37 a.m.] needsadrink
 hopefully! 😁 not always haha
 
 
-[04/26/2026 03:48] namibj
+[2026-04-26 3:48 a.m.] namibj
 sure.
 Anyways, I shouldn't chat too much about this while there's a 15 day deadline active.
 
 
-[04/26/2026 09:38] chips4makers
+[2026-04-26 9:38 a.m.] chips4makers
 I actually didn't hear about the former failure mode @imec; only heard about antenna just as reliability problem mainly related to CMP (chemical-mechanical polishing).
 
 
-[04/26/2026 09:47] chips4makers
+[2026-04-26 9:47 a.m.] chips4makers
 Also haven't heard about machines being damaged bue to design problems; e.g. nothing that a good clean could solve.
 BTW, cleaning equipment was kind of standard procedure in the research fab @imec. For example there where tools that needed to get a clean each time they went from Cu-contaminated state to non-Cu-contaminated.
 
 
-[04/26/2026 13:09] namibj
+[2026-04-26 1:09 p.m.] namibj
 well yeah, but AFAIK a gf180mcu fab isn't a "research fab", but a "high throughput low cost" fab, and those expect to run their equipment with minimal disruptive maintenance until they need to disrupt it to prevent meaningful impact on yield, or if the maintenance is easy and good preventative maintenance.
 
 
-[04/26/2026 15:34] polyfractal
+[2026-04-26 3:34 p.m.] polyfractal
 i imagine being 30yrs old helps too. everything is probably bigger and more robust and less fancy if I had to guess
 
 
-[04/26/2026 16:46] needsadrink
+[2026-04-26 4:46 p.m.] needsadrink
 fault detection does go a long way to prevent completely catastrophic events for sure, but you can still get outages due to things like arcing in sputter chambers if your clear area is too high etc, or yeah liek you mentioned, materials contamination in production chambers, never fun because its never caught immediately and tends to put hundreds or thousands of wafers on ice for a review board to convene to disposition
 
 
-[04/26/2026 16:48] needsadrink
+[2026-04-26 4:48 p.m.] needsadrink
 usually its "fine" but if youre manufacturing stuff that has to conform to IATF 16949 or the like, you may end up being forced to downgrade a bunch of wafers
 
 
-[04/27/2026 13:25] namibj
+[2026-04-27 1:25 p.m.] namibj
 Are there already (conditional) plans for a Run3?
 
 
-[04/27/2026 15:25] anfroholic
+[2026-04-27 3:25 p.m.] anfroholic
 As far as I understand it, run 3 is pretty much locked in. Many of the changes we are hoping to implement from what we learned in run 1 will be implemented in run 3 to give the maximum amount of time for those to know a) what changes there are, and b) have enough time to make those changes. 
 As far as the timeline goes, it depends on people being interested and purchasing slots, the more slots, the faster we make runs.
 
 
-[04/27/2026 15:28] namibj
+[2026-04-27 3:28 p.m.] namibj
 Any estimates regarding the deadline/heads-up that Run3 would likely spawn with?
 
 
-[04/27/2026 15:41] anfroholic
+[2026-04-27 3:41 p.m.] anfroholic
 Not exactly. I can say that we expect to obtain the finished wafers *[for run2]* in Oct. and ship them as soon as we can after that. 
 Run 3 timeline would me imminent around then.
 
 
-[04/27/2026 17:16] mole99
+[2026-04-27 5:16 p.m.] mole99
 The CoB have arrived 🎉  Now I just need some PCBs, bad timing...
 
 https://discord.com/channels/1361349522684510449/1496850151950520443/1498370675914703032
@@ -3909,15 +3909,15 @@ https://discord.com/channels/1361349522684510449/1496850151950520443/14983706759
 {Reactions}
 🎉 (7) ❤️ waferspace
 
-[04/28/2026 05:24] mithro_
+[2026-04-28 5:24 a.m.] mithro_
 Why bad timing?
 
 
-[04/28/2026 05:26] mithro_
+[2026-04-28 5:26 a.m.] mithro_
 Started a thread.
 
 
-[04/28/2026 06:23] mithro_
+[2026-04-28 6:23 a.m.] mithro_
 If people have photos or other media they are willing to share about run #1 - could you add them to this Google Photos Album? https://photos.app.goo.gl/2vo4baXmki3fGFdb7
 
 {Embed}
@@ -3926,15 +3926,15 @@ wafer.space Run #1 - Customer Photos · Shared album 📸
 Tap to view!
 
 
-[04/28/2026 06:31] mole99
+[2026-04-28 6:31 a.m.] mole99
 Bad timing on my part, I don't have any PCBs to test the chips yet ^^
 
 
-[04/28/2026 06:59] mithro_
+[2026-04-28 6:59 a.m.] mithro_
 I was pondering if it was more of a "this is going to distract me from the bunch of DRC rules I need to be working  on" 🙂
 
 
-[04/28/2026 17:54] simi150500
+[2026-04-28 5:54 p.m.] simi150500
 The CoB wire-bonded dies arrived at JKU today. They look awesome! 🙌
 Unfortunately the DIP adapter board is still in production. Hopefully I can post bring-up results soon. 🙂
 
@@ -3945,119 +3945,119 @@ Unfortunately the DIP adapter board is still in production. Hopefully I can post
 {Reactions}
 🎉 (5) ❤️
 
-[04/28/2026 19:54] tholin
+[2026-04-28 7:54 p.m.] tholin
 Tomorrow, I get the parts I need for my bring-up, on monday, I get the PCBs
 
 
-[04/29/2026 20:01] saladchap
+[2026-04-29 8:01 p.m.] saladchap
 Amazing photos!
 
 {Reactions}
 🙌
 
-[04/29/2026 20:25] logic_destroyer
+[2026-04-29 8:25 p.m.] logic_destroyer
 Hi, does anyone have a PCB  GitHub repo where I can check the connector again?
 
 I think I messed it up and want to compare it with a working reference.
 
 
-[04/29/2026 20:26] logic_destroyer
+[2026-04-29 8:26 p.m.] logic_destroyer
 Wie macht man so gute Fotos?
 
 
-[04/29/2026 20:55] namibj
+[2026-04-29 8:55 p.m.] namibj
 Fettes Makro-Objektiv oder optisch gutes sauberes Mikroskop. Und gute Beleuchtung.
 
 
-[04/29/2026 20:58] simi150500
+[2026-04-29 8:58 p.m.] simi150500
 Cheap digital Microscope (Andonstar AD407) for around 100€ and a mobile phone camera. Try to get a good light. Honestly, I post-processed the pictures with ChatGPT. For the right picture, this worked incredibly well. For the left picture, it also worked fine. However, if you look closely, some bond wires look strange. This is due to the fact that in the original picture, the bond wires were sometimes not visible at all. 😅
 
 {Reactions}
 waferspace 🔥
 
-[04/29/2026 21:01] namibj
+[2026-04-29 9:01 p.m.] namibj
 errrrm please don't pass off AI images as photos
 
 {Reactions}
 👆
 
-[04/29/2026 21:03] logic_destroyer
+[2026-04-29 9:03 p.m.] logic_destroyer
 I like the right picture best.
 
 {Reactions}
 🙌
 
-[04/30/2026 08:49] anfroholic
+[2026-04-30 8:49 a.m.] anfroholic
 @Simi These images are amazing! Would you mind if we used them?
 pinging @kris
 
 {Reactions}
 ❤️
 
-[04/30/2026 09:14] mithro_
+[2026-04-30 9:14 a.m.] mithro_
 Please add these pictures to the shared photo album if you can!
 
 
-[04/30/2026 09:19] mole99
+[2026-04-30 9:19 a.m.] mole99
 I'm not too happy about the use of AI here either. I think we should try to keep photos authentic and only perform basic image post-processing (using the correct tools) if necessary.
 
 {Reactions}
 ☝️ (6) 💯 (3)
 
-[04/30/2026 10:54] tholin
+[2026-04-30 10:54 a.m.] tholin
 To anyone who has already received their COBs, did it get shipped in a box or envelope?
 
 
-[04/30/2026 11:55] tholin
+[2026-04-30 11:55 a.m.] tholin
 Also, does this drop-down load for anyone? I’ve never seen it display anything else for years. I always have to contact customer support to change my deliveries and its becoming increasingly difficult to get through to a human.
 
 {Attachments}
 2026-04_media/image-0C61D.png
 
 
-[04/30/2026 11:57] 246tnt
+[2026-04-30 11:57 a.m.] 246tnt
 Only times I ever see that working is when the first delivery failed.
 
 
-[04/30/2026 11:59] tholin
+[2026-04-30 11:59 a.m.] tholin
 My Mouser order just failed to be delivered and it still says that. I’m trying to reschedule it to the same day as the COBs are set to arrive.
 
 
-[04/30/2026 12:04] jorropo
+[2026-04-30 12:04 p.m.] jorropo
 @Tim 'mithro' Ansell https://discord.com/channels/1361349522684510449/1361349523724570938/1499380331914989740
-You can use: 05/01/2026 11:59 Friday, 01 May 2026 11:59:00
+You can use: 2026-05-01 11:59 a.m. Friday, May 1, 2026 11:59:00 a.m.
 
-Here is what you have to send: `05/01/2026 11:59 Friday, 01 May 2026 11:59:00` it's `<t:` followed by the unix timestamp then `:` then a letter that changes the format (`R` for Relative, `F` for full, ...) and finally close it `>`
+Here is what you have to send: `2026-05-01 11:59 a.m. Friday, May 1, 2026 11:59:00 a.m.` it's `<t:` followed by the unix timestamp then `:` then a letter that changes the format (`R` for Relative, `F` for full, ...) and finally close it `>`
 
 
-[04/30/2026 12:04] jorropo
+[2026-04-30 12:04 p.m.] jorropo
 it shows a localized date
 
 
-[04/30/2026 12:04] jorropo
+[2026-04-30 12:04 p.m.] jorropo
 for example here is how I see my own message:
 
 {Attachments}
 2026-04_media/image-3DF17.png
 
 
-[04/30/2026 12:24] tholin
+[2026-04-30 12:24 p.m.] tholin
 It looks like next week is going to be bring-up day for me
 
 
-[04/30/2026 12:25] tholin
+[2026-04-30 12:25 p.m.] tholin
 More like bring-up weeks
 
 
-[04/30/2026 12:25] tholin
+[2026-04-30 12:25 p.m.] tholin
 Its going to take forever to get through everything
 
 
-[04/30/2026 12:26] tholin
+[2026-04-30 12:26 p.m.] tholin
 I’ve spent many hours this week preparing my C64C to receive my chips
 
 
-[04/30/2026 14:00] thorben_61995
+[2026-04-30 2:00 p.m.] thorben_61995
 Bonded the first Cloneless1 dies here locally (custom pad frame) and tested them on a breadboard (always gives me some nostalgia 😅) before the real PCB arrives next week. Everything seems to work nicely 😁
 
 {Attachments}
@@ -4067,73 +4067,73 @@ Bonded the first Cloneless1 dies here locally (custom pad frame) and tested them
 {Reactions}
 💯 ❤️ (4) 🎉 (2) 😮
 
-[04/30/2026 14:01] thorben_61995
+[2026-04-30 2:01 p.m.] thorben_61995
 I'm impressed by how easily one can recognize (larger) layout features with the naked eye on those dies.
 
 
-[04/30/2026 14:02] tholin
+[2026-04-30 2:02 p.m.] tholin
 What? Someone beat me to bonding to ceramic carrier? How?
 
 {Reactions}
 😄 (4)
 
-[04/30/2026 14:04] thorben_61995
+[2026-04-30 2:04 p.m.] thorben_61995
 Got the naked dies a week ago already. Then just had to request access to our bonding machine and here we are.
 
 {Reactions}
 😮
 
-[04/30/2026 14:05] tholin
+[2026-04-30 2:05 p.m.] tholin
 You have access to a bonding machine. Lucky.
 
 
-[04/30/2026 14:06] tholin
+[2026-04-30 2:06 p.m.] tholin
 I taped out a replica of the 6510 with a pad-out carefully chosen to allow bonding to a DIP-carrier. I thought I was gonna become the first to do this. Eventually.
 
 {Reactions}
 waferspace (2)
 
-[04/30/2026 14:21] 246tnt
+[2026-04-30 2:21 p.m.] 246tnt
 @Thorben Ball or Wedge ?
 
 
-[04/30/2026 14:21] 246tnt
+[2026-04-30 2:21 p.m.] 246tnt
 Looks like Au wire
 
 
-[04/30/2026 14:23] thorben_61995
+[2026-04-30 2:23 p.m.] thorben_61995
 Wedge, and Au wire indeed.
 
 
-[04/30/2026 14:25] 246tnt
+[2026-04-30 2:25 p.m.] 246tnt
 @Tim 'mithro' Ansell I'm wondering if Au wire would help
 
 
-[04/30/2026 14:27] mithro_
+[2026-04-30 2:27 p.m.] mithro_
 We are using AlSi wire
 
 
-[04/30/2026 14:28] 246tnt
+[2026-04-30 2:28 p.m.] 246tnt
 Oh, nm then. For some reason I thought it was Al wire.
 
 
-[04/30/2026 14:31] 246tnt
+[2026-04-30 2:31 p.m.] 246tnt
 @Tim 'mithro' Ansell Wait no, on the pictures from the bonding factory, it's "AlSi" wire.
 
 
-[04/30/2026 14:33] mithro_
+[2026-04-30 2:33 p.m.] mithro_
 Don't know how I typed Au when I meant to type Al
 
 
-[04/30/2026 14:34] mithro_
+[2026-04-30 2:34 p.m.] mithro_
 But I'm just generally confused I think. 😛
 
 
-[04/30/2026 14:34] mithro_
+[2026-04-30 2:34 p.m.] mithro_
 Al and Au are too alphabetically close
 
 
-[04/30/2026 14:35] mithro_
+[2026-04-30 2:35 p.m.] mithro_
 Can you add them to the photo album at https://photos.app.goo.gl/2vo4baXmki3fGFdb7 ?
 
 {Embed}
@@ -4145,56 +4145,56 @@ Shared album · Tap to view!
 {Reactions}
 👍
 
-[04/30/2026 16:41] mattvenn
+[2026-04-30 4:41 p.m.] mattvenn
 Wow! Luxury chips! I love it!
 
 {Reactions}
 ❤️
 
-[04/30/2026 17:19] 246tnt
+[2026-04-30 5:19 p.m.] 246tnt
 @Thorben What does the chip do btw ?
 
 
-[04/30/2026 17:44] namibj
+[2026-04-30 5:44 p.m.] namibj
 Started a thread.
 
 
-[04/30/2026 18:32] dorythecat_v2
+[2026-04-30 6:32 p.m.] dorythecat_v2
 Kind of an off topic question but I assume there must be some voltnuts around here?
 
 
-[04/30/2026 18:43] tholin
+[2026-04-30 6:43 p.m.] tholin
 There is the #off-topic channel, btw
 
 
-[04/30/2026 18:43] tholin
+[2026-04-30 6:43 p.m.] tholin
 For your off-topic needs
 
 
-[04/30/2026 18:49] dorythecat_v2
+[2026-04-30 6:49 p.m.] dorythecat_v2
 Facepalming rn
 
 
-[04/30/2026 18:49] dorythecat_v2
+[2026-04-30 6:49 p.m.] dorythecat_v2
 I am blind in more ways than I expected, thank you
 
 
-[04/30/2026 20:58] tholin
+[2026-04-30 8:58 p.m.] tholin
 My multi-project die template/generator is complete. Just waiting for DRC to pass to be absolutely sure, and then I’ll write up docs on the weekend and push.
 
 
-[04/30/2026 20:58] tholin
+[2026-04-30 8:58 p.m.] tholin
 What?
 
 {Attachments}
 2026-04_media/image-05EA3.png
 
 
-[04/30/2026 20:58] tholin
+[2026-04-30 8:58 p.m.] tholin
 Just as I say that, too....
 
 
-[04/30/2026 20:59] tholin
+[2026-04-30 8:59 p.m.] tholin
 Should’ve stayed quiet
 
 
