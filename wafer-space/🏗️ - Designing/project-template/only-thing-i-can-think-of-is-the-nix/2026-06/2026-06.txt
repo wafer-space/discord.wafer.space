@@ -1,0 +1,92 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 🏗️ - Designing / project-template / Only thing I can think of is the nix
+After: 2026-05-31 11:59 p.m.
+Before: 2026-07-01 12:00 a.m.
+==============================================================
+
+[2026-06-06 8:49 a.m.] mole99
+
+
+
+[2026-06-06 8:49 a.m.] mole99
+Your flake.nix and flake.lock matches the ones in the repo? Does a `nix flake update` change anything in flake.lock?
+
+
+[2026-06-06 8:52 a.m.] rebelmike
+Weirdly the XOR stage ran fine on `librelane --smoke-test`
+
+
+[2026-06-06 8:52 a.m.] rebelmike
+`nix flake update` didn't change anything - flake.lock is still clean
+
+
+[2026-06-06 8:54 a.m.] mole99
+That's very strange. Are you running on Linux, macOS, or WSL?
+
+
+[2026-06-06 8:54 a.m.] mole99
+Can you share a reproducible with me? I can try it locally on my end.
+
+
+[2026-06-06 8:59 a.m.] rebelmike
+Linux, Ubuntu 24.04.  I've just tried wiping the pdk as that's the only other thing I can think of, so will see if that works
+
+{Reactions}
+🤞
+
+[2026-06-06 9:04 a.m.] rebelmike
+How do I create a reproducible?  Or is one already hiding in the run directory somewhere?
+
+
+[2026-06-06 9:11 a.m.] bailey8889
+@RebelMike can you try to open `/home/mdb36/wafer-space/ws02-tinyQV/librelane/runs/RUN_2026-06-06_09-45-39/56-magic-streamout/chip_top.magic.gds` in klayout?
+
+
+[2026-06-06 9:12 a.m.] bailey8889
+If that doesn't work, can you try in magic?
+
+
+[2026-06-06 9:16 a.m.] rebelmike
+Ah no - the chip_top.magic.gds is zero size - that'll do it 😄
+
+
+[2026-06-06 9:19 a.m.] bailey8889
+Is the klayout data ok? Can you figure out why the magic gds file size is zero?
+
+
+[2026-06-06 9:20 a.m.] rebelmike
+```
+File /home/mdb36/wafer-space/ws02-tinyQV/gf180mcu/gf180mcuD/libs.ref/gf180mcu_ocd_ip_sram/mag/pmos_5p04310591302058_3v512x8m81.mag couldn't be read
+Failure to read entire subtree of the cell.
+Failed on cell pmos_5p04310591302058_3v512x8m81.
+```
+So maybe redownloading the pdk will have fixed it?  That file is there now and looks plausible.  The design takes a while to route so it's still going
+
+
+[2026-06-06 9:30 a.m.] rebelmike
+No, it's failed in the exact same way.  That is very weird
+
+
+[2026-06-06 9:38 a.m.] rebelmike
+I have no idea why this would be different on github to locally.  I am patching the pdk with a version from the latest build artfiact in Tholin's repo, but that should be unrelated - and is done the same way on github as locally.
+
+
+[2026-06-06 10:25 a.m.] mole99
+You can try this PR: https://github.com/wafer-space/gf180mcu-project-template/pull/61
+It updates the PDK to include Tholin's latest SCL updates.
+
+{Embed}
+https://github.com/wafer-space/gf180mcu-project-template/pull/61
+Update PDK by mole99 · Pull Request #61 · wafer-space/gf180mcu-pr...
+
+
+[2026-06-06 11:05 a.m.] rebelmike
+Thanks, I’m out for the day but will try this this evening. I’ll also try building the vanilla project template as logically that should also show the issue
+
+{Reactions}
+👍
+
+==============================================================
+Exported 17 message(s)
+==============================================================
