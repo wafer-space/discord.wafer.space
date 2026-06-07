@@ -37,3 +37,19 @@ I’m going to have an option to bring that clock in externally, but it would pr
 https://github.com/ishi-kai/ISHI-KAI_Multiple_Projects_WaferSapce-GF180-1#PLL
 Although it went 8 MHz in -> 48/40MHz out, and unclear if the die has been probed yet.","",""
 "691780627338625077","rebelmike","2026-06-05T15:07:28.4780000+00:00","Good find, thanks for the link!","",""
+"262706220073222144","namibj","2026-06-07T14:14:05.8040000+00:00","Not for Run2; but I plan to have something who's core is silicon validated for Run3.
+
+Provided my health can get in line today so I can at least get basic core parts drawn today. 
+
+An amplifier, a partial positive feedback delay cell for the VCO, and a very fast MUX2.
+
+Thanks by the way for giving me a clear purpose of what people might reasonably do with the fast TX I'm working on: digital video out.
+That works TX only with less than 10Gbit/s for general homelab hardware.","",""
+"262706220073222144","namibj","2026-06-07T14:23:04.8720000+00:00","That said, if I manage to get the PBRS hooked up I'd have a few days after the ttgf0p3 deadline to help you hook the serializer design up to your date source, at probably 32 bit wide (3v3 SCL) per clock.
+
+I'd think a TDMS encoder shouldn't be that hard, and it should be easy to make 4 copies of it fed from a single shared VCO.
+
+It'd be 4 control current signals plus a differential pin pair for each line.
+But those could use the ttgf analog MUX.
+
+PLL action would have to be done off-chip by adjusting the tail current for the VCO.","",""
