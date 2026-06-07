@@ -117,6 +117,33 @@ Increasing max open file descriptors to 4k worked 🎉   Thank you!
 (Failed at the default of 1024)
 
 
+[2026-06-07 7:51 a.m.] mole99
+This is great to hear! 🙌
+
+
+[2026-06-07 7:52 a.m.] mole99
+I remember now that there was a solution to the problem that I never got around to implementing 😅
+Magic keeps the files open to "lock" them. Disabling this behavior using `locking disable` should solve the issue once and for all.
+
+I opened a PR here: https://github.com/librelane/librelane/pull/959
+Maybe you could give this a try with the default of 1024 descriptors.
+
+Simply edit `flake.nix` to point to the LibreLane branch you want to use: https://github.com/wafer-space/gf180mcu-project-template/blob/7cbd17465ca1446b4daf93f543f899fb1b3489c3/flake.nix#L12
+And update `flake.lock` by running `nix flake update`.
+
+
+[2026-06-07 8:09 a.m.] rebelmike
+Thanks, I'll give that a try
+
+
+[2026-06-07 8:46 a.m.] rebelmike
+Looks like that worked 🙂
+
+
+[2026-06-07 8:54 a.m.] mole99
+Thanks for testing! I'll get this merged asap.
+
+
 ==============================================================
-Exported 24 message(s)
+Exported 29 message(s)
 ==============================================================

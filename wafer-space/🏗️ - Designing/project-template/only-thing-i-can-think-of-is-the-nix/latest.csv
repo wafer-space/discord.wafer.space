@@ -29,3 +29,15 @@ It updates the PDK to include Tholin's latest SCL updates.","",""
 "691780627338625077","rebelmike","2026-06-06T21:35:42.7480000+00:00","I feel like that could be it!  Running now 🙂","",""
 "691780627338625077","rebelmike","2026-06-06T22:07:12.3720000+00:00","Increasing max open file descriptors to 4k worked 🎉   Thank you!","",""
 "691780627338625077","rebelmike","2026-06-06T22:07:26.9650000+00:00","(Failed at the default of 1024)","",""
+"323371864074485771","mole99","2026-06-07T07:51:47.4130000+00:00","This is great to hear! 🙌","",""
+"323371864074485771","mole99","2026-06-07T07:52:06.0600000+00:00","I remember now that there was a solution to the problem that I never got around to implementing 😅
+Magic keeps the files open to ""lock"" them. Disabling this behavior using `locking disable` should solve the issue once and for all.
+
+I opened a PR here: https://github.com/librelane/librelane/pull/959
+Maybe you could give this a try with the default of 1024 descriptors.
+
+Simply edit `flake.nix` to point to the LibreLane branch you want to use: https://github.com/wafer-space/gf180mcu-project-template/blob/7cbd17465ca1446b4daf93f543f899fb1b3489c3/flake.nix#L12
+And update `flake.lock` by running `nix flake update`.","",""
+"691780627338625077","rebelmike","2026-06-07T08:09:54.3840000+00:00","Thanks, I'll give that a try","",""
+"691780627338625077","rebelmike","2026-06-07T08:46:19.7140000+00:00","Looks like that worked 🙂","",""
+"323371864074485771","mole99","2026-06-07T08:54:08.2780000+00:00","Thanks for testing! I'll get this merged asap.","",""
