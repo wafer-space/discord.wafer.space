@@ -16,7 +16,7 @@
     "after": "2026-05-31T23:59:59.999+00:00",
     "before": "2026-07-01T00:00:00+00:00"
   },
-  "exportedAt": "2026-06-07T21:57:57.4436582+00:00",
+  "exportedAt": "2026-06-08T01:37:45.2168882+00:00",
   "messages": [
     {
       "id": "1513236133138399433",
@@ -1555,7 +1555,73 @@
       "reactions": [],
       "mentions": [],
       "inlineEmojis": []
+    },
+    {
+      "id": "1513310123911680160",
+      "type": "Default",
+      "timestamp": "2026-06-07T22:34:09.483+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "https://people.engr.tamu.edu/spalermo/ecen689/low_power_link_lee_jssc_2000.pdf [Lee JSSC 2000]",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1513315213510705162",
+      "type": "Reply",
+      "timestamp": "2026-06-07T22:54:22.938+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "If you can tell(/soon show how) doing it at an 8-wide moment would be practical, I'd be quite ears. The 8:4 mux that comes after would want half the input latches at one clock phase and the other half at the inverted clock phase, basically having the input latches transparent exactly while that input side isn't selected by the single-wide MUX2 that particular latch is feeding into.\n\nUnfortunately the slower clocks won't be too edge-aligned to the faster ones as they're just made from a pair of latches with opposing clocks who's data is fed back to each other.\nI think there'll be easy opportunity to at least mint quadrature for some deserving applications as we might as well tap both latches of such a DIV2.\n\nBoosting the amplitude into the clock of the primary (fastest) DIV2 is expected to be quite important to make it reliable; the only other place where a 2-level MCML gate (2 series nmos sitting on the tail current source, before the steered tail current gets to see the load resistors) has to operate that fast is the final MUX2 that immediately feeds into the pre-driver (a buffer chain culminating in the digitally-selected-tail-current output driver for that tap; it's basically just a differential pair with the (pull-up) loads being off-chip).\nAnd those MUX2 there are fed by boosted MUX2 not by weakly regenerating latches.\n\nLike, those second-to-last MUX2 probably get the privilege of quadrature clocks and an output booster (just a single buffer) that should conspire to provide just enough hold time for the final MUX2 to not really feel that.\nThough I'd probably have to... ehhhh as annoying as it feels, it's probably gonna have to be some semblance of a C4 architecture, now that I manage to fully grasp [Lee JSSC 2000] just having flipped the selection and the data transistor levels by splitting the lower ones in two to move all fan-out the the very bottom.\n\nSolves the issue of needing aligned quarter and half rate clocks, by instead using quadrature quarter-rate clocks directly.\n\nI guess the good thing is that _technically_ that input-multiplexer itself architecturally doesn't actually need to provide current gain to work.\nSo ensuring it's fed strong and the output is aggressively pre-amplified before it hits the controlled output current PA, should probably suffice to make it work.\nNo more latches driven with what's a DDR clock w.r.t. the output.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "691780627338625077",
+          "name": "rebelmike",
+          "discriminator": "0000",
+          "nickname": "RebelMike",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-06_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1513276935621316679",
+        "channelId": "1513236128239456406",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
     }
   ],
-  "messageCount": 56
+  "messageCount": 58
 }

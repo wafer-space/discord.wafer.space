@@ -108,3 +108,20 @@ Gates to use are level sensitive latches, MUX2, and BUF. Inversions are free.","
 "262706220073222144","namibj","2026-06-07T20:35:05.6770000+00:00","can't paste any more screenshots for some reason idk why that's broken, locks my brwoser up for 20 seconds each time I even try","",""
 "262706220073222144","namibj","2026-06-07T20:44:04.7850000+00:00","ahhh this works at least","2026-06_media/image-EE1CA.png",""
 "262706220073222144","namibj","2026-06-07T20:44:09.4520000+00:00","shows the massive difference","",""
+"262706220073222144","namibj","2026-06-07T22:34:09.4830000+00:00","https://people.engr.tamu.edu/spalermo/ecen689/low_power_link_lee_jssc_2000.pdf [Lee JSSC 2000]","",""
+"262706220073222144","namibj","2026-06-07T22:54:22.9380000+00:00","If you can tell(/soon show how) doing it at an 8-wide moment would be practical, I'd be quite ears. The 8:4 mux that comes after would want half the input latches at one clock phase and the other half at the inverted clock phase, basically having the input latches transparent exactly while that input side isn't selected by the single-wide MUX2 that particular latch is feeding into.
+
+Unfortunately the slower clocks won't be too edge-aligned to the faster ones as they're just made from a pair of latches with opposing clocks who's data is fed back to each other.
+I think there'll be easy opportunity to at least mint quadrature for some deserving applications as we might as well tap both latches of such a DIV2.
+
+Boosting the amplitude into the clock of the primary (fastest) DIV2 is expected to be quite important to make it reliable; the only other place where a 2-level MCML gate (2 series nmos sitting on the tail current source, before the steered tail current gets to see the load resistors) has to operate that fast is the final MUX2 that immediately feeds into the pre-driver (a buffer chain culminating in the digitally-selected-tail-current output driver for that tap; it's basically just a differential pair with the (pull-up) loads being off-chip).
+And those MUX2 there are fed by boosted MUX2 not by weakly regenerating latches.
+
+Like, those second-to-last MUX2 probably get the privilege of quadrature clocks and an output booster (just a single buffer) that should conspire to provide just enough hold time for the final MUX2 to not really feel that.
+Though I'd probably have to... ehhhh as annoying as it feels, it's probably gonna have to be some semblance of a C4 architecture, now that I manage to fully grasp [Lee JSSC 2000] just having flipped the selection and the data transistor levels by splitting the lower ones in two to move all fan-out the the very bottom.
+
+Solves the issue of needing aligned quarter and half rate clocks, by instead using quadrature quarter-rate clocks directly.
+
+I guess the good thing is that _technically_ that input-multiplexer itself architecturally doesn't actually need to provide current gain to work.
+So ensuring it's fed strong and the output is aggressively pre-amplified before it hits the controlled output current PA, should probably suffice to make it work.
+No more latches driven with what's a DDR clock w.r.t. the output.","",""

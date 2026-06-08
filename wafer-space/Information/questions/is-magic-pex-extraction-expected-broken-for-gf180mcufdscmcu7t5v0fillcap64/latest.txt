@@ -5,6 +5,57 @@ After: 2026-05-31 11:59 p.m.
 Before: 2026-07-01 12:00 a.m.
 ==============================================================
 
+[2026-06-08 12:38 a.m.] rtimothyedwards_19428
+@namibj :  Well, I finally clawed my way back up out of that rabbit hole. . .  I am now on magic version 8.3.660, and I am happy to say that this version extracted a correct (as far as I can tell) R-C netlist of the `tinyqv_quarter_label_edited_01.gds` full chip layout.  Complete extraction took exactly 30 minutes on my desktop.
+
+{Reactions}
+ferrisCatOwO
+
+[2026-06-08 12:40 a.m.] namibj
+[Yeah extracting power parasitics out of the spice let's Xyce do singleton elimination on the matrix; apparently it's a trick where some node voltages can be calculated directly from fixed inputs instead of having to be iteratively solved for.]
+(Somehow this was stuck in discord's edit buffer.)
+
+
+[2026-06-08 12:43 a.m.] namibj
+I assume any sort of (mutual) inductance extraction isn't planned to become part of this toolkit?
+
+
+[2026-06-08 12:44 a.m.] rtimothyedwards_19428
+Not now, at any rate.
+
+
+[2026-06-08 12:44 a.m.] namibj
+And what about thermal extraction to the spice?
+
+
+[2026-06-08 12:45 a.m.] rtimothyedwards_19428
+There is an open source tool that does thermal modeling;  I've forgotten where it is but I can look it up.
+
+
+[2026-06-08 12:47 a.m.] namibj
+Not this week for me, for as I have to draw and a bit of tune and somewhat characterize a couple CML gates mostly just praying I can't fry the die with appropriate care in e.g. duty cycling.
+
+
+[2026-06-08 12:48 a.m.] namibj
+I've asked because spice does tend to support inclusion of lumped network thermal modeling.
+
+
+[2026-06-08 12:53 a.m.] rtimothyedwards_19428
+First I need to rework the parasitic capacitances so that the coupling caps get properly redistributed along the resistor networks, instead of being redirected to the substrate as they are now.  Redirecting to the substrate preserves the signal propagation delay characteristics but eliminates all the cross-talk.
+
+
+[2026-06-08 12:55 a.m.] rtimothyedwards_19428
+@namibj :  I would be interested in knowing if you can take the full R-C extracted netlist now produced by magic for an entire chip design and run it through Xyce and actually get it to simulate.
+
+
+[2026-06-08 12:57 a.m.] namibj
+I probably won't get around to it before the Run 2 deadline unless I'll try to do it as part of verifying a Run2 chip's design's integration.
+
+
+[2026-06-08 12:59 a.m.] namibj
+Ehhh, does that claim still hold if it's a high speed differential pair?
+
+
 ==============================================================
-Exported 0 message(s)
+Exported 12 message(s)
 ==============================================================
