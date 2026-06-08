@@ -1,0 +1,159 @@
+{
+  "guild": {
+    "id": "1361349522684510449",
+    "name": "wafer.space Community",
+    "iconUrl": "2026-06_media/fb143eaa45770cbb40493d09b625e98b-09FD1.png"
+  },
+  "channel": {
+    "id": "1513432126190522469",
+    "type": "GuildPublicThread",
+    "categoryId": "1409660288822673408",
+    "category": "questions",
+    "name": "Do we need OCD IO pads for digital 3v3 design",
+    "topic": null
+  },
+  "dateRange": {
+    "after": "2026-05-31T23:59:59.999+00:00",
+    "before": "2026-07-01T00:00:00+00:00"
+  },
+  "exportedAt": "2026-06-08T10:05:41.0691872+00:00",
+  "messages": [
+    {
+      "id": "1513432126190522469",
+      "type": "Default",
+      "timestamp": "2026-06-08T06:38:57.093+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "For our design, we're planning on using a pure 3v3 digital design (no analog, 3v3 SCL and SRAM). In that case, is switching from foundry provided IO pads to OCD pads necessary?",
+      "author": {
+        "id": "236632873782738944",
+        "name": ".pogeg",
+        "discriminator": "0000",
+        "nickname": "Jason Yang",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/e31b263653838da47e41a71360dba87e-C926B.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1513434109140140182",
+      "type": "Default",
+      "timestamp": "2026-06-08T06:46:49.865+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "No, it is not necessary. In this case, you can keep using the foundry pad cells.\n\nThe OCD cells add levelshifters between IO and core, which allows you to have IO voltage > core voltage. For example, you could have a 3.3V core voltage and a 5V IO voltage.\n\nIf you run everything at 3.3V, then you can simply use the FD cells.\n\nCurrently, there are no IO cells with 3.3V transistors (normal gate oxide). Both the FD and OCD cells use 5V transistors (thick gate oxide).",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "2026-06_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1513434177914146906",
+      "type": "Default",
+      "timestamp": "2026-06-08T06:47:06.262+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "As you probably know, the 3.3V SCL and SRAM are yet to be silicon verified.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "2026-06_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1513444673346342982",
+      "type": "Default",
+      "timestamp": "2026-06-08T07:28:48.568+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Also to note the foundry cells although designed for 5V provide more than acceptable performance running at 3.3V. ( > 100 MHz without issues ).",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "2026-06_media/1f44d-27259.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "323371864074485771",
+              "name": "mole99",
+              "discriminator": "0000",
+              "nickname": "Leo Moser (mole99)",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-06_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    }
+  ],
+  "messageCount": 4
+}
