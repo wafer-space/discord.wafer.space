@@ -1,0 +1,110 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"691780627338625077","rebelmike","2026-06-07T17:40:08.7080000+00:00","Repo here: https://github.com/MichaelBell/prbs31","",""
+"691780627338625077","rebelmike","2026-06-07T17:40:20.1780000+00:00","Realised we should probably go to a thread to reduce spam","",""
+"262706220073222144","namibj","2026-06-07T17:42:00.6260000+00:00","yeah thread good.
+
+And no, I am after a power-of-two number of outputs per cycle, probably 32.","","👍 (1)"
+"262706220073222144","namibj","2026-06-07T17:43:49.8840000+00:00","the fastest data latches are planned to be quarter the output baudrate; the VCO is supposed to run at half the output baudrate","",""
+"262706220073222144","namibj","2026-06-07T17:45:01.2040000+00:00","I'll know more about what those mean in GHz in a few hours when I have drawn some cells and did a bit of PEX on them to see what GBW I can hope for once I include the need for loads and at least some amount of routing parasitics.","",""
+"262706220073222144","namibj","2026-06-07T17:45:57.5760000+00:00","the PRBS has to in all cases reliably keep up with the baudrate though.","",""
+"262706220073222144","namibj","2026-06-07T17:46:33.8380000+00:00","basically up to where it produces substantial BER at the output data bit latches or such","",""
+"262706220073222144","namibj","2026-06-07T17:48:07.3240000+00:00","I _think_ I can hope for approximately 15 Gbit/s tops, I _hope_ 10GBASE-KR is decently practical to hit with some amount of margins overall.","",""
+"262706220073222144","namibj","2026-06-07T17:49:01.8190000+00:00","Faster would require inductive peaking throughout many parts of the serializer and I do not have infrastructure for planning/simulating the interactions of so many inductors in close proximity.","",""
+"691780627338625077","rebelmike","2026-06-07T17:50:00.0380000+00:00","OK, I'll keep one more bit to give you the 32 bits.
+
+This is using Tholin's 3v3 library, clock report says fmax of 348MHz at the worst corner.  So that hopefully won't bottleneck you.","",""
+"262706220073222144","namibj","2026-06-07T17:51:04.0170000+00:00","(I can get about 28 GHz GBW out of the transistors and I only ""need"" 1.12x the bitrate to theoretically make it behave.... but it'd be unusable without a decent bit of inductive peaking around the final MUX's.)","",""
+"262706220073222144","namibj","2026-06-07T17:51:54.4150000+00:00","How pessimistic is that estimate?
+I'm aiming for the tt corner btw.","",""
+"691780627338625077","rebelmike","2026-06-07T17:53:08.0670000+00:00","I would normally say fairly pessimistic, though Tholin's library is not well characterised so it's all a bit finger in the air!  nom_tt_025C_3v3 is saying 460MHz","",""
+"262706220073222144","namibj","2026-06-07T17:54:09.7750000+00:00","ohhh yeah those numbers I like a good deal more.
+I assume it could be told to be somewhat faster if that's put as a constraint? Just in case the serializer predictions come to desire a bit more.","",""
+"262706220073222144","namibj","2026-06-07T17:54:55.4280000+00:00","also notably I don't care about how it gets initalized it just can't be all-0's.","",""
+"691780627338625077","rebelmike","2026-06-07T17:55:38.5250000+00:00","I can ask but given how simple everything is I don't know whether that would actually change anything.  Removing `en` would probably help if you don't need it.","",""
+"262706220073222144","namibj","2026-06-07T17:55:39.3310000+00:00","wait","",""
+"262706220073222144","namibj","2026-06-07T17:56:14.2960000+00:00","that code snipped you gave me there, in #analog , that only computes one bit per cycle.","",""
+"262706220073222144","namibj","2026-06-07T17:57:19.1290000+00:00","I don't need enable the clock feed to that section is from the serializer anyways; what it would possibly want/need is selecting the user input of the digital tt mux instead","",""
+"262706220073222144","namibj","2026-06-07T17:59:50.0950000+00:00","This is iirc not the right view of the polynom, but it's an LFSR with vaguely similar tap structure in some view and the correct output width:
+
+```verilog
+module prsg31_stream32 (
+    input  wire        clk,
+    input  wire        rst,   // synchronous, active-high
+    input  wire        en,
+    output reg  [31:0] out
+);
+
+    reg [31:0] lfsr;
+
+    always @(posedge clk) begin
+        if (rst) begin
+            lfsr <= 32'hffff_ffff;
+            out  <= 32'hffff_ffff;
+        end else if (en) begin
+            lfsr[31:16] <= lfsr[30:15] ^ lfsr[27:12];
+            lfsr[15:4]  <= lfsr[14:3]  ^ lfsr[11:0];
+            lfsr[3:1]   <= lfsr[2:0]   ^ lfsr[30:28] ^ lfsr[27:25];
+            lfsr[0]     <= lfsr[30]    ^ lfsr[12];
+
+            out[31:16]  <= lfsr[30:15] ^ lfsr[27:12];
+            out[15:4]   <= lfsr[14:3]  ^ lfsr[11:0];
+            out[3:1]    <= lfsr[2:0]   ^ lfsr[30:28] ^ lfsr[27:25];
+            out[0]      <= lfsr[30]    ^ lfsr[12];
+        end
+    end
+
+endmodule
+```","",""
+"691780627338625077","rebelmike","2026-06-07T18:02:24.8280000+00:00","Ah, you want 32 cycles per clock?  That makes sense.  I hadn't found a spec - just read wikipedia 😄
+It's possible this does the right thing: https://github.com/mgwang37/PRBS/blob/master/Verilog/prbs_generator.v#L336-L372","",""
+"262706220073222144","namibj","2026-06-07T18:03:15.3200000+00:00","I sent you spec from the 802.3","",""
+"262706220073222144","namibj","2026-06-07T18:04:57.5660000+00:00","see DM btw for link","",""
+"691780627338625077","rebelmike","2026-06-07T18:05:53.0860000+00:00","Thanks - got it.","",""
+"691780627338625077","rebelmike","2026-06-07T18:07:36.9510000+00:00","I need to go get some food and stuff, I'll be back later.  But theoretically that shouldn't slow things down too much I think, just increase area a bit.","",""
+"262706220073222144","namibj","2026-06-07T18:13:10.8650000+00:00","","2026-06_media/Screenshot_2026-06-07-20-13-00-12-64BD7.jpg",""
+"262706220073222144","namibj","2026-06-07T18:14:01.7420000+00:00","This would be the ""alternative"" pattern genrator thing that would be of some amount of applicable relevance; I don't think it'll be easier/cheaper/faster to do, though.","",""
+"262706220073222144","namibj","2026-06-07T18:15:37.5130000+00:00","I'd guess one could hard-set the input to be `1` and then it might not need explicit initializing.","",""
+"262706220073222144","namibj","2026-06-07T18:16:26.2990000+00:00","as it might not be vulnerable to lock itself up as the left XOR would act as an invert instead between the output of the right XOR and the input to S0","",""
+"262706220073222144","namibj","2026-06-07T18:43:04.4980000+00:00","Basically I'm not that worried that LFSR thing can keep up, it's more that the optional direct input serialization would need to be combined in a way that's not a slowdown.
+
+And there's some control bits that need to be provided latched (clock glitches expected if that glitches) to notably adjust the VCO's loads for slow mode. The partial positive feedback has to cause sufficient differential amplitude at the reduced tail current.","",""
+"262706220073222144","namibj","2026-06-07T18:44:02.4000000+00:00","But as I said this isn't needed until I have enough progress to suggest that I can get the serializer made in time.","",""
+"262706220073222144","namibj","2026-06-07T19:09:24.6160000+00:00","Though, the one notable thing, if you could provide some insight on how large it would be to provide two shifted versions of the parallelized bitstream of whatever is fed to the serializer, for a total of 3 copies that are spaced exactly 1 bit, with two of them optionally inverted, plus some about 10 control bits, that'd be great to know.
+
+The final outputs from the digital section to the serializer will be SDR clocked and need to be provided as pairs of `bit[I]`/`not(bit[I])` because they are consumed by differential current mode logic.
+
+If it's not too expensive to do those couple control bits and the two optionally-inverted (that'd be control bits that stay in the digital section) single-bit-each shifted stream copies, it might even be realistic to do a 3-tap FIR TX EQ.
+
+If it's easy to do those copies I would do them at a faster stage of the MUX as it would be cheaper than so many wide slow speed MUXes to collect them all up to some decent speed.
+Like, at 8-wide perhaps.
+Note that we don't have flip flops but we do have two nice symmetric clock phases and the latches we have freely allow phase selection.
+And MUX2 are also fast and fairly cheap.
+Especially if their select inputs are driven by CMOS voltage levels.
+And ofc data inversion is literally free because it's just crossing the wires.","",""
+"691780627338625077","rebelmike","2026-06-07T19:57:54.4870000+00:00","For the shifted version - that should just be wires (plus maybe remembering a couple of bits?), and XORs for the optional inversions are not huge.  The main area will be all the flops for the final output from the digital section, I'm not sure what width you're aiming that to be but with 3 versions each in +/- pairs that's going to be the majority.  Switching those for latches could help but you'd need the input to the latch to be stable for half the clock cycle so it might reduce fmax.
+I'm not sure what you mean by ~10 control bits - what are they controlling?","",""
+"262706220073222144","namibj","2026-06-07T19:58:45.7800000+00:00","Oh I thought the inversion would be after the storage of the flop.","",""
+"262706220073222144","namibj","2026-06-07T20:00:01.9810000+00:00","The 10 control bits would depending on being set or not either connect a tail current cell to a current mirror gate voltage or disconnect from there and instead clamp to GND.","",""
+"262706220073222144","namibj","2026-06-07T20:00:30.2130000+00:00","they'd be setting drive current for the non-main taps","",""
+"262706220073222144","namibj","2026-06-07T20:02:47.7660000+00:00","If it's possible to do that cheaper after the initial like 2 layers of CML MUX (32->16->8->shift_spawn->4->phase_align->4->MUX2->amplifier->MUX2->PA)","",""
+"262706220073222144","namibj","2026-06-07T20:03:07.1080000+00:00","the numbers are parallel latch quantity for a single output tap","",""
+"691780627338625077","rebelmike","2026-06-07T20:11:55.5310000+00:00","Inversion after the flop makes sense, just need to be careful with asymmetric delay.","",""
+"262706220073222144","namibj","2026-06-07T20:13:38.1970000+00:00","to an extend, I guess...
+It'd get latched up pretty much right away though, the one benefit could be if cheap to provide half of them synchronized to the other clock edge to skip a second latch on the CML side to shift appropriately.","",""
+"262706220073222144","namibj","2026-06-07T20:14:15.7360000+00:00","I'm bad at estimating the gf180mcuD logic density  for now at least","",""
+"262706220073222144","namibj","2026-06-07T20:15:53.3130000+00:00","and I've not yet figured out how complex it'd be to do the shifted version at the 8-wide stage in CML instead.
+Gates to use are level sensitive latches, MUX2, and BUF. Inversions are free.","",""
+"691780627338625077","rebelmike","2026-06-07T20:16:12.6310000+00:00","I got some CI set up, and implemented the 32 iteration unroll thing: https://github.com/MichaelBell/prbs31/actions/runs/27103395235","",""
+"262706220073222144","namibj","2026-06-07T20:16:24.1920000+00:00","if you say it's not expensive and will be straight-forward to do I'll just keep that in mind.","",""
+"691780627338625077","rebelmike","2026-06-07T20:17:20.4200000+00:00","You can pretty easily play with that to see what's what, librelane should size the block appropriately.  Doing the unroll made basically no difference to size or speed","",""
+"262706220073222144","namibj","2026-06-07T20:17:33.1710000+00:00","I just know that last time I tried to understand I kinda got a headache instead of a solution.","",""
+"262706220073222144","namibj","2026-06-07T20:17:53.3660000+00:00","C.f. this as reference:","2026-06_media/image-23FA8.png",""
+"262706220073222144","namibj","2026-06-07T20:18:22.5710000+00:00","I'm not doing latches at the C2 clock though, that's MUX2/BUF instead","",""
+"262706220073222144","namibj","2026-06-07T20:19:09.9870000+00:00","and due to that I can't use this architecture of cooking up a total of 4 taps for nearly free","",""
+"691780627338625077","rebelmike","2026-06-07T20:22:16.7780000+00:00","Interesting - I think I see where you're going - I see why you want the offset streams","",""
+"262706220073222144","namibj","2026-06-07T20:23:48.7030000+00:00","","2026-06_media/image-E4F36.png",""
+"262706220073222144","namibj","2026-06-07T20:24:31.4590000+00:00","those are example settings for the 3 taps btw","",""
+"262706220073222144","namibj","2026-06-07T20:33:45.4010000+00:00","https://people.engr.tamu.edu/spalermo/ecen689/lecture7_ee720_eq_intro_txeq.pdf  page 16 tooo","",""
+"262706220073222144","namibj","2026-06-07T20:35:05.6770000+00:00","can't paste any more screenshots for some reason idk why that's broken, locks my brwoser up for 20 seconds each time I even try","",""
+"262706220073222144","namibj","2026-06-07T20:44:04.7850000+00:00","ahhh this works at least","2026-06_media/image-EE1CA.png",""
+"262706220073222144","namibj","2026-06-07T20:44:09.4520000+00:00","shows the massive difference","",""
