@@ -1,0 +1,47 @@
+```
+$ klayout -b -r $PDK_ROOT/$PDK/libs.tech/klayout/tech/drc/gf180mcu.drc -rd help=true
+2026-06-09 18:29:47 +0200: Memory Usage (1017732K) : Starting running GF180MCU Klayout DRC runset on 
+2026-06-09 18:29:47 +0200: Memory Usage (1017732K) : Ruby Version for klayout: 3.3.8
+
+GF180MCU KLayout DRC Rule Deck
+==============================
+
+Usage:
+  klayout -b -r gf180mcu.drc -rd input=<file> -rd report=<file> [options...]
+
+Options (* = required):
+  * input        Path to the input GDS/OASIS layout file
+  * report       Path for the DRC report output file (.lyrdb format).
+    topcell      Top cell name (default: auto-detect)
+    run_mode     Execution mode  (allowed: deep, flat, tiling; default: deep)
+    verbose      Enable verbose output  (default: false)
+    workers      Number of parallel workers. 'max' for number of available cores  (default: 1)
+    threads      Number of parallel threads to use in klayout DRC functions. 'max' for number of available cores  (default: max)
+    variant      PDK variant; superseded by metal_level, metal_top, and mim_option  (allowed: A, B, C, D, E, F, gf180mcuA, gf180mcuB, gf180mcuC, gf180mcuD, gf180mcuE, gf180mcuF; default: gf180mcuD)
+    metal_level  Metal stack configuration (default: from variant)  (allowed: 2LM, 3LM, 4LM, 5LM, 6LM)
+    metal_top    Top metal thickness (default: from variant)  (allowed: 9K, 11K, 30K)
+    mim_option   MIM capacitor option (default: from variant)  (allowed: A, B)
+    decks        Comma-separated list of decks to run. A leading "-" means that matching decks should be excluded.  Example: "-rd decks=all,-beol,metal1" means all except feol, but including metal1 decks. If no non-negative tags are provided, all decks are included.  (default: all)
+    help         Print this message and exit
+
+Variant presets:
+    A  =>  metal_level: 3LM   metal_top: 30K   mim_option: A
+    B  =>  metal_level: 4LM   metal_top: 11K   mim_option: B
+    C  =>  metal_level: 5LM   metal_top: 9K    mim_option: B
+    D  =>  metal_level: 5LM   metal_top: 11K   mim_option: B
+    E  =>  metal_level: 6LM   metal_top: 9K    mim_option: B
+    F  =>  metal_level: 6LM   metal_top: 9K    mim_option: A
+    gf180mcuA  =>  metal_level: 3LM   metal_top: 30K   mim_option: A
+    gf180mcuB  =>  metal_level: 4LM   metal_top: 11K   mim_option: B
+    gf180mcuC  =>  metal_level: 5LM   metal_top: 9K    mim_option: B
+    gf180mcuD  =>  metal_level: 5LM   metal_top: 11K   mim_option: B
+    gf180mcuE  =>  metal_level: 6LM   metal_top: 9K    mim_option: B
+    gf180mcuF  =>  metal_level: 6LM   metal_top: 9K    mim_option: A
+
+Example:
+  klayout -b -r gf180mcu.drc \
+    -rd input=design.gds \
+    -rd report=drc_results.lyrdb \
+    -rd metal_level=5LM \
+    -rd run_mode=deep
+```
