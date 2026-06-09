@@ -497,6 +497,76 @@ THAT 6261/6263/6266 Dual Low Noise Programmable-Gain Preamplifier-A...
 2026-06_media/626x-1-6C52A.png
 
 
+[2026-06-08 9:42 p.m.] polyfractal
+regarding pricing, I just ordered some PCB + assembly to test my chip a little easier than breadboard. Relatively simple 4 layer board (micro, headers, few level shifters, caps, resistors, only expensive part was a PSRAM module), moderate size. 
+
+- $17.90 for 5pc
+- $159.75 for assembly
+- $46.47 for shipping
+- $78.84 for tariffs and taxes
+
+all up that's $60 per board, plus $8.5 for the chip and COB. At qty 1000 and a better PCB that price could be brought down. But to hit $20 price point for PCB + chip COB, you'd probably have to assemble your own and keep the board ultra simple
+
+
+[2026-06-08 9:46 p.m.] namibj
+Ehhhh, look at parallax propeller 2 for example, that's 130nm on semi "fabless" and fairly big (iirc the die could fit about 1.2~1.5 MiB SRAM from it's area; they only have 512 kiB shared plus 8 cores @4 kiB local each, but it's extremely powerful IO wise.
+E.g. each core could drive individual 180~250 MHz pixel clock VGA (256 pallet or fixed LUT optional, but it could sustain true color just no framebuffer to match).
+
+Each GPIO (64 of them) has 3 8-bit DACs, one 3ns VGA-class, ~123 Ohm, one ~600 Ohm, and one iirc ~15 kOhm (that one is used for the level comparator and some select related feedback modes of the pad "drivers").
+It literally lets you set (sadly only 4 bit resolution) a "high" and a "low" code for the fast DAC to use for digital GPIO output state emission, so you can directly handle e.g. 1.2V CMOS levels, together with the input comparator.
+
+
+[2026-06-08 9:48 p.m.] namibj
+Where in that breakdown are the "misc" components? The *assembly cost"?
+
+
+[2026-06-08 9:48 p.m.] namibj
+Propeller 2 is 12$ in quantity
+
+
+[2026-06-08 9:49 p.m.] namibj
+(last I looked)
+
+
+[2026-06-08 9:50 p.m.] namibj
+It's by far the fanciest "GPIO pad" of any microcontroller.
+
+
+[2026-06-08 9:52 p.m.] polyfractal
+yeah lumped into assembly cost. Lemme find the BOM vs actual assembly breakdown
+
+
+[2026-06-08 9:53 p.m.] namibj
+Just checking otherwise I'd have called out your choice of expensive assembly.
+
+
+[2026-06-08 9:53 p.m.] namibj
+I should sleep now.
+
+
+[2026-06-08 9:55 p.m.] polyfractal
+some of this would fall under NRE that amortizes over a lot of parts for sure, just expensive at such low quantity.
+
+{Attachments}
+2026-06_media/image-075A6.png
+
+
+[2026-06-08 9:56 p.m.] polyfractal
+but yeah, cost is mostly _not_ the physical PCB or components. all in assembly, fixturing, setup fees, non-standard parts being loaded etc
+
+
+[2026-06-08 10:02 p.m.] namibj
+Fancy board to need fixture
+
+
+[2026-06-08 10:03 p.m.] polyfractal
+🤷‍♂️  I'm a PCB newbie and just yolo'd it, but it is double sided so that's probably why
+
+
+[2026-06-08 10:03 p.m.] namibj
+Ohh yeah
+
+
 ==============================================================
-Exported 106 message(s)
+Exported 120 message(s)
 ==============================================================
