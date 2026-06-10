@@ -181,3 +181,20 @@ SH.1 says circular inductors are theoretically supported?","",""
 "323371864074485771","mole99","2026-06-09T16:43:57.0250000+00:00","As far as I know, no. However, we might see some inductors with 45-degree angles taped out on ws-run #2.","",""
 "262706220073222144","namibj","2026-06-09T17:04:18.8010000+00:00","If I can cook some suitable ones in the next few hours I expect to use some simple and some T-coil ones in the serializer.
 Would be nice to have those much sharper clock edges at the final MUX.","",""
+"262706220073222144","namibj","2026-06-10T10:50:02.3940000+00:00","","",""
+"262706220073222144","namibj","2026-06-10T11:06:03.5870000+00:00","This _seems_ like it might easily enough be adapted to our (gf18mcuD instead of that file's SG13G2) layer stack and would unlock generic ""linear network"" PEX one could hook up to SPICE (Xyce's easy way seems locked to harmonic balance aka large-signal (non-linear, with harmonics and intermodulation!) AC, but it shouldn't be too hard to make an analog behavioral model out of it (`README.md` ""The resulting S-parameters can be used for simulation, but you can also extract a narrowband lumped element pi model using the pi-from-s2p tool."")) `workflow/run_generic_nport.py`:
+>>>
+```python
+# Model comments
+# 
+# This is a generic model running port excitation for all ports defined below, 
+# to get full [S] matrix data.
+# Output is stored to Touchstone S-parameter file. 
+# No data plots are created by this script.
+```","2026-06_media/SG13G2-68217.xml,2026-06_media/Screenshot_2026-06-10-12-59-58-96-E8EEB.jpg",""
+"323371864074485771","mole99","2026-06-10T11:18:12.9750000+00:00","@Ghaith Al Sabagh has already ported the XML to gf180mcuD for the IEEE Chipathon. He will tape out some inductors on ws-run #2.","",""
+"768095480264917023","ghaithalsabagh","2026-06-10T14:14:55.5760000+00:00","Hi @namibj 
+
+You would find the needed xml files for openEMS and palace AWS here:
+
+https://github.com/EngGhaith/The-Silent-Owl-GF180MCU-WB-LNA/tree/main/EM-Flow","",""

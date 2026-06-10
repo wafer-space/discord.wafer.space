@@ -640,6 +640,45 @@ If I can cook some suitable ones in the next few hours I expect to use some simp
 Would be nice to have those much sharper clock edges at the final MUX.
 
 
+[2026-06-10 10:50 a.m.] namibj
+
+
+
+[2026-06-10 11:06 a.m.] namibj
+This _seems_ like it might easily enough be adapted to our (gf18mcuD instead of that file's SG13G2) layer stack and would unlock generic "linear network" PEX one could hook up to SPICE (Xyce's easy way seems locked to harmonic balance aka large-signal (non-linear, with harmonics and intermodulation!) AC, but it shouldn't be too hard to make an analog behavioral model out of it (`README.md` "The resulting S-parameters can be used for simulation, but you can also extract a narrowband lumped element pi model using the pi-from-s2p tool.")) `workflow/run_generic_nport.py`:
+>>>
+```python
+# Model comments
+# 
+# This is a generic model running port excitation for all ports defined below, 
+# to get full [S] matrix data.
+# Output is stored to Touchstone S-parameter file. 
+# No data plots are created by this script.
+```
+
+{Attachments}
+2026-06_media/SG13G2-68217.xml
+2026-06_media/Screenshot_2026-06-10-12-59-58-96-E8EEB.jpg
+
+
+[2026-06-10 11:18 a.m.] mole99
+@Ghaith Al Sabagh has already ported the XML to gf180mcuD for the IEEE Chipathon. He will tape out some inductors on ws-run #2.
+
+
+[2026-06-10 2:14 p.m.] ghaithalsabagh
+Hi @namibj 
+
+You would find the needed xml files for openEMS and palace AWS here:
+
+https://github.com/EngGhaith/The-Silent-Owl-GF180MCU-WB-LNA/tree/main/EM-Flow
+
+{Embed}
+https://github.com/EngGhaith/The-Silent-Owl-GF180MCU-WB-LNA/tree/main/EM-Flow
+The-Silent-Owl-GF180MCU-WB-LNA/EM-Flow at main · EngGhaith/The-Sil...
+The Silent Owl is an open-source LNA designed in GF180MCU for Chipathon 2026 - EngGhaith/The-Silent-Owl-GF180MCU-WB-LNA
+2026-06_media/The-Silent-Owl-GF180MCU-WB-LNA-E5725
+
+
 ==============================================================
-Exported 133 message(s)
+Exported 137 message(s)
 ==============================================================
