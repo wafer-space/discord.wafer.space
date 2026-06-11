@@ -95,6 +95,16 @@ PACT: A Parallel Compact Thermal Simulator. Contribute to peaclab/PACT developme
 It has a very interesting approach.  They note that thermal diffusion equations are basically the same equations as you use to solve a resistor network, so they convert a layout into a SPICE netlist and use a SPICE simulator to solve the equations, then convert that back into temperature.
 
 
+[2026-06-10 7:32 p.m.] namibj
+Well yeah, I thought more of e.g. https://www.analog.com/en/resources/technical-articles/ltspice-soatherm-support-for-pcb-and-heat-sink-thermal-models.html or how Xyce supports a "temperature node" for some BSIM (not the ones of our two main PDKs) and some MEXTRAM and VBIC models.
+
+Of course that's mostly applicable to low-frequency/small-circuit transients (LTSpice SOA and thermal runaway/stability checking) and periodic steady state/harmonic balance cases of larger circuits (e.g. mmWave MMICs with very power dense HBTs or HEMTs) where thermal convergence is deliberately solved as an operating point that's static under the timescales of the fast electromagnetic simulation... at least all the heat sink effects; thermal contribution to device transient non-linearity and coupling isn't inherently ignored.
+
+
+[2026-06-10 7:53 p.m.] namibj
+Thanks for making me read the docs though rn, I had a minor eureka moment for how to tune the VCO to operate at the simulation frequency prescribed by harmonic balance: I just use an idealized PLL.
+
+
 ==============================================================
-Exported 20 message(s)
+Exported 22 message(s)
 ==============================================================
