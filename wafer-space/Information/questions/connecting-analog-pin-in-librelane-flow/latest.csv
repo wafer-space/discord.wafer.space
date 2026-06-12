@@ -1,0 +1,32 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"691780627338625077","rebelmike","2026-06-12T09:09:37.1660000+00:00","Last night, I thought I'd try taking @Matt Venn's R2R DAC he just submitted on TT 0p3 and add it to TinyQV.  I've got the macro in and the digital inputs + ground are connected OK (could probably do with buffers on the input, but one thing at a time).
+However, librelane won't route the output from the DAC to the analog pin - possibly quite sensibly as in general it probably shouldn't touch analog things.  How should I deal with making that connection?  I guess I could add it manually to the gds after the librelane flow has finished, but that seems not ideal.  Can I add a step to the flow to describe the connection?  Or can I just tell the router to connect it somehow?
+My repo is here, see the `dac` branch: https://github.com/MichaelBell/ws02-tinyQV/tree/dac","","👍 (1)"
+"492702620759228416","mattvenn","2026-06-12T09:12:57.5260000+00:00","Interested to see how you solve it!","",""
+"220639106915368960","tholin","2026-06-12T09:14:55.9090000+00:00","This is an issue I encountered last run as well, give me a minute to remember the fix","",""
+"220639106915368960","tholin","2026-06-12T09:16:36.1540000+00:00","Librelane does not like that the pad’s layout does not have a port named ""PAD"". That’s it.","",""
+"220639106915368960","tholin","2026-06-12T09:16:57.5440000+00:00","That’s all I did. Copy the files for the analog pad and define a port named ""PAD"" in magic","",""
+"220639106915368960","tholin","2026-06-12T09:17:10.0030000+00:00","https://github.com/AvalonSemiconductors/ws-submission-2025/tree/main/macros/Analog/AnalogPad","",""
+"220639106915368960","tholin","2026-06-12T09:18:14.7840000+00:00","Its not even different electrically. The analog pad just provides a straight connection to the outside, the ports ""ASIG5V"" and ""PAD"" are electrically shorted, but LibreLane needs ""PAD"" to exist.","",""
+"220639106915368960","tholin","2026-06-12T09:18:43.1870000+00:00","Otherwise it goes ""whoa, this is useless!"" and optimizes it out, since all it sees is a cell with only an input and no output (I *believe*)","",""
+"323371864074485771","mole99","2026-06-12T09:21:44.8160000+00:00","The issue is that OpenROAD's detailed router does not route any pins with the `SPECIAL` attribute. This makes sense for power supplies, as they are handled by a dedicated pdngen call.","",""
+"323371864074485771","mole99","2026-06-12T09:22:10.8720000+00:00","Here you can see that ASIG5V has SPECIAL set to True.","2026-06_media/Bildschirmfoto_vom_2026-06-12_11-20-36-2E0D6.png",""
+"323371864074485771","mole99","2026-06-12T09:22:20.8170000+00:00","Looking at the LEF for `gf180mcu_fd_io__asig_5p0.lef`, I don't see the `SPECIAL` attribute set for ASIG5V. However, OpenROAD probably sets it when making the bondpad a BTerm (top-level pin) with [`place_io_terminals`](https://openroad.readthedocs.io/en/latest/main/src/pad/README.html#place-io-terminals).","",""
+"323371864074485771","mole99","2026-06-12T09:25:03.2310000+00:00","I had a similar issue with [HeiChips](https://github.com/FPGA-Research/heichips25-tapeout): in IHP, the bondpads are separate from the I/O cells and [place_bondpad](https://openroad.readthedocs.io/en/latest/main/src/pad/README.html#place-wirebond-pads) also makes the pin SPECIAL. My solution (workaround) was to edit the LEF to add a second port for the core-facing pin of the I/O cell.","",""
+"323371864074485771","mole99","2026-06-12T09:25:52.0150000+00:00","afaik sky130 doesn't have this issue since the I/O cells have separate ports for bondpad and core side.","",""
+"691780627338625077","rebelmike","2026-06-12T09:26:48.5990000+00:00","I noticed that SPECIAL appeared in the def on the OpenROAD.PadRing step, and suspected that might be the reason the router ignored it","","👍 (1)"
+"691780627338625077","rebelmike","2026-06-12T09:27:31.3800000+00:00","But couldn't work out where that was coming from (or even if it was sensible to try and avoid it!)","",""
+"323371864074485771","mole99","2026-06-12T09:29:16.7570000+00:00","iirc @tnt recently found a workaround that doesn't require to edit the LEF file? It involves placing a macro with two ports, which is essentially just a short, next to the core-facing pin of the I/O cell.","",""
+"323371864074485771","mole99","2026-06-12T09:30:45.5850000+00:00","However, Tholin's solution is also fine.","",""
+"596068704471482370","246tnt","2026-06-12T09:35:51.9320000+00:00","Yesh, I putting a small macro doing the split connection which works better for me than editing the pads in the PDK :
+* No need for modifying PDK
+* Because the short is in a separate block with just that in it, it actually doesn't mess with full LVS/GDS check, both the ""schematic"" and ""layout"" side of that block will have a single 0R resistor in them, no ambiguity.
+* That also allowed me to connect all the split `Metal2` traces on the core side, join them together for better connection and bring them to `Metal3` where I needed them, avoiding me to have to deal with via at all when routing them 😅","",""
+"596068704471482370","246tnt","2026-06-12T09:38:25.9370000+00:00","Ends up looking like this :","2026-06_media/2026-06-12_224x778_scrot-9021C.png",""
+"691780627338625077","rebelmike","2026-06-12T09:39:59.0570000+00:00","Cool, that sounds like a good solution.  I assume I can find that in the TT gf0p3 project?","",""
+"596068704471482370","246tnt","2026-06-12T09:40:04.7520000+00:00","But the routing is still done manually though ODB scripts, I don't leave it up to the auto-router.","",""
+"596068704471482370","246tnt","2026-06-12T09:40:41.4850000+00:00","You can't find it anywhere, that's WIP which is not pushed publically anywhere yet.","",""
+"596068704471482370","246tnt","2026-06-12T09:42:19.2680000+00:00","But the macro is 2 squares of metal with via between them 😅  just positioned right where it needs to be.","","👍 (1)"
+"323371864074485771","mole99","2026-06-12T09:45:18.0530000+00:00","And *if* you want to leave it up to the auto-router, you can now add NDRs directly via the LibreLane config 😉 
+
+https://github.com/FPGA-Research/heichips25-tapeout/blob/d555bbc58aad6cc54e0bc9ce81b75936db2df0d8/librelane/config.yaml#L253","","👀 (1)"
