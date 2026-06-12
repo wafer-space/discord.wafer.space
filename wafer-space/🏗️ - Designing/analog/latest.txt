@@ -227,6 +227,19 @@ FYI, 6 Danube River characterisation chips have arrived at UC Irvine to be probe
 Would be good to know what other test-structures people would like to prioritise/characterise and just how much free-space we'll have on run two try out for the community.
 
 
+[2026-06-11 8:45 p.m.] namibj
+native NMOS both oxides in a way that somehow allows for extracting local mismatch models, with channel dimensions down to litho minimums, not just electrically suggested ">=1.8um, or it'll _leak too much when off_" restrictions that are currently enforced by the SPICE model deck in the openPDK.
+
+Perhaps some way of stress-testing SiN passivation crack propagation susceptibility when insisting on keeping the guard ring metal passivated, such that ACF-style (and/or similar) cheap flip chip packaging will be easy to select as a padframe "option" with hopefully just minor yield impact if one decides to just go for CoB wire bonding instead? Could be nice to combine with some M5-and-up-only (except perhaps a bit of vias down to redistribution/cross-connecting traces below) flip chip bond pad pitch/"resolution" stress testing structure that'll shoot allow us to trial on actual dies how the pad-connected-well-enough/not-shorting-nets yield relates to pad density.
+
+If the DRC checks won't aggressively stop us, someone might be up to draw up a couple thyristors and/or triacs. Triggered crowbars are quite helpful for being able to clamp excess (e.g ESD) voltage without being beholden to the inherent limitations of single-junction plain pn diodes, such as not having to rely on the presence of a low-impedance VDD to sink current into, but instead being able to "just" turn on a strong bipolar "open-collector"-like output "driver" that can even clamp to below VDD  if one e.g. uses thin oxide inputs for low voltage signaling standards that operate with peaks substantially below system VDD. Imagine using a series inductor to tame the ESD pulse enough to not current crowd (excess `dI/dt` causing localized overheating) the thyristor/bipolar clamp but otherwise using the inductor to fairly effectively match the input gate capacitance of the transistor to the output/port nominal impedance. As opposed to massive passive diodes to rails together with dumb lossy ohmic series resistors.
+
+Also: https://ieeexplore.ieee.org/document/7937877 (JFET in what looks like a very plain 250nm CMOS process) / https://www.semanticscholar.org/paper/A-JFET-CMOS-Technology-for-Low-Noise-Sensor-Takao-Asaoka/7aac24f59d2ac537ed6eed35a17e6ac8b60f1a5b (JFET in what sounds possibly less-plain CMOS and from the few numbers I could read due to language barrier, sounding like 700 nm CMOS) / some attempts at CCD structures, those all sound nice to trial at least a little bit when we're already working an area that's not "production suitable chips" and is expected to be fed to a probing station.
+
+From my rough understanding, it should probably be possible to trick the litho steps (normal used for fabricating some of the accessible mosfets) to form "functional" CCD structures. 
+Not like, _good,_ but c.f. _Reticon SAD-1024_ like CCD structures don't need to worry about photoelectric optimization beyond "better put it in an opaque package".
+
+
 ==============================================================
-Exported 34 message(s)
+Exported 35 message(s)
 ==============================================================
