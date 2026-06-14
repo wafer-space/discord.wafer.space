@@ -1,0 +1,133 @@
+{
+  "guild": {
+    "id": "1361349522684510449",
+    "name": "wafer.space Community",
+    "iconUrl": "2026-06_media/fb143eaa45770cbb40493d09b625e98b-09FD1.png"
+  },
+  "channel": {
+    "id": "1515714188683640852",
+    "type": "GuildPublicThread",
+    "categoryId": "1408135265427394661",
+    "category": "analog",
+    "name": "The current KLayout deck reports an",
+    "topic": null
+  },
+  "dateRange": {
+    "after": "2026-05-31T23:59:59.999+00:00",
+    "before": "2026-07-01T00:00:00+00:00"
+  },
+  "exportedAt": "2026-06-14T18:20:13.3683204+00:00",
+  "messages": [
+    {
+      "id": "1515750593379958834",
+      "type": "21",
+      "timestamp": "2026-06-14T16:11:42.746+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "",
+      "author": {
+        "id": "738396032295108721",
+        "name": "bailey8889",
+        "discriminator": "0000",
+        "nickname": "bailey",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/0-EB806.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "596068704471482370",
+          "name": "246tnt",
+          "discriminator": "0000",
+          "nickname": "tnt",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-06_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1515714188683640852",
+        "channelId": "1408135265427394661",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1515750600112083185",
+      "type": "Default",
+      "timestamp": "2026-06-14T16:11:44.351+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Maybe the real question is \"Is this a real via array error?\" The design rules show a via array inside a single metal shape, not an array across separate metal shapes.\n\nIf it's the case where a only a large metal shape causes an error, then the klayout rule might be changed to \n```\n  poss_4_4_via1 = via1.sized(0.2, 'square_limit').merged.sized(-0.2, 'square_limit').and(metal1).and(metal2)\n```\n\nThe magic tech file already has 2 spacing rules for vias, but it's based on the size of the via region.\n```\n templayer via1large via1\n        shrink 915\n        grow 915\n  \n layer VIA1     via1\n        and-not via1large\n        squares-grid 0 260 260\n        calma   35 0\n  \n layer VIA1     via1 \n        and via1large\n        squares-grid 0 260 360\n        calma   35 0\n```\nI wonder if something like\n```\ntemplayer via1large via1\n        grow 180\n        shrink 915\n        grow 915\n        and via1\n```\nwould work?\nThe `grow 180` is to merge shapes less than 0.36um apart.\n\n@Tim Edwards ?",
+      "author": {
+        "id": "738396032295108721",
+        "name": "bailey8889",
+        "discriminator": "0000",
+        "nickname": "bailey",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/0-EB806.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1365118310701600900",
+          "name": "rtimothyedwards_19428",
+          "discriminator": "0000",
+          "nickname": "Tim Edwards",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-06_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1515752206794752091",
+      "type": "Default",
+      "timestamp": "2026-06-14T16:18:07.414+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yeah, the question of if it's a real or not was my first question \uD83D\uDE42",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83D\uDE42",
+          "code": "slight_smile",
+          "isAnimated": false,
+          "imageUrl": "2026-06_media/1f642-83E8A.svg"
+        }
+      ]
+    }
+  ],
+  "messageCount": 3
+}

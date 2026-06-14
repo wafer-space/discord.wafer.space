@@ -1,0 +1,38 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"738396032295108721","bailey8889","2026-06-14T16:11:42.7460000+00:00","","",""
+"738396032295108721","bailey8889","2026-06-14T16:11:44.3510000+00:00","Maybe the real question is ""Is this a real via array error?"" The design rules show a via array inside a single metal shape, not an array across separate metal shapes.
+
+If it's the case where a only a large metal shape causes an error, then the klayout rule might be changed to 
+```
+  poss_4_4_via1 = via1.sized(0.2, 'square_limit').merged.sized(-0.2, 'square_limit').and(metal1).and(metal2)
+```
+
+The magic tech file already has 2 spacing rules for vias, but it's based on the size of the via region.
+```
+ templayer via1large via1
+        shrink 915
+        grow 915
+  
+ layer VIA1     via1
+        and-not via1large
+        squares-grid 0 260 260
+        calma   35 0
+  
+ layer VIA1     via1 
+        and via1large
+        squares-grid 0 260 360
+        calma   35 0
+```
+I wonder if something like
+```
+templayer via1large via1
+        grow 180
+        shrink 915
+        grow 915
+        and via1
+```
+would work?
+The `grow 180` is to merge shapes less than 0.36um apart.
+
+@Tim Edwards ?","",""
+"596068704471482370","246tnt","2026-06-14T16:18:07.4140000+00:00","Yeah, the question of if it's a real or not was my first question 🙂","",""
