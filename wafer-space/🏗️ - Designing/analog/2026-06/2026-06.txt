@@ -240,6 +240,16 @@ From my rough understanding, it should probably be possible to trick the litho s
 Not like, _good,_ but c.f. _Reticon SAD-1024_ like CCD structures don't need to worry about photoelectric optimization beyond "better put it in an opaque package".
 
 
+[2026-06-14 7:39 a.m.] vipul.sh
+For layout,drc, lvs for analog with gf180, what is the recommended flow, Klayout or magic?
+
+
+[2026-06-14 9:32 a.m.] mole99
+The wafer.space precheck uses Klayout DRC. However, if you pass magic DRC, it is very likely that you will also pass KLayout DRC.
+
+As for the layout, it depends on your preference. I think most designs currently being made are using magic. The KLayout PCells for gf180mcu use GDSFactory and are a bit spotty. Regarding LVS, you can either use magic+netgen or LVS with Klayout, which has recently been improved.
+
+
 ==============================================================
-Exported 35 message(s)
+Exported 37 message(s)
 ==============================================================

@@ -114,3 +114,7 @@ Also: https://ieeexplore.ieee.org/document/7937877 (JFET in what looks like a ve
 
 From my rough understanding, it should probably be possible to trick the litho steps (normal used for fabricating some of the accessible mosfets) to form ""functional"" CCD structures. 
 Not like, _good,_ but c.f. _Reticon SAD-1024_ like CCD structures don't need to worry about photoelectric optimization beyond ""better put it in an opaque package"".","",""
+"1214459146217201704","vipul.sh","2026-06-14T07:39:19.8860000+00:00","For layout,drc, lvs for analog with gf180, what is the recommended flow, Klayout or magic?","",""
+"323371864074485771","mole99","2026-06-14T09:32:17.6890000+00:00","The wafer.space precheck uses Klayout DRC. However, if you pass magic DRC, it is very likely that you will also pass KLayout DRC.
+
+As for the layout, it depends on your preference. I think most designs currently being made are using magic. The KLayout PCells for gf180mcu use GDSFactory and are a bit spotty. Regarding LVS, you can either use magic+netgen or LVS with Klayout, which has recently been improved.","",""
