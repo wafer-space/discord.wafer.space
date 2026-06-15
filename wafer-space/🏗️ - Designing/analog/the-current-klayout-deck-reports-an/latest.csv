@@ -63,3 +63,20 @@ During photolithography, light passing through closely spaced contact mask openi
 Contacts create physical holes cut into the silicon substrate or dielectric stack. A dense cluster of these cuts weakens the mechanical foundation of the chip. During thermal cycling, this can cause stress concentration points, leading to delamination (layer peeling), voids, or cracking in the barrier metal/tungsten plugs. Wider spacing ensures enough dielectric support remains intact.""","",""
 "596068704471482370","246tnt","2026-06-14T21:16:47.8500000+00:00","To be clear, this is @htamas 's project, I'm just looking into it because he's currently away/unavailable so I was trying to see if (1) it needed fixing at all and (2) if it did, was there a quick fix.","",""
 "596068704471482370","246tnt","2026-06-14T21:18:19.3470000+00:00","For cap estimation, AFAIR he said he ran magic extraction.","",""
+"738396032295108721","bailey8889","2026-06-14T23:58:41.7170000+00:00","Let's clarify the definition of via array. My current understanding is arrays of 4x4 or more vias where the space between the vias is less than 0.36um, right? 
+
+Could it be that klayout is (incorrectly?) including vias **at** 0.36 too? Would increasing the `squares-grid` spacing for large vias to 370 make a difference?
+```
+squares-grid 0 260 370
+```","",""
+"738396032295108721","bailey8889","2026-06-15T00:02:48.6760000+00:00","Well, looking at the klayout rule,
+```
+  poss_4_4_via1 = via1.sized(0.2, 'square_limit').merged.sized(-0.2, 'square_limit')
+```
+it seems that it's merging everything up-to and including 0.4um spacing.
+
+I wonder if changing this to 
+```
+  poss_4_4_via1 = via1.sized(0.18-1.dbu, 'square_limit').merged.sized(-0.18-1.dbu, 'square_limit')
+```
+would pass with the modified magic tech?","",""

@@ -101,6 +101,29 @@ To be clear, this is @htamas 's project, I'm just looking into it because he's c
 For cap estimation, AFAIR he said he ran magic extraction.
 
 
+[2026-06-14 11:58 p.m.] bailey8889
+Let's clarify the definition of via array. My current understanding is arrays of 4x4 or more vias where the space between the vias is less than 0.36um, right? 
+
+Could it be that klayout is (incorrectly?) including vias **at** 0.36 too? Would increasing the `squares-grid` spacing for large vias to 370 make a difference?
+```
+squares-grid 0 260 370
+```
+
+
+[2026-06-15 12:02 a.m.] bailey8889
+Well, looking at the klayout rule,
+```
+  poss_4_4_via1 = via1.sized(0.2, 'square_limit').merged.sized(-0.2, 'square_limit')
+```
+it seems that it's merging everything up-to and including 0.4um spacing.
+
+I wonder if changing this to 
+```
+  poss_4_4_via1 = via1.sized(0.18-1.dbu, 'square_limit').merged.sized(-0.18-1.dbu, 'square_limit')
+```
+would pass with the modified magic tech?
+
+
 ==============================================================
-Exported 10 message(s)
+Exported 12 message(s)
 ==============================================================

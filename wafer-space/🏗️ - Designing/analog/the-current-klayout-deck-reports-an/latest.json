@@ -16,7 +16,7 @@
     "after": "2026-05-31T23:59:59.999+00:00",
     "before": "2026-07-01T00:00:00+00:00"
   },
-  "exportedAt": "2026-06-14T21:58:54.4012815+00:00",
+  "exportedAt": "2026-06-15T01:36:07.9776704+00:00",
   "messages": [
     {
       "id": "1515750593379958834",
@@ -335,7 +335,57 @@
       "reactions": [],
       "mentions": [],
       "inlineEmojis": []
+    },
+    {
+      "id": "1515868113462231122",
+      "type": "Default",
+      "timestamp": "2026-06-14T23:58:41.717+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Let's clarify the definition of via array. My current understanding is arrays of 4x4 or more vias where the space between the vias is less than 0.36um, right? \n\nCould it be that klayout is (incorrectly?) including vias **at** 0.36 too? Would increasing the `squares-grid` spacing for large vias to 370 make a difference?\n```\nsquares-grid 0 260 370\n```",
+      "author": {
+        "id": "738396032295108721",
+        "name": "bailey8889",
+        "discriminator": "0000",
+        "nickname": "bailey",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/0-EB806.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1515869149283352707",
+      "type": "Default",
+      "timestamp": "2026-06-15T00:02:48.676+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Well, looking at the klayout rule,\n```\n  poss_4_4_via1 = via1.sized(0.2, 'square_limit').merged.sized(-0.2, 'square_limit')\n```\nit seems that it's merging everything up-to and including 0.4um spacing.\n\nI wonder if changing this to \n```\n  poss_4_4_via1 = via1.sized(0.18-1.dbu, 'square_limit').merged.sized(-0.18-1.dbu, 'square_limit')\n```\nwould pass with the modified magic tech?",
+      "author": {
+        "id": "738396032295108721",
+        "name": "bailey8889",
+        "discriminator": "0000",
+        "nickname": "bailey",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/0-EB806.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
     }
   ],
-  "messageCount": 10
+  "messageCount": 12
 }
