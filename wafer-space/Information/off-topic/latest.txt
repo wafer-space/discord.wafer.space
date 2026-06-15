@@ -44,6 +44,98 @@ That's awesome Tiny Tapeout Team!!!
 {Reactions}
 ❤️ (4) 🎉 (3) 🥳
 
+[2026-06-15 12:50 p.m.] thorben_61995
+Who from this crowd is going to be at FSiC 2026 (https://wiki.f-si.org/index.php/FSiC2026) in Ljubljana in three weeks? I see that at least @Leo Moser (mole99), @Simi, @Chips4Makers aka Staf Verhaegen and myself are giving presentations there. Anybody else presenting or attending?
+
+{Embed}
+https://wiki.f-si.org/index.php/FSiC2026
+FSiC2026
+Free Silicon Conference 2026 (FSiC2026) - free and open-source EDA and free and open-source silicon, 6-8 July 2026, University of Ljubljana, Slovenia
+2026-06_media/FSiC2026_logo_1200_630-A42FD.png
+
+{Reactions}
+🙌 (2)
+
+[2026-06-15 1:02 p.m.] 246tnt
+👋
+
+
+[2026-06-15 1:02 p.m.] 246tnt
+I'm presenting too.
+
+{Reactions}
+❤️
+
+[2026-06-15 1:03 p.m.] 246tnt
+I'm presenting work I did on a custom SRAM register file on sky130 and the test chips are currently with fedex which was supposed to delivery today but delayed it to tomorrow ... result of which will decide if my talk is going to be a post-mortem or not 😅
+
+{Reactions}
+😅
+
+[2026-06-15 1:04 p.m.] thorben_61995
+Ah yes, right on Monday morning, I see. Looking forward to it 😊
+
+
+[2026-06-15 1:05 p.m.] 246tnt
+Wait, are you  Thorben Moos btw ?
+
+
+[2026-06-15 1:06 p.m.] thorben_61995
+Yes
+
+
+[2026-06-15 1:06 p.m.] 246tnt
+Oh your bio link seems to indicate yes 😅   When looking at the program I had noticed someone else was coming from Belgium and even more from my Alma Mater
+
+{Reactions}
+❤️
+
+[2026-06-15 1:08 p.m.] 246tnt
+Did you do the bonding at Winfab ?  I was pondering pinging Christian (Renaux) about getting some time on the bonding machine if I ever needed to ...
+
+
+[2026-06-15 1:14 p.m.] thorben_61995
+Ha, very nice, did not know you're from here 😁 Yes, Christian from Winfab brought me the bonded samples on Friday. They are a little bit protective of their bonding machine at the moment, but as far as I know it's not used too much. And they seem to be getting a new semi-automated one soon (for some definition of soon). Then there's probably more availability and you have a fallback if one is temporarily out of order.
+
+
+[2026-06-15 1:18 p.m.] 246tnt
+Yeah, I studied there INGI then ELEC (was still FSA at the time).  And worked for intopix (a ucl spinoff) even before it was spunoff and I so I was in Maxwell for a year or so and also did some odd jobs for Quisquater and FX 🙂
+
+
+[2026-06-15 1:21 p.m.] thorben_61995
+Cool, will be a pleasure to chat with you in Slovenia 🙂
+
+{Reactions}
+👍
+
+[2026-06-15 1:22 p.m.] 246tnt
+Same 😄
+
+
+[2026-06-15 1:27 p.m.] namibj
+now that I'm no longer actively suffering from whatever that bread contained, let's hurry back to get this serializer worked on before anything is too late for it.
+
+
+[2026-06-15 1:50 p.m.] namibj
+VCO core, with enough fingers to let me tap off a single-finger feed to a clock tree without this causing undue load, probably do be aiming at exactly the 2.5 GHz though, maybe probably better like 3 GHz to handle a bit of layout parasitics and process variation.
+
+Then clock buffer.
+Then a latch fast enough to accomplish a DIV2 off of this.
+Then a mux2 at least that would act as the final MUX in a C2 arrangement.
+Then draw at least a plain serializer MUX tree up to have a fallback to submit; the base clock buf cells should be sufficient speed.
+
+After, see how much time is left,
+and see how good an inductor would be needed to clock the input-multiplexed current-mode C4 MUX (the pseudo-nmos style architecture of it).
+If success, try to make an inductor that's good enough for pulling off a C4 architecture.
+If success, go and implement the C4 with FIR taps furnished at the CLK/2 level (i.e., C8).
+
+If inductor trials not success, instead go for some FIR taps at still CLK/2.
+
+
+[2026-06-15 1:52 p.m.] 246tnt
+You're not targetting gf0p3 are you ?
+
+
 ==============================================================
-Exported 5 message(s)
+Exported 21 message(s)
 ==============================================================

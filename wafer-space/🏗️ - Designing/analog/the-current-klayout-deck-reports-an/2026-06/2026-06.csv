@@ -80,3 +80,24 @@ I wonder if changing this to
   poss_4_4_via1 = via1.sized(0.18-1.dbu, 'square_limit').merged.sized(-0.18-1.dbu, 'square_limit')
 ```
 would pass with the modified magic tech?","",""
+"596068704471482370","246tnt","2026-06-15T10:55:17.1230000+00:00","The change by @bailey above also seem to trigger the 0.36u spacing where it's not needed.","",""
+"738396032295108721","bailey8889","2026-06-15T13:33:59.6300000+00:00","@tnt can you be more specific (maybe a screenshot)? 
+Do you think tweaking the parameters yield a better result?","",""
+"596068704471482370","246tnt","2026-06-15T13:47:58.9000000+00:00","Ok, it's not as bad as I thought. At first I was doing a XOR and saw tons of difference, but it's because they all shifted.
+
+It did remove some it didn't need to. A bit annoying still because I'd rather keep them.","2026-06_media/2026-06-15_401x316_scrot-38391.png,2026-06_media/2026-06-15_419x350_scrot-C718F.png",""
+"738396032295108721","bailey8889","2026-06-15T14:20:59.0540000+00:00","Can you post the magic via regions at this location?
+
+I'd like to calculate what the merged region would look like.
+
+Ahh. I think I see my mistake.
+Does this yield a reasonable result?
+```
+templayer via1large via1
+        grow 180
+        shrink 1095
+        grow 915
+        and via1
+```","","👍 (1)"
+"596068704471482370","246tnt","2026-06-15T14:26:19.4290000+00:00","Yup, that seems to have generated exactly same via before/after for this project.","",""
+"596068704471482370","246tnt","2026-06-15T14:27:51.8300000+00:00","And still generated 0.36u spacing for the original project where it should.","",""

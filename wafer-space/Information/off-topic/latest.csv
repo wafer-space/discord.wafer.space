@@ -7,3 +7,31 @@ https://www.tinytapeout.com/","",""
 "596068704471482370","246tnt","2026-06-04T07:20:19.9160000+00:00","But they're not open yet 😅  ( As in, you can't submit it yet ).","","💜 (1)"
 "756011607603019777","anfroholic","2026-06-10T06:11:58.4390000+00:00","100% filled!! 
 That's awesome Tiny Tapeout Team!!!","2026-06_media/image-048D1.png","❤️ (4),🎉 (3),🥳 (1)"
+"1386929896323944612","thorben_61995","2026-06-15T12:50:56.1800000+00:00","Who from this crowd is going to be at FSiC 2026 (https://wiki.f-si.org/index.php/FSiC2026) in Ljubljana in three weeks? I see that at least @Leo Moser (mole99), @Simi, @Chips4Makers aka Staf Verhaegen and myself are giving presentations there. Anybody else presenting or attending?","","🙌 (2)"
+"596068704471482370","246tnt","2026-06-15T13:02:18.0310000+00:00","👋","",""
+"596068704471482370","246tnt","2026-06-15T13:02:25.4080000+00:00","I'm presenting too.","","❤️ (1)"
+"596068704471482370","246tnt","2026-06-15T13:03:40.1940000+00:00","I'm presenting work I did on a custom SRAM register file on sky130 and the test chips are currently with fedex which was supposed to delivery today but delayed it to tomorrow ... result of which will decide if my talk is going to be a post-mortem or not 😅","","😅 (1)"
+"1386929896323944612","thorben_61995","2026-06-15T13:04:09.2000000+00:00","Ah yes, right on Monday morning, I see. Looking forward to it 😊","",""
+"596068704471482370","246tnt","2026-06-15T13:05:32.6430000+00:00","Wait, are you  Thorben Moos btw ?","",""
+"1386929896323944612","thorben_61995","2026-06-15T13:06:38.6150000+00:00","Yes","",""
+"596068704471482370","246tnt","2026-06-15T13:06:54.6420000+00:00","Oh your bio link seems to indicate yes 😅   When looking at the program I had noticed someone else was coming from Belgium and even more from my Alma Mater","","❤️ (1)"
+"596068704471482370","246tnt","2026-06-15T13:08:11.6560000+00:00","Did you do the bonding at Winfab ?  I was pondering pinging Christian (Renaux) about getting some time on the bonding machine if I ever needed to ...","",""
+"1386929896323944612","thorben_61995","2026-06-15T13:14:32.6020000+00:00","Ha, very nice, did not know you're from here 😁 Yes, Christian from Winfab brought me the bonded samples on Friday. They are a little bit protective of their bonding machine at the moment, but as far as I know it's not used too much. And they seem to be getting a new semi-automated one soon (for some definition of soon). Then there's probably more availability and you have a fallback if one is temporarily out of order.","",""
+"596068704471482370","246tnt","2026-06-15T13:18:47.1260000+00:00","Yeah, I studied there INGI then ELEC (was still FSA at the time).  And worked for intopix (a ucl spinoff) even before it was spunoff and I so I was in Maxwell for a year or so and also did some odd jobs for Quisquater and FX 🙂","",""
+"1386929896323944612","thorben_61995","2026-06-15T13:21:25.2150000+00:00","Cool, will be a pleasure to chat with you in Slovenia 🙂","","👍 (1)"
+"596068704471482370","246tnt","2026-06-15T13:22:12.1620000+00:00","Same 😄","",""
+"262706220073222144","namibj","2026-06-15T13:27:19.6190000+00:00","now that I'm no longer actively suffering from whatever that bread contained, let's hurry back to get this serializer worked on before anything is too late for it.","",""
+"262706220073222144","namibj","2026-06-15T13:50:52.3070000+00:00","VCO core, with enough fingers to let me tap off a single-finger feed to a clock tree without this causing undue load, probably do be aiming at exactly the 2.5 GHz though, maybe probably better like 3 GHz to handle a bit of layout parasitics and process variation.
+
+Then clock buffer.
+Then a latch fast enough to accomplish a DIV2 off of this.
+Then a mux2 at least that would act as the final MUX in a C2 arrangement.
+Then draw at least a plain serializer MUX tree up to have a fallback to submit; the base clock buf cells should be sufficient speed.
+
+After, see how much time is left,
+and see how good an inductor would be needed to clock the input-multiplexed current-mode C4 MUX (the pseudo-nmos style architecture of it).
+If success, try to make an inductor that's good enough for pulling off a C4 architecture.
+If success, go and implement the C4 with FIR taps furnished at the CLK/2 level (i.e., C8).
+
+If inductor trials not success, instead go for some FIR taps at still CLK/2.","",""
+"596068704471482370","246tnt","2026-06-15T13:52:22.9570000+00:00","You're not targetting gf0p3 are you ?","",""
