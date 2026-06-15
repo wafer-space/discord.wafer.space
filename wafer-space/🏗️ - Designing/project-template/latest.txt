@@ -154,6 +154,71 @@ Good to know! I think you at least need to be logged in to GitHub.
 {Reactions}
 👍
 
+[2026-06-14 8:30 p.m.] furanfuranfuran
+hi, I hit the following w/make librelane on the latest template after a successful make clone-pdk:
+Writing src/generated_defines.svh
+SRAM_DEFINE=SRAM_gf180mcu_fd_ip_sram librelane librelane/slots/slot_1x1.yaml librelane/macros/macros_5v.yaml librelane/config.yaml --pdk gf180mcuD --pdk-root /opt/chip/gf180mcu-project-template/gf180mcu --manual-pdk --scl gf180mcu_fd_sc_mcu7t5v0 --pad gf180mcu_fd_io --save-views-to /opt/chip/gf180mcu-project-template/final
+[14:29:35] ERROR    Errors have occurred while loading the       __main__.py:160
+                    design configuration file.                                  
+[14:29:35] ERROR    Unknown key                                  __main__.py:162
+                    'PDN_CORE_RING_CONNECT_TO_PAD_LAYERS'                       
+                    provided.                                                   
+[14:29:35] ERROR    LibreLane will now quit. Please check your   __main__.py:164
+                    configuration.                                              
+make: *** [Makefile:94: librelane] Error 1
+
+
+[2026-06-14 9:26 p.m.] rebelmike
+That is surprising, it suggests you have the wrong version of LibreLane.  Have you installed locally rather than running through nix?
+
+
+[2026-06-14 9:29 p.m.] furanfuranfuran
+running through nix - I'm still digging, might have an old install
+
+
+[2026-06-14 9:34 p.m.] rebelmike
+`librelane --version` should say `LibreLane v3.1.0.dev1`
+
+
+[2026-06-14 9:37 p.m.] furanfuranfuran
+[nix-shell:~]$ librelane --version
+LibreLane v3.0.4
+[nix-shell:~]$ which librelane
+/nix/store/qjkqjsc147pnkgdr6lm288f5p757bliv-devshell-dir/bin/librelane
+
+
+[2026-06-14 9:42 p.m.] furanfuranfuran
+it's my nix install, 1 sec
+
+
+[2026-06-14 9:45 p.m.] furanfuranfuran
+good to go now - I think I had a newer nix installed, it was erroring updating the ciel package on startup
+
+
+[2026-06-14 9:52 p.m.] furanfuranfuran
+the error I had before was some sort of issue with the way nixpkgs is used vs the nix I had installed, so I removed/reinstalled using the curl command from the website. here's the error, if it's interesting:
+         … while calling the 'import' builtin
+           at «string»:1:2:
+              1| (import <nixpkgs> {}).bashInteractive
+               |  ^
+
+         … while realising the context of a path
+
+         … while calling the 'findFile' builtin
+           at «string»:1:9:
+              1| (import <nixpkgs> {}).bashInteractive
+               |         ^
+
+         error: file 'nixpkgs' was not found in the Nix search path (add it using $NIX_PATH or -I)
+  uses bash from your environment
+
+
+[2026-06-14 9:52 p.m.] furanfuranfuran
+template build is at step 63 so I think I'm set up, thanks
+
+{Reactions}
+🎉
+
 ==============================================================
-Exported 25 message(s)
+Exported 34 message(s)
 ==============================================================
