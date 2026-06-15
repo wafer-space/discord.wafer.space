@@ -268,6 +268,99 @@ Good point.
 Started a thread.
 
 
+[2026-06-15 4:23 p.m.] rtimothyedwards_19428
+@tnt :  I was thinking the same thing the other day.  Have any host board designs been made yet that are compatible with the COBs?  I could probably make do with a simple board that just routes the connector pins to a standard header.
+
+
+[2026-06-15 4:33 p.m.] rebelmike
+I have some of these https://codeberg.org/rebelmike/ws-breakout, but they aren't tested yet as my COBs should arrive at roughly the same time as yours.  Since I made that the breakouts in the WS repo have been updated: https://github.com/wafer-space/chip-on-board-wire-bonded-pcbs/tree/main/run-1/motherboards but I don't know if anyone has made any of those yet.  I think various people have tested with the previous version of that (which as far as I'm aware was fine except the pin 1 marker was the wrong side)
+
+
+[2026-06-15 4:41 p.m.] rebelmike
+The 1x0p5 COB is pinout compatible with the 1x1 COB in terms of power and ground.  The signal pads are mostly in the same order too, but for (probably bad) reasons I reversed the order of pads 67-70.  You can view the schematic here (pin/pad names are those on the default project template): https://kicanvas.org/?repo=https%3A%2F%2Fgithub.com%2Fwafer-space%2Fchip-on-board-wire-bonded-pcbs%2Ftree%2Fmain%2Frun-1%2F1x0p5-cob
+
+
+[2026-06-15 5:21 p.m.] polyfractal
+I've used the long breakoutboards from that repo, seem to be working for the minimal tests I've tried.
+
+I have some of the PCBs unpopulated and some of the mezzanine connectors, happy to fedex you one if you want @Tim Edwards . Will have to do the soldering yourself since my soldering skills are terrible and it took me many tries to get one working 😅
+
+{Attachments}
+2026-06_media/AP1GczMbT2o-W_EDtoIsbkqbQFQkZ-7c6ZdVF7VlBW-7D5D9.png
+
+
+[2026-06-15 5:22 p.m.] polyfractal
+(oh, mine are the pre-updated version. I think it was just the silkscreen that changed)
+
+
+[2026-06-15 5:24 p.m.] rtimothyedwards_19428
+@BreakingTaps : Sure, I'll take you up on that offer.  I assume that unless I'm _really_ bad at soldering, I should only need one board.  I can get the connector myself as long as somebody can tell me what the part number is from Digi-Key or Mouser.
+
+{Reactions}
+👍
+
+[2026-06-15 5:25 p.m.] 246tnt
+It's 0.4mm pitch 🙂
+
+
+[2026-06-15 5:27 p.m.] rebelmike
+Yeah, I got JLC to solder mine. Though having seen those photos of the CoB boards I might go double check they actually managed that..
+
+
+[2026-06-15 5:30 p.m.] polyfractal
+i definitely regret thinking I could do it by hand 🫣
+
+
+[2026-06-15 5:30 p.m.] 246tnt
+I believe mouser 798-DF40C2070DS04V51 is compatible.
+
+
+[2026-06-15 5:46 p.m.] rtimothyedwards_19428
+Thanks for the heads-up on the pin pitch.  That indeed will be difficult to hand solder.
+
+
+[2026-06-15 5:47 p.m.] rtimothyedwards_19428
+@RebelMike :  Will JLC assemble from parts that you send to them?
+
+
+[2026-06-15 5:54 p.m.] namibj
+yes, it's expensive
+
+
+[2026-06-15 5:55 p.m.] namibj
+like 70$ for each 50qty, each batch seems to be billed in full iirc
+
+
+[2026-06-15 5:56 p.m.] namibj
+(I've done so)
+
+
+[2026-06-15 5:57 p.m.] 246tnt
+But JLC can also get the part from LCSC directly.
+
+
+[2026-06-15 5:57 p.m.] namibj
+yes
+
+
+[2026-06-15 5:57 p.m.] namibj
+if mouser or digikey have them it's different fee structure if you use global sourcing
+
+
+[2026-06-15 6:14 p.m.] rebelmike
+At least when I ordered LCSC had the part in stock so it was easy to get them to use it. 5 PCBs and assembly was ~$25 + shipping and duties
+
+
+[2026-06-15 6:19 p.m.] mole99
+Yeah, I just sent my [PCB](https://github.com/mole99/waferspace-main-pcb) for fabrication via JLCPCB, including assembly with parts from LCSC.
+
+{Embed}
+https://github.com/mole99/waferspace-main-pcb
+GitHub - mole99/waferspace-main-pcb: Main PCB for wafer.space FABul...
+Main PCB for wafer.space FABulous FPGA. Contribute to mole99/waferspace-main-pcb development by creating an account on GitHub.
+2026-06_media/waferspace-main-pcb-0847D
+
+
 ==============================================================
-Exported 44 message(s)
+Exported 64 message(s)
 ==============================================================
