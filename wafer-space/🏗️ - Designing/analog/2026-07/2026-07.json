@@ -16,7 +16,145 @@
     "after": "2026-06-30T23:59:59.999+00:00",
     "before": "2026-08-01T00:00:00+00:00"
   },
-  "exportedAt": "2026-07-01T12:06:39.0370315+00:00",
-  "messages": [],
-  "messageCount": 0
+  "exportedAt": "2026-07-01T15:43:18.2675975+00:00",
+  "messages": [
+    {
+      "id": "1521885730278867087",
+      "type": "Default",
+      "timestamp": "2026-07-01T14:30:33.368+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-07_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "reference": {
+        "messageId": "1521839041597800558",
+        "channelId": "1510576446165356553",
+        "guildId": "1009193568256135208"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1521893037528055829",
+      "type": "Reply",
+      "timestamp": "2026-07-01T14:59:35.552+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@BreakingTaps perhaps you'd come up with info on the matter of photovoltaic mode operation of cells; particularly on the subject of whether multiple photodiodes in photovoltaic mode can be series connected to produce sufficient voltage for CMOS logic; I'd have ideas based on native nmos that wouldn't require more than the 500~700mV to operate but they're all unfortunately large structures due to the unavailability of any pmos devices with threshold voltages \"reasonably below\" diode forward voltage.\n\nI'd guess there are some available (on gf180mcuD) tactics for bootstrapping a charge pump voltage booster from a singular solar cell?\n\nMaybe substrate-tied dnwell with an lvpwell-to-dnwell photodiode (producing positive voltage relative to substrate) acting in series with a separate (d)nwell-to-psub diode (producing negative voltage relative to substrate) could work.\nThe negative bias could allow biasing pmos devices to act as resistors for native-nmos devices doing the actual logic, which would massively shrink the area requirements for the logic and probably also comfortably stabilize operating reliability against process variations in native nmos threshold voltage.\n\nNo good idea yet about back channel though; forward channel is obvious through just sufficiently deep amplitude modulation of the light, some probably-MIM storage caps for logic voltage supply, and some dynamic logic kind of data demodulator.\nOr if there's two beams available obviously just either differential signaling with some kind of clock recovery or a synchronous clock-and-data interface.\n\nMy goal is btw. to get a PUF-like structure that can be read out at the die sorter without needing to touch the bond/probe pads during this, to later post-packaging read the same PUF-like from digital logic, being able to match against the database the die sorter created, getting to look up what coordinates on which wafer that die came from. Or realistically just what reticle on which wafer (it's far cheaper to just encode the intra-reticle location with a few bits of mask ROM structure).\n\nI'm aiming towards enabling full traceability that way; if one wants easier IDs one can just put efuse PROM onto the die and burn these coordinates and other tracing information during the first post-packaging e-test of the die, just as part of the test pattern interaction; might require some scripting there but shouldn't be too involved for a vaguely flexible tester platform.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-07_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "384390069412429834",
+          "name": "polyfractal",
+          "discriminator": "0000",
+          "nickname": "BreakingTaps",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-07_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1521885730278867087",
+        "channelId": "1408135265427394661",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1521894788868210770",
+      "type": "Default",
+      "timestamp": "2026-07-01T15:06:33.104+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Oh, NFC-style with on-die inductor comes to the mind as well, just now!",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-07_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1521894822271647836",
+      "type": "Reply",
+      "timestamp": "2026-07-01T15:06:41.068+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Tim 'mithro' Ansell",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-07_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "169786952432746498",
+          "name": "mithro_",
+          "discriminator": "0000",
+          "nickname": "Tim 'mithro' Ansell",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-07_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1521894788868210770",
+        "channelId": "1408135265427394661",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    }
+  ],
+  "messageCount": 4
 }

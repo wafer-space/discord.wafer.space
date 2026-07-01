@@ -1,1 +1,17 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
+"262706220073222144","namibj","2026-07-01T14:30:33.3680000+00:00","","",""
+"262706220073222144","namibj","2026-07-01T14:59:35.5520000+00:00","@BreakingTaps perhaps you'd come up with info on the matter of photovoltaic mode operation of cells; particularly on the subject of whether multiple photodiodes in photovoltaic mode can be series connected to produce sufficient voltage for CMOS logic; I'd have ideas based on native nmos that wouldn't require more than the 500~700mV to operate but they're all unfortunately large structures due to the unavailability of any pmos devices with threshold voltages ""reasonably below"" diode forward voltage.
+
+I'd guess there are some available (on gf180mcuD) tactics for bootstrapping a charge pump voltage booster from a singular solar cell?
+
+Maybe substrate-tied dnwell with an lvpwell-to-dnwell photodiode (producing positive voltage relative to substrate) acting in series with a separate (d)nwell-to-psub diode (producing negative voltage relative to substrate) could work.
+The negative bias could allow biasing pmos devices to act as resistors for native-nmos devices doing the actual logic, which would massively shrink the area requirements for the logic and probably also comfortably stabilize operating reliability against process variations in native nmos threshold voltage.
+
+No good idea yet about back channel though; forward channel is obvious through just sufficiently deep amplitude modulation of the light, some probably-MIM storage caps for logic voltage supply, and some dynamic logic kind of data demodulator.
+Or if there's two beams available obviously just either differential signaling with some kind of clock recovery or a synchronous clock-and-data interface.
+
+My goal is btw. to get a PUF-like structure that can be read out at the die sorter without needing to touch the bond/probe pads during this, to later post-packaging read the same PUF-like from digital logic, being able to match against the database the die sorter created, getting to look up what coordinates on which wafer that die came from. Or realistically just what reticle on which wafer (it's far cheaper to just encode the intra-reticle location with a few bits of mask ROM structure).
+
+I'm aiming towards enabling full traceability that way; if one wants easier IDs one can just put efuse PROM onto the die and burn these coordinates and other tracing information during the first post-packaging e-test of the die, just as part of the test pattern interaction; might require some scripting there but shouldn't be too involved for a vaguely flexible tester platform.","",""
+"262706220073222144","namibj","2026-07-01T15:06:33.1040000+00:00","Oh, NFC-style with on-die inductor comes to the mind as well, just now!","",""
+"262706220073222144","namibj","2026-07-01T15:06:41.0680000+00:00","@Tim 'mithro' Ansell","",""
