@@ -16,7 +16,7 @@
     "after": "2026-06-30T23:59:59.999+00:00",
     "before": "2026-08-01T00:00:00+00:00"
   },
-  "exportedAt": "2026-07-01T15:43:18.2675975+00:00",
+  "exportedAt": "2026-07-01T19:20:20.2730557+00:00",
   "messages": [
     {
       "id": "1521885730278867087",
@@ -154,7 +154,198 @@
         "guildId": "1361349522684510449"
       },
       "inlineEmojis": []
+    },
+    {
+      "id": "1521907493809164439",
+      "type": "Reply",
+      "timestamp": "2026-07-01T15:57:02.198+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "hmm, I do recall reading a paper some years ago about an image sensor that was self-powered. I forget the scheme exactly but it basically toggled between energy harvesting and image capture. so in principle it's probably doable.  will see if I can find the paper...",
+      "author": {
+        "id": "384390069412429834",
+        "name": "polyfractal",
+        "discriminator": "0000",
+        "nickname": "BreakingTaps",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-07_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "262706220073222144",
+          "name": "namibj",
+          "discriminator": "0000",
+          "nickname": "namibj",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-07_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1521893037528055829",
+        "channelId": "1408135265427394661",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1521944517752655882",
+      "type": "Reply",
+      "timestamp": "2026-07-01T18:24:09.394+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hmmm; the NFC idea that came right after I sent that wall-of-text (it's technically the immediately following message in this channel) does feel somewhat more applicable right now at least; if using top metal for the resonant inductor of it and de-tuning by switching a cap into/out of the tank or even just modulating the load it puts onto the tank via some kind of like shunt/series combo LDO regulator, or literally shorting out the tank (with sufficiently limited duty cycle ofc.):\nsome way probably has enough intensity in the back channel to make it not require high specs from the reader.\nAfter all, for reasons of getting by with a compact coil and not having the global PDN ring enclosing the \"regular user area\" of the die wreck the Q of the resonant tank, I'd expect this to effectively-need a near-field H-field antenna. probably set up to sweep the frequency band of interest until it hits evidence of exciting the receiver's resonance (process variations cause some shift in resonant frequency), perhaps in a shape of a narrow gap between two coils thick enough for the die to slide into and deep enough to reach in just past the pad&PDN ring, or even just a more-pointy-tip \"loop antenna\"/H-field-oscilloscope-probe roughly visually aligned to and pointed close to but not touching the die by where that die has it's NFC-antenna.\n\nLight clearly has the benefit of less risk of accidentally scratching the die and not worrying about EMC compliant operation of the reader, but I'd assume a back channel to be FAR more difficult to pull off than just using simple well-trodden NFC tech.\n\n[||If I knew of a low-cost source for single-emitter variants of the triple-emitter https://ams-osram.com/products/lasers/ir-lasers-vcsel/osram-bidos-e1005-l-plpvyl1-940a-e , I'd be far more hopeful in possibly making optically powered bootstrapping (coupled through a simple multimode fiber) a silicon-proven thing on not-my-dime (well, as far as the tapeout masks for the process of silicon-proving the bootstrap mechanic goes)....\n\n...as that should be readily usable for bootstrapping any design variants of the switched-capacitor based MVDC-tamer plans (which I have _not_ given up on bringing towards a hands-on PoC demonstrator). Like, charging the local LV supply capacitors through optically provided power while the higher-voltage supply is not yet connected, as they later harvest from the resonant EM fields once in operation, and it's not necessarily easy to inject such \"RF\" power and not even necessarily feasible to bootstrap off of that due to the harvesting architecture that's preferred for steady-state possibly requiring synchronous rectification or switching of the power transistor.\n\nE.g. one could have a rectification diode from the harvesting node into the local storage capacitor, a capacitor from that node to the high-voltage drain node of the power switch, and a low-loss clamp shunt transistor that can ground the harvest node to the power transistor's source which also acts as the local ground.\n\n...errr, the last bit of thinking I allotted to the matter this week just revealed that if the power switch has automatic reverse diode behavior for the drain node, it would probably be safe to use this particular harvesting architecture as the voltage amplitude during bootstrap procedure is limited by the drain to-source capacitance (including the harvesting capacitor's contribution) and the bootstrap current amplitude, while the power drain-source leakage even if little prevents the drain voltage from building up much beyond the previously given implied peak-peak voltage amplitude, as long as it exceeds bleed-to-environment enough, and reverse voltage is clamped by the drain-source diode of the power switch....\n||]",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-07_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "OSRAM BIDOS™ E1005 L, PLPVYL1 940A_E IR Lasers (VCSEL) - ams-osra...",
+          "url": "https://ams-osram.com/products/lasers/ir-lasers-vcsel/osram-bidos-e1005-l-plpvyl1-940a-e",
+          "timestamp": null,
+          "description": "VCSEL (940 nm)\nPopt,typ = 11 mW",
+          "color": "#FFFFFF",
+          "images": [],
+          "fields": [],
+          "inlineEmojis": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "384390069412429834",
+          "name": "polyfractal",
+          "discriminator": "0000",
+          "nickname": "BreakingTaps",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-07_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1521907493809164439",
+        "channelId": "1408135265427394661",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1521953520352231425",
+      "type": "Default",
+      "timestamp": "2026-07-01T18:59:55.781+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi everyone, is ti possible to change the IO configuration on the chip ? for example the full tie list 56 (bidir: 40, in: 14, analog: 2), could we add more analogs ? and still get the chip on board packagin ?",
+      "author": {
+        "id": "692781607102185522",
+        "name": "rrichmondr",
+        "discriminator": "0000",
+        "nickname": "RRichmondR",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-07_media/e14aa2529ceadf35472f2392c14c377b-F3B28.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1521954907907817482",
+      "type": "Reply",
+      "timestamp": "2026-07-01T19:05:26.6+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yes @RRichmondR you are able to change any of the io pads to whatever you wish. With the cob the ground nets will be shorted and the power traces (currently) have decoupling caps.",
+      "author": {
+        "id": "756011607603019777",
+        "name": "anfroholic",
+        "discriminator": "0000",
+        "nickname": "Andrew Wingate",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 1
+          }
+        ],
+        "avatarUrl": "2026-07_media/67bd670a335a2f955fb2ded57088a2cb-675B3.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "692781607102185522",
+          "name": "rrichmondr",
+          "discriminator": "0000",
+          "nickname": "RRichmondR",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-07_media/e14aa2529ceadf35472f2392c14c377b-F3B28.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1521953520352231425",
+        "channelId": "1408135265427394661",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1521957940041617502",
+      "type": "Default",
+      "timestamp": "2026-07-01T19:17:29.517+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "and is there any information regarding the max io speed  on the digital ones ? i couldn't find anything",
+      "author": {
+        "id": "692781607102185522",
+        "name": "rrichmondr",
+        "discriminator": "0000",
+        "nickname": "RRichmondR",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-07_media/e14aa2529ceadf35472f2392c14c377b-F3B28.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
     }
   ],
-  "messageCount": 4
+  "messageCount": 9
 }
