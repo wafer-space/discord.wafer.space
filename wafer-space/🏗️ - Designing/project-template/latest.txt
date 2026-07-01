@@ -6,6 +6,39 @@ After: 2026-06-30 11:59 p.m.
 Before: 2026-08-01 12:00 a.m.
 ==============================================================
 
+[2026-07-01 8:16 a.m.] chips4makers
+Also having CTS done separately on different blocks is dangerous as the clock tree depth may be different between blocks causing unexpected hold/setup violations for signals going between different blocks.
+If I'm not mistaken, LibreLane supports P&R on subblocks separately but still CTS on top block.
+
+
+[2026-07-01 8:19 a.m.] 246tnt
+I know that CTS recently(-ish) got the ability to place macro at different depth of the CTS depending on the min/max clock delay specified in the liberty file of the macros/sub-blocks.  ( https://github.com/The-OpenROAD-Project/OpenROAD/issues/3759 )
+
+
+[2026-07-01 8:28 a.m.] osvel
+Cool, thanks for all the tips. I guess I will have a play around with this and see what I come up with. 🙂
+
+
+[2026-07-01 8:35 a.m.] 246tnt
+But TBH I'm not sure how common it is to harden various block independently. That prevents optimization at boundary and also cost area since macro are rectangular and blocks often harden more into blob shapes.
+
+
+[2026-07-01 8:36 a.m.] 246tnt
+The only case where I see blocks hardened as macro are highly optimized ones where there was significant manual/scripted/layout/... work to make it a separate block. Something like a SRAM / memory or something like that.
+
+
+[2026-07-01 8:36 a.m.] 246tnt
+Or of course analog-ish block like say a PLL.
+
+
+[2026-07-01 8:36 a.m.] 246tnt
+But I wouldn't say ... harden a SPI controller independently ... that'd be a lot of headache for virtually no benefits.
+
+
+[2026-07-01 8:37 a.m.] 246tnt
+Just my 2 cts ...
+
+
 ==============================================================
-Exported 0 message(s)
+Exported 8 message(s)
 ==============================================================
