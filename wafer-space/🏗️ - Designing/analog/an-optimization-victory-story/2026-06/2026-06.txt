@@ -1,0 +1,68 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 🏗️ - Designing / analog / An optimization victory story.
+After: 2026-05-31 11:59 p.m.
+Before: 2026-07-01 12:00 a.m.
+==============================================================
+
+[2026-06-26 10:13 a.m.] .dmv
+I figure this might be the right crowd to  share my little celebration with. Given the extra time, I've taken on an ambitious respin. My primary design involves sixteen segments of a serpentine of a highly repeated component (an op amp) that collectively consumes most of the area. The routed serpentine segments were 169.1 µm x 3963 µm -- tight within a 1x1 slot. I have gotten it all to fit, route, and pass the design checks. Overall, I had about 1.8 mm^2 of uncontested area (before the final routing) at the end of the segments and I had optimized my ambitious change requirement to somewhere between 2.3 mm^2 and 3.2 mm^2. Just shy by 0.5-1.4 mm^2.
+
+
+[2026-06-26 10:13 a.m.] .dmv
+The op amp had been derived from simulation for minimum appropriate performance specs, but the geometry wasn't necessarily optimized for dense folding. It seemed reasonable to speculate that there existed an op amp reconfiguration such that my segments could free up 0.5 mm^2. But also *way* too hard to find the valid op amp design based only on spacial and packing needs.
+
+
+[2026-06-26 10:29 a.m.] .dmv
+So I wrote a search program, and went through a series of iterations. From mostly random permutations, it generated a set of plausible candidate geometry numbers given the fixed performance considerations. That was relatively cheap -- I generated 500K of them in a minute.
+
+Then I had a series of filters against that candidate pool, each increasingly expensive: 
+
+**Tier-0**. Analytic bounding box + constraint check. That was ~1 ms/candidate
+
+**Tier-1**. Parametric placement GDS into a bounding box. That was ~5 s/candidate
+
+**Tier-2**. Placement DRC (for the segment). That was ~60 s/candidate.
+
+**Tier-3**. Deep-LVS MATCH. ~3 m/candidate.
+
+Tier-0 and Tier-1 took the 500K starting candidates down to 3655 remaining. Those filters constrained it so that any of those remaining would work -- and I only needed one of them to work (I didn't need global optimal, just "sufficiently better"). 3655 Tier-2 evaluations should have taken about 6 hours (took a bit more due to various workflow interruption bugs). So it ran all day today.
+
+
+[2026-06-26 10:30 a.m.] .dmv
+When I got home to review the results this evening... the conclusion was that 0 candidates had made it to Tier-3. 🙁
+
+
+[2026-06-26 10:33 a.m.] .dmv
+But looking closer, while many of the candidates had failed with hundreds of DRC errors, some had failed with few. One had *only* 4 DRC errors. That seemed like a DRC construction issue, and it was. More bugs, but fixing them resulted in... that candidate still being disqualified at Tier-3, but now a chance that some of the other barely disqualified might also make it to Tier-3.
+
+
+[2026-06-26 10:36 a.m.] .dmv
+None of the Tier-2 close washouts made it through Tier-3. But there was another bug (in resumption), where about 100 of the 3655 candidates had not been given a Tier-2 evaluation. 
+
+So ran those through Tier-2 as well. Two hours later... the last of the missed Tier-2 candidates passed the fixed Tier-2... and Tier-3!
+
+
+[2026-06-26 10:41 a.m.] .dmv
+So, search space of 500K possible op amp geometries... and I found one that happens to fold just right, shrinking the width of my serpentine segments from 169.1 µm to ~150-159µm (haven't finished the full DRC/LVS reassembly) while more importantly reducing serpentine segment height from 3963 µm to 3869 µm -- the 0.1 mm savings per segment (16x0.1 -> 1.6 mm^2) that should be enough to fit my ambitious extra feature.
+
+Now just a whole lot of routing to do, but... woo!
+
+
+[2026-06-26 10:45 a.m.] .dmv
+(Thanks for indulging my story telling here.)
+
+{Reactions}
+🎉 (2)
+
+[2026-06-26 10:53 a.m.] namibj
+Oh, so routing feasibility (let alone proving the feasibility by constructing a valid routing) wasn't part of the automated generation scripting?
+
+
+[2026-06-26 10:59 a.m.] .dmv
+Right -- that would have made the candidate generation much more expensive. And/or restricted the search space to iterations based on what was known to work. This is kind of like the philosophical difference between Monte Carlo (throw lots of darts, explore the space) and Hillclimbing (find local optima). I could generate more candidates without ensuring they were viable than to start with viable candidates. I'd already taken a couple passes at reconfiguring my existing op amp into a better geometry... but nothing was working out there. I was already near a local maxima. The successful replacement is pretty different.
+
+
+==============================================================
+Exported 10 message(s)
+==============================================================

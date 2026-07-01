@@ -1,0 +1,140 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 🏗️ - Designing / digital / BIO - The Bao I/O Co-Processor
+After: 2026-05-31 11:59 p.m.
+Before: 2026-07-01 12:00 a.m.
+==============================================================
+
+[2026-06-17 4:32 p.m.] polyfractal
+
+
+
+[2026-06-17 4:32 p.m.] polyfractal
+Dunno if it's possible, but some potential things to try:
+
+- Place four macros at top and four at bottom, so that the logic can reach in from both sides. Each core will route top or bottom. I bet that will help a lot with your congestion and timing
+- Make sure the macros are oriented so the inputs are facing the logic
+- Enable post GRT repair passes (`RUN_POST_GRT_DESIGN_REPAIR: true`, `RUN_POST_GRT_RESIZER_TIMING: true`) if you haven't already, might be able to fix
+- try giving the placer more room to move cells around (`PL_MAX_DISPLACEMENT_X`, `PL_MAX_DISPLACEMENT_Y`)
+- If you can get timing sorta close, you can often fix up the design with some tweaks to slack margins (`PL_RESIZER_HOLD_SLACK_MARGIN`, `GRT_RESIZER_HOLD_SLACK_MARGIN`, `PL_RESIZER_SETUP_SLACK_MARGIN`, `GRT_RESIZER_SETUP_SLACK_MARGIN`)
+- Decreasing the clock rate is always an option too if the violations are `setup`
+
+
+[2026-06-17 4:50 p.m.] rebelmike
+Very cool!  I'd like to do something with BIO too in future 🙂
+
+A couple of extra thoughts:
+- The SRAM macros are currently cutting the power ring, which is not good, they need moving in very slightly to avoid that.
+- I would close them up so there's not a small row of standard cells between each, and have them tight to the top/bottom as well as left/right.  That should increase the usable logic area a bit.
+
+What placement density are you using at the moment?  And what step errors out?
+
+
+[2026-06-17 5:15 p.m.] deempak
+I have kept it pl desnitu to 50  , the flow does not error out however the flow had  been runnign for 18 hours and in detailed placement i am not getting near zero violation there are kind of stuck at     
+Completing 10% with 560691 violations. even after 15 iteration so i check the logs and output of the global routing first and found these logs 
+[GRT-0115] Global routing finished with congestion 
+and NDR for a lot of clock 
+
+" [GRT-0273] Disabled NDR (to reduce congestion) for net: clknet_0_clk_PAD2CORE_regs
+[GRT-0273] Disabled NDR (to reduce congestion) for net: i_chip_core.u_bio_lite.u_bio.mach\[0\].core.clk
+[GRT-0273] Disabled NDR (to reduce congestion) for net: clknet_1_1_0_clk_PAD2CORE_regs
+[GRT-0273] Disabled NDR (to reduce congestion) for net: clknet_0_i_chip_core.u_bio_lite.u_bio.mach\[1\].core.clk"
+
+This is repeated lot to times 
+Thus i concluded that its higly lickely becouse fo congestion that viltation are not conversing to zero.
+
+
+[2026-06-17 5:15 p.m.] deempak
+And thank i will try the suggestion that you mentioned and check with them
+
+
+[2026-06-17 5:19 p.m.] rebelmike
+That's a lot of violations!  What utilization does global placement report?  One thing that's changed is it no longer fails if the utilization is higher than the placement density, it just ups the density.
+
+
+[2026-06-17 5:19 p.m.] deempak
+Thank you will try these approach , I hope i am to get better run with these.
+
+{Reactions}
+👍
+
+[2026-06-17 5:45 p.m.] deempak
+For global placement it is in the limit of half Widht howerver in the global routing it had 
+Total Overflow: 64,732
+
+Layer Metal3 Max Overflow: 24,363
+
+And i just realize the global routing ran for 7 h 
+
+The log for global placement 
+[INFO ODB-0403] 0 connections made, 0 conflicts skipped.
+Updating metrics…
+Cell type report:                       Count       Area
+  Macro                                    13 1799404.12
+  Input pad                                 6  157500.00
+  Input/output pad                         50 1312500.00
+  Power pad                                16  420000.00
+  Pad spacer                              738 1983800.00
+  Endcap cell                            2164  513583.26
+  Tap cell                              17237   75677.32
+  Tie cell                                279    2449.84
+  Inverter                               1212   10642.33
+  Clock gate cell                           2     122.93
+  Sequential cell                        4779  314818.02
+  Multi-Input combinational cell        30548  597895.65
+  Total                                 57044 7188393.48
+
+
+[2026-06-17 5:46 p.m.] rebelmike
+Near the top there'll be a line like ```
+[INFO GPL-0019] Utilization:                    58.988 %
+```
+
+
+[2026-06-17 5:47 p.m.] deempak
+[INFO GPL-0019] Utilization:                    40.319 %
+[INFO GPL-0020] Standard cells area:        1035590.191 um^2
+does thsi include sram area as well ?
+
+
+[2026-06-17 5:50 p.m.] rebelmike
+That is utilization of the area for standard cells.  40% should normally be routable so hopefully you can resolve it by moving your macros around as BreakingTaps suggested.  Separating the RAM for the two cores so one is pulled to the bottom and the other to the top does sound like it should make things work much better.
+
+
+[2026-06-17 5:52 p.m.] deempak
+Sure will try that out Just one more question These overflow as i mentioned previously they should be zero right ?
+
+
+[2026-06-17 5:53 p.m.] deempak
+[INFO GRT-0096] Final congestion report:
+Layer         Resource        Demand        Usage (%)    Max H / Max V / Total Overflow
+---------------------------------------------------------------------------------------
+Metal1               0             0            0.00%             0 /  0 /  0
+Metal2          565781        278898           49.29%             2 / 20 / 17928
+Metal3          587172        285760           48.67%            28 /  1 / 24363
+Metal4          714895        248151           34.71%             2 / 19 / 15516
+Metal5          467870        126841           27.11%             8 /  1 / 6925
+---------------------------------------------------------------------------------------
+Total          2335718        939650           40.23%            40 / 41 / 64732
+
+
+These onces
+
+
+[2026-06-17 5:56 p.m.] rebelmike
+Yeah, those should ideally be zero or at least close to zero (maybe 100s, IIRC)
+
+
+[2026-06-17 6:44 p.m.] deempak
+Thank you very much 
+
+Also I have noticed that 
+ SRAM macro's LEF file shows SIZE 431.86 BY 484.88 but OpenROAD reports the placed instance as 863.72 × 969.76 µm (exactly 2x). 
+
+Why could be that ?
+
+
+==============================================================
+Exported 15 message(s)
+==============================================================

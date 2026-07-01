@@ -1,0 +1,41 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"488155070052171816","rahulbhagwat","2026-06-20T08:58:34.9680000+00:00","Are there any plans from skywater to offer MPWs on this PDK or is this dead?
+
+https://github.com/google/sky90fd-pdk
+https://opensource.googleblog.com/2022/07/SkyWater-and-Google-expand-open-source-program-to-new-90nm-technology.html","",""
+"756011607603019777","anfroholic","2026-06-20T09:10:03.1370000+00:00","Currently wafer.space only has plans on offering wafers based on GF180MCU","","👍 (1)"
+"488155070052171816","rahulbhagwat","2026-06-20T09:10:56.4750000+00:00","yeah i thought it would be good to ask here since tim spearheaded open sourcing these at google so figured he would have more info","",""
+"1187141985530818611","ravenslofty","2026-06-20T14:44:04.4420000+00:00","perhaps this is not mine to say: but sky130 with its 8 MPW runs was more mature than gf180mcu's 1 MPW run at time of founding of w.s, yet Tim voted with his wallet to use gf180mcu.
+
+one must imagine he had very bad experiences with skywater to reject it like that.","",""
+"738396032295108721","bailey8889","2026-06-20T16:10:14.4580000+00:00","not mine to say either, but older processes generally take less time to fabricate and are cheaper. Also chipfoundry was already handling sky130, ihp is running it's own mpw, so from an open-source ecosystem standpoint, supporting gf makes sense.","",""
+"1170784850874220707","fossify_37988","2026-06-20T18:22:11.1570000+00:00","gf180mcu has more cool analog features too","",""
+"262706220073222144","namibj","2026-06-20T20:14:22.4310000+00:00","huh, anything in particular?","",""
+"262706220073222144","namibj","2026-06-20T20:16:26.0180000+00:00","(though yes, FDSOI is decently far from bulk CMOS (especially if the latter has deep-nwell and native nmos ""implants"" available), e.g. I'd guess vertical BJTs are not a thing on FDSOI processes)","",""
+"1170784850874220707","fossify_37988","2026-06-20T20:37:43.6450000+00:00","ldmos too. looking at the pdk though gf seems to be much better characterized more broadly","",""
+"596068704471482370","246tnt","2026-06-21T06:42:48.7300000+00:00","gf180mcu is _much_ cheaper (about 2x IIRC) ... Tim's stated goal is not MPW but small volume custom chip production at 1$/chip so that also made WS. much closer to targer when starting.","","👍 (1)"
+"1187141985530818611","ravenslofty","2026-06-21T06:43:19.5160000+00:00","I am aware of what Tim says, and I am also aware of what Tim *does*","",""
+"756011607603019777","anfroholic","2026-06-21T06:55:54.8470000+00:00","Having just spent a lot of time with Tim and asking many questions, I feel like I can say a few things. 
+@tnt is quite spot on and in that light Global Foundries seems like the best choice overall. 
+For one, price, and GF also has a lot more resources when it comes to things that are most beneficial regarding more goals in the general open source silicon ecosystem. 
+Part of Tim's thesis (and I also agree) is that it's beneficial to have for profit institutions involved and benefiting from open silicon and the tools/people/etc. surrounding it. 
+Taking all these into consideration Skywater is less suited in many areas and doesn't take into account the logistics required to support another foundry. For these and other reasons, I would say to stick to GF only, and this is coming from someone who lives a few hours from them.","",""
+"756011607603019777","anfroholic","2026-06-21T06:56:41.5540000+00:00","*I am a few hours from Skywater","",""
+"210716756778418187","olexorus","2026-06-21T08:49:44.6880000+00:00","Cheaper by which metric? Because a Sky130 TinyTapeout shuttle contains roughly 3x as many tiles as a GF180MCU one (512 vs 160), while the Chipfoundry slot is only twice as expensive (15k vs 7.5k). Of course that ignores the fact that with wafer.space you get many more parts back, but if we ignore that, Sky130 seems cheaper than GF180MCU relative to the amount of logic you get, not the other way around.","",""
+"596068704471482370","246tnt","2026-06-21T09:02:58.5380000+00:00","@Oliver Cheaper as in ""what's the minimum amount of cash you need to spend to make a run"" which basically comes down to the price of the mask set.","",""
+"596068704471482370","246tnt","2026-06-21T09:05:24.7280000+00:00","And the ""ignore you get many more parts back"" is the whole point. As said above, the goal here is _production_ use, not mpw where you're happy with 10 parts. So having many parts is important.","","💜 (1)"
+"210716756778418187","olexorus","2026-06-21T09:10:01.3960000+00:00","Ah, makes sense. But I thought the number of parts doesn't actually make a big difference for price (at these low parts counts, e.g. 10 vs 1000), it's just an arbitrary decision by the people running the MPW shuttle to make people use more expensive services for production use. So while that is a big advantage of wafer.space, it shouldn't say much about the production cost of Sky130? I.e. they could decide to ship more parts and it wouldn't change the price significantly?","",""
+"596068704471482370","246tnt","2026-06-21T09:16:11.7330000+00:00","It's not huge but it's not nothing, probably would be about 15~20% more expensive if my quick math from the rough number I know are correct.  Assuming die only like w.s.  ( for chipfoundry packaging cost is not cheap, one of the reason you only get 100 ).","",""
+"169786952432746498","mithro_","2026-06-22T06:40:20.2910000+00:00","Well, I also delibrately wanted something *outside* the US","","👍 (5)"
+"169786952432746498","mithro_","2026-06-22T06:41:02.3190000+00:00","Yes, SKY90FD was cancelled for many different reasons outside of Google's control.","",""
+"210716756778418187","olexorus","2026-06-22T07:23:24.3720000+00:00","Do you think it's likely that there will be new/more advanced open PDKs in the next years?","",""
+"169786952432746498","mithro_","2026-06-22T07:25:05.2100000+00:00","Unclear. I think being successful with the current PDKs is the first step. Successful == improve a foundries bottom line.","","👍 (5)"
+"262706220073222144","namibj","2026-06-22T19:22:37.2770000+00:00","There's the Japanese one, but it's a 1000nm 5V CMOS node.
+And I don't think it offers ldmos, and at best it mildly beats w.s. per-transistor ""if you ignore not getting 1~2 orders of magnitude fewer dies"".
+(I believe figuring out how to package smaller dies on w.s. would fully cancel that per-custom-design cost difference by making 1/8th tiles ""usable"".)","",""
+"169786952432746498","mithro_","2026-06-23T06:32:30.6100000+00:00","I do think there will be more open PDKs","",""
+"169786952432746498","mithro_","2026-06-23T06:33:14.4270000+00:00","There is the ICSprout55 node and the Indian 180nm node that seem like they might appear at some time. Someone should also keep poking Pragmatic for their 800nm non-cmos node.","","👀 (2)"
+"169786952432746498","mithro_","2026-06-23T07:05:42.0030000+00:00","Bunnie is getting in a few years after the AI bubble implodes there will probably end up being a 28nm node or two","",""
+"596068704471482370","246tnt","2026-06-23T07:09:19.5450000+00:00","I wouldn't call ICSprout55 ""open"" ... it's about as open as a FPGA is  ... you get abstracted view for the digital cells, no DRC rules or device or spice model for custom design. You have exactly what you need to do a pure digital design using only the exact cell they provide and you never get to see the actual GDS or how it's made.
+They've been saying ""yeah yeah it will come"" but then, no changes in the past 8 months.","",""
+"169786952432746498","mithro_","2026-06-24T06:56:55.6580000+00:00","That is why I say ""might appear at some time"" rather than ""already exists"" 🙂","",""

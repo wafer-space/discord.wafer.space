@@ -1,15 +1,1 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
-"262706220073222144","namibj","2026-06-03T18:37:49.3370000+00:00","Having an inverter at the output of a logic cell (buffering the internal node) is almost a given, right?
-So any custom gates in any static logic family I have to draw I should expect to use an inverter as an output buffer after the actual gate itself, right?","",""
-"596068704471482370","246tnt","2026-06-03T18:53:13.7050000+00:00","Sometimes you'll find `_0` variants of gates where it's directly the internal output but yeah that's rate and not that useful for general P&R where you'd almost always have an inverter at the output ... except if the cell in question is an inverter or a delay cell .","","ferrisCatOwO (1)"
-"728516105680846892","chips4makers","2026-06-04T08:12:32.5750000+00:00","No. CMOS standard cells have NAND2 and AOI amd OAI cells that don't have inverter at the end and these cells will be used quite a lot in the synthesized netlist.","",""
-"384390069412429834","polyfractal","2026-06-07T15:30:55.6740000+00:00","I just noticed the SRAM behavioral model has timing constraints (55.6 ns, ~18MHz). Do we know if this is a real limit of the SRAM, or just a quirk of the fab's sram model?","",""
-"691780627338625077","rebelmike","2026-06-07T20:24:23.2790000+00:00","That seems close to the 1.8V figures on https://gf180mcu-pdk.readthedocs.io/en/latest/IPs/SRAM/gf180mcu_fd_ip_sram/cells/gf180mcu_fd_ip_sram__sram512x8m8wm1/gf180mcu_fd_ip_sram__sram512x8m8wm1.html","",""
-"691780627338625077","rebelmike","2026-06-07T20:24:42.5060000+00:00","So I assume you can safely ignore at 5V or 3v3","",""
-"384390069412429834","polyfractal","2026-06-07T20:39:20.6250000+00:00","aha good catch! Didnt realize the docs had those tables for the sram 👍","",""
-"384390069412429834","polyfractal","2026-06-07T20:39:24.9480000+00:00","thanks!","",""
-"262706220073222144","namibj","2026-06-07T21:55:24.5580000+00:00","Does anyone have t_FO4 on hand by chance?","",""
-"220639106915368960","tholin","2026-06-12T08:17:49.0420000+00:00","@RebelMike @Leo Moser (mole99) Overdue update to my SCL: non-inverting latches. So you can use those now and drop any inverters you had to place in your design.
-Always remember to gate-level simulate, there should be no more missing cell models now.","","🎉 (2)"
-"691780627338625077","rebelmike","2026-06-12T08:19:43.9880000+00:00","Awesome, thank you!","",""
-"323371864074485771","mole99","2026-06-12T08:39:34.5540000+00:00","Opened an open_pdks PR to update the hash: https://github.com/RTimothyEdwards/open_pdks/pull/525","",""

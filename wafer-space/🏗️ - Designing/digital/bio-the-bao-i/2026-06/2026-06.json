@@ -1,0 +1,556 @@
+{
+  "guild": {
+    "id": "1361349522684510449",
+    "name": "wafer.space Community",
+    "iconUrl": "2026-06_media/fb143eaa45770cbb40493d09b625e98b-09FD1.png"
+  },
+  "channel": {
+    "id": "1516825766879428760",
+    "type": "GuildPublicThread",
+    "categoryId": "1409664140196188251",
+    "category": "digital",
+    "name": "BIO - The Bao I/O Co-Processor",
+    "topic": null
+  },
+  "dateRange": {
+    "after": "2026-05-31T23:59:59.999+00:00",
+    "before": "2026-07-01T00:00:00+00:00"
+  },
+  "exportedAt": "2026-07-01T02:02:12.925015+00:00",
+  "messages": [
+    {
+      "id": "1516842913839976519",
+      "type": "21",
+      "timestamp": "2026-06-17T16:32:12.238+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "",
+      "author": {
+        "id": "384390069412429834",
+        "name": "polyfractal",
+        "discriminator": "0000",
+        "nickname": "BreakingTaps",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "797470890765582377",
+          "name": "deempak",
+          "discriminator": "0000",
+          "nickname": "Deepak",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-06_media/47fee54537e3ffc4bdae3b8edfdee6d6-DB2C1.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1516825766879428760",
+        "channelId": "1409664140196188251",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1516842919053754509",
+      "type": "Default",
+      "timestamp": "2026-06-17T16:32:13.481+00:00",
+      "timestampEdited": "2026-06-17T16:33:07.201+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Dunno if it's possible, but some potential things to try:\n\n- Place four macros at top and four at bottom, so that the logic can reach in from both sides. Each core will route top or bottom. I bet that will help a lot with your congestion and timing\n- Make sure the macros are oriented so the inputs are facing the logic\n- Enable post GRT repair passes (`RUN_POST_GRT_DESIGN_REPAIR: true`, `RUN_POST_GRT_RESIZER_TIMING: true`) if you haven't already, might be able to fix\n- try giving the placer more room to move cells around (`PL_MAX_DISPLACEMENT_X`, `PL_MAX_DISPLACEMENT_Y`)\n- If you can get timing sorta close, you can often fix up the design with some tweaks to slack margins (`PL_RESIZER_HOLD_SLACK_MARGIN`, `GRT_RESIZER_HOLD_SLACK_MARGIN`, `PL_RESIZER_SETUP_SLACK_MARGIN`, `GRT_RESIZER_SETUP_SLACK_MARGIN`)\n- Decreasing the clock rate is always an option too if the violations are `setup`",
+      "author": {
+        "id": "384390069412429834",
+        "name": "polyfractal",
+        "discriminator": "0000",
+        "nickname": "BreakingTaps",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1516847436423889039",
+      "type": "Default",
+      "timestamp": "2026-06-17T16:50:10.506+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Very cool!  I'd like to do something with BIO too in future \uD83D\uDE42\n\nA couple of extra thoughts:\n- The SRAM macros are currently cutting the power ring, which is not good, they need moving in very slightly to avoid that.\n- I would close them up so there's not a small row of standard cells between each, and have them tight to the top/bottom as well as left/right.  That should increase the usable logic area a bit.\n\nWhat placement density are you using at the moment?  And what step errors out?",
+      "author": {
+        "id": "691780627338625077",
+        "name": "rebelmike",
+        "discriminator": "0000",
+        "nickname": "RebelMike",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83D\uDE42",
+          "code": "slight_smile",
+          "isAnimated": false,
+          "imageUrl": "2026-06_media/1f642-83E8A.svg"
+        }
+      ]
+    },
+    {
+      "id": "1516853763636465907",
+      "type": "Reply",
+      "timestamp": "2026-06-17T17:15:19.031+00:00",
+      "timestampEdited": "2026-06-17T17:18:57.053+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I have kept it pl desnitu to 50  , the flow does not error out however the flow had  been runnign for 18 hours and in detailed placement i am not getting near zero violation there are kind of stuck at     \nCompleting 10% with 560691 violations. even after 15 iteration so i check the logs and output of the global routing first and found these logs \n[GRT-0115] Global routing finished with congestion \nand NDR for a lot of clock \n\n\" [GRT-0273] Disabled NDR (to reduce congestion) for net: clknet_0_clk_PAD2CORE_regs\n[GRT-0273] Disabled NDR (to reduce congestion) for net: i_chip_core.u_bio_lite.u_bio.mach\\[0\\].core.clk\n[GRT-0273] Disabled NDR (to reduce congestion) for net: clknet_1_1_0_clk_PAD2CORE_regs\n[GRT-0273] Disabled NDR (to reduce congestion) for net: clknet_0_i_chip_core.u_bio_lite.u_bio.mach\\[1\\].core.clk\"\n\nThis is repeated lot to times \nThus i concluded that its higly lickely becouse fo congestion that viltation are not conversing to zero.",
+      "author": {
+        "id": "797470890765582377",
+        "name": "deempak",
+        "discriminator": "0000",
+        "nickname": "Deepak",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/47fee54537e3ffc4bdae3b8edfdee6d6-DB2C1.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "691780627338625077",
+          "name": "rebelmike",
+          "discriminator": "0000",
+          "nickname": "RebelMike",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-06_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1516847436423889039",
+        "channelId": "1516825766879428760",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1516853856053628969",
+      "type": "Reply",
+      "timestamp": "2026-06-17T17:15:41.065+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "And thank i will try the suggestion that you mentioned and check with them",
+      "author": {
+        "id": "797470890765582377",
+        "name": "deempak",
+        "discriminator": "0000",
+        "nickname": "Deepak",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/47fee54537e3ffc4bdae3b8edfdee6d6-DB2C1.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "691780627338625077",
+          "name": "rebelmike",
+          "discriminator": "0000",
+          "nickname": "RebelMike",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-06_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1516847436423889039",
+        "channelId": "1516825766879428760",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1516854751265034292",
+      "type": "Default",
+      "timestamp": "2026-06-17T17:19:14.5+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "That's a lot of violations!  What utilization does global placement report?  One thing that's changed is it no longer fails if the utilization is higher than the placement density, it just ups the density.",
+      "author": {
+        "id": "691780627338625077",
+        "name": "rebelmike",
+        "discriminator": "0000",
+        "nickname": "RebelMike",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1516854753777287280",
+      "type": "Reply",
+      "timestamp": "2026-06-17T17:19:15.099+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thank you will try these approach , I hope i am to get better run with these.",
+      "author": {
+        "id": "797470890765582377",
+        "name": "deempak",
+        "discriminator": "0000",
+        "nickname": "Deepak",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/47fee54537e3ffc4bdae3b8edfdee6d6-DB2C1.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "2026-06_media/1f44d-27259.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "384390069412429834",
+              "name": "polyfractal",
+              "discriminator": "0000",
+              "nickname": "BreakingTaps",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-06_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "384390069412429834",
+          "name": "polyfractal",
+          "discriminator": "0000",
+          "nickname": "BreakingTaps",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-06_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1516842919053754509",
+        "channelId": "1516825766879428760",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1516861348343185438",
+      "type": "Reply",
+      "timestamp": "2026-06-17T17:45:27.366+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "For global placement it is in the limit of half Widht howerver in the global routing it had \nTotal Overflow: 64,732\n\nLayer Metal3 Max Overflow: 24,363\n\nAnd i just realize the global routing ran for 7 h \n\nThe log for global placement \n[INFO ODB-0403] 0 connections made, 0 conflicts skipped.\nUpdating metrics…\nCell type report:                       Count       Area\n  Macro                                    13 1799404.12\n  Input pad                                 6  157500.00\n  Input/output pad                         50 1312500.00\n  Power pad                                16  420000.00\n  Pad spacer                              738 1983800.00\n  Endcap cell                            2164  513583.26\n  Tap cell                              17237   75677.32\n  Tie cell                                279    2449.84\n  Inverter                               1212   10642.33\n  Clock gate cell                           2     122.93\n  Sequential cell                        4779  314818.02\n  Multi-Input combinational cell        30548  597895.65\n  Total                                 57044 7188393.48",
+      "author": {
+        "id": "797470890765582377",
+        "name": "deempak",
+        "discriminator": "0000",
+        "nickname": "Deepak",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/47fee54537e3ffc4bdae3b8edfdee6d6-DB2C1.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "691780627338625077",
+          "name": "rebelmike",
+          "discriminator": "0000",
+          "nickname": "RebelMike",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-06_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1516854751265034292",
+        "channelId": "1516825766879428760",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1516861629529063546",
+      "type": "Default",
+      "timestamp": "2026-06-17T17:46:34.406+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Near the top there'll be a line like ```\n[INFO GPL-0019] Utilization:                    58.988 %\n```",
+      "author": {
+        "id": "691780627338625077",
+        "name": "rebelmike",
+        "discriminator": "0000",
+        "nickname": "RebelMike",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1516861919145889853",
+      "type": "Reply",
+      "timestamp": "2026-06-17T17:47:43.456+00:00",
+      "timestampEdited": "2026-06-17T17:47:53.19+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "[INFO GPL-0019] Utilization:                    40.319 %\n[INFO GPL-0020] Standard cells area:        1035590.191 um^2\ndoes thsi include sram area as well ?",
+      "author": {
+        "id": "797470890765582377",
+        "name": "deempak",
+        "discriminator": "0000",
+        "nickname": "Deepak",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/47fee54537e3ffc4bdae3b8edfdee6d6-DB2C1.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "691780627338625077",
+          "name": "rebelmike",
+          "discriminator": "0000",
+          "nickname": "RebelMike",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-06_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1516861629529063546",
+        "channelId": "1516825766879428760",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1516862554247532555",
+      "type": "Default",
+      "timestamp": "2026-06-17T17:50:14.876+00:00",
+      "timestampEdited": "2026-06-17T17:50:26.78+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "That is utilization of the area for standard cells.  40% should normally be routable so hopefully you can resolve it by moving your macros around as BreakingTaps suggested.  Separating the RAM for the two cores so one is pulled to the bottom and the other to the top does sound like it should make things work much better.",
+      "author": {
+        "id": "691780627338625077",
+        "name": "rebelmike",
+        "discriminator": "0000",
+        "nickname": "RebelMike",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1516863094381613256",
+      "type": "Reply",
+      "timestamp": "2026-06-17T17:52:23.654+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Sure will try that out Just one more question These overflow as i mentioned previously they should be zero right ?",
+      "author": {
+        "id": "797470890765582377",
+        "name": "deempak",
+        "discriminator": "0000",
+        "nickname": "Deepak",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/47fee54537e3ffc4bdae3b8edfdee6d6-DB2C1.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "691780627338625077",
+          "name": "rebelmike",
+          "discriminator": "0000",
+          "nickname": "RebelMike",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-06_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1516862554247532555",
+        "channelId": "1516825766879428760",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1516863426205319169",
+      "type": "Default",
+      "timestamp": "2026-06-17T17:53:42.767+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "[INFO GRT-0096] Final congestion report:\nLayer         Resource        Demand        Usage (%)    Max H / Max V / Total Overflow\n---------------------------------------------------------------------------------------\nMetal1               0             0            0.00%             0 /  0 /  0\nMetal2          565781        278898           49.29%             2 / 20 / 17928\nMetal3          587172        285760           48.67%            28 /  1 / 24363\nMetal4          714895        248151           34.71%             2 / 19 / 15516\nMetal5          467870        126841           27.11%             8 /  1 / 6925\n---------------------------------------------------------------------------------------\nTotal          2335718        939650           40.23%            40 / 41 / 64732\n\n\nThese onces",
+      "author": {
+        "id": "797470890765582377",
+        "name": "deempak",
+        "discriminator": "0000",
+        "nickname": "Deepak",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/47fee54537e3ffc4bdae3b8edfdee6d6-DB2C1.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1516864224931086456",
+      "type": "Default",
+      "timestamp": "2026-06-17T17:56:53.198+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yeah, those should ideally be zero or at least close to zero (maybe 100s, IIRC)",
+      "author": {
+        "id": "691780627338625077",
+        "name": "rebelmike",
+        "discriminator": "0000",
+        "nickname": "RebelMike",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1516876170925314212",
+      "type": "Reply",
+      "timestamp": "2026-06-17T18:44:21.345+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thank you very much \n\nAlso I have noticed that \n SRAM macro's LEF file shows SIZE 431.86 BY 484.88 but OpenROAD reports the placed instance as 863.72 × 969.76 µm (exactly 2x). \n\nWhy could be that ?",
+      "author": {
+        "id": "797470890765582377",
+        "name": "deempak",
+        "discriminator": "0000",
+        "nickname": "Deepak",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/47fee54537e3ffc4bdae3b8edfdee6d6-DB2C1.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "691780627338625077",
+          "name": "rebelmike",
+          "discriminator": "0000",
+          "nickname": "RebelMike",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-06_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1516864224931086456",
+        "channelId": "1516825766879428760",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    }
+  ],
+  "messageCount": 15
+}

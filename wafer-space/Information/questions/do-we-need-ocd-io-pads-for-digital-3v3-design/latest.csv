@@ -1,11 +1,1 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
-"236632873782738944",".pogeg","2026-06-08T06:38:57.0930000+00:00","For our design, we're planning on using a pure 3v3 digital design (no analog, 3v3 SCL and SRAM). In that case, is switching from foundry provided IO pads to OCD pads necessary?","",""
-"323371864074485771","mole99","2026-06-08T06:46:49.8650000+00:00","No, it is not necessary. In this case, you can keep using the foundry pad cells.
-
-The OCD cells add levelshifters between IO and core, which allows you to have IO voltage > core voltage. For example, you could have a 3.3V core voltage and a 5V IO voltage.
-
-If you run everything at 3.3V, then you can simply use the FD cells.
-
-Currently, there are no IO cells with 3.3V transistors (normal gate oxide). Both the FD and OCD cells use 5V transistors (thick gate oxide).","",""
-"323371864074485771","mole99","2026-06-08T06:47:06.2620000+00:00","As you probably know, the 3.3V SCL and SRAM are yet to be silicon verified.","",""
-"596068704471482370","246tnt","2026-06-08T07:28:48.5680000+00:00","Also to note the foundry cells although designed for 5V provide more than acceptable performance running at 3.3V. ( > 100 MHz without issues ).","","👍 (1)"
