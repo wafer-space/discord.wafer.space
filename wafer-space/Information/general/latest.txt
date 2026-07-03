@@ -177,6 +177,43 @@ I guess I’ll just sit here and wait for two weeks, then go get waffles?
 In case you're bored, a mux4 would be a great addition to your SCL 😉
 
 
+[2026-07-02 7:35 p.m.] carlfk
+is that in a repo?  Ste ps1 guy loves color bars, loves analog and vga.  might want to see what you are doing.
+
+
+[2026-07-02 7:36 p.m.] carlfk
+oh look, a repo appeared!
+
+
+[2026-07-02 7:50 p.m.] tholin
+We will see. I am burnt out right now.
+
+
+[2026-07-02 8:15 p.m.] namibj
+In your position I'd think scripting together a flow of minting a _lot_ of `.nodeset`'s to cover all multistable/regenerative-feedback node voltages,
+ - through probably the LVS tooling
+ - and some minor singled-out-cell pseudo-DC-op-point sims where you'd start the transient with the regular DC op point initialization as always, then throw whatever waveforms against the inputs that are needed to bring the internal state into the target state, then just stop imposing a maximum step size and let the time integrator run for like an entire simulated minute or so, to then harvest the final state's node voltages from it (for the correct PVT corner! If it's _too_ different one would risk the nonlinear solver potentially skipping across the forbidden band and deciding the flip-flop is actually better off in the opposite state; I do _think_ in principle this could be solved by using the advanced continuation functionality:
+the attached user guide's "Figure 8-3" "manual replication of MOSFET contonuation", amended with a 3rd `conparam` entry that happens after the `mosfet:gainscale` and `mosfet:nltermscale` entries, which will be essentially the output conductance of the current-type `B`-source which hard-forces the stateful digital logic cell's internal node voltage to the reference DC static voltage _of the desired internal state of that particular cell,_ and is ramped from a very high conductance (strong but still sufficciently numerically behaved especially when it comes to transitioning out of the forced state; I'd probably just start with `1 siemens` for any vaguely normal CMOS SCL internal nodes) down to literally `0` (which will have it be open-circuit at transient sim runtime). The parameter names legal to put into `conparam` are the same ones that are also legal to `.STEP` (the docs for how to casually do `.STEP` are far far easier to approach/read/understand than the fancy continuation stuffs).
+`.options loca stepper=1 predictor=1 stepcontrol=1` could be semi-necessary to (properly/reliably) handle the effects of combinatorial loops through the (non-transparent at the time of the continuation solving!) flip-flops; if the continuation DC OP point solve ahead of the transient sim itself takes too long it'd be worth testing whether it's sufficciently robust with the tangent predictor `0` and thus the downgrade from the arc-length continuation `stepper=1` to `stepper=0`.
+Though I guess _maybe_ it has to do continuation over the output resistance and push that out to near-infinity in the continuation solve process (default is like `100 exa`); the specified parameter constant value applicable outside of the special circumstances in which the `LOCA` does continuation on it, will need to be a sentinel (I'd suggest exact `0` or "anything negative"), as it shall be as non-interacting and as sparsified-away by the linear solver and all as possible (||it's not a problem because the discintinuity doesn't happen while a non-linear solver tries to solve the system of equations and could have called the behavioral function with node voltages/branch currents far from anythign physical, because that's just discintinuos in a parameter, and that parameter doesn't change during any transient time integration...||).
+
+Overall the idea I'm proposing is to use gate-level digital sim (post-techmapping (and any retiming and other such intrusive changes to the logic) verilog-sim basically 😄 ) to fast-forward to an interesting moment, snapshot all stateful state, map that against pre-computed DC op points of the cell library, use the LVS matching provisions to match that state to post-PEX SPICE node identifiers, emit a spice file to-be-`.include`'d full of those continuation-capable cell's-internal-node-forcing B-sources (test if things are faster when forcing combinatorial nets as well, or if the additional effort expended negates the faster convergence; `.nodeset` is likely cheaper for those though it's just not reliable), and start the `.tran` sim.
+
+
+[2026-07-02 8:16 p.m.] namibj
+(I can help later next week on the matter if you want; I'm just not at all deep enough int the digital simulation and LVS tooling side to handle that side of this simulation-type-marriage.)
+
+
+[2026-07-02 8:49 p.m.] namibj
+Goal IMO would be to (1) test some particularly questionable timing paths that came up in static timing analysis, (2) check if interaction between digital and analog aspects behaves sufficiently well/nicely to not be concerned about mixed-signal features being DOA due to oversights in the analog/digital interface specs, and (3) sanity check that at least normal interaction with any of the non-SCL parts of the chip (_any_ of those) shows no signs of anythign shorting out or being close enough to shorting out to be nearly-equivalent.
+
+(I'm still mildy traumatized by how you (not-)handled the excessive current draw/heating of the Run1 die's DAC's buffers.)
+
+(The glitching of the video signal you've blamed on the lack of latching of the digital feed to the DACs is actually something I'd file under the above mentioned reason number 2, as it's one thing to accept the glitching if one is aware of it, but a whole nother thing to not have expected it/thought about it being possibly an issue.)
+
+(I'm not sure but depending on what you spit out of the NTSC modulator, like in theory there is place for the audio carrier, parts of the functionality are contingent on non-terrible artifacts/interference behavior, as e.g. audio will eventually hurt or at least give headaches if it's bad enough with some artifacts at least.)
+
+
 ==============================================================
-Exported 33 message(s)
+Exported 39 message(s)
 ==============================================================
