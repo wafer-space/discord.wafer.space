@@ -1,0 +1,79 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / general / Small Risc-V cores
+After: 2025-08-31 11:59 p.m.
+Before: 2025-10-01 12:00 a.m.
+==============================================================
+
+[2025-09-21 7:28 p.m.] rebelmike
+
+
+
+[2025-09-21 7:28 p.m.] rebelmike
+We've realised that the biggest constraint is really the size of the pads.  You're going to want a QSPI interface to some RAM and flash, so that's 7 or preferably 12 IOs.  And then 4 or 8 IOs for actually doing something.  By the time you've made that pad ring you might as well put at least enough RAM in it for registers.
+
+But yes, I believe SERV can be configured to store registers in external RAM, that will be extremely slow though!
+
+I think going for RV32E (only 15 registers) makes sense.  Also if you support the compressed instructions (which is good to save flash bandwidth if you have no/minimal icache) they mostly can only use registers that are in RV32E anyway.
+
+
+[2025-09-21 7:29 p.m.] rebelmike
+I put together a spreadsheet for possible pad setups on a subdivided chip.  I don't know if the "pad strip" idea (pads on one side only) works in practice. https://docs.google.com/spreadsheets/d/1qEPO6t-Uz7HYwtpl9eECe0vx1UJSmiynZBl_LVMHF0k/edit?gid=0#gid=0
+
+{Embed}
+https://docs.google.com/spreadsheets/d/1qEPO6t-Uz7HYwtpl9eECe0vx1UJSmiynZBl_LVMHF0k/edit?gid=0
+gf180 subdivision
+2025-09_media/AHkbwyLfIqJIM4orbn_-RBNL4V6lwW4Kf6L4faZvDz-1951E
+
+
+[2025-09-21 7:32 p.m.] tholin
+I believe smaller pads are theoretically possible if you're willing to reduce output drive strength and reduce the effectiveness of the ESD protection.
+
+
+[2025-09-21 7:35 p.m.] 246tnt
+Technically nothing forces you to make a ring ... you could have a "strip"of pads on one side only.
+
+
+[2025-09-21 7:35 p.m.] 246tnt
+(I mean from a functional stand point, that might not be directly supported in the tooling)
+
+
+[2025-09-21 7:36 p.m.] mithro_
+There is also this thing called "circuit under pads"
+
+
+[2025-09-21 7:39 p.m.] 246tnt
+Is that allowed here ? And compatible with the bonding method ?  I know in both ihp and sky, placing anything active under the pad is a not an option.  And on sky in early mpw some people had high failure rate when bonding because there was some stuff under the pad that was getting crushed.
+
+
+[2025-09-21 7:39 p.m.] mithro_
+https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_09_3.html
+
+
+[2025-09-21 7:39 p.m.] mithro_
+> Active circuits are allowed when ball-type wire-bonding process is used and when bumping/flip chip technology is used. No circuit under pad is allowed when wedge-type wire-bonding process is used. The following additional rules apply to designs when active circuits are used under the pad.
+
+
+[2025-09-21 7:51 p.m.] mithro_
+15 pins == 4 for spi bus, 3 for power, 8 for I/O?
+
+
+[2025-09-21 7:56 p.m.] mithro_
+BTW I expect it'll take us a while to figure out what options make sense
+
+
+[2025-09-21 8:01 p.m.] rebelmike
+I was thinking the 15 would be 7 for QSPI, 2 for power, clock, reset, 4 for IO.  But actually I think you could get 16 in that width and have an extra ground.
+
+
+[2025-09-21 9:11 p.m.] mithro_
+I tend to think of 10 I/O as a good number as it ends up with a byte and 2 "control/signal lines"
+
+
+[2025-09-21 9:56 p.m.] rebelmike
+Yeah, only 4 GPIOs is a bit sad.  Going to pins on 2 sides and 3x3 division might be a better option.  Or 5x2 with a single strip but the other way.
+
+
+==============================================================
+Exported 15 message(s)
+==============================================================

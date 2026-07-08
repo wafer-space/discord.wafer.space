@@ -1,0 +1,120 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / general / TT GF180 padframe
+After: 2025-08-31 11:59 p.m.
+Before: 2025-10-01 12:00 a.m.
+==============================================================
+
+[2025-09-19 6:42 p.m.] mole99
+
+
+
+[2025-09-19 6:42 p.m.] mole99
+Thanks a lot Sylvain! Just updated the project template.
+
+
+[2025-09-19 6:43 p.m.] mole99
+The padring now looks like this. Once you have yours we need to double check the bondpad positions. I have updated the padring script to also support pads with arbitrary widths, but for this case it should behave the same as before.
+
+{Attachments}
+2025-09_media/image-07017.png
+
+
+[2025-09-19 6:44 p.m.] 246tnt
+Can you post the gds ?
+
+
+[2025-09-19 6:55 p.m.] mole99
+Sure! Without fill I assume.
+
+
+[2025-09-19 6:55 p.m.] 246tnt
+Yes.
+
+
+[2025-09-19 6:56 p.m.] 246tnt
+Something looks wrong from the picture though.
+
+
+[2025-09-19 6:57 p.m.] 246tnt
+Wait, the orientation doesn't match.
+
+
+[2025-09-19 6:57 p.m.] 246tnt
+It's rotated 180 deg.
+
+
+[2025-09-19 6:58 p.m.] mole99
+Is it? Pin 0 should be bottom left, but let's see... I'm almost at StreamOut.
+
+
+[2025-09-19 6:59 p.m.] 246tnt
+Bond pad 17, the first on the right edge at the bottom should be power.
+
+
+[2025-09-19 7:00 p.m.] 246tnt
+Ok, I just realized, in the text column I wrote "left" but it's actually "right" ...
+
+
+[2025-09-19 7:01 p.m.] mole99
+I see 😄 Then let me check again
+
+
+[2025-09-19 7:02 p.m.] mole99
+
+
+{Attachments}
+2025-09_media/chip_top.gds-3891B.gz
+
+
+[2025-09-19 7:02 p.m.] mole99
+Here is the GDS anyways, just for the pad positions
+
+
+[2025-09-19 7:05 p.m.] mole99
+Alright, rerunning!
+
+
+[2025-09-19 7:11 p.m.] mole99
+
+
+{Attachments}
+2025-09_media/image-3E9CA.png
+
+
+[2025-09-19 7:12 p.m.] mole99
+
+
+{Attachments}
+2025-09_media/chip_top.gds-F6A87.gz
+
+
+[2025-09-19 7:13 p.m.] mole99
+Should be right this time!
+
+
+[2025-09-19 7:20 p.m.] 246tnt
+Yeah the position of power pads match.
+The labels (input / bidir / clk / rst) don't but that doesn't matter, all those should be broken out 1:1 without any special consideration.
+
+It's important for the breakout that :
+- The PWR VDD AUX are _not_ connected to power rings, but just broken out to pins like other , just with decoupling caps
+- The IO / Core VDD pins are correctly mapped to independent rings with appropriate decoupling.
+
+
+[2025-09-19 7:23 p.m.] mole99
+Might be worth posting in the #📦-cob channel :)
+
+
+[2025-09-19 7:26 p.m.] 246tnt
+Pad position is fine, it's distributed equally, so I can make sure to match that ( if for some reason my script doesn't match it already ... ).
+
+
+[2025-09-19 7:30 p.m.] mole99
+Great! After the script rewrite I had to triple check that this is still the case 😅
+But I have yet to try a cell with a different width.
+
+
+==============================================================
+Exported 23 message(s)
+==============================================================
