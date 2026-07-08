@@ -1,0 +1,47 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / ⁉️-questions / Detailed Routing Antenna Violation
+After: 2025-11-30 11:59 p.m.
+Before: 2026-01-01 12:00 a.m.
+==============================================================
+
+[2025-12-03 3:21 p.m.] trev5514
+I've tried doing 20+ iterations on the detailed routing antenna fixing, and I have a single stubborn net/pin violation.
+
+
++ check_antennas 
+[INFO ANT-0002] Found 1 net violations.
+[INFO ANT-0001] Found 1 pin violations.
+
+Even after 40 total iterations, it will not fix this. Does anyone know how I can figure out what net/pin this is and possibly how I could fix this?
+
+
+[2025-12-03 5:07 p.m.] scafir
+I had somewhat similar issues on klayout where it was not clear where the error was coming from.
+Safest way to proceed was to copy the part of the design that failed, and cut connections until the error was gone
+
+
+[2025-12-03 8:06 p.m.] mole99
+The antenna summary should show you the affected net/pin.
+LibreLane allows you to manually insert antenna diodes:
+
+```
+...
+  substituting_steps:
+    +OpenROAD.DetailedRouting: Odb.InsertECODiodes
+...
+```
+
+```
+INSERT_ECO_DIODES:
+- target: instance/pin
+```
+
+
+[2025-12-03 8:11 p.m.] trev5514
+Less is more I guess. Either I had a stubborn pin or something else, I ran it with only 10 iterations and it stopped after 6 and says it's all clear.
+
+
+==============================================================
+Exported 4 message(s)
+==============================================================

@@ -1,0 +1,26 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / ⁉️-questions / Openroad GUI timing corner selection
+After: 2025-11-30 11:59 p.m.
+Before: 2026-01-01 12:00 a.m.
+==============================================================
+
+[2025-12-02 9:43 a.m.] greg.hashtag.9468
+I've tried googling this, but not having much luck yet. When opening the openroad-gui via librelane 'nom_tt_25C_5v00' timing corners are loaded and reported. I'm seeing a large gap between the slowest:'max_ss_125C_4v50' and fastest: 'min_ff_n40C_5v50' corners. Curious how I would load the other timing corners to visually see the paths, and maybe optimise macro placements. 
+
+I've tried `read_spef --corner <file>`, but the corner names don't seem to be correct.
+
+
+[2025-12-02 10:10 a.m.] mole99
+Quick and dirty: add e.g. `DEFAULT_CORNER: nom_ss_125C_4v50` to your config and LibeLane will load this corner instead.
+
+{Reactions}
+👍
+
+[2025-12-02 10:10 a.m.] mole99
+However, LibreLane should really load all timing corners that are available.
+
+
+==============================================================
+Exported 3 message(s)
+==============================================================

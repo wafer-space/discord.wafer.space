@@ -1,0 +1,105 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / ⁉️-questions / Magic DRC waving
+After: 2025-11-30 11:59 p.m.
+Before: 2026-01-01 12:00 a.m.
+==============================================================
+
+[2025-12-01 8:02 a.m.] mole99
+Great! I'm running the precheck on the updated GDS now.
+
+By the way, I just noticed that your sealring is still an earlier version (it's missing the glass cut on top). Please make sure to use the latest version of the PDK.
+
+Don't worry about the PR for now, that can wait until after the tapeout.
+
+
+[2025-12-01 10:16 a.m.] mole99
+The precheck also resulted in magic DRC errors on my end.
+They are of type "Can't overlap those layers" and seem to relate to an overlap of COMP in two different cells.
+The errors only occur inside the sram128x8, the other SRAMs are not affected.
+Taking a closer look at the cells which belong to these COMP layers, sram128x8 is the only one that uses the `xdec16_*` cell.
+The other SRAMs use a combination of `xdec8_*` and `xdec32_*`, which are part of `MAGIC_GDS_FLATGLOB`. 
+It seems the flatglob for `xdec16_*` is missing. I added it to `MAGIC_GDS_FLATGLOB` and started another run 🤞
+
+{Attachments}
+2025-12_media/Bildschirmfoto_vom_2025-12-01_11-04-25-0B04A.png
+
+
+[2025-12-01 10:35 a.m.] mole99
+`Precheck successfully completed.` That seemed to work 🥳
+
+
+[2025-12-01 10:35 a.m.] mole99
+I'll push the fix to the template and precheck and then you can give it a try on your end as well.
+
+
+[2025-12-01 10:57 a.m.] egorxe
+Thanks, Leo! 
+
+> Please make sure to use the latest version of the PDK.
+
+The latest version of the PDK or of the nix-eda?
+
+
+[2025-12-01 11:03 a.m.] mole99
+You're welcome!
+
+> The latest version of the PDK or of the nix-eda?
+
+Both! After you update your template or precheck make sure to run `make clone-pdk` again.
+
+
+[2025-12-01 11:07 a.m.] egorxe
+I think I'm running the [latest nix environment](https://github.com/ZeduloTech/gf180mcu-testchip2025/blob/acbd33fc43099d885758a78b2fdbfca26950c0f0/flake.nix#L12) and the latest PDK (from Nov 27). Is there a way to check that the correct sealring generation routine is launched?
+
+{Embed}
+https://github.com/ZeduloTech/gf180mcu-testchip2025/blob/acbd33fc43099d885758a78b2fdbfca26950c0f0/flake.nix
+gf180mcu-testchip2025/flake.nix at acbd33fc43099d885758a78b2fdbfca2...
+SRAM and eFUSE testchip for wafer.space MPW runs using the gf180mcu PDK - ZeduloTech/gf180mcu-testchip2025
+2025-12_media/gf180mcu-testchip2025-81CE6
+
+
+[2025-12-01 11:09 a.m.] mole99
+You can visually check the corner of your sealring. Yours looks like this:
+
+
+[2025-12-01 11:09 a.m.] mole99
+
+
+{Attachments}
+2025-12_media/image-4656A.png
+
+
+[2025-12-01 11:09 a.m.] mole99
+But it should look like this:
+
+
+[2025-12-01 11:09 a.m.] mole99
+
+
+{Attachments}
+2025-12_media/image-4308A.png
+
+
+[2025-12-01 11:18 a.m.] egorxe
+Ok, thanks. I've checked my latest GDS and it has this corner structure on 37/0, so it seems that I've updated something meanwhile between the GDS in repo and the current one, but thanks for the warning. With sealring being fine now, I'm waiting for your precheck update :).
+
+{Reactions}
+👏
+
+[2025-12-01 11:40 a.m.] mole99
+The precheck has been updated: https://github.com/wafer-space/gf180mcu-precheck/releases/tag/1.3.1
+However, it will take more time until the online precheck uses this version as well :)
+
+{Embed}
+https://github.com/wafer-space/gf180mcu-precheck/releases/tag/1.3.1
+Release 1.3.1: Merge pull request #16 from wafer-space/fix-sram128x...
+fix: add flatglob for sram128x8, add --run-tag option
+2025-12_media/gf180mcu-precheck-B88AF
+
+{Reactions}
+👍
+
+==============================================================
+Exported 13 message(s)
+==============================================================

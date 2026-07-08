@@ -1,0 +1,35 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / ⁉️-questions / Unused pad
+After: 2025-11-30 11:59 p.m.
+Before: 2026-01-01 12:00 a.m.
+==============================================================
+
+[2025-12-01 4:29 a.m.] xintingjiang_36756
+Hi all,
+When using the gf180mcuD padframe template, what’s the recommended way to handle unused pads? Should I keep the pad cells in place to maintain a complete pad ring, and configure the unused signal pads as inputs with a weak pull-down (or another default) while leaving them unbonded/unconnected?
+
+Thanks!
+
+
+[2025-12-01 4:51 a.m.] _luke_w_
+If you want to be bond-compatible with the COB design then you need to keep the same number of pads on each edge, and keep all of the VDD and VSS pads in the same locations
+
+
+[2025-12-01 4:52 a.m.] _luke_w_
+Yes I'd recommend a pull-down, otherwise pads can float up to mid rail and start drawing current. The pulls are pretty weak, like 100k or so.
+
+{Reactions}
+👍 (3)
+
+[2025-12-01 7:08 a.m.] xintingjiang_36756
+So that would be using input digital pad; gf180mcu_fd_io__in_c and set PD=1 PU=0?
+
+
+[2025-12-01 2:27 p.m.] _luke_w_
+That works, or using the bidi with `IE = OE = 0` would work too
+
+
+==============================================================
+Exported 5 message(s)
+==============================================================

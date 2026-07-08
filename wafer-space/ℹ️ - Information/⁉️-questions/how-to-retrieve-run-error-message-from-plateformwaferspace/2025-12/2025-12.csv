@@ -1,0 +1,61 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"1401841055975870476","scafir","2025-12-03T14:27:38.4360000+00:00","Seems like my design is failing some checks on the online plateform (or the plateform itself is failing) with 
+Processing Logs
+```
+=== SYSTEM ERROR - See error_message field ===
+
+RETRY #1: Automatic retry after error
+
+=== SYSTEM ERROR - See error_message field ===
+
+RETRY #2: Automatic retry after error
+
+=== SYSTEM ERROR - See error_message field ===
+
+RETRY #3: Automatic retry after error
+
+=== SYSTEM ERROR - See error_message field ===
+```
+Is there a way to get more  information? I do not see what the ""error_message field"" refers to","",""
+"169786952432746498","mithro_","2025-12-03T14:31:04.3980000+00:00","@Clyde Laforge - SYSTEM ERROR means the precheck failed to run correctly.","",""
+"169786952432746498","mithro_","2025-12-03T14:32:27.0630000+00:00","Well, looks like I broke the prechecks.....","",""
+"169786952432746498","mithro_","2025-12-03T14:32:39.0640000+00:00","```
+column shuttles_shuttle.max_slots does not exist
+LINE 1: ...ttle"".""description"", ""shuttles_shuttle"".""status"", ""shuttles_...
+```","",""
+"323371864074485771","mole99","2025-12-03T14:32:48.3260000+00:00","For now you can run the same precheck locally: https://github.com/wafer-space/gf180mcu-precheck","",""
+"1401841055975870476","scafir","2025-12-03T14:33:11.6200000+00:00","Yes! nix-shell currently compiling 🙂","","👍 (1)"
+"169786952432746498","mithro_","2025-12-03T14:33:54.3080000+00:00","I just need to restart the task worker so it picks up the db structure change.","",""
+"1401841055975870476","scafir","2025-12-03T14:34:31.8800000+00:00","Thank you for looking into this @Tim 'mithro' Ansell","",""
+"169786952432746498","mithro_","2025-12-03T14:37:40.4210000+00:00","@Leo Moser (mole99) - Now it's one for you I think","",""
+"323371864074485771","mole99","2025-12-03T14:38:57.6520000+00:00","Yes","",""
+"323371864074485771","mole99","2025-12-03T14:39:15.3100000+00:00","```
+assert id_cell.bbox() == qrcode_cell.bbox()
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+```","",""
+"323371864074485771","mole99","2025-12-03T14:39:58.1940000+00:00","@Clyde Laforge Did you place [this QR code instance](https://github.com/wafer-space/gf180mcu-project-template/tree/main/ip/gf180mcu_ws_ip__id)?","",""
+"323371864074485771","mole99","2025-12-03T14:40:14.9750000+00:00","It seems the bounding box is not as expected.","",""
+"1401841055975870476","scafir","2025-12-03T14:41:11.5410000+00:00","I reused the one that originally came from the pad ring from a couple weeks ago, but maybe there was some update to it?","",""
+"1401841055975870476","scafir","2025-12-03T14:46:39.1100000+00:00","Checked and my design seems correct and up to date, with a valid `gf180mcu_ws_ip__id` cell at 0,0.","",""
+"323371864074485771","mole99","2025-12-03T14:48:23.7400000+00:00","Is the instance directly after the top cell in the hierarchy?","",""
+"323371864074485771","mole99","2025-12-03T14:49:01.8380000+00:00","Can you confirm the size of the boundary layer is 142.8, 142.8?","",""
+"323371864074485771","mole99","2025-12-03T14:49:06.7140000+00:00","What is your ID?","",""
+"1401841055975870476","scafir","2025-12-03T14:50:04.8870000+00:00","Yes","",""
+"1401841055975870476","scafir","2025-12-03T14:50:12.4410000+00:00","TRID","",""
+"1401841055975870476","scafir","2025-12-03T14:51:06.2170000+00:00","Yes","",""
+"323371864074485771","mole99","2025-12-03T14:52:34.8930000+00:00","Can you provide me a link to your layout? :)","",""
+"323371864074485771","mole99","2025-12-03T14:52:53.5600000+00:00","(Can also be in private.)","",""
+"1401841055975870476","scafir","2025-12-03T14:53:39.4610000+00:00","No, it's fine, it's source available (hopefully with a proper open source license soon ^^'): https://github.com/Scafir/gf180mcu-project-trident-gf180-teststructure/blob/3f02c0f9c702dd272a04e1c97542253af30421cf/klayout/top.layout.filled.gds.gz","","👌 (1)"
+"323371864074485771","mole99","2025-12-03T15:04:33.1540000+00:00","I can trigger the same issue. Will look for a solution.","",""
+"323371864074485771","mole99","2025-12-03T15:13:48.8580000+00:00","Your database unit (dbu) of the layout is 0.05um. The dbu must be 0.001um and all geometry must be on-grid 0.05um.","",""
+"323371864074485771","mole99","2025-12-03T15:14:03.8470000+00:00","You should be able to easily scale your whole layout :)","",""
+"323371864074485771","mole99","2025-12-03T15:14:13.1900000+00:00","(And I can add a new check to the precheck)","",""
+"323371864074485771","mole99","2025-12-03T15:17:54.2040000+00:00","```
+[16:17:19] ERROR    Subprocess had a non-zero exit.step.py:1383
+[16:17:19] ERROR    Last 1 line(s):step.py:1388
+                    [Error]: Database unit (dbu) is not 0.001um.
+```
+
+Now that's a better error ;)","",""
+"1401841055975870476","scafir","2025-12-03T15:27:18.0500000+00:00","Very nice, thank you!","","👌 (1)"

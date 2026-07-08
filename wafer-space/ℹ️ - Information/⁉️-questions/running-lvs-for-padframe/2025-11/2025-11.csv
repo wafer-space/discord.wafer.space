@@ -1,0 +1,61 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"701803458495512666","luighiv","2025-11-29T20:23:14.9580000+00:00","Hi everyone, 
+
+We are trying to run LVS checks for the PADs in  gf180mcu using netgen. Not sure if others are using the same for it or maybe can suggest another tool to do it. However, while we achieved passing successfully for other circuits, for the pads (provided by GF) seems that it is no passing. We are trying with a simple test case of 4 pads, vdd, vss, asig5v and fills. What we found is that in all the pads there is an extra net which is not present (not matched) in schematic. 
+
+Digging into the issue we identified that the extracted spice netlist from layout is creating diodes with just one pin exposed while the another is connected to substrate. Not sure if netgen understands VSUBS as a global net, but the anode (substrate) is being considered as floating net during the comparison. The layout also seems to have just one pin exposed, so the extraction might be OK but might require something in netgen configuration to make it work. 
+
+Have anyone faced this issue?, or can provide a guidance to configure the LVS tool properly?
+
+Thank you!
+cc: @peterkinget","2025-11_media/image-5BE2C.png,2025-11_media/image-A452F.png,2025-11_media/image-65B26.png,2025-11_media/image-F0658.png",""
+"738396032295108721","bailey8889","2025-11-29T21:59:40.6430000+00:00","@LuighiV I think you may have run into the issue that magic does not handle devices that are formed by layers on different hierarchies. 
+
+I have LVS pass on the gf I/O cells by flattening before extracting via `gds flatglob`ing the following.
+```
+*Bondpad*
+*CLAMP_COR*
+*FILL*
+*METAL_RAIL*
+*NMOS_*
+*POWER_RAIL_COR*
+*_BASE*
+*comp018green*  
+*diode_nd2ps_06v0_*[A-Z]*
+*diode_pd2nw_06v0_*[A-Z]*
+*mim_*_*[A-Z]*  
+*moscap_*
+*nmos_*_*[A-Z]* 
+*nmos_4T_metal_stack*
+*nmos_clamp_*   
+*pmos_6p0_esd_* 
+*power_via*     
+*ppolyf_u_*[A-Z]*
+*top_route*     
+*_CDNS_*
+```
+(edited to include `*_CDNS_*`)","","🙌 (2)"
+"701803458495512666","luighiv","2025-11-29T22:03:34.0070000+00:00","Hi @bailey  that's great you have already managed to make it work, let me try the same here, thanks for the advice","","👍 (2)"
+"701803458495512666","luighiv","2025-11-30T00:07:32.5240000+00:00","Hi @bailey I have used the configuration you have shared, and now the difference is in the 3rd terminal of poly resistors. In layout is connected to VSS  while in the netlist is connected to VDD. Do you know how to fix this? I'm using the spice model shared in the Chipathon repository","2025-11_media/image-84544.png,2025-11_media/image-CFECC.png",""
+"738396032295108721","bailey8889","2025-11-30T08:34:20.9230000+00:00","@LuighiV The actual layout looks like it's over nwell, so `DVDD` should be the proper connection.
+
+Can you share the extracted netlist?","",""
+"701803458495512666","luighiv","2025-11-30T14:27:28.0220000+00:00","sure, the extrated one is attached here","2025-11_media/sample_pads_layout-2BF8E.spice",""
+"738396032295108721","bailey8889","2025-11-30T14:31:47.6130000+00:00","@LuighiV magic extracts devices at the level the occur in the hierarchy. It has problems, for example, if you add a nwell at a parent hierarchy. For the I/O cells to extract correctly, I had to `gds flatglob` all the subcells. The final extracted netlist should only include subckts for the top level io cells.","",""
+"701803458495512666","luighiv","2025-11-30T14:39:20.9000000+00:00","Hi @bailey  thanks for the heads up, I was using the set of instruction you shared before, I guessed that way will flatten he internal hierarchies, do you why it keeps extracting the subhierarchies?","2025-11_media/run_lvs-ED1F3.sh",""
+"738396032295108721","bailey8889","2025-11-30T14:45:49.5330000+00:00","@LuighiV Looks like I missed one.
+Try adding 
+```
+gds flatglob *_CDNS_*
+```","",""
+"701803458495512666","luighiv","2025-11-30T15:04:02.4800000+00:00","oh, got it, let me try again, thanks 👍","","👍 (1)"
+"701803458495512666","luighiv","2025-11-30T16:03:11.0990000+00:00","Hi @bailey  I re run again but seems it has the same issue, and it keeps extracting the internal hierarchies","2025-11_media/sample_pads_comp-8088B.out,2025-11_media/run_lvs-AC10A.sh,2025-11_media/sample_pads_layout-74415.spice",""
+"738396032295108721","bailey8889","2025-11-30T16:43:57.0330000+00:00","@LuighiV I can't understand why. Are you sure that `sample_pads_layout.spice` is the most recent file? Can you check the time stamp?","",""
+"701803458495512666","luighiv","2025-11-30T17:13:31.2240000+00:00","@bailey yes, indeed I deleted first just to be sure it is created again and not using and old one","","👍 (1)"
+"738396032295108721","bailey8889","2025-11-30T20:52:10.5330000+00:00","@LuighiV 
+```
+gfs flatglob *_CDNS_*
+```
+`gfs` 😆","",""
+"701803458495512666","luighiv","2025-11-30T21:05:53.8820000+00:00","oh... sorry, my mistake going to try again, thanks for noticing","","👍 (1)"
+"701803458495512666","luighiv","2025-11-30T21:21:02.2150000+00:00","It worked now! 🙂, thank you so much @bailey  for your help!","","👍 (1)"

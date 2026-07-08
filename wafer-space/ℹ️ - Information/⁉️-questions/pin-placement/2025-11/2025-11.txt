@@ -1,0 +1,62 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / ⁉️-questions / Pin Placement
+After: 2025-10-31 11:59 p.m.
+Before: 2025-12-01 12:00 a.m.
+==============================================================
+
+[2025-11-29 8:04 p.m.] buck_042
+Hi all. I’m using the template project to PnR some small digital modules and plan to integrate them into a larger analog block. I’m not using the template configs, just the Librelane environment.
+I have a question: how can I more precisely customize pin locations? Is there any script or config that lets me specify the absolute position of each pin on the floorplan? With pin_order.cfg I can only spread pins evenly along one side.
+Any help will be appreciated.
+
+
+[2025-11-29 8:48 p.m.] 246tnt
+The easiest is to the the "DEF template" feature. See FP_DEF_TEMPLATE.
+
+
+[2025-11-29 8:48 p.m.] 246tnt
+Then you can write a DEF that define exact positions of the pins you want.
+
+
+[2025-11-29 11:05 p.m.] buck_042
+Thank you! Are there any DEF template files that I can use as a reference?
+
+
+[2025-11-30 8:37 a.m.] bailey8889
+@Buck the caravel's user_project_wrapper uses one. https://github.com/chipfoundry/caravel_user_project/blob/main/openlane/user_project_wrapper/fixed_dont_change/user_project_wrapper_gf180mcu.def
+
+{Embed}
+https://github.com/chipfoundry/caravel_user_project/blob/main/openlane/user_project_wrapper/fixed_dont_change/user_project_wrapper_gf180mcu.def
+caravel_user_project/openlane/user_project_wrapper/fixed_dont_chang...
+Contribute to chipfoundry/caravel_user_project development by creating an account on GitHub.
+2025-11_media/caravel_user_project-AE990
+
+
+[2025-11-30 8:41 a.m.] 246tnt
+https://github.com/TinyTapeout/tt-support-tools/blob/main/tech/gf180mcuD/def/tt_block_1x1_pgvdd.def
+
+{Embed}
+https://github.com/TinyTapeout/tt-support-tools/blob/main/tech/gf180mcuD/def/tt_block_1x1_pgvdd.def
+tt-support-tools/tech/gf180mcuD/def/tt_block_1x1_pgvdd.def at main ...
+Tiny Tapeout project build tools + chip integration scripts - TinyTapeout/tt-support-tools
+2025-11_media/tt-support-tools-64586
+
+
+[2025-11-30 8:42 a.m.] 246tnt
+Tiny Tapeout  above also use some and they're pretty minimal.
+
+
+[2025-11-30 5:24 p.m.] buck_042
+Thank for everyone's help!
+
+
+[2025-11-30 5:29 p.m.] egorxe
+If you have an abstract LEF (for example after LibreLane run with pin placement you would like to fix) you could easily make a template DEF from it with magic, [like this](https://github.com/egorxe/gf180mcu-sram-wrappers/blob/main/utils/magic_def.tcl).
+
+{Reactions}
+👍
+
+==============================================================
+Exported 9 message(s)
+==============================================================

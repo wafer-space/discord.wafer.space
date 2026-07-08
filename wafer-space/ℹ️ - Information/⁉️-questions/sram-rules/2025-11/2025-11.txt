@@ -1,0 +1,64 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / ⁉️-questions / SRAM rules
+After: 2025-10-31 11:59 p.m.
+Before: 2025-12-01 12:00 a.m.
+==============================================================
+
+[2025-11-28 5:55 p.m.] 246tnt
+Are the SRAM rules only valid for foundry provided cell ? What if I want to design my own memory array or dual port cell or stuff like that, can I use them ?
+
+
+[2025-11-28 7:12 p.m.] mole99
+Yes, I think that should be possible.
+Afaik it's not the cells that are detected, but rather the SRAM marker layer.
+However, as you probably know, there's no guarantee your cells will work after production, since the SRAM cells in the PDK were probably carefully designed to violate the normal core rules.
+
+
+[2025-11-28 7:14 p.m.] mole99
+In fact, @Tim Edwards  already shrinked the 5V SRAM cells.
+
+
+[2025-11-28 7:15 p.m.] 246tnt
+I know he did but they are still 6T cells, I'm thinking about doing the same register file that I did on sky130, or a dual port cell, or rom or other things like that.
+
+{Reactions}
+😮
+
+[2025-11-28 7:17 p.m.] mole99
+Yes, as long as you place the SRAM marker layer you can use the SRAM 3.3V/5V rules, as I understand it.
+
+{Reactions}
+👍 (2)
+
+[2025-11-28 10:37 p.m.] mithro_
+When using the SRAM cells DRC rules there are normally a bunch of requirements around the layout of the cells that are not specified in DRC decks and such.
+
+
+[2025-11-28 10:38 p.m.] mithro_
+My understanding is that they can violate the rules due to the tuning to make the regular patterns print better.
+
+
+[2025-11-29 7:38 a.m.] mole99
+These rules are documented here:
+- https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_11_1.html
+- https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_11_2.html
+
+So it should be possible to submit your own custom cells based on these rules, but there is no guarantee that they will work as expected.
+
+
+[2025-11-29 4:52 p.m.] rtimothyedwards_19428
+Since I created the 3.3V SRAM core cell myself, we'll put that theory to the test.
+
+{Reactions}
+😮 (2)
+
+[2025-11-30 1:49 a.m.] mithro_
+Yeap! I'm interested to see how things go, I don't quite have the same pull with GF now I'm not Google.
+
+{Reactions}
+😮 (2)
+
+==============================================================
+Exported 10 message(s)
+==============================================================

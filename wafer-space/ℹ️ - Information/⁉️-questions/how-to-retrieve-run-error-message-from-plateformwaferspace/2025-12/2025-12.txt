@@ -1,0 +1,177 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / ⁉️-questions / How to retrieve run error message from plateform.wafer.space?
+After: 2025-11-30 11:59 p.m.
+Before: 2026-01-01 12:00 a.m.
+==============================================================
+
+[2025-12-03 2:27 p.m.] scafir
+Seems like my design is failing some checks on the online plateform (or the plateform itself is failing) with 
+Processing Logs
+```
+=== SYSTEM ERROR - See error_message field ===
+
+RETRY #1: Automatic retry after error
+
+=== SYSTEM ERROR - See error_message field ===
+
+RETRY #2: Automatic retry after error
+
+=== SYSTEM ERROR - See error_message field ===
+
+RETRY #3: Automatic retry after error
+
+=== SYSTEM ERROR - See error_message field ===
+```
+Is there a way to get more  information? I do not see what the "error_message field" refers to
+
+
+[2025-12-03 2:31 p.m.] mithro_
+@Clyde Laforge - SYSTEM ERROR means the precheck failed to run correctly.
+
+
+[2025-12-03 2:32 p.m.] mithro_
+Well, looks like I broke the prechecks.....
+
+
+[2025-12-03 2:32 p.m.] mithro_
+```
+column shuttles_shuttle.max_slots does not exist
+LINE 1: ...ttle"."description", "shuttles_shuttle"."status", "shuttles_...
+```
+
+
+[2025-12-03 2:32 p.m.] mole99
+For now you can run the same precheck locally: https://github.com/wafer-space/gf180mcu-precheck
+
+{Embed}
+https://github.com/wafer-space/gf180mcu-precheck
+GitHub - wafer-space/gf180mcu-precheck: Precheck for wafer.space MP...
+Precheck for wafer.space MPW runs using the gf180mcu PDK  - GitHub - wafer-space/gf180mcu-precheck: Precheck for wafer.space MPW runs using the gf180mcu PDK
+2025-12_media/gf180mcu-precheck-B88AF
+
+
+[2025-12-03 2:33 p.m.] scafir
+Yes! nix-shell currently compiling 🙂
+
+{Reactions}
+👍
+
+[2025-12-03 2:33 p.m.] mithro_
+I just need to restart the task worker so it picks up the db structure change.
+
+
+[2025-12-03 2:34 p.m.] scafir
+Thank you for looking into this @Tim 'mithro' Ansell
+
+
+[2025-12-03 2:37 p.m.] mithro_
+@Leo Moser (mole99) - Now it's one for you I think
+
+
+[2025-12-03 2:38 p.m.] mole99
+Yes
+
+
+[2025-12-03 2:39 p.m.] mole99
+```
+assert id_cell.bbox() == qrcode_cell.bbox()
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+```
+
+
+[2025-12-03 2:39 p.m.] mole99
+@Clyde Laforge Did you place [this QR code instance](https://github.com/wafer-space/gf180mcu-project-template/tree/main/ip/gf180mcu_ws_ip__id)?
+
+
+[2025-12-03 2:40 p.m.] mole99
+It seems the bounding box is not as expected.
+
+
+[2025-12-03 2:41 p.m.] scafir
+I reused the one that originally came from the pad ring from a couple weeks ago, but maybe there was some update to it?
+
+
+[2025-12-03 2:46 p.m.] scafir
+Checked and my design seems correct and up to date, with a valid `gf180mcu_ws_ip__id` cell at 0,0.
+
+
+[2025-12-03 2:48 p.m.] mole99
+Is the instance directly after the top cell in the hierarchy?
+
+
+[2025-12-03 2:49 p.m.] mole99
+Can you confirm the size of the boundary layer is 142.8, 142.8?
+
+
+[2025-12-03 2:49 p.m.] mole99
+What is your ID?
+
+
+[2025-12-03 2:50 p.m.] scafir
+Yes
+
+
+[2025-12-03 2:50 p.m.] scafir
+TRID
+
+
+[2025-12-03 2:51 p.m.] scafir
+Yes
+
+
+[2025-12-03 2:52 p.m.] mole99
+Can you provide me a link to your layout? :)
+
+
+[2025-12-03 2:52 p.m.] mole99
+(Can also be in private.)
+
+
+[2025-12-03 2:53 p.m.] scafir
+No, it's fine, it's source available (hopefully with a proper open source license soon ^^'): https://github.com/Scafir/gf180mcu-project-trident-gf180-teststructure/blob/3f02c0f9c702dd272a04e1c97542253af30421cf/klayout/top.layout.filled.gds.gz
+
+{Embed}
+https://github.com/Scafir/gf180mcu-project-trident-gf180-teststructure/blob/3f02c0f9c702dd272a04e1c97542253af30421cf/klayout/top.layout.filled.gds.gz
+gf180mcu-project-trident-gf180-teststructure/klayout/top.layout.fil...
+Project template for wafer.space MPW runs using the gf180mcu PDK - Scafir/gf180mcu-project-trident-gf180-teststructure
+
+{Reactions}
+👌
+
+[2025-12-03 3:04 p.m.] mole99
+I can trigger the same issue. Will look for a solution.
+
+
+[2025-12-03 3:13 p.m.] mole99
+Your database unit (dbu) of the layout is 0.05um. The dbu must be 0.001um and all geometry must be on-grid 0.05um.
+
+
+[2025-12-03 3:14 p.m.] mole99
+You should be able to easily scale your whole layout :)
+
+
+[2025-12-03 3:14 p.m.] mole99
+(And I can add a new check to the precheck)
+
+
+[2025-12-03 3:17 p.m.] mole99
+```
+[16:17:19] ERROR    Subprocess had a non-zero exit.step.py:1383
+[16:17:19] ERROR    Last 1 line(s):step.py:1388
+                    [Error]: Database unit (dbu) is not 0.001um.
+```
+
+Now that's a better error ;)
+
+
+[2025-12-03 3:27 p.m.] scafir
+Very nice, thank you!
+
+{Reactions}
+👌
+
+==============================================================
+Exported 30 message(s)
+==============================================================

@@ -1,0 +1,14 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"1413605821430104114","xintingjiang_36756","2025-12-02T01:05:47.4710000+00:00","Hi all,
+I am trying to generate a clean pad frame for manual top level connections following the script here: https://github.com/wafer-space/gf180mcu-project-template/pull/29/commits/34fc81fc1c3d354f5d73af2510585641c9bfa93c
+
+Since for a clean pad frame, we don't have the chip_core, just chip_top, what is the proper way of providing the config pins of these instantiated pads? I've tried
+ 1) '0/'1: leads to magic-klayout XOR errors and some lvs errors of the pad frame
+2) VSS/VDD: leads to lvs errors for short-connect the power grids.
+
+Thanks for your help!","2025-12_media/image-91E0C.png",""
+"323371864074485771","mole99","2025-12-02T07:31:55.1020000+00:00","Since you do manual top-level connections the padring is streamed out before any of the stdcells are placed and routed. Therefore you cannot connect any constants to the pins (you can, but there will be no connections).
+You need to manually tie these pins after the GDS for the padring has been generated.","",""
+"1413605821430104114","xintingjiang_36756","2025-12-02T16:44:57.9290000+00:00","Got it, thanks!","",""
+"1413605821430104114","xintingjiang_36756","2025-12-06T19:54:27.9040000+00:00","Just to double check, this clean pad ring generator script is still valid after the project template update right?","",""
+"323371864074485771","mole99","2025-12-06T20:03:29.7610000+00:00","Yes, I merged the PR into main. You can create a standalone padring via `make librelane-padring`.","","👍 (1)"

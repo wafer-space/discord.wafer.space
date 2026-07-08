@@ -1,0 +1,531 @@
+{
+  "guild": {
+    "id": "1361349522684510449",
+    "name": "wafer.space Community",
+    "iconUrl": "2025-12_media/fb143eaa45770cbb40493d09b625e98b-09FD1.png"
+  },
+  "channel": {
+    "id": "1444703124647313631",
+    "type": "GuildPublicThread",
+    "categoryId": "1409660288822673408",
+    "category": "⁉️-questions",
+    "name": "Magic DRC waving",
+    "topic": null
+  },
+  "dateRange": {
+    "after": "2025-11-30T23:59:59.999+00:00",
+    "before": "2026-01-01T00:00:00+00:00"
+  },
+  "exportedAt": "2026-07-08T21:17:00.9658829+00:00",
+  "messages": [
+    {
+      "id": "1444961945278087272",
+      "type": "Default",
+      "timestamp": "2025-12-01T08:02:53.849+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Great! I'm running the precheck on the updated GDS now.\n\nBy the way, I just noticed that your sealring is still an earlier version (it's missing the glass cut on top). Please make sure to use the latest version of the PDK.\n\nDon't worry about the PR for now, that can wait until after the tapeout.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2025-12_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1444995618555826177",
+      "type": "Default",
+      "timestamp": "2025-12-01T10:16:42.184+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The precheck also resulted in magic DRC errors on my end.\nThey are of type \"Can't overlap those layers\" and seem to relate to an overlap of COMP in two different cells.\nThe errors only occur inside the sram128x8, the other SRAMs are not affected.\nTaking a closer look at the cells which belong to these COMP layers, sram128x8 is the only one that uses the `xdec16_*` cell.\nThe other SRAMs use a combination of `xdec8_*` and `xdec32_*`, which are part of `MAGIC_GDS_FLATGLOB`. \nIt seems the flatglob for `xdec16_*` is missing. I added it to `MAGIC_GDS_FLATGLOB` and started another run \uD83E\uDD1E",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2025-12_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [
+        {
+          "id": "1444995618320683088",
+          "url": "2025-12_media/Bildschirmfoto_vom_2025-12-01_11-04-25-0B04A.png",
+          "fileName": "Bildschirmfoto_vom_2025-12-01_11-04-25.png",
+          "fileSizeBytes": 5400
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83E\uDD1E",
+          "code": "fingers_crossed",
+          "isAnimated": false,
+          "imageUrl": "2025-12_media/1f91e-2A114.svg"
+        }
+      ]
+    },
+    {
+      "id": "1445000245942554704",
+      "type": "Default",
+      "timestamp": "2025-12-01T10:35:05.439+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "`Precheck successfully completed.` That seemed to work \uD83E\uDD73",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2025-12_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83E\uDD73",
+          "code": "partying_face",
+          "isAnimated": false,
+          "imageUrl": "2025-12_media/1f973-88B39.svg"
+        }
+      ]
+    },
+    {
+      "id": "1445000378235093042",
+      "type": "Default",
+      "timestamp": "2025-12-01T10:35:36.98+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I'll push the fix to the template and precheck and then you can give it a try on your end as well.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2025-12_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1445005857820512298",
+      "type": "Default",
+      "timestamp": "2025-12-01T10:57:23.415+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks, Leo! \n\n> Please make sure to use the latest version of the PDK.\n\nThe latest version of the PDK or of the nix-eda?",
+      "author": {
+        "id": "709384666909507634",
+        "name": "egorxe",
+        "discriminator": "0000",
+        "nickname": "Egor Lukyanchenko",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-12_media/3-FB033.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1445007490898067456",
+      "type": "Default",
+      "timestamp": "2025-12-01T11:03:52.771+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You're welcome!\n\n> The latest version of the PDK or of the nix-eda?\n\nBoth! After you update your template or precheck make sure to run `make clone-pdk` again.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2025-12_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1445008341368705196",
+      "type": "Default",
+      "timestamp": "2025-12-01T11:07:15.539+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I think I'm running the [latest nix environment](https://github.com/ZeduloTech/gf180mcu-testchip2025/blob/acbd33fc43099d885758a78b2fdbfca26950c0f0/flake.nix#L12) and the latest PDK (from Nov 27). Is there a way to check that the correct sealring generation routine is launched?",
+      "author": {
+        "id": "709384666909507634",
+        "name": "egorxe",
+        "discriminator": "0000",
+        "nickname": "Egor Lukyanchenko",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-12_media/3-FB033.png"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "gf180mcu-testchip2025/flake.nix at acbd33fc43099d885758a78b2fdbfca2...",
+          "url": "https://github.com/ZeduloTech/gf180mcu-testchip2025/blob/acbd33fc43099d885758a78b2fdbfca26950c0f0/flake.nix",
+          "timestamp": null,
+          "description": "SRAM and eFUSE testchip for wafer.space MPW runs using the gf180mcu PDK - ZeduloTech/gf180mcu-testchip2025",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "2025-12_media/gf180mcu-testchip2025-81CE6",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": [],
+          "inlineEmojis": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1445008885390905433",
+      "type": "Default",
+      "timestamp": "2025-12-01T11:09:25.244+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You can visually check the corner of your sealring. Yours looks like this:",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2025-12_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1445008892584267857",
+      "type": "Default",
+      "timestamp": "2025-12-01T11:09:26.959+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2025-12_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [
+        {
+          "id": "1445008892344926249",
+          "url": "2025-12_media/image-4656A.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 17978
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1445008973790056529",
+      "type": "Default",
+      "timestamp": "2025-12-01T11:09:46.32+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "But it should look like this:",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2025-12_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1445008978995318959",
+      "type": "Default",
+      "timestamp": "2025-12-01T11:09:47.561+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2025-12_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [
+        {
+          "id": "1445008978764628151",
+          "url": "2025-12_media/image-4308A.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 16840
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1445011268535582762",
+      "type": "Default",
+      "timestamp": "2025-12-01T11:18:53.43+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Ok, thanks. I've checked my latest GDS and it has this corner structure on 37/0, so it seems that I've updated something meanwhile between the GDS in repo and the current one, but thanks for the warning. With sealring being fine now, I'm waiting for your precheck update :).",
+      "author": {
+        "id": "709384666909507634",
+        "name": "egorxe",
+        "discriminator": "0000",
+        "nickname": "Egor Lukyanchenko",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-12_media/3-FB033.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4F",
+            "code": "clap",
+            "isAnimated": false,
+            "imageUrl": "2025-12_media/1f44f-3D381.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "323371864074485771",
+              "name": "mole99",
+              "discriminator": "0000",
+              "nickname": "Leo Moser (mole99)",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2025-12_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1445016696565006498",
+      "type": "Default",
+      "timestamp": "2025-12-01T11:40:27.573+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The precheck has been updated: https://github.com/wafer-space/gf180mcu-precheck/releases/tag/1.3.1\nHowever, it will take more time until the online precheck uses this version as well :)",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2025-12_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "Release 1.3.1: Merge pull request #16 from wafer-space/fix-sram128x...",
+          "url": "https://github.com/wafer-space/gf180mcu-precheck/releases/tag/1.3.1",
+          "timestamp": null,
+          "description": "fix: add flatglob for sram128x8, add --run-tag option",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "2025-12_media/gf180mcu-precheck-B88AF",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": [],
+          "inlineEmojis": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "2025-12_media/1f44d-27259.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "709384666909507634",
+              "name": "egorxe",
+              "discriminator": "0000",
+              "nickname": "Egor Lukyanchenko",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2025-12_media/3-FB033.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    }
+  ],
+  "messageCount": 13
+}

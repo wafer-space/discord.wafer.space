@@ -1,0 +1,146 @@
+{
+  "guild": {
+    "id": "1361349522684510449",
+    "name": "wafer.space Community",
+    "iconUrl": "2025-12_media/fb143eaa45770cbb40493d09b625e98b-09FD1.png"
+  },
+  "channel": {
+    "id": "1445797038863155381",
+    "type": "GuildPublicThread",
+    "categoryId": "1409660288822673408",
+    "category": "⁉️-questions",
+    "name": "Detailed Routing Antenna Violation",
+    "topic": null
+  },
+  "dateRange": {
+    "after": "2025-11-30T23:59:59.999+00:00",
+    "before": "2026-01-01T00:00:00+00:00"
+  },
+  "exportedAt": "2026-07-08T21:58:09.7534235+00:00",
+  "messages": [
+    {
+      "id": "1445797038863155381",
+      "type": "Default",
+      "timestamp": "2025-12-03T15:21:15.675+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I've tried doing 20+ iterations on the detailed routing antenna fixing, and I have a single stubborn net/pin violation.\n\n\n+ check_antennas \n[INFO ANT-0002] Found 1 net violations.\n[INFO ANT-0001] Found 1 pin violations.\n\nEven after 40 total iterations, it will not fix this. Does anyone know how I can figure out what net/pin this is and possibly how I could fix this?",
+      "author": {
+        "id": "805909190333038612",
+        "name": "trev5514",
+        "discriminator": "0000",
+        "nickname": "Trevor Peyton",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-12_media/2-ADBB4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1445823707816788113",
+      "type": "Default",
+      "timestamp": "2025-12-03T17:07:14.049+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I had somewhat similar issues on klayout where it was not clear where the error was coming from.\nSafest way to proceed was to copy the part of the design that failed, and cut connections until the error was gone",
+      "author": {
+        "id": "1401841055975870476",
+        "name": "scafir",
+        "discriminator": "0000",
+        "nickname": "Clyde Laforge",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-12_media/e9fd582c6cd4273d01cbf5dfd4bb3455-27807.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1445868913744150660",
+      "type": "Reply",
+      "timestamp": "2025-12-03T20:06:51.982+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The antenna summary should show you the affected net/pin.\nLibreLane allows you to manually insert antenna diodes:\n\n```\n...\n  substituting_steps:\n    +OpenROAD.DetailedRouting: Odb.InsertECODiodes\n...\n```\n\n```\nINSERT_ECO_DIODES:\n- target: instance/pin\n```",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2025-12_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "805909190333038612",
+          "name": "trev5514",
+          "discriminator": "0000",
+          "nickname": "Trevor Peyton",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2025-12_media/2-ADBB4.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1445797038863155381",
+        "channelId": "1445797038863155381",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1445870014597959831",
+      "type": "Default",
+      "timestamp": "2025-12-03T20:11:14.446+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Less is more I guess. Either I had a stubborn pin or something else, I ran it with only 10 iterations and it stopped after 6 and says it's all clear.",
+      "author": {
+        "id": "805909190333038612",
+        "name": "trev5514",
+        "discriminator": "0000",
+        "nickname": "Trevor Peyton",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-12_media/2-ADBB4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    }
+  ],
+  "messageCount": 4
+}

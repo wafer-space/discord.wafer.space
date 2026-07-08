@@ -1,0 +1,816 @@
+{
+  "guild": {
+    "id": "1361349522684510449",
+    "name": "wafer.space Community",
+    "iconUrl": "2025-11_media/fb143eaa45770cbb40493d09b625e98b-09FD1.png"
+  },
+  "channel": {
+    "id": "1444423485182050415",
+    "type": "GuildPublicThread",
+    "categoryId": "1409660288822673408",
+    "category": "⁉️-questions",
+    "name": "Running LVS for padframe",
+    "topic": null
+  },
+  "dateRange": {
+    "after": "2025-10-31T23:59:59.999+00:00",
+    "before": "2025-12-01T00:00:00+00:00"
+  },
+  "exportedAt": "2026-07-08T21:09:42.3285152+00:00",
+  "messages": [
+    {
+      "id": "1444423485182050415",
+      "type": "Default",
+      "timestamp": "2025-11-29T20:23:14.958+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi everyone, \n\nWe are trying to run LVS checks for the PADs in  gf180mcu using netgen. Not sure if others are using the same for it or maybe can suggest another tool to do it. However, while we achieved passing successfully for other circuits, for the pads (provided by GF) seems that it is no passing. We are trying with a simple test case of 4 pads, vdd, vss, asig5v and fills. What we found is that in all the pads there is an extra net which is not present (not matched) in schematic. \n\nDigging into the issue we identified that the extracted spice netlist from layout is creating diodes with just one pin exposed while the another is connected to substrate. Not sure if netgen understands VSUBS as a global net, but the anode (substrate) is being considered as floating net during the comparison. The layout also seems to have just one pin exposed, so the extraction might be OK but might require something in netgen configuration to make it work. \n\nHave anyone faced this issue?, or can provide a guidance to configure the LVS tool properly?\n\nThank you!\ncc: @peterkinget",
+      "author": {
+        "id": "701803458495512666",
+        "name": "luighiv",
+        "discriminator": "0000",
+        "nickname": "LuighiV",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/b5e6bb9dd5baa610a148ca5409cc755c-A9135.png"
+      },
+      "attachments": [
+        {
+          "id": "1444423485647491183",
+          "url": "2025-11_media/image-5BE2C.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 68845
+        },
+        {
+          "id": "1444423486125899949",
+          "url": "2025-11_media/image-A452F.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 171771
+        },
+        {
+          "id": "1444423486440341554",
+          "url": "2025-11_media/image-65B26.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 108514
+        },
+        {
+          "id": "1444423486771564564",
+          "url": "2025-11_media/image-F0658.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 253093
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "853313068871188530",
+          "name": "peterkinget",
+          "discriminator": "0000",
+          "nickname": "peterkinget",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2025-11_media/3-FB033.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1444447752103661629",
+      "type": "Default",
+      "timestamp": "2025-11-29T21:59:40.643+00:00",
+      "timestampEdited": "2025-11-30T14:46:55.838+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@LuighiV I think you may have run into the issue that magic does not handle devices that are formed by layers on different hierarchies. \n\nI have LVS pass on the gf I/O cells by flattening before extracting via `gds flatglob`ing the following.\n```\n*Bondpad*\n*CLAMP_COR*\n*FILL*\n*METAL_RAIL*\n*NMOS_*\n*POWER_RAIL_COR*\n*_BASE*\n*comp018green*  \n*diode_nd2ps_06v0_*[A-Z]*\n*diode_pd2nw_06v0_*[A-Z]*\n*mim_*_*[A-Z]*  \n*moscap_*\n*nmos_*_*[A-Z]* \n*nmos_4T_metal_stack*\n*nmos_clamp_*   \n*pmos_6p0_esd_* \n*power_via*     \n*ppolyf_u_*[A-Z]*\n*top_route*     \n*_CDNS_*\n```\n(edited to include `*_CDNS_*`)",
+      "author": {
+        "id": "738396032295108721",
+        "name": "bailey8889",
+        "discriminator": "0000",
+        "nickname": "bailey",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/0-EB806.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDE4C",
+            "code": "raised_hands",
+            "isAnimated": false,
+            "imageUrl": "2025-11_media/1f64c-7C820.svg"
+          },
+          "count": 2,
+          "users": [
+            {
+              "id": "378788837452677120",
+              "name": "asc9742",
+              "discriminator": "0000",
+              "nickname": "asc",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2025-11_media/3-FB033.png"
+            },
+            {
+              "id": "701803458495512666",
+              "name": "luighiv",
+              "discriminator": "0000",
+              "nickname": "LuighiV",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2025-11_media/b5e6bb9dd5baa610a148ca5409cc755c-A9135.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "701803458495512666",
+          "name": "luighiv",
+          "discriminator": "0000",
+          "nickname": "LuighiV",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2025-11_media/b5e6bb9dd5baa610a148ca5409cc755c-A9135.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1444448730903347392",
+      "type": "Default",
+      "timestamp": "2025-11-29T22:03:34.007+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi @bailey  that's great you have already managed to make it work, let me try the same here, thanks for the advice",
+      "author": {
+        "id": "701803458495512666",
+        "name": "luighiv",
+        "discriminator": "0000",
+        "nickname": "LuighiV",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/b5e6bb9dd5baa610a148ca5409cc755c-A9135.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "2025-11_media/1f44d-27259.svg"
+          },
+          "count": 2,
+          "users": [
+            {
+              "id": "378788837452677120",
+              "name": "asc9742",
+              "discriminator": "0000",
+              "nickname": "asc",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2025-11_media/3-FB033.png"
+            },
+            {
+              "id": "738396032295108721",
+              "name": "bailey8889",
+              "discriminator": "0000",
+              "nickname": "bailey",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2025-11_media/0-EB806.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "738396032295108721",
+          "name": "bailey8889",
+          "discriminator": "0000",
+          "nickname": "bailey",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2025-11_media/0-EB806.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1444479930304823418",
+      "type": "Default",
+      "timestamp": "2025-11-30T00:07:32.524+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi @bailey I have used the configuration you have shared, and now the difference is in the 3rd terminal of poly resistors. In layout is connected to VSS  while in the netlist is connected to VDD. Do you know how to fix this? I'm using the spice model shared in the Chipathon repository",
+      "author": {
+        "id": "701803458495512666",
+        "name": "luighiv",
+        "discriminator": "0000",
+        "nickname": "LuighiV",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/b5e6bb9dd5baa610a148ca5409cc755c-A9135.png"
+      },
+      "attachments": [
+        {
+          "id": "1444479930057625652",
+          "url": "2025-11_media/image-84544.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 83656
+        },
+        {
+          "id": "1444479930392907956",
+          "url": "2025-11_media/image-CFECC.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 221157
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "738396032295108721",
+          "name": "bailey8889",
+          "discriminator": "0000",
+          "nickname": "bailey",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2025-11_media/0-EB806.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1444607472374517832",
+      "type": "Default",
+      "timestamp": "2025-11-30T08:34:20.923+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@LuighiV The actual layout looks like it's over nwell, so `DVDD` should be the proper connection.\n\nCan you share the extracted netlist?",
+      "author": {
+        "id": "738396032295108721",
+        "name": "bailey8889",
+        "discriminator": "0000",
+        "nickname": "bailey",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/0-EB806.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "701803458495512666",
+          "name": "luighiv",
+          "discriminator": "0000",
+          "nickname": "LuighiV",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2025-11_media/b5e6bb9dd5baa610a148ca5409cc755c-A9135.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1444696337508470814",
+      "type": "Default",
+      "timestamp": "2025-11-30T14:27:28.022+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "sure, the extrated one is attached here",
+      "author": {
+        "id": "701803458495512666",
+        "name": "luighiv",
+        "discriminator": "0000",
+        "nickname": "LuighiV",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/b5e6bb9dd5baa610a148ca5409cc755c-A9135.png"
+      },
+      "attachments": [
+        {
+          "id": "1444696336971595817",
+          "url": "2025-11_media/sample_pads_layout-2BF8E.spice",
+          "fileName": "sample_pads_layout.spice",
+          "fileSizeBytes": 192682
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1444697426312040569",
+      "type": "Default",
+      "timestamp": "2025-11-30T14:31:47.613+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@LuighiV magic extracts devices at the level the occur in the hierarchy. It has problems, for example, if you add a nwell at a parent hierarchy. For the I/O cells to extract correctly, I had to `gds flatglob` all the subcells. The final extracted netlist should only include subckts for the top level io cells.",
+      "author": {
+        "id": "738396032295108721",
+        "name": "bailey8889",
+        "discriminator": "0000",
+        "nickname": "bailey",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/0-EB806.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "701803458495512666",
+          "name": "luighiv",
+          "discriminator": "0000",
+          "nickname": "LuighiV",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2025-11_media/b5e6bb9dd5baa610a148ca5409cc755c-A9135.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1444699327535775837",
+      "type": "Reply",
+      "timestamp": "2025-11-30T14:39:20.9+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi @bailey  thanks for the heads up, I was using the set of instruction you shared before, I guessed that way will flatten he internal hierarchies, do you why it keeps extracting the subhierarchies?",
+      "author": {
+        "id": "701803458495512666",
+        "name": "luighiv",
+        "discriminator": "0000",
+        "nickname": "LuighiV",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/b5e6bb9dd5baa610a148ca5409cc755c-A9135.png"
+      },
+      "attachments": [
+        {
+          "id": "1444699327283990629",
+          "url": "2025-11_media/run_lvs-ED1F3.sh",
+          "fileName": "run_lvs.sh",
+          "fileSizeBytes": 2880
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "738396032295108721",
+          "name": "bailey8889",
+          "discriminator": "0000",
+          "nickname": "bailey",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2025-11_media/0-EB806.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1444697426312040569",
+        "channelId": "1444423485182050415",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1444700957580722247",
+      "type": "Default",
+      "timestamp": "2025-11-30T14:45:49.533+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@LuighiV Looks like I missed one.\nTry adding \n```\ngds flatglob *_CDNS_*\n```",
+      "author": {
+        "id": "738396032295108721",
+        "name": "bailey8889",
+        "discriminator": "0000",
+        "nickname": "bailey",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/0-EB806.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "701803458495512666",
+          "name": "luighiv",
+          "discriminator": "0000",
+          "nickname": "LuighiV",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2025-11_media/b5e6bb9dd5baa610a148ca5409cc755c-A9135.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1444705541732569139",
+      "type": "Default",
+      "timestamp": "2025-11-30T15:04:02.48+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "oh, got it, let me try again, thanks \uD83D\uDC4D",
+      "author": {
+        "id": "701803458495512666",
+        "name": "luighiv",
+        "discriminator": "0000",
+        "nickname": "LuighiV",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/b5e6bb9dd5baa610a148ca5409cc755c-A9135.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "2025-11_media/1f44d-27259.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "738396032295108721",
+              "name": "bailey8889",
+              "discriminator": "0000",
+              "nickname": "bailey",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2025-11_media/0-EB806.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83D\uDC4D",
+          "code": "thumbsup",
+          "isAnimated": false,
+          "imageUrl": "2025-11_media/1f44d-27259.svg"
+        }
+      ]
+    },
+    {
+      "id": "1444720425719431291",
+      "type": "Default",
+      "timestamp": "2025-11-30T16:03:11.099+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi @bailey  I re run again but seems it has the same issue, and it keeps extracting the internal hierarchies",
+      "author": {
+        "id": "701803458495512666",
+        "name": "luighiv",
+        "discriminator": "0000",
+        "nickname": "LuighiV",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/b5e6bb9dd5baa610a148ca5409cc755c-A9135.png"
+      },
+      "attachments": [
+        {
+          "id": "1444720424826044467",
+          "url": "2025-11_media/sample_pads_comp-8088B.out",
+          "fileName": "sample_pads_comp.out",
+          "fileSizeBytes": 30086
+        },
+        {
+          "id": "1444720425098543257",
+          "url": "2025-11_media/run_lvs-AC10A.sh",
+          "fileName": "run_lvs.sh",
+          "fileSizeBytes": 2902
+        },
+        {
+          "id": "1444720425463713913",
+          "url": "2025-11_media/sample_pads_layout-74415.spice",
+          "fileName": "sample_pads_layout.spice",
+          "fileSizeBytes": 192682
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "738396032295108721",
+          "name": "bailey8889",
+          "discriminator": "0000",
+          "nickname": "bailey",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2025-11_media/0-EB806.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1444730684710191264",
+      "type": "Default",
+      "timestamp": "2025-11-30T16:43:57.033+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@LuighiV I can't understand why. Are you sure that `sample_pads_layout.spice` is the most recent file? Can you check the time stamp?",
+      "author": {
+        "id": "738396032295108721",
+        "name": "bailey8889",
+        "discriminator": "0000",
+        "nickname": "bailey",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/0-EB806.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "701803458495512666",
+          "name": "luighiv",
+          "discriminator": "0000",
+          "nickname": "LuighiV",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2025-11_media/b5e6bb9dd5baa610a148ca5409cc755c-A9135.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1444738126206468287",
+      "type": "Default",
+      "timestamp": "2025-11-30T17:13:31.224+00:00",
+      "timestampEdited": "2025-11-30T17:13:41.543+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@bailey yes, indeed I deleted first just to be sure it is created again and not using and old one",
+      "author": {
+        "id": "701803458495512666",
+        "name": "luighiv",
+        "discriminator": "0000",
+        "nickname": "LuighiV",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/b5e6bb9dd5baa610a148ca5409cc755c-A9135.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "2025-11_media/1f44d-27259.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "738396032295108721",
+              "name": "bailey8889",
+              "discriminator": "0000",
+              "nickname": "bailey",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2025-11_media/0-EB806.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "738396032295108721",
+          "name": "bailey8889",
+          "discriminator": "0000",
+          "nickname": "bailey",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2025-11_media/0-EB806.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1444793152576688319",
+      "type": "Default",
+      "timestamp": "2025-11-30T20:52:10.533+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@LuighiV \n```\ngfs flatglob *_CDNS_*\n```\n`gfs` \uD83D\uDE06",
+      "author": {
+        "id": "738396032295108721",
+        "name": "bailey8889",
+        "discriminator": "0000",
+        "nickname": "bailey",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/0-EB806.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "701803458495512666",
+          "name": "luighiv",
+          "discriminator": "0000",
+          "nickname": "LuighiV",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2025-11_media/b5e6bb9dd5baa610a148ca5409cc755c-A9135.png"
+        }
+      ],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83D\uDE06",
+          "code": "laughing",
+          "isAnimated": false,
+          "imageUrl": "2025-11_media/1f606-BE94E.svg"
+        }
+      ]
+    },
+    {
+      "id": "1444796605952688148",
+      "type": "Default",
+      "timestamp": "2025-11-30T21:05:53.882+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "oh... sorry, my mistake going to try again, thanks for noticing",
+      "author": {
+        "id": "701803458495512666",
+        "name": "luighiv",
+        "discriminator": "0000",
+        "nickname": "LuighiV",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/b5e6bb9dd5baa610a148ca5409cc755c-A9135.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "2025-11_media/1f44d-27259.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "738396032295108721",
+              "name": "bailey8889",
+              "discriminator": "0000",
+              "nickname": "bailey",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2025-11_media/0-EB806.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1444800415777558669",
+      "type": "Default",
+      "timestamp": "2025-11-30T21:21:02.215+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It worked now! \uD83D\uDE42, thank you so much @bailey  for your help!",
+      "author": {
+        "id": "701803458495512666",
+        "name": "luighiv",
+        "discriminator": "0000",
+        "nickname": "LuighiV",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/b5e6bb9dd5baa610a148ca5409cc755c-A9135.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "2025-11_media/1f44d-27259.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "738396032295108721",
+              "name": "bailey8889",
+              "discriminator": "0000",
+              "nickname": "bailey",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2025-11_media/0-EB806.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "738396032295108721",
+          "name": "bailey8889",
+          "discriminator": "0000",
+          "nickname": "bailey",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2025-11_media/0-EB806.png"
+        }
+      ],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83D\uDE42",
+          "code": "slight_smile",
+          "isAnimated": false,
+          "imageUrl": "2025-11_media/1f642-83E8A.svg"
+        }
+      ]
+    }
+  ],
+  "messageCount": 16
+}

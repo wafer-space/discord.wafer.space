@@ -1,0 +1,191 @@
+{
+  "guild": {
+    "id": "1361349522684510449",
+    "name": "wafer.space Community",
+    "iconUrl": "2025-12_media/fb143eaa45770cbb40493d09b625e98b-09FD1.png"
+  },
+  "channel": {
+    "id": "1445219364906336448",
+    "type": "GuildPublicThread",
+    "categoryId": "1409660288822673408",
+    "category": "⁉️-questions",
+    "name": "Generate clean padring",
+    "topic": null
+  },
+  "dateRange": {
+    "after": "2025-11-30T23:59:59.999+00:00",
+    "before": "2026-01-01T00:00:00+00:00"
+  },
+  "exportedAt": "2026-07-08T21:38:01.6412887+00:00",
+  "messages": [
+    {
+      "id": "1445219364906336448",
+      "type": "Default",
+      "timestamp": "2025-12-02T01:05:47.471+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi all,\nI am trying to generate a clean pad frame for manual top level connections following the script here: https://github.com/wafer-space/gf180mcu-project-template/pull/29/commits/34fc81fc1c3d354f5d73af2510585641c9bfa93c\n\nSince for a clean pad frame, we don't have the chip_core, just chip_top, what is the proper way of providing the config pins of these instantiated pads? I've tried\n 1) '0/'1: leads to magic-klayout XOR errors and some lvs errors of the pad frame\n2) VSS/VDD: leads to lvs errors for short-connect the power grids.\n\nThanks for your help!",
+      "author": {
+        "id": "1413605821430104114",
+        "name": "xintingjiang_36756",
+        "discriminator": "0000",
+        "nickname": "Evansika",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-12_media/079dacdd621abb17caecd8882513a32e-13E97.png"
+      },
+      "attachments": [
+        {
+          "id": "1445219365216583750",
+          "url": "2025-12_media/image-91E0C.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 98342
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1445316536993710283",
+      "type": "Default",
+      "timestamp": "2025-12-02T07:31:55.102+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Since you do manual top-level connections the padring is streamed out before any of the stdcells are placed and routed. Therefore you cannot connect any constants to the pins (you can, but there will be no connections).\nYou need to manually tie these pins after the GDS for the padring has been generated.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2025-12_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1445455715857600522",
+      "type": "Default",
+      "timestamp": "2025-12-02T16:44:57.929+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Got it, thanks!",
+      "author": {
+        "id": "1413605821430104114",
+        "name": "xintingjiang_36756",
+        "discriminator": "0000",
+        "nickname": "Evansika",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-12_media/079dacdd621abb17caecd8882513a32e-13E97.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1446952956451881161",
+      "type": "Default",
+      "timestamp": "2025-12-06T19:54:27.904+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Just to double check, this clean pad ring generator script is still valid after the project template update right?",
+      "author": {
+        "id": "1413605821430104114",
+        "name": "xintingjiang_36756",
+        "discriminator": "0000",
+        "nickname": "Evansika",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-12_media/079dacdd621abb17caecd8882513a32e-13E97.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1446955229164601374",
+      "type": "Default",
+      "timestamp": "2025-12-06T20:03:29.761+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yes, I merged the PR into main. You can create a standalone padring via `make librelane-padring`.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2025-12_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "2025-12_media/1f44d-27259.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "1413605821430104114",
+              "name": "xintingjiang_36756",
+              "discriminator": "0000",
+              "nickname": "Evansika",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2025-12_media/079dacdd621abb17caecd8882513a32e-13E97.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    }
+  ],
+  "messageCount": 5
+}

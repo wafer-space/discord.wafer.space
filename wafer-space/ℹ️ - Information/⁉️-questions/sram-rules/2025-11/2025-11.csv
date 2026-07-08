@@ -1,0 +1,17 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"596068704471482370","246tnt","2025-11-28T17:55:34.5930000+00:00","Are the SRAM rules only valid for foundry provided cell ? What if I want to design my own memory array or dual port cell or stuff like that, can I use them ?","",""
+"323371864074485771","mole99","2025-11-28T19:12:54.9680000+00:00","Yes, I think that should be possible.
+Afaik it's not the cells that are detected, but rather the SRAM marker layer.
+However, as you probably know, there's no guarantee your cells will work after production, since the SRAM cells in the PDK were probably carefully designed to violate the normal core rules.","",""
+"323371864074485771","mole99","2025-11-28T19:14:07.8290000+00:00","In fact, @Tim Edwards  already shrinked the 5V SRAM cells.","",""
+"596068704471482370","246tnt","2025-11-28T19:15:10.6220000+00:00","I know he did but they are still 6T cells, I'm thinking about doing the same register file that I did on sky130, or a dual port cell, or rom or other things like that.","","😮 (1)"
+"323371864074485771","mole99","2025-11-28T19:17:42.5160000+00:00","Yes, as long as you place the SRAM marker layer you can use the SRAM 3.3V/5V rules, as I understand it.","","👍 (2)"
+"169786952432746498","mithro_","2025-11-28T22:37:27.7120000+00:00","When using the SRAM cells DRC rules there are normally a bunch of requirements around the layout of the cells that are not specified in DRC decks and such.","",""
+"169786952432746498","mithro_","2025-11-28T22:38:13.4840000+00:00","My understanding is that they can violate the rules due to the tuning to make the regular patterns print better.","",""
+"323371864074485771","mole99","2025-11-29T07:38:36.8780000+00:00","These rules are documented here:
+- https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_11_1.html
+- https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_11_2.html
+
+So it should be possible to submit your own custom cells based on these rules, but there is no guarantee that they will work as expected.","",""
+"1365118310701600900","rtimothyedwards_19428","2025-11-29T16:52:51.6500000+00:00","Since I created the 3.3V SRAM core cell myself, we'll put that theory to the test.","","😮 (2)"
+"169786952432746498","mithro_","2025-11-30T01:49:23.7730000+00:00","Yeap! I'm interested to see how things go, I don't quite have the same pull with GF now I'm not Google.","","😮 (2)"

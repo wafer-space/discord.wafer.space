@@ -1,0 +1,12 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"839883081896689765","buck_042","2025-11-29T20:04:21.7930000+00:00","Hi all. I’m using the template project to PnR some small digital modules and plan to integrate them into a larger analog block. I’m not using the template configs, just the Librelane environment.
+I have a question: how can I more precisely customize pin locations? Is there any script or config that lets me specify the absolute position of each pin on the floorplan? With pin_order.cfg I can only spread pins evenly along one side.
+Any help will be appreciated.","",""
+"596068704471482370","246tnt","2025-11-29T20:48:22.7280000+00:00","The easiest is to the the ""DEF template"" feature. See FP_DEF_TEMPLATE.","",""
+"596068704471482370","246tnt","2025-11-29T20:48:32.0170000+00:00","Then you can write a DEF that define exact positions of the pins you want.","",""
+"839883081896689765","buck_042","2025-11-29T23:05:55.8370000+00:00","Thank you! Are there any DEF template files that I can use as a reference?","",""
+"738396032295108721","bailey8889","2025-11-30T08:37:23.8810000+00:00","@Buck the caravel's user_project_wrapper uses one. https://github.com/chipfoundry/caravel_user_project/blob/main/openlane/user_project_wrapper/fixed_dont_change/user_project_wrapper_gf180mcu.def","",""
+"596068704471482370","246tnt","2025-11-30T08:41:53.4620000+00:00","https://github.com/TinyTapeout/tt-support-tools/blob/main/tech/gf180mcuD/def/tt_block_1x1_pgvdd.def","",""
+"596068704471482370","246tnt","2025-11-30T08:42:07.2280000+00:00","Tiny Tapeout  above also use some and they're pretty minimal.","",""
+"839883081896689765","buck_042","2025-11-30T17:24:24.7830000+00:00","Thank for everyone's help!","",""
+"709384666909507634","egorxe","2025-11-30T17:29:13.4950000+00:00","If you have an abstract LEF (for example after LibreLane run with pin placement you would like to fix) you could easily make a template DEF from it with magic, [like this](https://github.com/egorxe/gf180mcu-sram-wrappers/blob/main/utils/magic_def.tcl).","","👍 (1)"
