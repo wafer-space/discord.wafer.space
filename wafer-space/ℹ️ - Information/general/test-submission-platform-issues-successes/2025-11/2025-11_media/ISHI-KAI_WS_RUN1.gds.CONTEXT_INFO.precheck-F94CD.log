@@ -1,0 +1,22 @@
+PDK_ROOT = /workspace/gf180mcu
+PDK = gf180mcuD
+Top cell: $$$CONTEXT_INFO$$$
+Die ID: FFFFFFFF
+Slot: 1x1
+[05:50:41] INFO     Starting a new run of the 'PrecheckFlow' flow with the tag 'RUN_2025-11-28_05-50-41'.                                                                                    flow.py:658
+[05:50:41] INFO     Starting…                                                                                                                                                          sequential.py:339
+────────────────────────────────────────────────────────────────────────────────────────── Read in the layout ──────────────────────────────────────────────────────────────────────────────────────────
+[05:50:41] VERBOSE  Running 'KLayout.ReadLayout' at 'runs/RUN_2025-11-28_05-50-41/01-klayout-readlayout'…                                                                                   step.py:1138
+[05:50:41] VERBOSE  Logging subprocess to 'runs/RUN_2025-11-28_05-50-41/01-klayout-readlayout/klayout-readlayout.log'…                                                                      step.py:1338
+─────────────────────────────────────────────────────────────────────────────────────── Check the top-level name ───────────────────────────────────────────────────────────────────────────────────────
+[05:50:46] VERBOSE  Running 'KLayout.CheckTopLevel' at 'runs/RUN_2025-11-28_05-50-41/02-klayout-checktoplevel'…                                                                             step.py:1138
+[05:50:46] VERBOSE  Logging subprocess to 'runs/RUN_2025-11-28_05-50-41/02-klayout-checktoplevel/klayout-checktoplevel.log'…                                                                step.py:1338
+[Error] No top-level cell in /workspace/runs/RUN_2025-11-28_05-50-41/01-klayout-readlayout/$$$CONTEXT_INFO$$$.gds!                                                                                      
+[05:50:48] ERROR    Subprocess had a non-zero exit.                                                                                                                                         step.py:1383
+[05:50:48] ERROR    Last 1 line(s):                                                                                                                                                         step.py:1388
+                    [Error] No top-level cell in /workspace/runs/RUN_2025-11-28_05-50-41/01-klayout-readlayout/$$$CONTEXT_INFO$$$.gds!                                                                  
+                                                                                                                                                                                                        
+[05:50:48] ERROR    Full log file: 'runs/RUN_2025-11-28_05-50-41/02-klayout-checktoplevel/klayout-checktoplevel.log'                                                                        step.py:1391
+PrecheckFlow - Stage 2 - Check the top-level name ━━━                                       1/12 0:00:06
+Error: The precheck failed with the following exception: 
+Check the top-level name: subprocess (1, ['/nix/store/drsavrr1sj0pghyi129b0j9qfm6ln9gd-python3-3.12.10-env/bin/python3.12', '/workspace/scripts/klayout/check_top.py', '/workspace/runs/RUN_2025-11-28_05-50-41/01-klayout-readlayout/$$$CONTEXT_INFO$$$.gds', '--top', '$$$CONTEXT_INFO$$$']) failed

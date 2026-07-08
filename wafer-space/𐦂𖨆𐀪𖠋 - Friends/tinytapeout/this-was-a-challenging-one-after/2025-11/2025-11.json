@@ -1,0 +1,1284 @@
+{
+  "guild": {
+    "id": "1361349522684510449",
+    "name": "wafer.space Community",
+    "iconUrl": "2025-11_media/fb143eaa45770cbb40493d09b625e98b-09FD1.png"
+  },
+  "channel": {
+    "id": "1441431342335393884",
+    "type": "GuildPublicThread",
+    "categoryId": "1409664261952639098",
+    "category": "tinytapeout",
+    "name": "This was a challenging one! After",
+    "topic": null
+  },
+  "dateRange": {
+    "after": "2025-10-31T23:59:59.999+00:00",
+    "before": "2025-12-01T00:00:00+00:00"
+  },
+  "exportedAt": "2026-07-08T17:32:56.8132663+00:00",
+  "messages": [
+    {
+      "id": "1441825017230004234",
+      "type": "21",
+      "timestamp": "2025-11-22T16:17:51.921+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "",
+      "author": {
+        "id": "509798510170865675",
+        "name": "essen__",
+        "discriminator": "0000",
+        "nickname": "Essen",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/80e086280c9caadd9c05998c3254c9a9-25B3D.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "538398807986274304",
+          "name": "rzioma",
+          "discriminator": "0000",
+          "nickname": "ReJ aka Renaldas Zioma",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2025-11_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1441431342335393884",
+        "channelId": "1409664261952639098",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441825023248695368",
+      "type": "Default",
+      "timestamp": "2025-11-22T16:17:53.356+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Nice, how did you guys go about changing the default cell library ?",
+      "author": {
+        "id": "509798510170865675",
+        "name": "essen__",
+        "discriminator": "0000",
+        "nickname": "Essen",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/80e086280c9caadd9c05998c3254c9a9-25B3D.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441852630749151293",
+      "type": "Default",
+      "timestamp": "2025-11-22T18:07:35.497+00:00",
+      "timestampEdited": "2025-11-22T18:08:06.471+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Essen theoretically it should be just `\"STD_CELL_LIBRARY\": \"gf180mcu_fd_sc_mcu9t5v0\",` in `config.json`\nBUT there is a bug in the PDK that TT is using, so @htamas had to make a patch: https://github.com/TinyTapeout/tt-gds-action/compare/main...rejunity:tt-gds-action-gf180mcu_fd_sc_mcu9t5v0:main",
+      "author": {
+        "id": "538398807986274304",
+        "name": "rzioma",
+        "discriminator": "0000",
+        "nickname": "ReJ aka Renaldas Zioma",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "509798510170865675",
+          "name": "essen__",
+          "discriminator": "0000",
+          "nickname": "Essen",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2025-11_media/80e086280c9caadd9c05998c3254c9a9-25B3D.png"
+        },
+        {
+          "id": "543162393413287956",
+          "name": "h.tamas",
+          "discriminator": "0000",
+          "nickname": "htamas",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2025-11_media/1-B2132.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441854445972492288",
+      "type": "Default",
+      "timestamp": "2025-11-22T18:14:48.28+00:00",
+      "timestampEdited": "2025-11-22T18:20:30.182+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "So basically you have to\n1) clone https://github.com/TinyTapeout/tt-gds-action apply the patch\n1.5) add a tag on your patched gds-action repo, I used `ttgf0p2_9t`\n2) route your gds.yaml to use patched gds-action repo. something like that: https://github.com/rejunity/tt08-vga-drop/commit/2ac440a4bd84136deccb49f6ed56c4ded1a0a8b7\n3) add \"STD_CELL_LIBRARY\": \"gf180mcu_fd_sc_mcu9t5v0\", to your `config.json`\n4) change Makefile so that Gate Level tests use correct cell library too: https://github.com/rejunity/tt08-vga-drop/commit/22135b09cfd3b970ce26098b89df31547c557192\n\nand you should be done",
+      "author": {
+        "id": "538398807986274304",
+        "name": "rzioma",
+        "discriminator": "0000",
+        "nickname": "ReJ aka Renaldas Zioma",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441854860197888152",
+      "type": "Default",
+      "timestamp": "2025-11-22T18:16:27.039+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You might get around 10..15% speedup from that",
+      "author": {
+        "id": "538398807986274304",
+        "name": "rzioma",
+        "discriminator": "0000",
+        "nickname": "ReJ aka Renaldas Zioma",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441854891311108286",
+      "type": "Default",
+      "timestamp": "2025-11-22T18:16:34.457+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Nice, sounds like it was a fun ride. \uD83D\uDC4D",
+      "author": {
+        "id": "509798510170865675",
+        "name": "essen__",
+        "discriminator": "0000",
+        "nickname": "Essen",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/80e086280c9caadd9c05998c3254c9a9-25B3D.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83D\uDC4D",
+          "code": "thumbsup",
+          "isAnimated": false,
+          "imageUrl": "2025-11_media/1f44d-27259.svg"
+        }
+      ]
+    },
+    {
+      "id": "1441854899875745843",
+      "type": "Default",
+      "timestamp": "2025-11-22T18:16:36.499+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "(but loose in area)",
+      "author": {
+        "id": "538398807986274304",
+        "name": "rzioma",
+        "discriminator": "0000",
+        "nickname": "ReJ aka Renaldas Zioma",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441855011838759112",
+      "type": "Reply",
+      "timestamp": "2025-11-22T18:17:03.193+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "for some definition of fun...",
+      "author": {
+        "id": "538398807986274304",
+        "name": "rzioma",
+        "discriminator": "0000",
+        "nickname": "ReJ aka Renaldas Zioma",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "509798510170865675",
+          "name": "essen__",
+          "discriminator": "0000",
+          "nickname": "Essen",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2025-11_media/80e086280c9caadd9c05998c3254c9a9-25B3D.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1441854891311108286",
+        "channelId": "1441431342335393884",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441855102377005076",
+      "type": "Default",
+      "timestamp": "2025-11-22T18:17:24.779+00:00",
+      "timestampEdited": "2025-11-22T18:17:36.968+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I think we all here share a common twisted definition.",
+      "author": {
+        "id": "509798510170865675",
+        "name": "essen__",
+        "discriminator": "0000",
+        "nickname": "Essen",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/80e086280c9caadd9c05998c3254c9a9-25B3D.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "1004638051047309393",
+            "name": "partyblob",
+            "code": "partyblob",
+            "isAnimated": true,
+            "imageUrl": "2025-11_media/1004638051047309393-7C935.gif"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "538398807986274304",
+              "name": "rzioma",
+              "discriminator": "0000",
+              "nickname": "ReJ aka Renaldas Zioma",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2025-11_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441855466396319804",
+      "type": "Reply",
+      "timestamp": "2025-11-22T18:18:51.568+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Haha, maybe I should. \nFor now I don't have any timing issues, at least, assuming the output io doesn't go faster than 50MHz ? \uD83E\uDD37",
+      "author": {
+        "id": "509798510170865675",
+        "name": "essen__",
+        "discriminator": "0000",
+        "nickname": "Essen",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/80e086280c9caadd9c05998c3254c9a9-25B3D.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "538398807986274304",
+          "name": "rzioma",
+          "discriminator": "0000",
+          "nickname": "ReJ aka Renaldas Zioma",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2025-11_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1441854860197888152",
+        "channelId": "1441431342335393884",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83E\uDD37",
+          "code": "person_shrugging",
+          "isAnimated": false,
+          "imageUrl": "2025-11_media/1f937-19884.svg"
+        }
+      ]
+    },
+    {
+      "id": "1441855575964258457",
+      "type": "Default",
+      "timestamp": "2025-11-22T18:19:17.691+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I don't think this affects IO cells, only logic/dff",
+      "author": {
+        "id": "538398807986274304",
+        "name": "rzioma",
+        "discriminator": "0000",
+        "nickname": "ReJ aka Renaldas Zioma",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441855744310906970",
+      "type": "Default",
+      "timestamp": "2025-11-22T18:19:57.828+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yes, just to say that my timing is fine, and I am bottlenecked by the IO, so I have no motivation to up the frequency.",
+      "author": {
+        "id": "509798510170865675",
+        "name": "essen__",
+        "discriminator": "0000",
+        "nickname": "Essen",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/80e086280c9caadd9c05998c3254c9a9-25B3D.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441855957146800138",
+      "type": "Default",
+      "timestamp": "2025-11-22T18:20:48.572+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "We need faster, open source IO so bad \uD83E\uDEE0",
+      "author": {
+        "id": "509798510170865675",
+        "name": "essen__",
+        "discriminator": "0000",
+        "nickname": "Essen",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/80e086280c9caadd9c05998c3254c9a9-25B3D.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83E\uDEE0",
+          "code": "\uD83E\uDEE0",
+          "isAnimated": false,
+          "imageUrl": "2025-11_media/1fae0-D00A5.svg"
+        }
+      ]
+    },
+    {
+      "id": "1441856090945097900",
+      "type": "Default",
+      "timestamp": "2025-11-22T18:21:20.472+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Anyways, off to lunch \uD83D\uDC4B see you around",
+      "author": {
+        "id": "509798510170865675",
+        "name": "essen__",
+        "discriminator": "0000",
+        "nickname": "Essen",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/80e086280c9caadd9c05998c3254c9a9-25B3D.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "2025-11_media/1f44d-27259.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "538398807986274304",
+              "name": "rzioma",
+              "discriminator": "0000",
+              "nickname": "ReJ aka Renaldas Zioma",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2025-11_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83D\uDC4B",
+          "code": "wave",
+          "isAnimated": false,
+          "imageUrl": "2025-11_media/1f44b-8A059.svg"
+        }
+      ]
+    },
+    {
+      "id": "1441856164923965502",
+      "type": "Default",
+      "timestamp": "2025-11-22T18:21:38.11+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yeah, for MAC-array/SystolicArray you bound to be IO bound, I suppose",
+      "author": {
+        "id": "538398807986274304",
+        "name": "rzioma",
+        "discriminator": "0000",
+        "nickname": "ReJ aka Renaldas Zioma",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441856246121631774",
+      "type": "Default",
+      "timestamp": "2025-11-22T18:21:57.469+00:00",
+      "timestampEdited": "2025-11-22T18:28:12.348+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I added some \"noob\" input caches to my implementation, some time ago",
+      "author": {
+        "id": "538398807986274304",
+        "name": "rzioma",
+        "discriminator": "0000",
+        "nickname": "ReJ aka Renaldas Zioma",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441856360139460681",
+      "type": "Default",
+      "timestamp": "2025-11-22T18:22:24.653+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "https://github.com/rejunity/tiny-asic-1_58bit-matrix-mul",
+      "author": {
+        "id": "538398807986274304",
+        "name": "rzioma",
+        "discriminator": "0000",
+        "nickname": "ReJ aka Renaldas Zioma",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC40",
+            "code": "eyes",
+            "isAnimated": false,
+            "imageUrl": "2025-11_media/1f440-6C64D.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "509798510170865675",
+              "name": "essen__",
+              "discriminator": "0000",
+              "nickname": "Essen",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2025-11_media/80e086280c9caadd9c05998c3254c9a9-25B3D.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441856531137040596",
+      "type": "Default",
+      "timestamp": "2025-11-22T18:23:05.422+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "",
+      "author": {
+        "id": "538398807986274304",
+        "name": "rzioma",
+        "discriminator": "0000",
+        "nickname": "ReJ aka Renaldas Zioma",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+      },
+      "attachments": [
+        {
+          "id": "1441856530717606122",
+          "url": "2025-11_media/image-58839.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 68767
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441857018838122537",
+      "type": "Default",
+      "timestamp": "2025-11-22T18:25:01.699+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "And septenary version: https://github.com/rejunity/tt09-septenary-matrix-mul\nUnfortunately never got fab'd due to eFabless going bonk",
+      "author": {
+        "id": "538398807986274304",
+        "name": "rzioma",
+        "discriminator": "0000",
+        "nickname": "ReJ aka Renaldas Zioma",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441864820407402658",
+      "type": "Reply",
+      "timestamp": "2025-11-22T18:56:01.738+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Any plans on submitting it to a future shuttle ?",
+      "author": {
+        "id": "509798510170865675",
+        "name": "essen__",
+        "discriminator": "0000",
+        "nickname": "Essen",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/80e086280c9caadd9c05998c3254c9a9-25B3D.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "538398807986274304",
+          "name": "rzioma",
+          "discriminator": "0000",
+          "nickname": "ReJ aka Renaldas Zioma",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2025-11_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1441857018838122537",
+        "channelId": "1441431342335393884",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441874233490669658",
+      "type": "Reply",
+      "timestamp": "2025-11-22T19:33:25.992+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yes, for the next sky130 shuttle I would like to implementa input data cache with @tnt SRAM blocks.\nI am also very tempted to see how large of an array could fit onto the whole wafer.space chip... maybe even buy a wafer for that \uD83D\uDE09 but I don't think I will have time for the first shuttle.",
+      "author": {
+        "id": "538398807986274304",
+        "name": "rzioma",
+        "discriminator": "0000",
+        "nickname": "ReJ aka Renaldas Zioma",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83E\uDD23",
+            "code": "rofl",
+            "isAnimated": false,
+            "imageUrl": "2025-11_media/1f923-5854E.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "509798510170865675",
+              "name": "essen__",
+              "discriminator": "0000",
+              "nickname": "Essen",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2025-11_media/80e086280c9caadd9c05998c3254c9a9-25B3D.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "596068704471482370",
+          "name": "246tnt",
+          "discriminator": "0000",
+          "nickname": "tnt",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2025-11_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+        },
+        {
+          "id": "509798510170865675",
+          "name": "essen__",
+          "discriminator": "0000",
+          "nickname": "Essen",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2025-11_media/80e086280c9caadd9c05998c3254c9a9-25B3D.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1441864820407402658",
+        "channelId": "1441431342335393884",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83D\uDE09",
+          "code": "wink",
+          "isAnimated": false,
+          "imageUrl": "2025-11_media/1f609-9EC67.svg"
+        }
+      ]
+    },
+    {
+      "id": "1441875347690881155",
+      "type": "Reply",
+      "timestamp": "2025-11-22T19:37:51.638+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Sounds like more fun incoming \uD83D\uDE42 \nHaha, an entire wafer, I would like to see you guys do that.",
+      "author": {
+        "id": "509798510170865675",
+        "name": "essen__",
+        "discriminator": "0000",
+        "nickname": "Essen",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/80e086280c9caadd9c05998c3254c9a9-25B3D.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "538398807986274304",
+          "name": "rzioma",
+          "discriminator": "0000",
+          "nickname": "ReJ aka Renaldas Zioma",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2025-11_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1441874233490669658",
+        "channelId": "1441431342335393884",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83D\uDE42",
+          "code": "slight_smile",
+          "isAnimated": false,
+          "imageUrl": "2025-11_media/1f642-83E8A.svg"
+        }
+      ]
+    },
+    {
+      "id": "1441876190053924944",
+      "type": "Default",
+      "timestamp": "2025-11-22T19:41:12.473+00:00",
+      "timestampEdited": "2025-11-22T19:44:07.832+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "ah, sorry, I didn't mean a wafer scale \uD83D\uDE09 though that would be fun!!! Instead wafer.space has an option to get uncut wafer for $2000 with 40 chips of your design (but someone needs to cut and package them \uD83D\uDE09)\nbut still not a bad deal because that gives approximately 128 TinyTapeout tiles worth of an area.",
+      "author": {
+        "id": "538398807986274304",
+        "name": "rzioma",
+        "discriminator": "0000",
+        "nickname": "ReJ aka Renaldas Zioma",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC40",
+            "code": "eyes",
+            "isAnimated": false,
+            "imageUrl": "2025-11_media/1f440-6C64D.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "509798510170865675",
+              "name": "essen__",
+              "discriminator": "0000",
+              "nickname": "Essen",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2025-11_media/80e086280c9caadd9c05998c3254c9a9-25B3D.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83D\uDE09",
+          "code": "wink",
+          "isAnimated": false,
+          "imageUrl": "2025-11_media/1f609-9EC67.svg"
+        }
+      ]
+    },
+    {
+      "id": "1441880236152066296",
+      "type": "Default",
+      "timestamp": "2025-11-22T19:57:17.138+00:00",
+      "timestampEdited": "2025-11-22T19:57:32.211+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Back of envelope calculation gives me around 10..20 GOPs (something like 16x20 mac array) for a whole chip on 180nm still far from 1TOps \uD83D\uDE42",
+      "author": {
+        "id": "538398807986274304",
+        "name": "rzioma",
+        "discriminator": "0000",
+        "nickname": "ReJ aka Renaldas Zioma",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83D\uDE42",
+          "code": "slight_smile",
+          "isAnimated": false,
+          "imageUrl": "2025-11_media/1f642-83E8A.svg"
+        }
+      ]
+    },
+    {
+      "id": "1441880835169976350",
+      "type": "Default",
+      "timestamp": "2025-11-22T19:59:39.955+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@EmbeddedKen this is for you : \n> get uncut wafer for $2000 with 40 chips of your design (but someone needs to cut and package them \uD83D\uDE09)",
+      "author": {
+        "id": "509798510170865675",
+        "name": "essen__",
+        "discriminator": "0000",
+        "nickname": "Essen",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/80e086280c9caadd9c05998c3254c9a9-25B3D.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "190171097910607873",
+          "name": "embeddedken",
+          "discriminator": "0000",
+          "nickname": "EmbeddedKen",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2025-11_media/ad7d8fa834bc46a9826d4dd4ce7cf7d7-4D16D.png"
+        }
+      ],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83D\uDE09",
+          "code": "wink",
+          "isAnimated": false,
+          "imageUrl": "2025-11_media/1f609-9EC67.svg"
+        }
+      ]
+    },
+    {
+      "id": "1441881044138852502",
+      "type": "Reply",
+      "timestamp": "2025-11-22T20:00:29.777+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "How did I miss that \uD83D\uDC40 \nDamn, looks like I also need a die bonding machine now.",
+      "author": {
+        "id": "509798510170865675",
+        "name": "essen__",
+        "discriminator": "0000",
+        "nickname": "Essen",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/80e086280c9caadd9c05998c3254c9a9-25B3D.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "538398807986274304",
+          "name": "rzioma",
+          "discriminator": "0000",
+          "nickname": "ReJ aka Renaldas Zioma",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2025-11_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1441876190053924944",
+        "channelId": "1441431342335393884",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83D\uDC40",
+          "code": "eyes",
+          "isAnimated": false,
+          "imageUrl": "2025-11_media/1f440-6C64D.svg"
+        }
+      ]
+    },
+    {
+      "id": "1441881305364041839",
+      "type": "Default",
+      "timestamp": "2025-11-22T20:01:32.058+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "How are you planning on doing the cutting and packaging ? Does one of you own the die bonding machine or know someone that does ?",
+      "author": {
+        "id": "509798510170865675",
+        "name": "essen__",
+        "discriminator": "0000",
+        "nickname": "Essen",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/80e086280c9caadd9c05998c3254c9a9-25B3D.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441881552165408888",
+      "type": "Default",
+      "timestamp": "2025-11-22T20:02:30.9+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Well the 2000$ option is only as an addition to the 7000$ slot.",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441881774266253404",
+      "type": "Default",
+      "timestamp": "2025-11-22T20:03:23.853+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "So it's just to get a neat souvenir ... or if you want to do wafer level probing I guess.",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441883417020203114",
+      "type": "Default",
+      "timestamp": "2025-11-22T20:09:55.516+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "So sad, you got my hopes up there for a second. \uD83E\uDD23",
+      "author": {
+        "id": "509798510170865675",
+        "name": "essen__",
+        "discriminator": "0000",
+        "nickname": "Essen",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/80e086280c9caadd9c05998c3254c9a9-25B3D.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83E\uDD23",
+          "code": "rofl",
+          "isAnimated": false,
+          "imageUrl": "2025-11_media/1f923-5854E.svg"
+        }
+      ]
+    },
+    {
+      "id": "1441884000544227511",
+      "type": "Default",
+      "timestamp": "2025-11-22T20:12:14.639+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "There is a fixed number of slots in the reticle ...  so the price is pretty much production_cost / num_slots ...  2k$ is the cost to run one more wafer through the flow.",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441884246024261733",
+      "type": "Default",
+      "timestamp": "2025-11-22T20:13:13.166+00:00",
+      "timestampEdited": "2025-11-22T20:13:46.1+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The production costs are (simplified)  maskset_cost  + n_wafer * wafer_processing_cost    and the mask costs is the big chunks and the part which has a limited number of slots.",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "2025-11_media/1f44d-27259.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "509798510170865675",
+              "name": "essen__",
+              "discriminator": "0000",
+              "nickname": "Essen",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2025-11_media/80e086280c9caadd9c05998c3254c9a9-25B3D.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441901169281863750",
+      "type": "Default",
+      "timestamp": "2025-11-22T21:20:27.985+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Sad \uD83D\uDE09",
+      "author": {
+        "id": "538398807986274304",
+        "name": "rzioma",
+        "discriminator": "0000",
+        "nickname": "ReJ aka Renaldas Zioma",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83E\uDEC2",
+            "code": "people_hugging",
+            "isAnimated": false,
+            "imageUrl": "2025-11_media/1fac2-960B6.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "509798510170865675",
+              "name": "essen__",
+              "discriminator": "0000",
+              "nickname": "Essen",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2025-11_media/80e086280c9caadd9c05998c3254c9a9-25B3D.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83D\uDE09",
+          "code": "wink",
+          "isAnimated": false,
+          "imageUrl": "2025-11_media/1f609-9EC67.svg"
+        }
+      ]
+    },
+    {
+      "id": "1442227972890296611",
+      "type": "Default",
+      "timestamp": "2025-11-23T18:59:04.037+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Still a great deal though",
+      "author": {
+        "id": "509798510170865675",
+        "name": "essen__",
+        "discriminator": "0000",
+        "nickname": "Essen",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/80e086280c9caadd9c05998c3254c9a9-25B3D.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    }
+  ],
+  "messageCount": 34
+}

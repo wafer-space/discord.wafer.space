@@ -1,0 +1,105 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"169786952432746498","mithro_","2025-12-01T04:22:55.5940000+00:00","Dunno how time keeps disappearing.","",""
+"169786952432746498","mithro_","2025-12-01T04:23:24.7890000+00:00","I'm just in the process of updating https://test-platform.wafer.space and also looking at deploying the ""real"" https://platform.wafer.space","",""
+"169786952432746498","mithro_","2025-12-01T04:29:05.7710000+00:00","The platform should be able to run 3 checks in parallel","",""
+"169786952432746498","mithro_","2025-12-01T04:48:56.9510000+00:00","","",""
+"754661674145022032","noritsunaimamura","2025-12-01T05:01:31.8310000+00:00","""Permission denied""...","2025-12_media/image-A33A3.png",""
+"169786952432746498","mithro_","2025-12-01T05:20:05.0110000+00:00","Poke me again in about 30m","","👍 (1)"
+"538398807986274304","rzioma","2025-12-01T09:24:16.9500000+00:00","Mine is stuck between ""Check queued"" and ""Checking..."" going back and forth.","",""
+"538398807986274304","rzioma","2025-12-01T09:24:18.9760000+00:00","","2025-12_media/image-5C36C.png",""
+"538398807986274304","rzioma","2025-12-01T09:24:29.9670000+00:00","","2025-12_media/image-E5A21.png",""
+"538398807986274304","rzioma","2025-12-01T09:24:40.5570000+00:00","cc @Tholin","",""
+"754661674145022032","noritsunaimamura","2025-12-01T10:19:09.2890000+00:00","I'm in the same situation.","2025-12_media/image-F3A72.png,2025-12_media/image-07073.png",""
+"169786952432746498","mithro_","2025-12-01T10:37:58.7830000+00:00","Deploying a new version right now which should hopefully fix that.","",""
+"538398807986274304","rzioma","2025-12-01T10:40:32.3790000+00:00","@Tim 'mithro' Ansell do we need to resubmit?","",""
+"169786952432746498","mithro_","2025-12-01T10:41:32.2600000+00:00","It might start automatically.","",""
+"169786952432746498","mithro_","2025-12-01T10:42:59.5550000+00:00","It currently takes ~20m to do a deployment. I need to figure out why it takes so long but that is someone a future problem.","","👀 (2),🆗 (1),😫 (1)"
+"169786952432746498","mithro_","2025-12-01T11:35:02.3090000+00:00","Well, that didn't work - trying again now.","","🆗 (1)"
+"732347216412278825","urish","2025-12-01T11:49:23.6470000+00:00","Do you need help with this?","",""
+"169786952432746498","mithro_","2025-12-01T11:53:51.2020000+00:00","Running into differences between my local workstation and the remote vm.","",""
+"169786952432746498","mithro_","2025-12-01T11:54:10.9920000+00:00","Also regretting the decision to not make manufacturing checks work like download with seperate download attempts. One of the things to fix after we get past this bit.","",""
+"732347216412278825","urish","2025-12-01T11:58:02.9860000+00:00","IMHO it makes sense just to fire on VMs on demand for this (I think that's with ChipFoundry is doing?)","",""
+"732347216412278825","urish","2025-12-01T11:58:31.1860000+00:00","For TT sumbission we use fly.io","",""
+"169786952432746498","mithro_","2025-12-01T11:58:40.2060000+00:00","I am firing up docker containers on demand","",""
+"732347216412278825","urish","2025-12-01T11:58:44.1030000+00:00","Their advantage is that they can launch a vm in ~100 ms","",""
+"732347216412278825","urish","2025-12-01T11:59:06.1470000+00:00","(using firecracker, so it's actually some hybrid between VM and container)","",""
+"169786952432746498","mithro_","2025-12-01T11:59:08.5240000+00:00","The problem is mostly the django/celery code for managing the vm lifecycle stuff.","",""
+"732347216412278825","urish","2025-12-01T11:59:41.7210000+00:00","With fly they manage the lifecycle for you (but their compute is probably x10 more expensive compare with hetzner)","",""
+"169786952432746498","mithro_","2025-12-01T12:09:53.6170000+00:00","Things will be down for a little bit.","",""
+"169786952432746498","mithro_","2025-12-01T12:24:49.1270000+00:00","Should be back now.","",""
+"732347216412278825","urish","2025-12-01T12:25:24.4700000+00:00","Dispatched!","",""
+"732347216412278825","urish","2025-12-01T12:25:27.0850000+00:00","","2025-12_media/image-62AB3.png",""
+"169786952432746498","mithro_","2025-12-01T12:26:11.1790000+00:00","Dispatched means it's been sent to celery to run the docker command.....","",""
+"169786952432746498","mithro_","2025-12-01T12:38:20.2630000+00:00","Well, that is new......","",""
+"169786952432746498","mithro_","2025-12-01T12:41:33.0670000+00:00","@Leo Moser (mole99) - Something seems to have gone weird with nix in the docker container...","",""
+"732347216412278825","urish","2025-12-01T12:48:22.1060000+00:00","yeah","",""
+"732347216412278825","urish","2025-12-01T12:48:34.2020000+00:00","","2025-12_media/image-42004.png",""
+"732347216412278825","urish","2025-12-01T12:48:53.0360000+00:00","The error is:
+```
+       >        error: unable to download 'https://www.python.org/ftp/python/3.12.10/Python-3.12.10.tar.xz': Could not resolve hostname (6) Could not resolve host: www.python.org
+```","",""
+"732347216412278825","urish","2025-12-01T12:49:05.3770000+00:00","looks like an intermittent DNS error to me?","",""
+"169786952432746498","mithro_","2025-12-01T12:49:54.0680000+00:00","The docker container doesn't have network access.","",""
+"169786952432746498","mithro_","2025-12-01T12:50:52.3340000+00:00","And `nix` should be running with `--offline` too...","",""
+"732347216412278825","urish","2025-12-01T12:51:43.9080000+00:00","The logs don't show the actual nix command, so unfortunately I can't help further","",""
+"169786952432746498","mithro_","2025-12-01T12:55:29.8790000+00:00","https://github.com/wafer-space/gf180mcu-precheck/actions/runs/19823322624/job/56790515702?pr=17","",""
+"169786952432746498","mithro_","2025-12-01T12:58:21.2070000+00:00","`docker run --rm --network=none -e COLUMNS=200 -e TERM=xterm-256color -v
+    /home/django/platform.wafer.space/wafer_space/media/projects/562a942d-68e0-4370-8573-9cc36ffafd79/wafer-space.gf180mcu-project-template.r19704603402-a4686
+    122452.0p5x0p5_gds.chip_top.gds:/input/design.gds:ro -w /workspace --memory 64g ghcr.io/wafer-space/gf180mcu-precheck:latest python3 precheck.py --input
+    /input/design.gds --top ""chip_top"" --slot 0p5x0p5`","",""
+"220639106915368960","tholin","2025-12-01T13:07:02.2190000+00:00","I guess I have to re-submit the file to retry?","",""
+"169786952432746498","mithro_","2025-12-01T13:27:30.1920000+00:00","I can make it retry in a moment","",""
+"754661674145022032","noritsunaimamura","2025-12-01T13:54:44.9610000+00:00","When an error occurs, this screen appears and the processing logs disappear.
+How can I check the error logs?","2025-12_media/image-28A99.png",""
+"169786952432746498","mithro_","2025-12-01T14:09:06.4720000+00:00","I just fixed the issue with the logs getting overwritten, its in the process of deploying.","","🆗 (1)"
+"169786952432746498","mithro_","2025-12-01T14:09:43.0530000+00:00","The real issue in your case is that the job which cleans up orphan docker containers cleaned up your docker container.","",""
+"538398807986274304","rzioma","2025-12-01T14:10:53.3870000+00:00","@Tim 'mithro' Ansell is the /home/django/platform… a correct path? since we submit to test-platform…","",""
+"169786952432746498","mithro_","2025-12-01T14:13:26.6510000+00:00","Yeah - the test-platform is suppose to just be the production deployment with a different name.","",""
+"538398807986274304","rzioma","2025-12-01T14:16:47.0770000+00:00","That's what I get if I try to run docker command on my Ubuntu machine","2025-12_media/image-8FCDF.png",""
+"169786952432746498","mithro_","2025-12-01T14:20:47.6960000+00:00","Did you change the bit after the `-v` to match where your GDS file is?","",""
+"323371864074485771","mole99","2025-12-01T14:26:45.3490000+00:00","Is this still an issue?","",""
+"169786952432746498","mithro_","2025-12-01T14:27:39.8530000+00:00","@Leo Moser (mole99) - no it seems to go away after I deleted the container and repulled","","👌 (1)"
+"169786952432746498","mithro_","2025-12-01T16:14:56.6880000+00:00","Check seems to be running for your design now.","","🆗 (1)"
+"538398807986274304","rzioma","2025-12-01T16:25:45.8060000+00:00","ah, turns out, I need to provide the full path from the `~/` not just local path (I was trying to run docker from the folder with gds files).  Works now!","",""
+"538398807986274304","rzioma","2025-12-01T16:27:29.2300000+00:00","works: `docker run --rm --network=none -v ~/z80-open-silicon-tapeout/z80_quarter.gds:/input/design.gds:ro ...`
+
+doesn't:  `docker run --rm --network=none -v z80_quarter.gds:/input/design.gds:ro ...`","",""
+"169786952432746498","mithro_","2025-12-01T16:41:31.8020000+00:00","Looks like it might finally be running","2025-12_media/image-6A3B3.png","partyblob (2)"
+"538398807986274304","rzioma","2025-12-01T17:32:30.5900000+00:00","It is GREEN!","2025-12_media/image-87324.png",""
+"538398807986274304","rzioma","2025-12-01T17:33:15.5310000+00:00","🛳️ ship it! 🚢","",""
+"754661674145022032","noritsunaimamura","2025-12-01T20:50:37.7710000+00:00","It's GREEN!","2025-12_media/image-1049B.png","🎉 (2)"
+"169786952432746498","mithro_","2025-12-01T23:43:12.0780000+00:00","Looks like a bunch of the prechecks where able to be churned through last night...","",""
+"169786952432746498","mithro_","2025-12-02T00:29:03.6360000+00:00","The permission issues are because I went a little overboard with the privilege separation. The website can't write any files, only the download workers can. Only the docker workers can start/stop docker containers, etc.","",""
+"169786952432746498","mithro_","2025-12-02T00:32:03.1910000+00:00","And of course when running everything locally it all just runs as your user.","",""
+"169786952432746498","mithro_","2025-12-02T00:34:52.5580000+00:00","I do regret not putting the webapp and workers in their own docker containers, so then a deploy is just a few docker commands, rather than waiting for ansible to run a whole bunch of SSH commands which seem to each be taking 1.5 minutes rather than the 1 second they should.","",""
+"732347216412278825","urish","2025-12-02T05:06:16.1650000+00:00","We can finally join the it's green party too!","",""
+"732347216412278825","urish","2025-12-02T05:06:29.7070000+00:00","","2025-12_media/image-813CF.png",""
+"732347216412278825","urish","2025-12-02T05:07:32.6590000+00:00","1.5 minute to establish the connection or to push the container?","",""
+"732347216412278825","urish","2025-12-02T05:08:32.9660000+00:00","```
+PDK_ROOT = /workspace/gf180mcu
+PDK = gf180mcuD
+Top cell: tt_gf_wrapper
+Die ID: FFFFFFFF
+```
+
+I guess the DIE ID is not yet finalized?","",""
+"169786952432746498","mithro_","2025-12-02T06:08:52.0710000+00:00","1.5m to run a command on the server using SSH (like cat /etc/hostname)","",""
+"169786952432746498","mithro_","2025-12-02T06:10:25.4350000+00:00","Seems like some type of weird interaction between SSH jump hosts, ansible gather facts and other things I don't quite understand yet.","",""
+"732347216412278825","urish","2025-12-02T06:11:47.2150000+00:00","Long shot, but could be a DNS issue?","",""
+"732347216412278825","urish","2025-12-02T06:12:22.2540000+00:00","I've seen cases when failed DNS lookups really slow down systems","",""
+"732347216412278825","urish","2025-12-02T06:23:04.2260000+00:00","Shall we also submit on platform? or test-platform is enough?","",""
+"169786952432746498","mithro_","2025-12-02T06:23:54.0700000+00:00","test-platform should be enough","","👍 (1)"
+"323371864074485771","mole99","2025-12-02T07:54:43.9270000+00:00","The die ID needs to be passed to the precheck by the online platform ([#72](https://github.com/wafer-space/platform.wafer.space/issues/72)). After this has been implemented, the precheck needs to run again. (@Tim 'mithro' Ansell)","",""
+"323371864074485771","mole99","2025-12-02T07:57:42.2930000+00:00","https://platform.wafer.space failed to download the file because of:
+
+```
+Download Error:
+
+Download failed: [Errno 13] Permission denied: '/home/django/platform.wafer.space/wafer_space/media/projects/91a731b3-d0a9-4cc3-bb72-dbc57afca703'
+```
+
+Is this because of the above?","",""
+"169786952432746498","mithro_","2025-12-02T08:58:48.0970000+00:00","Seems like that is fixed now, but yes.","",""
+"323371864074485771","mole99","2025-12-02T08:59:40.9160000+00:00","Yes, precheck is running now 👍","",""
+"169786952432746498","mithro_","2025-12-02T09:01:19.6940000+00:00","I could probably up the number of concurrent prechecks on the platform server. 4 isn't giving test-platform any trouble and it is slower than the primary machine.","","👌 (1)"
+"754661674145022032","noritsunaimamura","2025-12-02T18:34:56.7070000+00:00","Our GDS was all green in the production platform too.","2025-12_media/image-99027.png","🎉 (2)"

@@ -1,0 +1,118 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 📐 - Designing / 📝-project-template / `librelane-magicdrc` crashes
+After: 2025-10-31 11:59 p.m.
+Before: 2025-12-01 12:00 a.m.
+==============================================================
+
+[2025-11-19 7:20 a.m.] mole99
+
+
+
+[2025-11-19 7:20 a.m.] mole99
+No, that is not expected. `librelane-magicdrc` only skips the `KLayout.DRC` step. Streamout, however, should still be done with both magic and KLayout in order to compare the GDS.
+Can you verify that both `56-magic-streamout` and `57-klayout-streamout` contain a GDS?
+
+
+[2025-11-19 10:46 a.m.] _luke_w_
+Haha ok, I'll dig in a bit more this evening! Thanks
+
+{Reactions}
+👌
+
+[2025-11-19 7:09 p.m.] _luke_w_
+so yeah, the `.magic.drc` has a size of 0 bytes, and the previous step failed, citing:
+
+```
+Cell nmos_1p2_02_R270_512x8m81 read from path /home/luke/proj/riscboy-180/gf180mcu/gf180mcuD/libs.ref/gf180mcu_fd_ip_sram/mag
+File /home/luke/proj/riscboy-180/gf180mcu/gf180mcuD/libs.ref/gf180mcu_fd_ip_sram/mag/M1_PSUB_05_512x8m81.mag couldn't be read
+Failure to read entire subtree of the cell.
+Failed on cell M1_PSUB_05_512x8m81.
+I/O error in writing file /home/luke/proj/riscboy-180/librelane/runs/RUN_2025-11-19_18-47-13/56-magic-streamout/chip_top.magic.gds.
+File may be incompletely written.
+[INFO] GDS Write Complete
+```
+
+That SRAM filename does look wrong to me. This similar filename does exist:
+
+```
+./gf180mcu/gf180mcuD/libs.ref/gf180mcu_fd_ip_sram/mag/M1_PSUB_05_512x8m81.mag
+```
+
+Not totally sure where the incorrect filename is coming from. I don't see it in my `config.yaml`
+
+
+[2025-11-19 7:11 p.m.] _luke_w_
+oh wait no, that filename (from `find`) does match the one that magic couldn't read 🤔
+
+
+[2025-11-19 7:12 p.m.] mole99
+Hm, maybe too many file handlers open? On what platform are you building?
+
+
+[2025-11-19 7:12 p.m.] _luke_w_
+ahhh that could be it
+
+
+[2025-11-19 7:12 p.m.] _luke_w_
+I'm on Ubuntu
+
+
+[2025-11-19 7:13 p.m.] mole99
+On Debian I haven't had this issue before 🤔
+
+
+[2025-11-19 7:14 p.m.] _luke_w_
+```
+luke@triton:~/proj/riscboy-180/hdl$ cat /proc/sys/fs/file-max
+9223372036854775807
+luke@triton:~/proj/riscboy-180/hdl$ ulimit -Hn
+1048576
+luke@triton:~/proj/riscboy-180/hdl$ ulimit -Sn
+1024
+luke@triton:~/proj/riscboy-180/hdl$ 
+```
+wat
+
+
+[2025-11-19 7:16 p.m.] _luke_w_
+thanks that was a good tip, I'll try with an increased limit. Somehow never hit this before 😅
+
+
+[2025-11-19 7:17 p.m.] mole99
+I only thought of it because ReJ has hit it on macOS recently ^^
+
+{Reactions}
+👍
+
+[2025-11-19 7:18 p.m.] _luke_w_
+you do tend to develop these spidey senses over time on a project
+
+{Reactions}
+🕷️
+
+[2025-11-19 7:40 p.m.] _luke_w_
+It seems much happier now. Thank you very much for your help
+
+
+[2025-11-19 7:54 p.m.] mole99
+Glad I could help!
+
+
+[2025-11-19 8:51 p.m.] mithro_
+@Leo Moser (mole99) - Maybe LibreLane should have a check that ulimit is a reasonable value?
+
+
+[2025-11-20 9:47 a.m.] mole99
+Working on it: https://github.com/librelane/librelane/issues/818
+
+{Embed}
+https://github.com/librelane/librelane/issues/818
+Check or set the maximum number of open file descriptors · Issue #...
+Description Leading up to the first wafer.space shuttle, two users faced the issue that the max open file descriptors count was set too low by default. One user is on Ubuntu and the other on macOS,...
+2025-11_media/818-D8A72
+
+
+==============================================================
+Exported 17 message(s)
+==============================================================

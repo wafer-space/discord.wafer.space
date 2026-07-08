@@ -1,0 +1,267 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / ⁉️-questions / PDN M4 routing over SRAMs
+After: 2025-10-31 11:59 p.m.
+Before: 2025-12-01 12:00 a.m.
+==============================================================
+
+[2025-11-23 12:01 a.m.] _luke_w_
+I attached a picture of my power nets. For some SRAMs, the M4 vertical stripes go straight over the top of the SRAMs, which is what I'd expect. The other SRAMs seem to punch a hole in M4. Any ideas what might be causing this? One other thing that's suspicious is the extra runt stripes visible between the instances in the top right -- these are offset 29 um to the right of the main grid.
+
+I'm using the PDN tcl snippet from the template project to add the straps down the east/west sides of each macro (all in N or S orientation). This is adapted to cover all of my instances but otherwise the same as the template project.
+
+```
+proc sram_pdn_ns {pdnname macrolist} {
+    define_pdn_grid \
+        -macro \
+        -instances $macrolist \
+        -name $pdnname \
+        -starts_with POWER \
+        -halo "$::env(PDN_HORIZONTAL_HALO) $::env(PDN_VERTICAL_HALO)"
+
+    add_pdn_connect \
+        -grid $pdnname \
+        -layers "$::env(PDN_VERTICAL_LAYER) $::env(PDN_HORIZONTAL_LAYER)"
+
+    add_pdn_connect \
+        -grid $pdnname \
+        -layers "$::env(PDN_VERTICAL_LAYER) Metal3"
+
+    add_pdn_stripe \
+        -grid $pdnname \
+        -layer Metal4 \
+        -width 2.36 \
+        -offset 1.18 \
+        -spacing 0.28 \
+        -pitch 426.86 \
+        -starts_with GROUND \
+        -number_of_straps 2
+}
+
+sram_pdn_ns pdn_cpu_iram {i_chip_core.iram_u.sram.*.ram_u}
+sram_pdn_ns pdn_apu_ram {i_chip_core.apu_u.ram_u.sram.*.ram_u}
+sram_pdn_ns pdn_ppu_sbram {i_chip_core.ppu_u.*.ram_u}
+```
+
+I'm not getting any DRCs but I expect punching holes in the vertical routing like that is not good for power integrity.
+
+{Attachments}
+2025-11_media/image-13DBB.png
+
+
+[2025-11-23 3:25 a.m.] _luke_w_
+I looked at this a bit further. There were no DRC errors but there were some very interesting warnings:
+
+```
+[WARNING PDN-0231] i_chip_core.ppu_u.blender.palette_mapper.pram_u.g_d256.g_width\[0\].ram_u is not connected to any power/ground nets.
+[WARNING PDN-0231] i_chip_core.ppu_u.blender.palette_mapper.pram_u.g_d256.g_width\[1\].ram_u is not connected to any power/ground nets.
+[WARNING PDN-0231] i_chip_core.ppu_u.scanbuf0_u.g_d512.g_width\[0\].ram_u is not connected to any power/ground nets.
+[WARNING PDN-0231] i_chip_core.ppu_u.scanbuf0_u.g_d512.g_width\[1\].ram_u is not connected to any power/ground nets.
+[WARNING PDN-0231] i_chip_core.ppu_u.scanbuf1_u.g_d512.g_width\[0\].ram_u is not connected to any power/ground nets.
+[WARNING PDN-0231] i_chip_core.ppu_u.scanbuf1_u.g_d512.g_width\[1\].ram_u is not connected to any power/ground nets.
+[WARNING PDN-0231] chip_id is not connected to any power/ground nets.
+[WARNING PDN-0231] wafer_space_logo is not connected to any power/ground nets.
+[WARNING PDN-0231] i_chip_core.ppu_u.blender.palette_mapper.pram_u.g_d256.g_width\[0\].ram_u is not connected to any power/ground nets.
+[WARNING PDN-0231] i_chip_core.ppu_u.blender.palette_mapper.pram_u.g_d256.g_width\[1\].ram_u is not connected to any power/ground nets.
+[WARNING PDN-0231] i_chip_core.ppu_u.scanbuf0_u.g_d512.g_width\[0\].ram_u is not connected to any power/ground nets.
+[WARNING PDN-0231] i_chip_core.ppu_u.scanbuf0_u.g_d512.g_width\[1\].ram_u is not connected to any power/ground nets.
+[WARNING PDN-0231] i_chip_core.ppu_u.scanbuf1_u.g_d512.g_width\[0\].ram_u is not connected to any power/ground nets.
+[WARNING PDN-0231] i_chip_core.ppu_u.scanbuf1_u.g_d512.g_width\[1\].ram_u is not connected to any power/ground nets.
+```
+
+These are exactly the RAMs which have M4 overroute in my screencap, and they were missing their RTL VDD/VSS connections. Now that's fixed, they also punch holes in M4.
+
+
+[2025-11-23 3:28 a.m.] _luke_w_
+I think the ideal setup would be for the main M4/M5 grid to continue over the SRAMs, and the M4 vertical straps on west/east edges of the SRAMs would then just via up in multiple places to the M5 horizontal stripes. Is this achievable? I had a look through the flags for `define_pdn_grid` in the openroad docs but I didn't see anything super promising.
+
+
+[2025-11-23 11:28 p.m.] mithro_
+@Leo Moser (mole99) / @Tim Edwards - Any ideas?
+
+
+[2025-11-24 8:52 a.m.] mole99
+Yeah, I don't think that's achievable at the moment. I think the holes in the PDN are due to the `-halo` option, which cuts the PDN straps.
+
+For now, you can make the PDN straps on Metal5 thicker to reduce IR-drop across the chip. But for the ideal solution we need to open a feature request in OpenROAD.
+
+@LukeW If you would like to report this, I can show you how to create a standalone reproducible from a LibreLane step.
+
+
+[2025-11-24 10:03 a.m.] _luke_w_
+Thanks, no worries. I asked a coworker about this today and they confirmed we would normally continue our M7/M6 "waffle" (on TSMC40) over the top of RAMs, so I don't think what I'm trying to do is too weird.
+
+As a workaround, maybe I could add some M4 vertical straps to the SRAM GDS just to keep the M5 horizontals all nailed together?
+
+I think I have a few tickets to file on OpenROAD after the dust clears 🙂
+
+{Reactions}
+👏
+
+[2025-11-24 10:04 a.m.] _luke_w_
+> . I think the holes in the PDN are due to the -halo option, which cuts the PDN straps.
+
+I thought that too, but in that case I can't explain why it's not also cutting the M5 horizontals?
+
+
+[2025-11-24 10:08 a.m.] 246tnt
+It's on sky130, but when I place my macros there, I can get pdngen to just continue the met4 rails over them, so there might already be some magic incantation to do that.
+
+
+[2025-11-24 10:09 a.m.] 246tnt
+( That's how I power my ROM and register files macro in TT ).
+
+{Reactions}
+👍
+
+[2025-11-24 10:11 a.m.] _luke_w_
+Interesting, I have a couple experiments to try when I get home then. Maybe it's adding the `add_pdn_stripe` on M4 (for connecting up the pins on east/west edge) that is causing it to punch a hole in M4? In that case I could try the pre-strapped RAM GDS someone shared on GitHub. Thanks 🙂
+
+
+[2025-11-24 10:13 a.m.] 246tnt
+I think the trick is to make sure that both your macro pdn grid and the macro itself have _nothing_ in M4. Then pdngen see that it's all clear and it can just continue the existing rails.  If you have anything in M4 either in the LEF or trying to create things yourself, it will carve a hole the size of the macro.
+
+{Reactions}
+👍
+
+[2025-11-24 10:29 a.m.] mole99
+@tnt we use `add_pdn_stripe` to add a pair of Metal4 straps on either side of the SRAM macro, in order to easily connect it to the PDN straps on Metal5. This is probably why OpenROAD considers that layer to be blocked.
+
+
+[2025-11-24 10:33 a.m.] _luke_w_
+How do the SRAM power connections work on SKY130 then? I think having a bunch of VDD/VSS on the edges of a RAM is quite normal 🤔
+
+
+[2025-11-24 10:34 a.m.] _luke_w_
+Does it just have some M3 straps that get via'd up in multiple places to the M4 rails?
+
+
+[2025-11-24 10:34 a.m.] 246tnt
+Well those macro have M3 straps at various places and they're meant to wire up to M4 rails.
+
+
+[2025-11-24 10:35 a.m.] _luke_w_
+ah ok, yeah
+
+
+[2025-11-24 10:35 a.m.] _luke_w_
+I guess for this tapeout I'll just add some M4 rails to the RAM GDS so my M5s are all still nailed together, but the GF180 RAMs could probably be tweaked to hook up in a way more like the SKY130 ones
+
+
+[2025-11-24 10:36 a.m.] _luke_w_
+or I could leave it-- it's all 5V after all
+
+
+[2025-11-24 10:36 a.m.] _luke_w_
+thanks, I didn't do any SKY130 tapeouts other than TT so never saw the macros
+
+
+[2025-11-24 3:37 p.m.] _luke_w_
+Looking at the LEF there are a whole bunch of horizontal M3 VDD/VSS pins that aren't getting connected at the moment due to the hole in M4 (here for 256x8 memory):
+
+{Attachments}
+2025-11_media/image-39228.png
+
+
+[2025-11-24 3:50 p.m.] mole99
+Yes, the problem is that those pins are not really... structured. So it's hard to hook them up to the PDN without careful placement. That's why I added the Metal4 straps on both sides. As long as they cross Metal5, you are fine.
+But connectivity could be better, perhaps a custom wrapper is the best solution after all.
+
+
+[2025-11-24 4:27 p.m.] _luke_w_
+I talked to a layout engineer on my lunch break and they suggested adding M3 rings around the RAM so it works in both orientations without any additional PDN config. I think you would still have reasonable access to data pins via M2
+
+
+[2025-11-24 4:40 p.m.] _luke_w_
+and yeah I realise it's hard to get all of them but is it really ok to have the SRAM powered *only* by its west and east edges? None of the rails in that LEF screencap are connected up to M4. Seems like you could get a lot of ground bounce in the centre
+
+
+[2025-11-24 4:46 p.m.] 246tnt
+One thing to consider is it's 5V.  0.1V bounce for a 5V vdd will matter way less than the same 0.1V when your vdd is 1.1v 🙂
+
+
+[2025-11-24 5:16 p.m.] _luke_w_
+Yeah that's true 😅  I settled on just a few more stripes to connect the macro's M3 rails up to M5. Still don't like the M4 slot below the macro
+
+{Attachments}
+2025-11_media/image-B1ADD.png
+
+
+[2025-11-24 5:16 p.m.] _luke_w_
+```
+    # Strap pins on east/west edges of RAM
+    add_pdn_stripe \
+        -grid $pdnname \
+        -layer Metal4 \
+        -width 2.36 \
+        -offset 1.18 \
+        -spacing 0.28 \
+        -pitch 426.86 \
+        -starts_with GROUND \
+        -number_of_straps 2
+
+    # Due to the above, we've punched an SRAM-sized hole in our M4 vertical
+    # rails. Put some small rails over the top of the macro just to nail M5
+    # back together. We still have an awful slot in the M4 routing above and
+    # below the macro; it's 5V, I'm sure it's ok
+    add_pdn_stripe \
+        -grid $pdnname \
+        -layer Metal4 \
+        -width 2.36 \
+        -offset 65.93 \
+        -spacing 0.28 \
+        -pitch 50 \
+        -starts_with GROUND \
+        -number_of_straps 7
+```
+
+
+[2025-11-24 5:31 p.m.] _luke_w_
+I filed a ticket just so this isn't forgotten: https://github.com/wafer-space/gf180mcu-project-template/issues/31
+
+{Embed}
+https://github.com/wafer-space/gf180mcu-project-template/issues/31
+RAM PDN config punches a hole in M4 · Issue #31 · wafer-space/gf1...
+Writing up the discord thread so we still remember it post-shuttle. The PDN config has this line to add an M4 strap down each side of the RAM: gf180mcu-project-template/librelane/pdn_cfg.tcl Line 2...
+2025-11_media/31-DFC52
+
+
+[2025-11-24 6:33 p.m.] mole99
+That's clever! I didn't think of adding another call to `add_pdn_stripe` (not sure why 😅).
+Initially, I tried connecting the pins directly to the Metal4 straps using `add_pdn_connect`, but with that you need to line up the macro with the pins. That's why I resorted to adding the stripes on the sides.
+
+I think it would be good to add your additional stripes to the template too. Maybe I'll make them slightly thicker, since I chose 2.36 only because the pins on the sides are so thin.
+
+
+[2025-11-24 10:21 p.m.] mithro_
+@LukeW - GF180MCU actually has some configurations with even less metal layers. I wonder if there is any consideration for that fact in the SRAM design?
+
+
+[2025-11-24 10:22 p.m.] _luke_w_
+I mean the RAM is solid up to M3 so if you don't have at least one layer for over-route then you're a bit screwed 😅  but yeah it's possible they have the edge pins so that you can have M4 fully available for routing over the RAM?
+
+
+[2025-11-24 10:24 p.m.] _luke_w_
+I guess you can do it without any layers above M3,  just impossible to route over the RAM 🤔 would wafer.space ever do an MPW with just three metal layers?
+
+
+[2025-11-25 10:45 a.m.] mole99
+
+
+{Attachments}
+2025-11_media/image-FF945.png
+
+
+[2025-11-25 10:45 a.m.] mole99
+@LukeW what do you think of this? https://github.com/wafer-space/gf180mcu-project-template/pull/32
+
+I used your stripes for the N/S orientation, but made them slightly thicker (4um). The W/E orientation is more awkward: There I added more stripes closer together in the first half for a good connection to the pins underneath, as well as some stripes spaced further apart.
+
+
+[2025-11-25 3:52 p.m.] _luke_w_
+sure, I replied on GitHub just so on the next shuttle when we're like "why did we do that?" there's a record
+
+
+==============================================================
+Exported 34 message(s)
+==============================================================

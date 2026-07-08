@@ -1,0 +1,128 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / general / Using gf180mcu_ocd_io in LibreLane
+After: 2026-03-31 11:59 p.m.
+Before: 2026-05-01 12:00 a.m.
+==============================================================
+
+[2026-04-22 6:42 a.m.] 246tnt
+@Tim Edwards BTW, basic testing seem to show that IO library works in silicon 🙂
+
+
+[2026-04-22 6:53 a.m.] 246tnt
+Changed the channel name: Using gf180mcu_ocd_io in LibreLane
+
+
+[2026-04-22 12:03 p.m.] rtimothyedwards_19428
+@tnt :  What kind of "basic testing"?
+
+
+[2026-04-22 12:04 p.m.] 246tnt
+Well, they're fed 3.3v on both Vio and Vcore and they pass data between the inside and the outside of the chip 😅
+
+
+[2026-04-22 12:04 p.m.] rtimothyedwards_19428
+What chip was that?  I thought I was the only one using my I/O library.
+
+
+[2026-04-22 12:04 p.m.] 246tnt
+That's the extend of the testing that will be done at the factory until I get my hands on the chips.
+
+
+[2026-04-22 12:05 p.m.] 246tnt
+We have a version of the tiny tapeout GF 0.2 that uses your library.
+
+
+[2026-04-22 12:05 p.m.] rtimothyedwards_19428
+Oh, wow, I didn't know that.  Nice!
+
+
+[2026-04-22 12:07 p.m.] 246tnt
+Hopefully by end of next week I'll be able to make actual delay / rise / fall measurements and IV curves and all that stuff with different Vio and Vcore .
+
+
+[2026-04-22 12:07 p.m.] rtimothyedwards_19428
+I don't think I ever actually tested operation with Vio at 3.3V.
+
+
+[2026-04-22 12:08 p.m.] 246tnt
+I simulated that case and it's behaving just fine AFAICT. Pretty much same results as the original GF pads at 3.3v.
+
+
+[2026-04-22 12:09 p.m.] 246tnt
+Some of your dies should be on their way to you so if you have bonding capability locally you can test those too 🙂 Looking fwd to seeing the 3.3V SRAM results 😁
+
+
+[2026-04-23 2:16 p.m.] mithro_
+@tnt - The first package of Tiny Tapeout bonded die went out to you today.
+
+{Reactions}
+🎉
+
+[2026-04-23 2:21 p.m.] 246tnt
+@Tim 'mithro' Ansell Got a tracking number ? 😅
+
+
+[2026-04-23 2:23 p.m.] mithro_
+I would be able to get you one if the fedex website wasn't so terrible...
+
+
+[2026-04-23 2:23 p.m.] 246tnt
+🤣
+
+
+[2026-04-23 2:23 p.m.] 246tnt
+It's ok, I guess I should eventually get a notification by mail.
+
+
+[2026-04-23 2:23 p.m.] 246tnt
+Better not share it publically anyway ..
+
+
+[2026-04-27 3:34 p.m.] 246tnt
+@Tim Edwards Did a bit more testing and they seem to perform just fine at 3.3V    Got rise time of 2 ns and fall time of 1 ns ( not sure of the load, it's a test pcb + scope probe so probably in the 20~30 pF range ). And the output still looked pretty square outputting a 75 MHz clock.   TBH they work better than the sky130 and IHP ones 😅
+
+
+[2026-04-27 3:55 p.m.] rtimothyedwards_19428
+The sky130 pads are over-designed and the IHP pads are under-designed, so that's not entirely surprising.  Are you planning any tests at 5V?
+
+
+[2026-04-27 3:58 p.m.] 246tnt
+@Tim Edwards Yes I am. But the breakout I have is unsuitable for 5V test ATM, so I need to wait until I get one where I can set Vio to what I want.
+
+
+[2026-04-27 4:01 p.m.] 246tnt
+BTW there are diodes between Vcore and Vio, so Vio needs to come up first
+
+
+[2026-04-27 4:24 p.m.] rtimothyedwards_19428
+I'm not sure if I looked specifically for diodes between the power supplies.  Would there happen to be a forward-biased diode from Vio to Vcore?  That would be a big problem for running the I/O voltage at 5V.
+
+
+[2026-04-27 4:24 p.m.] 246tnt
+No, it's forward biased from Vcore to Vio.  So must have Vio >= Vcore
+
+
+[2026-04-27 4:27 p.m.] rtimothyedwards_19428
+In what cell(s)?  A quick check of the netlist for `D` entries shows only diodes between pad and power, and between ground and power.
+
+
+[2026-04-27 4:27 p.m.] 246tnt
+Ah ... that I haven't searched yet, I can just tell you I see it in the silicon 😅
+
+
+[2026-04-27 4:28 p.m.] rtimothyedwards_19428
+Probably some indirect path like through a pullup resistor or something.
+
+
+[2026-04-27 4:28 p.m.] 246tnt
+I was feeding 3.3V to Vcore and I haden't power Vio yet and still the IO were powered through it ...
+
+
+[2026-04-27 4:29 p.m.] rtimothyedwards_19428
+I'll have to go analyze that one.
+
+
+==============================================================
+Exported 29 message(s)
+==============================================================

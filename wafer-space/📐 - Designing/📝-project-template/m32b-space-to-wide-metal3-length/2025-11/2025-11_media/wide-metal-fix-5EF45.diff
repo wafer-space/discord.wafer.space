@@ -1,0 +1,87 @@
+diff --git a/gf180mcuD/libs.tech/klayout/tech/drc/rule_decks/metal1.drc b/gf180mcuD/libs.tech/klayout/tech/drc/rule_decks/metal1.drc
+index c5fc609..9919d1a 100644
+--- a/gf180mcuD/libs.tech/klayout/tech/drc/rule_decks/metal1.drc
++++ b/gf180mcuD/libs.tech/klayout/tech/drc/rule_decks/metal1.drc
+@@ -37,7 +37,7 @@ if BEOL
+ 
+   # Rule M1.2b: Space to wide Metal1 (length & width > 10um) is 0.3µm
+   logger.info('Executing rule M1.2b')
+-  wide_m1 = metal1.not_interacting(metal1.edges.with_length(nil, 10.um))
++  wide_m1 = metal1.sized(-5.um).sized(5.um) & metal1
+   m12b_l1 = metal1.separation(wide_m1, 0.3.um, euclidian)
+   m12b_l1.output('M1.2b', 'M1.2b : Space to wide Metal1 (length & width > 10um) : 0.3µm')
+   m12b_l1.forget
+diff --git a/gf180mcuD/libs.tech/klayout/tech/drc/rule_decks/metal2.drc b/gf180mcuD/libs.tech/klayout/tech/drc/rule_decks/metal2.drc
+index 0b3aaaf..c0a08b3 100644
+--- a/gf180mcuD/libs.tech/klayout/tech/drc/rule_decks/metal2.drc
++++ b/gf180mcuD/libs.tech/klayout/tech/drc/rule_decks/metal2.drc
+@@ -35,7 +35,7 @@ if BEOL && (METAL_LEVEL == '3LM' || METAL_LEVEL == '4LM' || METAL_LEVEL == '5LM'
+ 
+   # Rule M2.2b: Space to wide Metal2 (length & width > 10um) is 0.3µm
+   logger.info('Executing rule M2.2b')
+-  wide_m2 = metal2.not_interacting(metal2.edges.with_length(nil, 10.um))
++  wide_m2 = metal2.sized(-5.um).sized(5.um) & metal2
+   m22b_l1 = metal2.separation(wide_m2, 0.3.um, euclidian)
+   m22b_l1.output('M2.2b', 'M2.2b : Space to wide Metal2 (length & width > 10um) : 0.3µm')
+   m22b_l1.forget
+diff --git a/gf180mcuD/libs.tech/klayout/tech/drc/rule_decks/metal3.drc b/gf180mcuD/libs.tech/klayout/tech/drc/rule_decks/metal3.drc
+index 719d70a..ac49bdf 100644
+--- a/gf180mcuD/libs.tech/klayout/tech/drc/rule_decks/metal3.drc
++++ b/gf180mcuD/libs.tech/klayout/tech/drc/rule_decks/metal3.drc
+@@ -36,7 +36,7 @@ if BEOL && (METAL_LEVEL == '4LM' || METAL_LEVEL == '5LM' || METAL_LEVEL == '6LM'
+ 
+   # Rule M3.2b: Space to wide Metal3 (length & width > 10um) is 0.3µm
+   logger.info('Executing rule M3.2b')
+-  wide_m3 = metal3.not_interacting(metal3.edges.with_length(nil, 10.um))
++  wide_m3 = metal3.sized(-5.um).sized(5.um) & metal3
+   m32b_l1 = metal3.separation(wide_m3, 0.3.um, euclidian)
+   m32b_l1.output('M3.2b', 'M3.2b : Space to wide Metal3 (length & width > 10um) : 0.3µm')
+   m32b_l1.forget
+diff --git a/gf180mcuD/libs.tech/klayout/tech/drc/rule_decks/metal4.drc b/gf180mcuD/libs.tech/klayout/tech/drc/rule_decks/metal4.drc
+index 636e405..8a95397 100644
+--- a/gf180mcuD/libs.tech/klayout/tech/drc/rule_decks/metal4.drc
++++ b/gf180mcuD/libs.tech/klayout/tech/drc/rule_decks/metal4.drc
+@@ -35,7 +35,7 @@ if BEOL && (METAL_LEVEL == '5LM' || METAL_LEVEL == '6LM')
+ 
+   # Rule M4.2b: Space to wide Metal4 (length & width > 10um) is 0.3µm
+   logger.info('Executing rule M4.2b')
+-  wide_m4 = metal4.not_interacting(metal4.edges.with_length(nil, 10.um))
++  wide_m4 = metal4.sized(-5.um).sized(5.um) & metal4
+   m42b_l1 = metal4.separation(wide_m4, 0.3.um, euclidian)
+   m42b_l1.output('M4.2b', 'M4.2b : Space to wide Metal4 (length & width > 10um) : 0.3µm')
+   m42b_l1.forget
+diff --git a/gf180mcuD/libs.tech/klayout/tech/drc/rule_decks/metal5.drc b/gf180mcuD/libs.tech/klayout/tech/drc/rule_decks/metal5.drc
+index 1769f58..c87d72b 100644
+--- a/gf180mcuD/libs.tech/klayout/tech/drc/rule_decks/metal5.drc
++++ b/gf180mcuD/libs.tech/klayout/tech/drc/rule_decks/metal5.drc
+@@ -35,7 +35,7 @@ if BEOL && (METAL_LEVEL == '6LM')
+ 
+   # Rule M5.2b: Space to wide Metal5 (length & width > 10um) is 0.3µm
+   logger.info('Executing rule M5.2b')
+-  wide_m5 = metal5.not_interacting(metal5.edges.with_length(nil, 10.um))
++  wide_m5 = metal5.sized(-5.um).sized(5.um) & metal5
+   m52b_l1 = metal5.separation(wide_m5, 0.3.um, euclidian)
+   m52b_l1.output('M5.2b', 'M5.2b : Space to wide Metal5 (length & width > 10um) : 0.3µm')
+   m52b_l1.forget
+diff --git a/gf180mcuD/libs.tech/klayout/tech/drc/rule_decks/metaltop.drc b/gf180mcuD/libs.tech/klayout/tech/drc/rule_decks/metaltop.drc
+index 163eb73..9620bc1 100644
+--- a/gf180mcuD/libs.tech/klayout/tech/drc/rule_decks/metaltop.drc
++++ b/gf180mcuD/libs.tech/klayout/tech/drc/rule_decks/metaltop.drc
+@@ -39,7 +39,7 @@ if BEOL
+ 
+     # Rule MT.2b: Space to wide Metal2 (length & width > 10um) is 0.5µm
+     logger.info('Executing rule MT.2b')
+-    wide_top_metal = top_metal.not_interacting(top_metal.edges.with_length(nil, 10.um))
++    wide_top_metal = top_metal.sized(-5.um).sized(5.um) & top_metal
+     mt2b_l1 = top_metal.separation(wide_top_metal, 0.5.um, euclidian)
+     mt2b_l1.output('MT.2b', 'MT.2b : Space to wide Metal2 (length & width > 10um) : 0.5µm')
+     mt2b_l1.forget
+@@ -68,7 +68,7 @@ if BEOL
+ 
+     # Rule MT.2b: Space to wide Metal2 (length & width > 10um) is 0.6µm
+     logger.info('Executing rule MT.2b')
+-    wide_top_metal = top_metal.not_interacting(top_metal.edges.with_length(nil, 10.um))
++    wide_top_metal = top_metal.sized(-5.um).sized(5.um) & top_metal
+     mt2b_l1 = top_metal.separation(wide_top_metal, 0.6.um, euclidian)
+     mt2b_l1.output('MT.2b', 'MT.2b : Space to wide Metal2 (length & width > 10um) : 0.6µm')
+     mt2b_l1.forget

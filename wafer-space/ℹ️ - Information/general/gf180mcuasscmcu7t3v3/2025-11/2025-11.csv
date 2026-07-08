@@ -1,0 +1,16 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"738396032295108721","bailey8889","2025-11-26T23:48:52.7400000+00:00","","",""
+"738396032295108721","bailey8889","2025-11-26T23:48:53.5670000+00:00","@Tholin Sorry, but I don't think my Mac has enough umph to run a design that size. If you get partial logs/reports you can send them to me. 
+
+I've seen long run times when the fill/cap cells aren't parallelized before comparison. May not be relevant.","",""
+"220639106915368960","tholin","2025-11-29T22:12:04.9470000+00:00","","2025-11_media/69-netgen-lvs-ADD1E.zip",""
+"738396032295108721","bailey8889","2025-11-29T22:16:18.2970000+00:00","Thanks, I'll check later today.","",""
+"738396032295108721","bailey8889","2025-11-30T12:23:30.4520000+00:00","@Tholin the setup file for `gf180mcuD` provides for parallel reduction of `fillcap` cells but not `decap` cells. If you are creating a new standard cell library for `gf180mcu_as_sc_mcu7t3v3` then I suggest you either,
+1. rename the `decap` cells to `fillcap` to match the `5v0` libraries or
+2. modify the netgen setup file to reduce parallel `decap` cells.","",""
+"220639106915368960","tholin","2025-11-30T17:26:45.8190000+00:00","I did this and its still taking forever. There are also still warnings in the log that I don”t see with the 5V SCL","",""
+"220639106915368960","tholin","2025-11-30T17:27:56.8800000+00:00","","2025-11_media/image-FD25E.png,2025-11_media/image-65112.png",""
+"738396032295108721","bailey8889","2025-11-30T20:58:52.5800000+00:00","The first is due to yosys adding buffers to increase capacitance on nets (I think). The outputs are unconnected - normal.
+The second is netgen output saying that it was told to ignore a parameter that did not exist on a device - also normal.
+
+If you could send me the partial log, I can take a look at it.","",""

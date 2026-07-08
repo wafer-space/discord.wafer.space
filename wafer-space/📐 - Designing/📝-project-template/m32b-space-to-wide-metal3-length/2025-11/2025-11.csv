@@ -1,0 +1,64 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"732347216412278825","urish","2025-11-23T12:33:46.4510000+00:00","","",""
+"732347216412278825","urish","2025-11-23T12:33:47.4940000+00:00","Looking at the rule:
+
+```
+  # Rule M3.2b: Space to wide Metal3 (length & width > 10um) is 0.3µm
+  logger.info('Executing rule M3.2b')
+  wide_m3 = metal3.not_interacting(metal3.edges.with_length(nil, 10.um))
+  m32b_l1 = metal3.separation(wide_m3, 0.3.um, euclidian)
+  m32b_l1.output('M3.2b', 'M3.2b : Space to wide Metal3 (length & width > 10um) : 0.3µm')
+  m32b_l1.forget
+  wide_m3.forget
+```","",""
+"732347216412278825","urish","2025-11-23T12:37:59.9950000+00:00","I understand it as follows:
+
+`wide_m3` is all the m3 shapes that do not have at least one dimension that is in the range [0, 10), which seems to match what the written rule says","",""
+"596068704471482370","246tnt","2025-11-23T12:40:39.6710000+00:00","You need to use common sense when interpreting rules. The dimensions are if the shape is filled. a long thin met3 trace going all around and spanning a distance of more than 10u in both X and Y direction is not ""wide metal"".","",""
+"732347216412278825","urish","2025-11-23T12:42:38.2230000+00:00","Ok, that explains the issue","",""
+"596068704471482370","246tnt","2025-11-23T12:46:38.6300000+00:00","`wide_m3 = metal3.sized(-5.um).sized(5.um) & metal3` might work better.","",""
+"732347216412278825","urish","2025-11-23T12:47:35.5870000+00:00","Maybe even just metal3.sized(-5.um) and then check if there are any shapes with area > 0 ?","",""
+"596068704471482370","246tnt","2025-11-23T12:48:07.3060000+00:00","Why ?  wide metal3 is not an error in itself.","",""
+"732347216412278825","urish","2025-11-23T12:48:16.2170000+00:00","ah, right 🙂","",""
+"323371864074485771","mole99","2025-11-23T13:13:46.8610000+00:00","Here's the docs for reference: https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_07_14.html
+Both the length and width of the metal need to be > 10um.
+Could you open a quick issue in the gf180mcu PDK fork?","",""
+"596068704471482370","246tnt","2025-11-23T14:27:13.8570000+00:00","Created issue along with reproducer and also show casing that the proposed fix does indeed seems to behave better ( doesn't flag the non-existent error, but does correctly flag a true error ).
+https://github.com/wafer-space/gf180mcu/issues/4","","thank_you (1),👏 (1)"
+"596068704471482370","246tnt","2025-11-23T14:28:44.8230000+00:00","@Leo Moser (mole99) In general should we open issues against your fork or against fossi repo ?","",""
+"596068704471482370","246tnt","2025-11-23T14:53:16.6960000+00:00","","2025-11_media/wide-metal-fix-5EF45.diff",""
+"596068704471482370","246tnt","2025-11-23T14:53:28.6350000+00:00","@urish if you want to locally patch the PDK","",""
+"732347216412278825","urish","2025-11-23T15:04:57.7660000+00:00","Thx! Hopefully the upstream PDK will be fixed promptly","",""
+"323371864074485771","mole99","2025-11-23T16:52:35.4860000+00:00","In this case I asked to open it against the fork, so that I wouldn't forget about it 😅
+But in general we want to fix all of these issues upstream. I hope to port the majority of the changes after the tapeout to the FOSSi repos.","",""
+"323371864074485771","mole99","2025-11-23T16:53:14.2750000+00:00","I hope tomorrow is soon enough!
+I'd like to check if a stepped `sized` makes a difference here, since large `sized` can be a performance bottleneck.","","👍 (1)"
+"323371864074485771","mole99","2025-11-23T16:54:52.2310000+00:00","With `upstream` do you mean the PDK fork, or the FOSSi one?
+If this is an issue in Tiny Tapeout user designs, then I'll upstream the patch sooner than after the tapeout.","",""
+"596068704471482370","246tnt","2025-11-23T16:55:18.2480000+00:00","FWIW the new rule executed way faster than the old one 😅","",""
+"596068704471482370","246tnt","2025-11-23T16:55:31.3200000+00:00","No, it's only an issue for the top level TT integration.","","👍 (1)"
+"596068704471482370","246tnt","2025-11-23T16:55:49.9170000+00:00","We're having a weird LVS failure in the user designs though 😅","",""
+"323371864074485771","mole99","2025-11-23T16:57:20.1930000+00:00","Yes, I would think so 😁  But it might be even faster with doing the sizing in smaller steps.","",""
+"323371864074485771","mole99","2025-11-23T16:58:32.6370000+00:00","Yes, I saw Mike's post, but I haven't had a chance to take a closer look at it yet.","",""
+"596068704471482370","246tnt","2025-11-26T08:55:56.9570000+00:00","@Leo Moser (mole99) Yeah sorry, forgot to start the full chip DRC last night ... ( takes like 4.5 ~ 5hours 😅 )","",""
+"732347216412278825","urish","2025-11-26T09:08:15.3730000+00:00","I'll run the mpw precheck action now","",""
+"323371864074485771","mole99","2025-11-26T09:08:23.1480000+00:00","Np. It works for your reproducible and for the default template, so I assume it works for the TT chip as well :)
+If not just let me know ✌️","",""
+"732347216412278825","urish","2025-11-26T09:08:46.7350000+00:00","https://github.com/TinyTapeout/tinytapeout-gf-0p2/actions/runs/19698325989","",""
+"323371864074485771","mole99","2025-11-26T09:09:02.8550000+00:00","The latest PDK updates are not yet in the precheck. Working on that now.","",""
+"323371864074485771","mole99","2025-11-26T09:31:29.0580000+00:00","@urish New version is tagged: https://github.com/wafer-space/gf180mcu-precheck/releases/tag/1.0.1","",""
+"732347216412278825","urish","2025-11-26T09:32:05.3800000+00:00","will rerun the action","",""
+"732347216412278825","urish","2025-11-26T09:32:23.8940000+00:00","second time: https://github.com/TinyTapeout/tinytapeout-gf-0p2/actions/runs/19698997807","",""
+"732347216412278825","urish","2025-11-26T13:17:14.3130000+00:00","passed!","",""
+"732347216412278825","urish","2025-11-26T13:17:15.8490000+00:00","thanks Leo","","🎉 (1)"
+"323371864074485771","mole99","2025-11-26T13:35:08.5600000+00:00","Great 🥳  Zero area polygons check coming next.","",""
+"732347216412278825","urish","2025-11-26T13:36:49.9770000+00:00","and if you find any way of speeding this thing up","",""
+"732347216412278825","urish","2025-11-26T13:36:54.0560000+00:00","that'd be great","",""
+"732347216412278825","urish","2025-11-26T13:37:22.2030000+00:00","(for comparison, the sky130 precheck takes around 1 hour on this size of chip, and ihp precheck is also around that ballpark)","",""
+"323371864074485771","mole99","2025-11-26T16:09:34.4980000+00:00","Unfortunately, it's not as easy as that :)
+I hope to find the time to identify the biggest bottlenecks and see if they can be fixed. But that won't happen before the tapeout, at least.
+
+The IHP KLayout DRC is only that fast because they split the rule deck and run N instances in parallel. You could do the same here (and I'll look into it), but the gf180mcu KLayout DRC implementation is much more memory hungry, so with e.g. 64 GB, I can't run many threads in parallel at all.","",""
+"323371864074485771","mole99","2025-11-26T16:09:38.1340000+00:00","Here's a new precheck tag: https://github.com/wafer-space/gf180mcu-precheck/releases/tag/1.2.0","",""
+"732347216412278825","urish","2025-11-26T17:53:20.8550000+00:00","Yes, we've seen the memory get to about 10-12 GB","",""
+"732347216412278825","urish","2025-11-26T17:53:28.6640000+00:00","GH actions have a limit of 16 GB RAM IIRC","",""

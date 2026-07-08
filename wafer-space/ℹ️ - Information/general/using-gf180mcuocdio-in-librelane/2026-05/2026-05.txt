@@ -1,0 +1,53 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / general / Using gf180mcu_ocd_io in LibreLane
+After: 2026-04-30 11:59 p.m.
+Before: 2026-06-01 12:00 a.m.
+==============================================================
+
+[2026-05-03 4:37 p.m.] 246tnt
+Seems to happen in `io_inv_2i` inside the input path.
+
+
+[2026-05-03 4:38 p.m.] 246tnt
+There is a pmos whose source is wired to `VDD` (core) and nwell is biased by `DVDD`.
+
+
+[2026-05-04 8:05 a.m.] 246tnt
+As for 5V operation, doing some quick tests now. Seems all fine. I'm feeding 3.0V as Vcore and 5.0V as Vio and works just fine AFAICT.
+
+
+[2026-05-04 9:03 a.m.] 246tnt
+There isn't any big change in performance. The measure rise time is longer but it's a bit of an artefact of the output shape.
+
+
+[2026-05-04 9:04 a.m.] 246tnt
+
+
+{Attachments}
+2026-05_media/shot_rise_time_hump_vio_3v3-BE94C.png
+
+
+[2026-05-04 9:05 a.m.] 246tnt
+There is a bit of a slow down right before hitting 80% and so that makes the measure point be almost twice as long ... I'd need to check if that's also in simulation. Could be non-linear capacitance/load on the line from the RP2350 chip being on that line.
+
+
+[2026-05-04 7:04 p.m.] 246tnt
+@Tim Edwards ^^
+
+
+[2026-05-04 11:48 p.m.] rtimothyedwards_19428
+Or it could be from the latching stage of the level shifter.
+
+
+[2026-05-05 10:34 a.m.] 246tnt
+@Tim Edwards There is the same effect in the GF provided default IOs when powered at 3.3V so I don't think it's related to anything you did.
+
+
+[2026-05-05 10:50 a.m.] 246tnt
+I think it's an artefact of the board layout, there is a small stuf to go to a 7 seg display and I think it's some reflection.  Probing another pin that doesn't go to the 7 seg doesn't show that hump and has a better looking rise time.
+
+
+==============================================================
+Exported 10 message(s)
+==============================================================

@@ -1,0 +1,80 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 📐 - Designing / 📝-project-template / My custom ASIC KianV SV32 SoC is now
+After: 2025-10-31 11:59 p.m.
+Before: 2025-12-01 12:00 a.m.
+==============================================================
+
+[2025-11-19 6:08 p.m.] polyfractal
+
+
+
+[2025-11-19 6:08 p.m.] polyfractal
+Super cool! 
+
+Newbie question: why is the sdram exposed via pins? to allow loading the memory/program externally directly instead of over something like uart?
+
+also what are the 20 some "blocks" in the image?
+
+
+[2025-11-19 6:21 p.m.] logic_destroyer
+Great questions — SDRAM is external because this process node doesn’t offer large embedded DRAM, only small SRAM blocks.To run Linux you need external memory.
+
+
+[2025-11-19 6:24 p.m.] polyfractal
+oooh right, makes sense!
+
+
+[2025-11-19 6:41 p.m.] tholin
+What kinda SDRAM can run at 5V?
+
+
+[2025-11-19 6:54 p.m.] mole99
+It runs at 3.3V with 20MHz 👌
+
+
+[2025-11-19 6:54 p.m.] tholin
+How much RAM is required to boot mainline Linux? Like, at minimum?
+
+
+[2025-11-19 6:55 p.m.] tholin
+I’ve done it with as little as 16MiB, booting to busybox with 12MiB free. So could maybe do 8MiB.
+
+
+[2025-11-19 7:20 p.m.] tholin
+1Mx16 Dynamic RAM with 5V power supply:
+https://www.issi.com/ww/pdf/41C16100.pdf
+4 of these and you get your 8MiB for busybox on mainline Linux at a much higher clockspeed
+
+
+[2025-11-19 7:21 p.m.] tholin
+I highly doubt 20MHz at 3.3V is realistic without wait states. My own testing put the switching speed of the GPIOs at 12.5MHz at 3.3V.
+
+{Reactions}
+❤️
+
+[2025-11-19 8:22 p.m.] logic_destroyer
+I mean, I did build the Tiny Tapeout Micro Linux SoC. With that thing I could boot Linux with just 8 MB. The SoC should support IPv6 and IPv4 and be comfortable to use — not just boot BusyBox and call it a day. I want to do more with it: MicroPython, C++, NFS, all kinds of stuff.
+
+
+[2025-11-19 8:31 p.m.] tholin
+BusyBox + Lua is a decent setup for me on embedded
+
+
+[2025-11-19 8:31 p.m.] tholin
+(I strongly dislike python)
+
+
+[2025-11-19 8:32 p.m.] logic_destroyer
+K
+
+
+[2025-11-19 8:42 p.m.] tholin
+But yeah, this project might be more interesting once we have a native 3.3V SCL and 3.3V IO pad structures.
+
+{Reactions}
+❤️
+
+==============================================================
+Exported 15 message(s)
+==============================================================

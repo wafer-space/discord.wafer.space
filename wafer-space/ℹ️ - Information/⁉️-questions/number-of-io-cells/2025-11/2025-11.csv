@@ -1,0 +1,15 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"839883081896689765","buck_042","2025-11-23T21:59:47.9500000+00:00","According to the template, the number of pads and power pads is fixed and cannot be changed. I assume this is to comply with the default floorplan and the PCB wire-bonding scheme.
+
+So, even if we do not actually use that many IO cells, we still need to place that many IO cells, is that correct?","",""
+"169786952432746498","mithro_","2025-11-23T23:27:05.1400000+00:00","@Buck - I believe you should be able to actually change the pads and such but all complications are your own responsibility (like not being able to use PCB wire bonding scheme and such).
+@Leo Moser (mole99) and @Andrew Wingate might be able to comment more.","",""
+"756011607603019777","anfroholic","2025-11-23T23:31:30.8440000+00:00","If you want more pins than are on the default padring you are more on your own. 
+
+@ReJ aka Renaldas Zioma is making a design that has fewer needed pads, but is leaving the others present like in his drawing here https://discord.com/channels/1361349522684510449/1408134567491145728/1442207041593806851
+
+But changing the number I believe would change the positions, which would not make it compatible with our current standards. 
+Like @Tim 'mithro' Ansell said, others may be able to speak more confidently about what changes are really possible","",""
+"323371864074485771","mole99","2025-11-24T07:39:15.4520000+00:00","@Buck If you want to use the CoB bonding option, you shouldn't change the number of pad cells. This is because LibreLane places the pads equidistant from each other, so changing the number of pads also changes the bondpad positions.
+
+Simply set any pad cells that you don't need to input-only and don't use them in your RTL.","","💜 (2)"

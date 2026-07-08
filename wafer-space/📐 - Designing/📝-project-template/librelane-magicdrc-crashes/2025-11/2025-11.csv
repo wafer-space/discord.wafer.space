@@ -1,0 +1,46 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"323371864074485771","mole99","2025-11-19T07:20:41.3350000+00:00","","",""
+"323371864074485771","mole99","2025-11-19T07:20:42.5090000+00:00","No, that is not expected. `librelane-magicdrc` only skips the `KLayout.DRC` step. Streamout, however, should still be done with both magic and KLayout in order to compare the GDS.
+Can you verify that both `56-magic-streamout` and `57-klayout-streamout` contain a GDS?","",""
+"803213471402688522","_luke_w_","2025-11-19T10:46:43.0300000+00:00","Haha ok, I'll dig in a bit more this evening! Thanks","","👌 (1)"
+"803213471402688522","_luke_w_","2025-11-19T19:09:56.5740000+00:00","so yeah, the `.magic.drc` has a size of 0 bytes, and the previous step failed, citing:
+
+```
+Cell nmos_1p2_02_R270_512x8m81 read from path /home/luke/proj/riscboy-180/gf180mcu/gf180mcuD/libs.ref/gf180mcu_fd_ip_sram/mag
+File /home/luke/proj/riscboy-180/gf180mcu/gf180mcuD/libs.ref/gf180mcu_fd_ip_sram/mag/M1_PSUB_05_512x8m81.mag couldn't be read
+Failure to read entire subtree of the cell.
+Failed on cell M1_PSUB_05_512x8m81.
+I/O error in writing file /home/luke/proj/riscboy-180/librelane/runs/RUN_2025-11-19_18-47-13/56-magic-streamout/chip_top.magic.gds.
+File may be incompletely written.
+[INFO] GDS Write Complete
+```
+
+That SRAM filename does look wrong to me. This similar filename does exist:
+
+```
+./gf180mcu/gf180mcuD/libs.ref/gf180mcu_fd_ip_sram/mag/M1_PSUB_05_512x8m81.mag
+```
+
+Not totally sure where the incorrect filename is coming from. I don't see it in my `config.yaml`","",""
+"803213471402688522","_luke_w_","2025-11-19T19:11:45.3750000+00:00","oh wait no, that filename (from `find`) does match the one that magic couldn't read 🤔","",""
+"323371864074485771","mole99","2025-11-19T19:12:23.6440000+00:00","Hm, maybe too many file handlers open? On what platform are you building?","",""
+"803213471402688522","_luke_w_","2025-11-19T19:12:30.5260000+00:00","ahhh that could be it","",""
+"803213471402688522","_luke_w_","2025-11-19T19:12:35.1970000+00:00","I'm on Ubuntu","",""
+"323371864074485771","mole99","2025-11-19T19:13:10.5120000+00:00","On Debian I haven't had this issue before 🤔","",""
+"803213471402688522","_luke_w_","2025-11-19T19:14:21.2690000+00:00","```
+luke@triton:~/proj/riscboy-180/hdl$ cat /proc/sys/fs/file-max
+9223372036854775807
+luke@triton:~/proj/riscboy-180/hdl$ ulimit -Hn
+1048576
+luke@triton:~/proj/riscboy-180/hdl$ ulimit -Sn
+1024
+luke@triton:~/proj/riscboy-180/hdl$ 
+```
+wat","",""
+"803213471402688522","_luke_w_","2025-11-19T19:16:20.2640000+00:00","thanks that was a good tip, I'll try with an increased limit. Somehow never hit this before 😅","",""
+"323371864074485771","mole99","2025-11-19T19:17:50.2460000+00:00","I only thought of it because ReJ has hit it on macOS recently ^^","","👍 (1)"
+"803213471402688522","_luke_w_","2025-11-19T19:18:10.9210000+00:00","you do tend to develop these spidey senses over time on a project","","🕷️ (1)"
+"803213471402688522","_luke_w_","2025-11-19T19:40:52.8310000+00:00","It seems much happier now. Thank you very much for your help","",""
+"323371864074485771","mole99","2025-11-19T19:54:10.7610000+00:00","Glad I could help!","",""
+"169786952432746498","mithro_","2025-11-19T20:51:29.9260000+00:00","@Leo Moser (mole99) - Maybe LibreLane should have a check that ulimit is a reasonable value?","",""
+"323371864074485771","mole99","2025-11-20T09:47:38.6360000+00:00","Working on it: https://github.com/librelane/librelane/issues/818","",""

@@ -1,0 +1,76 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 📐 - Designing / 📝-project-template / How we can do the same here, excluding
+After: 2025-10-31 11:59 p.m.
+Before: 2025-12-01 12:00 a.m.
+==============================================================
+
+[2025-11-20 4:00 p.m.] mole99
+
+
+
+[2025-11-20 4:00 p.m.] mole99
+You need to set [`SYNTH_EXCLUDED_CELL_FILE`](https://librelane.readthedocs.io/en/latest/reference/common_pdk_vars.html) to point to your exclude file.
+
+
+[2025-11-20 4:01 p.m.] mole99
+You can find the current one in `gf180mcu/gf180mcuD/libs.tech/librelane/gf180mcu_fd_sc_mcu7t5v0/synth_exclude.cells`
+
+{Reactions}
+❤️
+
+[2025-11-20 4:03 p.m.] logic_destroyer
+it is possible to overlay it?
+
+
+[2025-11-20 4:03 p.m.] logic_destroyer
+I don't want to touch the gf180mcu repo
+
+
+[2025-11-20 4:03 p.m.] mole99
+No, unfortunately not. Make a copy of the file in your repository and add the line.
+
+{Reactions}
+😢
+
+[2025-11-20 4:07 p.m.] urish
+Yes, that's what I did
+
+
+[2025-11-20 4:07 p.m.] urish
+But it'd be really nice to understand the actual issue
+
+
+[2025-11-20 4:08 p.m.] logic_destroyer
+But if they are changes in gf180mcu you will not recognize 🙂
+
+
+[2025-11-20 4:09 p.m.] logic_destroyer
+Today you know, but not tomorrow 🙂
+
+
+[2025-11-20 4:15 p.m.] mole99
+Yes, the proper solution is to fix the simulation model of the cell (if that is the issue).
+
+
+[2025-11-20 4:20 p.m.] logic_destroyer
+$ cat 06-yosys-synthesis/chip_top.nl.v  | grep gf180mcu_fd_sc_mcu7t5v0__oai21_1 | wc -l
+0
+lolo
+
+
+[2025-11-20 4:55 p.m.] urish
+There's a good chance the simulation model is not the issue, since there are many `gf180mcu_fd_sc_mcu7t5v0__oai21_2` instances in the design that does pass the GL tests
+
+
+[2025-11-20 10:30 p.m.] logic_destroyer
+what is the issue then?
+
+
+[2025-11-20 10:32 p.m.] logic_destroyer
+yosys?
+
+
+==============================================================
+Exported 15 message(s)
+==============================================================
