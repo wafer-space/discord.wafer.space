@@ -1,0 +1,304 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 📐 - Designing / 📦-cob / I don't have any actual specs from the
+After: 2025-10-31 11:59 p.m.
+Before: 2025-12-01 12:00 a.m.
+==============================================================
+
+[2025-11-07 11:55 a.m.] mole99
+
+
+
+[2025-11-07 11:55 a.m.] mole99
+Yes, but the smaller the spacing, the more I/O we can get for the sub-projects.
+
+
+[2025-11-07 11:55 a.m.] mithro_
+Damn trade offs 😛
+
+
+[2025-11-07 11:58 a.m.] anfroholic
+75µm would yield 2x the bondpads, so as long as we think 2x is fine, we wouldn't have to do anything right now
+
+
+[2025-11-07 11:59 a.m.] mithro_
+I think @Leo Moser (mole99) is thinking of some type of higher I/O count design or what type of checks to put in the precheck?
+
+
+[2025-11-07 12:00 p.m.] anfroholic
+actually looking at @Tholin pad drawing, I am wrong
+
+{Attachments}
+2025-11_media/image-FCF7B.png
+
+
+[2025-11-07 12:01 p.m.] mole99
+No, I'm working on projects with a smaller die size. There you really want less spacing between the pads to get enough I/Os.
+
+
+[2025-11-07 12:02 p.m.] tholin
+fyi this is a custom pad-out and not the standard one from the template
+
+{Reactions}
+👀
+
+[2025-11-07 12:02 p.m.] anfroholic
+Correct, I *wrongly* assumed you could fit another pad in between each
+
+
+[2025-11-07 12:03 p.m.] tholin
+This one has the standard placements of power and clock/reset
+https://github.com/AvalonSemiconductors/as2650-ws/blob/main/padout.png
+
+{Embed}
+https://github.com/AvalonSemiconductors/as2650-ws/blob/main/padout.png
+as2650-ws/padout.png at main · AvalonSemiconductors/as2650-ws
+AS2650v2 on wafer.space template. Contribute to AvalonSemiconductors/as2650-ws development by creating an account on GitHub.
+
+
+[2025-11-07 12:03 p.m.] anfroholic
+I'm only refering to pad size and spacing here
+
+
+[2025-11-08 3:16 a.m.] saladchap
+@Tim 'mithro' Ansell I haven't asked about pad spacing before but will try to find out
+
+{Reactions}
+👏
+
+[2025-11-11 3:35 p.m.] mole99
+
+
+{Attachments}
+2025-11_media/Bildschirmfoto_vom_2025-11-11_16-14-53-BF5A1.png
+
+
+[2025-11-11 3:35 p.m.] mole99
+This is a quarter project with a 110um horizontal and a 73um vertical bondpad spacing.
+Currently, it has 36 bondpads. Considering that people always want more I/Os we should really try to get the most out of it.
+Decreasing the distance between pads to 15um would give us a whole lot more pads to work with!
+From another vendor (university), I got a minimum distance of 30um. So perhaps 30um would be a better target?
+
+@Tim 'mithro' Ansell should I create the padring with a 30um minimum spacing? Once the padring for the sub-slots has been finalized, @Andrew Wingate could create CoB PCB for it.
+
+{Reactions}
+👍
+
+[2025-11-11 4:12 p.m.] mole99
+
+
+{Attachments}
+2025-11_media/image-92074.png
+
+
+[2025-11-11 4:13 p.m.] mole99
+With a minimum spacing of 30um, I can fit 54 bondpads. Of course, some of these will be used for power/ground.
+
+
+[2025-11-11 9:27 p.m.] anfroholic
+@Leo Moser (mole99)  I'm about to hit the road and will be out for most of the evening. I don't understand how we will get these out of the wafer at least right now. 
+Could some arrangement like this be suitable? We could go wider as long as we hit `reticle width` by the 3.88 height of the standard die
+There is some optimal size we could go for, but if we divide things like this, then we can just have the dicing house cut them all and we still just deal with sorting. *which now that I'm thinking of it would mean more than 40 reels...something for later*
+Thoughts @Tim 'mithro' Ansell?
+
+{Attachments}
+2025-11_media/image-882F7.png
+2025-11_media/image-F6E3D.png
+
+
+[2025-11-11 9:27 p.m.] anfroholic
+To rephrase, we could hit something a little larger than 1/4 pretty easily I think.
+
+
+[2025-11-12 4:48 a.m.] anfroholic
+@Tim 'mithro' Ansell
+
+
+[2025-11-12 8:48 a.m.] mole99
+@Andrew Wingate I've already arranged the dies on the reticle:
+
+
+[2025-11-12 8:48 a.m.] mole99
+
+
+{Attachments}
+2025-11_media/Bildschirmfoto_vom_2025-11-07_14-47-44-FE832.png
+
+
+[2025-11-12 8:48 a.m.] mole99
+As it seems right now, GF does not allows us to use the full reticle, that's why we need to cut some of the large slots.
+
+
+[2025-11-12 8:49 a.m.] mole99
+This gives us four different sizes: a full slot, two half slots, and a quarter slot.
+
+
+[2025-11-12 8:49 a.m.] mole99
+If we need more of the smaller slots, we can add two more cuts here:
+
+
+[2025-11-12 8:49 a.m.] mole99
+
+
+{Attachments}
+2025-11_media/more_cuts-44869.png
+
+
+[2025-11-12 8:53 a.m.] anfroholic
+I spoke with Tim earlier and he showed me this. I have to say that objectively I hate everything about it. Not anyone's fault really but this is a big change and has many significant drawbacks. 
+If at all possible we should do something else. He said we can consider it next run, I'm just stating how I feel about this layout
+
+
+[2025-11-12 8:55 a.m.] anfroholic
+Also sorry if that came across harsher than I wanted it. I am very tired and still have a lot to complete tonight
+
+
+[2025-11-12 8:59 a.m.] mole99
+No worries! It would be great if you could explain later why this arrangement will complicate things for you downstream.
+Good luck with completing your things and make sure to get some sleep afterwards :)
+
+{Reactions}
+💜
+
+[2025-11-12 6:23 p.m.] anfroholic
+So I finally made it home and figured I'd try to get this off. 
+
+I fully understand there may be a few things I'm missing, but for starters there's 4 different sized dies, while that isn't an outright problem, I think it doesn't satisfy many problems other than *now we have this extra space we should do something*
+
+I feel that those slots will be the most sought after as now we have a number of different price points. There are multi project dies, like TT and what @Tholin is up to, but I feel that's not the norm. 
+
+Continuing on, if these small slots have the highest demand, they will get filled the fastest and all those who wanted one will be out of luck. Not only that but there are a number of different sized small ones. I don't know how easy it is to translate your design from one padframe to another, but if it isn't too difficult, I suggest we pull the band-aid now and just make the flip. This run is largely about proving things out, and in that spirit it would be beneficial to have less things change next run the better. 
+
+To me it looks like the silicon wants to be divided like this where the *nominal block* is 3.667mm x 4.833mm yielding 36 full dies/ reticle. 
+-# note that I don't have the real size of the reticle, but I think I'm close
+
+{Attachments}
+2025-11_media/image-0FDAA.png
+
+
+[2025-11-12 6:24 p.m.] anfroholic
+Now what we can have is the height of any die is **always** 3.667mm, but we can divide the slices however we want. Whatever it is, it always has to be 6x to get the full stack. 
+But from there it can be anything. They want a wafer full of 1/3blocks and 108 projects? Fine! There are 6 people that want 4/3 or 3/2 large and extra large blocks also fine. If Tim really does get where he wants to be and is sending in a run every week, it's likely someone would only have to wait a couple weeks for the low demand very large blocks. But this is still highly standardized, which if you haven't noticed I like a whole lot. 
+
+Anyways, super tired now, finally got home and need some sleep. Hope this was 
+intelligible.
+
+{Attachments}
+2025-11_media/image-F8F5B.png
+
+
+[2025-11-13 11:36 a.m.] mole99
+@Andrew Wingate Hi Andrew, the sub-slots weren't just a spontaneous idea. They were planned mostly from the beginning, maybe @Tim 'mithro' Ansell didn't tell you that yet.
+This is actually the most compelling feature of wafer.space IMHO. That you can choose your die size (to some extent).
+
+If you make an analog design, you almost never need as much area as a digital one. This is where one of the smaller slots fits perfectly.
+I also think that smaller slots will be much more financially accessible to a wide range of people, while still offering a reasonable number of I/Os.
+
+We hadn't planned to introduce sub-slots in the first shuttle just yet, mainly because involves a lot work on the template side and in the reticle stitcher. But I actually managed to implement sub-slots in the template and wrote the reticle stitcher in such a way that it can handle any size of slots (with integer dividers).
+
+The sub-slots are an experimental feature of the first shuttle, so you cannot buy any yet.
+This allows us to get things right before we offer them in the next shuttle. The picking/handling of the smaller dies is probably more difficult, so it's good to work through the issues in the first run.
+
+The idea is that if we need more smaller slots, we can simply add more cuts. If we can do laser dicing for the second run, we could even replace all half-slots with two quarter slots - based on demand. This would make for a very flexible system, eliminating the need for users to wait for a run with this specific slot size.
+
+One issue with your arrangement is that we can only divide the die on one side. If you want a small area, the aspect ratio is so large that it is not really usable for many designs.
+
+
+[2025-11-13 11:37 a.m.] mole99
+Could you please explain why you want die height to always be 3.667mm?
+Is it because of the mechanical system or to simplify the programming?
+You try to provide a different solution without explaining what the problem is.
+
+
+[2025-11-14 7:27 p.m.] anfroholic
+Sorry for the late reply, I've been away from my desk since then. 
+
+>  the sub-slots weren't just a spontaneous idea. They were planned mostly from the beginning,
+He did, but at the time it seemed more like a 2nd op kind of thing. I had also tried to come up with some strategies at the time, but didn't quite understand all that I know now. 
+
+> The idea is that if we need more smaller slots, we can simply add more cuts.
+This is the idea with my method as well, but does not require *If we can do laser dicing for the second run*. If we can then a lot of this goes out the window. 
+
+> One issue with your arrangement is that we can only divide the die on one side. If you want a small area, the aspect ratio is so large that it is not really usable for many designs.
+Correct, I've noticed there is a lot of waste based on perimeter vs area, but seeing the layout you had just created, I figured that was viable. 
+
+> Could you please explain why you want die height to always be 3.667mm?
+Mostly for a cutting scheme that is an evenly divisible reticle. I don't know the actual reticle size so I assumed it was 22mm. This could very well be wrong, but the point is that it's evenly divisible with the reticle. This was how the original size was determined. 8x5 subdivided reticle
+
+> Is it because of the mechanical system or to simplify the programming?
+Really it's all about something that can be diced and more specifically can fit many different demands on a single wafer (to a degree) 
+
+
+> You try to provide a different solution without explaining what the problem is.
+I think I did. The reticle size changed. That's a big thing on a lot of levels.  **Most Notably there are now only 28 projects** This is a big deal!!
+I feel like this poor girl  https://www.youtube.com/watch?v=cUbIkNUFs-4
+
+{Embed}
+Tired Actor (Alison Burke)
+https://www.youtube.com/watch?v=cUbIkNUFs-4
+The Original Square Hole Girl Video + The Redemption
+My original "Square Hole" duet and the redemption in one video! Enjoy! 
+
+
+Check me out! - https://linktr.ee/AlisonBurke
+2025-11_media/maxresdefault-B1E5F.jpg
+
+
+[2025-11-15 1:03 p.m.] mole99
+@Andrew Wingate
+
+- The reticle size for GFMPW0/1 was 32x26mm. An 8x5 grid of Caravel utilizes the entire reticle.
+- For the first wafer.space run, however, we can only use a 30x24mm reticle size. This may change again for future runs.
+- Thus, for run 1 we will simply use an 7x4 grid of full-size slots and fill the remaining area with smaller slots. This gives us the opportunity to test all variations of sub-slots that are offered in future runs. Only a small gap is remaining at the top due to the reticle size.
+- This run is underutilized. For now, it's not a problem to only have 28 full slots available.
+- This method does not **require** laser dicing, but if we can use laser dicing, the 0.5x1 slots can be subdivided into more usable 0.5x0.5 slots.
+
+Again, with your method, the aspect ratio is so large after the second cut that the die is mostly unusable for most projects.
+
+If there is no other issue with my method other than the supposed waste of area (there really is just a small gap at the top), I will proceed with it for the reasons mentioned above.
+
+
+[2025-11-15 2:54 p.m.] anfroholic
+Thanks for the reply 
+
+> This may change again for future runs.
+That's less than ideal, hopefully we will get the 32x26mm again. This exercise has shown I think that reticle size (or at least number of features/ reticle) is most important for what we're doing. 
+
+> Only a small gap is remaining at the top due to the reticle size.
+I hadn't noticed the gap before. 
+
+
+
+> If there is no other issue with my method other than the supposed waste of area (there really is just a small gap at the top), I will proceed with it for the reasons mentioned above.
+Really this is up to @Tim 'mithro' Ansell and from what I heard from him the other day, it seems he's most interested in doing what we offered to do when we said we'd offer it. Full/ not full, this is more about proving we do what we say. *This is also my reading of what he said to me*
+
+Sometimes these exercises are good to see if we're still on the right track. 
+Just to continue these on, if for some reason these long skinny shapes persist. What is the function of the rings along the outside (and not the pads themselves) Would it be possible to have something that only had the pads on the two short sides and you can then get all that space back--at the expense of more pads?
+
+
+[2025-11-15 3:11 p.m.] mole99
+@Andrew Wingate To be honest, Andrew, I'm finding this discussion increasingly annoying. I tried to explain to you in technical terms why your layout is not ideal for people designing actual chips.
+
+> Really this is up to @Tim 'mithro' Ansell and from what I heard from him the other day, it seems he's most interested in doing what we offered to do when we said we'd offer it. Full/ not full, this is more about proving we do what we say. This is also my reading of what he said to me
+
+You presume that I wasn't talking to Tim when I did the layout of the reticle and the sub-tiles.
+I **was** talking to Tim, and I showed him the layout of the reticle and the sub-tiles just as I showed them to you.
+
+> What is the function of the rings along the outside (and not the pads themselves) Would it be possible to have something that only had the pads on the two short sides and you can then get all that space back--at the expense of more pads?
+
+This ring is called the "pad ring" and includes the I/O cells. Yes, this is possible and we had a whole discussion with Tim and Mike how we could realize this in a future run. However, for all I know this feature is not yet supported by OpenROAD's pad ring generator. So what?
+And even then you would want a roughly square aspect ratio for less congestion during routing.
+
+I do have more important things to work on for the shuttle than arguing with you.
+
+{Reactions}
+👍
+
+[2025-11-15 3:15 p.m.] anfroholic
+Really wasn't trying to be argumentative. Then was probing just for my own curiosity. 
+Sounds good. Thank you.
+
+
+==============================================================
+Exported 37 message(s)
+==============================================================

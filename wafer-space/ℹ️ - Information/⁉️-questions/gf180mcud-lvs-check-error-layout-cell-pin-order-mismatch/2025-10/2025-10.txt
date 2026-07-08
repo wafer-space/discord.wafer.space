@@ -1,0 +1,76 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / ⁉️-questions / gf180mcuD lvs check error -- layout cell pin order mismatch
+After: 2025-09-30 11:59 p.m.
+Before: 2025-11-01 12:00 a.m.
+==============================================================
+
+[2025-10-31 5:27 a.m.] xintingjiang_36756
+Hi all,
+
+I running the lvs check using klayout 0.30.2 and use the latest gf180mcuD version. What is weird is that I can pass lvs check for the same design using an earlier version of the gf180mcu pdk and failed when I use the updated one. The lvs report is attached.
+My question is it seems that the root of the problem is the pin order and number of pins do not match for std cell in .cdl file(schematic) and in .cir file(layout extracted).
+I attached the screen shot for the nor gate for instance. The subckt in cdl has 7 pins defined and in layout there are 9 pins. The extra two pins are VPW and VNW which were not there in earlier version. I've tried tight VPW to VSS and VNW to VDD and define gf180mcu_gnd and the VSS as the same net. These errors were still not resolved. 
+
+I was wondering has anyone met similar problem before or is there any workaround about this? 
+Many thanks in advance!
+
+{Attachments}
+2025-10_media/image-1F30A.png
+2025-10_media/get_attachment_url-8A860.png
+2025-10_media/get_attachment_url-7FFB3.png
+
+
+[2025-10-31 9:26 a.m.] mole99
+Hi!
+
+When you say the latest gf180mcuD version, do you mean the one from open_pdks or the one from wafer.space?
+There shouldn't be any changes to the KLayout LVS setup in either of them in the recent versions.
+
+Could you find out which changes have been made to the KLayout LVS setup that cause it to fail?
+
+
+[2025-10-31 3:48 p.m.] xintingjiang_36756
+Hi! We used volare to configure the gf180mcu pdk, the hash value for the pdk version is attached. It is the latest version released this Aug
+
+{Attachments}
+2025-10_media/image-20977.png
+
+
+[2025-10-31 5:37 p.m.] xintingjiang_36756
+oh for this coming up tapeout, what is the correct gf180mcu pdk version to use?
+
+
+[2025-10-31 6:10 p.m.] mole99
+In order to submit your design, it must pass the [gf180mcu-precheck](https://github.com/wafer-space/gf180mcu-precheck).
+You can run it locally, later it will also be available through the platform.
+
+The precheck uses the wafer.space fork of the PDK: https://github.com/wafer-space/gf180mcu
+We use this fork for the [gf180mcu-project-template](https://github.com/wafer-space/gf180mcu-project-template).
+
+The fork has mostly changes around the LibreLane configuration, and we intend to upstream all changes in the near future.
+
+
+[2025-10-31 6:10 p.m.] mole99
+Please do not use volare anymore, it has been replaced by [ciel](https://github.com/fossi-foundation/ciel).
+
+
+[2025-10-31 6:11 p.m.] mole99
+Still, it is strange that you get this error since there haven't been any recent changes to the KLayout LVS setup. See here: https://github.com/fossi-foundation/globalfoundries-pdk-libs-gf180mcu_fd_pv/tree/main/klayout/lvs
+
+
+[2025-10-31 6:12 p.m.] mole99
+Can you find if there is a difference in the LVS setup between these two PDK versions?
+
+
+[2025-10-31 6:13 p.m.] mole99
+Finally, it looks like you are trying to create a digital design. Why not use LibreLane? It also performs LVS, but using magic and netgen.
+
+
+[2025-10-31 6:47 p.m.] xintingjiang_36756
+Thanks a lot! I think I will try LibreLane flow first.
+
+
+==============================================================
+Exported 10 message(s)
+==============================================================

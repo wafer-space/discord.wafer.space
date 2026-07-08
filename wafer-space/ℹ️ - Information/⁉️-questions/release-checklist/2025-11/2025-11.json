@@ -1,0 +1,1410 @@
+{
+  "guild": {
+    "id": "1361349522684510449",
+    "name": "wafer.space Community",
+    "iconUrl": "2025-11_media/fb143eaa45770cbb40493d09b625e98b-09FD1.png"
+  },
+  "channel": {
+    "id": "1434837450735353896",
+    "type": "GuildPublicThread",
+    "categoryId": "1409660288822673408",
+    "category": "⁉️-questions",
+    "name": "Release Checklist",
+    "topic": null
+  },
+  "dateRange": {
+    "after": "2025-10-31T23:59:59.999+00:00",
+    "before": "2025-12-01T00:00:00+00:00"
+  },
+  "exportedAt": "2026-07-08T14:01:33.4760325+00:00",
+  "messages": [
+    {
+      "id": "1434837450735353896",
+      "type": "Default",
+      "timestamp": "2025-11-03T09:31:46.246+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi, is there a release checklist for the things to take into account before doing a submission? From what I see, I need to:\n1) Pass the  gf180mcu-precheck\n2) Make sure the QR code is correct (what info should it contain?)\n3) Are there naming conventions to follow?\n4) Are there special ways in which we should save the output file?\n5) Are there non DRC check we would need to run (e.g: zero size polygons)?\n\nFor the IHP tapeout, there was an issue with different guidelines, maybe something similar could be made?\nI'm asking because I will do an analog tapeout and thus will not use the librelane flow. I will also have to modify the padring dimension and bond the chips myself.",
+      "author": {
+        "id": "1401841055975870476",
+        "name": "scafir",
+        "discriminator": "0000",
+        "nickname": "Clyde Laforge",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/e9fd582c6cd4273d01cbf5dfd4bb3455-27807.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1434849326584037460",
+      "type": "Default",
+      "timestamp": "2025-11-03T10:18:57.669+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi @Clyde Laforge!\nAll of these checks should be handled by the precheck. The precheck runs both the magic and KLayout DRC setup, offgrid and angle checks, density checks etc. We might need to add a zero size polygon check.\n\nYou only need to include the QR-Code cell in your design. During the precheck, its content will be replaced with the correct ID for your design.\n\nCurrently, there is no check on the file and top-level cell naming, but we might require both to be named the same. I will also add a check for the die size, since for the first run all designs will be the same size.\n\nBut other than that you are free to do what you want. You can create the GDS with LibreLane or any other software. Just make sure to pass the precheck.\n\nIf anything is not caught by the precheck and flagged by the foundry, we will make sure to improve the precheck.\nLikewise, if you manage to break the precheck, please let us know so we can improve it :)",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2025-11_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "2025-11_media/1f44d-27259.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "1401841055975870476",
+              "name": "scafir",
+              "discriminator": "0000",
+              "nickname": "Clyde Laforge",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2025-11_media/e9fd582c6cd4273d01cbf5dfd4bb3455-27807.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "1401841055975870476",
+          "name": "scafir",
+          "discriminator": "0000",
+          "nickname": "Clyde Laforge",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2025-11_media/e9fd582c6cd4273d01cbf5dfd4bb3455-27807.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1440824121750585345",
+      "type": "Default",
+      "timestamp": "2025-11-19T22:00:39.843+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Precheck- that is running gds against https://github.com/wafer-space/gf180mcu-precheck, is that correct @Leo Moser (mole99) ?",
+      "author": {
+        "id": "538398807986274304",
+        "name": "rzioma",
+        "discriminator": "0000",
+        "nickname": "ReJ aka Renaldas Zioma",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "2025-11_media/1f44d-27259.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "323371864074485771",
+              "name": "mole99",
+              "discriminator": "0000",
+              "nickname": "Leo Moser (mole99)",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2025-11_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "323371864074485771",
+          "name": "mole99",
+          "discriminator": "0000",
+          "nickname": "Leo Moser (mole99)",
+          "color": null,
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1423020172595298314",
+              "name": "Mod",
+              "color": null,
+              "position": 4
+            }
+          ],
+          "avatarUrl": "2025-11_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1440824884476514525",
+      "type": "Default",
+      "timestamp": "2025-11-19T22:03:41.691+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I also wanted to ask how the submission process will look like?\n\nWill it be basically just copying GDS file?",
+      "author": {
+        "id": "538398807986274304",
+        "name": "rzioma",
+        "discriminator": "0000",
+        "nickname": "ReJ aka Renaldas Zioma",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1440824910359298090",
+      "type": "Default",
+      "timestamp": "2025-11-19T22:03:47.862+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Leo Moser (mole99) you may find this useful for the zero size polygons: <https://github.com/TinyTapeout/tt-support-tools/blob/main/precheck/tech-files/zeroarea.rb.drc>",
+      "author": {
+        "id": "732347216412278825",
+        "name": "urish",
+        "discriminator": "0000",
+        "nickname": "urish",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2025-11_media/2b6c3aac0ae09fc8a72a4b2e17d7f9c9-39032.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "323371864074485771",
+          "name": "mole99",
+          "discriminator": "0000",
+          "nickname": "Leo Moser (mole99)",
+          "color": null,
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1423020172595298314",
+              "name": "Mod",
+              "color": null,
+              "position": 4
+            }
+          ],
+          "avatarUrl": "2025-11_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1440824970979573812",
+      "type": "Reply",
+      "timestamp": "2025-11-19T22:04:02.315+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You need to submit a URL to the final GDS file",
+      "author": {
+        "id": "732347216412278825",
+        "name": "urish",
+        "discriminator": "0000",
+        "nickname": "urish",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2025-11_media/2b6c3aac0ae09fc8a72a4b2e17d7f9c9-39032.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "538398807986274304",
+          "name": "rzioma",
+          "discriminator": "0000",
+          "nickname": "ReJ aka Renaldas Zioma",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2025-11_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1440824884476514525",
+        "channelId": "1434837450735353896",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1440824985336680448",
+      "type": "Default",
+      "timestamp": "2025-11-19T22:04:05.738+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "(could be from a github repo)",
+      "author": {
+        "id": "732347216412278825",
+        "name": "urish",
+        "discriminator": "0000",
+        "nickname": "urish",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2025-11_media/2b6c3aac0ae09fc8a72a4b2e17d7f9c9-39032.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1440825006954381455",
+      "type": "Default",
+      "timestamp": "2025-11-19T22:04:10.892+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "along with MD5 or SHA1 hash",
+      "author": {
+        "id": "732347216412278825",
+        "name": "urish",
+        "discriminator": "0000",
+        "nickname": "urish",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2025-11_media/2b6c3aac0ae09fc8a72a4b2e17d7f9c9-39032.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1440825044778483884",
+      "type": "Default",
+      "timestamp": "2025-11-19T22:04:19.91+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "you can try it out at https://test-platform.wafer.space/",
+      "author": {
+        "id": "732347216412278825",
+        "name": "urish",
+        "discriminator": "0000",
+        "nickname": "urish",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2025-11_media/2b6c3aac0ae09fc8a72a4b2e17d7f9c9-39032.png"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "Welcome to wafer.space\n…",
+          "url": "https://test-platform.wafer.space/",
+          "timestamp": null,
+          "description": "Platform for wafer.space low cost silicon manufacturing.",
+          "images": [],
+          "fields": [],
+          "inlineEmojis": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDE4F",
+            "code": "pray",
+            "isAnimated": false,
+            "imageUrl": "2025-11_media/1f64f-22B8D.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "538398807986274304",
+              "name": "rzioma",
+              "discriminator": "0000",
+              "nickname": "ReJ aka Renaldas Zioma",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2025-11_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1440825167621128244",
+      "type": "Default",
+      "timestamp": "2025-11-19T22:04:49.198+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "This is what the submission interface currenty looks like:",
+      "author": {
+        "id": "732347216412278825",
+        "name": "urish",
+        "discriminator": "0000",
+        "nickname": "urish",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2025-11_media/2b6c3aac0ae09fc8a72a4b2e17d7f9c9-39032.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1440825179755511880",
+      "type": "Default",
+      "timestamp": "2025-11-19T22:04:52.091+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "",
+      "author": {
+        "id": "732347216412278825",
+        "name": "urish",
+        "discriminator": "0000",
+        "nickname": "urish",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2025-11_media/2b6c3aac0ae09fc8a72a4b2e17d7f9c9-39032.png"
+      },
+      "attachments": [
+        {
+          "id": "1440825179898122290",
+          "url": "2025-11_media/image-7A669.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 274429
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1440828902585929750",
+      "type": "Default",
+      "timestamp": "2025-11-19T22:19:39.683+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Got it! Thanks",
+      "author": {
+        "id": "538398807986274304",
+        "name": "rzioma",
+        "discriminator": "0000",
+        "nickname": "ReJ aka Renaldas Zioma",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1440980564805943362",
+      "type": "Reply",
+      "timestamp": "2025-11-20T08:22:18.774+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yes",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2025-11_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "538398807986274304",
+          "name": "rzioma",
+          "discriminator": "0000",
+          "nickname": "ReJ aka Renaldas Zioma",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2025-11_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1440824121750585345",
+        "channelId": "1434837450735353896",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1440985093169741876",
+      "type": "Reply",
+      "timestamp": "2025-11-20T08:40:18.42+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks Uri! I'm torn between just reporting an error on zero size polygons (with a report), so the problem is fixed upstream/in the design. Or to delete these shapes as done in the script. I think I prefer to modify the original layout as little as possible.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2025-11_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "732347216412278825",
+          "name": "urish",
+          "discriminator": "0000",
+          "nickname": "urish",
+          "color": null,
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1423020172595298314",
+              "name": "Mod",
+              "color": null,
+              "position": 4
+            }
+          ],
+          "avatarUrl": "2025-11_media/2b6c3aac0ae09fc8a72a4b2e17d7f9c9-39032.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1440824910359298090",
+        "channelId": "1434837450735353896",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1440986076780171345",
+      "type": "Default",
+      "timestamp": "2025-11-20T08:44:12.931+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "we are actually only using this script to report the error, but do not use the modified design",
+      "author": {
+        "id": "732347216412278825",
+        "name": "urish",
+        "discriminator": "0000",
+        "nickname": "urish",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2025-11_media/2b6c3aac0ae09fc8a72a4b2e17d7f9c9-39032.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1440989907035230378",
+      "type": "Default",
+      "timestamp": "2025-11-20T08:59:26.135+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Good. I will do the same \uD83D\uDC4D",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2025-11_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83D\uDC4D",
+          "code": "thumbsup",
+          "isAnimated": false,
+          "imageUrl": "2025-11_media/1f44d-27259.svg"
+        }
+      ]
+    },
+    {
+      "id": "1441063087494139996",
+      "type": "Default",
+      "timestamp": "2025-11-20T13:50:13.716+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Non Manufacturable! \uD83E\uDD2F",
+      "author": {
+        "id": "538398807986274304",
+        "name": "rzioma",
+        "discriminator": "0000",
+        "nickname": "ReJ aka Renaldas Zioma",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+      },
+      "attachments": [
+        {
+          "id": "1441063087317713038",
+          "url": "2025-11_media/image-3A3F4.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 121062
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "1282961370593366049",
+            "name": "matt_oh_no",
+            "code": "matt_oh_no",
+            "isAnimated": false,
+            "imageUrl": "2025-11_media/1282961370593366049-C12DD.png"
+          },
+          "count": 2,
+          "users": [
+            {
+              "id": "492702620759228416",
+              "name": "mattvenn",
+              "discriminator": "0000",
+              "nickname": "Matt Venn",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2025-11_media/aa8560ba40f1f3d339d044dee6970630-97A62.png"
+            },
+            {
+              "id": "732347216412278825",
+              "name": "urish",
+              "discriminator": "0000",
+              "nickname": "urish",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2025-11_media/2b6c3aac0ae09fc8a72a4b2e17d7f9c9-39032.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83E\uDD2F",
+          "code": "exploding_head",
+          "isAnimated": false,
+          "imageUrl": "2025-11_media/1f92f-FF4E0.svg"
+        }
+      ]
+    },
+    {
+      "id": "1441063208080244817",
+      "type": "Default",
+      "timestamp": "2025-11-20T13:50:42.466+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Leo Moser (mole99) @urish any advice?",
+      "author": {
+        "id": "538398807986274304",
+        "name": "rzioma",
+        "discriminator": "0000",
+        "nickname": "ReJ aka Renaldas Zioma",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "732347216412278825",
+          "name": "urish",
+          "discriminator": "0000",
+          "nickname": "urish",
+          "color": null,
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1423020172595298314",
+              "name": "Mod",
+              "color": null,
+              "position": 4
+            }
+          ],
+          "avatarUrl": "2025-11_media/2b6c3aac0ae09fc8a72a4b2e17d7f9c9-39032.png"
+        },
+        {
+          "id": "323371864074485771",
+          "name": "mole99",
+          "discriminator": "0000",
+          "nickname": "Leo Moser (mole99)",
+          "color": null,
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1423020172595298314",
+              "name": "Mod",
+              "color": null,
+              "position": 4
+            }
+          ],
+          "avatarUrl": "2025-11_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441063255115038913",
+      "type": "Default",
+      "timestamp": "2025-11-20T13:50:53.68+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "What did I screw up?",
+      "author": {
+        "id": "538398807986274304",
+        "name": "rzioma",
+        "discriminator": "0000",
+        "nickname": "ReJ aka Renaldas Zioma",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441063279480016997",
+      "type": "Default",
+      "timestamp": "2025-11-20T13:50:59.489+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Precheck passed",
+      "author": {
+        "id": "538398807986274304",
+        "name": "rzioma",
+        "discriminator": "0000",
+        "nickname": "ReJ aka Renaldas Zioma",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441063290846314620",
+      "type": "Default",
+      "timestamp": "2025-11-20T13:51:02.199+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Maybe you need to add fill?",
+      "author": {
+        "id": "732347216412278825",
+        "name": "urish",
+        "discriminator": "0000",
+        "nickname": "urish",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2025-11_media/2b6c3aac0ae09fc8a72a4b2e17d7f9c9-39032.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441063319099281469",
+      "type": "Default",
+      "timestamp": "2025-11-20T13:51:08.935+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "(re the 2nd error)",
+      "author": {
+        "id": "732347216412278825",
+        "name": "urish",
+        "discriminator": "0000",
+        "nickname": "urish",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2025-11_media/2b6c3aac0ae09fc8a72a4b2e17d7f9c9-39032.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441063445129859176",
+      "type": "Default",
+      "timestamp": "2025-11-20T13:51:38.983+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The precheck is not yet integrated, what you see is AI generated afaik",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2025-11_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441063464947814500",
+      "type": "Default",
+      "timestamp": "2025-11-20T13:51:43.708+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Leo Moser (mole99) precheck has passed btw",
+      "author": {
+        "id": "538398807986274304",
+        "name": "rzioma",
+        "discriminator": "0000",
+        "nickname": "ReJ aka Renaldas Zioma",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+      },
+      "attachments": [
+        {
+          "id": "1441063464721453197",
+          "url": "2025-11_media/image-7E30F.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 266387
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "2025-11_media/1f44d-27259.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "323371864074485771",
+              "name": "mole99",
+              "discriminator": "0000",
+              "nickname": "Leo Moser (mole99)",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2025-11_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "323371864074485771",
+          "name": "mole99",
+          "discriminator": "0000",
+          "nickname": "Leo Moser (mole99)",
+          "color": null,
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1423020172595298314",
+              "name": "Mod",
+              "color": null,
+              "position": 4
+            }
+          ],
+          "avatarUrl": "2025-11_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441063796226523187",
+      "type": "Default",
+      "timestamp": "2025-11-20T13:53:02.691+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Tim 'mithro' Ansell will be able to tell you when the precheck has been integrated into the online platform.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2025-11_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "169786952432746498",
+          "name": "mithro_",
+          "discriminator": "0000",
+          "nickname": "Tim 'mithro' Ansell",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2025-11_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441063827352322209",
+      "type": "Default",
+      "timestamp": "2025-11-20T13:53:10.112+00:00",
+      "timestampEdited": "2025-11-20T13:53:31.926+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "In other words, should I worry right now about those messages?",
+      "author": {
+        "id": "538398807986274304",
+        "name": "rzioma",
+        "discriminator": "0000",
+        "nickname": "ReJ aka Renaldas Zioma",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441064028892954726",
+      "type": "Default",
+      "timestamp": "2025-11-20T13:53:58.163+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Those are AI hallucinations, you don't have to worry about them :)",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2025-11_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83C\uDF89",
+            "code": "tada",
+            "isAnimated": false,
+            "imageUrl": "2025-11_media/1f389-5C738.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "538398807986274304",
+              "name": "rzioma",
+              "discriminator": "0000",
+              "nickname": "ReJ aka Renaldas Zioma",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2025-11_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+            }
+          ]
+        },
+        {
+          "emoji": {
+            "id": "",
+            "name": "❤️",
+            "code": "heart",
+            "isAnimated": false,
+            "imageUrl": "2025-11_media/2764-A3D25.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "732347216412278825",
+              "name": "urish",
+              "discriminator": "0000",
+              "nickname": "urish",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2025-11_media/2b6c3aac0ae09fc8a72a4b2e17d7f9c9-39032.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441186054832128204",
+      "type": "Default",
+      "timestamp": "2025-11-20T21:58:51.414+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "AI hallucinations == stuff the AI just put in instead of the real precheck",
+      "author": {
+        "id": "169786952432746498",
+        "name": "mithro_",
+        "discriminator": "0000",
+        "nickname": "Tim 'mithro' Ansell",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441186275687268444",
+      "type": "Default",
+      "timestamp": "2025-11-20T21:59:44.07+00:00",
+      "timestampEdited": "2025-11-20T21:59:59.988+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I'm working on the real manufacturing check integration @ https://github.com/wafer-space/platform.wafer.space/pull/43",
+      "author": {
+        "id": "169786952432746498",
+        "name": "mithro_",
+        "discriminator": "0000",
+        "nickname": "Tim 'mithro' Ansell",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "Add manufacturability checking system with Docker integration by mi...",
+          "url": "https://github.com/wafer-space/platform.wafer.space/pull/43",
+          "timestamp": null,
+          "description": "Summary\nImplements automated manufacturability checking for GDS design files using the gf180mcu-precheck tool in Docker containers. This includes export compliance certification requirements and co...",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "2025-11_media/43-AF869",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": [],
+          "inlineEmojis": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "❤️",
+            "code": "heart",
+            "isAnimated": false,
+            "imageUrl": "2025-11_media/2764-A3D25.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "538398807986274304",
+              "name": "rzioma",
+              "discriminator": "0000",
+              "nickname": "ReJ aka Renaldas Zioma",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2025-11_media/f2ec4a3c78aa64de4ebf8efb563cc011-91657.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441186426694926418",
+      "type": "Default",
+      "timestamp": "2025-11-20T22:00:20.073+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "But I'm currently fighting with the download pathway",
+      "author": {
+        "id": "169786952432746498",
+        "name": "mithro_",
+        "discriminator": "0000",
+        "nickname": "Tim 'mithro' Ansell",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441186547956449291",
+      "type": "Default",
+      "timestamp": "2025-11-20T22:00:48.984+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@ https://github.com/wafer-space/platform.wafer.space/pull/45",
+      "author": {
+        "id": "169786952432746498",
+        "name": "mithro_",
+        "discriminator": "0000",
+        "nickname": "Tim 'mithro' Ansell",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2025-11_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "Add content extraction pipeline for GDS/OASIS file processing by mi...",
+          "url": "https://github.com/wafer-space/platform.wafer.space/pull/45",
+          "timestamp": null,
+          "description": "Summary\nThis PR implements a comprehensive content extraction pipeline for processing GDS and OASIS files from various sources, including support for compressed archives and GitHub Actions artifact...",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "2025-11_media/45-C93DE",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": [],
+          "inlineEmojis": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441310022440321064",
+      "type": "Default",
+      "timestamp": "2025-11-21T06:11:27.595+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I thought about asking for support for GH action artifact submission",
+      "author": {
+        "id": "732347216412278825",
+        "name": "urish",
+        "discriminator": "0000",
+        "nickname": "urish",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2025-11_media/2b6c3aac0ae09fc8a72a4b2e17d7f9c9-39032.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1441310227071762523",
+      "type": "Default",
+      "timestamp": "2025-11-21T06:12:16.383+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "But on second thought, they are empheral by nature, so it may not be such a great idea",
+      "author": {
+        "id": "732347216412278825",
+        "name": "urish",
+        "discriminator": "0000",
+        "nickname": "urish",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2025-11_media/2b6c3aac0ae09fc8a72a4b2e17d7f9c9-39032.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    }
+  ],
+  "messageCount": 33
+}
