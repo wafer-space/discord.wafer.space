@@ -1,0 +1,74 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 📐 - Designing / 📦-cob
+Topic: Channel for discussing chip-on-board packaging options for wafer.space bare die.
+After: 2026-06-30 11:59 p.m.
+Before: 2026-08-01 12:00 a.m.
+==============================================================
+
+[2026-07-01 12:45 a.m.] rtimothyedwards_19428
+Test of writing to the lower 4 bits of 64 words at 25MHz (also works at 50MHz but it's at the sampling limit of the USB scope).
+
+{Attachments}
+2026-07_media/4bit_count_bench_test-45506.png
+
+
+[2026-07-01 12:52 a.m.] rtimothyedwards_19428
+Test setup with one Digilent Analog Discovery 2.
+
+{Attachments}
+2026-07_media/sram_test_2a-E7B04.jpg
+
+{Reactions}
+💜 (6)
+
+[2026-07-01 3:05 p.m.] namibj
+Can we get some amount of reporting as to how good as a PUF that SRAM behaves?
+Like, reading the power-on bit pattern of a few dies and seeing how stable and unique it is per-die?
+
+If it's at least not-terrible, I could try next week about getting a probably-smallest-tested SRAM macro set up, if I can think of a way to read it _at all_ without an electrical pad contact to the die.
+
+
+[2026-07-01 3:26 p.m.] rtimothyedwards_19428
+@namibj :  I don't have any kind of temperature force unit, so I won't be able to determine if the power-up pattern is stable over temperature.  I would tend to expect it to be dependent on the 3.3V supply ramp, as well.
+
+
+[2026-07-01 4:03 p.m.] namibj
+temperature stability shouldn't matter tooo much; trying voltage corners of the nominal-3v3, or, if not difficult, operation at reduced voltage (e.g. the foundry `Dualgate` SCL is rated down to 1.62V) would be plenty sufficcient to get an idea of if it's looking to be usable or not.
+
+It doesn't have to be an exact match of the pattern, it just has to be closest-match by a physically-inspired metric (notably, I'd figure accounting for the impact of mismatch in the sense amplifiers would help the statistical-model-based matching, like perhaps using a polynomial chaos expansion surrogate model to decorrelate w.r.t. supply ramps and (as needed) temperature, and focus on die-specific mismatch instead.
+
+It'd be a next-week thing though, as this week I got the extended ttgf0p3 and have already pushed schedule from the next two days to the weekend.
+
+
+[2026-07-01 4:08 p.m.] chips4makers
+I think what you will find is that some bit will always be the same at power-on but some will likely be more random. This means you'll need to transform this power-up pattern with random bits into a reproducible one.
+
+
+[2026-07-01 6:30 p.m.] namibj
+Well, I _mostly_ care about it as being able to record them at the die sorter while the process still knows what reticle and what wafer any particular die came from (location within a reticle is obviously trivial to encode using mask ROM techniques), to then later post-packaging being able to read it out from in the circuit during e-testing and match it against the recorded database to recognize which of the dies it (with high likelihood) was, followed by printing the information onto a label or writing them into some type/choice of PROM, be it on-die or just on-PCB.
+
+
+[2026-07-07 3:00 p.m.] mithro_
+The future CoB boards will have unqiue IDs. @Andrew Wingate is hoping to keep track of the die (where from the wafer they came from) as they are loaded into the tape. 
+
+I'm also looking to source a large number of I2C EEPROMs which end up being 1-2 cents each.
+
+{Reactions}
+👍
+
+[2026-07-07 3:08 p.m.] tholin
+Clearly, the perfect solution is
+
+{Attachments}
+2026-07_media/image-62E4C.png
+2026-07_media/image-498BE.png
+
+
+[2026-07-07 3:39 p.m.] namibj
+Oh great.
+
+
+==============================================================
+Exported 10 message(s)
+==============================================================

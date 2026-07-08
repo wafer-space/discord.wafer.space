@@ -1,0 +1,135 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 📐 - Designing / 💻-digital
+After: 2026-02-28 11:59 p.m.
+Before: 2026-04-01 12:00 a.m.
+==============================================================
+
+[2026-03-10 2:52 p.m.] egorxe
+I've finally written some comprehensible documentation for my open-source eFuse OTP memory compiler, which was used to generate eFuse IPs for the Run 1 testchip. In case someone is considering using eFuse in their design during later runs, please [check it out](https://github.com/egorxe/gf180_efuse_compiler). I'm open to any suggestions regarding compiler improvements, and would be happy to assist with eFuse IP integration if needed.
+
+{Reactions}
+🎉 (4)
+
+[2026-03-10 3:22 p.m.] mole99
+Started a thread.
+
+
+[2026-03-13 5:05 a.m.] wspitts2
+If it is helpful, I have a pretty nice systemverilog testbench I can share when I used to teach a SerDes course. It is integrated into virtuoso, Basically, it drops a random 8 bits out -> 8b10b encoding -> PISO -> channel driver -> channel -> CTLE/AMP/DFE -> slicer -> 10b8b decode ->  compares to the random 8bits that should have been sent and flags it. There is a CDR attached to the slicer. it is not PAM4 but it could be extended to that.
+
+
+[2026-03-13 5:06 a.m.] mithro_
+@beardothaweirdo - Any chance you could port to open source tooling? Verilator's systemverilog testbench support has come a long way these days.
+
+
+[2026-03-13 5:08 a.m.] wspitts2
+Well, it is system verilog, I could share the testbench structure. Basically, I had students design everything from the 8b10b output to the 10b8b input via schematics in FreePDK15 and FreePDK3. I could help stand up the FreePDKs at least from questions and simulations if needed. I upgraded the FreePDK15 to have integration in cadence instead of python wrappers and I did the TCAD to Spice on the models and setup a cadence PDK for schematics (no DRC/LVS).
+
+
+[2026-03-13 5:09 a.m.] wspitts2
+I can share my systemverilog source
+
+
+[2026-03-13 5:09 a.m.] wspitts2
+and I can check to make sure that the 8b10b and 10b8b encoding/decoding is shareable (I think I snagged it offline).
+
+
+[2026-03-13 5:10 a.m.] wspitts2
+The real power in it is that all bits that go down the channel are kept in a memory in the testbench and then they are checked as they come off the final reciever.  I also have some VerilogA and VerilogAMS of all the other components in there as well.
+
+
+[2026-03-13 5:12 a.m.] wspitts2
+If you can do mixed mode simulation then this is a good testbench for SerDes. I have one with a verilogA PLL and another with a verilogAMS DLL. have a few topologies things as well in there.
+
+
+[2026-03-13 5:15 a.m.] wspitts2
+I am not sure I will have the time to port it over the next couple of months. I also have something similar for a flipflop.
+
+
+[2026-03-13 5:25 a.m.] wspitts2
+I have a pile of stuff from the Digital Electronics course I taught for a while. At some point I guess I need to just port it to opensource and put it in the wild. but there are only so many hours in the day and I am spoiled with industry tools.
+
+
+[2026-03-13 5:28 a.m.] wspitts2
+Oh, I didn't hit reply to you @Tim 'mithro' Ansell
+
+
+[2026-03-13 6:48 a.m.] mithro_
+Maybe find some excited undergrads to do it for you? 😛
+
+
+[2026-03-13 6:50 a.m.] wspitts2
+It was a PhD level class... as far as I know I am the only undergraduate I know that had ever taken in when Dr. Franzon was teaching the course. It was how I got into his research group as an undergraduate.
+
+
+[2026-03-19 4:40 p.m.] mguthaus
+I just put this together for cocotb AMS with standard spice rather than VerilogA/VerilogAMS: https://github.com/VLSIDA/cocotbext-ams
+
+{Embed}
+https://github.com/VLSIDA/cocotbext-ams
+GitHub - VLSIDA/cocotbext-ams: An analog simulator bridge for cocot...
+An analog simulator bridge for cocotb — open-source mixed-signal co-simulation - VLSIDA/cocotbext-ams
+2026-03_media/cocotbext-ams-CB584
+
+
+[2026-03-19 4:43 p.m.] wspitts2
+Cool, I will take a look! There are both veriloga and verilogams can it handle both? I assume it handles system verilog and verilog too.
+
+
+[2026-03-19 4:43 p.m.] mguthaus
+No, it cannot handle either verilogA nor verilogAMS.
+
+
+[2026-03-19 4:44 p.m.] mguthaus
+It's intended as spice + (System) Verilog
+
+
+[2026-03-19 4:44 p.m.] mguthaus
+Are you aware of any open tools for VerilogA/VerilogAMS verification against spice?
+
+
+[2026-03-19 4:45 p.m.] mguthaus
+I'm not sure I like this discord threading. (I don't usually use discord)
+
+
+[2026-03-19 4:49 p.m.] wspitts2
+Verilog-A → OpenVAF → ngspice
+Digital → Verilator
+
+Is one possible, no vams though just verilogA which is workable (you can just break verilogams into a verilogA and verilog file, but that is not as closely coupled @Matt G. (Mobius)
+
+
+[2026-03-19 4:50 p.m.] wspitts2
+Gnucap Verilog-AMS is an attempt that is out there. Maybe we can improve it to support. Not opposed to writing a proposal for it either.
+
+
+[2026-03-19 4:52 p.m.] wspitts2
+Lol you and me both, it is easier than some, worse than others, but long gone it seems are the days of emacs, irc, bbs, and vim users... Le sigh...
+
+
+[2026-03-19 5:15 p.m.] nmz787
+I'm still on libera IRC, there's even some discord servers I'm in with a bot that bridges the two
+
+{Reactions}
+🔥
+
+[2026-03-19 6:33 p.m.] mguthaus
+I am as well, but no bridge.
+
+
+[2026-03-19 7:26 p.m.] tdextrous
+One thing with respect to the verilog-a -> OpenVAF flow is that the Verilog-a syntax support is very minimal. I believe this was intended to support device models that are in Verilog-a first and foremost, and less so about supporting behavior models e.g. for vcos or other analog blocks. So a lot of the models you might find on designer's guide won't work with this flow to my knowledge.
+
+
+[2026-03-19 9:50 p.m.] wspitts2
+Well that is disheartening.
+
+
+[2026-03-19 9:58 p.m.] wspitts2
+has anybody used Gnucap? @Thomas Dexter
+
+
+==============================================================
+Exported 28 message(s)
+==============================================================

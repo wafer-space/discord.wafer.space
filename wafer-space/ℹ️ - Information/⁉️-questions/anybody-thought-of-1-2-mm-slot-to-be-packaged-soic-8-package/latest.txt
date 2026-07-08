@@ -1,0 +1,81 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / ⁉️-questions / Anybody thought of 1-2 mm² slot to be packaged SOIC-8 package?
+After: 2026-06-30 11:59 p.m.
+Before: 2026-08-01 12:00 a.m.
+==============================================================
+
+[2026-07-04 7:52 p.m.] bobo38
+I was wandering whether it could be possible to fit 10 to 16 dies in a standard slot in order to go for SOIC-8 packaging. I got some idea about a standard pad frame placement for SOIC-8 packaging that could work with 1.5-2 mm² dies, likely with dedicated ESD protections. It could be very handy for people to implement stand-alone analog IC with 8 pins which allow a lot of classic discrete analog functions. SOIC-8 is easy to handle and solder, and there are inexpensive sockets available to test all your parts without soldering.
+
+It seems that SOIC-8 packaging is much cheaper than QFN with large pin numbers. If we were able to dice 10 to 16 dies in a one slot, we could reduce cost and increase access for sub 1000$ entry level to get 1000 SOIC-8 parts. I would personally be interested in designing some op amp stuff, but current prices are too large for hobby. It might really interest some universities for educational program, or even some start-ups needed tailor made discrete IC in small quantities, or prototype new discrete IC product.
+
+Wafer.space, what is the smallest die size that can be diced? 1 mm²? would you be willing to offer those?
+
+If a community grows and organizes to fill slots, and wafer.space provides final standardized dies for SOIC-8, it could be possible to join orders and get that packaged many thousands of SOIC-8 at little cost. It would be much easier if wafer.space developed this capability directly. Would there be some interest for wafer.space to develop this offer?
+
+For all: what do you think about that? Would you be interested in? Should the package size be increased to SOIC-16 to fit more stuff?
+
+
+[2026-07-04 7:59 p.m.] 246tnt
+Do you have a link for packaging house doing soic cheap ?
+
+
+[2026-07-04 8:05 p.m.] bobo38
+> • Selected Package: SOIC
+> • Pins: 16pin
+> • Volume: Low
+> 
+> The estimate price is: $0.18
+> 
+> Don’t hesitate to contact us if you have any questions.
+Got by email by filling form on https://anysilicon.com/package-price-estimator/
+
+Not sure whether it's possible to really get those prices for 10000-20000 parts. ChatGPT believes that the price for low volume is not so inflated, because those packages are very standard, and basically need 2 lines of pads with some pitch. The website does not have 8 pins.
+
+{Embed}
+https://anysilicon.com/package-price-estimator/
+IC Package Price Estimator - AnySilicon
+<br />
+
+
+[2026-07-07 2:45 p.m.] mithro_
+@bobo38 - I have not found anyone who is willing to do the low volume that wafer.space has.
+
+
+[2026-07-07 2:47 p.m.] mithro_
+@bobo38 - I started trying to figure out how to do IO only one one side of the die and such at https://mithro.github.io/gf180mcu-project-template/
+
+
+[2026-07-07 3:32 p.m.] rebelmike
+I plan to submit a one side only quarter slot design as a test - @Leo Moser (mole99) did some changes to the template to allow that to work.  As you can see, this allows a decent amount of SRAM on a quarter slot (here 9.5kB):
+
+{Attachments}
+2026-07_media/chip_top-B3536.png
+
+{Reactions}
+❤️
+
+[2026-07-07 6:19 p.m.] bobo38
+yeah maybe just one edge with IO would allow low pin count small dies. @RebelMike , I would rather remove the corner cells, as they only make sense to connect an adjacent edge I would say
+
+
+[2026-07-07 6:32 p.m.] rebelmike
+Yeah, that would make sense, I haven’t looked into how this actually works in the pad ring script.
+
+
+[2026-07-08 1:11 a.m.] mithro_
+@RebelMike - Oh, super cool!
+
+
+[2026-07-08 1:14 a.m.] mithro_
+@bobo38 - Most people complain about not having enough I/O, so I'm excited for people who think they can do something with the much more limited 12 or 20 I/O count. 
+
+I think of 12 I/O as 2 power, 8 bit bidir bus and 2 control while 20 I/O is 16 bit bidir.
+
+Packaging is about 1-2 cents a pin + some fixed cost (around ~10-15 cents), so with something like 12 I/O we might be able to get packaging down to $0.50 each.
+
+
+==============================================================
+Exported 10 message(s)
+==============================================================

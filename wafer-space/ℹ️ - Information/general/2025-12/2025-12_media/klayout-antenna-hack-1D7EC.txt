@@ -1,0 +1,30 @@
+diff --git a/src/db/db/dbLayoutToNetlist.cc b/src/db/db/dbLayoutToNetlist.cc
+index 043f1629c..8998d222d 100644
+--- a/src/db/db/dbLayoutToNetlist.cc
++++ b/src/db/db/dbLayoutToNetlist.cc
+@@ -1934,6 +1934,7 @@ db::Region LayoutToNetlist::antenna_check (const db::Region &gate, double gate_a
+       }
+ 
+       double r = ratio;
++      double da = 0.0;
+       bool skip = false;
+ 
+       adiodes_int.clear ();
+@@ -1953,7 +1954,7 @@ db::Region LayoutToNetlist::antenna_check (const db::Region &gate, double gate_a
+             skip = true;
+           }
+         } else {
+-          r += adiode_int * dbu * dbu * d->second;
++          da += adiode_int * dbu * dbu * d->second;
+         }
+ 
+       }
+@@ -1999,7 +2000,7 @@ db::Region LayoutToNetlist::antenna_check (const db::Region &gate, double gate_a
+             }
+           }
+ 
+-          if (ametal / agate > r + db::epsilon) {
++          if (ametal / (agate + da) > r + db::epsilon) {
+ 
+             db::Shapes &shapes = ly.cell (*cid).shapes (dl.layer ());
+ 

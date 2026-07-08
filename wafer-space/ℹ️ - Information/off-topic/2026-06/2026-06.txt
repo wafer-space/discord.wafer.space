@@ -1,0 +1,368 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / 🤪-off-topic
+Topic: Discussions ***unrelated*** to wafer.space or unconnected to IC design.
+
+Prefer <#1361349523724570941> for any IC design or wafer.space related chatter.
+After: 2026-05-31 11:59 p.m.
+Before: 2026-07-01 12:00 a.m.
+==============================================================
+
+[2026-06-04 6:47 a.m.] anfroholic
+Looking like Tiny Tapeout may need a second slot 👍
+
+{Attachments}
+2026-06_media/image-69F94.png
+
+
+[2026-06-04 7:14 a.m.] 246tnt
+@Andrew Wingate Repo already ready https://github.com/TinyTapeout/tinytapeout-gf-26b 😅
+
+
+[2026-06-04 7:17 a.m.] anfroholic
+:waferspace: Nice!! 
+You guys should consider showing more Open Shuttles on your homepage
+https://www.tinytapeout.com/
+
+{Embed}
+https://www.tinytapeout.com/
+Tiny Tapeout - Tiny Tapeout
+Tiny Tapeout makes it more accessible than ever to get your designs manufactured on a real chip!
+2026-06_media/tinytapeout6-60983.png
+
+
+[2026-06-04 7:20 a.m.] 246tnt
+But they're not open yet 😅  ( As in, you can't submit it yet ).
+
+{Reactions}
+💜
+
+[2026-06-10 6:11 a.m.] anfroholic
+100% filled!! 
+That's awesome Tiny Tapeout Team!!!
+
+{Attachments}
+2026-06_media/image-048D1.png
+
+{Reactions}
+❤️ (4) 🎉 (3) 🥳
+
+[2026-06-15 12:50 p.m.] thorben_61995
+Who from this crowd is going to be at FSiC 2026 (https://wiki.f-si.org/index.php/FSiC2026) in Ljubljana in three weeks? I see that at least @Leo Moser (mole99), @Simi, @Chips4Makers aka Staf Verhaegen and myself are giving presentations there. Anybody else presenting or attending?
+
+{Embed}
+https://wiki.f-si.org/index.php/FSiC2026
+FSiC2026
+Free Silicon Conference 2026 (FSiC2026) - free and open-source EDA and free and open-source silicon, 6-8 July 2026, University of Ljubljana, Slovenia
+2026-06_media/FSiC2026_logo_1200_630-A42FD.png
+
+{Reactions}
+🙌 (3)
+
+[2026-06-15 1:02 p.m.] 246tnt
+👋
+
+
+[2026-06-15 1:02 p.m.] 246tnt
+I'm presenting too.
+
+{Reactions}
+❤️
+
+[2026-06-15 1:03 p.m.] 246tnt
+I'm presenting work I did on a custom SRAM register file on sky130 and the test chips are currently with fedex which was supposed to delivery today but delayed it to tomorrow ... result of which will decide if my talk is going to be a post-mortem or not 😅
+
+{Reactions}
+😅
+
+[2026-06-15 1:04 p.m.] thorben_61995
+Ah yes, right on Monday morning, I see. Looking forward to it 😊
+
+
+[2026-06-15 1:05 p.m.] 246tnt
+Wait, are you  Thorben Moos btw ?
+
+
+[2026-06-15 1:06 p.m.] thorben_61995
+Yes
+
+
+[2026-06-15 1:06 p.m.] 246tnt
+Oh your bio link seems to indicate yes 😅   When looking at the program I had noticed someone else was coming from Belgium and even more from my Alma Mater
+
+{Reactions}
+❤️
+
+[2026-06-15 1:08 p.m.] 246tnt
+Did you do the bonding at Winfab ?  I was pondering pinging Christian (Renaux) about getting some time on the bonding machine if I ever needed to ...
+
+
+[2026-06-15 1:14 p.m.] thorben_61995
+Ha, very nice, did not know you're from here 😁 Yes, Christian from Winfab brought me the bonded samples on Friday. They are a little bit protective of their bonding machine at the moment, but as far as I know it's not used too much. And they seem to be getting a new semi-automated one soon (for some definition of soon). Then there's probably more availability and you have a fallback if one is temporarily out of order.
+
+
+[2026-06-15 1:18 p.m.] 246tnt
+Yeah, I studied there INGI then ELEC (was still FSA at the time).  And worked for intopix (a ucl spinoff) even before it was spunoff and I so I was in Maxwell for a year or so and also did some odd jobs for Quisquater and FX 🙂
+
+
+[2026-06-15 1:21 p.m.] thorben_61995
+Cool, will be a pleasure to chat with you in Slovenia 🙂
+
+{Reactions}
+👍
+
+[2026-06-15 1:22 p.m.] 246tnt
+Same 😄
+
+
+[2026-06-15 1:27 p.m.] namibj
+now that I'm no longer actively suffering from whatever that bread contained, let's hurry back to get this serializer worked on before anything is too late for it.
+
+
+[2026-06-15 1:50 p.m.] namibj
+VCO core, with enough fingers to let me tap off a single-finger feed to a clock tree without this causing undue load, probably do be aiming at exactly the 2.5 GHz though, maybe probably better like 3 GHz to handle a bit of layout parasitics and process variation.
+
+Then clock buffer.
+Then a latch fast enough to accomplish a DIV2 off of this.
+Then a mux2 at least that would act as the final MUX in a C2 arrangement.
+Then draw at least a plain serializer MUX tree up to have a fallback to submit; the base clock buf cells should be sufficient speed.
+
+After, see how much time is left,
+and see how good an inductor would be needed to clock the input-multiplexed current-mode C4 MUX (the pseudo-nmos style architecture of it).
+If success, try to make an inductor that's good enough for pulling off a C4 architecture.
+If success, go and implement the C4 with FIR taps furnished at the CLK/2 level (i.e., C8).
+
+If inductor trials not success, instead go for some FIR taps at still CLK/2.
+
+
+[2026-06-15 1:52 p.m.] 246tnt
+You're not targetting gf0p3 are you ?
+
+
+[2026-06-15 1:54 p.m.] namibj
+Well, kinda; thanks for me realizing now that it's not a week but just 4 days.
+
+
+[2026-06-16 11:58 a.m.] anfroholic
+Gave a lightning talk at the Chicago Python Users Group (Chipy)
+Hard to talk about much of anything in 5 min, but figured I'd share
+https://youtu.be/0ROkPEg5Jl8
+
+{Embed}
+Chicago Python Users Group
+https://www.youtube.com/watch?v=0ROkPEg5Jl8
+ChiPy  __main__  Meeting 2026.06  -  Andrew Wingate - Open Silicon ...
+Open Silicon:
+My experience supporting wafer.space first production run, the projects and opportunities that lie ahead
+2026-06_media/maxresdefault-FD1F4.jpg
+
+{Reactions}
+💜 (5)
+
+[2026-06-16 5:05 p.m.] namibj
+Oscillation success:
+
+{Attachments}
+2026-06_media/image-F7C42.png
+
+{Reactions}
+🏄
+
+[2026-06-16 7:19 p.m.] namibj
+clock buffer at FO4, though with limited fancyness of harness
+
+{Attachments}
+2026-06_media/image-34441.png
+
+
+[2026-06-16 7:22 p.m.] namibj
+food break; then a latch that can DIV2 off of that.
+
+
+[2026-06-16 7:44 p.m.] namibj
+forward device's drain current density oscillating between approximately 16 and 72 A/m
+
+
+[2026-06-16 8:12 p.m.] namibj
+thanks past-me for making a plan so present-me doesn't wander off of the minimum-viable-submission route.
+
+
+[2026-06-16 10:42 p.m.] namibj
+pair of latches be DIV2-ing
+
+{Attachments}
+2026-06_media/image-86E54.png
+
+
+[2026-06-17 3:03 a.m.] namibj
+
+
+{Attachments}
+2026-06_media/mux_tree-C4_simple-64EE9.png
+
+
+[2026-06-17 3:10 a.m.] namibj
+16 half speed latches @ approx 100 mW each + 4 full-speed latches @ approx 400 mW each + 4 full-speed MUX2 @ somewhere_between_those each, so a "total" of 3.6 ~ 4.8 mW, not counting the clock feed (quadrature phases at both full clock and half clock), and not counting the output predriver limiting amplifier
+
+
+[2026-06-17 6:59 p.m.] namibj
+yeah I don't want to draw the rest by hand, real ugly to tune that way....
+
+{Attachments}
+2026-06_media/image-7FB40.png
+
+
+[2026-06-18 3:13 a.m.] anfroholic
+I designed some silicon lol. 
+Maybe I will talk about it someday, this was more of an exercise than something I care about. 
+
+A portion of the above was to understand the toolchain so I could make this docker based starter thing. 
+Some people have asked me for it, so now it exist @carlfk 
+
+https://github.com/evezor/wafer_space_docker_based_starter_kit
+If someone would mind giving it a quick overview, that would be lovely. 
+Thanks and hope it's helpful!
+
+{Attachments}
+2026-06_media/chip_top-B6AF1.png
+
+{Embed}
+https://github.com/evezor/wafer_space_docker_based_starter_kit
+GitHub - evezor/wafer_space_docker_based_starter_kit
+Contribute to evezor/wafer_space_docker_based_starter_kit development by creating an account on GitHub.
+2026-06_media/wafer_space_docker_based_starter_kit-21C38
+
+{Reactions}
+🎉 (2) waferspace
+
+[2026-06-21 7:06 a.m.] anfroholic
+@needsadrink|woke Tim is asking me to look into getting the old Skywater masks from the google mpw run.
+Would you mind giving me a little assistance there? Please DM me. 
+Thanks
+
+{Reactions}
+👍
+
+[2026-06-22 7:16 a.m.] mithro_
+How do you draw these diagrams? Just by hand in some tool or?
+
+
+[2026-06-22 11:08 a.m.] mattvenn
+looks like draw.io to me
+
+
+[2026-06-22 11:33 a.m.] namibj
+Hand in drawio.
+
+
+[2026-06-22 11:34 a.m.] namibj
+I'd prefer a less-hand way to get free verification out of it.
+
+
+[2026-06-22 11:34 a.m.] namibj
+I can send you the source this evening if you want.
+
+
+[2026-06-23 5:37 a.m.] trev5514
+Check out https://github.com/hneemann/digital !
+
+{Embed}
+https://github.com/hneemann/digital
+GitHub - hneemann/Digital: A digital logic designer and circuit sim...
+A digital logic designer and circuit simulator. Contribute to hneemann/Digital development by creating an account on GitHub.
+2026-06_media/Digital-052AE
+
+
+[2026-06-23 6:56 a.m.] anfroholic
+Cool! 
+There's also Wokwi which you can use to create designs for Tiny Tapeout
+https://tinytapeout.com/digital_design/wokwi/
+
+{Embed}
+https://tinytapeout.com/digital_design/wokwi/
+Getting started with our digital design tool - Tiny Tapeout
+Learn the basics of Wokwi
+
+
+[2026-06-23 7:06 a.m.] mithro_
+For smallish things netlistsvg worked okay for a while
+
+
+[2026-06-23 7:49 a.m.] trev5514
+As a follow up, https://github.com/logisim-evolution/logisim-evolution this is an alternative program also. I used Digital when I was at uni and it was really nice.
+
+{Embed}
+https://github.com/logisim-evolution/logisim-evolution
+GitHub - logisim-evolution/logisim-evolution: Digital logic design ...
+Digital logic design tool and simulator. Contribute to logisim-evolution/logisim-evolution development by creating an account on GitHub.
+2026-06_media/952e5096-8116-4cf7-82c7-10b3a5f7087c-D6AA7
+
+
+[2026-06-26 10:00 a.m.] namibj
+I'm melting 🙁
+
+But I do see hope for the 4:1 MUX (and required clocking feed) getting tested as part of Run2.
+
+{Attachments}
+2026-06_media/Screenshot_2026-06-26-11-54-46-98_f9ee0578-BC1AD.jpg
+
+
+[2026-06-26 10:01 a.m.] tholin
+40 tomorrow, 39 sunday
+
+
+[2026-06-26 10:01 a.m.] tholin
+Gonna have a fun weekend
+
+
+[2026-06-26 10:01 a.m.] tholin
+But not gonna stop working
+
+
+[2026-06-26 10:48 a.m.] namibj
+I'll ask and if I'm lucky I'll figure out how to remote into my workstation from the office 😉
+
+Would be awesome for the heatwave situation.
+Should just need a sufficiently effective codec to keep my sanity despite the inevitable lag.
+
+
+[2026-06-27 3:09 p.m.] gojimmypi
+For all the Visual Studio developers out there: I've released my best ever version of the Verilog Syntax Highlighter Extension.
+
+https://marketplace.visualstudio.com/items?itemName=gojimmypi.gojimmypi-verilog-language-extension
+
+{Embed}
+https://marketplace.visualstudio.com/items?itemName=gojimmypi.gojimmypi-verilog-language-extension
+VerilogLanguage - Visual Studio Marketplace
+Extension for Visual Studio - 
+Verilog Extension for Visual Studio. (classifier extension).
+Implements the Verilog Language Extension allowing user-definable
+keyword colorization. Useful for FPGA, ASIC and other RTL development.
+2026-06_media/Microsoft.VisualStudio.Services.Icons-C29C1.Default
+
+{Reactions}
+👍
+
+[2026-06-28 6:30 a.m.] nmz787
+hopefully low humidity!
+
+
+[2026-06-30 1:45 a.m.] polyfractal
+not perfect, but pretty happy how this turned out 🙂
+
+{Attachments}
+2026-06_media/HMBm74GboAEDlAS-47484.png
+2026-06_media/HMBm6ZXaQAApIbn-80D19.png
+
+{Reactions}
+💜 (5)
+
+[2026-06-30 2:21 a.m.] anfroholic
+Looks great!!
+
+{Reactions}
+❤️
+
+==============================================================
+Exported 52 message(s)
+==============================================================

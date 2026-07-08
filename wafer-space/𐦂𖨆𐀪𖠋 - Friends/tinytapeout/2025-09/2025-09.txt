@@ -1,0 +1,139 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 𐦂𖨆𐀪𖠋 - Friends / tinytapeout
+Topic: Current shuttle - Tiny Tapeout GF 0p2 - [discord](https://discord.com/channels/1009193568256135208/1422290927816540402) - [webpage](https://app.tinytapeout.com/shuttles/ttgf0p2)
+After: 2025-08-31 11:59 p.m.
+Before: 2025-10-01 12:00 a.m.
+==============================================================
+
+[2025-09-16 9:39 p.m.] urish
+Early experimentation on GF180 Tiny Tapeout GitHub action:
+
+https://github.com/urish/tt-gf180-factory-test/actions/runs/17778063270
+
+{Embed}
+https://github.com/urish/tt-gf180-factory-test/actions/runs/17778063270
+chore: adapt for gf180mcu · urish/tt-gf180-factory-test@aca8bfd
+Factory test project for Tiny Tapeout GF shuttles. Contribute to urish/tt-gf180-factory-test development by creating an account on GitHub.
+2025-09_media/tt-gf180-factory-test-6BFE9
+
+{Reactions}
+👍 (2) 🎉 👏 (3) ❤️
+
+[2025-09-16 10:24 p.m.] mithro_
+@urish - Awesome work.
+
+
+[2025-09-17 2:13 p.m.] algofoogle
+Great stuff  @urish 🙂 For fun I ran it on one of my old designs, and it worked: https://github.com/algofoogle/tt-gf180-toy/actions/runs/17800061560 -- I was surprised that the flow seems to define `USE_POWER_PINS` (and since my code was originally written to support Caravel, it's sensitive to those defines and gives a linter warning, though safe to ignore I guess).
+
+
+[2025-09-17 2:14 p.m.] algofoogle
+I was thinking about using Magic's `plot` to render GDS instead of the existing renderer used by the TT actions. Maybe it will look better for IHP and GF's standard cells -- I will give it a try soon.
+
+{Reactions}
+👍
+
+[2025-09-29 6:28 p.m.] urish
+The verilog project template is ready!
+
+https://github.com/TinyTapeout/ttgf-verilog-template/
+
+One caveat: the "precheck" part will fail, and that's expected. We'll fix it over the next week or two.
+
+{Embed}
+https://github.com/TinyTapeout/ttgf-verilog-template/
+GitHub - TinyTapeout/ttgf-verilog-template: Submission template for...
+Submission template for Tiny Tapeout GF180 (wafer.space) shuttles - Verilog HDL Projects - TinyTapeout/ttgf-verilog-template
+2025-09_media/1df1e918-07ad-4314-a3e0-26b497370dd1-D3AC8
+
+{Reactions}
+🎉 (4) 👀
+
+[2025-09-29 9:52 p.m.] mithro_
+@urish - Should I promote that to people yet?
+
+
+[2025-09-30 4:28 a.m.] urish
+Everyone should be able to use the template as-is right now, but we're thinking to only open submission for people who submitted to a Tiny Tapeout shuttle in the past (our past experience shows that this is a good way to get higher quality submissions)
+
+{Reactions}
+👀
+
+[2025-09-30 5:06 a.m.] mithro_
+@urish - BTW Have you ever tested what happens if someone shorts VDD to GND together aggressively?
+
+
+[2025-09-30 5:07 a.m.] mithro_
+@urish - The power gating should stop it from causing any problem.
+
+
+[2025-09-30 5:11 a.m.] urish
+Yes, it should stop it.
+
+
+[2025-09-30 5:12 a.m.] urish
+But the current shuttle won't be power gated
+
+
+[2025-09-30 5:25 a.m.] h_thoreson_71412
+I did one past TT, kinda have been digging around Discord looking for ideas to work on for the next run. Is there anything I can try to do with this that would be helpful?
+
+
+[2025-09-30 5:37 a.m.] urish
+Started a thread.
+
+
+[2025-09-30 6:21 a.m.] 246tnt
+@Tim 'mithro' Ansell The power gate stops it as long as you don't enable that particular design 😅   If you do enable it, you will get potentially damaging high currents.
+
+
+[2025-09-30 6:22 a.m.] mithro_
+But have you actually tested such a thing?
+
+
+[2025-09-30 6:22 a.m.] 246tnt
+No.
+
+
+[2025-09-30 6:23 a.m.] 246tnt
+We had one design that had a short but it was through `li` in sky130 so it ended up drawing way more than expected and more than we recommend, but it was only ~ 15 mA which is still very much in the "chip will survive" zone.
+
+
+[2025-09-30 6:25 a.m.] 246tnt
+I had a power gate test design that was meant to test high current usage in TT07 but I made a mistake in the layout so it wasn't able to generate very high current. There is a fixed version in TT08 but given I just got the chips yesterday, I'll wait a bit before trying to burn those 😅
+
+
+[2025-09-30 6:29 a.m.] urish
+We do have a way to mark dangerous projects post silicon, so users get warned before enabling them through the commander app
+
+
+[2025-09-30 7:20 a.m.] algofoogle
+Will you be taking custom GDS on this run, or just digital LibreLane generated stuff?
+
+
+[2025-09-30 7:47 a.m.] 246tnt
+Only LibreLane stuff. Without power gating it's a bit risky to accept random GDS 😅
+
+
+[2025-09-30 7:55 a.m.] urish
+If you manually add a power gate yourself we can consider including it
+
+
+[2025-09-30 7:55 a.m.] urish
+Or if might just wait for the next shuttle
+
+
+[2025-09-30 9:30 a.m.] algofoogle
+Yeah makes sense, I figured that would be the case. I think I will try an assortment of digital and analog/mixed stuff in GF180 and see whichever shuttles I can get onto, whenever 🙂
+
+
+[2025-09-30 5:31 p.m.] mithro_
+BTW It's GF180MCU not GF180 🙂 -- Going to keep saying that because if successful we'll end up with multiple GF180 technologies.
+
+{Reactions}
+❤️
+
+==============================================================
+Exported 25 message(s)
+==============================================================

@@ -1,0 +1,879 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 📐 - Designing / 📦-cob
+Topic: Channel for discussing chip-on-board packaging options for wafer.space bare die.
+After: 2026-03-31 11:59 p.m.
+Before: 2026-05-01 12:00 a.m.
+==============================================================
+
+[2026-04-11 7:23 a.m.] saladchap
+Started a thread.
+
+
+[2026-04-13 5:27 p.m.] tholin
+Why is there a missing connection on the COB PCB layout?
+
+{Attachments}
+2026-04_media/image-EB87A.png
+
+
+[2026-04-13 5:27 p.m.] tholin
+I just cloned the repo and its like this
+
+
+[2026-04-14 12:58 a.m.] tholin
+The proposed mating connector (LCSC C19089262) only has 6 in stock right now. Might need an alternative part number.
+
+
+[2026-04-14 3:43 a.m.] anfroholic
+Wow, good catch. I have no idea how that dissapeared.
+
+
+[2026-04-14 3:43 a.m.] anfroholic
+We have the connectors.
+
+
+[2026-04-14 8:12 a.m.] tholin
+Sorry, I mean, the board side connector that the breakouts will plug into is the one with only 6 left in stock
+
+
+[2026-04-14 8:13 a.m.] 246tnt
+The mating connector is available in multiple stacking height variants and some have thousands in stock.
+
+
+[2026-04-14 8:32 a.m.] saladchap
+afaict you can use any height mating connector too
+
+
+[2026-04-14 8:35 a.m.] anfroholic
+Correct, there are a number of different heights available. I just picked one when we began. 
+https://www.lcsc.com/datasheet/C19089262.pdf?spm=wm.sxq.inf.ggs&lcsc_vid=TllZV1RfQVVdBlQCTlBfVFIDTlZXUFNTQFJcBAZQFFUxVlNRQVBbUlJXRFZYXjsOAxUeFF5JWAYHEwwTFU8NCAlJAAAIAhZLBBEPBAFJFAkHF0kJGUwMCAUUE0wZDhYDWgMBCQADE0weBAYV
+There are also a number of other manufacturers that make compatible connectors as well.
+
+{Attachments}
+2026-04_media/image-080D8.png
+
+{Embed}
+https://www.lcsc.com/datasheet/C19089262.pdf?spm=wm.sxq.inf.ggs&lcsc_vid=TllZV1RfQVVdBlQCTlBfVFIDTlZXUFNTQFJcBAZQFFUxVlNRQVBbUlJXRFZYXjsOAxUeFF5JWAYHEwwTFU8NCAlJAAAIAhZLBBEPBAFJFAkHF0kJGUwMCAUUE0wZDhYDWgMBCQADE0weBAYV
+Datasheet - LCSC Electronics
+Free download the datasheet for HC-PBB40C-70DS-0.4V-2.0-02 from HCTL.
+
+{Reactions}
+👍🏻
+
+[2026-04-14 3:02 p.m.] simi150500
+Hi, is it planned to get some samples of these DIP breakout boards with the order of the CoB dies? Or can we buy them somewhere, or do we have to build them on our own? Thanks. 🙂
+
+{Attachments}
+2026-04_media/image-164E9.png
+
+
+[2026-04-14 3:04 p.m.] tholin
+I’m building my own
+
+
+[2026-04-14 3:07 p.m.] anfroholic
+I don't think there are any plans to offer them. 
+When i get home after this run, I intend to clean this up and create some more offers, but still will just be gerbers and you can order your own.
+
+{Reactions}
+👍
+
+[2026-04-18 2:05 a.m.] anfroholic
+@xianglin_pu and @peterkinget 
+I created the panelized version of your board. 
+A pull request has been made if you'd like to merge back into your repo.
+
+{Attachments}
+2026-04_media/image-2A724.png
+
+{Reactions}
+🙌 waferspace
+
+[2026-04-18 2:05 a.m.] anfroholic
+@Tholin you had a custom version as well?
+
+
+[2026-04-18 2:08 a.m.] chasees18
+@Andrew Wingate Looks great ! Thanks for the help.
+
+{Reactions}
+💯
+
+[2026-04-18 5:18 a.m.] peterkinget
+Thanks @Andrew Wingate looks gr8 !
+
+{Reactions}
+👍
+
+[2026-04-18 10:32 a.m.] tholin
+Yes.
+https://github.com/AvalonSemiconductors/gf180mcu_cob/tree/main/74pad-mp-mezzanine
+
+{Reactions}
+👀
+
+[2026-04-18 10:32 a.m.] tholin
+Its the same as the default breakout, just the routing is different
+
+
+[2026-04-18 10:35 a.m.] anfroholic
+Thanks, I'll get to it later tonight. 
+
+I see the caps are also different. This should not be a problem either, I'll let you know if that changes. 
+
+Thanks
+
+https://kicanvas.org/?repo=https%3A%2F%2Fgithub.com%2FAvalonSemiconductors%2Fgf180mcu_cob%2Ftree%2Fmain%2F74pad-mp-mezzanine
+
+
+[2026-04-19 9:38 a.m.] anfroholic
+Thank you @Tholin 
+I have created a pull request if you'd like to merge
+
+{Attachments}
+2026-04_media/image-A8D18.png
+
+
+[2026-04-19 9:52 a.m.] anfroholic
+Do you have a preference on COB soldermask color? 
+@peterkinget @xianglin_pu @Tholin @stuart
+
+
+[2026-04-19 10:46 a.m.] tholin
+Nope
+
+
+[2026-04-19 2:21 p.m.] peterkinget
+We have been using blue or black. Blue would be nice for this one.
+
+{Reactions}
+👍
+
+[2026-04-20 3:35 a.m.] namibj
+Is this wirebonding with the COBs chaper, was a socketed chip desired, did GF ask for things that can't (reasonably) be done like due to open PDK limitations, or how come that wafer.space is wire-bonded COB packaging instead of native flip chip WLCSP through 1 extra metal layer for some amount of redistribution plus the bumping process itself, and resulting in just bare WLCSP BGA dies?
+Even the half slot at least at default IO count maths to "just" 0.4mm pitch, tho I do see that 122 IO count would be rather ambitious at probably about 0.25mm pitch.
+
+Like there has to be a reason... is it just that such WLCSP devices would be "too much" for many customers to handle/solder?
+
+Like e.g. epc-co with few exceptions (only one that comes to mind is one they have a drop-in different strength version of and use optically inspectable QFN pads) sells their GaN-on-Si (almost exclusively low-voltage, and most are "switch"-class but they do have some with S-parameters specified) transistors only as WLCSP BGA (well, some technically LGA due to bar-shaped pads). They claim something about cost/price for reasoning.
+
+
+[2026-04-20 6:05 a.m.] 246tnt
+It's cheaper
+
+
+[2026-04-20 7:03 a.m.] mithro_
+As WLCSP requires more masks, it also then requires all the chips to have identical pad rings, sizes, fixed functions, etc.
+
+Other type of packaging still uses wire bonding internally, so just drives the cost up.
+
+
+[2026-04-20 11:51 a.m.] namibj
+Ehhhhh why would it force "all the chips" to have identical pad rings beyond the extend this currently already applies (per reticle)?
+
+
+[2026-04-20 11:52 a.m.] namibj
+(isn't that cob option currently also mandating a specific pad ring layout to be selectable?)
+
+
+[2026-04-20 11:52 a.m.] 246tnt
+@namibj Only for COB option.  But if you process for WLCSP it applies to everyone ... same wafer.
+
+
+[2026-04-20 11:53 a.m.] namibj
+I understand the words you say, but I don't comprehend why the WLCSP layers would have smaller reticles?
+
+
+[2026-04-20 11:54 a.m.] namibj
+(and iirc the actual bumping part of it is selective so you could just skip bumping a slice's pads if that slice is supposed to get some custom wirebonding)
+
+
+[2026-04-20 11:55 a.m.] 246tnt
+The way I read the rules, either the whole wafer will be prepped for bumping and bumped  or will be prepped for bonding, they're exclusive options.  I think it's not just additional steps, some of the final steps diverge between options.  That's my understanding at least.
+
+
+[2026-04-20 11:56 a.m.] namibj
+(I would easily understand the factory not letting you mix pinouts if they separate the wafers, but why would they care if the customer uses their own die sorter to pick and sort?)
+
+
+[2026-04-20 11:59 a.m.] namibj
+https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_09_4_5.html probe pads are at least allowed:
+
+
+[2026-04-20 12:05 p.m.] namibj
+(notably I'm comparing the packaging budget of IIUC 1.5$/each to the total unit cost of 4$/each at the small slice size, and I don't think bumping would be that expensive relative to the FEOL+main-BEOL processing)
+
+
+[2026-04-20 12:06 p.m.] mithro_
+@namibj - WCSP adds about ~$30k NRE to every run *before* you do anything.
+
+
+[2026-04-20 12:06 p.m.] namibj
+Oh and no F[C]BGA doesn't use wire bonding internally.
+
+
+[2026-04-20 12:07 p.m.] namibj
+Ohh...
+A case of "that part of the industry hasn't learned how to scale down yet"?
+
+
+[2026-04-20 12:09 p.m.] mithro_
+FYI - No part of the industry has scaled down here. I've scaled up the number of people doing things. The costs are all the same, we just divide it by a larger number of people.
+
+
+[2026-04-20 12:14 p.m.] namibj
+Ehhhhh, not relying on Cadence NDA gated PDKs by offering self-service "don't talk to us about it" open source PDKs that suffice for creating submission-grade gds is already a major aspect.
+
+You AFAIK are approximately the first one to offer series-production-quantities of dies through an MPW process with listed pricing instead of "call for NDA" schemes.
+
+The other MPWs with listed prices seem to all be research quantities ("30 dies" "option for up to 200 dies").
+
+
+[2026-04-20 12:19 p.m.] mithro_
+But that is just because the other MPW services throw lots of away stuff and loose money because they can't get enough people to order stuff.
+
+
+[2026-04-20 12:20 p.m.] namibj
+The "30 dies" ones, or the "call for NDA before we talk pricing" ones?
+
+
+[2026-04-20 12:21 p.m.] mithro_
+All of the above, the foundry itself generally runs things in half lot or full lot which is 12 or 25 wafers.
+
+
+[2026-04-20 12:22 p.m.] namibj
+Wafer.Space is how many wafers?
+
+
+[2026-04-20 12:22 p.m.] mithro_
+1,000 dies require ~50 wafers in total
+
+
+[2026-04-20 12:23 p.m.] mithro_
+For this first run I only did 25 wafers, but it only saved about 15% of the cost
+
+
+[2026-04-20 12:24 p.m.] namibj
+(also how many wafers do the full-reticle masks last? Not "effectively infinity" for say a mainstream STM32 die, but maybe close enough to the unlimited to not matter for MPW?)
+
+
+[2026-04-20 12:26 p.m.] namibj
+I'd guess it's "very many" for these larger nodes at least?
+
+
+[2026-04-20 12:29 p.m.] namibj
+Can you share anything about how they manage to make it that expensive? They're not fine-pitch masks, and not many masks either.
+No notable automation causing lots of engineer time?
+
+
+[2026-04-20 12:53 p.m.] mithro_
+@namibj - effectively infinity but we use them once.
+
+
+[2026-04-21 5:28 a.m.] rebelmike
+Just bumping this: https://discord.com/channels/1361349522684510449/1408134567491145728/1483821797253185590
+Has there been any more thought as to how half slots will be bonded? It would be nice to work out the pinout so I could start designing a carrier board.
+
+
+[2026-04-21 6:44 a.m.] mithro_
+@RebelMike - any thoughts on if we can reuse the existing PCBs with longer bond wires?
+
+
+[2026-04-21 6:51 a.m.] rebelmike
+That’s definitely beyond my knowledge, but I would be worried about the distribution of pins being skewed to the long sides of the half slots meaning some of the wires would be at a difficult angle.
+
+
+[2026-04-23 3:59 a.m.] mithro_
+FYI - We are getting an ~80% success rate of dies being chip on board mounted with all wire bonds working based on the Tiny Tapeout testing. So we have pulled the trigger to get the first 20 parts of the 1x1 designs bonded to get people stuff.
+
+{Reactions}
+🎉 (5)
+
+[2026-04-23 8:34 p.m.] tholin
+Is the mezzanine connector keyed or will I have to *extremely careful* about orientation?
+
+
+[2026-04-23 8:46 p.m.] 246tnt
+It's not keyed AFAIK
+
+{Reactions}
+👍
+
+[2026-04-24 2:39 a.m.] anfroholic
+Correct. It is not keyed
+
+
+[2026-04-25 2:08 a.m.] saladchap
+The COB factory confirmed the length isn't an issue for them, but yes the angles may be. Afaik @Tim 'mithro' Ansell  will be checking this and preparing bonding diagrams (maybe with @Leo Moser (mole99) ?) over the next few days
+
+
+[2026-04-25 8:41 a.m.] rebelmike
+Awesome, thanks for letting me know! If new boards are required I could potentially have a go at that next week, if that would be helpful.
+
+
+[2026-04-25 9:23 a.m.] mithro_
+@RebelMike - IIRC you have the quarter slot one? (Plus some half slots?)
+
+It would probably be helpful to look at that one at least.
+
+I think your ICs are interesting enough that I would love to see a custom board? 
+
+Being able to give out a fully open source RISC-V blinky would be pretty cool....
+
+
+[2026-04-25 10:18 a.m.] rebelmike
+Yes I have one each of the two half slots and a quarter, they’re all the same design but Leo encouraged me to submit them all to help test everything.
+
+Do you mean a custom board the chip is directly bonded to? I’d be very happy to do that if it can be made to work - I know there are max size considerations. But yes I was already planning to make a carrier board, but haven’t started on that yet as I’m not sure what the pinout will end up being.
+
+
+[2026-04-25 2:44 p.m.] mithro_
+I was more thinking a custom cob board that made them all have the same pin out so could share a carrier board or something.
+
+{Reactions}
+ferrisHmm
+
+[2026-04-25 5:30 p.m.] rebelmike
+Yes if it’s possible to make a cob board that can match the pinout at least for the digital pins used for TinyQV (and in general as many as possible in the default template) that would definitely seem like a good move.
+Haven’t looked into how feasible that is yet, today ended up busier than expected, but hopefully I’ll get some time tomorrow evening.
+
+
+[2026-04-26 12:22 a.m.] mithro_
+@RebelMike - Great! I'll probably be looking at that this week as well but there are quite a few projects and the 0.5x0.5 will likely be the lowest priority due to there only being one of that.
+
+{Reactions}
+👍
+
+[2026-04-26 2:07 a.m.] polyfractal
+guess I should start thinking about PCB stuff now that the boards are shipping 😅   Has anyone designed just a simple breakout board for the COB connector?
+
+
+[2026-04-26 2:12 a.m.] namibj
+https://discord.com/channels/1361349522684510449/1361349523724570938/1497771485966897273 look at the image with the green adapter board.
+
+{Reactions}
+👀
+
+[2026-04-26 2:30 a.m.] mithro_
+https://github.com/wafer-space/chip-on-board-wire-bonded-pcbs
+
+{Embed}
+https://github.com/wafer-space/chip-on-board-wire-bonded-pcbs
+GitHub - wafer-space/chip-on-board-wire-bonded-pcbs: Wire bonded ch...
+Wire bonded chip on board PCB designs. Contribute to wafer-space/chip-on-board-wire-bonded-pcbs development by creating an account on GitHub.
+2026-04_media/chip-on-board-wire-bonded-pcbs-BA081
+
+
+[2026-04-26 2:31 a.m.] mithro_
+https://www.crowdsupply.com/wafer-space/gf180mcu-run-1/updates/chip-on-board
+
+{Embed}
+https://www.crowdsupply.com/wafer-space/gf180mcu-run-1/updates/chip-on-board
+Community Progress on Chip-on-Board Packaging Strategy
+The wafer.space community is developing a flexible chip-on-board packaging strategy, so you won't need specialized equipment or expensive packaging services to use your chips.
+2026-04_media/padframes-cob-lga-cob_png_project-main-DE6C2.jpg
+
+
+[2026-04-26 2:38 a.m.] polyfractal
+oh wow, totally missed that somehow. thanks @Tim 'mithro' Ansell!
+
+
+[2026-04-26 5:39 a.m.] saladchap
+https://github.com/htfab/breakout-ttgf0p2-ws-adapter
+
+Here's the repo for the green adaptor board in that photo. We used this so we could test the bonding process for w.s die by using the TT w.s die and the known test process we use for TT chips when making devkits.
+
+Maybe not super useful for you but thought it might be helpful
+
+{Embed}
+https://github.com/htfab/breakout-ttgf0p2-ws-adapter
+GitHub - htfab/breakout-ttgf0p2-ws-adapter
+Contribute to htfab/breakout-ttgf0p2-ws-adapter development by creating an account on GitHub.
+2026-04_media/breakout-ttgf0p2-ws-adapter-E2153
+
+{Reactions}
+❤️
+
+[2026-04-26 9:12 a.m.] anfroholic
+I designed a couple simple ones.
+https://github.com/wafer-space/chip-on-board-wire-bonded-pcbs/tree/main/74pad-70pin-mezzanine/motherboards
+The large one was the only one that I made, since the castellated were a little more expensive.
+
+{Embed}
+https://github.com/wafer-space/chip-on-board-wire-bonded-pcbs/tree/main/74pad-70pin-mezzanine/motherboards
+chip-on-board-wire-bonded-pcbs/74pad-70pin-mezzanine/motherboards a...
+Wire bonded chip on board PCB designs. Contribute to wafer-space/chip-on-board-wire-bonded-pcbs development by creating an account on GitHub.
+2026-04_media/chip-on-board-wire-bonded-pcbs-BA081
+
+
+[2026-04-26 9:13 a.m.] anfroholic
+
+
+{Attachments}
+2026-04_media/image0-79720.png
+
+{Reactions}
+👍
+
+[2026-04-26 3:34 p.m.] polyfractal
+ordered a small batch of these last night, thanks for making them!
+
+
+[2026-04-26 3:36 p.m.] anfroholic
+Of course. I am thinking now something I should have mentioned is I did not put the pinned headers all the way in as I got the shortest of the mating connector. 
+Sorry about that.
+
+
+[2026-04-26 3:36 p.m.] polyfractal
+no worries, will bodge my way to making it work 🙂
+
+
+[2026-04-26 3:38 p.m.] anfroholic
+Perfect! Here's a more side view if that helps
+
+{Attachments}
+2026-04_media/20251217_000430-9CBCA.jpg
+
+{Reactions}
+👍 (2)
+
+[2026-04-26 3:42 p.m.] polyfractal
+aha I see, good to know. will keep that in mind when soldering it up 👍
+
+{Reactions}
+💯
+
+[2026-04-26 3:42 p.m.] polyfractal
+so excited!
+
+
+[2026-04-26 3:43 p.m.] polyfractal
+here's to hoping it's not DOA haha
+
+
+[2026-04-26 3:43 p.m.] anfroholic
+You got this!!
+
+
+[2026-04-26 10:01 p.m.] rebelmike
+Started by trying to put a Kicad symbol together for the 1x0p5 and 0p5x1.  The 0p5x1 is rotated 90 degrees to align as best as possible:
+
+{Attachments}
+2026-04_media/Screenshot_from_2026-04-26_22-58-55-7BFAD.png
+2026-04_media/Screenshot_from_2026-04-26_22-59-10-836CC.png
+
+
+[2026-04-26 10:11 p.m.] rebelmike
+clk on the bottom left is 1x0p5, clk on the top left is 0p5x1.  My TinyQV SoC uses clk, rst_n, in0-1 and bidir0-32.  Maybe it would be possible to produce a board that had two pads for the bond wires on the nets that are in significantly different places between the two?  I'm thinking I would ignore the analog pads completely but try to get something that would work for clk, rst_n, in0-3 and bidir0-43.
+
+
+[2026-04-27 4:59 p.m.] mithro_
+I assume you got distracted by @tnt and the tt silicon stuff 🙂
+
+
+[2026-04-27 5:01 p.m.] mithro_
+Well, there is no reason you can't route all the pads around the place so the connector has the pins in the same locations even if the pads/bonds are not.
+
+
+[2026-04-27 5:11 p.m.] rebelmike
+Yes I'm afraid so.  Should get some more time for this later in the week!
+
+
+[2026-04-27 5:11 p.m.] rebelmike
+I was hoping a single CoB might be able to work for both types of half slot, but maybe that isn't a good thing to try and do
+
+
+[2026-04-27 5:26 p.m.] mithro_
+I think it is just easier to have 3 seperate PCBs which all end up with the same layout on the connector?
+
+{Reactions}
+👍
+
+[2026-04-28 8:43 p.m.] rebelmike
+My first go at a footprint for the 1x0p5 chip:
+
+{Attachments}
+2026-04_media/image-BD886.png
+
+{Reactions}
+😮
+
+[2026-04-28 8:45 p.m.] rebelmike
+The pads on the bottom and top are reduced to 0.2mm wide and 0.3mm spacing.  The rest are 0.25mm wide and at least 0.4mm spacing, as in the original 1x1 version
+
+
+[2026-04-28 8:46 p.m.] rebelmike
+The mask box is the same as the original in https://github.com/wafer-space/chip-on-board-wire-bonded-pcbs/tree/main/scratch/footprints
+
+
+[2026-04-28 8:53 p.m.] rebelmike
+Interested in feedback (especially from @Tim 'mithro' Ansell @Andrew Wingate @stuart @htamas).  I've pushed the footprint here: https://github.com/MichaelBell/chip-on-board-wire-bonded-pcbs/tree/half-slot-dev/scratch/footprints
+
+
+[2026-04-28 8:54 p.m.] rebelmike
+If that looks plausible I'll try and route the board matching up the pinout with the 1x1 slot as best as possible
+
+
+[2026-04-29 12:02 a.m.] mithro_
+@RebelMike - It's important to keep the same footprint and placement of capacitors/connectors as the existing board - otherwise the CoB house has to make a new jig.
+
+
+[2026-04-29 6:10 a.m.] rebelmike
+By the “same footprint” you mean board size?
+I think we’d decided it wasn’t possible to use the same footprint for the die as the angles to the pads on the ends of the long rows get too shallow
+
+
+[2026-04-29 6:13 a.m.] rebelmike
+Looking again at this it’s possible I was trying to be too clever with the 45 degree pads and actually the angles would be better with just a straight row of pads. Thoughts on that?
+
+
+[2026-04-29 6:19 a.m.] mithro_
+@RebelMike - I mean the PCB size
+
+{Reactions}
+👍
+
+[2026-04-29 6:19 a.m.] mithro_
+And the location of the capacitors and connectors on the PCB
+
+{Reactions}
+👍
+
+[2026-04-29 7:01 a.m.] anfroholic
+Sorry, been out for the afternoon. 
+Yes, basically the edge.cuts layer should stay the same, and then there was an area marked off "allocated for passives" or something like that. 
+Anything on the back should remain in the designated areas (ie. mezzanine/ passives)
+
+{Reactions}
+👍
+
+[2026-04-29 7:45 a.m.] saladchap
+Yes, basically we have a jig made for the 'standard' WS BB PCBs - the most important thing is the location of the components (connectors) on the bottom side of the PCB
+
+
+[2026-04-29 7:45 a.m.] saladchap
+for bonding the panels are split in half, 10pcs boards per panel
+
+
+[2026-04-29 7:46 a.m.] anfroholic
+@RebelMike Don't worry about panelization. I'll probably just take care of those for you as I did the others.
+
+
+[2026-04-29 7:47 a.m.] rebelmike
+Great, thank you. I’ll try and get a first rev of the PCB done this evening.
+
+
+[2026-04-29 7:48 a.m.] saladchap
+Is the plan to make these breakout (individual boardS) the same physical size of the normal ones?
+
+
+[2026-04-29 7:48 a.m.] saladchap
+would make sense imo
+
+
+[2026-04-29 7:48 a.m.] rebelmike
+Yes
+
+{Reactions}
+💯
+
+[2026-04-29 7:49 a.m.] rebelmike
+Idea is to match the 1x1 version as closely as possible, including the pinout (if using the default setup from the template repo)
+
+
+[2026-04-29 7:49 a.m.] rebelmike
+I’ll see how well that plan holds together once I actually see the rats nest though 😆
+
+{Reactions}
+🤣
+
+[2026-04-29 3:08 p.m.] saladchap
+
+
+{Attachments}
+2026-04_media/mmexport1777469028111-539CC.jpg
+
+
+[2026-04-29 3:09 p.m.] saladchap
+@Tholin ^^
+
+
+[2026-04-29 3:59 p.m.] h.tamas
+I think it's going to be ok. Here are my "strict-mode warnings" if you want to be extra careful:
+- The pads in the kicad footprint are slightly off from the gds. This shouldn't matter directly as the cob house doesn't use the coordinates for alignment, but it makes the next item harder to check.
+- The angles for pads 2, 23, 38 and 59 are slightly over the limit. The bond wires should have an angle of at least 45 degrees with the die edge (this is relaxed for pads 1, 24, 37 and 60 because they are the last pads on the particular die edge so there is no next pad to disturb)
+- You have vias under the epoxy glob. I don't think this is a problem in practice, we had them on the "TT02" cob pcbs and the official wafer.space cob pcb also has them, and so far we didn't see any issues. But some guidelines say that the epoxy seeping through the vias can cause problems, so I moved them outside the epoxy area starting with our TT08 boards. This has the tradeoff that the ground paths are longer.
+- You might want to add some marker lines to the footprint. It doesn't matter for this particular board because you have nothing else on the top side, but a silkscreen line for the area to be covered with epoxy can help the operator adding the globs, and a courtyard line a bit further out can prevent pcb designers using your footprint to accidentally add components too close to it.
+
+
+[2026-04-29 5:54 p.m.] rebelmike
+Thank you for the review!
+- Yeah I just positioned the pads in roughly the right place to get an idea.  I'll leave as is
+- I'll try and squeeze these up a little to avoid this.
+- I assume this is working fine for the 1x1 wafer space breakout, so I'll leave as is
+- I'm not actually sure what these limits are, so as this is intended just for the breakout at the moment, I will leave as is
+
+{Reactions}
+👍
+
+[2026-04-29 6:27 p.m.] rebelmike
+Squeezed up a little and grounds connected
+
+
+[2026-04-29 6:28 p.m.] namibj
+if the vias are tented there shouldn't be seepage
+
+
+[2026-04-29 6:29 p.m.] rebelmike
+
+
+{Attachments}
+2026-04_media/image-9A033.png
+
+{Reactions}
+👍
+
+[2026-04-30 3:26 a.m.] mithro_
+@htamas - I think we have discovered that vias might be causing some of the air bubbling seen by some users. 
+
+Something we need to explore more - https://jlcpcb.com/help/article/pcb-via-covering
+
+{Embed}
+https://jlcpcb.com/help/article/pcb-via-covering
+Via Covering in PCBs: Tented, Untented, Plugged, Epoxy-Filled & Cop...
+Discover the different types of via covering in PCB manufacturing, including tented, untented, plugged, epoxy-filled, and copper-epoxy-filled vias. Learn their applications, advantages,
+2026-04_media/logo-og-B75C2.png
+
+
+[2026-04-30 8:19 a.m.] rebelmike
+Realised I didn’t update before going to bed last night. Didn’t have so much time as I thought I would last night but I’ve routed the “easy” three quarters.
+
+The rest the pin order doesn’t match the 1x1 so I need to decide how much to mess things around to make routing easy and how much to try and make work.
+It would probably be good to be thinking about the 0p5x1 at the same time, but I’m going to have minimal time after tonight until 12th May so I’ll prioritise getting this one finished.
+
+
+[2026-04-30 8:29 a.m.] anfroholic
+> The pads in the kicad footprint are slightly off from the gds. 
+These files are not what we are sending the wirebonders anymore. They (and us) would like some more detail. I am attaching @BreakingTaps sample so you all can see. 
+
+> The angles for pads 2, 23, 38 and 59 are slightly over the limit. The bond wires should have an angle of at least 45 degrees with the die edge (this is relaxed for pads 1, 24, 37 and 60 because they are the last pads on the particular die edge so there is no next pad to disturb)
+It seems this issue has been resolved in his update. I will look a little closer in a bit here. 
+
+> You have vias under the epoxy glob. I don't think this is a problem in practice, we had them on the "TT02" cob pcbs and the official wafer.space cob pcb also has them, and so far we didn't see any issues. But some guidelines say that the epoxy seeping through the vias can cause problems, so I moved them outside the epoxy area starting with our TT08 boards. This has the tradeoff that the ground paths are longer.
+Holes in vias and whatnot do seem to be causing some problems. Not the ones under the dies themselves but the ones that are under the wire from the wirebonds. I wouldn't worry about it at the moment, but we need to explore this more deeply. 
+
+> You might want to add some marker lines to the footprint. [...] help the operator adding the globs, and a courtyard line [...] can prevent pcb designers using your footprint to accidentally add components too close to it.
+None of the other boards had this. I will be heading to China in a few days and will personally get a better look at this. 
+
+Nice writeup @htamas Thank you
+
+{Attachments}
+2026-04_media/BTAP-DDC29.pdf
+
+
+[2026-04-30 8:45 a.m.] anfroholic
+Hey @RebelMike, 
+Just talked to Tim and got a little info on what we have going here with your COB. 
+As I understand it, you have one of all three 1xp5, p5x1, and p5xp5
+The idea is there can be a carrier board that can accept all 3, while some may have reduced functionality. 
+@Tim 'mithro' Ansell  will be leaving China on may 10, so I don't know what anything means for designs after that date. 
+
+I don't have a lot of time either, but if you'd like to share some information with me I'd be happy to spend a bit of time that I do have.
+
+
+[2026-04-30 8:48 a.m.] rebelmike
+I've just pushed my current state to https://github.com/MichaelBell/chip-on-board-wire-bonded-pcbs/tree/half-slot-dev/
+
+
+[2026-04-30 8:52 a.m.] rebelmike
+Yes, I have the same design on each of the three smaller sizes.  My goal is to try and make breakouts that match the template pinouts as well as possible, but with the ones TinyQV needs as a hard requirement.  I'm also trying to match the 1x1 template pinout for overall consistency.  Though I'm still not sure how possible this is given the size and sticking to 2 layers.
+
+
+[2026-04-30 8:53 a.m.] anfroholic
+I would be less concerned with matching the template as I would be with matching themselves.
+
+
+[2026-04-30 8:53 a.m.] rebelmike
+But there's two copies of TinyQV in 1xp5 slots so even just having that one would allow plenty of boards to be made (and prove the design actually works).  I'm in no rush though so waiting until we have good designs for all breakouts would be fine - but I'm on holiday next week and spending all evening on Kicad would be unpopular 😆
+
+{Reactions}
+🤣
+
+[2026-04-30 8:54 a.m.] rebelmike
+Matching the template = matching each other - the TinyQV designs just use the default pinout from the template
+
+
+[2026-04-30 8:54 a.m.] anfroholic
+I see
+
+
+[2026-04-30 8:55 a.m.] rebelmike
+Although it only uses the first 33 bidirs, clk, rst_n and two inputs, so the others I might mess with.
+
+
+[2026-04-30 8:56 a.m.] anfroholic
+Sounds good. 
+I have a little time at the moment, so let me know if there's a good place I could jump in
+
+
+[2026-04-30 8:58 a.m.] rebelmike
+If you wanted to have a go at the footprint for p5x1 that would be great.  I'll quickly stick the symbol somewhere
+
+
+[2026-04-30 9:00 a.m.] anfroholic
+That sounds reasonable. 
+Sure!
+
+
+[2026-04-30 9:02 a.m.] rebelmike
+Thanks!  See https://github.com/MichaelBell/chip-on-board-wire-bonded-pcbs/tree/half-slot-dev/mezzanine-0p5x1
+
+
+[2026-04-30 9:04 a.m.] rebelmike
+Incidentally I'm still on Kicad 9, so I started based on the last revision you had before going up to 10 - hopefully that didn't lose anything significant given I was just using the 1x1 as a template.  I should probably upgrade...
+
+
+[2026-04-30 9:05 a.m.] anfroholic
+it should, going back the other way could be a problem though after I save
+
+
+[2026-04-30 9:07 a.m.] anfroholic
+So this is the tall skinny one correct?
+Also have I marked the correct location for pad 0 and there is an increasing number in the direction of the arrow?
+
+
+[2026-04-30 9:07 a.m.] anfroholic
+
+
+{Attachments}
+2026-04_media/image-F2880.png
+
+
+[2026-04-30 9:22 a.m.] rebelmike
+Yes this is the tall skinny one.  Probably for consistency pad 0 would be top left (that is beginning of SOUTH in the librelane config), but the numbering matches the wide one with it rotated and pad 0 bottom left
+
+
+[2026-04-30 9:25 a.m.] anfroholic
+A man after my own hear lol. 
+Ok, I'll run with that.
+
+{Reactions}
+😄
+
+[2026-04-30 12:03 p.m.] anfroholic
+ok @RebelMike I have created a padring. 
+Didn't get a whole lot of time, but it's a start
+https://github.com/anfroholic/chip-on-board-wire-bonded-pcbs/tree/half-slot-dev-help
+I have made a pull request if you'd like. 
+I may have a little more time later to look at it again.
+
+{Attachments}
+2026-04_media/image-9D312.png
+
+{Embed}
+https://github.com/anfroholic/chip-on-board-wire-bonded-pcbs/tree/half-slot-dev-help
+GitHub - anfroholic/chip-on-board-wire-bonded-pcbs at half-slot-dev...
+Wire bonded chip on board PCB designs. Contribute to anfroholic/chip-on-board-wire-bonded-pcbs development by creating an account on GitHub.
+2026-04_media/chip-on-board-wire-bonded-pcbs-25F29
+
+
+[2026-04-30 12:05 p.m.] rebelmike
+That's great - thank you!  I'll take a look later
+
+{Reactions}
+💯
+
+[2026-04-30 2:47 p.m.] mithro_
+These are the three diagrams I generated for @Greg chips.
+
+{Attachments}
+2026-04_media/GD04_chip_top_10_8-72305.png
+2026-04_media/GD03_chip_top_6_6-8C28D.png
+2026-04_media/GD04_chip_top_6_8-90DCE.png
+
+
+[2026-04-30 2:49 p.m.] mithro_
+These are the three diagrams I generated for your die.
+
+{Attachments}
+2026-04_media/TQVA_chip_top_14_8-3ADB7.png
+2026-04_media/TQVB_chip_top_14_6-334B6.png
+2026-04_media/TQVC_chip_top_8_8-FDD3B.png
+
+
+[2026-04-30 2:51 p.m.] rebelmike
+Thank you!  I'll double check they match what I've extracted from the librelane config
+
+
+[2026-04-30 2:51 p.m.] mithro_
+These are generated from the GDS file
+
+{Reactions}
+waferspace (2)
+
+[2026-04-30 3:51 p.m.] mithro_
+BTW one of the theory about some of the bubbles in the CoB epoxy is this effect - https://docs.google.com/drawings/d/1_l0R9LjZSGAY5cvv7YkMGCiPKqeMAvKO5AYDg0XRl3w/edit
+
+{Embed}
+https://docs.google.com/drawings/d/1_l0R9LjZSGAY5cvv7YkMGCiPKqeMAvKO5AYDg0XRl3w/edit
+Tented and non-tented vias and air escape pathways
+2026-04_media/AHkbwyKTPsib3J6WjQEdGi05yB9cuNsac8wpZBgzIu-E0D44
+
+{Reactions}
+❤️
+
+[2026-04-30 3:54 p.m.] anfroholic
+A little more explanation is we get our boards plugged, which will just let the soldermask (this is the stuff that would make a board green; or in this case black) flow everywhere and into the holes plugging them. 
+This plugs them on the back side, but since there is no soldermask on this side, so no plugs.
+
+
+[2026-04-30 4:26 p.m.] rebelmike
+Could you add soldermask between the inner edge of the ground ring and the inner edge of the pads?
+
+
+[2026-04-30 4:27 p.m.] anfroholic
+I made that suggestion as well.
+
+
+[2026-04-30 5:17 p.m.] dnaltews
+that does seem like the most straightforward simple fix
+
+
+[2026-04-30 7:36 p.m.] rebelmike
+I don't actually see the new padring in your branch - maybe forgot to add the file?
+
+
+[2026-04-30 7:38 p.m.] rebelmike
+I seem to have successfully upgraded to Kicad 10 without destroying too much stuff though (had to switch from snap to ppa), so we should at least be making compatible files 😄
+
+
+[2026-04-30 10:18 p.m.] rebelmike
+Finished routing the 1x0p5 version.  Pinout of power, clk, rst_n and bidirs matches 1x1.  I suspect matching the 0p5x1 will be rather tricky.  Quarter size should be easier as the pad frame will be smaller giving a bit more space for routing.
+
+{Attachments}
+2026-04_media/image-75E6C.png
+2026-04_media/image-1426B.png
+
+{Reactions}
+💯
+
+[2026-04-30 10:23 p.m.] rebelmike
+I had lots of fun with the ground connections to the ring/pad, so I stripped all the wires off the footprint, and changed the big ground pad to an actual pad instead of a drawing.
+
+
+[2026-04-30 10:23 p.m.] namibj
+Would it help to rotate that one by 90 degrees?
+
+
+[2026-04-30 10:26 p.m.] rebelmike
+Yes I think it might - good thought.  We'll be very short on space at the edges but hopefully the extra space top and bottom will make up for that.
+
+
+[2026-04-30 10:59 p.m.] namibj
+Also, not sure how the bonding palce likes it, but if you need routing access, do consider rotating 45 degrees.
+
+
+==============================================================
+Exported 154 message(s)
+==============================================================

@@ -1,0 +1,85 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 📐 - Designing / 📝-project-template
+Topic: [template-github](https://github.com/wafer-space/gf180mcu-project-template)
+After: 2026-06-30 11:59 p.m.
+Before: 2026-08-01 12:00 a.m.
+==============================================================
+
+[2026-07-01 8:16 a.m.] chips4makers
+Also having CTS done separately on different blocks is dangerous as the clock tree depth may be different between blocks causing unexpected hold/setup violations for signals going between different blocks.
+If I'm not mistaken, LibreLane supports P&R on subblocks separately but still CTS on top block.
+
+
+[2026-07-01 8:19 a.m.] 246tnt
+I know that CTS recently(-ish) got the ability to place macro at different depth of the CTS depending on the min/max clock delay specified in the liberty file of the macros/sub-blocks.  ( https://github.com/The-OpenROAD-Project/OpenROAD/issues/3759 )
+
+
+[2026-07-01 8:28 a.m.] osvel
+Cool, thanks for all the tips. I guess I will have a play around with this and see what I come up with. 🙂
+
+
+[2026-07-01 8:35 a.m.] 246tnt
+But TBH I'm not sure how common it is to harden various block independently. That prevents optimization at boundary and also cost area since macro are rectangular and blocks often harden more into blob shapes.
+
+
+[2026-07-01 8:36 a.m.] 246tnt
+The only case where I see blocks hardened as macro are highly optimized ones where there was significant manual/scripted/layout/... work to make it a separate block. Something like a SRAM / memory or something like that.
+
+
+[2026-07-01 8:36 a.m.] 246tnt
+Or of course analog-ish block like say a PLL.
+
+
+[2026-07-01 8:36 a.m.] 246tnt
+But I wouldn't say ... harden a SPI controller independently ... that'd be a lot of headache for virtually no benefits.
+
+
+[2026-07-01 8:37 a.m.] 246tnt
+Just my 2 cts ...
+
+
+[2026-07-01 9:02 a.m.] osvel
+Thanks, appreciate the input. I'm not super familiar with this field and trying to learn. In my case, I'm studying SIMD lanes and thought to make the separate arithmetic units (say 32 of them) as I thought this is how 'real' designs are made. I had some severe congestion issues when trying to synth my top module
+
+
+[2026-07-01 6:47 p.m.] namibj
+I'd consider looking into the placement/partitioning tuning options in librelane for how to possibly selectively nudge the density around congested blocks to be lower and/or nudge SIMD lanes to be substantially less-overlapping.
+If your SIMD instructions are complex enough it might be practical to force them into slices, though, to spend much more compute on optimizing a slice, afforded by then getting to just make 31 already-routed copies at no extra PnR compute for the dense intra-slice situation.
+
+
+[2026-07-01 7:19 p.m.] osvel
+Right. Yeah, its basically option 2 I have been considering (slicing it into a module and instancing it 32 times). At least, that makes sense in my mind. But I understand now that this is a bit more complex than I first thought. I believe I need to specify where I/O to this 'macro' will be placed (like inputs on the left, outputs on the right), but I'm also having issues getting this to close. Well.
+
+
+[2026-07-01 7:19 p.m.] osvel
+Thanks for all the tips! 🙂
+
+
+[2026-07-01 9:19 p.m.] namibj
+yeah ideally you'd somehow be able to tell it just that in this region there are 32 identical slices and that they're instances for the 32-wide datapath around it, and that it has to figure out PnR inside, outside, and has to figure out how it likes the ports placed.
+
+I'd probably give it opportunity to just place the ports wherever on the grid on one side in teh small slice and just roll with what it likes best there.
+
+
+[2026-07-05 8:00 a.m.] mole99 (pinned)
+📢 Minor update!
+
+It turns out that the changes to the density rules have not yet been upstreamed to Open PDKs from our legacy wafer.space PDK fork. This update addresses this issue.
+
+- Project Template [1.5.7](https://github.com/wafer-space/gf180mcu-project-template/releases/tag/1.5.7)
+  - Update PDK to `d658698b`
+
+- Precheck [1.7.1](https://github.com/wafer-space/gf180mcu-precheck/releases/tag/1.7.1)
+  - Update PDK to `d658698b`
+
+The filler generation has already considered these rules. The platform will automatically rerun the latest precheck for your designs.
+
+
+[2026-07-05 8:00 a.m.] mole99
+Pinned a message.
+
+
+==============================================================
+Exported 15 message(s)
+==============================================================

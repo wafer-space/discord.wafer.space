@@ -1,0 +1,1534 @@
+{
+  "guild": {
+    "id": "1361349522684510449",
+    "name": "wafer.space Community",
+    "iconUrl": "2026-06_media/fb143eaa45770cbb40493d09b625e98b-09FD1.png"
+  },
+  "channel": {
+    "id": "1408135265427394661",
+    "type": "GuildTextChat",
+    "categoryId": "1409664731760955403",
+    "category": "\uD83D\uDCD0 - Designing",
+    "name": "\uD83D\uDD70️-analog",
+    "topic": null
+  },
+  "dateRange": {
+    "after": "2026-05-31T23:59:59.999+00:00",
+    "before": "2026-07-01T00:00:00+00:00"
+  },
+  "exportedAt": "2026-07-08T06:58:54.7833998+00:00",
+  "messages": [
+    {
+      "id": "1510896491609325598",
+      "type": "Default",
+      "timestamp": "2026-06-01T06:43:14.699+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Ah sorry I'm dumb then \uD83D\uDE2D",
+      "author": {
+        "id": "1447738536638943333",
+        "name": "dorythecat_v2",
+        "discriminator": "0000",
+        "nickname": "Dory",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/b85383a7b9f53ad2d4f1114b1b216b78-B7AC0.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83D\uDE2D",
+          "code": "sob",
+          "isAnimated": false,
+          "imageUrl": "2026-06_media/1f62d-02603.svg"
+        }
+      ]
+    },
+    {
+      "id": "1510896575948394627",
+      "type": "Default",
+      "timestamp": "2026-06-01T06:43:34.807+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Though you could probably still try with a double transistor constant current source",
+      "author": {
+        "id": "1447738536638943333",
+        "name": "dorythecat_v2",
+        "discriminator": "0000",
+        "nickname": "Dory",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/b85383a7b9f53ad2d4f1114b1b216b78-B7AC0.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1510896621485948938",
+      "type": "Default",
+      "timestamp": "2026-06-01T06:43:45.664+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I don't have any schematics available rn but they shouldn't be hard to find",
+      "author": {
+        "id": "1447738536638943333",
+        "name": "dorythecat_v2",
+        "discriminator": "0000",
+        "nickname": "Dory",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/b85383a7b9f53ad2d4f1114b1b216b78-B7AC0.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1511832215779151912",
+      "type": "Default",
+      "timestamp": "2026-06-03T20:41:28.726+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "We don't by chance have any decent inductors let alone mutual ones available, I guess?\nI'd hope to use some gain peaking on the clock buffers, they aren't _that_ sensitive to precise inductor performance and honestly need so much parasitic resistance anyways that they can have fairly terrible Q so long as they are still very inductive (not capacitive) at the peak operating frequency.\n\nI think I'd mostly want them to sustain higher fan-out than what I'd be having sufficient-margin-above-unity gain with at whatever frequency I can squeeze out of the latches feeding MUX2's feeding the output buffers (final latch stage clocked at half the output bit rate, just like the output MUX2 that converts from 2 parallel SDR streams to the final singular DDR (NRZ) stream).\n\nAnd possibly even not using a latch on the full clock but rather a 4:1 MUX tree with selective clock phasing on the 3 involved selector bits and the 4 latches feeding directly into the input muxes.\n\nI'll try to get a basic (inductor-free) setup going in the coming hours to figure out if 10 Gbit/s is just wishful thinking or just an issue of thermal density/chip-cooling.\nfT of 25GHz at feasible drain current and low-frequency gain sounds like a mere 5 GHz fundamental with desire for clipping to be more square wave than sine wave shouldn't be _that_ bad to handle, that sounds like FO2~FO3 territory after basic parasitics...\nSure it's _intense_ but in theory only a DIV2 and a MUX2 have to be driven at the full speed from the VCO and the MUX2's output has to go to an output buffer.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1511879419852226701",
+      "type": "Default",
+      "timestamp": "2026-06-03T23:49:03.054+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I don't think I've seen anyone post an inductor layout yet. Would probably have to DIY one with GDSFactory's spiral loop generator or something? And then sim it to see how works \uD83D\uDE15",
+      "author": {
+        "id": "384390069412429834",
+        "name": "polyfractal",
+        "discriminator": "0000",
+        "nickname": "BreakingTaps",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83D\uDE15",
+          "code": "confused",
+          "isAnimated": false,
+          "imageUrl": "2026-06_media/1f615-4892B.svg"
+        }
+      ]
+    },
+    {
+      "id": "1511883505611571260",
+      "type": "Reply",
+      "timestamp": "2026-06-04T00:05:17.175+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yeah that fasthenry script https://github.com/diadatp/sky130_rf_tools/blob/main/fasthenry/iterate_fh.py should port decently to gf180mcuD, but that's half-finished work (like, for sky130) and not particularly what I quite have time to work on in these rather limited days until the ttgf0p3 deadline.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "sky130_rf_tools/fasthenry/iterate_fh.py at main · diadatp/sky130_r...",
+          "url": "https://github.com/diadatp/sky130_rf_tools/blob/main/fasthenry/iterate_fh.py",
+          "timestamp": null,
+          "description": "Guides and templates for using open source RF design tools with the SkyWater SKY130 process. - diadatp/sky130_rf_tools",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "2026-06_media/sky130_rf_tools-77DF9",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": [],
+          "inlineEmojis": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "384390069412429834",
+          "name": "polyfractal",
+          "discriminator": "0000",
+          "nickname": "BreakingTaps",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-06_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1511879419852226701",
+        "channelId": "1408135265427394661",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1512068246294233088",
+      "type": "Default",
+      "timestamp": "2026-06-04T12:19:22.786+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Now that I've done some _Gain-Bandwidth Product_ maths I _really_ want some T-coil's for bandwidth enhancement.\n\nI low key have trouble believing these numbers, for that they suggest it's _technically possible_ to yeet a lane of `25GBASE-KR-S` out of a wafer.space die without necessarily melting said die as long as one ensures good cooling.\n\nWithout effective inductive peaking it's gonna involve rather lifetime-limiting hot carrier injection conditions, though, as the `nfet_3v3_dss` probably won't quite reach enough native GBW.\n\nYes I'm aware that prospect sounds kinda ridiculous.\nI'm just getting the numbers/down-clocking-support cooked a little more before I go see how to get anywhere close to the abstract numbers I've been looking at since last night.\nEven if that's too much it does suggest `10GBASE-KR` to be actually quite realistic to pull off (even post-layout).",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1512185477166534677",
+      "type": "Reply",
+      "timestamp": "2026-06-04T20:05:12.804+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Ok welp I'm not attempting a C4 serializer, yet without C4 (i.e., mere C2), 25GBASE-KR-S would probably risk melting the gf180mcuD die.\n\nDoes not seem impossible though...\nMight need flip chip though due to severe high frequency impedance of the bond wire.\n\n10GBASE-KR with \"only\" a C2 architecture looks worryingly \"easy\" (decent limiting amplifier GBW, no peaking inductors needed, C2 doesn't need any ultra-fast 4:1 MUX unlike C4 (they're tricky to correctly common-mode bias), and overall it might not need _any_ bandwidth extension trickery to function.)....\nHopefully I can be productive Saturday and do some trial layouting for the critical blocks of concern.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "reference": {
+        "messageId": "1512068246294233088",
+        "channelId": "1408135265427394661",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1512430287647412295",
+      "type": "Default",
+      "timestamp": "2026-06-05T12:18:00.171+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Does anyone have a PLL that’s in a state I might be able to use it in my design?\nThe goal would be to drive HDMI output so I’d want to generate a 126MHz clock.\nI’m going to have an option to bring that clock in externally, but it would preferable to be able to run without such a fast external clock.",
+      "author": {
+        "id": "691780627338625077",
+        "name": "rebelmike",
+        "discriminator": "0000",
+        "nickname": "RebelMike",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1512470734847348797",
+      "type": "Reply",
+      "timestamp": "2026-06-05T14:58:43.535+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Looks like there was a PLL in the ISHI-KAI run1 design.\nhttps://github.com/ishi-kai/ISHI-KAI_Multiple_Projects_WaferSapce-GF180-1#PLL\nAlthough it went 8 MHz in -> 48/40MHz out, and unclear if the die has been probed yet.",
+      "author": {
+        "id": "356185479911047169",
+        "name": ".dmv",
+        "discriminator": "0000",
+        "nickname": "dmv",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/cf91f9947bc37b8a1071311863f9c4b7-14667.png"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "GitHub - ishi-kai/ISHI-KAI_Multiple_Projects_WaferSapce-GF180-1: IS...",
+          "url": "https://github.com/ishi-kai/ISHI-KAI_Multiple_Projects_WaferSapce-GF180-1",
+          "timestamp": null,
+          "description": "ISHI-KAI's Multiple Projects Wafer for Wafer.Sapce GF180 Run 1. - ishi-kai/ISHI-KAI_Multiple_Projects_WaferSapce-GF180-1",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "2026-06_media/ISHI-KAI_Multiple_Projects_WaferSapce-GF18-3C661",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": [],
+          "inlineEmojis": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "691780627338625077",
+          "name": "rebelmike",
+          "discriminator": "0000",
+          "nickname": "RebelMike",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-06_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1512430287647412295",
+        "channelId": "1408135265427394661",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1512472936618004591",
+      "type": "Reply",
+      "timestamp": "2026-06-05T15:07:28.478+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Good find, thanks for the link!",
+      "author": {
+        "id": "691780627338625077",
+        "name": "rebelmike",
+        "discriminator": "0000",
+        "nickname": "RebelMike",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "356185479911047169",
+          "name": ".dmv",
+          "discriminator": "0000",
+          "nickname": "dmv",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-06_media/cf91f9947bc37b8a1071311863f9c4b7-14667.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1512470734847348797",
+        "channelId": "1408135265427394661",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1513184279360700416",
+      "type": "Reply",
+      "timestamp": "2026-06-07T14:14:05.804+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Not for Run2; but I plan to have something who's core is silicon validated for Run3.\n\nProvided my health can get in line today so I can at least get basic core parts drawn today. \n\nAn amplifier, a partial positive feedback delay cell for the VCO, and a very fast MUX2.\n\nThanks by the way for giving me a clear purpose of what people might reasonably do with the fast TX I'm working on: digital video out.\nThat works TX only with less than 10Gbit/s for general homelab hardware.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "691780627338625077",
+          "name": "rebelmike",
+          "discriminator": "0000",
+          "nickname": "RebelMike",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-06_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1512430287647412295",
+        "channelId": "1408135265427394661",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1513186540375900291",
+      "type": "Default",
+      "timestamp": "2026-06-07T14:23:04.872+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "That said, if I manage to get the PBRS hooked up I'd have a few days after the ttgf0p3 deadline to help you hook the serializer design up to your date source, at probably 32 bit wide (3v3 SCL) per clock.\n\nI'd think a TDMS encoder shouldn't be that hard, and it should be easy to make 4 copies of it fed from a single shared VCO.\n\nIt'd be 4 control current signals plus a differential pin pair for each line.\nBut those could use the ttgf analog MUX.\n\nPLL action would have to be done off-chip by adjusting the tail current for the VCO.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1513193511548227644",
+      "type": "Reply",
+      "timestamp": "2026-06-07T14:50:46.929+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Interesting.  I just finished using up all the pins on the quarter slot \uD83D\uDE04  But potentially I could free some back up.\n\nSerialization wise I'm using https://github.com/Wren6991/SmolDVI, and have a super simple stateless TMDS encoder that is only capable of 2bpp on each channel, which is enough for now, and the 8 pins can instead be used for 2bpp/colour VGA output (TT VGA Pmod compatible) if HDMI is not selected (also gives me a fallback if HDMI doesn't work).",
+      "author": {
+        "id": "691780627338625077",
+        "name": "rebelmike",
+        "discriminator": "0000",
+        "nickname": "RebelMike",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "262706220073222144",
+          "name": "namibj",
+          "discriminator": "0000",
+          "nickname": "namibj",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-06_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1513186540375900291",
+        "channelId": "1408135265427394661",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83D\uDE04",
+          "code": "smile",
+          "isAnimated": false,
+          "imageUrl": "2026-06_media/1f604-BF863.svg"
+        }
+      ]
+    },
+    {
+      "id": "1513193875488116970",
+      "type": "Reply",
+      "timestamp": "2026-06-07T14:52:13.699+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "honestly for Run3 I'd suggest to aim for a lane of DP; by then there's decent chance all the biasing for my serializer could live on-die, too.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "691780627338625077",
+          "name": "rebelmike",
+          "discriminator": "0000",
+          "nickname": "RebelMike",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-06_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1513193511548227644",
+        "channelId": "1408135265427394661",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1513194969718853853",
+      "type": "Default",
+      "timestamp": "2026-06-07T14:56:34.584+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "notably by then I should have managed to get at least a few taps of TX FIR EQ working.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1513198205255291032",
+      "type": "Default",
+      "timestamp": "2026-06-07T15:09:25.996+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "DP would be cool!  I'll probably keep things simple for run 2 and then see if there's interest in putting something DP or faster HDMI together for a later run.",
+      "author": {
+        "id": "691780627338625077",
+        "name": "rebelmike",
+        "discriminator": "0000",
+        "nickname": "RebelMike",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1513202066657644745",
+      "type": "Reply",
+      "timestamp": "2026-06-07T15:24:46.626+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yeah I'm decently confident in the TX being good enough for it; I don't see myself being able to supply the encoder though.\nI do have decent hope for DP 1.3's HBR3 though, but probably not with anywhere near full cable length in practice.\nThat is 30 fps per lane at 3840x2160, though....\nIf we can get a performant flip chip strategy measured long enough before Run3's deadline, spec-compliant drive might be possible, though.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "691780627338625077",
+          "name": "rebelmike",
+          "discriminator": "0000",
+          "nickname": "RebelMike",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-06_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1513198205255291032",
+        "channelId": "1408135265427394661",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1513204904230129704",
+      "type": "Default",
+      "timestamp": "2026-06-07T15:36:03.156+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I've done a fair amount with VGA and DVI/HDMI, but haven't touched DP, so not sure what's required for the encoder.\nI guess I remain sceptical about getting anything like that speed, but then I haven't actually got my hands on any gf180 chips yet.  On sky130 though the output drivers in the default padframe TT uses are really weak - you struggle to get a clean signal above 33MHz.",
+      "author": {
+        "id": "691780627338625077",
+        "name": "rebelmike",
+        "discriminator": "0000",
+        "nickname": "RebelMike",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1513205563830440047",
+      "type": "Default",
+      "timestamp": "2026-06-07T15:38:40.417+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "If I get far enough to where the serializer takes some shape on track for getting finished by the deadline, you are free to make the digital feed for the serializer, it's gonna have a couple bits (10~20) of VCO load trim to select a choosen number of PMOS fingers to connect the VDD side of the pull-up-resistors to VDD, some way of setting straight alternating bit pattern to output clock signal instead of data, and probably some way of turning off the output of the divided clock onto the GPIO.\nOtherwise, it'd be free to select itself a mode where it takes in 16 bits of GPIO parallel if feasible as DDR even, and feed them to the serializer core instead of feeding the PRBS-31 to it.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1513205873420402799",
+      "type": "Default",
+      "timestamp": "2026-06-07T15:39:54.229+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "There's approximately half a normal tt tile space for all the digital stuff.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1513206426015633558",
+      "type": "Default",
+      "timestamp": "2026-06-07T15:42:05.978+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I do feel like I'l get to draw the amplifier (as needed for fan out in general) at least today, tho.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1513208529131929750",
+      "type": "Reply",
+      "timestamp": "2026-06-07T15:50:27.4+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "If I've made enough progress in 7 days, I'd welcome you to make a digital SCL section for feeding the analog core with either PRBS-31 or notably a 16-wide input that might as well be DDR w.r.t. the exported GPIO clock.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "691780627338625077",
+          "name": "rebelmike",
+          "discriminator": "0000",
+          "nickname": "RebelMike",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-06_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1513204904230129704",
+        "channelId": "1408135265427394661",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1513208844044472351",
+      "type": "Default",
+      "timestamp": "2026-06-07T15:51:42.481+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Would allow testing of DP transmission with an external encoder and external PLL.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1513218610275815484",
+      "type": "Default",
+      "timestamp": "2026-06-07T16:30:30.932+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Generating PRBS31 looks straightforward - are you targetting TT gf0p3 for this?",
+      "author": {
+        "id": "691780627338625077",
+        "name": "rebelmike",
+        "discriminator": "0000",
+        "nickname": "RebelMike",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1513233015201861802",
+      "type": "Default",
+      "timestamp": "2026-06-07T17:27:45.334+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "yes",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1513233629726249102",
+      "type": "Reply",
+      "timestamp": "2026-06-07T17:30:11.848+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "This is more about that I won't have time to do a digital section that can re-use the 16 normal user inputs for data feed, so to get that, I'd be calling upon help/offering collaboration on that aspect after getting the base core part into a state where it is clearly realistic to get to actually have a functioning data serializer component.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "691780627338625077",
+          "name": "rebelmike",
+          "discriminator": "0000",
+          "nickname": "RebelMike",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-06_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1513218610275815484",
+        "channelId": "1408135265427394661",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1513235954322636991",
+      "type": "Default",
+      "timestamp": "2026-06-07T17:39:26.075+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yes, understood - and I'm much more familiar with the digital tooling than the analog side of things.  This should implement ```\nmodule prbs31 (\n    input wire          clk,\n    input wire          rst_n,\n    input wire          en,\n    output reg  [30:0]  q\n);\n\n    always @(posedge clk or negedge rst_n) begin\n        if (~rst_n) q <= '1;\n        else if (en) begin\n            q[0] <= q[30] ^ q[27];\n            q[30:1] <= q[29:0];\n        end\n    end\n\nendmodule\n```\nis that roughly what you're after?",
+      "author": {
+        "id": "691780627338625077",
+        "name": "rebelmike",
+        "discriminator": "0000",
+        "nickname": "RebelMike",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+      },
+      "attachments": [
+        {
+          "id": "1513235954004004955",
+          "url": "2026-06_media/prbs31-4B42F.tgz",
+          "fileName": "prbs31.tgz",
+          "fileSizeBytes": 2273064
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1513236128239456406",
+      "type": "ThreadCreated",
+      "timestamp": "2026-06-07T17:40:07.54+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Started a thread.",
+      "author": {
+        "id": "691780627338625077",
+        "name": "rebelmike",
+        "discriminator": "0000",
+        "nickname": "RebelMike",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "reference": {
+        "messageId": null,
+        "channelId": "1513236128239456406",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1513391093230604348",
+      "type": "Reply",
+      "timestamp": "2026-06-08T03:55:54.073+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "unfortunately that tool so far seems rather reluctant in giving me blocks that are closer to custom drawn than those fully-automatic fire-and-forget \"with dnwell + with guard ring + with substrate tap + oh-yeah-source-and-drain-have-to-come-out-the-same-side\" \uD83D\uDE41\n\nSeems a little problematic so far due to having to keep an eye on electromigration limits due to transistors driven into very fast not efficient regimes.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "169786952432746498",
+          "name": "mithro_",
+          "discriminator": "0000",
+          "nickname": "Tim 'mithro' Ansell",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-06_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1510078451703480472",
+        "channelId": "1408135265427394661",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83D\uDE41",
+          "code": "slight_frown",
+          "isAnimated": false,
+          "imageUrl": "2026-06_media/1f641-E1429.svg"
+        }
+      ]
+    },
+    {
+      "id": "1513391431060947054",
+      "type": "Default",
+      "timestamp": "2026-06-08T03:57:14.618+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I'll sleep over it to make the judgement call of whether to continue going with this for now or whether to go for other basic-multifinger-structure-drawing code.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1513398039488761866",
+      "type": "Default",
+      "timestamp": "2026-06-08T04:23:30.19+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "ok I gotta confirm with proper PEX but if the model already includes the parasitic capacitance of the finger contacts that's not really avoidable anyways, then that 25GBASE-KR TX seems actually not that infeasible without having to do inductors even, though those would help a lot in power efficiency.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1513400215703523409",
+      "type": "Default",
+      "timestamp": "2026-06-08T04:32:09.04+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "2 nH on 10x10 um with access to m2/m3/m4.\nParticular gain needed at about 13~15 GHz.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1514544476788621403",
+      "type": "Default",
+      "timestamp": "2026-06-11T08:19:02.142+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "FYI, 6 Danube River characterisation chips have arrived at UC Irvine to be probed.\n\nWould be good to know what other test-structures people would like to prioritise/characterise and just how much free-space we'll have on run two try out for the community.",
+      "author": {
+        "id": "1331673337616793672",
+        "name": "tpluck_",
+        "discriminator": "0000",
+        "nickname": "Thomas Pluck 2.1",
+        "color": "#F47FFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1497474712815538187",
+            "name": "Server Booster",
+            "color": "#F47FFF",
+            "position": 1
+          }
+        ],
+        "avatarUrl": "2026-06_media/688634c717468cb5bf69a34d64a85782-C5466.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1514732227244851390",
+      "type": "Reply",
+      "timestamp": "2026-06-11T20:45:05.339+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "native NMOS both oxides in a way that somehow allows for extracting local mismatch models, with channel dimensions down to litho minimums, not just electrically suggested \">=1.8um, or it'll _leak too much when off_\" restrictions that are currently enforced by the SPICE model deck in the openPDK.\n\nPerhaps some way of stress-testing SiN passivation crack propagation susceptibility when insisting on keeping the guard ring metal passivated, such that ACF-style (and/or similar) cheap flip chip packaging will be easy to select as a padframe \"option\" with hopefully just minor yield impact if one decides to just go for CoB wire bonding instead? Could be nice to combine with some M5-and-up-only (except perhaps a bit of vias down to redistribution/cross-connecting traces below) flip chip bond pad pitch/\"resolution\" stress testing structure that'll shoot allow us to trial on actual dies how the pad-connected-well-enough/not-shorting-nets yield relates to pad density.\n\nIf the DRC checks won't aggressively stop us, someone might be up to draw up a couple thyristors and/or triacs. Triggered crowbars are quite helpful for being able to clamp excess (e.g ESD) voltage without being beholden to the inherent limitations of single-junction plain pn diodes, such as not having to rely on the presence of a low-impedance VDD to sink current into, but instead being able to \"just\" turn on a strong bipolar \"open-collector\"-like output \"driver\" that can even clamp to below VDD  if one e.g. uses thin oxide inputs for low voltage signaling standards that operate with peaks substantially below system VDD. Imagine using a series inductor to tame the ESD pulse enough to not current crowd (excess `dI/dt` causing localized overheating) the thyristor/bipolar clamp but otherwise using the inductor to fairly effectively match the input gate capacitance of the transistor to the output/port nominal impedance. As opposed to massive passive diodes to rails together with dumb lossy ohmic series resistors.\n\nAlso: https://ieeexplore.ieee.org/document/7937877 (JFET in what looks like a very plain 250nm CMOS process) / https://www.semanticscholar.org/paper/A-JFET-CMOS-Technology-for-Low-Noise-Sensor-Takao-Asaoka/7aac24f59d2ac537ed6eed35a17e6ac8b60f1a5b (JFET in what sounds possibly less-plain CMOS and from the few numbers I could read due to language barrier, sounding like 700 nm CMOS) / some attempts at CCD structures, those all sound nice to trial at least a little bit when we're already working an area that's not \"production suitable chips\" and is expected to be fed to a probing station.\n\nFrom my rough understanding, it should probably be possible to trick the litho steps (normal used for fabricating some of the accessible mosfets) to form \"functional\" CCD structures. \nNot like, _good,_ but c.f. _Reticon SAD-1024_ like CCD structures don't need to worry about photoelectric optimization beyond \"better put it in an opaque package\".",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1331673337616793672",
+          "name": "tpluck_",
+          "discriminator": "0000",
+          "nickname": "Thomas Pluck 2.1",
+          "color": "#F47FFF",
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1497474712815538187",
+              "name": "Server Booster",
+              "color": "#F47FFF",
+              "position": 1
+            }
+          ],
+          "avatarUrl": "2026-06_media/688634c717468cb5bf69a34d64a85782-C5466.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1514544476788621403",
+        "channelId": "1408135265427394661",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1515621648479551648",
+      "type": "Default",
+      "timestamp": "2026-06-14T07:39:19.886+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "For layout,drc, lvs for analog with gf180, what is the recommended flow, Klayout or magic?",
+      "author": {
+        "id": "1214459146217201704",
+        "name": "vipul.sh",
+        "discriminator": "0000",
+        "nickname": "Vipul",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/4-4551A.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1515650076645523457",
+      "type": "Default",
+      "timestamp": "2026-06-14T09:32:17.689+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The wafer.space precheck uses Klayout DRC. However, if you pass magic DRC, it is very likely that you will also pass KLayout DRC.\n\nAs for the layout, it depends on your preference. I think most designs currently being made are using magic. The KLayout PCells for gf180mcu use GDSFactory and are a bit spotty. Regarding LVS, you can either use magic+netgen or LVS with Klayout, which has recently been improved.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-06_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "2026-06_media/1f44d-27259.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "1214459146217201704",
+              "name": "vipul.sh",
+              "discriminator": "0000",
+              "nickname": "Vipul",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-06_media/4-4551A.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1515713521885647091",
+      "type": "Default",
+      "timestamp": "2026-06-14T13:44:24.213+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "So a bit of a question of interpretation for the PDK : Is `Vn.2b` meant to apply to vias attached to different metal  zones ?",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1515713556157300746",
+      "type": "Default",
+      "timestamp": "2026-06-14T13:44:32.384+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [
+        {
+          "id": "1515713555855315006",
+          "url": "2026-06_media/2026-06-14_528x382_scrot-0EC13.png",
+          "fileName": "2026-06-14_528x382_scrot.png",
+          "fileSizeBytes": 2568
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1515713738412523582",
+      "type": "Default",
+      "timestamp": "2026-06-14T13:45:15.837+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "i.e. should it apply to the above ( from a MOM cap )",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1515714002309611640",
+      "type": "Default",
+      "timestamp": "2026-06-14T13:46:18.755+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The diagram in the PDK shows them on the same metal but other than that, is not explicit in any way.",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [
+        {
+          "id": "1515714002041311322",
+          "url": "2026-06_media/2026-06-14_185x206_scrot-A5C98.png",
+          "fileName": "2026-06-14_185x206_scrot.png",
+          "fileSizeBytes": 9012
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1515714188683640852",
+      "type": "Default",
+      "timestamp": "2026-06-14T13:47:03.19+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The current KLayout deck reports an error. But the current magic techfile generated those vias. I'm not even sure if it would be possible to get magic to realize there is an array there ...",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1515750593379958839",
+      "type": "ThreadCreated",
+      "timestamp": "2026-06-14T16:11:42.746+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Started a thread.",
+      "author": {
+        "id": "738396032295108721",
+        "name": "bailey8889",
+        "discriminator": "0000",
+        "nickname": "bailey",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/0-EB806.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "reference": {
+        "messageId": null,
+        "channelId": "1515714188683640852",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1516079486813339770",
+      "type": "Default",
+      "timestamp": "2026-06-15T13:58:37.051+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I have this basic (well, technically, the PMOS are arranged differently for speed reasons) \"ring oscillator\" cell; there's 2 of these cells back-to-back acting as a direct quadrature phase clock source, albeit with naturally limited slew rate.\n\nIs there any reason not to make it as big as necessary to directly tap all the clock feeds off of it, especially if I want to use the quadrature clock feeds in similar source-coupled \"differential nmos pairs\" logic?\nVs. a more \"proper\" clock tree, at least if this is contained to a single serdes channel worth of area?",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [
+        {
+          "id": "1516079486674665662",
+          "url": "2026-06_media/1000047004-9D409.png",
+          "fileName": "1000047004.png",
+          "fileSizeBytes": 131018
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1516863290884751362",
+      "type": "Reply",
+      "timestamp": "2026-06-17T17:53:10.504+00:00",
+      "timestampEdited": "2026-06-17T17:53:41.626+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "We (me @ GDSFactory) actually recently updated these to be XOR clean replicas of the Magic ones - so it should ideally be *stable-r* but naturally, buyer beware.",
+      "author": {
+        "id": "1331673337616793672",
+        "name": "tpluck_",
+        "discriminator": "0000",
+        "nickname": "Thomas Pluck 2.1",
+        "color": "#F47FFF",
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1497474712815538187",
+            "name": "Server Booster",
+            "color": "#F47FFF",
+            "position": 1
+          }
+        ],
+        "avatarUrl": "2026-06_media/688634c717468cb5bf69a34d64a85782-C5466.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "323371864074485771",
+          "name": "mole99",
+          "discriminator": "0000",
+          "nickname": "Leo Moser (mole99)",
+          "color": null,
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1423020172595298314",
+              "name": "Mod",
+              "color": null,
+              "position": 4
+            }
+          ],
+          "avatarUrl": "2026-06_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1515650076645523457",
+        "channelId": "1408135265427394661",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1520008973795983512",
+      "type": "ThreadCreated",
+      "timestamp": "2026-06-26T10:12:59.754+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Started a thread.",
+      "author": {
+        "id": "356185479911047169",
+        "name": ".dmv",
+        "discriminator": "0000",
+        "nickname": "dmv",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/cf91f9947bc37b8a1071311863f9c4b7-14667.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "reference": {
+        "messageId": null,
+        "channelId": "1520008973795983512",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    }
+  ],
+  "messageCount": 46
+}

@@ -1,0 +1,18 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"797470890765582377","deempak","2026-07-02T19:48:11.1140000+00:00","In my design while i was checking out the numbers  I found that  fanout/design repair is  using dlyb_1 as for ordinary buffer is the what's suppose to happen ? 
+
+These are being added by the repair_design command in the flow","",""
+"323371864074485771","mole99","2026-07-03T06:29:11.3160000+00:00","Unfortunately, OpenROAD does not currently differentiate between data and hold buffers during buffer selection: https://github.com/The-OpenROAD-Project/OpenROAD/issues/10622
+
+While you can disable all delay buffers, this would also mean that they could not be used for hold repair.","",""
+"323371864074485771","mole99","2026-07-03T06:29:41.0410000+00:00","@RebelMike did a workaround for his design where he replaced all setup-repair dlyb with normal buffers iirc.","",""
+"691780627338625077","rebelmike","2026-07-03T11:22:43.8010000+00:00","Yes, I used the foundry cell library for my TT design and it had this issue. I wrote a quick librelane plugin to fix it that’s linked from here https://github.com/librelane/librelane/issues/967
+you can see how I injected it into the config here: https://github.com/MichaelBell/ttgf0p3-tinyQV/blob/c02a42568e2f9dcf6b6ba6f78fe7b5f818b97e76/src/config.json#L73 (will need converting to yaml)
+And then I think you just need that plugin on the PYTHONPATH and it should work","","👍 (1)"
+"797470890765582377","deempak","2026-07-04T08:57:45.5010000+00:00","ohh ok I tried to disable the delay cells this but the hold timing got bad so 
+I will check the work around 
+
+
+Btw would it effect the tapeout if the dlyb buffers are used instead of normal buffer ?","",""
+"323371864074485771","mole99","2026-07-04T08:59:35.8570000+00:00","As long as STA says that you meet your timing requirements, then it should be fine even with dlyb.","",""
+"797470890765582377","deempak","2026-07-04T09:00:25.9860000+00:00","yup the STA is fine , Then i guess i will let it be","","👌 (1)"

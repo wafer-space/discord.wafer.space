@@ -1,0 +1,132 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"1447738536638943333","dorythecat_v2","2026-06-01T06:43:14.6990000+00:00","Ah sorry I'm dumb then 😭","",""
+"1447738536638943333","dorythecat_v2","2026-06-01T06:43:34.8070000+00:00","Though you could probably still try with a double transistor constant current source","",""
+"1447738536638943333","dorythecat_v2","2026-06-01T06:43:45.6640000+00:00","I don't have any schematics available rn but they shouldn't be hard to find","",""
+"262706220073222144","namibj","2026-06-03T20:41:28.7260000+00:00","We don't by chance have any decent inductors let alone mutual ones available, I guess?
+I'd hope to use some gain peaking on the clock buffers, they aren't _that_ sensitive to precise inductor performance and honestly need so much parasitic resistance anyways that they can have fairly terrible Q so long as they are still very inductive (not capacitive) at the peak operating frequency.
+
+I think I'd mostly want them to sustain higher fan-out than what I'd be having sufficient-margin-above-unity gain with at whatever frequency I can squeeze out of the latches feeding MUX2's feeding the output buffers (final latch stage clocked at half the output bit rate, just like the output MUX2 that converts from 2 parallel SDR streams to the final singular DDR (NRZ) stream).
+
+And possibly even not using a latch on the full clock but rather a 4:1 MUX tree with selective clock phasing on the 3 involved selector bits and the 4 latches feeding directly into the input muxes.
+
+I'll try to get a basic (inductor-free) setup going in the coming hours to figure out if 10 Gbit/s is just wishful thinking or just an issue of thermal density/chip-cooling.
+fT of 25GHz at feasible drain current and low-frequency gain sounds like a mere 5 GHz fundamental with desire for clipping to be more square wave than sine wave shouldn't be _that_ bad to handle, that sounds like FO2~FO3 territory after basic parasitics...
+Sure it's _intense_ but in theory only a DIV2 and a MUX2 have to be driven at the full speed from the VCO and the MUX2's output has to go to an output buffer.","",""
+"384390069412429834","polyfractal","2026-06-03T23:49:03.0540000+00:00","I don't think I've seen anyone post an inductor layout yet. Would probably have to DIY one with GDSFactory's spiral loop generator or something? And then sim it to see how works 😕","",""
+"262706220073222144","namibj","2026-06-04T00:05:17.1750000+00:00","Yeah that fasthenry script https://github.com/diadatp/sky130_rf_tools/blob/main/fasthenry/iterate_fh.py should port decently to gf180mcuD, but that's half-finished work (like, for sky130) and not particularly what I quite have time to work on in these rather limited days until the ttgf0p3 deadline.","",""
+"262706220073222144","namibj","2026-06-04T12:19:22.7860000+00:00","Now that I've done some _Gain-Bandwidth Product_ maths I _really_ want some T-coil's for bandwidth enhancement.
+
+I low key have trouble believing these numbers, for that they suggest it's _technically possible_ to yeet a lane of `25GBASE-KR-S` out of a wafer.space die without necessarily melting said die as long as one ensures good cooling.
+
+Without effective inductive peaking it's gonna involve rather lifetime-limiting hot carrier injection conditions, though, as the `nfet_3v3_dss` probably won't quite reach enough native GBW.
+
+Yes I'm aware that prospect sounds kinda ridiculous.
+I'm just getting the numbers/down-clocking-support cooked a little more before I go see how to get anywhere close to the abstract numbers I've been looking at since last night.
+Even if that's too much it does suggest `10GBASE-KR` to be actually quite realistic to pull off (even post-layout).","",""
+"262706220073222144","namibj","2026-06-04T20:05:12.8040000+00:00","Ok welp I'm not attempting a C4 serializer, yet without C4 (i.e., mere C2), 25GBASE-KR-S would probably risk melting the gf180mcuD die.
+
+Does not seem impossible though...
+Might need flip chip though due to severe high frequency impedance of the bond wire.
+
+10GBASE-KR with ""only"" a C2 architecture looks worryingly ""easy"" (decent limiting amplifier GBW, no peaking inductors needed, C2 doesn't need any ultra-fast 4:1 MUX unlike C4 (they're tricky to correctly common-mode bias), and overall it might not need _any_ bandwidth extension trickery to function.)....
+Hopefully I can be productive Saturday and do some trial layouting for the critical blocks of concern.","",""
+"691780627338625077","rebelmike","2026-06-05T12:18:00.1710000+00:00","Does anyone have a PLL that’s in a state I might be able to use it in my design?
+The goal would be to drive HDMI output so I’d want to generate a 126MHz clock.
+I’m going to have an option to bring that clock in externally, but it would preferable to be able to run without such a fast external clock.","",""
+"356185479911047169",".dmv","2026-06-05T14:58:43.5350000+00:00","Looks like there was a PLL in the ISHI-KAI run1 design.
+https://github.com/ishi-kai/ISHI-KAI_Multiple_Projects_WaferSapce-GF180-1#PLL
+Although it went 8 MHz in -> 48/40MHz out, and unclear if the die has been probed yet.","",""
+"691780627338625077","rebelmike","2026-06-05T15:07:28.4780000+00:00","Good find, thanks for the link!","",""
+"262706220073222144","namibj","2026-06-07T14:14:05.8040000+00:00","Not for Run2; but I plan to have something who's core is silicon validated for Run3.
+
+Provided my health can get in line today so I can at least get basic core parts drawn today. 
+
+An amplifier, a partial positive feedback delay cell for the VCO, and a very fast MUX2.
+
+Thanks by the way for giving me a clear purpose of what people might reasonably do with the fast TX I'm working on: digital video out.
+That works TX only with less than 10Gbit/s for general homelab hardware.","",""
+"262706220073222144","namibj","2026-06-07T14:23:04.8720000+00:00","That said, if I manage to get the PBRS hooked up I'd have a few days after the ttgf0p3 deadline to help you hook the serializer design up to your date source, at probably 32 bit wide (3v3 SCL) per clock.
+
+I'd think a TDMS encoder shouldn't be that hard, and it should be easy to make 4 copies of it fed from a single shared VCO.
+
+It'd be 4 control current signals plus a differential pin pair for each line.
+But those could use the ttgf analog MUX.
+
+PLL action would have to be done off-chip by adjusting the tail current for the VCO.","",""
+"691780627338625077","rebelmike","2026-06-07T14:50:46.9290000+00:00","Interesting.  I just finished using up all the pins on the quarter slot 😄  But potentially I could free some back up.
+
+Serialization wise I'm using https://github.com/Wren6991/SmolDVI, and have a super simple stateless TMDS encoder that is only capable of 2bpp on each channel, which is enough for now, and the 8 pins can instead be used for 2bpp/colour VGA output (TT VGA Pmod compatible) if HDMI is not selected (also gives me a fallback if HDMI doesn't work).","",""
+"262706220073222144","namibj","2026-06-07T14:52:13.6990000+00:00","honestly for Run3 I'd suggest to aim for a lane of DP; by then there's decent chance all the biasing for my serializer could live on-die, too.","",""
+"262706220073222144","namibj","2026-06-07T14:56:34.5840000+00:00","notably by then I should have managed to get at least a few taps of TX FIR EQ working.","",""
+"691780627338625077","rebelmike","2026-06-07T15:09:25.9960000+00:00","DP would be cool!  I'll probably keep things simple for run 2 and then see if there's interest in putting something DP or faster HDMI together for a later run.","",""
+"262706220073222144","namibj","2026-06-07T15:24:46.6260000+00:00","Yeah I'm decently confident in the TX being good enough for it; I don't see myself being able to supply the encoder though.
+I do have decent hope for DP 1.3's HBR3 though, but probably not with anywhere near full cable length in practice.
+That is 30 fps per lane at 3840x2160, though....
+If we can get a performant flip chip strategy measured long enough before Run3's deadline, spec-compliant drive might be possible, though.","",""
+"691780627338625077","rebelmike","2026-06-07T15:36:03.1560000+00:00","I've done a fair amount with VGA and DVI/HDMI, but haven't touched DP, so not sure what's required for the encoder.
+I guess I remain sceptical about getting anything like that speed, but then I haven't actually got my hands on any gf180 chips yet.  On sky130 though the output drivers in the default padframe TT uses are really weak - you struggle to get a clean signal above 33MHz.","",""
+"262706220073222144","namibj","2026-06-07T15:38:40.4170000+00:00","If I get far enough to where the serializer takes some shape on track for getting finished by the deadline, you are free to make the digital feed for the serializer, it's gonna have a couple bits (10~20) of VCO load trim to select a choosen number of PMOS fingers to connect the VDD side of the pull-up-resistors to VDD, some way of setting straight alternating bit pattern to output clock signal instead of data, and probably some way of turning off the output of the divided clock onto the GPIO.
+Otherwise, it'd be free to select itself a mode where it takes in 16 bits of GPIO parallel if feasible as DDR even, and feed them to the serializer core instead of feeding the PRBS-31 to it.","",""
+"262706220073222144","namibj","2026-06-07T15:39:54.2290000+00:00","There's approximately half a normal tt tile space for all the digital stuff.","",""
+"262706220073222144","namibj","2026-06-07T15:42:05.9780000+00:00","I do feel like I'l get to draw the amplifier (as needed for fan out in general) at least today, tho.","",""
+"262706220073222144","namibj","2026-06-07T15:50:27.4000000+00:00","If I've made enough progress in 7 days, I'd welcome you to make a digital SCL section for feeding the analog core with either PRBS-31 or notably a 16-wide input that might as well be DDR w.r.t. the exported GPIO clock.","",""
+"262706220073222144","namibj","2026-06-07T15:51:42.4810000+00:00","Would allow testing of DP transmission with an external encoder and external PLL.","",""
+"691780627338625077","rebelmike","2026-06-07T16:30:30.9320000+00:00","Generating PRBS31 looks straightforward - are you targetting TT gf0p3 for this?","",""
+"262706220073222144","namibj","2026-06-07T17:27:45.3340000+00:00","yes","",""
+"262706220073222144","namibj","2026-06-07T17:30:11.8480000+00:00","This is more about that I won't have time to do a digital section that can re-use the 16 normal user inputs for data feed, so to get that, I'd be calling upon help/offering collaboration on that aspect after getting the base core part into a state where it is clearly realistic to get to actually have a functioning data serializer component.","",""
+"691780627338625077","rebelmike","2026-06-07T17:39:26.0750000+00:00","Yes, understood - and I'm much more familiar with the digital tooling than the analog side of things.  This should implement ```
+module prbs31 (
+    input wire          clk,
+    input wire          rst_n,
+    input wire          en,
+    output reg  [30:0]  q
+);
+
+    always @(posedge clk or negedge rst_n) begin
+        if (~rst_n) q <= '1;
+        else if (en) begin
+            q[0] <= q[30] ^ q[27];
+            q[30:1] <= q[29:0];
+        end
+    end
+
+endmodule
+```
+is that roughly what you're after?","2026-06_media/prbs31-4B42F.tgz",""
+"691780627338625077","rebelmike","2026-06-07T17:40:07.5400000+00:00","Started a thread.","",""
+"262706220073222144","namibj","2026-06-08T03:55:54.0730000+00:00","unfortunately that tool so far seems rather reluctant in giving me blocks that are closer to custom drawn than those fully-automatic fire-and-forget ""with dnwell + with guard ring + with substrate tap + oh-yeah-source-and-drain-have-to-come-out-the-same-side"" 🙁
+
+Seems a little problematic so far due to having to keep an eye on electromigration limits due to transistors driven into very fast not efficient regimes.","",""
+"262706220073222144","namibj","2026-06-08T03:57:14.6180000+00:00","I'll sleep over it to make the judgement call of whether to continue going with this for now or whether to go for other basic-multifinger-structure-drawing code.","",""
+"262706220073222144","namibj","2026-06-08T04:23:30.1900000+00:00","ok I gotta confirm with proper PEX but if the model already includes the parasitic capacitance of the finger contacts that's not really avoidable anyways, then that 25GBASE-KR TX seems actually not that infeasible without having to do inductors even, though those would help a lot in power efficiency.","",""
+"262706220073222144","namibj","2026-06-08T04:32:09.0400000+00:00","2 nH on 10x10 um with access to m2/m3/m4.
+Particular gain needed at about 13~15 GHz.","",""
+"1331673337616793672","tpluck_","2026-06-11T08:19:02.1420000+00:00","FYI, 6 Danube River characterisation chips have arrived at UC Irvine to be probed.
+
+Would be good to know what other test-structures people would like to prioritise/characterise and just how much free-space we'll have on run two try out for the community.","",""
+"262706220073222144","namibj","2026-06-11T20:45:05.3390000+00:00","native NMOS both oxides in a way that somehow allows for extracting local mismatch models, with channel dimensions down to litho minimums, not just electrically suggested "">=1.8um, or it'll _leak too much when off_"" restrictions that are currently enforced by the SPICE model deck in the openPDK.
+
+Perhaps some way of stress-testing SiN passivation crack propagation susceptibility when insisting on keeping the guard ring metal passivated, such that ACF-style (and/or similar) cheap flip chip packaging will be easy to select as a padframe ""option"" with hopefully just minor yield impact if one decides to just go for CoB wire bonding instead? Could be nice to combine with some M5-and-up-only (except perhaps a bit of vias down to redistribution/cross-connecting traces below) flip chip bond pad pitch/""resolution"" stress testing structure that'll shoot allow us to trial on actual dies how the pad-connected-well-enough/not-shorting-nets yield relates to pad density.
+
+If the DRC checks won't aggressively stop us, someone might be up to draw up a couple thyristors and/or triacs. Triggered crowbars are quite helpful for being able to clamp excess (e.g ESD) voltage without being beholden to the inherent limitations of single-junction plain pn diodes, such as not having to rely on the presence of a low-impedance VDD to sink current into, but instead being able to ""just"" turn on a strong bipolar ""open-collector""-like output ""driver"" that can even clamp to below VDD  if one e.g. uses thin oxide inputs for low voltage signaling standards that operate with peaks substantially below system VDD. Imagine using a series inductor to tame the ESD pulse enough to not current crowd (excess `dI/dt` causing localized overheating) the thyristor/bipolar clamp but otherwise using the inductor to fairly effectively match the input gate capacitance of the transistor to the output/port nominal impedance. As opposed to massive passive diodes to rails together with dumb lossy ohmic series resistors.
+
+Also: https://ieeexplore.ieee.org/document/7937877 (JFET in what looks like a very plain 250nm CMOS process) / https://www.semanticscholar.org/paper/A-JFET-CMOS-Technology-for-Low-Noise-Sensor-Takao-Asaoka/7aac24f59d2ac537ed6eed35a17e6ac8b60f1a5b (JFET in what sounds possibly less-plain CMOS and from the few numbers I could read due to language barrier, sounding like 700 nm CMOS) / some attempts at CCD structures, those all sound nice to trial at least a little bit when we're already working an area that's not ""production suitable chips"" and is expected to be fed to a probing station.
+
+From my rough understanding, it should probably be possible to trick the litho steps (normal used for fabricating some of the accessible mosfets) to form ""functional"" CCD structures. 
+Not like, _good,_ but c.f. _Reticon SAD-1024_ like CCD structures don't need to worry about photoelectric optimization beyond ""better put it in an opaque package"".","",""
+"1214459146217201704","vipul.sh","2026-06-14T07:39:19.8860000+00:00","For layout,drc, lvs for analog with gf180, what is the recommended flow, Klayout or magic?","",""
+"323371864074485771","mole99","2026-06-14T09:32:17.6890000+00:00","The wafer.space precheck uses Klayout DRC. However, if you pass magic DRC, it is very likely that you will also pass KLayout DRC.
+
+As for the layout, it depends on your preference. I think most designs currently being made are using magic. The KLayout PCells for gf180mcu use GDSFactory and are a bit spotty. Regarding LVS, you can either use magic+netgen or LVS with Klayout, which has recently been improved.","","👍 (1)"
+"596068704471482370","246tnt","2026-06-14T13:44:24.2130000+00:00","So a bit of a question of interpretation for the PDK : Is `Vn.2b` meant to apply to vias attached to different metal  zones ?","",""
+"596068704471482370","246tnt","2026-06-14T13:44:32.3840000+00:00","","2026-06_media/2026-06-14_528x382_scrot-0EC13.png",""
+"596068704471482370","246tnt","2026-06-14T13:45:15.8370000+00:00","i.e. should it apply to the above ( from a MOM cap )","",""
+"596068704471482370","246tnt","2026-06-14T13:46:18.7550000+00:00","The diagram in the PDK shows them on the same metal but other than that, is not explicit in any way.","2026-06_media/2026-06-14_185x206_scrot-A5C98.png",""
+"596068704471482370","246tnt","2026-06-14T13:47:03.1900000+00:00","The current KLayout deck reports an error. But the current magic techfile generated those vias. I'm not even sure if it would be possible to get magic to realize there is an array there ...","",""
+"738396032295108721","bailey8889","2026-06-14T16:11:42.7460000+00:00","Started a thread.","",""
+"262706220073222144","namibj","2026-06-15T13:58:37.0510000+00:00","I have this basic (well, technically, the PMOS are arranged differently for speed reasons) ""ring oscillator"" cell; there's 2 of these cells back-to-back acting as a direct quadrature phase clock source, albeit with naturally limited slew rate.
+
+Is there any reason not to make it as big as necessary to directly tap all the clock feeds off of it, especially if I want to use the quadrature clock feeds in similar source-coupled ""differential nmos pairs"" logic?
+Vs. a more ""proper"" clock tree, at least if this is contained to a single serdes channel worth of area?","2026-06_media/1000047004-9D409.png",""
+"1331673337616793672","tpluck_","2026-06-17T17:53:10.5040000+00:00","We (me @ GDSFactory) actually recently updated these to be XOR clean replicas of the Magic ones - so it should ideally be *stable-r* but naturally, buyer beware.","",""
+"356185479911047169",".dmv","2026-06-26T10:12:59.7540000+00:00","Started a thread.","",""

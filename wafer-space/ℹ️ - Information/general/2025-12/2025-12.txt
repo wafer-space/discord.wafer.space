@@ -1,0 +1,3838 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / general
+Topic: Welcome to [wafer.space](https://wafer.space/) - 
+documentation at [wafer.space github](https://github.com/wafer-space) - 
+buy at [buy.wafer.space](https://buy.wafer.space) - 
+archives at [discord.wafer.space](https://discord.wafer.space/)
+After: 2025-11-30 11:59 p.m.
+Before: 2026-01-01 12:00 a.m.
+==============================================================
+
+[2025-12-01 4:48 a.m.] mithro_
+
+
+
+[2025-12-01 5:19 a.m.] mithro_
+@Ethan Mahintorabi - Anything interesting in https://ieeexplore.ieee.org/document/10833805 ?
+
+
+[2025-12-01 6:43 a.m.] itisyeetimetoday
+It seems like for pure digital dense, the high density libraries SKY130 is around 170kG/mm^2 for raw/100kG/mm^2 for routed. GF180MCU doesn't have numbers I could find, but maybe it's around/better than SKY130? Anyone know what the numbers for SKY90/price is shaping up to be? Are there rumors/news about other nodes that will be open sourced?
+
+
+[2025-12-01 7:29 a.m.] 246tnt
+@itisyeetimetoday sky90 is dead afaik.  Also I'm not sure how you would think gf180mcu could ever be more dense than sky130 ... from an area density PoV it's way worse. raw routing wires are twice as big ( so 4 times worse in area ), cells are much much larger than the hd lib from sky130.
+
+
+[2025-12-01 9:00 a.m.] rzioma
+@Tim 'mithro' Ansell @Ethan Mahintorabi afaik Andreas Andreou (from John Hopkins) and Shantanu Chakrabartty groups are working together on a new open-source DVS sensor. They plan to tapeout on 130nm.
+
+It is part of annual Telluride Neuromorphic Workshop.
+
+
+[2025-12-01 9:04 a.m.] rzioma
+Their prototype wasn’t very dense either, but promising
+
+
+[2025-12-01 4:01 p.m.] _mwelling_
+@Tim 'mithro' Ansell congratulations on funding the first shuttle
+
+{Reactions}
+🥳 (4)
+
+[2025-12-01 4:29 p.m.] polyfractal
+Started a thread.
+
+
+[2025-12-01 4:49 p.m.] mithro_
+My current plan is,
+ (1) Finish the https://platform.wafer.space deployment.
+ (2) Bed.
+ (3) Check how things have gone and evaluate an what the update should be.
+
+Given the timeline, I'll probably port across any green prechecks on the https://test-platform.wafer.space to prod platform.
+
+{Embed}
+https://test-platform.wafer.space/
+Welcome to wafer.space
+…
+Platform for wafer.space low cost silicon manufacturing.
+
+
+[2025-12-01 5:09 p.m.] itisyeetimetoday
+Oh what happened to sky90? If the google open souce pdk dead or is it the node being discontinued? Any hope for anything lower than 180 from global foundaries/tsmc/samsung/intel?
+
+
+[2025-12-01 5:12 p.m.] 246tnt
+@itisyeetimetoday The whole google involvment into open pdks ended before sky90 was ever released ... and without google's money, skywater has no interest in releasing their tech.
+
+
+[2025-12-01 5:14 p.m.] itisyeetimetoday
+I see so sky130 was only open sourced beacause google paid a metric ton of cash? I'm guessing they paid GF for GF180MCU too, which probably means that we won't get any new open source nodes unless someone else steps up and pays for it?
+
+
+[2025-12-01 5:15 p.m.] 246tnt
+Well, IHP released their 130 nm node as an open pdk. (Although technically, that was funded by the German govt, but under ihp's initiative stiff IIUC).
+
+
+[2025-12-01 5:15 p.m.] itisyeetimetoday
+I see, how does IHP 130nm stack up aginst sky130 for density and/or price?
+
+
+[2025-12-01 5:17 p.m.] 246tnt
+It's faster. It's not as dense as sky130 though, simply because the cell library available isn't optimized for density like the `hd` one from sky130.  Price is ~ 1500 EUR per sq mm for ~ 40 dies.
+
+
+[2025-12-01 11:58 p.m.] polyfractal
+Think it would be possible to do a "seamless" tiling if you didn't need to dice the final wafer (and designed features large enough to overlap on the edges to account for overlay error)? or will foundries always enforce a certain border of dead space width around the die?
+
+I guess you could just do a bunch of wirebonds between neighbors
+
+
+[2025-12-02 12:26 a.m.] anfroholic
+These guys are trying that. Effectively the only thing between would be the metal layers for interconnect. 
+https://www.cerebras.ai/chip
+
+{Attachments}
+2025-12_media/image-3DDF7.png
+
+{Embed}
+https://www.cerebras.ai/chip
+Cerebras
+Cerebras is the go-to platform for fast and effortless AI training. Learn more at cerebras.ai.
+2025-12_media/21fa43f6d541115e57887beb1155bddc7541ae71-2-08B64.jpg
+
+
+[2025-12-02 12:28 a.m.] polyfractal
+oh right, I forgot about them! will do some closer reading and see if I can glean any details
+
+ I was noodling over some future projects that could be meshed with 1000 chips, and was like "why don't I just leave them all on the wafer?" 😇   I'm sure there are tons of weird issues like power distribution and timing and such, but could be a fun way to abuse an older node like 180nm
+
+{Reactions}
+waferspace
+
+[2025-12-02 1:18 a.m.] trev5514
+125 petaflops! WOW! My chip deisgn is an AI accelerator and I'm hoping to hit GOPS! That is unbelievable!
+
+{Reactions}
+👍
+
+[2025-12-02 3:44 a.m.] mithro_
+I have thought about that idea too!
+
+{Reactions}
+😎
+
+[2025-12-02 4:43 a.m.] peterkinget
+Hi Tim, excuse my ignorance, but where do we _test_ submit the design? I did it both on the test platform and platform.wafer.space. Going forward, can we just continue with platform.wafer.space?
+
+Will someone communicate about the design after it goes through the pre-checks?
+
+Thanks, -- Peter for MOSbiusV3
+
+
+[2025-12-02 6:16 a.m.] mithro_
+An update should go out within 24h
+
+
+[2025-12-02 5:09 p.m.] polyfractal
+Started a thread.
+
+
+[2025-12-02 11:22 p.m.] mithro_
+How is everyone going today. I see a bunch of running prechecks on both test-platform and platform but not a massive queue. I also see a bunch of precheck successes.
+
+
+[2025-12-02 11:22 p.m.] rtimothyedwards_19428
+@Tholin :  Any chance I could get you to add a tristate inverter to your 3.3V standard cell set?
+
+
+[2025-12-02 11:25 p.m.] tholin
+An inverter with a tri-state output enable?
+
+
+[2025-12-02 11:26 p.m.] rtimothyedwards_19428
+Yes, like `invz` in the `gf180mcu_fd_sc_mcu7t5v0` library.
+
+
+[2025-12-02 11:26 p.m.] tholin
+That’s not too difficult
+
+
+[2025-12-02 11:26 p.m.] tholin
+But lctime cannot characterize three-state output enables and I don’t think STA looks at them anyways.
+
+
+[2025-12-02 11:27 p.m.] rtimothyedwards_19428
+The characterization is not important to me;  I am using them in a ring oscillator that can't be simulated anyway.
+
+
+[2025-12-02 11:27 p.m.] tholin
+You will have to do some SDC file trickery of your own
+
+
+[2025-12-02 11:27 p.m.] tholin
+Ah
+
+
+[2025-12-02 11:27 p.m.] tholin
+Okay
+
+
+[2025-12-02 11:27 p.m.] tholin
+Are you still experimenting around with my SCL?
+
+
+[2025-12-02 11:28 p.m.] tholin
+I pushed some updates fixing DRC issues to the repo just last week, I hope you saw.
+
+
+[2025-12-02 11:31 p.m.] rtimothyedwards_19428
+No, I didn't see, but updating is easy.  I need to start getting notifications on libraries that I am handling in open_pdks.
+
+
+[2025-12-02 11:32 p.m.] tholin
+Unfortunately, I did not get characterizations at other corners done in time. Please add healthy setup and slack margins to your librelane configs.
+
+
+[2025-12-02 11:34 p.m.] mithro_
+@Tim Edwards - You can ask GitHub to notify you on any activity on a repository.. Don't know if that helps.
+
+
+[2025-12-03 12:19 a.m.] ravenslofty
+My ISP is down for maintenance; wonderful timing.
+
+
+[2025-12-03 2:49 p.m.] ravenslofty
+@Tim 'mithro' Ansell do we get assigned a project ID, or is this a freeform field? it's unclear from the "create new project" form
+
+
+[2025-12-03 2:50 p.m.] mole99
+You should be able to choose your own ID.
+
+
+[2025-12-03 2:51 p.m.] ravenslofty
+`CHES` it is then.
+
+{Reactions}
+🔥
+
+[2025-12-03 2:54 p.m.] mithro_
+They have to be unique per shuttle, 4 letters/numbers and you can have [A-Z0-9]
+
+
+[2025-12-03 3:00 p.m.] mithro_
+Well it's bed time for me.
+
+
+[2025-12-03 3:42 p.m.] scafir
+Hey, I see that pre-filled file url for the design file submission on platform.wafer.space is branch referred  (`github.com/[...]/blob/main/[...]`). It could be a bit dangerous to use it as such, as they may change with time. For example, if some error is found in the precheck and there's a need to update it and rerun the check, the files may not be same anymore.
+A simple fix would be to encourage users to update files that are commit-referred instead, like `github.com/[...]/blob/39306415f62fd6e74851dbc5f0dc57ea608af3f3/[...]`, which are static
+
+
+[2025-12-03 5:19 p.m.] tholin
+Antenna DRC clean?
+
+
+[2025-12-03 5:19 p.m.] tholin
+Oh no
+
+
+[2025-12-03 5:19 p.m.] tholin
+That’s not good for me
+
+
+[2025-12-03 5:20 p.m.] tholin
+I have no standard cell grid in the top level, so no antenna cells can be inserted.
+
+
+[2025-12-03 6:30 p.m.] 246tnt
+Yeah, same ...
+
+
+[2025-12-03 7:55 p.m.] tholin
+What do I even do when this happens? What config changes can I make?
+
+{Attachments}
+2025-12_media/image-078B0.png
+
+
+[2025-12-03 8:40 p.m.] 246tnt
+Supposedly OpenROAD now supports resolving antenna violation using higer layer strapping but I didn't search yet how to do that / configure it / ...
+
+
+[2025-12-03 8:40 p.m.] 246tnt
+That's on my todo for tomorrow.
+
+
+[2025-12-03 8:47 p.m.] bailey8889
+@Tholin @tnt Does your design use macros? 
+
+These are just guesses. It would be nice to know if anything made a difference.
+
+If it does, you might try the `DIODE_ON_PORTS` parameter. 
+
+If those are fanout related, make sure `DESIGN_REPAIR_TIE_FANOUT` is set to true.
+
+Maybe adjust the `DESIGN_REPAIR_MAX_CAP_PCT` setting. Maybe counter-intuitive, but a higher setting may decrease the ratio by increasing the gate area. On the other hand, a lower setting may, decrease the wiring area.
+
+
+[2025-12-03 8:49 p.m.] bailey8889
+or https://discord.com/channels/1361349522684510449/1445797038863155381/1445868913744150660
+
+
+[2025-12-03 8:57 p.m.] 246tnt
+@bailey I have diodes on all input ports of my macro. The violations are on wires going to the IO pads because the IO pads input don't have diodes I guess.
+
+
+[2025-12-03 9:05 p.m.] bailey8889
+There's a setting for `both` for `DIODE_ON_PORTS`. Does that make a difference/something you want?
+
+
+[2025-12-03 9:13 p.m.] tholin
+All my config changes make it worse. How am I expected to get 0 violations here?
+
+{Attachments}
+2025-12_media/image-0FF89.png
+
+{Reactions}
+🤔
+
+[2025-12-03 10:17 p.m.] mithro_
+How is everyone going this morning?
+
+{Reactions}
+🤣
+
+[2025-12-03 10:17 p.m.] mithro_
+Are these digital designs?
+
+
+[2025-12-03 10:18 p.m.] mithro_
+We ***do*** require you to submit a hash for the gds/oas. Probably still worth submitting a GitHub issue about it.
+
+
+[2025-12-03 10:22 p.m.] tholin
+Yes
+
+
+[2025-12-03 10:24 p.m.] mithro_
+Couple of things -- If OpenROAD is having trouble closing on any of your designs, we should get them into the upstream OpenROAD benchmark test suite.
+
+
+[2025-12-03 10:25 p.m.] mithro_
+What config are you using? I assume you have pushed this design somewhere?
+
+
+[2025-12-03 10:26 p.m.] polyfractal
+@Tim 'mithro' Ansell trying to submit a new GDS url with new hashes, but it appears to be using the hashes from prior upload. any ideas?
+
+
+[2025-12-03 10:27 p.m.] polyfractal
+ah, reloading and restarting the flow worked
+
+
+[2025-12-03 10:28 p.m.] tholin
+https://github.com/AvalonSemiconductors/ws-submission-2025/tree/main/macros/SID
+
+{Embed}
+https://github.com/AvalonSemiconductors/ws-submission-2025/tree/main/macros/SID
+ws-submission-2025/macros/SID at main · AvalonSemiconductors/ws-su...
+Multi-project die. Contribute to AvalonSemiconductors/ws-submission-2025 development by creating an account on GitHub.
+2025-12_media/ws-submission-2025-1F7C1
+
+
+[2025-12-03 10:28 p.m.] tholin
+Here I go, pushing OpenROAD to its limits again...
+
+{Reactions}
+💜 (2)
+
+[2025-12-03 10:30 p.m.] mithro_
+Like all the best people!
+
+
+[2025-12-03 10:51 p.m.] rtimothyedwards_19428
+@Tholin :  And I'm pushing your library to the limits.  Now I need an asynchronous set/reset flop in addition to the tristate inverter.  If you haven't worked on the tristate buffer at all, then I will probably try to do both of those tomorrow, along with any others that might be useful (oai?  nand4/nor4?).  But probably just the flops and tristate inverter will get me through synthesis.
+
+
+[2025-12-03 10:53 p.m.] mithro_
+
+
+
+[2025-12-03 10:53 p.m.] mithro_
+@Tholin - Maybe the following could help?
+
+
+[2025-12-03 11:27 p.m.] tholin
+Unfortunately, I will now be busy fixing antenna violations in almost all of my designs.
+
+
+[2025-12-03 11:27 p.m.] tholin
+All but like one or two of them have at least one violation.
+
+
+[2025-12-03 11:32 p.m.] tholin
+Even the multiplexer!
+
+
+[2025-12-03 11:36 p.m.] tholin
+This fixes the antenna violations but generates LVS errors.
+
+
+[2025-12-03 11:41 p.m.] tholin
+Ah, because the config lines you showed me add the diodes *after* detailed routing. I guess its supposed to be before?
+
+
+[2025-12-03 11:41 p.m.] mithro_
+I don't really know anything, I just forward messages between people 😛
+
+
+[2025-12-03 11:42 p.m.] tholin
+I am trying
+```
+  substituting_steps:
+    +OpenROAD.RepairAntennas: Odb.InsertECODiodes
+```
+and I’ll report back in ~30 minutes
+
+
+[2025-12-03 11:42 p.m.] ravenslofty
+So, platform.wafer.space says it supports Google Drive, but I attach a google drive link and it reports `Security validation failed: URL validation failed: Invalid file size: 0 bytes `
+
+
+[2025-12-03 11:43 p.m.] ravenslofty
+uh, I think you might need to run `OpenROAD.DetailedRouting` after that
+
+
+[2025-12-03 11:46 p.m.] mithro_
+Can you create a GitHub Issue about that?
+
+
+[2025-12-04 12:19 a.m.] tholin
+Stuck
+
+{Attachments}
+2025-12_media/image-D5987.png
+
+
+[2025-12-04 12:20 a.m.] ravenslofty
+I suspect when mine comes around I might end up holding everyone else up >.>
+
+
+[2025-12-04 1:18 a.m.] tholin
+Got another fun one. If you run the flow on this with its exact config, it’ll fail GLP with `[GPL-0305] RePlAce diverged during gradient descent calculating, resulting in an invalid step length (inf or NaN).` but if the max fanout constraint in the config is changed from 7 to 6, it passes (before failing due to routing congestion).
+Maybe also a fun benchmark case.
+
+{Attachments}
+2025-12_media/example.tar-E5614.gz
+
+
+[2025-12-04 1:21 a.m.] trev5514
+A month ago I was trying different fanout constraints and it caused so many headaches with that exact error message. I went back to the standard and didn't have any issues since then.
+
+
+[2025-12-04 1:22 a.m.] mithro_
+I'm pretty sure that should be a bug reported upstream.
+
+
+[2025-12-04 1:24 a.m.] trev5514
+@Tim 'mithro' Ansell My last gds run on the test-platform.wafer.space website stalled after 3 hours. The same design ran on my computer for over 8 hours and didn't finish. Does the platform.wafer.space have longer run capability?
+
+
+[2025-12-04 1:28 a.m.] trev5514
+I believe I reported to the project template, in hindsight I believe it's an upstream issue.
+
+ https://github.com/wafer-space/gf180mcu-project-template/issues/5
+
+{Embed}
+https://github.com/wafer-space/gf180mcu-project-template/issues/5
+RePlAce step failing to converge · Issue #5 · wafer-space/gf180mc...
+I&#39;m on a macOS which I read could cause some heuristic issues (here) so I will try this later on my windows machine. I am using the default setup and haven&#39;t changed anything (except #4). [...
+2025-12_media/5-ED548
+
+
+[2025-12-04 1:35 a.m.] mithro_
+I see some people have prechecks running at the +12 hours
+
+{Reactions}
+👍
+
+[2025-12-04 1:38 a.m.] mithro_
+
+
+{Attachments}
+2025-12_media/image-5DAE1.png
+
+
+[2025-12-04 1:42 a.m.] tholin
+That doesn't seem right
+
+
+[2025-12-04 1:42 a.m.] tholin
+My die is packed and it doesn't take nearly as long
+
+
+[2025-12-04 1:43 a.m.] tholin
+A 0.5x1 slot taking 12 hours feels like something got stuck
+
+
+[2025-12-04 1:45 a.m.] trev5514
+
+
+
+[2025-12-04 1:45 a.m.] trev5514
+Maybe not... I don't know how large this design was but if it's more complex than this then I could believe it.
+
+
+[2025-12-04 2:18 a.m.] mithro_
+At some point in the near future, I'll decomission https://test-platform.wafer.space and then set it up to provide extra precheck workers for https://platform.wafer.space
+
+{Embed}
+https://test-platform.wafer.space/
+Welcome to wafer.space
+…
+Platform for wafer.space low cost silicon manufacturing.
+
+{Embed}
+https://platform.wafer.space/
+Welcome to wafer.space
+…
+Platform for wafer.space low cost silicon manufacturing.
+
+
+[2025-12-04 2:25 a.m.] mithro_
+
+
+{Attachments}
+2025-12_media/image-C35DA.png
+
+
+[2025-12-04 2:26 a.m.] mithro_
+Looks like there are still a few that need to be ported across from test-platform?
+
+{Attachments}
+2025-12_media/image-CE35D.png
+
+{Reactions}
+👍
+
+[2025-12-04 4:12 a.m.] polyfractal
+the deadline is just "have a GDS in the queue" right?  we can continue to update the design through next week due to the upcoming DRC changes?
+
+
+[2025-12-04 5:53 a.m.] mole99
+Yes
+
+{Reactions}
+👍 (2)
+
+[2025-12-04 6:40 a.m.] mithro_
+You may have trouble logging into the https://platform.wafer.space but you should be able to reset the password via email. I was transfering users from test-platform.wafer.space but the passwords for email based login are hashed in a way they don't transfer.
+
+{Embed}
+https://platform.wafer.space/
+Welcome to wafer.space
+…
+Platform for wafer.space low cost silicon manufacturing.
+
+{Reactions}
+👍
+
+[2025-12-04 7:00 a.m.] mithro_
+Anyone need anything from me/waiting on anything from me at the moment? (Apart from looking into the DRC check queue on platform.wafer.space?)
+
+
+[2025-12-04 9:06 p.m.] rtimothyedwards_19428
+@Tholin :  I don't know if you have time to do anything with these, but here are layouts for a set-reset flop and a tristate inverter.  I think these two will be sufficient for my needs.
+
+{Attachments}
+2025-12_media/gf180mcu_as_sc_mcu7t3v3__dfsrtp_2-F511B.mag
+2025-12_media/gf180mcu_as_sc_mcu7t3v3__invz_2-356B8.mag
+
+
+[2025-12-04 9:08 p.m.] rtimothyedwards_19428
+The `invz` cell is the equivalent of the GF 5V 7 track cell of the same name (I changed pin names to match your conventions), and the `dfsrtp` cell is the equivalent of the GF 5V 7 track cell `gf180mcu_fd_sc_mcu7t5v0__dffrsnq_2`.
+
+
+[2025-12-04 9:54 p.m.] rtimothyedwards_19428
+I have also created all the views (GDS, CDL, LEF, verilog, and a liberty file just copied from the original) and can provide a gzipped tarball if needed.
+
+
+[2025-12-04 10:24 p.m.] mithro_
+
+
+{Attachments}
+2025-12_media/image-B9D26.png
+
+
+[2025-12-04 10:28 p.m.] 246tnt
+The half width looks higher than the full in that diagram.
+
+{Reactions}
+😮
+
+[2025-12-04 11:10 p.m.] tholin
+I am still fighting antenna violations
+
+
+[2025-12-04 11:10 p.m.] tholin
+Each of my individual macros now has none
+
+
+[2025-12-04 11:10 p.m.] tholin
+But the top level does!
+
+{Attachments}
+2025-12_media/image-48CA3.png
+
+
+[2025-12-04 11:11 p.m.] tholin
+I really don’t want to have to insert a standard cell grid into this.
+
+
+[2025-12-04 11:11 p.m.] tholin
+The problem appears to be that the iopads don’t have diodes.
+
+
+[2025-12-04 11:30 p.m.] mithro_
+@Tholin - I think @tnt is fighting with similar problem on Tiny Tapeout?
+
+
+[2025-12-04 11:34 p.m.] tholin
+I have a stupid idea on how to fix this, but if it works it works.
+
+
+[2025-12-04 11:34 p.m.] tholin
+But for the next shuttle, we should consider modifying the IO cells to have diodes on the Y output.
+
+
+[2025-12-05 12:59 a.m.] tholin
+I forgot diodes on ports on one of my macros. No more antenna violations after detailed routing. Lets hope KLayout doesn’t find anything either.
+
+
+[2025-12-05 1:03 a.m.] ravenslofty
+you're using a custom standard cell library for your design, right?
+
+
+[2025-12-05 1:03 a.m.] tholin
+No
+
+
+[2025-12-05 1:05 a.m.] ravenslofty
+well, I wanted to ask some questions about <https://github.com/AvalonSemiconductors/gf180mcu_as_sc_mcu7t3v3>, but I guess they don't matter then
+
+
+[2025-12-05 1:30 a.m.] mithro_
+
+
+
+[2025-12-05 1:41 a.m.] mithro_
+I believe @Tim Edwards is using them in some way?
+
+
+[2025-12-05 7:12 a.m.] 246tnt
+They're fixed now. KLayout still shows some violations with the default deck, but I believe this to be a bug in the KLayout antenna deck. When I change it to what I think it should be according to the docs, then it passes.
+
+
+[2025-12-05 7:18 a.m.] securitybrahh
+https://github.com/securitybrahh/open-source-asic-bitcoin-chip-sha256/
+
+{Embed}
+https://github.com/securitybrahh/open-source-asic-bitcoin-chip-sha256/
+GitHub - securitybrahh/open-source-asic-bitcoin-chip-sha256: I am t...
+I am trying to design open source asic sha256 for bitcoin - securitybrahh/open-source-asic-bitcoin-chip-sha256
+2025-12_media/open-source-asic-bitcoin-chip-sha256-704C7
+
+
+[2025-12-05 7:19 a.m.] securitybrahh
+Hi I am trying to design an open source ASIC for bitcoin miner.
+
+Can someone guide me how to design and send the project for manufacturing?
+
+
+[2025-12-05 7:20 a.m.] securitybrahh
+So should I make wokwi and siliwiz projects?
+
+
+[2025-12-05 9:10 a.m.] tholin
+Why am I getting 596 CUP.3 errors?
+
+
+[2025-12-05 9:14 a.m.] mole99
+Please see the latest announcement in #📝-project-template
+
+
+[2025-12-05 9:16 a.m.] tholin
+I did update the PDK
+
+
+[2025-12-05 9:17 a.m.] mole99
+And you regenerated the padring with the updated pad library?
+
+
+[2025-12-05 9:20 a.m.] tholin
+Were my analog pad changes upstreamed? Otherwise, I still have to rely on my modded analog pads for DRT to function.
+
+
+[2025-12-05 9:22 a.m.] mole99
+Have you submitted an upstream patch?
+
+
+[2025-12-05 9:22 a.m.] mole99
+The changes only affect the GDS, so you can keep your changes to the LEF.
+
+
+[2025-12-05 9:23 a.m.] tholin
+No, I don’t know how to do this properly. Modifying the existing cell seems difficult because of how its all crammed into one GDSII file and then referenced by precise byte offsets in the mag files.
+
+
+[2025-12-05 9:26 a.m.] tholin
+I added a pin as well
+
+
+[2025-12-05 9:26 a.m.] tholin
+DRT seems to like it when there is a "PAD" pin separate from ASIG5V even though they are both the same
+
+
+[2025-12-05 9:28 a.m.] mole99
+The GDS of the foundry pad library has already been adjusted for CUP.3.
+So far magic streamout and the following XOR with KLayout seem to be successful. So perhaps no changes to the mag files are necessary?
+
+
+[2025-12-05 9:30 a.m.] tholin
+I had to add a pin to the analog cell, so that implies a mag file change for sure
+
+
+[2025-12-05 9:31 a.m.] tholin
+I’m also talking about this at the end of every mag file. Updating the GDSII would have to update these lines in ALL mag files, as the byte offsets change.
+
+{Attachments}
+2025-12_media/image-653F2.png
+
+
+[2025-12-05 9:31 a.m.] tholin
+Maybe you got lucky since all you did was adjust some polygons
+
+
+[2025-12-05 9:31 a.m.] tholin
+Or maybe this information isn’t used
+
+
+[2025-12-05 9:31 a.m.] tholin
+But I don’t know
+
+
+[2025-12-05 9:39 a.m.] 246tnt
+I don't think it's used in the default flow, but updating it is definitely needed to not have invalid cross references in the PDK.
+
+
+[2025-12-05 9:39 a.m.] 246tnt
+And given the GDS changed size, those offsets have definitely changed so the current PDK has incoherent views which is not good.
+
+
+[2025-12-05 9:42 a.m.] tholin
+This is why, for all my SCLs, I generate separate GDSII files for each cell. Its a lot more files and looks like a mess, but its impossible to accidentally have everything suddenly have an invalid reference.
+
+
+[2025-12-05 9:42 a.m.] tholin
+I....don’t know how they even generated those byte offsets in the first place.
+
+
+[2025-12-05 9:43 a.m.] 246tnt
+You just do `gds readonly true` / `gds read xxx.gds` / `writeall`  and this will rewrite mag views for all the cells in the GDS that was read.
+
+
+[2025-12-05 9:44 a.m.] mole99
+Thanks, I see! I'll update the mag files soon.
+
+
+[2025-12-05 9:46 a.m.] 246tnt
+I'm not sure how the `maglef` are done. But @Tim Edwards would know 😅
+
+
+[2025-12-05 9:46 a.m.] 246tnt
+maybe just reading the lef views before the GDS ?
+
+
+[2025-12-05 9:46 a.m.] tholin
+...what?
+
+{Attachments}
+2025-12_media/image-AEC6A.png
+
+
+[2025-12-05 9:46 a.m.] tholin
+I think my project is cursed
+
+
+[2025-12-05 9:46 a.m.] tholin
+Haunted, even
+
+
+[2025-12-05 9:47 a.m.] 246tnt
+Is that using your IO ? Or the default one ?
+
+
+[2025-12-05 9:47 a.m.] tholin
+Default, but I applied some of my LEF changes
+
+
+[2025-12-05 9:59 a.m.] tholin
+Reverted those changes, still fails
+
+
+[2025-12-05 10:03 a.m.] tholin
+Disregard, I forgot to hit save in the text editor.
+
+
+[2025-12-05 10:04 a.m.] bailey8889
+BTDT
+
+
+[2025-12-05 10:19 a.m.] 246tnt
+Hard to tell because I'm looking at 2 days old version, but your chip top level should have corresponding `inout` for the analog signals and those should be connected to your newly defined `PAD` signal on the analog pins.
+
+
+[2025-12-05 11:43 a.m.] tholin
+I turned the standard cell grid back on so that antennas can be inserted, and even though DRT finishes with 0 antenna violations, KLayout still finds 175 problems. What do I do?
+
+
+[2025-12-05 11:46 a.m.] 246tnt
+Are you running the latest PDK update ?
+
+
+[2025-12-05 11:46 a.m.] 246tnt
+There was a fix for KLayout antenna check ~ 1.5h ago.
+
+
+[2025-12-05 11:55 a.m.] tholin
+Oh, right
+
+
+[2025-12-05 11:55 a.m.] tholin
+I started this flow before then
+
+
+[2025-12-05 11:55 a.m.] tholin
+That’s how long it takes!
+
+
+[2025-12-05 11:57 a.m.] tholin
+@Tim Edwards invz_2 has been added to my SCL. DFFs take a while, its over an hour to run all the simulations.
+
+
+[2025-12-05 12:03 p.m.] 246tnt
+Yeah, precheck we started 6h ago just finished for TT 😅
+
+
+[2025-12-05 12:05 p.m.] tholin
+Only after doing `rm -rf librelane/runs && make librelane` did it occur to me that I could’ve just re-run the antenna check on the existing GDSII...
+
+
+[2025-12-05 12:10 p.m.] 246tnt
+😬
+
+
+[2025-12-05 1:05 p.m.] tholin
+@Tim Edwards Both cells are now in the library. Have fun!
+
+{Reactions}
+👍 🎉
+
+[2025-12-05 1:36 p.m.] tholin
+With the new PDK. NOW what do I do?
+
+{Attachments}
+2025-12_media/image-C60A6.png
+
+
+[2025-12-05 1:40 p.m.] tholin
+Antenna repair doesn’t pick up on these.
+
+
+[2025-12-05 1:40 p.m.] tholin
+The antenna check after DRT says nothing’s wrong.
+
+
+[2025-12-05 1:45 p.m.] egorxe
+There is currently an ongoing work to correct KLayout antenna checks, it could be due to this. See latest merged & unmerged PRs in the [PDK repo](https://github.com/wafer-space/gf180mcu/pulls?q=is%3Apr).
+
+{Embed}
+https://github.com/wafer-space/gf180mcu/pulls?q=is%3Apr).
+Pull requests · wafer-space/gf180mcu
+Temporary development repository for the gf180mcuD PDK variant. - Pull requests · wafer-space/gf180mcu
+2025-12_media/gf180mcu-8BA53
+
+
+[2025-12-05 1:46 p.m.] tholin
+I thought that already was merged?
+
+
+[2025-12-05 1:47 p.m.] tholin
+Aaaand analog pads once again don’t route
+
+{Attachments}
+2025-12_media/image-8A4F9.png
+
+
+[2025-12-05 1:54 p.m.] egorxe
+The latest PR from Leo relaxing overly strict Klayout antenna checks (considering whole diode area) [was merget 4 hours ago](https://github.com/wafer-space/gf180mcu/pull/13). Do you have it in already? There is also one from me which is still not merged, but it will make KLayout checks more strict due to proper Metal5 thickness, so it does not look like your problem.
+
+{Embed}
+https://github.com/wafer-space/gf180mcu/pull/13).
+Build software better, together
+GitHub is where people build software. More than 150 million people use GitHub to discover, fork, and contribute to over 420 million projects.
+2025-12_media/github-logo-55c5b9a1fe52-4FC66.png
+
+{Embed}
+https://github.com/wafer-space/gf180mcu/pull/13).
+2025-12_media/github-mark-57519b92ca4e-A0C13.png
+
+{Embed}
+https://github.com/wafer-space/gf180mcu/pull/13).
+2025-12_media/github-octocat-13c86b8b336d-42CA8.png
+
+
+[2025-12-05 2:05 p.m.] tholin
+@Leo Moser (mole99) I tried this and it appears to not generate `LEFclass`, `LEFsite` and `LEFsymmetry` properties, so ensure they are preserved from the old mag files.
+
+
+[2025-12-05 2:08 p.m.] mole99
+I think you have to annotate the GDS with the LEF files? I'm not sure as I haven't done this before.
+Perhaps @Tim Edwards could comment on this.
+
+
+[2025-12-05 2:22 p.m.] tholin
+Also, I am definitely on the new antenna DRC script. I even checked the actual file and it matches.
+
+
+[2025-12-05 2:23 p.m.] tholin
+Still getting antenna violations that LibreLane isn’t picking up on and repairing.
+
+
+[2025-12-05 2:47 p.m.] mole99
+The final antenna summary in OpenROAD does not show these violations? If that is the case, can you load the marker database in KLayout to see which nets are affected?
+
+
+[2025-12-05 3:07 p.m.] 246tnt
+@Tholin If you can post the GDS and XML report, I can have a look.
+
+
+[2025-12-05 3:11 p.m.] 246tnt
+@Leo Moser (mole99) Actually now that I think about it, generating the mag/maglef is probably done as an install step of open_pdks ...
+
+
+[2025-12-05 3:14 p.m.] 246tnt
+Yeah, there is some magic stuff but also some python scripting to generate the mag/maglef from the GDS.
+
+{Reactions}
+👌
+
+[2025-12-05 3:41 p.m.] egorxe
+BTW, @Tholin you're using your own 3.3V cell library in LibreLane right? What value do you use for ANTENNAGATEPLUSDIFF in your techlefs?
+
+
+[2025-12-05 3:44 p.m.] 246tnt
+@Egor Lukyanchenko He is not.
+
+{Reactions}
+👌
+
+[2025-12-05 4:19 p.m.] rtimothyedwards_19428
+@Leo Moser (mole99) @Tholin :  The LEF parameters can be set with the "property" command in magic by hand, or you can just read LEF on top of an existing layout, if you have the LEF already, and it will generate the properties for you.  Be careful when you do that, because it will also try to relabel everything according to the ports in the LEF file.  That may be what you want, then again, it might not.
+
+{Reactions}
+👍
+
+[2025-12-05 4:19 p.m.] jonathan_ha_25034
+Switching to the development version of librelane might be worth a try to see if something changes. I had similar issues with antenna violations within the macros of our design. You could try to get the librelane dev version with
+```
+nix shell github:librelane/librelane/dev
+```
+and then run the synthesis flow with
+```make
+librelane librelane/config.yaml --pdk ${PDK} --pdk-root ${PDK_ROOT}
+```.
+Set PDK_ROOT to some directory and then Librelane should download the PDK. At least for me this yielded better results that helped me debug the design
+
+
+[2025-12-05 4:35 p.m.] egorxe
+Allowing Librelane to download a PDK is probably not a good idea, as it will download it using ciel and for gf180mcu it will be outdated.
+
+
+[2025-12-05 4:44 p.m.] tholin
+I don’t know how to do this.
+
+
+[2025-12-05 4:44 p.m.] tholin
+Trying to figure it out
+
+
+[2025-12-05 4:45 p.m.] tholin
+But also, manually checking the coordinates a few times, its almost all on bidir_PAD2CORE lines
+
+
+[2025-12-05 4:47 p.m.] tholin
+Here we are
+
+{Attachments}
+2025-12_media/image-C89C0.png
+
+
+[2025-12-05 4:48 p.m.] ravenslofty
+that's why there's the `--manual-pdk` option to librelane
+
+
+[2025-12-05 5:05 p.m.] mole99
+About my previous question: Does the final antenna summary in OpenROAD show these violations?
+Because if it does, we just need to convince LibreLane to fix them in some way. If not, then we have a mismatch between OpenROAD's and KLayout's definition of antenna violations.
+
+
+[2025-12-05 5:10 p.m.] tholin
+
+
+{Attachments}
+2025-12_media/image-8DEB0.png
+
+{Reactions}
+🎉 (2)
+
+[2025-12-05 5:23 p.m.] egorxe
+If there were no such discrepancies previously , it most likely means that it appeared due to increase in ANTENNAGATEPLUSDIFF, as OR is not overfixing with diodes anymore. If it so, it means that the mismatch is most likely related to diodes, not metals.
+
+
+[2025-12-05 5:29 p.m.] 246tnt
+@Leo Moser (mole99) Yes, discrepency is what I'd like to check. But I'm wondering if being perfect is even possible since the LEF contains only the total gate/diff are and no information about the layers to reach that gate/diff area so I'm not sure OpenROAD can always be correct.
+
+
+[2025-12-05 5:29 p.m.] 246tnt
+But I'd need to analyze the final GDS to test that theory.
+
+
+[2025-12-05 5:29 p.m.] tholin
+So, I have KLayout antenna violations on wires that go in-between macros. I have antennas on all macro ports. So a wire with antennas on both ends is getting an antenna violation. Is that even possible?
+
+
+[2025-12-05 5:30 p.m.] tholin
+Like, the standard cell, I mean.
+
+
+[2025-12-05 5:31 p.m.] 246tnt
+Yes, it's possible.
+
+
+[2025-12-05 5:31 p.m.] 246tnt
+Depending on routing layers, that diode could be useless.
+
+
+[2025-12-05 5:32 p.m.] tholin
+https://files.tholin.dev/Public/GDSII/chip_top.tar.gz
+
+
+[2025-12-05 5:33 p.m.] 246tnt
+When OpenROAD inserts a diode, it takes care to put it close to where the gate to protect is. But when you manually instanciate one, OpenROAD just sees that as "just another standard cell" and will place it where ever convenient.
+
+In tiny tapeout I was instanciating diodes, and I had to write a custom script to manually re-position those diode where appropriate so they are effective to fix some of my violations.
+
+
+[2025-12-05 5:34 p.m.] 246tnt
+If you're manually instanciating diodes, you could instead try to use this : https://openlane2.readthedocs.io/en/latest/reference/step_config_vars.html#diodes-on-ports-protection-routine  which should also take care of placing them well.
+
+
+[2025-12-05 5:35 p.m.] tholin
+I have DIODE_ON_PORTS: both in all my flows
+
+
+[2025-12-05 5:35 p.m.] 246tnt
+Ah ok, nevermind then 😅
+
+
+[2025-12-05 5:35 p.m.] 246tnt
+Could you post the antenna report xml too so I don't have to run it 😅
+
+
+[2025-12-05 5:40 p.m.] tholin
+
+
+{Attachments}
+2025-12_media/antenna.klayout-D527C.lyrdb
+
+{Reactions}
+👌
+
+[2025-12-05 5:49 p.m.] egorxe
+Diodes on output ports of macros do not help much as there is quite low probability of them being connected to the receiving gate without going "up" through the metal stack.
+
+
+[2025-12-05 5:52 p.m.] 246tnt
+Mmm, something is weird. Beause I picked a random violation and looked at it and it didn't properly account for the input protection diode that's present in the IO cell.
+
+
+[2025-12-05 5:53 p.m.] 246tnt
+Are you sure that was run with the latest PDK ?
+
+
+[2025-12-05 5:56 p.m.] 246tnt
+it measures perimeter at 2139  and gate area at 3.15 ( and those looks correct ) and report ratio as 679 ( so indeed a violation ).   But there is a 1 um^2 diode that's propertly connected by a lower metal layer so this should make the effective gate area 3.15 + 15 * 1 = 18.15 and the ratio 117 which is well below the error threshold.
+
+
+[2025-12-05 5:57 p.m.] tholin
+1.4.1?
+
+
+[2025-12-05 5:57 p.m.] 246tnt
+yes.
+
+
+[2025-12-05 5:58 p.m.] tholin
+That’s the tag I got checked out
+
+
+[2025-12-05 5:59 p.m.] tholin
+But I see there have been antenna-check related commits since then
+
+
+[2025-12-05 6:01 p.m.] tholin
+I will pull the latest and try to run the check again, since I have nothing better to try.
+
+
+[2025-12-05 6:03 p.m.] rtimothyedwards_19428
+@Tholin :  What am I missing here?
+```
+ABC: Setting driving cell to be "gf180mcu_as_sc_mcu7t3v3__inv_2/Y".
+ABC: Setting output load to be 72.910004.
+ABC: + source /home/tim/gits/gf180mcu_ocd_openframe/librelane/runs/RUN_2025-12-05_13-00-18/06-yosys-s
+ynthesis/AREA_0.abc
+ABC: Error: The network is combinational.
+ABC: Cannot find the default PI driving cell (gf180mcu_as_sc_mcu7t3v3__inv_2/Y) in the library.
+```
+
+
+[2025-12-05 6:08 p.m.] tholin
+I don’t know
+
+
+[2025-12-05 6:09 p.m.] tholin
+Its not happening on my end either
+
+
+[2025-12-05 6:10 p.m.] tholin
+So I can’t replicate the issue
+
+
+[2025-12-05 6:11 p.m.] rtimothyedwards_19428
+Okay, actually that's good to know;  it's probably something in my code, then.
+
+
+[2025-12-05 6:21 p.m.] rtimothyedwards_19428
+It did not like synthesizing my ring oscillator, which I guess shouldn't surprise me.
+
+
+[2025-12-05 7:13 p.m.] tholin
+Nope. Still getting antenna violations.
+
+
+[2025-12-05 7:29 p.m.] 246tnt
+Yeah ... there is still a bug in the deck 😅
+
+
+[2025-12-05 7:29 p.m.] 246tnt
+`n_diode | n_diode` ... cc @Leo Moser (mole99)
+
+{Reactions}
+😢
+
+[2025-12-05 7:29 p.m.] mole99
+🤦‍♂️
+
+{Reactions}
+😢
+
+[2025-12-05 7:29 p.m.] mole99
+Thanks, fixing now...
+
+
+[2025-12-05 7:31 p.m.] tholin
+Oh
+
+
+[2025-12-05 7:31 p.m.] tholin
+Well
+
+
+[2025-12-05 7:32 p.m.] tholin
+I guess I can undo all the changes I’ve been making to my project to try and fix this.
+
+
+[2025-12-05 7:34 p.m.] mole99
+https://github.com/wafer-space/gf180mcu/releases/tag/1.4.4
+
+
+[2025-12-05 8:13 p.m.] rtimothyedwards_19428
+@Leo Moser (mole99):  I'm getting an error
+```
+ No libs found for macro                                    flow.py:698
+                    gf180mcu_ocd_ip_sram__sram256x8m8wm1 at corner
+                    max_ff_n40C_5v50. The module will be black-boxed.
+```
+But I am not specifying 5V anywhere.  Where is this corner name coming from?  My MACROS section specifies the .lib files for the SRAMs as, e.g., `tt_025C_3v30`.
+
+
+[2025-12-05 8:24 p.m.] rtimothyedwards_19428
+(Also it seems to be looking for 5V .lib files for the standard cells as well, and of course can't find any.)
+
+
+[2025-12-05 8:25 p.m.] mole99
+The LibreLane config in the PDK defines the various corners. You can override this from your config like so: https://github.com/splinedrive/gf180mcu-kianv-rv32ima-sv32/blob/4da6d0129e7d52011066a0dd335faa4a0551ebb8/librelane/config.yaml#L172
+Make sure to change `STA_CORNERS`, `LIB` and `DEFAULT_CORNER`.
+
+
+[2025-12-05 8:26 p.m.] mole99
+If `LIB` is not set, the pdk_compat functionality in LibreLane will set it to these values: https://github.com/librelane/librelane/blob/d8b98532399f6eaa230e44e4a505bd653c10dd71/librelane/config/pdk_compat.py#L294
+
+
+[2025-12-05 8:42 p.m.] rtimothyedwards_19428
+@Leo Moser (mole99) :  Thanks, that worked for Stage 10 and got me through synthesis.  But I'm still getting the same message (as a warning, not an error) on the floorplanning (Stage 12), but only for the SRAM.  As it is a warning only, I'm going to assume it's okay unless I discover otherwise. . .
+
+{Reactions}
+👍
+
+[2025-12-05 9:19 p.m.] ravenslofty
+if I upload a new GDS to platform.wafer.space, do I lose my spot in the queue? ^^;
+
+
+[2025-12-05 9:28 p.m.] mole99
+@Tim 'mithro' Ansell ^
+
+
+[2025-12-05 9:31 p.m.] ravenslofty
+because I've been trying to get antenna check to pass locally, and, uh
+
+
+[2025-12-05 9:36 p.m.] 246tnt
+@Tholin I ran new antenna check on the GDS you sent. It didn't fix all of them, but it fixed some at least.
+
+
+[2025-12-05 9:45 p.m.] ravenslofty
+answer: yes, you lose your spot in the queue
+
+
+[2025-12-05 10:00 p.m.] tholin
+Yep. I’m down to 17 errors.
+
+
+[2025-12-05 11:56 p.m.] tholin
+Uhhhhhhhh
+
+{Attachments}
+2025-12_media/image-5334E.png
+
+
+[2025-12-05 11:57 p.m.] tholin
+I know what’s causing this, but its still funny.
+
+
+[2025-12-06 12:05 a.m.] tholin
+But it appears we do have some discrepancies between OpenROAD and KLayout
+
+
+[2025-12-06 12:36 a.m.] bailey8889
+Started a thread.
+
+
+[2025-12-06 1:48 a.m.] tholin
+Wait
+
+
+[2025-12-06 1:48 a.m.] tholin
+I messed something up
+
+
+[2025-12-06 1:48 a.m.] tholin
+There is traces and standard cells clipping into my silicon art
+
+
+[2025-12-06 1:48 a.m.] tholin
+That is a big yikes
+
+
+[2025-12-06 1:49 a.m.] tholin
+Besides the DRC errors this brings, wanna bet its responsible for the false antenna positives?
+
+
+[2025-12-06 1:51 a.m.] rtimothyedwards_19428
+Maybe.  Top level metal is rarely involved in antenna violations because it is almost guaranteed to be connected to diffusion somewhere.  The only way to go is down.
+
+
+[2025-12-06 2:04 a.m.] tholin
+I may or may not have duplicated the artwork pixels onto every metal layer, as well as Poly2
+
+
+[2025-12-06 2:07 a.m.] tholin
+I have a fillblock over every piece of artwork because I am afraid of the fillers messing it up visually. So that’s why the artwork is on every layer. To prevent minimum density violations.
+
+
+[2025-12-06 2:07 a.m.] tholin
+The art IS my fill pattern!
+
+{Reactions}
+💜
+
+[2025-12-06 2:10 a.m.] mithro_
+I have to run very soon, but it looks like the prechecks are running okay on platform (even if there is still a bit of a queue) and are detecting antenna issues now?
+
+
+[2025-12-06 2:13 a.m.] mithro_
+I didn't get a chance to deploy the functionality which lets me crank the number of simultaneous prechecks up yet but I think that will happen today.
+
+
+[2025-12-06 2:19 a.m.] mithro_
+Also if you haven't already seen, there is a great post from Matt Venn @ https://www.zerotoasiccourse.com/post/excited_by_silicon/ about his thoughts on the state of open silicon.
+
+{Embed}
+https://www.zerotoasiccourse.com/post/excited_by_silicon/
+Excited by silicon!
+I was recently asked what excites me most about the exploding open-source silicon ecosystem. Honestly? It depends who’s asking.
+For one person I might talk about Basilisk - the PULP team’s seriously impressive Linux-capable RISC-V core. For another, maybe the new GF180mcu MPW from Wafer.Space, or the millions in funding finally flowing into ...
+2025-12_media/wafer-02092.png
+
+{Reactions}
+💜 (3)
+
+[2025-12-06 2:20 a.m.] rtimothyedwards_19428
+I feel like I am far behind in the race, but at least I got LibreLane to give me GDS of a synthesized layout of my 3.3V picoRV32 in a mixed voltage padframe using my SRAM and I/O and Tholin's standard cells (thanks, Tholin!).  I still have not worked on the power connections and there are other issues, and the whole thing is under-utilizing the space, but it is good progress!
+
+{Attachments}
+2025-12_media/caravel_openframe-01168.png
+
+{Reactions}
+❤️ (2) 🎉 (3)
+
+[2025-12-06 2:28 a.m.] rtimothyedwards_19428
+@Tholin :  FYI:  I pulled your latest standard cell updates and obviously they worked because otherwise I would not have produced the pic above.  But for the record, you are missing the verilog for the two new cells (my version, attached).  Also, I noticed in the update that you renamed "decap" cells to "fillcap";  however, the setup file for LibreLane still calls out "decap" for the cells.
+
+{Attachments}
+2025-12_media/gf180mcu_as_sc_mcu7t3v3__dfsrtp_2-19816.v
+2025-12_media/gf180mcu_as_sc_mcu7t3v3__invz_2-7954E.v
+
+
+[2025-12-06 5:25 a.m.] mithro_
+@SecurityBrahh - Just so you have the right expectations, any "bitcoin miner" accelerator on GF180MCU is not going to be competitive in any way against the current miner ASICs that are available (I doubt it would even beat a modern CPU). If you are doing it as an academic/learning exercise or for prototyping or otherwise, it could still make sense to do.
+
+Also doing a bitcoin miner isn't an easy task, I would not recommend it be your first ASIC or tapeout. You are not going to do a full miner with Tiny Tapeout (but you might be able to test some small parts of it with Tiny Tapeout). Start with something small and easy.
+
+
+[2025-12-06 7:09 a.m.] ravenslofty
+I am not entirely sure the tools could handle the power virus requirements of such an ASIC either
+
+
+[2025-12-06 7:13 a.m.] mithro_
+That is exactly why the sky130 PDK is the way it is. Having every cell be a seperate gds file with stuff related to it in the same directory seems so logical to me. Lots of "industry people" hated the fact that the library was now a lot of files rather than one big file.
+
+
+[2025-12-06 7:19 a.m.] mithro_
+The queue is currently sorted by upload time for the GDS.
+
+
+[2025-12-06 7:21 a.m.] ravenslofty
+I figured it was a waste of everyone's time to check my initial GDS when the requirements had changed
+
+
+[2025-12-06 7:21 a.m.] mithro_
+I had the crazy idea that we should have a "fill with artwork" tool that uses things like the wafer-space logo as the fill where it fits 😛 -- Probably a terrible idea.
+
+
+[2025-12-06 7:24 a.m.] mithro_
+There is no reason a bitcoin minor would be *required* to have a power virus like profile. You are right that most groups are optimising their designs in a way that does produces results like that.
+
+
+[2025-12-06 7:25 a.m.] mithro_
+Well, I've finally caught up with stuff on this channel, time to check the other ones!
+
+
+[2025-12-06 7:29 a.m.] mithro_
+
+
+{Attachments}
+2025-12_media/image-70061.png
+
+{Reactions}
+💜 (2)
+
+[2025-12-06 8:29 a.m.] mithro_
+I need to take platform.wafer.space down for 30m - when it comes back up it should be able to run a lot more prechecks in parallel.
+
+
+[2025-12-06 8:31 a.m.] mithro_
+I don't yet know when I'll do that.
+
+
+[2025-12-06 9:19 a.m.] egorxe
+In case this info would be useful to someone: after all the latest antenna-related PRs were merged into PDK, [our design](https://github.com/ZeduloTech/gf180mcu-testchip2025) containing several LibreLane generated macros passes KLayout antenna check just fine. I'm not seeing OpenROAD-KLayout antenna discrepancies any more.
+
+{Embed}
+https://github.com/ZeduloTech/gf180mcu-testchip2025
+GitHub - ZeduloTech/gf180mcu-testchip2025: SRAM and eFUSE testchip ...
+SRAM and eFUSE testchip for wafer.space MPW runs using the gf180mcu PDK - ZeduloTech/gf180mcu-testchip2025
+2025-12_media/gf180mcu-testchip2025-98391
+
+
+[2025-12-06 10:16 a.m.] mithro_
+https://mithro.github.io/gf180mcu-project-template/
+
+
+[2025-12-06 11:14 a.m.] 246tnt
+@Leo Moser (mole99) Why are OFFGRID and ANGLE checked for PMNDMY ?  Doesn't looks like it should really be a problem since that layer is not used for actual mask making.
+
+
+[2025-12-06 11:27 a.m.] mole99
+As for why it is the way it currently is, you would have to ask Mabrains as they created the original rule deck :)
+
+What I found in the docs:
+
+- https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_03.html
+
+> 3.4 Consistent layout all designs on a 0.005μm grid will avoid off-grid and snapping issues during database fracturing.
+
+- https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_07_02.html
+
+> The design grid must be an integer multiple of 0.005μm.
+
+Given the wording of the second statement, and that DRC errors in the design can lead to a back and forth with GF, it is probably safer and simpler to assume that all shapes on all layers need to be on the 5nm grid.
+
+As for the angle checks, I would actually love to be able to draw arbitrary angles (except for acute and as long as all points are on-grid). However, given the wording in the docs I'm not sure about this.
+
+- https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_05_1.html
+
+> SH.2: Avoid any COMP, poly and metal shapes with acute angles (angles <90 deg). Exceptions are only for pre-tested metal inductors with IND_MK mark layers and lettering (non circuit elements).
+
+This would tell me that arbitrary angles (except acute) are allowed on these layers.
+
+However this is contradicted by:
+
+https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_03.html
+
+> 3.6 Only 90 deg and 45 deg bends are allowed for poly and metal lines.
+
+I wouldn't even dare to guess what this means for other layers 🤷‍♂️
+
+{Reactions}
+👍🏻
+
+[2025-12-06 11:29 a.m.] 246tnt
+👌
+
+
+[2025-12-06 4:36 p.m.] meinhard
+Were you able to resolve the antenna violations? I quit the checker run after 10h+ to make a small adaptions and start a new one; so I'm not too sure how many trials I have 😄
+
+
+[2025-12-06 4:39 p.m.] tholin
+Down to 5 violations on 2 nets
+
+
+[2025-12-06 4:40 p.m.] meinhard
+Which settings did you adapt? `DRT_ANTENNA_REPAIR_ITERS` and 
+`DRT_ANTENNA_MARGIN` or anything else?
+
+
+[2025-12-06 4:41 p.m.] tholin
+I had DRC errors
+
+
+[2025-12-06 4:42 p.m.] tholin
+The antenna violations I’m getting are not noticed by LibreLane
+
+
+[2025-12-06 4:42 p.m.] tholin
+So I’ve been playing with INSERT_ECO_DIODES
+
+
+[2025-12-06 4:42 p.m.] tholin
+Basically firing blindly hoping I hit something.
+
+
+[2025-12-06 4:42 p.m.] tholin
+It only needs to work twice
+
+
+[2025-12-06 5:01 p.m.] simi150500
+@Jonathan and I are using the same PDK (currently 1.4.1) for both. However, for building the macros we are using the `dev` branch of LibreLane and the "classic" flow. For the top-level build, we are using the LibreLane version from the nix-shell and the "chip" flow. From our POV this seems to work better for the macros in terms of timing and antenna violations. However, tbh, we do not really understand why. But there is nothing against this approach, right? 😅
+
+
+[2025-12-06 5:03 p.m.] tholin
+As long as no DRC is violated, its at least manufacturable.
+
+{Reactions}
+👍
+
+[2025-12-06 5:08 p.m.] meinhard
+Ok, thanks. Let's see what it looks like when the next checker runs finishes 🙂
+
+
+[2025-12-06 5:28 p.m.] tholin
+I made it worse
+
+{Attachments}
+2025-12_media/image-87785.png
+
+
+[2025-12-06 5:28 p.m.] tholin
+What’s going on here? Why is LibreLane not fixing these?
+
+
+[2025-12-06 5:30 p.m.] 246tnt
+Can you post updated gds and klayout xml report ?
+
+
+[2025-12-06 6:25 p.m.] tholin
+https://files.tholin.dev/Public/GDSII/chip_top.tar.gz
+
+
+[2025-12-06 6:25 p.m.] tholin
+Haven’t looked at it myself yet, though
+
+
+[2025-12-06 6:30 p.m.] 246tnt
+Ok, I'll take a look at it, but will be later tonight. 
+Some tips to help though would be to move pins of your modules to Met3/Met4 instead of Met2/Met3 so the pins acts as antenna straps. And also try to avoid routing on Met5.
+
+
+[2025-12-06 6:30 p.m.] tholin
+My guess is that it actually can’t see the port diodes inside the macros.
+
+
+[2025-12-06 6:31 p.m.] tholin
+I think I could test this by running antenna checks on a fully flattened GDSII
+
+
+[2025-12-06 6:32 p.m.] 246tnt
+It most definitely can see them. But diodes are also not magic. Some of those nets are huge and one diode might not be enough.
+
+
+[2025-12-06 6:32 p.m.] tholin
+But alright. I’ll find the configuration variable for changing the pin layers.
+
+
+[2025-12-06 6:34 p.m.] tholin
+Interesting that there is no antenna violations on lines going to my DACs, since those have no input diodes at all.
+
+
+[2025-12-06 6:47 p.m.] rtimothyedwards_19428
+@Tholin :  Small revision to the DFF I made for your standard cell library:  Because I put a via on top of the set pin (SN), OpenROAD will put other vias too close to it if it's not aware that there's a via blockage there.  I generally have the LEF writer not add via blockages (I probably should rethink that), but in this case it's needed.  I added it to the OBS list:
+```
+LAYER Via1
+  RECT 13.645 1.690 13.905 1.950 ;
+```
+which worked fine (no DRC errors generated during routing).  Not sure if it makes more sense to put it under the SN pin PORT record.  I think I can have magic output via records where vias are sitting inside a port boundary.  Until then, these lines have to be added manually.
+
+
+[2025-12-06 6:59 p.m.] tholin
+Cannot find the configuration variable for IO port layers
+
+
+[2025-12-06 7:00 p.m.] tholin
+I could also make this one of the exceptions where I do export the LEF with -pinonly, which can increase routing congestion slightly, but would let you define an area where it is safe to place vias.
+
+
+[2025-12-06 7:03 p.m.] tholin
+I am currently speeding through caracterization at the ff corner, because that is where hold violations happen.
+
+
+[2025-12-06 7:53 p.m.] 246tnt
+@Tholin  `FP_IO_HLAYER` / `FP_IO_VLAYER`
+
+
+[2025-12-06 9:23 p.m.] 246tnt
+@Tholin Do you have wires going to nowhere ?
+
+
+[2025-12-06 9:24 p.m.] 246tnt
+I'm looking at `io_in[13]` and it seems routed to several modules, but them go un-used in several of those ...
+
+
+[2025-12-06 9:24 p.m.] tholin
+Yeah, that could be
+
+
+[2025-12-06 9:26 p.m.] 246tnt
+That's causing issues because it ends it with very very long wires to move it around and then going to nowhere, not even a diode to compensate for all that wiring that got added.
+
+
+[2025-12-06 9:28 p.m.] tholin
+But just like TinyTapeout, my designs may have unused inputs.
+
+
+[2025-12-06 9:29 p.m.] 246tnt
+Then try at least putting a diode on those.
+
+
+[2025-12-06 9:33 p.m.] tholin
+See, I thought it would do this automatically with DIODE_ON_PORTS: both
+
+
+[2025-12-06 9:46 p.m.] 246tnt
+No, because it goes and adds protection diodes near every instance connected to that net ... no instances, no diodes.
+
+
+[2025-12-06 9:48 p.m.] 246tnt
+I'm not sure why OpenROAD doesn't see the violation though, unless something funk is going on with the LEF of the macros.
+
+
+[2025-12-06 9:50 p.m.] 246tnt
+Wait no, wtf : 
+```
+pmetal_factor: 0.54
+agate: 0.396
+ametal_eff: 3451.0752
+pmetal: 6390.88
+max_ratio_eff: 5324.8
+ratio: 8714.83636364
+diode_factors: (6000)
+adiodes: (0.8208)
+max_ratio: 400
+```
+
+
+[2025-12-06 9:52 p.m.] 246tnt
+`3451.0752 / 0.396 = 8714.83636364` which is what it reports.
+But it also sees the diodes `0.8208` which is correct for 2 antenna diodes cells connected on that segment.
+But then the ratio should be `3451.0752 / (0.396 + 15 * 0.8208) = 271.6` which is not an error.
+
+
+[2025-12-06 10:14 p.m.] 246tnt
+Ok, I think I understand.
+
+
+[2025-12-06 10:15 p.m.] 246tnt
+The check done by klayout doesn't match the PDK.
+
+
+[2025-12-06 10:17 p.m.] 246tnt
+The DRC rule says `ratio = perim_area / (gate_area + MF * diode_area)  < 400`
+
+
+[2025-12-06 10:18 p.m.] 246tnt
+But what KLayout checks is :   `(perim_area / gate_area) < 400 + (400 * MF * diode_area)`
+
+
+[2025-12-06 10:18 p.m.] 246tnt
+Those are not equivalent ...
+
+
+[2025-12-06 10:20 p.m.] 246tnt
+In the example above what KLayout does is compare the ratio it computed ( `8714.83636364` ) to the `max_ratio + (diode_factors * adiodes) = 5324.8` and thus sees it as a violation.
+
+
+[2025-12-06 10:21 p.m.] 246tnt
+(cc @Leo Moser (mole99) )
+
+
+[2025-12-06 10:22 p.m.] 246tnt
+I hope my explanation makes sense 😅
+
+
+[2025-12-06 10:27 p.m.] 246tnt
+AFAICT from the KLayout doc for `antenna_check`, there is no way to implement the check as described in the DRM.
+
+
+[2025-12-06 10:57 p.m.] tholin
+So is the KLayout check more or less strict than required?
+
+
+[2025-12-06 11:11 p.m.] asc9742
+@Tim 'mithro' Ansell , the precheck gave out a error_log file but does not contain which rules were violated.
+Is there a way to get the rdb file to see where the errors are?
+
+
+[2025-12-06 11:21 p.m.] mithro_
+I'm working on that.
+
+{Reactions}
+👍
+
+[2025-12-07 2:30 a.m.] tholin
+@Tim Edwards I have characterized my SCL at the ff corner and fixed the verilog models. Please update asap as ff is where hold violations like to happen.
+
+{Reactions}
+👍
+
+[2025-12-07 2:38 a.m.] mithro_
+I've updated the platform.wafer.space so it should be running up to 9 checks at once.
+
+
+[2025-12-07 2:39 a.m.] mithro_
+I'm not sure it is quite stable, so I'll keep monitoring it.
+
+
+[2025-12-07 3:13 a.m.] rtimothyedwards_19428
+One-day chip:  3.3V SRAM break-out test chip!
+
+{Attachments}
+2025-12_media/gf180mcu_ocd_sram_test-2C04E.png
+
+{Reactions}
+blobclap (6) 🔥 (3)
+
+[2025-12-07 4:46 a.m.] egorxe
+Oh, you're right... It might be possible to implement a workaround by extending shapes on diodes layer 15 times in area. It's definitely not a general solution, but should work correctly at least for the antenna cells from the 7t library.
+
+
+[2025-12-07 6:53 a.m.] mithro_
+Looks great!
+
+
+[2025-12-07 7:26 a.m.] 246tnt
+@Egor Lukyanchenko I don't see how extending the shapes would change anything.  I mean you could extend their area and then add them to the "gate" part of the `antenna_check` and not use the `diode` function at all ...
+
+
+[2025-12-07 7:27 a.m.] 246tnt
+@Tholin It's just different ... if the gate area is < 1 um^2 it'll be more strict and if gate area is > 1 um^2 then it's more lenient.
+
+
+[2025-12-07 8:37 a.m.] egorxe
+That is what I've meant
+
+
+[2025-12-07 9:18 a.m.] 246tnt
+@Egor Lukyanchenko But how would you size diode by 15 ?   AFAICT there isn't a relative ration `.sized` operator ... and then you might also end up merging shapes that shouldn't.
+
+
+[2025-12-07 9:23 a.m.] 246tnt
+The proper way needs to be implemented in KLayout. The related function seem pretty isolated so it's probably not a big job ( actually updating the doc might be half of it 😅 ), but the KLayout maintainer would have to pick the syntax he wants to specify that.
+
+
+[2025-12-07 9:31 a.m.] 246tnt
+I created https://github.com/KLayout/klayout/issues/2245
+
+{Embed}
+https://github.com/KLayout/klayout/issues/2245
+[gf180mcu] Support `ANTENNAGATEPLUSDIFF` way of accounting for diod...
+The way the antenna computation is done in KLayout cannot implement the actual antenna check that the gf180mcu DRM specifies. In short for diodes/diffusion KLayout can add some value to the maximum...
+2025-12_media/2245-C0782
+
+
+[2025-12-07 9:33 a.m.] 246tnt
+I'm not sure how applicable it will be for this tapeout because ... time to implement in klayout + time to get binaries in the nix + time to update PDK/template/precheck + time for people to update is probably non negligible and may not fit the timeline.
+
+{Reactions}
+😮
+
+[2025-12-07 9:41 a.m.] 246tnt
+In the mean time, from the KLayout error file you can at least check if the reported errors are false positive. It's not however possible to know if there are false negatives.
+
+
+[2025-12-07 10:23 a.m.] 246tnt
+AFAICT `magic` implements exactly the same method as KLayout and thus can't properly check for antennas either :/ (cc @Tim Edwards )
+
+{Reactions}
+👀
+
+[2025-12-07 10:31 a.m.] mole99
+So, KLayout changes the ratio limit depending on the diode area, instead of increasing the gate area proportionally. Good catch, that is indeed a problem.
+
+In this case, it seems we really need to wait for a fix.
+
+Once a patch has been released, I can update the Nix setup in the template quite quickly. The main bottleneck is therefore whether Matthias has time to take a look at this, and the time that is needed for people to fix their designs afterwards.
+
+
+[2025-12-07 10:32 a.m.] urish
+What about OR, does it calculate the antenna sizes correctly?
+
+
+[2025-12-07 10:33 a.m.] 246tnt
+It does the best it can. But AFAIK the LEF contains no information about the metal layers for connectivity of the declared gate/diff area so the check can't be 100%.
+
+
+[2025-12-07 10:38 a.m.] 246tnt
+Like pins have only a single line `ANTENNAGATEAREA` / `ANTENNADIFFAREA` which I don't see how that could be used to fully evaluate antenna without knowing what internal layers path.
+
+
+[2025-12-07 10:38 a.m.] egorxe
+@tnt You're right there seems to be nothing of the sort... So the only options for this tapeout would likely be either to ignore KLayout antenna violations in precheck, or to create a temporary KLayout fork which will perform antenna_check the way gf180mcu requires it.
+
+{Reactions}
+😮
+
+[2025-12-07 10:41 a.m.] egorxe
+But it should work correctly for the flat design, right?
+
+
+[2025-12-07 10:44 a.m.] 246tnt
+For any internal node that doesn't connect to a macro it should be correct. But anything that connect to a macro where the only info is from a LEF could be a problem.
+
+
+[2025-12-07 10:44 a.m.] 246tnt
+Now this would include IO pads, but AFAICT the io pads have protection diodes and they did take care of having them connected through metal1/metal2 only so that should be fine.
+
+
+[2025-12-07 10:46 a.m.] 246tnt
+For Tiny Tapeout we also have no signal routing on Metal5 and have all the user signal pins on Metal4 so this will work too because pins then act as antenna strap. This was done on purpose exactly for that reason.
+
+
+[2025-12-07 10:48 a.m.] 246tnt
+```diff
+diff --git a/src/db/db/dbLayoutToNetlist.cc b/src/db/db/dbLayoutToNetlist.cc
+index 043f1629c..041b51b06 100644
+--- a/src/db/db/dbLayoutToNetlist.cc
++++ b/src/db/db/dbLayoutToNetlist.cc
+@@ -1934,6 +1934,7 @@ db::Region LayoutToNetlist::antenna_check (const db::Region &gate, double gate_a
+       }
+ 
+       double r = ratio;
++      double da = 0.0;
+       bool skip = false;
+ 
+       adiodes_int.clear ();
+@@ -1953,7 +1954,7 @@ db::Region LayoutToNetlist::antenna_check (const db::Region &gate, double gate_a
+             skip = true;
+           }
+         } else {
+-          r += adiode_int * dbu * dbu * d->second;
++          da += adiode_int * dbu * dbu * d->second;
+         }
+ 
+       }
+@@ -1965,7 +1966,7 @@ db::Region LayoutToNetlist::antenna_check (const db::Region &gate, double gate_a
+ 
+         compute_area_and_perimeter_of_net_shapes (*cid, *c, layer_of (gate), agate_int, pgate_int);
+ 
+-        double agate = 0.0;
++        double agate = da;
+         if (fabs (gate_area_factor) > 1e-6) {
+           agate += agate_int * dbu * dbu * gate_area_factor;
+         }
+```
+
+{Reactions}
+👌 👀
+
+[2025-12-07 10:49 a.m.] 246tnt
+(Although with the patch above, the DRC rule need to be changed, the number passed in the diode check needs to be the Mf, so 15 / 2 and not 6000 / 800 )
+
+
+[2025-12-07 10:50 a.m.] mole99
+I'll try to patch this through the Nix flake.
+
+{Reactions}
+❤️
+
+[2025-12-07 10:54 a.m.] egorxe
+LibreLane docs recommend supplying netlists for macros if available. But as far as I can tell they are used only in OpenSTA steps. It's probably best to buffer macro pins on the both sides to avoid antenna problems.
+
+{Reactions}
+👀
+
+[2025-12-07 10:58 a.m.] 246tnt
+Yeah, netlist wouldn't help for the physical layout, it would need to look at the DEF or GDS of the macro and I don't think it does that. I haven't dug a lot into the OR source code, but AFAIK it only looks at the LEF and that just doesn't have enough info to be correct all the time AFAIU.
+
+
+[2025-12-07 11:20 a.m.] egorxe
+OR can only use LEF abstract + Liberty for macros and OpenSTA is able use Verilog netlists + SPEFs instead for more precise timing. But you're right, even if it would be possible to load netlists into OR, it wouldn't help antenna analysis anyway. So the only ways to reliably avoid antennas on wires going through the macro ports seem to be either to locate them on the top  routing layer or to buffer them on both sides.
+
+
+[2025-12-07 12:47 p.m.] mole99
+- project template: https://github.com/wafer-space/gf180mcu-project-template/tree/antenna-calculations
+- PDK: https://github.com/wafer-space/gf180mcu/tree/antenna-calculations
+
+Due to the patch KLayout needs to recompile when invoking the Nix shell.
+
+{Reactions}
+👍 (2)
+
+[2025-12-07 12:50 p.m.] mole99
+@Tholin can you verify that this resolves the false positives?
+
+
+[2025-12-07 1:24 p.m.] 246tnt
+FWIW, I ran the chip_top that @Tholin posted yesterday through locally patched KLayout / PDK and it's not reporting any violations.
+
+
+[2025-12-07 2:03 p.m.] mole99
+No violations at all? That's great!
+Well, hopefully we *do* get violations if they are above the limit 😄
+
+
+[2025-12-07 2:03 p.m.] mole99
+Could you perhaps post your patch in the KLayout issue as a quick starting point for Matthias?
+
+
+[2025-12-07 2:06 p.m.] 246tnt
+Yeah, knowing if there are actual violations or not is harder 😅 
+Although TBH, given the massive multiplier of 15, it'd be quite challenging to get a violation when any diode is involved. On 3v3 designs, that'd be more likely so maybe Tim will see some in his designs.
+
+
+[2025-12-07 2:07 p.m.] 246tnt
+How is the filler update doing ?  It's the last expected fix right ?
+
+
+[2025-12-07 2:12 p.m.] mole99
+It's going well: https://github.com/wafer-space/gf180mcu/commits/filler-generation/
+The last commit should fix all remaining DPF.1 violations.
+Then, we'll see if we can still meet the density limits for all designs...
+
+
+[2025-12-07 2:17 p.m.] mole99
+Another issue is that some designs take multiple hours for the KLayout antenna check. I think there's something going wrong. I checked the connectivity setup for potential shorts, but I don't see how this can happen for some designs but not for others.
+
+
+[2025-12-07 2:18 p.m.] egorxe
+@Leo Moser (mole99) I'll experiment with disabling Antenna fixing stages in LibreLane for my design and see if I'll get matching antenna violations in KLayout.
+
+{Reactions}
+👍
+
+[2025-12-07 2:19 p.m.] rebelmike
+I was wondering how long this might take - admittedly this is on my laptop but `Executing rule ANT.16_i_ANT.2` has taken over an hour when all of the flow up to that point took ~20 mins
+
+
+[2025-12-07 2:19 p.m.] rebelmike
+(this is on a quarter slot design)
+
+
+[2025-12-07 2:19 p.m.] 246tnt
+Each step is progressively longer 😅
+
+
+[2025-12-07 2:21 p.m.] egorxe
+Antenna runtime depends very much on the ammount of routing, especially on upper layers. So obviously high density designs will take several times longer to verify.
+
+
+[2025-12-07 2:28 p.m.] egorxe
+My design takes ~4 hours to verify locally, this is why I was pursuing even relatively small antenna runtime optimizations I had in my PR.
+
+
+[2025-12-07 2:32 p.m.] 246tnt
+4h for just for the antenna or the whole precheck ?
+
+
+[2025-12-07 2:41 p.m.] egorxe
+Just antenna. My old Xeon workstation is rather slow in single thread, but it still should take a couple of hours on fast machine I think. KLayout DRC takes another ~3 hours locally.
+
+
+[2025-12-07 2:53 p.m.] ravenslofty
+`2025-12-07 06:25:53 +0000: Memory Usage (4133788K) : Executing rule ANT.16_ii_ANT.4 `
+so, that's about 8h30m elapsed time on one antenna rule so far :p
+
+{Reactions}
+😅
+
+[2025-12-07 2:57 p.m.] mole99
+Yes, but it still feels too long.
+Extracting full connectivity in KLayout DRC for a complex design now takes ~15min. Of course, the actual antenna check goes on top. Still, I can't believe that querying the geometry and calculating the ratios has to take several hours (e.g. for the last antenna check).
+
+Last time I checked with Matthias regarding the connectivity in the DRC deck, it paid off :)
+
+
+[2025-12-07 2:59 p.m.] 246tnt
+Did you check on magic how long it takes ?
+
+
+[2025-12-07 3:02 p.m.] 246tnt
+"88 KLayout density errors found."
+
+
+[2025-12-07 3:02 p.m.] 246tnt
+😢
+
+
+[2025-12-07 3:02 p.m.] 246tnt
+(using new filler gen)
+
+
+[2025-12-07 3:06 p.m.] mole99
+Hm, why so many violations? Shouldn't it create a single marker for each violated layer? (It's a global density check, not stepped.)
+
+
+[2025-12-07 3:08 p.m.] mole99
+And can you show me the ratios for all layers? Should be in the logs.
+
+
+[2025-12-07 3:08 p.m.] 246tnt
+It's window density ...
+
+
+[2025-12-07 3:08 p.m.] 246tnt
+M2 layer only ... for basically every where in the chip 😅
+
+
+[2025-12-07 3:09 p.m.] 246tnt
+
+
+{Attachments}
+2025-12_media/2025-12-07_1579x846_scrot-1467A.png
+
+
+[2025-12-07 3:12 p.m.] mole99
+Oh right, it's in tiled mode. However, the ratio should still be calculated across the whole chip, it's only the markers that are tiled.
+
+
+[2025-12-07 3:12 p.m.] mole99
+The problem is that there's Metal1 inside all standard cells. That means that almost no dummy Metal2 can be placed...
+
+
+[2025-12-07 3:13 p.m.] 246tnt
+Yeah, there is metal2 ... nowhere ...
+
+
+[2025-12-07 3:13 p.m.] urish
+Why not?
+
+
+[2025-12-07 3:14 p.m.] 246tnt
+GF has this rulel that you can't place dummy if there is real metal in _adjacent_ layers ...
+
+{Reactions}
+😫
+
+[2025-12-07 3:15 p.m.] mole99
+Well, there should be some outside of the padring. Else it might be a bug?
+
+{Attachments}
+2025-12_media/image-62159.png
+
+
+[2025-12-07 3:15 p.m.] 246tnt
+Yes, there is some outside the pad ring and between module but ... meeting 30% with that will be impossible ...
+
+
+[2025-12-07 3:15 p.m.] 246tnt
+Or maybe making it _solid_ metal2 dummy rather than little squares ..
+
+
+[2025-12-07 3:15 p.m.] mole99
+That's the DRC rule. If there is active metal above or below, you can't place any dummy.
+It's a stupid rule, that's why we initially decided to ignore it.
+
+
+[2025-12-07 3:16 p.m.] urish
+Do we know why this rule exists? I can't make sense if it
+
+
+[2025-12-07 3:16 p.m.] 246tnt
+It's kind of annoying it doesn't report the actual density so we can now how far we are.
+
+
+[2025-12-07 3:16 p.m.] mole99
+No, there's another rule for that...
+
+
+[2025-12-07 3:16 p.m.] 246tnt
+@urish Probably to avoid affecting capacitance of nearby nets.
+
+{Reactions}
+👍
+
+[2025-12-07 3:16 p.m.] mole99
+It should be in the log.
+
+
+[2025-12-07 3:17 p.m.] 246tnt
+`29.238749553369797`
+
+
+[2025-12-07 3:17 p.m.] 246tnt
+😑
+
+
+[2025-12-07 3:17 p.m.] urish
+But wouldn't the same issue arise with non fill metal as well?
+
+
+[2025-12-07 3:18 p.m.] 246tnt
+@urish Of course, but the idea is that if you run simulation without fill, adding the fill shouldn't change/affect the results.
+
+
+[2025-12-07 3:18 p.m.] urish
+Do you need some metal 2 smiley macros to throw around in the tt-mux?
+
+
+[2025-12-07 3:19 p.m.] 246tnt
+@urish Maybe copy the logo to `Metal2` layer 🙂
+
+
+[2025-12-07 3:19 p.m.] urish
+With pleasure will copy to layer
+
+
+[2025-12-07 3:19 p.m.] mole99
+I can update the wafer.space logo as well.
+
+
+[2025-12-07 3:20 p.m.] 246tnt
+Running the fill in non-tiled mode might also help because there are gaps in the fill at the tile boundary
+
+
+[2025-12-07 3:21 p.m.] mole99
+Yes, there is. But there's currently no solution for that afaik. You will always have filler cells at the tile boundary and KLayout doesn't cut them, but instead remove them.
+
+
+[2025-12-07 3:22 p.m.] 246tnt
+But you can run it non-tiled right ?
+
+
+[2025-12-07 3:22 p.m.] mole99
+Yes.
+
+
+[2025-12-07 3:22 p.m.] 246tnt
+That will take longer of course but at this point I'll take anything that can help get some metal2.
+
+
+[2025-12-07 3:23 p.m.] mole99
+Well, yeah. But it's not only you. There will be other designs that won't meet density with an even larger margin.
+
+
+[2025-12-07 3:23 p.m.] 246tnt
+It only the area inside the seal ring considered ?
+
+
+[2025-12-07 3:23 p.m.] mole99
+No the whole chip as specified in the docs.
+
+
+[2025-12-07 3:25 p.m.] 246tnt
+I know, but running non-tiled will always lead to more fill, so it's pretty much always good. Sure, that'll only work if you're close but ...
+
+
+[2025-12-07 3:25 p.m.] 246tnt
+Could we make a fill / decap cell that has enough space between the met1 power rails to allow Metal2 filler ?
+
+
+[2025-12-07 3:25 p.m.] mole99
+Yeah, of course. Every little bit helps :)
+
+
+[2025-12-07 3:26 p.m.] mole99
+To be honest, that rule is really stupid and there's a solution to all of that: active dummy metal fill 😈
+
+{Reactions}
+⚡
+
+[2025-12-07 3:27 p.m.] egorxe
+Is there anything in DRM forbidding performing fill using regular non-fill metal layer if it's impossible to reach density with dummy layer?
+
+
+[2025-12-07 3:27 p.m.] 246tnt
+Sure, I mean, you'd have to do that during fab submission ... copy the `dummy` layer to `drawing` layer and be done with it.
+
+
+[2025-12-07 3:28 p.m.] 246tnt
+Because for all the dev process and such you want them separate.
+
+{Reactions}
+👌
+
+[2025-12-07 3:28 p.m.] mole99
+No, not that I have seen.
+
+
+[2025-12-07 3:30 p.m.] mole99
+I might add an option to the filler script to ignore the previous/subsequent active metal rules. So for analog designs it's still possible to do the fill according to the DRC rules.
+
+
+[2025-12-07 3:32 p.m.] mole99
+Well, that sounds like a plan. Thanks for giving the script a try and for all the feedback!
+
+
+[2025-12-07 3:39 p.m.] 246tnt
+Too bad the standard cells don't have a marker layer, it'd have been nice to have a flag to just ignore met1 of stdcell ...
+
+
+[2025-12-07 3:40 p.m.] mole99
+Yes, but we would still get DRC violations when submitting to the foundry. Except if we added those shapes as active metal...
+
+
+[2025-12-07 3:42 p.m.] 246tnt
+Oh yeah, of course, it was just to make it easier to deal with mixed analog/digital stuff.
+
+{Reactions}
+👍
+
+[2025-12-07 4:00 p.m.] 246tnt
+Ah, the klayout patch is no good ...
+
+
+[2025-12-07 4:01 p.m.] rebelmike
+Can standard fill cells be easily identified at the point the fill is run? If so maybe could always add “active” metal above them (if there’s nothing else there)
+
+
+[2025-12-07 4:09 p.m.] mole99
+Sylvain had the same idea just a few messages above 😁
+Unfortunately, there's no easy way...
+
+
+[2025-12-07 4:10 p.m.] rebelmike
+I was wondering if limiting it to just fill cells, rather than all standard cells, might make it easier
+
+
+[2025-12-07 4:11 p.m.] rebelmike
+Eg is there any record of the cell name at that point, or could a marker be added just to those cells?
+
+
+[2025-12-07 4:16 p.m.] mole99
+I see what you mean. It would be possible, but not really straightforward.
+Since we need to add dummy metal as active metal anyways, at this point we can just convert all dummy I would say.
+
+{Reactions}
+👍
+
+[2025-12-07 5:06 p.m.] 246tnt
+@Leo Moser (mole99) I updated the patch on the issue. Here's also a copy.
+
+
+[2025-12-07 5:06 p.m.] 246tnt
+
+
+{Attachments}
+2025-12_media/klayout-antenna-hack-1D7EC.txt
+
+
+[2025-12-07 5:07 p.m.] 246tnt
+The previous one had a logic error because I added the diode area to gate area too early. First need to check if there is _any_ gate area else you end up testing wires that are only connected to diodes ...
+
+
+[2025-12-07 5:08 p.m.] 246tnt
+It wasn't a huge deal on Tholin design because the MF multiplier is so big for 5V devices. But if you have any 3v3 devices, then the 3v3 rule are run and you get false positives.
+
+
+[2025-12-07 5:48 p.m.] mole99
+Thanks Sylvain! I'll update the template branch shortly.
+
+
+[2025-12-07 8:50 p.m.] rtimothyedwards_19428
+@Tholin :  Your latest update is breaking my LibreLane flow. . .   You added references to PAD_CELL_LIBRARY in the librelane setup.  If I add that to my local config.yaml file, it doesn't do anything useful.  If I hack it in to your setup file for the standard cell library, then LibreLane just gives me an error "Unknown key 'PAD_CELL_LIBRARY' provided." (though I can't see why that should be considered an error).  I'm not even doing anything with pads for this LibreLane run. . .
+
+
+[2025-12-07 9:46 p.m.] tholin
+I'm just copying lines from the fd_sc library's config. It also runs on my end with the wafer.space template's nix-shell.
+
+
+[2025-12-07 9:59 p.m.] tholin
+Very good. I guess I just wait until that patch hits main, then?
+
+
+[2025-12-08 12:27 a.m.] ravenslofty
+hurray, I timed out while doing antenna check >.<
+
+
+[2025-12-08 1:27 a.m.] mithro_
+How are things going this morning?
+
+
+[2025-12-08 1:28 a.m.] tholin
+Just waiting for patches now so my antenna violations go away.
+
+
+[2025-12-08 2:39 a.m.] securitybrahh
+The antminer/bitmain stuff is probably 2nm TSMC type shit?
+
+
+[2025-12-08 2:48 a.m.] mithro_
+@Leo Moser (mole99) - Could we just use fill to add extra capacitance on the power rails?
+
+
+[2025-12-08 2:48 a.m.] mithro_
+Google's AI says: Bitmain's Antminer models use increasingly advanced semiconductor process nodes, moving from 7nm for older models like the S19 series to cutting-edge 5nm and even 3nm nodes for their latest, highly efficient machines like the S21 (5nm) and rumored S23 (3nm), leveraging foundries like TSMC for fabrication to achieve higher performance (hashrates) and lower power consumption (J/TH).
+
+
+[2025-12-08 2:58 a.m.] mithro_
+```
+| ID | Project                                     | Docker | Max Mem GB | Runtime Hrs | Date       |
+|---:|---------------------------------------------|--------|-----------:|------------:|------------|
+| 48 | BreakingTTAPs                               | 0f9e5  |      11.09 |       13.67 | 2025-12-07 |
+| 39 | FA25_Engn2912e_Saligane_Brown               | 0f9e5  |      16.15 |        4.19 | 2025-12-06 |
+|  9 | FABulous FPGA                               | 739cb  |      14.41 |        3.02 | 13 | FazyRV Hachure                              | 739cb  |      14.12 |        7.39 | 2025-12-03 |
+| 32 | FOSSi open-source replacement for Z80 CPU   | 0f9e5  |      14.82 |        4.28 | 2025-12-06 |
+| 50 | FOSSi open-source replacement for Z80 CPU   | 0f9e5  |      13.06 |        5.79 | 2025-12-07 |
+| 28 | gf180mcu-jku-atbs-adc                       | 64e7f  |      12.18 |        3.46 | 2025-12-05 |
+| 29 | gf180mcu-jku-projects                       | 64e7f  |      15.65 |       10.90 | 2025-12-05 |
+| 45 | gf180mcu-project-trident-teststructure      | 0f9e5  |       5.97 |        2.18 | 2025-12-07 |
+|  6 | ISHI-KAI's Multiple Users Project           | 739cb  |      16.38 |        5.03 | 2025-12-02 |
+| 41 | MOSbiusV3                                   | 0f9e5  |       7.66 |        2.61 | 2025-12-06 |
+| 51 | ocd_sram_test                               | 0f9e5  |       5.57 |        3.24 | 2025-12-07 |
+| 12 | Tiny Tapeout GF 0.2                         | 739cb  |      14.21 |        4.74 | 2025-12-03 |
+| 11 | Tiny Tapeout GF 0p2 - Power Gated Variant   | 739cb  |      14.38 |        4.56 | 2025-12-03 |
+| 19 | TinyQV - Crowdsourced Risc-V SoC            | 64e7f  |       6.11 |        4.85 | 2025-12-05 |
+| 18 | TinyQV - Crowdsourced Risc-V SoC (0.5x1)    | 0f9e5  |       9.71 |        8.56 | 2025-12-07 |
+| 17 | TinyQV - Crowdsourced Risc-V SoC (1x0.5)    | 0f9e5  |      13.11 |        7.92 | 2025-12-07 |
+```
+
+
+[2025-12-08 7:43 a.m.] 246tnt
+@Egor Lukyanchenko How's the runtime of the `evaluate_nets` version vs the native `antenna_check` version ?
+
+
+[2025-12-08 7:44 a.m.] egorxe
+For my test design it looks to be more or less the same.
+
+
+[2025-12-08 7:44 a.m.] 246tnt
+And does it also report the raw values ( perimeters / gate area / diode area and such as details in each violation ) ?
+
+
+[2025-12-08 7:50 a.m.] egorxe
+For now version in the PR only marks the violating gates, no nets even. AFAIU all raw values could be made available in GDS properties, but I'm not sure how to output them to lyrdb. Do you suggest to save them always, or just to create some "debug mode"?
+
+
+[2025-12-08 7:51 a.m.] 246tnt
+I would always put them in the lyrdb, it's just useful to have when you have violation to know if you're way off and just slighly off and to know if a single diode is ok, or more extensive rework.
+
+
+[2025-12-08 7:52 a.m.] egorxe
+Ok, I'll look into how to add them.
+
+
+[2025-12-08 8:00 a.m.] 246tnt
+I'd hope that using `put` to put properties on the output shapes would also result in them being in the lyrdb.
+
+
+[2025-12-08 8:05 a.m.] egorxe
+Yes, this is what I'm going to check first.
+
+
+[2025-12-08 8:15 a.m.] egorxe
+Seems to work, I'll update PR now. Currently I'm saving gate area, diodes area, antenna perimeter and resulting ratio, that's enough I guess?
+
+{Reactions}
+👌
+
+[2025-12-08 8:21 a.m.] 246tnt
+I think so yes.
+
+
+[2025-12-08 9:32 a.m.] egorxe
+I've done a couple of quick tests trying to find a way to mark whole violated net in lyrdb, not only a gate, but failed. So I've updated the PR only with raw parameters saving.
+
+{Reactions}
+👌
+
+[2025-12-08 10:22 a.m.] 246tnt
+@Egor Lukyanchenko I think that's fine. I'm running the update check now to confirm I get the same results as previously.
+
+{Reactions}
+👍
+
+[2025-12-08 10:27 a.m.] tholin
+My top level fails to route if I don’t let it use Metal5 for routing.
+
+
+[2025-12-08 10:27 a.m.] tholin
+And moving the IO layers of the macros to Metal3/Metal4 caused DRC errors.
+
+
+[2025-12-08 10:28 a.m.] tholin
+Running out of things to try for fixing the antenna violations.
+
+
+[2025-12-08 10:29 a.m.] 246tnt
+Ok, the fail to route, I could see that on dense designs.
+But moving pins shouldn't cause DRC errors ...
+
+
+[2025-12-08 10:30 a.m.] 246tnt
+But then again, the chip top you had posted last was actually clean from an Antenna PoV when using the fixed antenna check.
+
+
+[2025-12-08 10:30 a.m.] tholin
+All I changed was move the pins, and suddenly I’m getting Metal3 clearance violations.
+
+
+[2025-12-08 10:35 a.m.] 246tnt
+So you jus set `FP_IO_VLAYER` to 'Metal4' ?
+
+
+[2025-12-08 11:11 a.m.] bailey8889
+@Tholin density errors? I wonder if the obstruction layer in the lef file is causing that. Would adding fill manually in the macro solve the problem?
+
+
+[2025-12-08 11:12 a.m.] tholin
+No, clearance
+
+{Reactions}
+👍
+
+[2025-12-08 11:12 a.m.] tholin
+And FP_IO_HLAYER to Metal3
+
+
+[2025-12-08 11:38 a.m.] 246tnt
+@Egor Lukyanchenko Yup works perfectly and matches the hacked up klayout version. Runtime is basically the same too.
+
+{Reactions}
+👍
+
+[2025-12-08 11:39 a.m.] egorxe
+You should probably close the KLayout issue :).
+
+
+[2025-12-08 11:40 a.m.] 246tnt
+I was just doing that right after posting the above 😁
+
+
+[2025-12-08 11:55 a.m.] 246tnt
+@Tholin Well it shouldn't happen, so it's definitely a bug, but I'd obviously need way more details to know what's going on 😅
+
+
+[2025-12-08 11:56 a.m.] tholin
+Unfortunately, I already deleted the files
+
+
+[2025-12-08 11:56 a.m.] tholin
+But I remember the DRC errors were in the power grid
+
+
+[2025-12-08 11:57 a.m.] tholin
+Two parallel, vertical straps on Metal4 were interrupted by a macro and generated Metal3 rects at the end, going to nowhere. And those were too close together.
+
+
+[2025-12-08 11:57 a.m.] tholin
+No idea what was going on there.
+
+
+[2025-12-08 12:01 p.m.] 246tnt
+Oh ... mm, yeah, the template pdn is quite custom, maybe there is some config there messing things up.
+
+
+[2025-12-08 12:01 p.m.] 246tnt
+But in any case, you should just retry with the new antenna check and see how things turn out now.
+
+
+[2025-12-08 12:02 p.m.] 246tnt
+(Either pull it in manually or wait for it to be merged)
+
+
+[2025-12-08 12:15 p.m.] scafir
+Seems like the last update of the pdk causes some false positive on space to wide rules on klayout
+
+
+[2025-12-08 12:15 p.m.] scafir
+
+
+{Attachments}
+2025-12_media/space_to_wide_false_positive-36A67.gds
+
+
+[2025-12-08 12:16 p.m.] scafir
+Is it me misunderstanding the rules or an actual error of the pdk?
+
+
+[2025-12-08 12:19 p.m.] 246tnt
+Definitely looks like a false positive to me
+
+
+[2025-12-08 12:32 p.m.] scafir
+Seems like "without_touching_edges" should be enabled at the separation check. I'll make a PR.
+
+
+[2025-12-08 1:46 p.m.] mole99
+I think you're hitting this issue: https://github.com/The-OpenROAD-Project/OpenROAD/issues/8868
+Unfortunately, I don't want to risk updating OpenROAD so close to the tapeout. However, there is a workaround that I used for the project template. You can set the PDN halo around the macros slightly smaller than the halo size for cutting the rows.
+
+{Embed}
+https://github.com/The-OpenROAD-Project/OpenROAD/issues/8868
+Issue in `pdngen` leading to DRC errors · Issue #8868 · The-OpenR...
+Describe the bug It seems that there is an issue with PDN generation on gf180mcu when a strap almost, but not quite, overlaps with the stdcell rail. This leads to DRC errors. Observation: Normally,...
+
+
+[2025-12-08 1:46 p.m.] mole99
+Thanks a lot, Clyde. I'll take a look at the PR!
+
+
+[2025-12-08 2:27 p.m.] tholin
+I was bored and made a 5V dynamic DFF, though I don’t think I will tape anything out with it.
+
+{Attachments}
+2025-12_media/image-FDC89.png
+
+{Reactions}
+👀 😮
+
+[2025-12-08 2:27 p.m.] tholin
+It may be super unstable and I am out of space on my die anyways.
+
+
+[2025-12-08 3:21 p.m.] ravenslofty
+I've been trying to build a domino logic standard cell library, so this might be useful to study at least.
+
+{Reactions}
+😮
+
+[2025-12-08 3:22 p.m.] polyfractal
+13hrs for mine, ouch. what hardware is this running on? took ~4hrs on Ryzen 9950 here, wonder if it got stuck or something on the wafer.space platform. I had one error out that I canceled and restarted too
+
+
+[2025-12-08 9:49 p.m.] rtimothyedwards_19428
+@Tholin :  If you're _bored_ then I've got a long list of things you can be doing. . .
+
+
+[2025-12-08 9:54 p.m.] tholin
+Are there still problems with my SCL?
+
+
+[2025-12-08 9:56 p.m.] tholin
+I know there is some config issues
+
+
+[2025-12-08 9:57 p.m.] tholin
+I referenced the fd_sc configs *from the wafer.space PDK branch*, which might’ve been a mistake.
+
+
+[2025-12-08 9:57 p.m.] tholin
+Definitely caused us some confusion.
+
+
+[2025-12-09 12:02 a.m.] tholin
+I somehow managed to get an antenna-clean chip_top build with the broken antenna checker lol
+
+
+[2025-12-09 12:02 a.m.] tholin
+I optimized the macro pin orders to get more optimized top-level routing.
+
+
+[2025-12-09 12:02 a.m.] tholin
+I guess that helped
+
+
+[2025-12-09 12:02 a.m.] tholin
+But 48 magic DRC errors.
+
+
+[2025-12-09 12:03 a.m.] tholin
+Metal3 spacing
+
+
+[2025-12-09 12:04 a.m.] tholin
+I will try mole99’s trick
+
+
+[2025-12-09 1:07 a.m.] tholin
+Well, it looks like I’m all good to go
+
+
+[2025-12-09 1:08 a.m.] tholin
+I’m not going to change anything on my layout anymore
+
+
+[2025-12-09 1:42 a.m.] mithro_
+I guess I don't understand what the dynamic means verse async verse "normal"
+
+
+[2025-12-09 1:44 a.m.] mithro_
+The machine is running 9 other prechecks at the same time. It's also an older machine because I'm cheap.
+
+
+[2025-12-09 2:12 a.m.] polyfractal
+ah ok, makes sense. apologies for eating a slot so long!
+
+
+[2025-12-09 2:13 a.m.] mithro_
+No apologies needed! You are actually paying for one, not like all these other free loaders 😉
+
+{Reactions}
+😁
+
+[2025-12-09 2:18 a.m.] mithro_
+@Leo Moser (mole99) - Which are the exactly weird / strange fill rule DRCs about active avoidance?
+
+
+[2025-12-09 2:25 a.m.] mithro_
+I assume @Leo Moser (mole99) is probably asleep at this moment. Anyone else recall / remember which ones they were?
+
+
+[2025-12-09 2:36 a.m.] mithro_
+I got the AI to update it's recommendation around "cloud machines" for EDA development with @BreakingTaps addition -> https://claude.ai/public/artifacts/44717da0-d032-4bb2-9763-87dcfbb66a8a
+
+{Embed}
+https://claude.ai/public/artifacts/44717da0-d032-4bb2-9763-87dcfbb66a8a
+Best Dedicated Servers for EDA Workloads 2024 - DRC Performance Guide
+Compare 25+ dedicated servers optimized for single-threaded EDA workloads like KLayout/Magic DRC. Find the best price/performance under $100/month.
+2025-12_media/claude_ogimage-1F4D7.png
+
+
+[2025-12-09 2:41 a.m.] mithro_
+I think this was it -> https://discord.com/channels/1361349522684510449/1423349035892478074/1425377835953946694
+
+
+[2025-12-09 3:44 a.m.] egorxe
+Rules DM.4-7 https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_13_3.html
+
+
+[2025-12-09 3:45 a.m.] mithro_
+And the general problem is meeting metal density rules while avoiding fill above/below active metal?
+
+
+[2025-12-09 3:53 a.m.] egorxe
+As far as I get it yes. The main problem is Metal2 in digital designs, cause there always is Metal1 in std cells, even in fillers, at least in rails.
+
+
+[2025-12-09 5:05 a.m.] mithro_
+
+
+
+[2025-12-09 7:22 a.m.] mole99
+DPF.12, DPF.13, DM.4_DM.6 and DM.5_DM.7. However, DM.5_DM.7 causes the most issues due the Metal1 in all standard cells.
+
+
+[2025-12-09 7:24 a.m.] mithro_
+Morning! Okay - I sent them an email asking what form they would like questions about these DRC rules.
+
+
+[2025-12-09 7:34 a.m.] 246tnt
+I'd be curious to check the data from GFMPW0/1 and if the fill was compliant with those rules 😅
+
+
+[2025-12-09 7:35 a.m.] urish
+IIRC the filled ones were never published
+
+
+[2025-12-09 8:20 a.m.] egorxe
+I doubt it :). Also there were definitely a lot of antenna errors, at least in my design for sure :).
+
+{Reactions}
+😁
+
+[2025-12-09 9:51 a.m.] tholin
+Still DRC errors
+
+{Attachments}
+2025-12_media/image-B3EE9.png
+
+
+[2025-12-09 1:46 p.m.] tholin
+@Tim Edwards Could you please give me a comprehensive list of issues and shortcomings you still see with my SCL?
+Depending on how long that list is, I can’t promise I’ll get to all of it, but I can try.
+
+
+[2025-12-09 2:42 p.m.] rtimothyedwards_19428
+@Tholin :  Honestly, the standard cell library is great.  As far as I know, my only issue with it right now is that you were using variable PAD_CELL_LIBRARY in your librelane setup file, which is apparently incompatible with the dev version of librelane.  I was able to work around it by deleting those lines from the setup file (I'm not including pad cells in my synthesis anyway, for now), but it needs some future-proof fix.  Apart from that, I assume I could get a better synthesis if I had additional cells like a half-adder, full-adder, 4-input basic logic gates, and more variations of OAI cells.  And a slow corner liberty file would be good.  But the library is usable as-is.
+
+
+[2025-12-09 2:47 p.m.] tholin
+Never said I was done adding cells. I think I added the last of the AOI cells recently.
+
+
+[2025-12-09 2:48 p.m.] tholin
+I’m taking a RISC-approach. I ran synthesis on a big RISC-V core with sky130_fd_sc_hd back when I was doing my sky130 SCL and looked only at cells that got used more than 100 times.
+
+
+[2025-12-09 2:48 p.m.] ravenslofty
+> I assume I could get a better synthesis if I had additional cells like a half-adder, full-adder
+probably not. these cells are not inferable because they have multiple outputs.
+
+
+[2025-12-09 2:49 p.m.] tholin
+Indeed
+
+
+[2025-12-09 2:49 p.m.] tholin
+A vlsiffra backend for my SCL is the only thing that those would be good for.
+
+
+[2025-12-09 2:49 p.m.] ravenslofty
+and honestly, if you're gonna design custom cells to accelerate arithmetic, something targeted towards a more efficient parallel-prefix adder would be best, I think
+
+
+[2025-12-09 2:50 p.m.] tholin
+But a full-adder is actually just one maj3 and one xor3 cell jammed together. So if I add xor3, that’d also work.
+
+
+[2025-12-09 2:52 p.m.] rtimothyedwards_19428
+@Lofty :  I was assuming that full adders and half adders would come with mapping files for yosys.
+
+
+[2025-12-09 2:53 p.m.] ravenslofty
+I would advise against such an approach
+
+
+[2025-12-09 2:53 p.m.] tholin
+I’ve never seen yosys synthesize adder cells
+
+
+[2025-12-09 2:53 p.m.] ravenslofty
+the default structure for an adder in Yosys is Brent-Kung
+
+
+[2025-12-09 2:54 p.m.] tholin
+Okay, if I add xor3 and oai33, I can add my SCL as a technology backend to vlsiffra.
+
+
+[2025-12-09 2:54 p.m.] tholin
+I am actually almost there.
+
+
+[2025-12-09 2:54 p.m.] ravenslofty
+might be interesting to think about a csa42, but
+
+
+[2025-12-09 2:54 p.m.] tholin
+I don’t know what csa42 is
+
+
+[2025-12-09 2:54 p.m.] ravenslofty
+4:2 compressor for a carry-save adder
+
+
+[2025-12-09 2:55 p.m.] ravenslofty
+full adders are 3:2 compressors, as such
+
+
+[2025-12-09 2:56 p.m.] _luke_w_
+The main things I saw that were missing were DFFEs and flops with sync set/clear (the latter being useful for absorbing an OR or ANDN on non-reset datapath flops)
+
+
+[2025-12-09 2:57 p.m.] _luke_w_
+Also ICGs, but I don't think many people are using clock gates, partly because our CTS doesn't balance through them very well
+
+
+[2025-12-09 2:58 p.m.] tholin
+Wow, I looked up how fd_sc did its xor3 because I thought "there has to be a more elegant solution than concatenating two xor2 cells" but nope. Its just two xor2 cells slapped together.
+
+
+[2025-12-09 2:59 p.m.] rtimothyedwards_19428
+@Lofty :  I do analog stuff mostly.  I'm generally happy with whatever yosys synthesizes, because I'm not doing for ultra high performance digital.
+
+
+[2025-12-09 2:59 p.m.] ravenslofty
+well, unfortunately, it is my job to improve "whatever yosys synthesises" ^^;
+
+
+[2025-12-09 2:59 p.m.] rtimothyedwards_19428
+@Tholin :  Don't look for inspiration from the foundry libraries, or you'll be disappointed.
+
+
+[2025-12-09 3:00 p.m.] tholin
+But I’m looking at the boolean logic and I don’t see a better way with less transistors either.
+
+
+[2025-12-09 3:00 p.m.] tholin
+XOR is just weird
+
+
+[2025-12-09 3:00 p.m.] tholin
+It eats into your transistor count no matter what you do
+
+
+[2025-12-09 3:00 p.m.] rtimothyedwards_19428
+@Lofty :  Understood.  I was just explaining why elegant adder solutions are not on my priorities list.  : )
+
+
+[2025-12-09 3:01 p.m.] ravenslofty
+(I find it interesting that in domino logic structures a xor2 is isomorphic to a mux2)
+
+
+[2025-12-09 3:08 p.m.] tholin
+My todo list is quite small now. It turns out that aoi cells already cover most of what yosys needs for efficient outputs. I just need oai21 and oai22 and I’m done.
+
+
+[2025-12-09 3:08 p.m.] tholin
+And oa33 if I want to add that vlsiffra backend.
+
+
+[2025-12-09 3:49 p.m.] mithro_
+I was working on vlsiffra for gf180mcu and other technologies at the time I left Google
+
+
+[2025-12-09 3:50 p.m.] mithro_
+https://github.com/mithro/vlsiffra/branches/all
+
+{Embed}
+https://github.com/mithro/vlsiffra/branches/all
+Branches · mithro/vlsiffra
+Create fast and efficient standard cell based adders, multipliers and multiply-adders. - Branches · mithro/vlsiffra
+2025-12_media/vlsiffra-50A99
+
+
+[2025-12-09 4:05 p.m.] tholin
+I used vlsiffra during my tapeout here
+
+
+[2025-12-09 4:56 p.m.] rzioma
+You have to tell it to use them:
+
+SYNTH_ADDER_TYPE: FA
+
+
+[2025-12-09 5:32 p.m.] polyfractal
+silly newbie question: so yosys has a collection of default strategies/cells to synthesize math and logic, but you can swap in other cells (potentially higher performance but more area, other tradeoffs, etc) and yosys will instead generate with those? Is there a way to tell it which parts of the design to use which cells?
+
+Or would you have to generate/harden individual blocks and use those in a larger design to guarantee what cells are used?
+
+
+[2025-12-09 5:44 p.m.] ravenslofty
+okay, here's some rough yosys internals. Yosys represents your netlist as a bunch of relatively high-level cells; e.g. an adder is a `$add` cell. synthesis is the job of taking these high-level concept cells and lowering them into concrete implementations. one way you can do that is with the `techmap` command, which takes in a "mapping" Verilog file, and replaces a cell with the contents of that mapping for the cell. the "different strategies" *generally* amount to passing a `techmap` file to map the cell however you want it before the default mapping is applied
+
+{Reactions}
+❤️
+
+[2025-12-09 5:45 p.m.] ravenslofty
+and yes, you can ask `techmap` to apply only on certain parts of the design. but this is, admittedly, somewhat fragile, and librelane doesn't really expose this
+
+
+[2025-12-09 5:45 p.m.] polyfractal
+gotcha, thanks for the details!
+
+
+[2025-12-09 5:46 p.m.] polyfractal
+i see that things are / can be much more complicated than just hitting the "build" button and accepting whatever is spit out 🙂
+
+
+[2025-12-09 5:49 p.m.] ravenslofty
+~~if they aren't, users will complain :p~~
+
+{Reactions}
+😁
+
+[2025-12-09 5:52 p.m.] polyfractal
+at a higher workflow level, I assume larger projects like to prebuild and harden smaller units to make the project easier to manage (and optimize)? Instead of letting ALU, LSU, etc all regenerate each time, it'd probably make sense to bake those into small IP blocks and just drop them into the final design?
+
+
+[2025-12-09 5:54 p.m.] ravenslofty
+It depends. in a lot of ways this can actually result in a worse end product than if you throw the whole thing at it
+
+
+[2025-12-09 5:55 p.m.] polyfractal
+yeah fair, easier to manage but harder to actually optimize since each block is independent
+
+
+[2025-12-09 5:55 p.m.] ravenslofty
+a lot of optimisations become impossible because of the opaqueness of other blocks
+
+
+[2025-12-09 5:55 p.m.] ravenslofty
+and, well, Yosys does relatively okay, runtime/scalability-wise
+
+
+[2025-12-09 5:56 p.m.] ravenslofty
+e.g. my 112k gate design takes 7 minutes to synthesise, which I think is okay.
+
+
+[2025-12-09 5:57 p.m.] ravenslofty
+Most people do not have designs that big, I think
+
+
+[2025-12-09 5:58 p.m.] polyfractal
+it's all the downstream steps that end up slow though right? all the routing/timing stuff (i.e. on my machine it's like an hour or two)? I assumed that would get baked into each block and speed up the final build process
+
+
+[2025-12-09 5:58 p.m.] ravenslofty
+It's not like that stuff goes away even when you bake things into macros.
+
+
+[2025-12-09 5:59 p.m.] polyfractal
+ah, nevermind then 🙂 I really need to dig into how these tools work more so I have a better intuition about what's going on
+
+
+[2025-12-09 5:59 p.m.] polyfractal
+big ol' blackbox for me right now. feed verilog, get chip 😂
+
+
+[2025-12-09 6:00 p.m.] ravenslofty
+It's a dangerous path to go down :p
+
+{Reactions}
+🙈
+
+[2025-12-09 6:01 p.m.] ravenslofty
+*smiles*
+One day your life may be an iceberg with `&mfs`, `aiger vs xaiger flops` and `nldm vs ccs` at the bottom
+
+
+[2025-12-09 6:01 p.m.] ravenslofty
+:3
+
+
+[2025-12-09 6:02 p.m.] polyfractal
+I will enjoy my ignorance of those commands while I can 😄
+
+
+[2025-12-09 7:15 p.m.] mattvenn
+I did a bit of work in this with different adder topologies: https://www.zerotoasiccourse.com/post/instrumenting-hardware-adders/
+
+{Embed}
+https://www.zerotoasiccourse.com/post/instrumenting-hardware-adders/
+Instrumenting Hardware Adders
+Following my interview with Teo on optimising hardware adders, I thought it would be a great project to tapeout on MPW6.
+I wrote about the process on twitter:
+I'm working on putting @td_ene 's adder work onto MPW6. Work in progress repo here: https://t.co/OBg8jQG1HJ
+It was very easy to generate the adders, but I'm getting stuck on instrumenting ...
+2025-12_media/instrumented_adder-52FBE.png
+
+{Reactions}
+👀
+
+[2025-12-09 7:16 p.m.] mattvenn
+I should get round to publishing the results
+
+
+[2025-12-09 7:18 p.m.] mattvenn
+
+
+{Attachments}
+2025-12_media/image-29-F3527.png
+
+
+[2025-12-09 7:18 p.m.] mattvenn
+Interesting takeaway is that ripple adders are the fastest if you only need 8 bits
+
+
+[2025-12-09 7:19 p.m.] mattvenn
+Behavioural is yosys default
+
+
+[2025-12-09 7:35 p.m.] trev5514
+I'd love to see the area tradeoff for each!
+
+
+[2025-12-09 11:06 p.m.] mithro_
+Before NVIDIA stole Teo, he was working on a whole bunch of adder analysis stuff
+
+
+[2025-12-09 11:06 p.m.] mithro_
+https://docs.google.com/spreadsheets/d/1pTGzZo5XYU7iuUryxorfzJwNuE9rM3le5t44wmLohy4/edit?gid=126548956#gid=126548956
+
+{Embed}
+https://docs.google.com/spreadsheets/d/1pTGzZo5XYU7iuUryxorfzJwNuE9rM3le5t44wmLohy4/edit?gid=126548956
+SKY130 Adder performance
+2025-12_media/AHkbwyJEcKv4CIBgY0QZqWiJCLXKCrOkshAwUwlFxx-29F71
+
+
+[2025-12-09 11:09 p.m.] ravenslofty
+yeah, I remember talking to him about his adder tree stuff
+
+
+[2025-12-10 4:15 a.m.] mithro_
+I believe I have the changes which mean I can use multiple machines to run precheck commands (and also update the server code without killing currently running prechecks).
+
+I have picked up a couple of EX63 hetzner servers with Intel Core Ultra 7 265 Arrow Lake and 192GB memory to run the prechecks. 
+
+AI says they are 4,663 single threaded performance compared to the current 1,200 single threaded performance. 
+
+I'm just working on testing everything with test-platform.wafer.space before deploying it to the production platform.wafer.space
+
+
+[2025-12-10 4:24 a.m.] mithro_
+I'll have an update about the deadline in the #announcements and to the mailing list shortly.
+
+{Reactions}
+💜
+
+[2025-12-10 12:07 p.m.] tholin
+I apparently can’t have both no antenna violations and no Metal3 clearance violations from that bug.
+
+
+[2025-12-10 12:07 p.m.] tholin
+And there is only 48 of the clearance violations.
+
+
+[2025-12-10 12:07 p.m.] tholin
+So imma just go in with klayout -e and remove them by hand.
+
+
+[2025-12-10 12:28 p.m.] mithro_
+
+
+{Reactions}
+👍
+
+[2025-12-10 3:02 p.m.] _luke_w_
+There is this cursed thing. The PMOS sources are floating but I think that would still be manufacturable on P-substrate? 🤔 from: https://pubs.aip.org/aip/acp/article-pdf/1324/1/346/11503305/346_1_online.pdf
+
+{Attachments}
+2025-12_media/image-264B1.png
+
+
+[2025-12-10 3:02 p.m.] _luke_w_
+There are also GDI gates but I don't think you can do those on GF180MCU
+
+
+[2025-12-10 3:03 p.m.] tholin
+I tried building alternative XOR layouts before, but they’re all super slow and have terrible logic high and/or logic low output levels.
+
+{Reactions}
+👍
+
+[2025-12-10 3:04 p.m.] tholin
+You can do two transistor pair XOR if you want it to have nanosecond long transition times and 1V logic low, 4V logic high on the output.
+
+
+[2025-12-10 3:10 p.m.] _luke_w_
+Yeah I figured it would need extra buffering but that the ratio might tip in its favour for larger XOR cells
+
+
+[2025-12-10 3:10 p.m.] _luke_w_
+Guess it is on me to go prove that 😅
+
+
+[2025-12-10 3:27 p.m.] rtimothyedwards_19428
+@Tholin :  The verilog for the set-reset flop got kind of scrambled.  It should be:
+```
+module gf180mcu_as_sc_mcu7t3v3__dfsrtp_2(
+        input VPW,
+        input VNW,
+        input VDD,
+        input VSS,
+
+        input CLK,
+        input D,
+        input RN,
+        input SN,
+        output Q
+);
+
+reg state;
+wire sr;
+
+assign sr = ~(RN & SN);
+assign Q = state;
+
+always @(posedge CLK or posedge sr) begin
+        if (sr == 1'b1) begin
+                if (RN == 1'b0) begin
+                        state <= 1'b0;
+                end else if (SN == 1'b0) begin
+                        state <= 1'b1;
+                end
+        end else begin
+                state <= D;
+        end
+end
+
+endmodule
+```
+
+
+[2025-12-10 9:31 p.m.] ravenslofty
+this simulation model is not IEEE 1364.1 compliant, as far as I can tell
+
+
+[2025-12-10 9:32 p.m.] ravenslofty
+```verilog
+module gf180mcu_as_sc_mcu7t3v3__dfsrtp_2(
+        input VPW,
+        input VNW,
+        input VDD,
+        input VSS,
+
+        input CLK,
+        input D,
+        input RN,
+        input SN,
+        output Q
+);
+
+reg state;
+
+assign Q = state;
+
+always @(posedge CLK or negedge RN or negedge SN) begin
+        if (RN == 1'b0) begin
+                state <= 1'b0;
+        end else if (SN == 1'b0) begin
+                state <= 1'b1;
+        end else begin
+                state <= D;
+        end
+end
+
+endmodule
+```
+
+
+[2025-12-11 12:26 a.m.] rtimothyedwards_19428
+@Lofty :  That one was my quick one-minute don't-think-about-it solution to getting some simulations to run.  Ultimately, the code has to deal somehow with the fact that RN and SN both going low at the same time is an invalid state.  Usually that's done with truth tables, not behavioral code.  At any rate, what got into the repo yesterday was not just non-compliant, it was just wrong.
+
+
+[2025-12-11 12:30 a.m.] mithro_
+Morning -- I'm finishing up the plan to do the upgrade of platform.wafer.space today which will bring the fast precheck workers online.
+
+
+[2025-12-11 12:30 a.m.] mithro_
+I haven't had a chance to look over all my email or discord messages yet. If there is something that should get my attention - please `@` me.
+
+
+[2025-12-11 8:57 a.m.] chvsnaveen12
+@Tim 'mithro' Ansell What's the earliest we can submit a design for tapeout? Is it going to be next april?
+
+
+[2025-12-11 9:00 a.m.] mithro_
+I assume you mean for the next tapeout?
+
+
+[2025-12-11 9:06 a.m.] chvsnaveen12
+I meant the next tapeout, but being curious would it be possible to submit for this one?
+
+
+[2025-12-11 9:15 a.m.] mithro_
+Do you want a free slot or are you willing to pay for it?
+
+
+[2025-12-11 9:28 a.m.] mithro_
+@chvsnaveen12: You can create a design on platform.wafer.space right now and see if it passes the precheck runs. 
+
+When we finish doing shuttle slot assignments there might be empty space that something which is manufacturable on the platform would end up getting put into. 
+
+Paying obviously gets you ahead of the queue when slot assignments happen.
+
+At the moment there /may/ be some 1×0.5 (Half Height) slots that we end up looking for things to put in.
+
+There is also the chance that some people don't end up delivering manufacturable stuff which means we have more open slots which need to be filled.
+
+
+[2025-12-11 9:35 a.m.] chvsnaveen12
+Alright, could you let me know both of the options? If there is a free slot available and if I have to pay for a full/half slot how much would that be?
+
+
+[2025-12-11 9:37 a.m.] mithro_
+@chvsnaveen12 - Currently payment is $7k / $8.5k USD for a slot and kind of needs to have been done yesterday. CrowdSupply might be willing to make that happen for you.
+
+There is currently no way to "pay" for a half slot. Basically you need to have something on the platform.wafer.space site which is manufacturable at the time of assignment.
+
+
+[2025-12-11 9:39 a.m.] chvsnaveen12
+Oh alright. Thanks for the info. Given the scenario, We'll try to put our design on the platform right now for half a slot. Probably for the next shuttle we'll purchase a full slot.
+
+
+[2025-12-11 9:42 a.m.] mithro_
+@chvsnaveen12 - That is great to hear!
+
+
+[2025-12-11 9:42 a.m.] mithro_
+With the number of people saying they are looking to purchase slots on the second shuttle, I'm starting to wonder if we might actually sell out.....
+
+{Reactions}
+👏
+
+[2025-12-11 9:45 a.m.] scafir
+Hey, seems like  the pdk's run_drc.py` (klayout) does not run dummy checks for DRC. I don't quite understand how precheck runs the klayout drc. Could this be a problem?
+
+
+[2025-12-11 9:45 a.m.] securitybrahh
+Do you do freepdk-45 or sky90?
+
+
+[2025-12-11 9:46 a.m.] chvsnaveen12
+Let's hypothetically say that you guys choose to manufacture the design, how much would I need to pay for the bonded dies to PCBs?
+
+
+[2025-12-11 9:48 a.m.] mole99
+The precheck runs DRC through LibreLane, including dummy checks, so that is not a problem. However, we should update the `run_drc.py` in this case.
+
+
+[2025-12-11 9:51 a.m.] scafir
+Good! II guess we could integrate the dummy checks in the feol checks rather than keep this switch
+
+
+[2025-12-11 9:55 a.m.] mithro_
+I haven't quite figured out what I'm doing regarding COB stuff for the free slots yet....
+
+
+[2025-12-11 10:00 a.m.] mole99
+Yes, that was done in this PR: https://github.com/wafer-space/gf180mcu/pull/1
+But we can move it to any other.
+
+
+[2025-12-11 10:14 a.m.] chvsnaveen12
+Alright, if there's any update do let me know. We'll be willing to pay for the packaging and other charges if it proceeds to manufacturing.
+
+
+[2025-12-11 10:16 a.m.] mithro_
+I'm currently planning on the idea that people who have done designs that we have manufactured for free end up with something useful for them without having to pay. The exact details are still unknown and depends on lots of different things and unclear if it is even worth the hassle for there to be options to pay something to get more and such.
+
+
+[2025-12-11 10:16 a.m.] mithro_
+First step is to get the stuff to GF for manufacturing 🙂
+
+
+[2025-12-11 1:26 p.m.] ravenslofty
+FreePDK45 is explicitly not manufacturable, and sky90 doesn't exist.
+
+
+[2025-12-11 3:39 p.m.] mithro_
+Is somewhere here "meiniki" working on FazyRV ?
+
+
+[2025-12-11 3:52 p.m.] ravenslofty
+that's @Meinhard Kissich
+
+
+[2025-12-11 3:53 p.m.] mole99
+He's listed in the spreadsheet
+
+
+[2025-12-11 3:55 p.m.] mithro_
+@Meinhard Kissich - FYI - I cancelled the check you started on test-platform.wafer.space
+
+
+[2025-12-11 4:15 p.m.] meinhard
+I had remembered to upload to both instances, but that information is likely outdated. Thanks for pointing out 🙂
+
+
+[2025-12-11 4:22 p.m.] mithro_
+You got a sneak preview of the updates I'm trying to deploy to platform.wafer.space 🙂
+
+{Reactions}
+🚀
+
+[2025-12-11 5:22 p.m.] tholin
+I had a check that was a minute away from completing :flop:
+
+
+[2025-12-11 5:23 p.m.] rzioma
+I have related question - I am looking for the smallest possible area population count  circuits (populations are 128 bits and higher).
+
+
+[2025-12-11 5:24 p.m.] rzioma
+So far I found that adder tree made out FA cells gives me the best result.
+
+
+[2025-12-11 5:24 p.m.] rzioma
+It ends up being approximately 1 FA cell per 1 input bit.
+
+
+[2025-12-11 5:24 p.m.] ravenslofty
+oh, popcount is fun. I assume you want a combinational approach :p
+
+
+[2025-12-11 5:24 p.m.] tholin
+Nevermind. I reloaded the page and
+
+{Attachments}
+2025-12_media/image-8C5C3.png
+
+{Reactions}
+🎉 (5) 🥳 (4)
+
+[2025-12-11 5:25 p.m.] tholin
+First time in weeks. I can finally rest now.
+
+
+[2025-12-11 5:25 p.m.] rzioma
+Yes, purely combinational.
+
+
+[2025-12-11 5:26 p.m.] rzioma
+Speed is comparatively not important for me.
+
+
+[2025-12-11 5:26 p.m.] rzioma
+Minimizing the area is the main goal.
+
+
+[2025-12-11 5:27 p.m.] ravenslofty
+do you remember me talking about compressors?
+
+
+[2025-12-11 5:28 p.m.] rzioma
+4:2 one?
+
+
+[2025-12-11 5:29 p.m.] ravenslofty
+yes, but a full adder is itself a 3:2 compressor
+
+
+[2025-12-11 5:29 p.m.] rzioma
+Or did I ask you about popcount already? 🙂
+
+
+[2025-12-11 5:29 p.m.] ravenslofty
+no, you didn't :p
+
+
+[2025-12-11 5:30 p.m.] rzioma
+FA = 3:2 compressor, I understand that part.
+
+
+[2025-12-11 5:30 p.m.] ravenslofty
+a FA feeding into a FA is one way to implement a 4:2 compressor
+
+
+[2025-12-11 5:31 p.m.] ravenslofty
+I feel like an adder tree probably is the most optimal way to implement this, but I'll have a think
+
+
+[2025-12-11 5:32 p.m.] rzioma
+Right now I am building a wide FA array that feeds into another smaller FA array... and on like that
+
+
+[2025-12-11 5:33 p.m.] ravenslofty
+I assume you're adding triplets of bits for the first layer with FAs?
+
+{Reactions}
+👍
+
+[2025-12-11 5:34 p.m.] rzioma
+Yes
+
+
+[2025-12-11 5:35 p.m.] ravenslofty
+(*would* be nice if we could use 4:2 compressors here)
+
+
+[2025-12-11 5:38 p.m.] rzioma
+I use patterns like that which build from smaller components hierarchically:
+```module PopCount128 (
+  input [127:0] data,
+  output  [7:0] count // 8 bits to hold from 0 to 128 (inclusive)
+);
+  wire [43:0] bit0_stage1;
+  wire [15:0] bit0_stage2;
+  wire [ 5:0] bit0_stage3;
+  wire [ 1:0] bit0_stage4;
+  wire [41:0] bit1_stage1;
+  wire [13:0] bit1_stage2;
+  wire [ 4:0] bit1_stage3;
+  wire [ 1:0] bit1_stage4;
+  wire        bit1_stage5;
+  Add128 ad0(.data(data),        .sum(bit0_stage1), .carry(bit1_stage1)); // 42
+  Add44 add1(.data(bit0_stage1), .sum(bit0_stage2), .carry(bit1_stage2)); // 14
+  Add16 add3(.data(bit0_stage2), .sum(bit0_stage3), .carry(bit1_stage3)); // 5
+  Add6  add4(.data(bit0_stage3), .sum(bit0_stage4), .carry(bit1_stage4)); // 2
+  Add2  add5(.data(bit0_stage4), .sum(count[0]),    .carry(bit1_stage5)); // 0.625
+
+  wire [63:0] pop64 = {bit1_stage1, bit1_stage2, bit1_stage3, bit1_stage4, bit1_stage5};
+  PopCount64 count64(.data(pop64), .count(count[7:1]));
+
+endmodule```
+
+
+[2025-12-11 5:38 p.m.] rzioma
+compressor 128=>44 =>16
+
+
+[2025-12-11 5:39 p.m.] ravenslofty
+What's your use case for this, out of curiosity?
+
+
+[2025-12-11 5:39 p.m.] rzioma
+neural networks 🙂
+
+
+[2025-12-11 5:41 p.m.] rzioma
+either 1) neural nets with (stationary) ternary weights or
+b) summation at the end of the Logic Gate Networks (LGN aka differentiable logic)
+
+
+[2025-12-11 5:42 p.m.] rzioma
+It works well with SKY130 PDK FA/HA cells, but not sure what is the best for GF180
+
+
+[2025-12-11 5:43 p.m.] rzioma
+In GF180 atm I am using `$popcount()` in combination with `SYNTH_ADDER_TYPE: FA` instead.
+
+
+[2025-12-11 5:46 p.m.] rzioma
+*(there are of course no FA cells in GF180 PDK, but it seems to produce slightly smaller area this way... maybe just a coincidence... also seems to synthesise/route faster)*
+
+
+[2025-12-11 5:48 p.m.] ravenslofty
+Okay, that changes things
+
+
+[2025-12-11 5:50 p.m.] ravenslofty
+what do you get if you literally do `data[0] + data[1] + ...`?
+
+
+[2025-12-11 5:50 p.m.] 246tnt
+@ReJ aka Renaldas Zioma Given the application, I'm wondering if approximation are ok ?
+
+{Reactions}
+👍
+
+[2025-12-11 5:51 p.m.] rzioma
+Approximations are OK.
+
+
+[2025-12-11 5:52 p.m.] rzioma
+That usually does not work as well. Definitely worse (in terms of area) on SKY130 than `FA/HA solution` and worse than `$popcount()` for GF180.
+
+
+[2025-12-11 5:53 p.m.] ravenslofty
+yosys has...no handling for `$popcount` that I can find?
+
+
+[2025-12-11 5:55 p.m.] rzioma
+I don't get any errors and tests run.
+Gate level gives me weirds results though 😉
+
+
+[2025-12-11 5:55 p.m.] ravenslofty
+are you using slang?
+
+
+[2025-12-11 5:55 p.m.] rzioma
+Not at the moment.
+
+
+[2025-12-11 6:18 p.m.] rzioma
+Actually I wanted to use analog summation, but I don't feel that I can make a one that works reliably with more than 10 inputs 😉
+
+
+[2025-12-11 6:36 p.m.] 246tnt
+@ReJ aka Renaldas Zioma Yeah that's what I was thinking, just summing some unit currents and then use some form of flash adc to convert to binary.
+
+
+[2025-12-11 6:39 p.m.] rzioma
+Actually it is even better, I don’t even need the binary values.
+
+What I need is to compare either 2 or 10 currents and just pick the index of the largest one.
+
+
+[2025-12-11 6:39 p.m.] rzioma
+I need argmax operation essentially
+
+
+[2025-12-11 6:40 p.m.] rzioma
+So maybe comparator would be enough instead of ADC
+
+
+[2025-12-11 6:41 p.m.] 246tnt
+Oh yeah, that makes it easier,.
+
+
+[2025-12-12 1:27 a.m.] ravenslofty
+hurray
+
+{Attachments}
+2025-12_media/firefox_rnsiPjHERY-CDB87.png
+
+{Reactions}
+🎉 (5)
+
+[2025-12-12 3:24 a.m.] mithro_
+Now here hoping I haven't screwed something up which makes the system thing non-clean things are clean!
+
+
+[2025-12-12 3:11 p.m.] 246tnt
+Congrats, you're popular enough to spam 🙂
+
+
+[2025-12-12 3:15 p.m.] 246tnt
+Need more moderators 😅
+
+{Reactions}
+💜 (3)
+
+[2025-12-12 5:24 p.m.] ewenmcneill
+It’s probably also time to make some channels restricted posting, to limit the noise. 
+
+Eg, having an “announcements” or “rules” channel that anyone can post in (or allowing general discussion in “announcements”), rather defeats the purpose of having separate channels for announcements.
+
+Most servers limit posting in those types of channels to a small set of pre-approved users.  Which also avoids getting spam in those channels.
+
+
+[2025-12-13 12:03 a.m.] mithro_
+Where?
+
+
+[2025-12-13 12:05 a.m.] mithro_
+@Andrew Wingate - You seem to understand discord enough to make that happen?
+
+
+[2025-12-13 12:05 a.m.] anfroholic
+I banned them and cleaned it up. 
+Not much you can do to stop them from happining.
+
+
+[2025-12-13 12:06 a.m.] mithro_
+@ewen was mentioning converting the announcement and rules channels?
+
+
+[2025-12-13 12:16 a.m.] mithro_
+@ReJ aka Renaldas Zioma - Is https://www.researchgate.net/profile/Koulab-Mukherjee/publication/398423265_Analysis_and_Design_of_a_Parametric_Hybrid_Adder_with_Tunable_Accuracy_Using_Kogge-Stone_and_Approximate_Ripple-Carry_Architecture/links/69358cf90c98040d481bdc34/Analysis-and-Design-of-a-Parametric-Hybrid-Adder-with-Tunable-Accuracy-Using-Kogge-Stone-and-Approximate-Ripple-Carry-Architecture.pdf anyway related to your ideas?
+
+{Reactions}
+👀
+
+[2025-12-13 12:21 a.m.] ewenmcneill
+Specifically making the "admin"-like channels (eg, #announcements  and #welcome-and-rules ) limited to admins (and other specifically approved people) to post.    That'd also avoid announcements turning into a discussion channel, obscuring the announcements (which has happened at least once already).
+
+
+[2025-12-13 1:53 a.m.] anfroholic
+Yeah, I had mentioned making announcements admin only so important things don't get pushed off. 
+It won't keep spammers from doing things though
+
+
+[2025-12-13 2:39 a.m.] ewenmcneill
+It does reduce the blast radius a bit though 😀
+
+
+[2025-12-13 4:05 a.m.] mithro_
+BTW @ewen - You the ewen who I know through LCA and a bunch of past FPGA stuff?
+
+
+[2025-12-13 4:12 a.m.] mithro_
+@Andrew Wingate - I deputize you to do what is needed 🙂
+
+{Reactions}
+💜
+
+[2025-12-13 5:56 a.m.] mithro_
+FYI - I'm not going to be available on Monday (15th Dec), which is Sunday for most people in the US.
+
+
+[2025-12-13 8:07 a.m.] ewenmcneill
+Yes!   (My actual Discord username is slightly more identifying, but for better or worse my display name became what I use on IRC.)
+
+
+[2025-12-13 8:08 a.m.] mithro_
+Going to do an ASIC now? 😛
+
+{Reactions}
+❤️
+
+[2025-12-13 8:10 a.m.] ewenmcneill
+Definitely not this time!   But maybe eventually.... 🤔
+
+
+[2025-12-13 8:10 a.m.] ewenmcneill
+(Mostly just here as "interesting topic, know some of the people, should vaguely pay attention")
+
+
+[2025-12-14 2:00 a.m.] mithro_
+How is everyone today?
+
+{Reactions}
+🎉
+
+[2025-12-14 3:29 p.m.] logic_destroyer
+
+
+{Attachments}
+2025-12_media/Screenshot_20251214_162432_Gallery-AC396.jpg
+
+{Reactions}
+🚴‍♂️ (2)
+
+[2025-12-14 3:29 p.m.] logic_destroyer
+Today bmx only
+
+
+[2025-12-14 6:52 p.m.] mattvenn
+
+
+{Attachments}
+2025-12_media/PXL_20251214_185237465-5C091.jpg
+
+{Reactions}
+🎄 (5) 🔥 (2)
+
+[2025-12-14 9:17 p.m.] rebelmike
+I'd be very happy to pay something to get some TinyQV chips, if you do end up making and bonding them!  I might also be interested in a pack of boards with chips of different public designs, were such a thing to be available.  But I appreciate the focus is on getting stuff to GF for now 🙂
+
+
+[2025-12-15 7:46 a.m.] mole99
+Started a thread.
+
+
+[2025-12-15 11:49 p.m.] mithro_
+Morning everyone, hopefully everyone had a productive and/or fun weekend!
+
+
+[2025-12-16 1:15 a.m.] mithro_
+@ReJ aka Renaldas Zioma & @LukeW - I could use your feedback on the following AI generated output -> https://github.com/mithro/gf180mcu-sram-forge/pull/35
+
+{Embed}
+https://github.com/mithro/gf180mcu-sram-forge/pull/35
+docs: comprehensive SRAM interface research for issue #34 by mithro...
+Summary
+
+Complete research on 5V/3.3V SRAM parts (historical and current) for sram-forge external interface compatibility
+Identify de-facto standard interfaces for 8-bit, 16-bit, and 32-bit widths
+...
+2025-12_media/35-B4943
+
+{Reactions}
+😮
+
+[2025-12-16 3:55 p.m.] tholin
+What’s with the duplicating log lines?
+
+{Attachments}
+2025-12_media/image-A5779.png
+
+
+[2025-12-16 3:58 p.m.] ravenslofty
+it's weird, but equally, I think it's kind of a confidence tick that something is happening and it hasn't disconnected or got stuck.
+
+
+[2025-12-16 4:00 p.m.] tholin
+I don’t like that there’s two empty lines in-between. That looks quite ugly.
+
+
+[2025-12-16 4:02 p.m.] mithro_
+I actually think it's an error in how my code is handling the docker log outputs.
+
+
+[2025-12-17 3:00 a.m.] bailey8889
+@Leo Moser (mole99) @Tim 'mithro' Ansell I think the default compile scripts for magic and netgen have optimization turned off. 
+
+I wonder how much of a speed up you'd get with optimization turned on. Be warned that I think I got conflicting results with optimization on.
+
+
+[2025-12-17 3:07 a.m.] mithro_
+It would be nice if we could have nix install both the optimized and non-optimized version side-by-side and let us run a direct comparison with the same input data....
+
+
+[2025-12-17 3:28 p.m.] rtimothyedwards_19428
+I keep the compile optimizations turned off because (1) I want to be able to debug immediately if anything goes wrong, and (2) I have not found much difference between running with and without optimization.  Maybe now that the tapeout is done and I'm done with the 3.3V SRAM development for now, I can work on some code development (finally---way too many items on that "to do" list).
+
+{Reactions}
+😆
+
+[2025-12-17 9:05 p.m.] bailey8889
+CVC-RV has a 3-4x speed up on sky130 tinytapeout with optimazation, but it's written in C++. I think I remember over a 2x gain with magic/netgen.
+
+
+[2025-12-17 9:15 p.m.] rtimothyedwards_19428
+@bailey :  I haven't run a comparison recently.  It's possible that I have now knocked down enough of the truly horrible chokepoints in the code that the performance provided by compiler optimization is actually significant. . .
+
+{Reactions}
+👍
+
+[2025-12-17 10:28 p.m.] mithro_
+@Tim Edwards - Compilers have gotten a lot better over the years. Also you can generate pretty good debugging symbols for optimized code these days.
+
+
+[2025-12-18 4:35 a.m.] mithro_
+How is everyone feeling with the countdown looming?
+
+
+[2025-12-18 5:12 a.m.] thorben_61995
+All good 🙂 Have a design ready that passed the 1.5.5 precheck on the platform. Currently running a slightly adapted version (improved timing) to see if it still passes. If not, can I just select the prior (successfully checked) version when pressing "Submit for Manufacturing" or do I have to re-run it?
+
+
+[2025-12-18 8:01 a.m.] mithro_
+@Thorben - In theory you should be able to submit an old version which has passed precheck, but I'm not sure that functionality actually works.
+
+
+[2025-12-18 8:02 a.m.] mithro_
+@Thorben - It seems the precheck did something weird on your last run, so I restarted it.
+
+
+[2025-12-18 8:49 a.m.] thorben_61995
+Thanks, the new one had antenna violations anyway, so I put the old one back in and pressed submit.
+
+
+[2025-12-18 8:51 a.m.] thorben_61995
+It is now checking the old file again for which the test already passed (see matching hashes). Feel free to stop the current run if it's not needed for you to proceed.
+
+
+[2025-12-18 10:59 p.m.] polyfractal
+Does GF specify anywhere what they use for passivation? some kind of nitride? Only reference I could find was the bump specs, everywhere else it just says "passivation layer"
+
+
+[2025-12-19 6:36 a.m.] 246tnt
+Looks like Silicon Nitride yes and Silicon Dioxide :
+
+https://gf180mcu-pdk.readthedocs.io/en/latest/analog/layout/inter_specs/inter_specs_3_43.html
+https://gf180mcu-pdk.readthedocs.io/en/latest/analog/layout/inter_specs/inter_specs_2_2.html
+
+{Reactions}
+🙏
+
+[2025-12-19 5:15 p.m.] polyfractal
+oh nice find, spent ages looking for a chart like that. Saving for future reference thanks!
+
+
+[2025-12-19 8:54 p.m.] tholin
+This is one of the things on my die. I don’t know what compelled me to do this, I just did it.
+
+{Attachments}
+2025-12_media/image-17B78.png
+
+{Reactions}
+👍🏻
+
+[2025-12-19 8:55 p.m.] tholin
+Oops, little mistake there. 6510 is the one with the GPIO port.
+
+
+[2025-12-20 10:30 a.m.] anfroholic
+For the people doing legacy components, just came across this Ben Eater video where he's talking about SID (Sound Interface Device) like those used on the Commodore. May be interesting. 
+@ReJ aka Renaldas Zioma 
+https://www.youtube.com/watch?v=nooPmXxO6K0
+
+{Embed}
+Ben Eater
+https://www.youtube.com/watch?v=nooPmXxO6K0
+Modern SID chip substitutes
+More 6502: https://eater.net/6502
+
+Support these videos on Patreon: https://www.patreon.com/beneater or https://eater.net/support for other ways to support.
+
+------------------
+
+Social media:
+Website: https://www.eater.net
+Twitter: https://x.com/beneater
+Patreon: https://patreon.com/beneater
+Reddit: https://www.reddit.com/r/beneater
+
+Special tha...
+2025-12_media/maxresdefault-3446A.jpg
+
+{Reactions}
+❤️
+
+[2025-12-20 9:52 p.m.] rzioma
+SID is absolutely the best audio chip from the 8-bit times.
+
+SID is pretty much The Holy Grail when it comes to replicas. Relatively 😉 large demand, relatively expensive and hard to emulate correctly.
+SID has bunch of analog components inside - amps, filters and DACs. All with pretty unique characteristics.
+
+GF180 is prefect for such a replica!
+
+
+[2025-12-20 9:54 p.m.] rzioma
+Once TinyTapeout opens support for analog designs with GF180 - it will be great for prototyping and validating all the analog components in separation.
+Wafer.Space will be ideal for the whole chip tapeout.
+
+
+[2025-12-20 9:55 p.m.] rzioma
+... and I think @Tholin already started work on it 🙂
+
+{Reactions}
+💜
+
+[2025-12-20 10:59 p.m.] anfroholic
+Haha nice! Kind of figured as much, but still thought it was worth posting about. 
+Thanks for all the extra info!
+
+
+[2025-12-20 11:00 p.m.] tholin
+I taped out a SID clone this week
+
+{Reactions}
+💜 (2)
+
+[2025-12-20 11:01 p.m.] tholin
+I also taped out the SID **2**. A custom creation.
+
+
+[2025-12-20 11:02 p.m.] tholin
+Its backwards-compatible with the SID, but adds a sine wave option to each voice and extends it all with some FM Synthesis features.
+
+{Reactions}
+waferspace (2)
+
+[2025-12-21 9:45 p.m.] lromor_
+👋  Hi! I heard there are a bunch of cool projects trying to make combinational designs of AI inference models. That's something I've been thinking a lot about in the past years as well and I would love to know more about it and if there's any progress.
+
+
+[2025-12-24 1:31 a.m.] trev5514
+@lromor One of my designs implemented a 32x32 output stationary systolic array (an AI accelerator). I had to make quite a few architecture choices to get it to fit on GF180.
+
+{Reactions}
+💜
+
+[2025-12-24 9:34 a.m.] mithro_
+https://hackaday.com/2025/12/23/exploring-modern-sid-chip-substitutes/
+
+{Embed}
+Maya Posch
+https://hackaday.com/2025/12/23/exploring-modern-sid-chip-substitutes/
+Exploring Modern SID Chip Substitutes
+Despite the Commodore 64 having been out of production for probably longer than many Hackaday readers have been alive, its SID audio chip remains a very popular subject of both retrocomputing and m…
+2025-12_media/armsid_sid_replacement_ben_eater_youtube-60505.jpg
+
+
+[2025-12-24 10:46 a.m.] lromor_
+Interesting. I imagine you are targeting inference and exploding each network GEMM into an array like that? Or are you reusing most of the components?
+
+
+[2025-12-24 4:41 p.m.] polyfractal
+I chucked a MAC, tanh and xorshift into my processor so that it could (maybe) do some light reservoir computing inference. but those were an afterthought more than a design goal 🙂
+
+
+[2025-12-24 10:27 p.m.] lromor_
+Interesting! You made a dedicated instruction for those? Are you supporting IEEE 754 floats?
+
+
+[2025-12-24 10:34 p.m.] polyfractal
+Yep, sorta! My processor is a transport-triggered architecture, so it's relatively easy to bolt on additional functional units (just adds a new move destination/result to the bus). iirc the tanh is set to use Q1.15 fixed point, and I think the MAC is just simple wrapping integer (edit: yep)
+
+{Reactions}
+🤩
+
+[2025-12-24 10:34 p.m.] polyfractal
+those particular FUs got basically zero testing and were thrown in the last week, so dunno if they work 🤷 😅
+
+{Reactions}
+😆
+
+[2025-12-24 10:38 p.m.] polyfractal
+(I'm using Spade HDL and did zero optimization here, so it's also just whatever the transpiler spit out and then yosys generated using defaults. i'm sure they are horrible at the transistor level 🫣 )
+
+
+[2025-12-24 10:39 p.m.] ravenslofty
+Hey, we're not *that* awful :p
+
+{Reactions}
+😁 ❤️ (2)
+
+[2025-12-24 10:41 p.m.] ravenslofty
+It's kind of funny to think of my chess move generator in CPU terms :p
+
+
+[2025-12-24 10:41 p.m.] ravenslofty
+I'm not *entirely* sure it counts as a TTA, but it has things that could be considered such
+
+
+[2025-12-24 10:48 p.m.] polyfractal
+definitely seems to be a bit of a spectrum imo. sorta like functional languages... hard to be "pure" once you interact with the real world. I had to cheat a little when it came to handling the program counter and conditionals.
+
+
+[2025-12-24 10:49 p.m.] polyfractal
+did give me a better appreciation of RISC vs CISC etc
+
+
+[2025-12-25 2:33 a.m.] mithro_
+Merry Xmas and Happy Holidays to everyone!
+
+{Reactions}
+💜 (2) 🎄 (9) ❤️ (2)
+
+[2025-12-26 9:06 a.m.] 246tnt
+How is the reticle doing ?
+
+
+[2025-12-26 9:06 a.m.] 246tnt
+Stiched ? Approved by GF ?  That would be a good xmas present 😁
+
+{Reactions}
+🎉
+
+[2025-12-26 3:24 p.m.] mole99
+We stitched the reticle and sent it to GF on Monday. However, we received a number of violations. The next step is to sort through them, to see which ones can be waived, and which ones need to be fixed. Due to the holidays, things are moving a bit slowly at the moment, though :)
+
+{Reactions}
+😢 (5) 💜
+
+[2025-12-26 3:51 p.m.] 246tnt
+No hurry... actually if there are any for TT the longer the better because I wouldn't even start looking at them for 2 weeks 😅
+
+{Reactions}
+😢 (2)
+
+[2025-12-27 5:57 p.m.] trev5514
+Inference was the target yes. You can do GEMM, CNN, and some other common ops with a systolic array. If you do the right numerical representation (fixed/float) you can do training by just doing a second multiplication pass for the gradients/backprop - at least that was my understanding, I've never done it as inference has been my priority.
+
+
+[2025-12-27 5:58 p.m.] trev5514
+That's cool! I'd love to see a comparison. I looked into an xorshift but went with the systolic array instead. I'm curious to see the potential power/area differences you can get in performance!
+
+
+[2025-12-27 6:01 p.m.] lromor_
+I see, so you have a lot of synchronous parts. Is your target representation float/fixed point?
+
+
+[2025-12-27 6:04 p.m.] trev5514
+The entire array is synchronous. I went with ternary weights, 8-bit activations to fit on chip. FP multipliers are huge, so I stuck with int space.
+
+
+==============================================================
+Exported 763 message(s)
+==============================================================

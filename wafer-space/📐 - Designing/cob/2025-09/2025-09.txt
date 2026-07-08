@@ -1,0 +1,442 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 📐 - Designing / 📦-cob
+Topic: Channel for discussing chip-on-board packaging options for wafer.space bare die.
+After: 2025-08-31 11:59 p.m.
+Before: 2025-10-01 12:00 a.m.
+==============================================================
+
+[2025-09-08 4:49 p.m.] mithro_
+I just found
+
+{Attachments}
+2025-09_media/201417154417279-826FD.png
+
+
+[2025-09-11 1:13 a.m.] mithro_
+@Tim Edwards - Lots of discussion about padrings and such is happening here.
+
+
+[2025-09-12 6:40 p.m.] tholin
+I designed and ordered a PCB layout to let me test COB, even though I don't have a wire bonder yet.
+But I'm increasingly ready to experiment!
+
+
+[2025-09-12 8:33 p.m.] mithro_
+@Tholin - Have you uploaded your PCB layout somewhere?
+
+
+[2025-09-12 8:41 p.m.] tholin
+Not yet
+
+
+[2025-09-12 9:30 p.m.] tholin
+Going to wait at least until the board house has reviewed the layout and declared it manufacturable
+
+
+[2025-09-13 4:47 p.m.] tholin
+Alright, no complaints so far and its mid-production. Hold on.
+
+
+[2025-09-13 4:47 p.m.] tholin
+https://cdn.discordapp.com/attachments/1355137289390391538/1416096601876987904/image.png?ex=68c6ebbb&is=68c59a3b&hm=fbb99a124cca8622f7dba83653df52c0276cb52851cbb75dda48164c1b6f1fc5
+
+{Embed}
+https://cdn.discordapp.com/attachments/1355137289390391538/1416096601876987904/image.png?ex=68c6ebbb&is=68c59a3b&hm=fbb99a124cca8622f7dba83653df52c0276cb52851cbb75dda48164c1b6f1fc5
+2025-09_media/image-27F98.png
+
+
+[2025-09-13 4:47 p.m.] tholin
+Here's a preview
+
+
+[2025-09-13 5:10 p.m.] urish
+Nice!
+
+
+[2025-09-13 5:56 p.m.] mithro_
+@Tholin - Where are you getting it manufactured?
+
+
+[2025-09-13 6:22 p.m.] tholin
+JLCPCB
+
+
+[2025-09-13 6:22 p.m.] tholin
+I selected ENIG so all the pads are gold-plated. Hopefully that will be enough.
+
+
+[2025-09-13 6:22 p.m.] tholin
+Its not actually too terribly expensive.
+
+
+[2025-09-13 6:25 p.m.] tholin
+JLC quotes $120 for 100 4-layer PCBs up to 100mm by 100mm with ENIG, which comes down to just $1.20 per board.
+
+
+[2025-09-13 6:27 p.m.] 246tnt
+But where do you get them wire bonded ?
+
+
+[2025-09-13 6:34 p.m.] mithro_
+FWIW - I finally got a contact at JLCPCB, will see if I can get to someone who can help with getting wire bonding offered.
+
+{Reactions}
+👍 (3)
+
+[2025-09-13 6:52 p.m.] tholin
+I am trying to obtain a wire bonder of my own
+
+
+[2025-09-13 6:52 p.m.] tholin
+https://github.com/AvalonSemiconductors/gf180mcu_cob/tree/main/COB_test_board
+
+{Embed}
+https://github.com/AvalonSemiconductors/gf180mcu_cob/tree/main/COB_test_board
+gf180mcu_cob/COB_test_board at main · AvalonSemiconductors/gf180mc...
+Experimenting with Chip On Board setups for GF180MCU chips, most importantly gf180 Caravel. - AvalonSemiconductors/gf180mcu_cob
+2025-09_media/gf180mcu_cob-51C33
+
+
+[2025-09-13 6:57 p.m.] tholin
+Based on the RISC-V core on my multi-project die
+
+
+[2025-09-13 6:57 p.m.] tholin
+Outside of the COB, the rest of the PCB is as simple and bodge-able as possible.
+
+
+[2025-09-13 6:57 p.m.] tholin
+Just in case
+
+
+[2025-09-13 7:42 p.m.] urish
+Have you ever tried working with a wire bonder?
+
+
+[2025-09-13 7:42 p.m.] urish
+@stuart and Matt did in the past, and it was... pretty challenging
+
+
+[2025-09-13 9:56 p.m.] tholin
+Well, practice makes perfect, right?
+
+
+[2025-09-14 12:31 a.m.] polyfractal
+can confirm they are pretty hateful machines 😅
+
+
+[2025-09-14 12:32 a.m.] polyfractal
+fun while working, very frustrating when not
+
+
+[2025-09-19 7:03 p.m.] mithro_
+
+
+
+[2025-09-19 7:03 p.m.] mithro_
+@Andrew Wingate was playing with some castellated edge boards.
+
+
+[2025-09-19 7:07 p.m.] urish
+Nice! One power domain?
+
+
+[2025-09-19 7:22 p.m.] 246tnt
+What's the pitch on those ?   1.27 mm ? or 1 mm ?
+
+
+[2025-09-19 7:23 p.m.] mithro_
+I think 1mm but have to wait for what @Andrew Wingate says
+
+
+[2025-09-19 7:43 p.m.] anfroholic
+Yes, the pitch is 1mm as shown. 
+I hadn't realized how large the ring for the bonding wires was so there's a lot more room than I had thought. 
+
+All this is a bit of an exploration into what's the best form factor for:
+- ease of use
+- easiest for the wire bonders themselves
+- if you want many of them
+
+I am open to suggestions.
+
+
+[2025-09-19 7:54 p.m.] tholin
+tbh that COB footprint I made could be scaled down. The power/ground rings can be closer to the die, I think.
+
+
+[2025-09-19 7:59 p.m.] anfroholic
+Sounds great. Thank you for the baseline. I am just playing around a bit.
+
+
+[2025-09-19 8:00 p.m.] 246tnt
+@Andrew Wingate Also see https://discord.com/channels/1361349522684510449/1418540236148838461 thread which has the pad frame and how it should be bonded out.
+
+
+[2025-09-19 8:00 p.m.] anfroholic
+This whole panel is 100mm on a side. 
+and from what I've seen should fit in the wire bonding machines I've seen.
+
+{Attachments}
+2025-09_media/image-BFD28.png
+
+
+[2025-09-19 8:02 p.m.] 246tnt
+@Tim 'mithro' Ansell What's the die thickness ? Are they going through thinning ?
+
+
+[2025-09-19 8:05 p.m.] anfroholic
+I am seeing 64 pins? 
+Is that what we should be shooting for. 
+I was under the assumption there were no hard standards and was shooting for something that could cover most use cases while being easy for people to work with. 
+There were also some suggestions for this same kind of thing but with .1" spacing and the ability to breadboard. 
+
+Is there interest in that variation as well?
+
+
+[2025-09-19 8:06 p.m.] mithro_
+Not currently planned as it is quite expensive in very low volume.
+
+
+[2025-09-19 8:07 p.m.] 246tnt
+So around 750um then ?
+
+
+[2025-09-19 8:07 p.m.] mithro_
+I don't think people can access that thread?
+
+
+[2025-09-19 8:07 p.m.] anfroholic
+I can see it
+
+
+[2025-09-19 8:08 p.m.] urish
+Same
+
+
+[2025-09-19 8:08 p.m.] mithro_
+Maybe just my phone being weird?
+
+
+[2025-09-19 8:08 p.m.] 246tnt
+@Tim 'mithro' Ansell why not ? It's in #general in this discord.
+
+
+[2025-09-19 8:09 p.m.] mithro_
+@Tholin - I would definitely like to have some DIP style templates. I believe @ReJ aka Renaldas Zioma needs that for the z80?
+
+{Reactions}
+👍 (2)
+
+[2025-09-19 8:10 p.m.] mithro_
+Just seems to be some weirdness of the phone client, working now. Sorry.
+
+
+[2025-09-19 8:11 p.m.] tholin
+The current COB footprint is too large to fit a DIP footprint
+
+
+[2025-09-19 8:11 p.m.] tholin
+I’ll need to make a new one
+
+
+[2025-09-19 8:11 p.m.] tholin
+But as it stands, I can’t even test the current one
+
+
+[2025-09-19 8:11 p.m.] tholin
+Still do not own a wire bonder and won’t for a few more months
+
+
+[2025-09-19 8:25 p.m.] tholin
+But, theoretically, should be possible. After all, the dies are of the right dimension to fit inside one of those ceramic DIP carriers.
+
+
+[2025-09-19 8:30 p.m.] 246tnt
+@Tim 'mithro' Ansell So you want one pad frame but different breakout options ?
+
+
+[2025-09-19 8:31 p.m.] anfroholic
+Just for reference, this is what it looks like currently.
+
+
+[2025-09-19 8:31 p.m.] anfroholic
+
+
+{Attachments}
+2025-09_media/image-ADB94.png
+
+
+[2025-09-19 8:32 p.m.] 246tnt
+That's definitely not bondable. Wires can't be at more than 45 deg.
+
+
+[2025-09-19 8:32 p.m.] 246tnt
+Ah wait, nm, that footprint is not the die itself, forget it.
+
+
+[2025-09-19 8:33 p.m.] anfroholic
+I was more making a visual model than anything concrete, just trying to engage some conversation and see if there are opinions so I may gather a consensus of sorts.
+
+
+[2025-09-19 8:37 p.m.] tholin
+Okay, I don’t think it needs to be scaled down much to fit routing to the pins
+
+{Reactions}
+👍
+
+[2025-09-19 8:45 p.m.] mithro_
+@tnt - I think there are missing traces from the bond pads to the edge pads?
+
+
+[2025-09-19 8:46 p.m.] anfroholic
+correct, there are no traces on anything
+
+
+[2025-09-19 8:47 p.m.] mithro_
+Eventually, multiple standard templates for everything and it being someone else's problem 😛
+
+
+[2025-09-19 8:48 p.m.] mithro_
+But in the short term, one or two pad frames and one or two breakouts.
+
+
+[2025-09-19 9:12 p.m.] tholin
+For reference, this is what it looks like inside an actual DIP-40 ceramic carrier.
+https://www.spectrum-semi.com/sites/default/files/pdfs/CSB04079.pdf
+
+
+[2025-09-19 9:20 p.m.] tholin
+Relevant section. I believe I can design a COB footprint based on these dimensions. I also have diagrams for DIP-48 and DIP-64 carriers to reference if more pads are needed.
+
+{Attachments}
+2025-09_media/image-6BE4A.png
+
+{Reactions}
+💜
+
+[2025-09-21 6:48 p.m.] tholin
+Done!
+
+{Attachments}
+2025-09_media/image-96343.png
+
+{Reactions}
+blobclap (4)
+
+[2025-09-21 9:28 p.m.] tholin
+Well, that works!
+
+{Attachments}
+2025-09_media/image-50849.png
+
+{Reactions}
+🎉 (3)
+
+[2025-09-23 12:28 a.m.] mithro_
+@Tholin - Cool! What size is that?
+
+
+[2025-09-23 12:29 a.m.] mithro_
+@Tholin - What design rules does that end up being?
+
+
+[2025-09-23 7:37 a.m.] tholin
+Its JLCPCB’s two-layer PCB rules
+
+
+[2025-09-23 7:38 a.m.] tholin
+Its basically just a DIP-40 carrier, but on PCB
+
+
+[2025-09-23 8:30 p.m.] mithro_
+@Tholin - Link to repo?
+
+
+[2025-09-23 8:32 p.m.] tholin
+https://github.com/AvalonSemiconductors/gf180mcu_cob
+
+{Embed}
+https://github.com/AvalonSemiconductors/gf180mcu_cob
+GitHub - AvalonSemiconductors/gf180mcu_cob: Experimenting with Chip...
+Experimenting with Chip On Board setups for GF180MCU chips, most importantly gf180 Caravel. - AvalonSemiconductors/gf180mcu_cob
+2025-09_media/gf180mcu_cob-C1E0D
+
+
+[2025-09-23 8:37 p.m.] mithro_
+Awesome, thanks!
+
+
+[2025-09-23 10:30 p.m.] mithro_
+I wonder if you could "drop" the chip in a cut out to make the whole thing flatter, bond wires shorter.....
+
+
+[2025-09-24 1:22 a.m.] algofoogle
+4-layer PCB, and a die-shaped hole milled out of the top substrate, you mean?
+
+
+[2025-09-24 1:55 a.m.] mithro_
+@algofoogle (Anton Maurovic) - yeah, something like that
+
+
+[2025-09-24 4:47 a.m.] urish
+How would that work with the epad?
+
+
+[2025-09-24 4:59 a.m.] mithro_
+@urish - You mean the backside silicon connection? I believe you can still have pads in the hole.
+
+{Reactions}
+👍
+
+[2025-09-24 5:02 a.m.] algofoogle
+Is the back of the die electrically connected, though? I don’t think it was in the Efabless runs (or at least not intentionally); @Tim Edwards ?
+
+
+[2025-09-24 5:03 a.m.] mole99
+No, it should be not. The epad refers to QFN packaging and is also wire bonded.
+
+
+[2025-09-24 5:05 a.m.] algofoogle
+Btw, I think the hole I was talking about is called a “PCB Cavity”, and there are different ways to do it and different options supported.
+
+https://www.pcbway.com/blog/PCB_Basic_Information/What_is_Cavity_PCB_0882350d.html
+
+Related: die embedding
+
+https://www.pcbway.com/blog/Engineering_Technical/Use_Embedded_Components_To_Improve_PCB_Performance_And_Reduce_Size.html
+
+
+[2025-09-24 5:33 a.m.] mithro_
+Yeah PCB Cavity is proper name.
+
+
+[2025-09-24 5:36 a.m.] mithro_
+They have an picture on that last page like this
+
+{Attachments}
+2025-09_media/2014522151016245-0E3A0.png
+
+
+[2025-09-25 1:18 a.m.] polyfractal
+oooh that's interesting re: image sensors, since it'd provide some protection to the bond wires without encapsulation
+
+
+[2025-09-25 7:40 p.m.] mithro_
+BTW - People here might be interested in the discussions in #🏗️-die-sorter as well.
+
+
+[2025-09-26 7:14 a.m.] jwbowen
+*(sorry, I was just directed here by someone chatting about garage phabs and just wanted to say I'm a fan of your videos! I'll go back to being a normal person now)*
+
+{Reactions}
+❤️
+
+[2025-09-26 5:15 p.m.] polyfractal
+Started a thread.
+
+
+==============================================================
+Exported 89 message(s)
+==============================================================

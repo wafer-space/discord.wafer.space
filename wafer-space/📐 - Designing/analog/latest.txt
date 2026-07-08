@@ -1,0 +1,102 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 📐 - Designing / 🕰️-analog
+After: 2026-06-30 11:59 p.m.
+Before: 2026-08-01 12:00 a.m.
+==============================================================
+
+[2026-07-01 2:30 p.m.] namibj
+
+
+
+[2026-07-01 2:59 p.m.] namibj
+@BreakingTaps perhaps you'd come up with info on the matter of photovoltaic mode operation of cells; particularly on the subject of whether multiple photodiodes in photovoltaic mode can be series connected to produce sufficient voltage for CMOS logic; I'd have ideas based on native nmos that wouldn't require more than the 500~700mV to operate but they're all unfortunately large structures due to the unavailability of any pmos devices with threshold voltages "reasonably below" diode forward voltage.
+
+I'd guess there are some available (on gf180mcuD) tactics for bootstrapping a charge pump voltage booster from a singular solar cell?
+
+Maybe substrate-tied dnwell with an lvpwell-to-dnwell photodiode (producing positive voltage relative to substrate) acting in series with a separate (d)nwell-to-psub diode (producing negative voltage relative to substrate) could work.
+The negative bias could allow biasing pmos devices to act as resistors for native-nmos devices doing the actual logic, which would massively shrink the area requirements for the logic and probably also comfortably stabilize operating reliability against process variations in native nmos threshold voltage.
+
+No good idea yet about back channel though; forward channel is obvious through just sufficiently deep amplitude modulation of the light, some probably-MIM storage caps for logic voltage supply, and some dynamic logic kind of data demodulator.
+Or if there's two beams available obviously just either differential signaling with some kind of clock recovery or a synchronous clock-and-data interface.
+
+My goal is btw. to get a PUF-like structure that can be read out at the die sorter without needing to touch the bond/probe pads during this, to later post-packaging read the same PUF-like from digital logic, being able to match against the database the die sorter created, getting to look up what coordinates on which wafer that die came from. Or realistically just what reticle on which wafer (it's far cheaper to just encode the intra-reticle location with a few bits of mask ROM structure).
+
+I'm aiming towards enabling full traceability that way; if one wants easier IDs one can just put efuse PROM onto the die and burn these coordinates and other tracing information during the first post-packaging e-test of the die, just as part of the test pattern interaction; might require some scripting there but shouldn't be too involved for a vaguely flexible tester platform.
+
+
+[2026-07-01 3:06 p.m.] namibj
+Oh, NFC-style with on-die inductor comes to the mind as well, just now!
+
+
+[2026-07-01 3:06 p.m.] namibj
+@Tim 'mithro' Ansell
+
+
+[2026-07-01 3:57 p.m.] polyfractal
+hmm, I do recall reading a paper some years ago about an image sensor that was self-powered. I forget the scheme exactly but it basically toggled between energy harvesting and image capture. so in principle it's probably doable.  will see if I can find the paper...
+
+
+[2026-07-01 6:24 p.m.] namibj
+Hmmm; the NFC idea that came right after I sent that wall-of-text (it's technically the immediately following message in this channel) does feel somewhat more applicable right now at least; if using top metal for the resonant inductor of it and de-tuning by switching a cap into/out of the tank or even just modulating the load it puts onto the tank via some kind of like shunt/series combo LDO regulator, or literally shorting out the tank (with sufficiently limited duty cycle ofc.):
+some way probably has enough intensity in the back channel to make it not require high specs from the reader.
+After all, for reasons of getting by with a compact coil and not having the global PDN ring enclosing the "regular user area" of the die wreck the Q of the resonant tank, I'd expect this to effectively-need a near-field H-field antenna. probably set up to sweep the frequency band of interest until it hits evidence of exciting the receiver's resonance (process variations cause some shift in resonant frequency), perhaps in a shape of a narrow gap between two coils thick enough for the die to slide into and deep enough to reach in just past the pad&PDN ring, or even just a more-pointy-tip "loop antenna"/H-field-oscilloscope-probe roughly visually aligned to and pointed close to but not touching the die by where that die has it's NFC-antenna.
+
+Light clearly has the benefit of less risk of accidentally scratching the die and not worrying about EMC compliant operation of the reader, but I'd assume a back channel to be FAR more difficult to pull off than just using simple well-trodden NFC tech.
+
+[||If I knew of a low-cost source for single-emitter variants of the triple-emitter https://ams-osram.com/products/lasers/ir-lasers-vcsel/osram-bidos-e1005-l-plpvyl1-940a-e , I'd be far more hopeful in possibly making optically powered bootstrapping (coupled through a simple multimode fiber) a silicon-proven thing on not-my-dime (well, as far as the tapeout masks for the process of silicon-proving the bootstrap mechanic goes)....
+
+...as that should be readily usable for bootstrapping any design variants of the switched-capacitor based MVDC-tamer plans (which I have _not_ given up on bringing towards a hands-on PoC demonstrator). Like, charging the local LV supply capacitors through optically provided power while the higher-voltage supply is not yet connected, as they later harvest from the resonant EM fields once in operation, and it's not necessarily easy to inject such "RF" power and not even necessarily feasible to bootstrap off of that due to the harvesting architecture that's preferred for steady-state possibly requiring synchronous rectification or switching of the power transistor.
+
+E.g. one could have a rectification diode from the harvesting node into the local storage capacitor, a capacitor from that node to the high-voltage drain node of the power switch, and a low-loss clamp shunt transistor that can ground the harvest node to the power transistor's source which also acts as the local ground.
+
+...errr, the last bit of thinking I allotted to the matter this week just revealed that if the power switch has automatic reverse diode behavior for the drain node, it would probably be safe to use this particular harvesting architecture as the voltage amplitude during bootstrap procedure is limited by the drain to-source capacitance (including the harvesting capacitor's contribution) and the bootstrap current amplitude, while the power drain-source leakage even if little prevents the drain voltage from building up much beyond the previously given implied peak-peak voltage amplitude, as long as it exceeds bleed-to-environment enough, and reverse voltage is clamped by the drain-source diode of the power switch....
+||]
+
+{Embed}
+https://ams-osram.com/products/lasers/ir-lasers-vcsel/osram-bidos-e1005-l-plpvyl1-940a-e
+OSRAM BIDOS™ E1005 L, PLPVYL1 940A_E IR Lasers (VCSEL) - ams-osra...
+VCSEL (940 nm)
+Popt,typ = 11 mW
+
+
+[2026-07-01 6:59 p.m.] rrichmondr
+Hi everyone, is ti possible to change the IO configuration on the chip ? for example the full tie list 56 (bidir: 40, in: 14, analog: 2), could we add more analogs ? and still get the chip on board packagin ?
+
+
+[2026-07-01 7:05 p.m.] anfroholic
+Yes @RRichmondR you are able to change any of the io pads to whatever you wish. With the cob the ground nets will be shorted and the power traces (currently) have decoupling caps.
+
+
+[2026-07-01 7:17 p.m.] rrichmondr
+and is there any information regarding the max io speed  on the digital ones ? i couldn't find anything
+
+
+[2026-07-01 8:00 p.m.] rebelmike
+Sample size of 1, but on the Tiny Tapeout board I could clock the factory test design at up to 188MHz and it would work correctly.  On the output side I don't have a good enough scope but the drivers are pretty strong - they still seemed pretty good at 100MHz
+
+{Reactions}
+👍 (2)
+
+[2026-07-01 8:10 p.m.] 246tnt
+They're actually a bit too strong ... so if you wiring isn't up to par you get quite a bit of ringing due to the fast edge, so much I actually got some double clocks on spi lines in some conditions.
+
+
+[2026-07-03 12:26 a.m.] namibj
+what happened if you went a little beyond that speed? Minor amount of swalloed clocks? Minor excess count? Sudden breakage? No faster quality clock source on hand to try to feed in and see if it can go faster?
+
+
+[2026-07-03 7:38 a.m.] rebelmike
+Seems like sudden breakage, when I’ve run this test before on sky chips it’s normally shown one missing count, then two before breaking down. But here it suddenly starts missing lots of clocks. Unfortunately two variables have changed at once though because TT has moved to a new demo board with mezzanine connectors so I can’t test in my old setup, and the demo board has a possibly non-ideal debounce circuit for the manual clock button hanging off the clock line.
+Update though, I tried a higher drive strength from the RP2350 that’s generating the clock and got up to 220MHz ok (again sudden breakage at 224MHz)
+
+{Reactions}
+ferrisCatOwO
+
+[2026-07-06 3:12 p.m.] 246tnt
+Started a thread.
+
+
+==============================================================
+Exported 14 message(s)
+==============================================================

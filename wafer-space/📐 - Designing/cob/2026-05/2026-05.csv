@@ -1,0 +1,401 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"169786952432746498","mithro_","2026-05-01T01:55:31.5160000+00:00","Great work Mike!","",""
+"169786952432746498","mithro_","2026-05-01T01:55:56.3430000+00:00","From what I have seen so far, I don't think the bond house we are using will care at all.","",""
+"169786952432746498","mithro_","2026-05-01T01:59:38.7170000+00:00","@RebelMike / @Greg - It is very likely whatever we end up using on the TinyQV and/or Racquet die will become the standard CoB layout for the non-1x1 projects getting packaged.","",""
+"169786952432746498","mithro_","2026-05-01T02:01:01.7420000+00:00","@RebelMike / @Greg / @Leo Moser (mole99) - I'm also open to the alternative idea of changing the GF180MCU template I/O allocations for these sizes to make things easier.","",""
+"252198343764213760","dnaltews","2026-05-01T02:05:54.5380000+00:00","a pin 1 marker on the silkscreen for the mezzanine connector might be nice just for completeness","",""
+"262706220073222144","namibj","2026-05-01T02:07:20.5310000+00:00","Might wrongly suggest polarization.","",""
+"384390069412429834","polyfractal","2026-05-01T02:19:39.8510000+00:00","just got my motherboard breakout PCBs ... i severely underestimated how small the connector pins/pads would be 😅  probably should have bought a stencil to go with it, guess we'll see how good I am at fine soldering!","","💜 (1)"
+"169786952432746498","mithro_","2026-05-01T02:30:16.8540000+00:00","Hot Air reflow and a good (pre-)heating plate helps a lot, surface tension is your friend.","","👍 (1)"
+"756011607603019777","anfroholic","2026-05-01T03:36:46.3360000+00:00","Sorry, it seems I didn't hit save before I hit commit.","",""
+"274535015969456128","greg.hashtag.9468","2026-05-01T06:43:13.1610000+00:00","Do you have the scripts which generated this? Would be nice to get an SVG if possible to put into the datasheet/spec for the chip","",""
+"274535015969456128","greg.hashtag.9468","2026-05-01T06:47:00.1120000+00:00","Was this checked in somewhere? I'm happy to take a look and poke around with the bonding for the 0p5x1","",""
+"691780627338625077","rebelmike","2026-05-01T06:48:29.6950000+00:00","It’s in https://github.com/MichaelBell/chip-on-board-wire-bonded-pcbs/tree/half-slot-dev/mezzanine-0p5x1","","👍 (1)"
+"756011607603019777","anfroholic","2026-05-01T06:49:09.0180000+00:00","I am told these may be partially out of date, but here you go!","2026-05_media/GD04_chip_top_10_8-53FBA.svg,2026-05_media/GD02_chip_top_14_4-96145.svg,2026-05_media/GD03_chip_top_6_6-B0050.svg,2026-05_media/GD04_chip_top_6_8-F78BA.svg",""
+"691780627338625077","rebelmike","2026-05-01T06:51:31.1510000+00:00","Ah, no it isn't - apparently I was on Andrew's branch and committed and pushed it there.  I'll merge that","",""
+"274535015969456128","greg.hashtag.9468","2026-05-01T06:53:47.7900000+00:00","Thanks 👍","",""
+"691780627338625077","rebelmike","2026-05-01T06:54:16.5040000+00:00","I'll also make a PR against the main repo.  But possibly after I've had some coffee 🙂","",""
+"274535015969456128","greg.hashtag.9468","2026-05-01T06:56:32.9260000+00:00","No worries, I'll only get to looking at this in depth in a few hours","",""
+"169786952432746498","mithro_","2026-05-01T07:02:14.7710000+00:00","It is a super horrific AI written bit of code. Let me see if I can upload it somewhere. 
+
+At some point I think I'm (or really I'm going to have a better attempt at AI doing it) going to try and write/good a proper version and integrate it into either https://platform.wafer.space or maybe even LibreLane.","","💜 (1)"
+"169786952432746498","mithro_","2026-05-01T07:03:30.9950000+00:00","@Leo Moser (mole99) / @Andrew Wingate - I just had the thought that maybe it should be LibreLane that is generating Andrew's KiCAD footprints + wire bonding diagrams and my random pin out diagrams?","",""
+"169786952432746498","mithro_","2026-05-01T07:03:48.5300000+00:00","@Leo Moser (mole99) - Terrible or good idea? 😛","",""
+"756011607603019777","anfroholic","2026-05-01T07:04:58.0560000+00:00","I don't know how that would work? You  must specify a standard wirebonding frame first? Like from a set?","",""
+"691780627338625077","rebelmike","2026-05-01T07:06:32.0400000+00:00","Not sure if Librelane, but a script that could generate the correct sized pad + drawing annotations in the exact pin positions could be useful. For the whole padring I guess it would be possible at least for a standard rectangular one - just push the pins out until the 45 degree rule wasn’t violated","",""
+"691780627338625077","rebelmike","2026-05-01T07:33:12.3260000+00:00","Yeah I don’t know how much thought was given to the pin allocations for the different sizes - I suspect @Leo Moser (mole99) was just trying things out.
+Potentially we try to route them all to match the existing template as much as possible, then change the template to make them match completely?
+Though I suspect in general this doesn’t matter too much - the case of wanting them to match has only really come up because TinyQV was used in different slot sizes as a test.","",""
+"169786952432746498","mithro_","2026-05-01T07:38:51.1680000+00:00","I think having a ""standard"" which means people can share ""motherboards"" PCBs is helpful rather than everyone having to design new ones.","",""
+"691780627338625077","rebelmike","2026-05-01T07:42:47.7720000+00:00","I don’t think a standard mapping of the template pinout is required for that - it’s probably the other way around: if there was a standard SoC host motherboard (with flash, ram, etc) and the pinout for that and all the breakouts was known, you could just wire things up correctly in the silicon.","",""
+"691780627338625077","rebelmike","2026-05-01T07:43:39.3740000+00:00","But I guess that is basically the same as saying make the template match whatever we end up with","",""
+"756011607603019777","anfroholic","2026-05-01T07:50:48.8980000+00:00","That is a good point though to think about some things upstream instead of all downstream. 
+Thanks for the thought","",""
+"169786952432746498","mithro_","2026-05-01T12:38:08.8330000+00:00","@Greg - Don't say I didn't warn you 😛 - https://github.com/mithro/wafer-space-die-pad-diagrams","","❤️ (1)"
+"1386929896323944612","thorben_61995","2026-05-01T13:42:43.7540000+00:00","That looks much more professional than what I did 😅","",""
+"1386929896323944612","thorben_61995","2026-05-01T13:43:06.0400000+00:00","","2026-05_media/IMG_20260429_145204314-A6D5C.jpg",""
+"220639106915368960","tholin","2026-05-01T14:24:47.8670000+00:00","","2026-05_media/padout-C400A.png",""
+"756011607603019777","anfroholic","2026-05-01T14:26:21.6910000+00:00","@Tholin here's yours, anyone else can have theirs if they wish. 
+
+We're looking to integrate this into the verification system, so you'd just get one anyways.","2026-05_media/AS03_chip_top_6_0-B0753.png",""
+"756011607603019777","anfroholic","2026-05-01T14:27:05.0500000+00:00","Yours is still very neat that is shows the sub-projects as well!","",""
+"220639106915368960","tholin","2026-05-01T14:33:28.1040000+00:00","To show the macro locations is a bit tricky. The position of each macro is specified in the librelane config, but to get its size, you need to open up its LEF.","","👍 (1)"
+"220639106915368960","tholin","2026-05-01T14:34:46.6140000+00:00","I see the analog pads are all just labeled ""PAD"" in this","",""
+"756011607603019777","anfroholic","2026-05-01T14:35:39.1850000+00:00","Yeah, we were talking earlier about pincounts and what's actually needed. 
+How many of the pins did you end up using for real? all of them? Most of them?","",""
+"220639106915368960","tholin","2026-05-01T14:40:30.2880000+00:00","All of them","","💯 (1)"
+"756011607603019777","anfroholic","2026-05-01T14:41:35.8190000+00:00","Like I said we were talking about some reduced pin counts. 
+In your opinion what's a reasonable low number?","",""
+"756011607603019777","anfroholic","2026-05-01T14:41:43.7130000+00:00","*lower","",""
+"220639106915368960","tholin","2026-05-01T14:42:32.9110000+00:00","I always need as many as possible for my processor designs for memory throughput","","🤣 (1)"
+"220639106915368960","tholin","2026-05-01T14:43:09.6430000+00:00","I can finally build 32-bit wide data buses on wafer.space","",""
+"756011607603019777","anfroholic","2026-05-01T14:43:25.4050000+00:00","It's all good. There really is no answer. 
+Ah, ok, that's a good thought.","",""
+"220639106915368960","tholin","2026-05-01T14:43:38.2440000+00:00","My GFMPW-1 RISC-V core multiplexes both halves of the address and both halves of a word onto the same 16 pins","",""
+"220639106915368960","tholin","2026-05-01T14:43:51.9950000+00:00","4 clock cycles for a single instruction fetch, worst case","",""
+"220639106915368960","tholin","2026-05-01T14:44:04.7570000+00:00","3 clock cycles best case","",""
+"756011607603019777","anfroholic","2026-05-01T14:44:05.5800000+00:00","I see. Thanks for the insight","",""
+"220639106915368960","tholin","2026-05-01T14:45:20.6330000+00:00","wafer.space still doesn’t give enough pins for separate address and data buses on a 32-bit CPU without compromises, but its almost there","","👍 (1)"
+"756011607603019777","anfroholic","2026-05-01T14:46:19.4340000+00:00","Getcha, the question revolved around trying to come up with some less expensive cob or packaging alternatives.","",""
+"1187141985530818611","ravenslofty","2026-05-01T15:00:04.8220000+00:00","CHES uses 4 GPIOs for JTAG and 11 for ULPI","","💜 (1)"
+"1187141985530818611","ravenslofty","2026-05-01T15:00:49.6180000+00:00","(if that's a useful datapoint)","",""
+"756011607603019777","anfroholic","2026-05-01T15:01:46.3960000+00:00","They are all useful. Thank you. 
+I think we just need to put together some numbers and see where any kind of step functions are.","",""
+"1187141985530818611","ravenslofty","2026-05-01T15:07:34.5040000+00:00","(side note, I don't suppose there's a way to manually annotate the pad diagrams with actual pin functions rather than the toplevel pin name)","",""
+"220639106915368960","tholin","2026-05-01T15:08:36.9930000+00:00","Unfortunately, we are talking about integrated circuits, where IO is often the bottleneck","",""
+"756011607603019777","anfroholic","2026-05-01T15:08:37.2530000+00:00","Does this data exist somewhere? If it exists and people will use it we can incorporate it into the pipeline","",""
+"1187141985530818611","ravenslofty","2026-05-01T15:09:06.1450000+00:00","ULPI was my solution to that problem :p","",""
+"1187141985530818611","ravenslofty","2026-05-01T15:09:27.6500000+00:00","uh, I have it as source code defines; nothing more structured if that's what you're asking for","",""
+"756011607603019777","anfroholic","2026-05-01T15:09:30.3870000+00:00","Can you share what that acronym is?","",""
+"756011607603019777","anfroholic","2026-05-01T15:09:59.4310000+00:00","I see, if there's a way to get it into the GDS that's our source of truth.","",""
+"1187141985530818611","ravenslofty","2026-05-01T15:10:08.8210000+00:00","UTMI+ Low Pin Interface; uh, USB Hi Speed PHY interface","","💜 (1)"
+"1187141985530818611","ravenslofty","2026-05-01T15:10:54.9370000+00:00","which means I can do 480Mbps serial (well, theoretically) while having my chip only have to achieve 60MHz","",""
+"220639106915368960","tholin","2026-05-01T15:11:01.6840000+00:00","I mean, particularly for memory. Ever CPU I ever taped out on gf180mcu was memory bottlenecked. Caravel was **aggressively** memory bottlenecked.","",""
+"756011607603019777","anfroholic","2026-05-01T15:11:21.0130000+00:00","I know Tim has been interested in SerDes, this can probably help with pincounts someday as well?","","👍 (1),🎉 (1)"
+"1187141985530818611","ravenslofty","2026-05-01T15:11:28.6580000+00:00","yes","",""
+"756011607603019777","anfroholic","2026-05-01T15:11:43.9380000+00:00","I am marginally aware how they didn't let you do a lot","",""
+"1187141985530818611","ravenslofty","2026-05-01T15:12:15.3090000+00:00","(although I feel like at that point we *need* a better standard cell library >.>)","","💯 (1)"
+"1187141985530818611","ravenslofty","2026-05-01T15:12:42.7290000+00:00","(this is not directed at Tholin, it's directed at myself to try to get back to working on my synthesisable domino logic library)","","waferspace (1)"
+"220639106915368960","tholin","2026-05-01T15:19:21.5300000+00:00","There is a lot I need to improve about my SCL before I’m fully confident in it","",""
+"1187141985530818611","ravenslofty","2026-05-01T15:20:37.6950000+00:00","It also doesn't help that I'm having to work with custom timing extraction scripts from ngspice to characterise the cells","",""
+"1187141985530818611","ravenslofty","2026-05-01T15:23:11.0880000+00:00","I also think my library will probably have to rely on yours for the non-logic stuff because I have zero clue what to do there","",""
+"691780627338625077","rebelmike","2026-05-01T15:44:18.7740000+00:00","Tiny Tapeout offers 26 pins (plus any analog pins) so 26-30 might be something to consider for a lower cost option on the smaller slots. Although Wafer Space is quite a different offering to TT people might prototype on TT and then bring things across.
+
+It might also be interesting to have a higher pin count option for the full size slot.","","💯 (1)"
+"756011607603019777","anfroholic","2026-05-01T15:45:15.1940000+00:00","I don't think there are any plans to lower any counts, only to try to offer a lower cost version.","",""
+"691780627338625077","rebelmike","2026-05-01T15:49:34.7250000+00:00","I guess I was thinking it might be interesting to have the current option (56 IOs) plus a smaller option (~26 IOs) for the half slots.
+And the current option plus a larger option (~80 IOs?) on the full slot.","",""
+"691780627338625077","rebelmike","2026-05-01T15:52:55.4120000+00:00","Though the larger option would obviously need a different connector (presumably 2x50) - I know there was some concern about two connectors but TT should soon find out if that causes any problems","",""
+"756011607603019777","anfroholic","2026-05-01T15:54:35.1260000+00:00","2x mezzanine was shunned pretty hard by those here, so I don't see that as an option. 
+Maybe if we can get back to looking at some kind of LGA or something. 
+https://discord.com/channels/1361349522684510449/1408134567491145728/1426376335709966446","",""
+"691780627338625077","rebelmike","2026-05-01T15:56:55.6080000+00:00","Yeah I remember that discussion but I think it was probably over cautious. But the new TT boards should be a good indicator of whether it’s a problem in practice (they have 2x mezzanine)","","👍 (1)"
+"805909190333038612","trev5514","2026-05-01T16:05:01.5210000+00:00","I was going to use this for my daughter/motherboard cards: HC-PBB40C-90DP-0.4V-02 it's a 90 pin version, much easier than a 2x50 (in my opinion).","",""
+"805909190333038612","trev5514","2026-05-01T16:05:10.2280000+00:00","https://jlcpcb.com/partdetail/HCTL-HC_PBB40C_90DP_0_4V02/C19089238","","👍 (1),👀 (1)"
+"262706220073222144","namibj","2026-05-01T17:40:49.4020000+00:00","DDR to the rescue?","",""
+"169786952432746498","mithro_","2026-05-02T02:31:48.7430000+00:00","FYI - The diagrams are at https://github.com/mithro/wafer-space-die-pad-diagrams/tree/main/diagrams","",""
+"169786952432746498","mithro_","2026-05-02T02:33:03.0740000+00:00","You have a ULPI USB interface?","",""
+"169786952432746498","mithro_","2026-05-02T02:36:13.0100000+00:00","At the current time packaging is a large part of the cost here and packaging is driven up by the number of IO pins. IO pads also take up quite a bit of die space. Hence figuring out options for SERDES and other ways to reduce pin count is something I'm very interested in.","",""
+"1187141985530818611","ravenslofty","2026-05-02T06:19:13.3080000+00:00","Yes","",""
+"169786952432746498","mithro_","2026-05-02T06:24:12.3990000+00:00","@Lofty - Cool! I think having a bunch of proven USB connectivity solutions would be a huge gain for community.","",""
+"169786952432746498","mithro_","2026-05-02T06:24:33.0440000+00:00","@tnt also had some type of USB interface on the Tiny Tapeout chip.","",""
+"1187141985530818611","ravenslofty","2026-05-02T06:26:16.1390000+00:00","I knew I was going to be bandwidth hungry but also needed some kind of standard communication interface; at one point the plan was to have the chip be its own PHY and run at Full Speed, but then it was suggested that I could use ULPI and aim for Hi Speed instead.","",""
+"169786952432746498","mithro_","2026-05-02T06:29:53.7620000+00:00","FWIW - The original design doc for Caravel had it providing a high speed interface between your tape out and a computer and a whole bunch of ""virtual"" digital and analog pins that could be queried via virtual logic analyser / virtual oscilliscope so the limited number of pins that we could provide cost effectively was less of an impact, but that never quite happened.","",""
+"169786952432746498","mithro_","2026-05-02T06:30:22.2870000+00:00","I'm still interested in reaching that type of goal.","",""
+"262706220073222144","namibj","2026-05-02T18:19:22.9790000+00:00","If you have a little space (it's the smallest analog tile on ttsky26a, but you'd probably want higher current output drivers if they don't have to go through an analog mux), two analog pads, and some tt-style Mux'd digital access, and would give a functioning one to @azonenberg for characterization, I'd put considerable effort into porting my currently-in-progress ttsky26a submission to gf180mcud in time for the wafer.space Run2 GDS deadline.
+
+(I hope to assume correctly that there is deep-nwell and the capability for placing `nmos_03v3_nvt` devices with raised bulk in said deep-nwell. And decent models of those in the region just around/above the (effective) threshold.
+With those ""requirements"" I'd see no reason why my ttsky26a submission wouldn't be readily portable to Run2.
+At least for short channels (no backplane or multi-meter Twinax!) an RX design might be possible to attempt before the Run2 deadline.)
+
+I'll try my best to get a parasitics-extraction simulation of the VCO core done today so we'd know where things stand both with the VCO itself as well as with an SDR latch fast enough to do a DIV2 on the VCO. No inductors involved.","",""
+"596068704471482370","246tnt","2026-05-02T18:47:25.8280000+00:00","So has anyone tested their COB package yet ?","",""
+"220639106915368960","tholin","2026-05-02T18:48:01.1330000+00:00","I will on tuesday","",""
+"220639106915368960","tholin","2026-05-02T18:49:04.1760000+00:00","Or... wednesday? The package got delayed?","",""
+"220639106915368960","tholin","2026-05-02T18:49:10.9370000+00:00","That’s not good, I’m not home wednesday","",""
+"220639106915368960","tholin","2026-05-02T18:50:00.7750000+00:00","Did the COBs get shipped in an envelope (like the dies) or package?","",""
+"210834917125390336","simi150500","2026-05-02T19:11:13.4590000+00:00","envelope","",""
+"220639106915368960","tholin","2026-05-02T19:11:43.6550000+00:00","Oh, very good. Lets hope it fits in my mailbox.","","👍 (1)"
+"262706220073222144","namibj","2026-05-02T21:37:18.1710000+00:00","making you have a mailbox that will fit them (if you ask nicely enough you can probably get fairly good dimensins) could allow you to reduce the need for hope/luck. (I should get me a mailbox that can fit German Maxibrief; C4 (or B4?) at the 3?5?cm thickness, or at least letters of full size (non-folded) without substantial bending....)","",""
+"220639106915368960","tholin","2026-05-02T21:38:34.3060000+00:00","The envelope with the dies fit","",""
+"220639106915368960","tholin","2026-05-02T21:38:53.1710000+00:00","So should be fine","",""
+"262706220073222144","namibj","2026-05-02T21:41:20.4170000+00:00","(I say this because the COBs are from what I could see at breaking tap's post, slabs of PCB as they were processed at the bond house, not individualized or like the dies, taped.)","",""
+"756011607603019777","anfroholic","2026-05-03T03:26:32.7710000+00:00","@Tim 'mithro' Ansell do we know the formfactor the COB were send in? 
+Envelope or box?","",""
+"169786952432746498","mithro_","2026-05-03T03:45:27.5530000+00:00","@Andrew Wingate - Smaller padded envelope inside a non-padded fedex envelope.","","💯 (2)"
+"169786952432746498","mithro_","2026-05-03T05:18:30.2520000+00:00","@Andrew Wingate - BTW Did you share the bond diagrams you are generating here?","",""
+"756011607603019777","anfroholic","2026-05-03T05:39:04.0850000+00:00","I only shared Breaking Taps' version. 
+https://discord.com/channels/1361349522684510449/1408134567491145728/1499326875657306113
+I can share more if you like.","",""
+"596068704471482370","246tnt","2026-05-04T07:19:46.5680000+00:00","@Greg Does the arrow sticker on the picture mean you found an issue with that particular chip ?","",""
+"220639106915368960","tholin","2026-05-05T15:26:08.9700000+00:00","I don’t know how I failed to notice that my dies are upside-down when I looked closely at this. Confirmation bias, probably.","",""
+"596068704471482370","246tnt","2026-05-05T15:40:03.6810000+00:00","I'm looking at https://discord.com/channels/1361349522684510449/1408134567491145728/1495357823314563143  and the pad 0 indicator (which is the one where QR code is on the dies) is on the side of the silk `Uxx` markers.","",""
+"596068704471482370","246tnt","2026-05-05T15:45:51.0990000+00:00","Ah yeah, I see. In the repo for the COB PCB the board orientation is not the same as the GDS orientation. https://github.com/wafer-space/chip-on-board-wire-bonded-pcbs/blob/main/74pad-70pin-mezzanine/wirebonding/wirebonding.png","",""
+"220639106915368960","tholin","2026-05-05T16:11:11.2630000+00:00","I simply expected the top of the GDSII layout to be aligned with the top of the PCB layout, and was never informed otherwise
+Even in that wireponding.png view, you have to squint to see where the QR Code and logo are.","",""
+"270286460668739587","meinhard","2026-05-06T16:22:12.9410000+00:00","How are Vcore, VIO, and Vaux currently/in future used? The cob module routes them separately but they seem to be low-ohmically connected.","",""
+"323371864074485771","mole99","2026-05-06T16:46:34.7530000+00:00","In the (very) near future, you will be able to have separate voltage domains in your chip by using the wafer.space template. The foundry-provided pads short the core and I/O domain on purpose.
+
+This will be possible thanks to Tim's 3.3/5V I/O cells, which have a level shifter between core and I/O domain and keep both domains properly separated in the power/ground pads.
+
+As for Vaux, the idea is to provide another voltage domain directly to the core.","","👍 (1),😮 (1)"
+"270286460668739587","meinhard","2026-05-06T18:33:54.7670000+00:00","Great, thanks for the info @Leo Moser (mole99)","","👍 (1)"
+"274535015969456128","greg.hashtag.9468","2026-05-07T13:31:51.1610000+00:00","Yes. that particular one has a lifted bondwire. 
+Found just with a visual inspection. Threw a QC flag so I didn't forget about it.","",""
+"596068704471482370","246tnt","2026-05-07T13:35:08.0350000+00:00","Interesting. I couldn't really tell from the image.","",""
+"169786952432746498","mithro_","2026-05-10T02:22:28.8270000+00:00","@tnt - FWIW @Lauri has been contracted to do an automated tester base around the reverse biasing the ESD diodes like you suggested.","",""
+"384390069412429834","polyfractal","2026-05-17T16:20:28.8790000+00:00","@Andrew Wingate  question about the mezzanine breakout board. I'm looking at the die and COB pinout, Pad0 is top right on the die (by QR code) and bonds to top-right pad on COB (by wafer.space logo). So I'm assuming it drops down a via and goes to the right side of the mezzanine connector (while still at the die from above).
+
+But the mezzanine breakout board lists Pad0 on the left side and the silkscreen has a dot on the top-left pin too. I _think_ Pad0 will drop down onto the right side of the breakout board but thought I'd ping first before I started releasing magic smoke 🙂","2026-05_media/image-D3FF9.png,2026-05_media/image-86799.png,2026-05_media/image-6D220.png",""
+"596068704471482370","246tnt","2026-05-17T16:26:04.4690000+00:00","Why not check the cob pcb directly?","",""
+"756011607603019777","anfroholic","2026-05-17T16:37:31.9730000+00:00","Hey @BreakingTaps 
+Yeah, sorry about how this all looks, nothing ever wanted to play nice with the way the pads were laid out and the way kicad wants things. I have been talking with @Tim 'mithro' Ansell and @Leo Moser (mole99)  about changing how we have our orientations and pin/pad orderings so things make better sense here and across the different sizes. 
+
+The first picture is how it would look if you were looking 'through' the cob at the pinout. The other one is how it would look if you had it backwards and were looking at the mezzanine connector directly from the back. 
+
+Hope that makes sense, also I just arrived home from Shenzhen in what turned into a 4 day journey home, so please reverify yourself please. 
+Hope this helps","2026-05_media/image-057FA.png,2026-05_media/image-933EF.png",""
+"756011607603019777","anfroholic","2026-05-17T16:38:15.4060000+00:00","And yes, pad 0 is the one by the qr code","",""
+"384390069412429834","polyfractal","2026-05-17T16:45:24.2280000+00:00","Oh yikes, four day travel home apologies for the ping! 😱  Glad you made it, I imagine things did not go quite to plan.  Cheers for the help!","",""
+"384390069412429834","polyfractal","2026-05-17T16:45:52.8620000+00:00","I've only used kicad like twice, but this might be the sign that it's time to learn 🙂","",""
+"756011607603019777","anfroholic","2026-05-17T16:47:11.9210000+00:00","No need for apologies! 
+Can't wait to see you bring it up. Don't hesitate ever to message, I could be in any timezone ;)","","❤️ (1)"
+"169786952432746498","mithro_","2026-05-17T17:05:50.7110000+00:00","@psychogenic has some great YouTube videos on using KiCAD 🙂","","💯 (1),👀 (1)"
+"169786952432746498","mithro_","2026-05-18T15:54:50.0670000+00:00","@Lauri seems to have made some great progress on the wire bond connectivity tester!","","👍 (1)"
+"169786952432746498","mithro_","2026-05-18T22:17:39.0210000+00:00","@Lauri - The number of pads @ https://mithro.github.io/gf180mcu-project-template/ are now correct for the 1x1 default.","","👍 (1)"
+"691780627338625077","rebelmike","2026-05-20T22:35:14.5690000+00:00","I've been having some luck routing the tall thin one (0p5x1) by having the die at 45 degrees:","2026-05_media/image-9F41B.png","💜 (1)"
+"756011607603019777","anfroholic","2026-05-20T22:35:53.3320000+00:00","That's interesting","",""
+"691780627338625077","rebelmike","2026-05-20T22:37:20.2730000+00:00","Ended up breaking compatibility with some of the TinyQV pins, but none of the important ones - so bidir[27:0], in[1:0], clk and rst_n all match the 1x1","",""
+"756011607603019777","anfroholic","2026-05-20T22:38:06.7130000+00:00","Oh, is this one also only 2 layers?","",""
+"691780627338625077","rebelmike","2026-05-20T22:38:16.4920000+00:00","Yeah","",""
+"756011607603019777","anfroholic","2026-05-20T22:39:14.9730000+00:00","Would you mind setting your min trace spacing to .103mm please. 
+The last boards I had to change a bit as the boardhouse complained some parts were <.1mm 
+I don't think you did anything wrong. I checked and DRC was clean...","",""
+"691780627338625077","rebelmike","2026-05-20T22:39:17.4590000+00:00","I guess the one thing I haven't considered yet is whether I can connect all the grounds, but hopefully I'll work something out 😄","","😂 (1)"
+"756011607603019777","anfroholic","2026-05-20T22:39:55.4500000+00:00","haha, if it has to be 4 I don't think that's the end of the world, and if that's the case you can also disregard the previous statement.","",""
+"756011607603019777","anfroholic","2026-05-20T22:40:16.3140000+00:00","4layer spec is .09 so we're all clear there.","",""
+"691780627338625077","rebelmike","2026-05-20T22:41:00.1780000+00:00","Will do.  Also for the last one I had hole to hole 0.25mm, but I double checked the JLC rules and they are 0.2 so I tuned that down to 0.2, does that sound ok?  Maybe should put a safety fudge on that too?","",""
+"756011607603019777","anfroholic","2026-05-20T22:41:50.4760000+00:00","Wouldn't hurt. 
+Again, I have no idea why they failed us. let me get the pic, 1 sec","",""
+"756011607603019777","anfroholic","2026-05-20T22:43:08.3910000+00:00","This was what they sent us.","2026-05_media/ADKq_NYBZIQX9_SJ7-7V5ApjeDTOvFztbDKtXYYCXW-DD362.png",""
+"691780627338625077","rebelmike","2026-05-20T22:44:03.0250000+00:00","Hmm, was the problem via to track?","",""
+"756011607603019777","anfroholic","2026-05-20T22:44:38.2750000+00:00","4 layer is also an easy fix. 
+Also I have no idea, there are arrows everywhere it seems 🤣","","😆 (1)"
+"756011607603019777","anfroholic","2026-05-20T22:45:02.4460000+00:00","> Hi there,
+> 
+> Sorry to bother you, but we'd like to confirm with you an issue found when engineer making production file of your PCB order.
+> 
+> The spacing between traces is smaller than 0.1mm which is not enough to proceed, could we help you cancel this order?","",""
+"691780627338625077","rebelmike","2026-05-20T22:46:56.9880000+00:00","Weird, maybe some unit conversion caused some rounding issue?  Anyway, I'll go up to 0.103 - I've got a bunch of tightly packed traces but hopefully won't take too long to wiggle them apart!","",""
+"691780627338625077","rebelmike","2026-05-20T22:50:47.6880000+00:00","Cool, and good to know that 4 layer isn't a major issue - if we end up trying to do custom CoBs to match important pins on all the Racquet and TinyQV designs then routing might get even more fun!","",""
+"691780627338625077","rebelmike","2026-05-20T22:53:17.9160000+00:00","Anyway - I need to call it a night - I've pushed my WIP to https://github.com/MichaelBell/chip-on-board-wire-bonded-pcbs/tree/half-slot-dev if you want to take a look","",""
+"756011607603019777","anfroholic","2026-05-20T22:53:57.6900000+00:00","Thanks and goodnight","",""
+"262706220073222144","namibj","2026-05-20T23:03:26.8310000+00:00","Are you doing JLC? If so, I'd be surprised why you weren't just going for 4L in the first place.","",""
+"756011607603019777","anfroholic","2026-05-20T23:12:38.1910000+00:00","We are. That's why I was saying that as well. It's not much difference in price","",""
+"262706220073222144","namibj","2026-05-20T23:13:04.2070000+00:00","Yeah 4L for signal integrity!","",""
+"756011607603019777","anfroholic","2026-05-20T23:13:12.7760000+00:00","That as well","",""
+"262706220073222144","namibj","2026-05-21T03:04:27.1910000+00:00","In the interest of possibly understanding safety margins that were shown to not be that large by Tholin's DAC's OpAmps, do we have material datasheet information or enough detail that I could dig such up for the COBs?
+
+Notably, thermal expansion behavior of the board; how the chip is attached to the board; what the goop is that's covering the front of the die.","",""
+"691780627338625077","rebelmike","2026-05-21T21:46:15.2090000+00:00","So I was thinking - if the plan is to do custom CoB PCBs for TinyQV and the other run 1 half slot designs, then why are we trying to match the pinout for the default template on the generic half slot CoBs?  It would be better just to do the natural pinout and then fix the templates, rather than doing more complex than necessary routing and then locking that in for future runs.  It would also make sense to update all the CoBs to 4 layer for better signal integrity if the cost difference is negligible.
+That does obviously require the generic CoBs are completed reasonably quickly so that the template can be updated in plenty of time for the run 2 designs.  But I wouldn't suggest moving any of the power pads, clock or reset, and beyond that it is likely that pinout matching only matters if people are submitting the same design at different slot sizes, or expecting a common motherboard to work between different slot sizes on the basis of using pins with the same name in the template.
+Thoughts?","",""
+"756011607603019777","anfroholic","2026-05-21T21:48:10.5640000+00:00","I've been speaking with @Tim 'mithro' Ansell  and have been wanting to change things about the layout and the standard template and fix things at the beginning so it's harmonized across the sizes from the start.","",""
+"691780627338625077","rebelmike","2026-05-21T21:51:53.9620000+00:00","Cool, it probably wouldn't take long to work out what the natural pad order would be and adjust the default template, even if the routing isn't actually done at that point.  I know @Leo Moser (mole99) is planning to push a significant template update soon so if that is the direction maybe getting it done before that goes out would be a good idea","","👍 (1)"
+"169786952432746498","mithro_","2026-05-22T01:20:41.3650000+00:00","I'm sure a professional packaging house will happily provide you with all these details if you are willing to order at least 1 million units a month. 
+
+For $1.50 USD for <1000 units getting things like data sheets is pretty impossible most of the time.","",""
+"323371864074485771","mole99","2026-05-22T06:22:42.9210000+00:00","I agree, we should probably do all of the major changes now, so people only need to migrate once.
+
+@Andrew Wingate we should also change the pin order of the die to match the CoB, so that it doesn't need to be turned upside down. This should help reduce the confusion around the pinout, too.","",""
+"596068704471482370","246tnt","2026-05-22T06:42:31.9400000+00:00","Why not just rotate the CoB PCB by 180 deg ... ?","",""
+"596068704471482370","246tnt","2026-05-22T06:49:45.9020000+00:00","The pin number themselves already match, it's just on the PCB version / footprint, it was rotated so the first is on the top right instead of bottom left ...","",""
+"323371864074485771","mole99","2026-05-22T08:13:26.4300000+00:00","I thought there was a reason downstream why that isn't easily possible. @Andrew Wingate what was the reason again for rotating the die?
+Perhaps we should just change the PCB then. In any case, it should be consistent.","",""
+"756011607603019777","anfroholic","2026-05-22T18:57:13.7750000+00:00","@tnt @Leo Moser (mole99) 
+Just rotating won't fix the underlying problem. 
+We should strive to harmonize default across the different die sizes. 
+If we follow something like my diagrams here, you could design for any size die and still get a cob that matches all three (or four if the 1/4 slot follows)
+I prefer the fiducial to be up top because it follows convention","2026-05_media/image-C9BE3.png",""
+"220639106915368960","tholin","2026-05-22T18:59:59.6680000+00:00","I think the thing that made it confusing is that the die has a wafer.space logo on it and the PCB has a waver.space logo on it, but they are on *opposite corners* from each other","",""
+"220639106915368960","tholin","2026-05-22T19:00:18.3110000+00:00","Instead of it being used as a alignment marker","",""
+"756011607603019777","anfroholic","2026-05-22T19:01:37.5730000+00:00","Agreed that did not help.
+Not sure how it's getting announced, but if you want to have the COB 3 corners will be used by the defaults. 
+Qr code, ws logo, blank space. The Qr and the blank will be in opposing corners","",""
+"596068704471482370","246tnt","2026-05-22T19:30:40.4650000+00:00","@Andrew Wingate The current COB footprint on the PCB has the pad 0 in the top right, not top left ... so if you rotate it 180 it's fine and aligned with the die.","",""
+"756011607603019777","anfroholic","2026-05-22T19:30:57.0600000+00:00","That is correct","",""
+"596068704471482370","246tnt","2026-05-22T19:31:33.0490000+00:00","That was the main issue in assmbly ... people expected the die to be placed in the same way it was visible in the GDS.","",""
+"756011607603019777","anfroholic","2026-05-22T19:34:21.8190000+00:00","I believe what we have here is an [x y problem](https://en.wikipedia.org/wiki/XY_problem)
+To me, I think harmonizing across the die sizes is the bigger issue. If you're changing that, then also change the position of the fiducial so it cannot be confused.","",""
+"691780627338625077","rebelmike","2026-05-23T17:05:45.8830000+00:00","I think there are just two independent issues that should be addressed at the same time:
+- The CoB layout for half and quarter slots isn't finalised (and wasn't known when run 1 designs were done), so projects in different size slots can't match their pinouts.  Once the layout is known it would make sense to harmonize the default template (but most people will customize that anyway, so the important thing is knowing the mapping).
+- The wafer space logos are in different places on the board and the chip, which is confusing.  The proposal seems to be to change both board and template to have the logo (and therefore pin 1) in the top left, is that correct?  Obviously everyone will need to update their run 2 projects if that change is made.","",""
+"756011607603019777","anfroholic","2026-05-23T18:12:09.2910000+00:00","Agreed, and thanks for the work you've done with the half slot dies. 
+And to be clear, a lot of the changes I'm requesting are still just my opinion. 
+That said, having worked with a number of the downstream effects, someday we're likely to want to make changes.  
+Harmonizing the template across sizes will help with whatever next version of cob we may introduce, if people want to harmonize across different dip like packages, this would be easier. 
+Unless I'm mistaken, I think we collectively have enough information to make some better decisions across the board. And doing so sooner than later would be better.","","👍 (1)"
+"756011607603019777","anfroholic","2026-05-23T18:18:45.9380000+00:00","Also of note, any of these propositions are _only_ for people who are looking to get the standard COB packaging. 
+Other than that, anyone's still free to do whatever they like.","",""
+"691780627338625077","rebelmike","2026-05-23T18:20:37.5380000+00:00","On the half slot CoBs, I’ve now got distracted by a possible run 2 silicon project, but I could potentially do some more on those.","",""
+"756011607603019777","anfroholic","2026-05-23T18:21:53.5660000+00:00","The first panels of the p5x1 version should be back from the board house in the next few days if I understand correctly","","👍 (1)"
+"691780627338625077","rebelmike","2026-05-23T18:25:38.2430000+00:00","CoB work items I'm aware I could look at:
+- Make a simplified version of the 1x0p5 CoB, and also going up to 4 layers.  That would become the standard one going forwards
+- Have another go at the 0p5x1 - this time going for the simplest routing, and hence probably just having the chip in the obvious ""upright"" position rather than diagonal.  Again change to 4 layers.
+- Create run 1 TinyQV specific 1x0p5, 0p5x1 (and eventually 0p5x0p5) CoBs that match clk, SPI, UART to the pinout of the 1x1 GD03 Racquet project.","",""
+"691780627338625077","rebelmike","2026-05-23T18:27:10.0580000+00:00","Then there's:
+- Create a motherboard against that pinout that could be used by TinyQV or Racquet with the custom CoB
+- And also make a TinyQV motherboard for the original 1x0p5 CoB, if I'm likely to receive any chips bonded to it 🙂","",""
+"691780627338625077","rebelmike","2026-05-23T18:28:08.0400000+00:00","I would ideally like to get my hands on a TinyQV board a little before the run 2 deadline as I may be doing a revision so it would be good to know if anything didn't work","",""
+"756011607603019777","anfroholic","2026-05-23T18:33:17.2550000+00:00","> And also make a TinyQV motherboard for the original 1x0p5 CoB, if I'm likely to receive any chips bonded to it 
+As far as I understand, this is definitely the plan. I can't imagine it's not. I'm not in China anymore so am a bit more detached now. 
+I would bet something gets sent to you in about a week or two.","",""
+"691780627338625077","rebelmike","2026-05-23T18:36:39.2020000+00:00","Awesome!  There's two copies of TinyQV in this size slot so even if Tim would like a bunch in a custom CoB eventually there should be loads left still.  I'll put together a quick motherboard based on the pinout on the existing CoB so I have something to test with.","","💜 (1)"
+"691780627338625077","rebelmike","2026-05-23T19:17:25.4340000+00:00","Just to double check, is this the correct part for the mating connector?  https://www.lcsc.com/product-detail/C19089292.html","",""
+"691780627338625077","rebelmike","2026-05-23T19:17:52.0860000+00:00","The link from the https://github.com/wafer-space/chip-on-board-wire-bonded-pcbs/ readme is broken (maybe the part number has changed?)","",""
+"756011607603019777","anfroholic","2026-05-23T19:18:36.5770000+00:00","That is correct. 
+Keep in mind there are a number of different heights if that is of concern, and there are also other compatible brands as well.","","👍 (1)"
+"756011607603019777","anfroholic","2026-05-23T19:20:45.9080000+00:00","The link has been fixed. Thanks","","👍 (1)"
+"691780627338625077","rebelmike","2026-05-23T23:53:16.3280000+00:00","Doh.  Just finished routing my board.  For some reason at that point I decided to double check that the pinout of the mezzanine connector was correct.  And it's not - the pins on the connector in the motherboards project which I grabbed the footprint from are flipped compared to the CoB!  That doesn't matter for those simple breakouts because they just expose all the pins.  Incidentally I think that means the pin 1 marking on those simple breakout motherboards is actually against pin 70.","",""
+"691780627338625077","rebelmike","2026-05-24T08:14:42.5070000+00:00","Ah, this is the same thing that @BreakingTaps spotted last week!","","🫠 (1)"
+"323371864074485771","mole99","2026-05-24T10:55:41.6720000+00:00","Started a thread.","",""
+"756011607603019777","anfroholic","2026-05-24T17:48:20.9130000+00:00","Hey @Leo Moser (mole99) stuff seems to get lost in threads on discord.
+For starters, I don't think any of this 'should' happen for run2. I think it's too late for that. 
+
+> I'm not exactly sure what your diagram is showing?
+I just decided to make a rough thing to illustrate. @RebelMike you could probably imagine a ring of vias that do whatever on the bottom side, but all route cleanly on the top. 
+
+> I agree that we should harmonize what we can between the different slots sizes. What are your plans with regards to matching the pinout?
+If we want to keep that many pins on all the half slots and drop 2 from the 1x1 we end up with them all being identical. I don't know what this means in reality, but if someone wanted to prototype on a half slot, then move to a larger size, the pin/padout stays identical. 
+
+> PS: Looking at the CoB PCB for the 1x1 slot, pin 1 of the mezzanine connector seems to be in the top right corner rather than the top left. Why is that the case?
+KiCads generic connector library and most packages and connectors in general have pin1 in the top left. I would prefer, if someone were to take a generic mezzanine connector and use the footprint provided by the manufacturer, for pin1 to line up. There's already a lot of confusion when trying to go through all these maps to add one more translation.","2026-05_media/harmonized_slot_1x1-7F68B.png,2026-05_media/harmonized_slot_1x0p5-AB264.png,2026-05_media/harmonized_slot_0p5x1-C10AE.png",""
+"596068704471482370","246tnt","2026-05-24T18:17:44.6540000+00:00","But connectors is on the bottom of the PCB, opposite of die. And then the connector on the ""user side"" is also swapped because it's the other side of the connection ... they can't be all top left pin 1 footprint, at some point swap needs to occur ...","",""
+"756011607603019777","anfroholic","2026-05-24T18:20:00.0370000+00:00","Agreed, when mentioning the connector above, I was referring to the connector a user would be sourcing (on their motherboard). The important one in my mind is the final connector and the die itself to match.","",""
+"596068704471482370","246tnt","2026-05-24T18:37:41.6440000+00:00","But the ""manufacturer footprint"" argument doesn't hold really. If you look at the kicad library ( in the Hirose library for DF12 that's the closest I have installed ), the `DS` side connector which would be the ""user side"" , they standardized indeed on pin 1 top left ... with the connector horizontal. Which means top right if you put it vertically ( or bottom left ) ...","",""
+"756011607603019777","anfroholic","2026-05-24T18:51:38.5020000+00:00","Whatever, I'm not religious about this. Seems like others are. I also tend to make and throw a bunch of stuff against the wall to see what sticks. 
+
+More to the point of harmonizing. There is an error in my pictures from the last post. I am reposting more correct versions. 
+I have also created an example slot_size.yaml thing. 
+I am not sure how many people will be designing for multiple slot sizes, or how difficult that is. @RebelMike can maybe speak to that. 
+In the spirit of making more things, I propose a config that has a different shape. There is a single list of pads that doesn't change between slot sizes.","2026-05_media/harmonized_slot_0p5x1-81F56.png,2026-05_media/harmonized_slot_1x0p5-8229F.png,2026-05_media/harmonized_slot_1x1-1ECF6.png,2026-05_media/example_padring_0p5x1-1842D.yaml,2026-05_media/example_padring_1x0p5-056A3.yaml,2026-05_media/example_padring_1x1-D7C00.yaml",""
+"756011607603019777","anfroholic","2026-05-24T18:52:43.7150000+00:00","And for the record I am aware this obscures a starting pad even further","",""
+"262706220073222144","namibj","2026-05-24T19:25:57.2560000+00:00","IMO what needs to be clear and uniform across all 3 slabs of multilayer routing is that there's exactly one clear orienting corner, and they all line up when assembled correctly. 
+Die, COB, motherboard's socket area.","","👍 (2)"
+"262706220073222144","namibj","2026-05-24T19:28:15.9330000+00:00","That's easy to verify when looking at a layout and picking like 3-ish nets to highlight and visually check. 
+
+The top surface of all 3 is the same ""up"".","","👍 (2)"
+"262706220073222144","namibj","2026-05-24T19:30:12.7720000+00:00","(in the sense of surface-normal-vector direction)","",""
+"691780627338625077","rebelmike","2026-05-24T20:06:19.7590000+00:00","I was assuming power pads would stay where they were and this was simply an exercise in renaming the signal pads in the default template on the half (and quarter) slots.  That basically has no implications except for helping make the CoB pinout clearer as there would be a single mapping default template -> pins, which projects could compare their renamed pins against.
+
+But for run 3 obviously bigger changes could be considered - I'm not clear on what the implications of removing two power pads from the 1x1 pad ring would be.","",""
+"262706220073222144","namibj","2026-05-24T20:20:21.4050000+00:00","Don't remove too many power pads, at least if we have a way to not fry chips as much as the avalon Run1 DACs are doing.","",""
+"262706220073222144","namibj","2026-05-24T20:20:30.3630000+00:00","larger chip more consumption","",""
+"691780627338625077","rebelmike","2026-05-24T20:21:50.5000000+00:00","My thoughts:
+- The wafer space logos should be in the same position as it's the obvious marker to align in assembly (I'd weakly suggest top right as aesthetically it looks most pleasing there - Andrew and Leo both put it there independently AFAICT) - this doesn't necessarily need to mean ""pin 1"".
+- To allow that without users having to change their run 2 designs, the CoB pinout should be changed (this would likely end up ~a 180 degree rotation on the current pinout, and maybe if it could be exactly that that would leave some compatibility between run 1 and run 2).
+- The project pad -> mezzanine pin mapping should be clearly documented, with reference to the pad names in the default template and the pin names on the mezzanine footprint for the user's motherboard.
+- The signal (and VDD?) pins on the default templates should be harmonized as much as possible, so the above documentation applies to all slot sizes
+
+Ideally that should be done for run 2, because the current state is a source of confusion and mistakes.","",""
+"691780627338625077","rebelmike","2026-05-24T20:24:50.2730000+00:00","On the pin types in the templates, I suspect it would make sense to keep some analog and input ones to highlight their existence in the template, rather than just making everything bidir.  My principle of least change was suggesting make everything match the current 1x1 but that does have quite a large number of dedicated inputs","",""
+"756011607603019777","anfroholic","2026-05-24T20:28:25.3130000+00:00","Think of all these as conceptual models rather than genuine proposals. 
+More power pins are perfectly acceptable. 
+
+An overarching goal expressed by @Tim 'mithro' Ansell is to look for ways to reduce cost in efforts towards accessibility.  
+This likely means moving away from the mezzanine all together, and taking any decoupling caps with it, since assembly is no longer an operation we're doing.
+No caps means more pins can be used for whatever purpose as they all become generic wires.","",""
+"262706220073222144","namibj","2026-05-24T20:29:20.6870000+00:00","Yeah it's a good top right corner ""arrow""","",""
+"262706220073222144","namibj","2026-05-24T20:30:24.8490000+00:00","","2026-05_media/image-941E6.png",""
+"262706220073222144","namibj","2026-05-24T20:30:46.7420000+00:00","qr code lacks coarse structure contrast","",""
+"262706220073222144","namibj","2026-05-24T20:31:50.1020000+00:00","W.S logo or alternatively (if for some reason that has to not be there) an Intel LGA style triangle should be strongly recommended.","",""
+"262706220073222144","namibj","2026-05-24T20:32:14.9960000+00:00","(The QR would work if the other corners were blank, but they aren't.)","",""
+"756011607603019777","anfroholic","2026-05-24T20:36:42.4910000+00:00","I think all that sounds reasonable. 
+
+> The project pad -> mezzanine pin mapping should be clearly documented, with reference to the pad names in the default template and the pin names on the mezzanine footprint for the user's motherboard.
+I'm finally getting settled as I get home and plan to work on cleaning the repo with the current COB and better document the motherboard. 
+I think that will take away most of the confusion. 
+
+> The wafer space logos should be in the same position as it's the obvious marker to align in assembly (I'd weakly suggest top right as aesthetically it looks most pleasing there - Andrew and Leo both put it there independently AFAICT) - this doesn't necessarily need to mean ""pin 1"".
+The one request I did have, is whatever corner we are using as 'fiducial' has the opposing corner blank. This could happen this run, or not. 
+
+> To allow that without users having to change their run 2 designs, the CoB pinout should be changed (this would likely end up ~a 180 degree rotation on the current pinout, and maybe if it could be exactly that that would leave some compatibility between run 1 and run 2).
+I don't understand this one fully? Basically rotate all the copper 180? That would do it? (negating changes to the schematic)
+
+> The signal (and VDD?) pins on the default templates should be harmonized as much as possible, so the above documentation applies to all slot sizes
+This is a run3 thing?","",""
+"756011607603019777","anfroholic","2026-05-24T20:39:59.3250000+00:00","> The signal (and VDD?) pins on the default templates should be harmonized as much as possible, so the above documentation applies to all slot sizes
+I think I see. When making all this I did not have that info. 
+I've been filling in this spreadsheet as I got more info
+https://docs.google.com/spreadsheets/d/1pI2BAEWEexXcXN3vah3SR85zPIV6eAXPGXc2bcvoSGU/edit?gid=0#gid=0
+You're saying to use the info in the `config.yaml` column?","",""
+"691780627338625077","rebelmike","2026-05-24T20:43:52.9020000+00:00","> The one request I did have, is whatever corner we are using as 'fiducial' has the opposing corner blank. This could happen this run, or not. 
+The location is specified in the project's config, but I assume is validated by the submission system, so changing it and then advising people of the change should be possible?
+
+> Basically rotate all the copper 180? That would do it? (negating changes to the schematic)
+Yeah I think rotating everything through 180 but leaving the logo where it is would resolve it.
+
+> You're saying to use the info in the config.yaml column?
+Yes - while users will rename their pins, they will have started from this setup so it seems the most meaningful thing to me.  Maybe I'm putting too much weight on it though","",""
+"756011607603019777","anfroholic","2026-05-24T20:45:51.0660000+00:00","Can you explain the reason they may be called `bidir\\[0\\].pad` and `inputs\\[0\\].pad` instead of something more generic if it's just overwritten anyways?","",""
+"691780627338625077","rebelmike","2026-05-24T20:47:16.3220000+00:00","This is what's specified in https://github.com/wafer-space/gf180mcu-project-template/blob/main/librelane/slots/slot_1x1.yaml
+And the number of bidirs / analog / inputs match the defines in https://github.com/wafer-space/gf180mcu-project-template/blob/main/src/slot_defines.svh","",""
+"691780627338625077","rebelmike","2026-05-24T20:49:25.3300000+00:00","Users may well change those to match their needs, but given wafer space is providing both the project template and the CoB, referring to things by those names seems like it should make sense to people","","👍 (1)"
+"691780627338625077","rebelmike","2026-05-24T20:52:38.8060000+00:00","In my case, I was short on time and also didn't know what slot size you might have going spare, so I just fitted my design in to the template without changing any of the pad names.  Then you had spare slots of all half and quarter sizes so all 3 got produced!  That's what led to me wishing that the default pinout was harmonized back in run 1.  That's probably a pretty unique circumstance though so I think going forwards its more about documentation, but it would also reduce surprises if you do switch which slot you're targetting.","",""
+"756011607603019777","anfroholic","2026-05-24T20:57:23.3370000+00:00","I'm going to go out on a limb and say I don't think switching slot sizes will be all that uncommon in the future. 
+More or less I think things are pretty entrenched as far as run1 goes. I'll try to make the changes listed above. 
+I would like to keep the conversation alive about run3 though. 
+Thanks for the input","","👍 (1)"
+"262706220073222144","namibj","2026-05-24T21:12:54.2980000+00:00","oh, hmmmmm..... @BreakingTaps any hope for the idea of using ACF and DRC-pushed FPC (JLC just about lets you do 102 um pitch on the 5$ special)?
+Or is that too high resistance/would need fancy surface treatment on the die to connect to the aluminium topmetal?
+
+I'd expect AOI to reject even up to half the FPC production to be sufficiently practical to work from that POV; but it's not easy to find out if the commodity ACF would have sufficient performance to do the task of W.S default/bargain fan-out.
+
+It is my understanding that the traces are on top of the core and the lack of fine-pitch coverlay/soldermask would imply that these are bare metal strips on an underlying flat polyimide core; so that might be enough ""bump""? It's about 12um thick there.","",""
+"262706220073222144","namibj","2026-05-25T00:02:47.5550000+00:00","Ok I'll draw up a standard COB pinout FPC for that tomorrow.
+This.... _might just work._","",""
+"756011607603019777","anfroholic","2026-05-25T00:03:18.0400000+00:00","What is this?","",""
+"262706220073222144","namibj","2026-05-25T00:09:08.5500000+00:00","https://www.youtube.com/watch?v=0HZ35CyHVxQ
+https://web.archive.org/web/20190708182030/https://fsrkj.com/upfiles/201712/22/af0aa1f1cb2886b6f.pdf
+It's on aliexpress for like 7 USD a roll; seems to not be hard to get one's hands on, and it's just `190±10 C` for 10 s at 2 MPa via a hard-ish silicone sheet (200~300 um they say, shore 70+) with a thn teflon sheet (25~50 um) between that and the FPC, pressing the contact strip area down using a sufficciently solid anvil underneath to not harm the more-fragile die (or, in the original case, the LCD's glass; it works for dies too, though, ""just"" not well on aluminium at least with that standard metallurgy)","",""
+"756011607603019777","anfroholic","2026-05-25T00:16:57.6590000+00:00","I've seen this video before. Super neat!! Good luck!","",""
+"262706220073222144","namibj","2026-05-25T00:18:27.5450000+00:00","yeah same I remembered didn't even remember it was him but tbf, fits.","",""
+"384390069412429834","polyfractal","2026-05-25T17:42:47.7860000+00:00","oh that's a fun idea! I'm not sure to be honest, might be dodgy for high frequency signals, but maybe fine for less demanding tasks? I dont actually have much experience with the stuff on real projects, just tearing down existing projects to get to the ACF for microscopy 🙂 But yeah it's used all over for displays
+
+Could be a really clever way to get flipchip without needing the fab to bump for us!","","🔥 (1)"
+"262706220073222144","namibj","2026-05-25T18:52:32.5950000+00:00","It's actually waaaay better for high frequency it's a bit resistive but I'm sure that's easy to tune away in a transceiver as we talk like a couple Ohm at the terminus.
+
+That 3mm bond wire at 1 GHz is already 12 ohm though...
+
+If you have any idea how to get some test dies receptive to the nickel spheres....","",""
+"384390069412429834","polyfractal","2026-05-25T18:54:13.0530000+00:00","ah interesting, why would more resistance help with higher frequency? I sorta assumed you'd want the shortest, most conductive path possible?","",""
+"384390069412429834","polyfractal","2026-05-25T18:55:27.4510000+00:00","our topmetal is aluminum right? I just skimmed that old video of mine and they used Al on the glass connector side. So it was Al -> ACF -> Ni/P coated Cu fpc","",""
+"756011607603019777","anfroholic","2026-05-25T18:56:03.5500000+00:00","As far as I understand, yes, it's aluminum.","","👍 (1)"
+"1170784850874220707","fossify_37988","2026-05-25T19:08:42.3650000+00:00","It's easier to control resonances with slight dampening. You lose a bit of Q but you get a more consistent response","","👍 (2)"
+"384390069412429834","polyfractal","2026-05-25T19:39:32.3260000+00:00","gotcha, TIL!","",""
+"262706220073222144","namibj","2026-05-26T03:58:03.2740000+00:00","It's got comparatively _zero_ inductance once you include the remaining parasitics.","",""
+"262706220073222144","namibj","2026-05-26T03:59:44.4780000+00:00","Wait they they.... They did Al straight to the ACF???
+
+I'll get you a JLC special FPC layout/pinout for your die before the weekend if you'd be interested in trying.","",""
+"262706220073222144","namibj","2026-05-26T04:05:33.7520000+00:00","Well it's more that you can tune the launch impedance a bit anyways once it matters and that'll easily cover the spread in series resistance from the ACF.
+Like you already need the structures in the PA (yeah it's digital but it's still a power amplifier, with tuned distortion, and sometimes integrally fused modulator if the output itself is naturally clocked instead of being a second stage after the clocked stage) and a bit more tuning range to cover increased stacking of variance is not really expensive at that point.
+
+So therefore you might as well just enjoy the much lower inductance.","",""
+"262706220073222144","namibj","2026-05-26T04:11:43.4490000+00:00","If you have any special wishes on that provide a schematic.
+I'd plan for having the mezzanine connector off the side so you could bend it and have the entire thing barely taller/thicker than the original cob, but now with the die backside exposed to attach a heatsink.
+
+I'd probably do it on Thursday early Berlin time; if that's too early I'd get to it approximately a week later (that's Germanys closest thing to a comiket this coming weekend I'll be running on fumes by the end).","",""
+"169786952432746498","mithro_","2026-05-26T08:59:50.2570000+00:00","What does ACF stand for?","",""
+"262706220073222144","namibj","2026-05-26T09:01:27.1510000+00:00","https://discord.com/channels/1361349522684510449/1408134567491145728/1508260597412921375","",""
+"169786952432746498","mithro_","2026-05-26T09:01:28.2130000+00:00","ACF is the tape stuff that @BreakingTaps is talking in the video you shared?","",""
+"262706220073222144","namibj","2026-05-26T09:01:33.9490000+00:00","Yeah","",""
+"262706220073222144","namibj","2026-05-26T09:02:38.3250000+00:00","It's what they use to bond to notably LCDs and other TFT-on-glass type active-matrix displays like OLED.","",""
+"262706220073222144","namibj","2026-05-26T09:03:37.6250000+00:00","It's a 180~190C for 2~10 seconds thermoset epoxy used with about 2MPa pressure.","",""
+"384390069412429834","polyfractal","2026-05-26T14:28:11.6000000+00:00","""Anisotropic Conductive Film"" yep","",""
+"384390069412429834","polyfractal","2026-05-26T14:29:02.1760000+00:00","At least for the glass-FPC interface, looks that way.  Copper FPC pad on top, glass on bottom. Thin film of aluminum on glass side.  (please excuse my shitty cross-section polishing I was in a rush 😄 ) Edit: also ignore the silver, iirc I sputtered a very thin layer on to help with charging on the glass","2026-05_media/Image_3_analysis_1_map_C_O_Al_Si_P_Ca_Ni_C-0E452.png","😍 (1)"
+"691780627338625077","rebelmike","2026-05-27T22:47:04.7060000+00:00","I did a quick tweak to the generic breakout to make it 4 layer and label clk/rst/power/ground - don't know if this would be useful to anyone else: https://codeberg.org/rebelmike/ws-breakout","","👍 (2)"
+"169786952432746498","mithro_","2026-05-29T04:40:25.6890000+00:00","Cool!","",""
+"756011607603019777","anfroholic","2026-05-30T03:36:35.6160000+00:00","Hey all, I've added and updated some of the readmes and moved all the run-1 stuff into it's own directory so we can keep things more organized moving forward.  https://github.com/wafer-space/chip-on-board-wire-bonded-pcbs
+This likely breaks any way for you to make pull requests Mike. *side note- this has the updated 1xp5 files that have the larger clearance.*
+@Tim 'mithro' Ansell @RebelMike","","waferspace (1)"
+"756011607603019777","anfroholic","2026-05-30T03:37:10.4290000+00:00","Also updated the motherboards to have these as the symbols.","2026-05_media/0-8D144.png","🎉 (2),❤️ (1)"

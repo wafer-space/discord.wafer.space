@@ -1,0 +1,30 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"728516105680846892","chips4makers","2026-07-01T08:16:21.3840000+00:00","Also having CTS done separately on different blocks is dangerous as the clock tree depth may be different between blocks causing unexpected hold/setup violations for signals going between different blocks.
+If I'm not mistaken, LibreLane supports P&R on subblocks separately but still CTS on top block.","",""
+"596068704471482370","246tnt","2026-07-01T08:19:31.2860000+00:00","I know that CTS recently(-ish) got the ability to place macro at different depth of the CTS depending on the min/max clock delay specified in the liberty file of the macros/sub-blocks.  ( https://github.com/The-OpenROAD-Project/OpenROAD/issues/3759 )","",""
+"290925586266980352","osvel","2026-07-01T08:28:44.0180000+00:00","Cool, thanks for all the tips. I guess I will have a play around with this and see what I come up with. 🙂","",""
+"596068704471482370","246tnt","2026-07-01T08:35:04.5270000+00:00","But TBH I'm not sure how common it is to harden various block independently. That prevents optimization at boundary and also cost area since macro are rectangular and blocks often harden more into blob shapes.","",""
+"596068704471482370","246tnt","2026-07-01T08:36:01.5400000+00:00","The only case where I see blocks hardened as macro are highly optimized ones where there was significant manual/scripted/layout/... work to make it a separate block. Something like a SRAM / memory or something like that.","",""
+"596068704471482370","246tnt","2026-07-01T08:36:18.5320000+00:00","Or of course analog-ish block like say a PLL.","",""
+"596068704471482370","246tnt","2026-07-01T08:36:56.4820000+00:00","But I wouldn't say ... harden a SPI controller independently ... that'd be a lot of headache for virtually no benefits.","",""
+"596068704471482370","246tnt","2026-07-01T08:37:19.5930000+00:00","Just my 2 cts ...","",""
+"290925586266980352","osvel","2026-07-01T09:02:33.0260000+00:00","Thanks, appreciate the input. I'm not super familiar with this field and trying to learn. In my case, I'm studying SIMD lanes and thought to make the separate arithmetic units (say 32 of them) as I thought this is how 'real' designs are made. I had some severe congestion issues when trying to synth my top module","",""
+"262706220073222144","namibj","2026-07-01T18:47:33.2750000+00:00","I'd consider looking into the placement/partitioning tuning options in librelane for how to possibly selectively nudge the density around congested blocks to be lower and/or nudge SIMD lanes to be substantially less-overlapping.
+If your SIMD instructions are complex enough it might be practical to force them into slices, though, to spend much more compute on optimizing a slice, afforded by then getting to just make 31 already-routed copies at no extra PnR compute for the dense intra-slice situation.","",""
+"290925586266980352","osvel","2026-07-01T19:19:29.6190000+00:00","Right. Yeah, its basically option 2 I have been considering (slicing it into a module and instancing it 32 times). At least, that makes sense in my mind. But I understand now that this is a bit more complex than I first thought. I believe I need to specify where I/O to this 'macro' will be placed (like inputs on the left, outputs on the right), but I'm also having issues getting this to close. Well.","",""
+"290925586266980352","osvel","2026-07-01T19:19:35.8720000+00:00","Thanks for all the tips! 🙂","",""
+"262706220073222144","namibj","2026-07-01T21:19:07.1470000+00:00","yeah ideally you'd somehow be able to tell it just that in this region there are 32 identical slices and that they're instances for the 32-wide datapath around it, and that it has to figure out PnR inside, outside, and has to figure out how it likes the ports placed.
+
+I'd probably give it opportunity to just place the ports wherever on the grid on one side in teh small slice and just roll with what it likes best there.","",""
+"323371864074485771","mole99","2026-07-05T08:00:01.0600000+00:00","📢 Minor update!
+
+It turns out that the changes to the density rules have not yet been upstreamed to Open PDKs from our legacy wafer.space PDK fork. This update addresses this issue.
+
+- Project Template [1.5.7](https://github.com/wafer-space/gf180mcu-project-template/releases/tag/1.5.7)
+  - Update PDK to `d658698b`
+
+- Precheck [1.7.1](https://github.com/wafer-space/gf180mcu-precheck/releases/tag/1.7.1)
+  - Update PDK to `d658698b`
+
+The filler generation has already considered these rules. The platform will automatically rerun the latest precheck for your designs.","",""
+"323371864074485771","mole99","2026-07-05T08:00:12.2750000+00:00","Pinned a message.","",""

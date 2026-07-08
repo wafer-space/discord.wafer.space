@@ -1,0 +1,288 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 📐 - Designing / 💻-digital
+After: 2026-05-31 11:59 p.m.
+Before: 2026-07-01 12:00 a.m.
+==============================================================
+
+[2026-06-03 6:37 p.m.] namibj
+Having an inverter at the output of a logic cell (buffering the internal node) is almost a given, right?
+So any custom gates in any static logic family I have to draw I should expect to use an inverter as an output buffer after the actual gate itself, right?
+
+
+[2026-06-03 6:53 p.m.] 246tnt
+Sometimes you'll find `_0` variants of gates where it's directly the internal output but yeah that's rate and not that useful for general P&R where you'd almost always have an inverter at the output ... except if the cell in question is an inverter or a delay cell .
+
+{Reactions}
+ferrisCatOwO
+
+[2026-06-04 8:12 a.m.] chips4makers
+No. CMOS standard cells have NAND2 and AOI amd OAI cells that don't have inverter at the end and these cells will be used quite a lot in the synthesized netlist.
+
+
+[2026-06-07 3:30 p.m.] polyfractal
+I just noticed the SRAM behavioral model has timing constraints (55.6 ns, ~18MHz). Do we know if this is a real limit of the SRAM, or just a quirk of the fab's sram model?
+
+
+[2026-06-07 8:24 p.m.] rebelmike
+That seems close to the 1.8V figures on https://gf180mcu-pdk.readthedocs.io/en/latest/IPs/SRAM/gf180mcu_fd_ip_sram/cells/gf180mcu_fd_ip_sram__sram512x8m8wm1/gf180mcu_fd_ip_sram__sram512x8m8wm1.html
+
+
+[2026-06-07 8:24 p.m.] rebelmike
+So I assume you can safely ignore at 5V or 3v3
+
+
+[2026-06-07 8:39 p.m.] polyfractal
+aha good catch! Didnt realize the docs had those tables for the sram 👍
+
+
+[2026-06-07 8:39 p.m.] polyfractal
+thanks!
+
+
+[2026-06-07 9:55 p.m.] namibj
+Does anyone have t_FO4 on hand by chance?
+
+
+[2026-06-12 8:17 a.m.] tholin
+@RebelMike @Leo Moser (mole99) Overdue update to my SCL: non-inverting latches. So you can use those now and drop any inverters you had to place in your design.
+Always remember to gate-level simulate, there should be no more missing cell models now.
+
+{Reactions}
+🎉 (2)
+
+[2026-06-12 8:19 a.m.] rebelmike
+Awesome, thank you!
+
+
+[2026-06-12 8:39 a.m.] mole99
+Opened an open_pdks PR to update the hash: https://github.com/RTimothyEdwards/open_pdks/pull/525
+
+
+[2026-06-17 3:24 p.m.] deempak
+Hello everyone  I am trying to tapeout bunnie's Andrew Huang  BIO Core  https://www.crowdsupply.com/baochip/dabao/updates/bio-the-bao-i-o-co-processor   in ws 2 run 
+It has 2 core in a half height slot,  I started with 2Kb sram each core ( 4Kb total ie 8 macros of (512*8 ) ) but that arrangement is producing a lot of  routing congestion    
+I =have tried to stagger the columns vertically so they don't overlap in Y:
+Column 1 (core 0): X = 442,  Y = 500, 1020, 1540, 2060   (bottom half)
+Column 2 (core 1): X = 1060, Y = 2600, 3120, 3640, 4160   (top half)
+But that is giving  bad timing paths and congestion. 
+
+Only Thing I can think of currently is to move 1Kb sram each core and use ( 8 macros of (256*8)) 
+
+this is my first time working in backend and SRAM so I would like to know is there possibility to actually fit 4Kb in the slot ? 
+
+Sorry if the question is dumb or confusing .
+
+{Attachments}
+2026-06_media/Screenshot_from_2026-06-17_18-59-23-91F74.png
+2026-06_media/Screenshot_from_2026-06-17_19-31-18-07754.png
+2026-06_media/Screenshot_from_2026-06-17_19-31-01-F3E17.png
+2026-06_media/Screenshot_from_2026-06-17_19-12-42-E298B.png
+
+{Embed}
+https://www.crowdsupply.com/baochip/dabao/updates/bio-the-bao-i-o-co-processor
+BIO - The Bao I/O Co-Processor
+BIO is the I/O co-processor in the Baochip-1x. In this update, I’ll talk about the origins of the BIO, starting by working through a detailed study of the Raspberry Pi PIO as a reference before diving into the architecture of the BIO.
+2026-06_media/5148f773-7784-4467-bcb9-bddecab01155_open--C06B1.jpg
+
+{Reactions}
+💜
+
+[2026-06-17 4:32 p.m.] polyfractal
+Started a thread.
+
+
+[2026-06-22 7:26 p.m.] tholin
+Here we go again!
+
+{Attachments}
+2026-06_media/image-D6744.png
+
+
+[2026-06-22 7:26 p.m.] tholin
+A bit of a problem with the 3.3V SCL: the antenna rules are even stricter for 3.3V!
+
+
+[2026-06-22 8:54 p.m.] polyfractal
+huh interesting, my design is using your 3v3 library and I don't think it ran into any non-user-error antenna violations (I had a few originally because it was trying to cram logic between two closely spaced macros and then no room for diode placement). will double check when I get home, maybe it did and I didn't notice!
+
+
+[2026-06-23 4:08 p.m.] tholin
+https://cdn.discordapp.com/attachments/1361349523724570941/1518378503844663426/image.png?ex=6a3b052d&is=6a39b3ad&hm=0df703c1937246f2e5942d86e151188c0cc1c83dbc5a0da0886e9094c110a1db
+
+{Embed}
+https://cdn.discordapp.com/attachments/1361349523724570941/1518378503844663426/image.png?ex=6a3b052d&is=6a39b3ad&hm=0df703c1937246f2e5942d86e151188c0cc1c83dbc5a0da0886e9094c110a1db
+2026-06_media/image-AB6E2.png
+
+
+[2026-06-23 4:08 p.m.] tholin
+Where do I report this?
+
+
+[2026-06-23 4:08 p.m.] tholin
+Its a major issue because the only workaround for it I’ve found so far is it to crank the area of the macro up to way above what is actually necessary
+
+
+[2026-06-23 4:09 p.m.] tholin
+Which is currently having the result that using my SCL yields a *decrease* in density
+
+
+[2026-06-23 4:09 p.m.] tholin
+Just by having to insert lots of blank space to stop this error from happening
+
+
+[2026-06-23 4:14 p.m.] mole99
+@Tholin You're likely hitting this bug in OpenROAD: https://github.com/The-OpenROAD-Project/OpenROAD/issues/10273
+
+{Embed}
+https://github.com/The-OpenROAD-Project/OpenROAD/issues/10273
+Underflow error after antenna repair · Issue #10273 · The-OpenROA...
+Describe the bug I'm getting a [ERROR GRT-0183] Net 22574: heap underflow during 3D maze routing. After antenna repair Expected Behavior No error. Environment 26Q2-555-gd71446d6e9 OpenROAD 26Q2...
+2026-06_media/10273-0262F
+
+
+[2026-06-23 4:15 p.m.] mole99
+A workaround in LibreLane is to set `CTS_APPLY_NDR: "none"`. It disables non-default rules for CTS.
+
+
+[2026-06-23 7:58 p.m.] deempak
+So I tried to figure a few thing out and it looks like 
+repair_design is inserting ~12K buffers on clock nets before CTS ie  +28% area explosion
+in Stage 31 (OpenROAD.RepairDesignPostGPL) inserts 12K buffers causing a +28.5% area jump. 
+I then verifed in the openroad with the ODB , that shows only two nets with fanout above 50: clk_PAD2CORE (2,320 loads) and core_clk (980 loads)  both are clock nets. The repair is happening entirely on clock nets that CTS then rebuilds anyway. Zero data path violations exist . What is the correct LibreLane config variable to prevent repair_design from touching clock nets before CTS runs?
+
+Also I noticed this warning [01:21:22] WARNING  [GRT-0281] Net clk_PAD2CORE has a large fanout of 2320 terminals.
+
+
+[2026-06-23 8:29 p.m.] mole99
+Have you updated your project template and cloned the latest PDK? There was an issue in the OCD I/O cells that lead to CTS being skipped.
+
+
+[2026-06-23 8:39 p.m.] deempak
+hello Yes i am on version 1.5.4 of template and i did run clone-pdk so its up to date. 
+
+Actually i am using a ICG Cell in my design so the clk_PAD2Core is input to that and core_clk is out put . So I suspect that .
+
+
+[2026-06-23 8:45 p.m.] rebelmike
+It's possible that adding them to CLOCK_NET in the config would help.  I have: ```
+CLOCK_NET:
+- i_chip_core.real_clk_gf180mcu_as_sc_mcu7t3v3__mux2_2_Y/Y
+- clk5x_pad/Y
+```
+
+
+[2026-06-24 3:17 a.m.] deempak
+Hello thank you , the sdc should add these  clock nets as create clock right ? or  clock group
+
+
+[2026-06-24 6:54 a.m.] deempak
+So the congestion seems to be only get blobbed in a small section of the chip rest is just empty  and tht is creating overflow in that local congestion And that ends up begin overflow in the GRT ( or that what i understood atleast)
+
+
+Is there a way to spread it I have tried with different logic density already form 30 to 50 
+And sorry fro continues spam here i am bit newbie in Pnr .
+
+{Attachments}
+2026-06_media/Screenshot_from_2026-06-24_11-54-53-B69D3.png
+
+
+[2026-06-24 7:06 a.m.] mole99
+The variable you are searching for is [PL_TARGET_DENSITY_PCT](https://github.com/wafer-space/gf180mcu-project-template/blob/1db3a3bf89491ed497e21208e82f95734bab98db/librelane/config.yaml#L75). Note that a lower value means a higher spread.
+
+What kind of message do you get during GRT? Normally, you can always continue at least to DRT if `GRT_ALLOW_CONGESTION: true`.
+
+
+[2026-06-24 7:15 a.m.] deempak
+Yes I have iterated  PL_TARGET_DENSITY_PCT  from 30 to 50 but the results were creating same number of overflows ie is around 18 K 
+The flow does  go to the Detailed routing as   i have kept GRT_ALLOW_CONGESTION: true  but DRT starts with 90K violations and then just keeps on iterating it did went down to 79K but that took 12h . 
+Then my system killed the process but I think 12h was too much anyway? Or is that normal 
+
+
+I search on internet and found that maybe adding PAD_CELL might help what is you take on that ?
+
+
+[2026-06-24 7:19 a.m.] mole99
+You need to lower the value to spread the cells. For example. try `PL_TARGET_DENSITY_PCT: 20`.
+
+
+[2026-06-24 7:22 a.m.] deempak
+my design utilisation was 27 % so i thought i should keep above that  if that's not the case i will try 20 now 
+Thank You much
+
+
+[2026-06-24 7:23 a.m.] mole99
+Increasing the target density means a higher routing congestion. Good luck!
+
+{Reactions}
+❤️
+
+[2026-06-24 9:57 a.m.] deempak
+this worked thank you very much
+
+
+[2026-06-24 9:57 a.m.] mole99
+That's great to hear!
+
+
+[2026-06-25 3:16 p.m.] osvel
+Is there a better open-source tool than yosys/abc for retiming?
+
+
+[2026-06-25 3:17 p.m.] osvel
+I don't really understand it i guess, it feels like it doesn't work
+
+
+[2026-06-29 7:44 p.m.] .pogeg
+what problem are you encountering?
+
+
+[2026-06-29 7:50 p.m.] osvel
+From a software perspective, I guess I assume retiming to be more powerful than it is.
+
+I was under the impression that this should distribute the implementation (booth or whatever) over multiple cycles (i.e, balance the gates):
+```verilog
+module IntegerMultiply(
+  input         clock,
+  input  [31:0] inA,
+                inB,
+  output [31:0] out
+);
+
+  reg [31:0] prod_pipe_r0;
+  reg [31:0] prod_pipe_r1;
+  reg [31:0] prod_pipe_r2;
+  reg [31:0] prod_pipe;
+  always @(posedge clock) begin
+    prod_pipe_r0 <= (inA * inB);
+    prod_pipe_r1 <= prod_pipe_r0;
+    prod_pipe_r2 <= prod_pipe_r1;
+    prod_pipe <= prod_pipe_r2;
+  end
+  assign out = prod_pipe;
+endmodule
+```
+This is for an ASIC, using abc (not abc9)
+
+
+[2026-06-29 8:19 p.m.] 246tnt
+Is retiming even enabled by default in the flow ?
+
+
+[2026-06-29 9:41 p.m.] rebelmike
+I'm fairly sure retiming doesn't happen in the Librelane flow.  Though interestingly `retime` is passed to ABC.
+I found this in a search: https://github.com/The-OpenROAD-Project/OpenROAD-flow-scripts/discussions/1782#discussioncomment-8264228 which suggests ABC only sees combinational logic.  Which is possibly why you always see the error `ABC: Error: The network is combinational.`  
+But clearly yosys *can* do retiming because it works on some FPGA flows - I guess if you wanted to investigate further you could compare the synth scripts for an FPGA and librelane
+
+
+[2026-06-29 9:51 p.m.] osvel
+Interesting. I'm pretty sure I got it to work at least once. I have done so many experiments so I feel a bit lost, but iirc retiming worked well until i added input/output delays in my .sbc file. I'll do some more experiments tomorrow and update.
+
+
+[2026-06-30 1:38 a.m.] ravenslofty
+(it doesn't work very well though, because it retimes after mapping LUTs, not during mapping LUTs)
+
+
+==============================================================
+Exported 45 message(s)
+==============================================================

@@ -1,0 +1,135 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / general / Not bad for starters
+After: 2025-07-31 11:59 p.m.
+Before: 2025-09-01 12:00 a.m.
+==============================================================
+
+[2025-08-22 9:45 a.m.] mole99
+
+
+
+[2025-08-22 9:45 a.m.] mole99
+PDN is not yet connected between the pad ring and the core. Routing is also currently erroring out.
+
+
+[2025-08-22 9:45 a.m.] mole99
+This includes several hacks on top of the PDK that need to be upstreamed, as well as changes to the LibreLane padring generation script, which needs to be made more generic to support gf180mcu by default.
+
+
+[2025-08-22 9:46 a.m.] mole99
+Other than that you can simply set the die size and the I/O cells on each side.
+
+
+[2025-08-22 9:46 a.m.] tholin
+What is exactly it that I’m looking at here?
+
+
+[2025-08-22 9:46 a.m.] tholin
+I mean
+
+
+[2025-08-22 9:46 a.m.] tholin
+I see TT pin names
+
+
+[2025-08-22 9:49 a.m.] mole99
+Yes, the padring uses the same pinout as a tiny tapeout project. You could basically just drop it in there and produce a very expensive TT project/chip.
+
+I ported the padring from my IHP LibreLane workshop, see the bonus exercise: https://github.com/FPGA-Research/heichips25-workshop/tree/main
+
+
+[2025-08-22 10:41 a.m.] tholin
+Oh, that’s an interesting repo in general!
+
+
+[2025-08-22 10:44 a.m.] tholin
+You say this requires changes to both the PDK and the padring script. Are you working on getting those upstreamed right now?
+
+
+[2025-08-22 10:49 a.m.] h.tamas
+Fyi, I have a preliminary padframe setup for the Synopsys shuttle in this repo: https://github.com/htfab/ttgf0p1-poc
+
+
+[2025-08-22 10:53 a.m.] tholin
+Oh
+
+
+[2025-08-22 10:53 a.m.] tholin
+Very good
+
+
+[2025-08-22 10:53 a.m.] tholin
+Is the total die size of that compatible with wafer.space, though? Or do we not know that yet?
+
+
+[2025-08-22 1:14 p.m.] tholin
+I tried going through the IHP LibreLane workshop repo, but using the gf180 PDK. Only a few slight tweaks to the configs were required. Can follow the instructions fine otherwise. Good stuff.
+
+
+[2025-08-22 4:23 p.m.] urish
+The Synopsys shuttle die size is not compatible with wafer.space, it's smaller
+
+
+[2025-08-22 4:25 p.m.] mole99
+Eventually, this all needs to be upstreamed.
+
+
+[2025-08-22 4:26 p.m.] mole99
+@htamas  How did you deal with Yosys not reading in the I/O cell Verilog? As a workaround I created a separate blackbox library. Or did you just read the liberty?
+
+
+[2025-08-22 4:26 p.m.] mole99
+For wafer.space,  we will probably keep the same die size as Caravel, since we have all the dimensions for the reticle. (And you could still tapeout Caravel if you want.)
+
+
+[2025-08-22 4:27 p.m.] mole99
+@Tholin Glad to hear you like it! You can even have separate sections for each PDK in the config.
+
+
+[2025-08-22 4:36 p.m.] h.tamas
+Yes, I just added `"EXTRA_LIBS": ["pdk_dir::libs.ref/gf180mcu_fd_io/lib/gf180mcu_fd_io__tt_025C_5v00.lib"]` to the config (as well as similar `EXTRA_LEFS` and `EXTRA_GDS_FILES` entries for later steps in the flow)
+
+
+[2025-08-22 5:03 p.m.] tholin
+Trying to make something based off of this. Struggling my way through, one flow error at a time!
+Currently making it to Generate PDN before error.
+
+
+[2025-08-22 7:34 p.m.] mole99
+I see, thanks! In the padring branch the I/O cell views are set up directly in the PDK config similar to the standard cells.
+
+{Reactions}
+👍
+
+[2025-08-23 4:42 p.m.] tholin
+Quick question. How did you derive these values? I get flow errors if I try to mess with the die size or any of these, but I kinda need to.
+
+{Attachments}
+2025-08_media/image-5D781.png
+
+
+[2025-08-23 5:08 p.m.] h.tamas
+`IO_LENGTH` & `IO_WIDTH` come from the io cells in the `gf180mcu_fd_io` library
+`IO_OFFSET`, `MAX_NUM_PADS_HORIZONTAL` and `MAX_NUM_PADS_VERTICAL` are to reproduce the exact pad locations of Mehdi's padframe as they are constraints of the Synopsys shuttle
+
+
+[2025-08-23 5:10 p.m.] h.tamas
+(there is also `DIE_AREA` from `build.py` that factors into the calculations)
+
+
+[2025-08-23 5:11 p.m.] h.tamas
+Do you only get flow errors if you change the values?
+
+
+[2025-08-23 11:42 p.m.] tholin
+Yep. It goes "Unable to fill gap completely in row IO_NORTH".
+
+
+[2025-08-24 5:03 a.m.] h.tamas
+The space between two pads has to be completely filled with filler cells. In my case it was 25 microns so it was enough to use "fill10" and "fill5". If the free space between your pins is not divisible by 5 microns you might have to add "fill1" as well (1 micron wide) and possibly "fillnc" (0.1 micron wide).
+
+
+==============================================================
+Exported 29 message(s)
+==============================================================
