@@ -1,0 +1,177 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 📐 - Designing / 📝-project-template / Huh ... I'd like to know about those
+After: 2026-04-30 11:59 p.m.
+Before: 2026-06-01 12:00 a.m.
+==============================================================
+
+[2026-05-27 12:57 p.m.] mole99
+
+
+
+[2026-05-27 12:57 p.m.] mole99
+It will mainly be about the logos: besides the QR code, we will also add a readable ID, which will look like this:
+
+
+[2026-05-27 12:57 p.m.] mole99
+
+
+{Attachments}
+2026-05_media/Bildschirmfoto_vom_2026-05-05_09-35-00-2FCEE.png
+
+
+[2026-05-27 12:58 p.m.] mole99
+And for the bonding, it was suggested that the opposite corner should be empty to make it is easier to differentiate. The wafer.space logo will likely be moved in the top left corner. So only the bottom right corner can be used for a user logo.
+
+
+[2026-05-27 1:00 p.m.] 246tnt
+Ok, we have a custom bonding setup anyway ( and the changes discussed in #📦-cob would make TT incompatible anyway ) so that shouldn't be an issue.
+
+
+[2026-05-27 1:11 p.m.] namibj
+Oh, custom bonding?
+Can I read enough on it two weeks from now to make at least an attempt at respecting the package inductance?
+
+
+[2026-05-27 1:13 p.m.] 246tnt
+Huh no ...
+
+
+[2026-05-27 1:14 p.m.] 246tnt
+The wire we use is the same, posted in some of the picture, the PCB we wirebond to is on the TT github ... feel free to run an EM simulation if you fancy it, but that's not something we will do as it's inconsequential to 99.99% of TT users ...
+
+
+[2026-05-27 1:19 p.m.] namibj
+That's enough documentation for me then.
+
+
+[2026-05-27 1:41 p.m.] 246tnt
+Because of the COB process that means you have to use our big standard breakout so I'm not sure it'll be suitable for anything "high speed" in any case.  Processes where you can get the QFN ( sky or ihp ) are more suitable.
+
+I'm hoping TT would also offer "bare chip" bonded to a small COB PCB like the W.S one of run.1. but not sure that will happen, that's not my decision.
+
+
+[2026-05-27 3:09 p.m.] namibj
+Huh, are you not doing the same mezzanine plug (just different pinout/bonding diagram) as https://discord.com/channels/1361349522684510449/1361349523724570941/1501331867973193728 ?
+
+
+[2026-05-27 3:10 p.m.] namibj
+(I couldn't find anything that clearly looked like a COB PCB on the TT GitHub that sounded like it applied; the "best" I could find was `cobbler`?)
+
+
+[2026-05-27 3:19 p.m.] namibj
+I'd assume TT won't put all 1k dies of the `ttgf0p3`on the fancy breakout boards if there's sufficient interest in some going through the W.S COB "packaging" line, but even if not, I don't _think_ extracting an analog pin pair to HF-appropriate and probing-suitable pads/pins would be too much for @azonenberg 's rework skills.
+
+
+[2026-05-27 3:20 p.m.] 246tnt
+https://github.com/htfab/breakout-ttgf0p2-cob/tree/main
+
+
+[2026-05-27 3:21 p.m.] 246tnt
+We wouldn't put 1k dies on it ... just what we deem necessary and just not do anything with the rest.
+
+
+[2026-05-27 5:08 p.m.] namibj
+Hmmm, if it's JLC04161H-3313, they should be 50Ω single-ended/90~95Ω differential.
+
+
+[2026-05-27 5:14 p.m.] 246tnt
+@stuart Do we know what the stackup of the PCBs we use for production is ?
+
+
+[2026-05-27 5:32 p.m.] namibj
+I don't have to know until in those about 14 days from now.
+
+
+[2026-05-27 5:48 p.m.] namibj
+_after_ I have a functional design filed, and if I have several days left until the deadline, I would work to tune performance with PEX to the reasonably-accessible outside interface. I'd not need anything detailed I couldn't quick-maths from the bonding diagram and the analog mux structure before then.
+
+
+[2026-05-27 6:02 p.m.] saladchap
+Which boards/production?
+
+
+[2026-05-27 6:03 p.m.] namibj
+ttgf0p3 COB/"package"
+
+
+[2026-05-27 6:04 p.m.] namibj
+I don't need to know any sooner than ~14 days from now.
+
+
+[2026-05-27 6:24 p.m.] azonenberg
+I have access to a gold ball bonder at work. Old K&S manual unit
+
+
+[2026-05-27 6:24 p.m.] azonenberg
+if i can get them to OK me using it for a nonbillable project, I can probably rebond a bare die if i had 1-2 old dies on the same process to dial in the settings on
+
+
+[2026-05-27 6:24 p.m.] azonenberg
+(like not remove existing bonds, but doing my own COB from a never-bonded die that breaks out to SMA or something)
+
+
+[2026-05-27 6:25 p.m.] namibj
+Give me 15 minutes to get home.
+
+
+[2026-05-27 6:30 p.m.] saladchap
+We haven't made any PCBs for these, only 0p2 and 0p1
+
+
+[2026-05-27 6:39 p.m.] 246tnt
+@stuart Well I'm assuming we use the same 4l stackup every time ?
+
+
+[2026-05-27 6:45 p.m.] namibj
+I'm hoping those choices happen with a few days to spare until the GDS deadline for me filing the last tile revision, though.
+
+As said though, no rush from me just trying to get a bit of information going and then go offline for the weekend (3 very long days)
+
+
+[2026-05-27 8:09 p.m.] mithro_
+@Andrew Wingate - FYI
+
+
+[2026-05-27 8:12 p.m.] anfroholic
+Cool! 
+Also sorry, I think I'm missing some context. Are you in the Chicago area @azonenberg?
+
+
+[2026-05-27 8:14 p.m.] azonenberg
+No, Seattle
+
+
+[2026-05-27 8:32 p.m.] saladchap
+For TTGF0p1 and TTGF0p2 we used JLCPCB's standard 1.6mm FR-4 4 layer PCBs with ENIG
+
+{Attachments}
+2026-05_media/image-E4B3D.png
+
+
+[2026-05-27 8:34 p.m.] saladchap
+For the Wafer Space panels we used JLCPCB's 4-layer 0.8mm thick PCB with ENIG, though we are also trying some 2-layer panels at the moment
+
+{Attachments}
+2026-05_media/image-A657E.png
+
+
+[2026-05-27 8:43 p.m.] namibj
+If it doesn't change the shown cost, I'd suggest clicking the "specify stackup" and just keeping the suggested one, that way it's at least known. I think in some cases there may be more than one choice in the "cheap" tier to pick from, though.
+
+But it confirms my assumptions that it's likely that `JLC04161H-3313`. (It's probably the stackup you got without specifying on the 1.6mm 4L's.)
+
+{Reactions}
+👌
+
+[2026-05-27 8:48 p.m.] 246tnt
+@stuart But production boards shipped to users will be made by Sam right ? What stackup do they use ?
+
+
+[2026-05-27 9:00 p.m.] saladchap
+This very much depends on the qtys we're making and what the priority is. For WS the priority (for now and afaiu at least) has been lowest cost.
+
+
+==============================================================
+Exported 37 message(s)
+==============================================================

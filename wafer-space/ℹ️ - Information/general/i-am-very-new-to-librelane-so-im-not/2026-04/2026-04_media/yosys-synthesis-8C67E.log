@@ -1,0 +1,1396 @@
+
+ /----------------------------------------------------------------------------\
+ |  yosys -- Yosys Open SYnthesis Suite                                       |
+ |  Copyright (C) 2012 - 2026  Claire Xenia Wolf <claire@yosyshq.com>         |
+ |  Distributed under an ISC-like license, type "license" to see terms        |
+ \----------------------------------------------------------------------------/
+ Yosys 0.62 (git sha1 7326bb7d6641500ecb285c291a54a662cb1e76cf, clang++ 21.1.2 -fPIC -O3)
+
+1. Executing Liberty frontend: /var/home/dory/ASCON/gf180mcu/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/lib/gf180mcu_fd_sc_mcu7t5v0__tt_025C_5v00.lib
+Imported 229 cell types from liberty file.
+
+2. Executing Liberty frontend: /var/home/dory/ASCON/gf180mcu/gf180mcuD/libs.ref/gf180mcu_fd_io/lib/gf180mcu_fd_io__tt_025C_5v00.lib
+Imported 15 cell types from liberty file.
+
+3. Executing Liberty frontend: /var/home/dory/ASCON/gf180mcu/gf180mcuD/libs.ref/gf180mcu_fd_io/lib/gf180mcu_ws_io__tt_025C_5v00.lib
+Imported 2 cell types from liberty file.
+
+4. Executing Verilog-2005 frontend: /var/home/dory/ASCON/ip/gf180mcu_ws_ip__id/vh/gf180mcu_ws_ip__id.v
+Parsing SystemVerilog input from `/var/home/dory/ASCON/ip/gf180mcu_ws_ip__id/vh/gf180mcu_ws_ip__id.v' to AST representation.
+Generating RTLIL representation for module `\gf180mcu_ws_ip__id'.
+Successfully finished Verilog frontend.
+
+5. Executing Verilog-2005 frontend: /var/home/dory/ASCON/ip/gf180mcu_ws_ip__logo/vh/gf180mcu_ws_ip__logo.v
+Parsing SystemVerilog input from `/var/home/dory/ASCON/ip/gf180mcu_ws_ip__logo/vh/gf180mcu_ws_ip__logo.v' to AST representation.
+Generating RTLIL representation for module `\gf180mcu_ws_ip__logo'.
+Successfully finished Verilog frontend.
+
+6. Executing Verilog-2005 frontend: /var/home/dory/ASCON/gf180mcu/gf180mcuD/libs.ref/gf180mcu_fd_ip_sram/verilog/gf180mcu_fd_ip_sram__sram512x8m8wm1__blackbox.v
+Parsing SystemVerilog input from `/var/home/dory/ASCON/gf180mcu/gf180mcuD/libs.ref/gf180mcu_fd_ip_sram/verilog/gf180mcu_fd_ip_sram__sram512x8m8wm1__blackbox.v' to AST representation.
+Generating RTLIL representation for module `\gf180mcu_fd_ip_sram__sram512x8m8wm1'.
+Successfully finished Verilog frontend.
+[INFO] Using SDC file '/var/home/dory/ASCON/librelane/runs/RUN_2026-04-16_12-50-32/06-yosys-synthesis/synthesis.abc.sdc' for ABC…wtaf
+
+7. Executing Verilog-2005 frontend: /var/home/dory/ASCON/src/chip_top.sv
+Parsing SystemVerilog input from `/var/home/dory/ASCON/src/chip_top.sv' to AST representation.
+Storing AST representation for module `$abstract\chip_top'.
+Successfully finished Verilog frontend.
+
+8. Executing Verilog-2005 frontend: /var/home/dory/ASCON/src/chip_core.sv
+Parsing SystemVerilog input from `/var/home/dory/ASCON/src/chip_core.sv' to AST representation.
+Storing AST representation for module `$abstract\chip_core'.
+Successfully finished Verilog frontend.
+
+9. Executing HIERARCHY pass (managing design hierarchy).
+
+10. Executing AST frontend in derive mode using pre-parsed AST for module `\chip_top'.
+Generating RTLIL representation for module `\chip_top'.
+
+10.1. Analyzing design hierarchy..
+Top module:  \chip_top
+Parameter \NUM_INPUT_PADS = 0
+Parameter \NUM_BIDIR_PADS = 64
+Parameter \NUM_ANALOG_PADS = 0
+
+10.2. Executing AST frontend in derive mode using pre-parsed AST for module `\chip_core'.
+Parameter \NUM_INPUT_PADS = 0
+Parameter \NUM_BIDIR_PADS = 64
+Parameter \NUM_ANALOG_PADS = 0
+Generating RTLIL representation for module `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core'.
+Note: Assuming pure combinatorial block at /var/home/dory/ASCON/src/chip_core.sv:55.5-61.8 in
+compliance with IEC 62142(E):2005 / IEEE Std. 1364.1(E):2002. Recommending
+use of @* instead of @(...) for better match of synthesis and simulation.
+
+10.3. Analyzing design hierarchy..
+Top module:  \chip_top
+Used module:     $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core
+
+10.4. Analyzing design hierarchy..
+Top module:  \chip_top
+Used module:     $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core
+Removing unused module `$abstract\chip_core'.
+Removing unused module `$abstract\chip_top'.
+Removed 2 unused modules.
+Renaming module chip_top to chip_top.
+
+11. Executing ATTRMAP pass (move or copy attributes).
+
+12. Executing HIERARCHY pass (managing design hierarchy).
+
+12.1. Analyzing design hierarchy..
+Top module:  \chip_top
+Used module:     $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core
+
+12.2. Analyzing design hierarchy..
+Top module:  \chip_top
+Used module:     $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core
+Removed 0 unused modules.
+
+13. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Cleaned up 0 empty switches.
+
+14. Executing PROC_RMDEAD pass (remove dead branches from decision trees).
+Marked 1 switch rules as full_case in process $proc$/var/home/dory/ASCON/src/chip_core.sv:63$8 in module $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.
+Removed a total of 0 dead cases.
+
+15. Executing PROC_PRUNE pass (remove redundant assignments in processes).
+Removed 0 redundant assignments.
+Promoted 8 assignments to connections.
+
+16. Executing PROC_INIT pass (extract init attributes).
+Found init rule in `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.$proc$/var/home/dory/ASCON/src/chip_core.sv:53$98'.
+  Set init value: \r_counter = 1'0
+Found init rule in `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.$proc$/var/home/dory/ASCON/src/chip_core.sv:52$97'.
+  Set init value: \perm_counter = 4'0000
+Found init rule in `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.$proc$/var/home/dory/ASCON/src/chip_core.sv:51$96'.
+  Set init value: \c = 8'11110000
+
+17. Executing PROC_ARST pass (detect async resets in processes).
+
+18. Executing PROC_ROM pass (convert switches to ROMs).
+Converted 0 switches.
+<suppressed ~2 debug messages>
+
+19. Executing PROC_MUX pass (convert decision trees to multiplexers).
+Creating decoders for process `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.$proc$/var/home/dory/ASCON/src/chip_core.sv:53$98'.
+Creating decoders for process `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.$proc$/var/home/dory/ASCON/src/chip_core.sv:52$97'.
+Creating decoders for process `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.$proc$/var/home/dory/ASCON/src/chip_core.sv:51$96'.
+Creating decoders for process `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.$proc$/var/home/dory/ASCON/src/chip_core.sv:63$8'.
+     1/13: $0\r_counter[0:0]
+     2/13: $0\perm_counter[3:0]
+     3/13: $1\s4[63:0]
+     4/13: $1\s3[63:0]
+     5/13: $1\s2[63:0]
+     6/13: $1\s1[63:0]
+     7/13: $1\s0[63:0]
+     8/13: $0\t4[63:0]
+     9/13: $0\t3[63:0]
+    10/13: $0\t2[63:0]
+    11/13: $0\t1[63:0]
+    12/13: $0\t0[63:0]
+    13/13: $0\c[7:0]
+Creating decoders for process `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.$proc$/var/home/dory/ASCON/src/chip_core.sv:55$7'.
+
+20. Executing PROC_DLATCH pass (convert process syncs to latches).
+No latch inferred for signal `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\s0' from process `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.$proc$/var/home/dory/ASCON/src/chip_core.sv:55$7'.
+No latch inferred for signal `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\s1' from process `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.$proc$/var/home/dory/ASCON/src/chip_core.sv:55$7'.
+No latch inferred for signal `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\s2' from process `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.$proc$/var/home/dory/ASCON/src/chip_core.sv:55$7'.
+No latch inferred for signal `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\s3' from process `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.$proc$/var/home/dory/ASCON/src/chip_core.sv:55$7'.
+No latch inferred for signal `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\s4' from process `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.$proc$/var/home/dory/ASCON/src/chip_core.sv:55$7'.
+
+21. Executing PROC_DFF pass (convert process syncs to FFs).
+Creating register for signal `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\c' using process `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.$proc$/var/home/dory/ASCON/src/chip_core.sv:63$8'.
+  created $dff cell `$procdff$161' with positive edge clock.
+Creating register for signal `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\t0' using process `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.$proc$/var/home/dory/ASCON/src/chip_core.sv:63$8'.
+  created $dff cell `$procdff$162' with positive edge clock.
+Creating register for signal `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\t1' using process `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.$proc$/var/home/dory/ASCON/src/chip_core.sv:63$8'.
+  created $dff cell `$procdff$163' with positive edge clock.
+Creating register for signal `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\t2' using process `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.$proc$/var/home/dory/ASCON/src/chip_core.sv:63$8'.
+  created $dff cell `$procdff$164' with positive edge clock.
+Creating register for signal `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\t3' using process `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.$proc$/var/home/dory/ASCON/src/chip_core.sv:63$8'.
+  created $dff cell `$procdff$165' with positive edge clock.
+Creating register for signal `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\t4' using process `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.$proc$/var/home/dory/ASCON/src/chip_core.sv:63$8'.
+  created $dff cell `$procdff$166' with positive edge clock.
+Creating register for signal `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\s0' using process `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.$proc$/var/home/dory/ASCON/src/chip_core.sv:63$8'.
+  created $dff cell `$procdff$167' with positive edge clock.
+Creating register for signal `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\s1' using process `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.$proc$/var/home/dory/ASCON/src/chip_core.sv:63$8'.
+  created $dff cell `$procdff$168' with positive edge clock.
+Creating register for signal `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\s2' using process `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.$proc$/var/home/dory/ASCON/src/chip_core.sv:63$8'.
+  created $dff cell `$procdff$169' with positive edge clock.
+Creating register for signal `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\s3' using process `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.$proc$/var/home/dory/ASCON/src/chip_core.sv:63$8'.
+  created $dff cell `$procdff$170' with positive edge clock.
+Creating register for signal `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\s4' using process `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.$proc$/var/home/dory/ASCON/src/chip_core.sv:63$8'.
+  created $dff cell `$procdff$171' with positive edge clock.
+Creating register for signal `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\perm_counter' using process `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.$proc$/var/home/dory/ASCON/src/chip_core.sv:63$8'.
+  created $dff cell `$procdff$172' with positive edge clock.
+Creating register for signal `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\r_counter' using process `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.$proc$/var/home/dory/ASCON/src/chip_core.sv:63$8'.
+  created $dff cell `$procdff$173' with positive edge clock.
+
+22. Executing PROC_MEMWR pass (convert process memory writes to cells).
+
+23. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Removing empty process `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.$proc$/var/home/dory/ASCON/src/chip_core.sv:53$98'.
+Removing empty process `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.$proc$/var/home/dory/ASCON/src/chip_core.sv:52$97'.
+Removing empty process `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.$proc$/var/home/dory/ASCON/src/chip_core.sv:51$96'.
+Found and cleaned up 2 empty switches in `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.$proc$/var/home/dory/ASCON/src/chip_core.sv:63$8'.
+Removing empty process `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.$proc$/var/home/dory/ASCON/src/chip_core.sv:63$8'.
+Removing empty process `$paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.$proc$/var/home/dory/ASCON/src/chip_core.sv:55$7'.
+Cleaned up 2 empty switches.
+
+24. Executing CHECK pass (checking for obvious problems).
+Checking module chip_top...
+Warning: Wire chip_top.\input_PAD2CORE [1] is used but has no driver.
+Warning: Wire chip_top.\input_PAD2CORE [0] is used but has no driver.
+Checking module $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core...
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [63]:
+    port Q[63] of cell $procdff$171 ($dff)
+    port Q[63] of cell $procdff$170 ($dff)
+    port Q[63] of cell $procdff$169 ($dff)
+    port Q[63] of cell $procdff$168 ($dff)
+    port Q[63] of cell $procdff$167 ($dff)
+    module input bidir_in[63]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [62]:
+    port Q[62] of cell $procdff$171 ($dff)
+    port Q[62] of cell $procdff$170 ($dff)
+    port Q[62] of cell $procdff$169 ($dff)
+    port Q[62] of cell $procdff$168 ($dff)
+    port Q[62] of cell $procdff$167 ($dff)
+    module input bidir_in[62]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [61]:
+    port Q[61] of cell $procdff$171 ($dff)
+    port Q[61] of cell $procdff$170 ($dff)
+    port Q[61] of cell $procdff$169 ($dff)
+    port Q[61] of cell $procdff$168 ($dff)
+    port Q[61] of cell $procdff$167 ($dff)
+    module input bidir_in[61]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [60]:
+    port Q[60] of cell $procdff$171 ($dff)
+    port Q[60] of cell $procdff$170 ($dff)
+    port Q[60] of cell $procdff$169 ($dff)
+    port Q[60] of cell $procdff$168 ($dff)
+    port Q[60] of cell $procdff$167 ($dff)
+    module input bidir_in[60]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [59]:
+    port Q[59] of cell $procdff$171 ($dff)
+    port Q[59] of cell $procdff$170 ($dff)
+    port Q[59] of cell $procdff$169 ($dff)
+    port Q[59] of cell $procdff$168 ($dff)
+    port Q[59] of cell $procdff$167 ($dff)
+    module input bidir_in[59]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [58]:
+    port Q[58] of cell $procdff$171 ($dff)
+    port Q[58] of cell $procdff$170 ($dff)
+    port Q[58] of cell $procdff$169 ($dff)
+    port Q[58] of cell $procdff$168 ($dff)
+    port Q[58] of cell $procdff$167 ($dff)
+    module input bidir_in[58]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [57]:
+    port Q[57] of cell $procdff$171 ($dff)
+    port Q[57] of cell $procdff$170 ($dff)
+    port Q[57] of cell $procdff$169 ($dff)
+    port Q[57] of cell $procdff$168 ($dff)
+    port Q[57] of cell $procdff$167 ($dff)
+    module input bidir_in[57]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [56]:
+    port Q[56] of cell $procdff$171 ($dff)
+    port Q[56] of cell $procdff$170 ($dff)
+    port Q[56] of cell $procdff$169 ($dff)
+    port Q[56] of cell $procdff$168 ($dff)
+    port Q[56] of cell $procdff$167 ($dff)
+    module input bidir_in[56]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [55]:
+    port Q[55] of cell $procdff$171 ($dff)
+    port Q[55] of cell $procdff$170 ($dff)
+    port Q[55] of cell $procdff$169 ($dff)
+    port Q[55] of cell $procdff$168 ($dff)
+    port Q[55] of cell $procdff$167 ($dff)
+    module input bidir_in[55]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [54]:
+    port Q[54] of cell $procdff$171 ($dff)
+    port Q[54] of cell $procdff$170 ($dff)
+    port Q[54] of cell $procdff$169 ($dff)
+    port Q[54] of cell $procdff$168 ($dff)
+    port Q[54] of cell $procdff$167 ($dff)
+    module input bidir_in[54]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [53]:
+    port Q[53] of cell $procdff$171 ($dff)
+    port Q[53] of cell $procdff$170 ($dff)
+    port Q[53] of cell $procdff$169 ($dff)
+    port Q[53] of cell $procdff$168 ($dff)
+    port Q[53] of cell $procdff$167 ($dff)
+    module input bidir_in[53]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [52]:
+    port Q[52] of cell $procdff$171 ($dff)
+    port Q[52] of cell $procdff$170 ($dff)
+    port Q[52] of cell $procdff$169 ($dff)
+    port Q[52] of cell $procdff$168 ($dff)
+    port Q[52] of cell $procdff$167 ($dff)
+    module input bidir_in[52]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [51]:
+    port Q[51] of cell $procdff$171 ($dff)
+    port Q[51] of cell $procdff$170 ($dff)
+    port Q[51] of cell $procdff$169 ($dff)
+    port Q[51] of cell $procdff$168 ($dff)
+    port Q[51] of cell $procdff$167 ($dff)
+    module input bidir_in[51]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [50]:
+    port Q[50] of cell $procdff$171 ($dff)
+    port Q[50] of cell $procdff$170 ($dff)
+    port Q[50] of cell $procdff$169 ($dff)
+    port Q[50] of cell $procdff$168 ($dff)
+    port Q[50] of cell $procdff$167 ($dff)
+    module input bidir_in[50]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [49]:
+    port Q[49] of cell $procdff$171 ($dff)
+    port Q[49] of cell $procdff$170 ($dff)
+    port Q[49] of cell $procdff$169 ($dff)
+    port Q[49] of cell $procdff$168 ($dff)
+    port Q[49] of cell $procdff$167 ($dff)
+    module input bidir_in[49]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [48]:
+    port Q[48] of cell $procdff$171 ($dff)
+    port Q[48] of cell $procdff$170 ($dff)
+    port Q[48] of cell $procdff$169 ($dff)
+    port Q[48] of cell $procdff$168 ($dff)
+    port Q[48] of cell $procdff$167 ($dff)
+    module input bidir_in[48]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [47]:
+    port Q[47] of cell $procdff$171 ($dff)
+    port Q[47] of cell $procdff$170 ($dff)
+    port Q[47] of cell $procdff$169 ($dff)
+    port Q[47] of cell $procdff$168 ($dff)
+    port Q[47] of cell $procdff$167 ($dff)
+    module input bidir_in[47]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [46]:
+    port Q[46] of cell $procdff$171 ($dff)
+    port Q[46] of cell $procdff$170 ($dff)
+    port Q[46] of cell $procdff$169 ($dff)
+    port Q[46] of cell $procdff$168 ($dff)
+    port Q[46] of cell $procdff$167 ($dff)
+    module input bidir_in[46]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [45]:
+    port Q[45] of cell $procdff$171 ($dff)
+    port Q[45] of cell $procdff$170 ($dff)
+    port Q[45] of cell $procdff$169 ($dff)
+    port Q[45] of cell $procdff$168 ($dff)
+    port Q[45] of cell $procdff$167 ($dff)
+    module input bidir_in[45]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [44]:
+    port Q[44] of cell $procdff$171 ($dff)
+    port Q[44] of cell $procdff$170 ($dff)
+    port Q[44] of cell $procdff$169 ($dff)
+    port Q[44] of cell $procdff$168 ($dff)
+    port Q[44] of cell $procdff$167 ($dff)
+    module input bidir_in[44]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [43]:
+    port Q[43] of cell $procdff$171 ($dff)
+    port Q[43] of cell $procdff$170 ($dff)
+    port Q[43] of cell $procdff$169 ($dff)
+    port Q[43] of cell $procdff$168 ($dff)
+    port Q[43] of cell $procdff$167 ($dff)
+    module input bidir_in[43]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [42]:
+    port Q[42] of cell $procdff$171 ($dff)
+    port Q[42] of cell $procdff$170 ($dff)
+    port Q[42] of cell $procdff$169 ($dff)
+    port Q[42] of cell $procdff$168 ($dff)
+    port Q[42] of cell $procdff$167 ($dff)
+    module input bidir_in[42]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [41]:
+    port Q[41] of cell $procdff$171 ($dff)
+    port Q[41] of cell $procdff$170 ($dff)
+    port Q[41] of cell $procdff$169 ($dff)
+    port Q[41] of cell $procdff$168 ($dff)
+    port Q[41] of cell $procdff$167 ($dff)
+    module input bidir_in[41]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [40]:
+    port Q[40] of cell $procdff$171 ($dff)
+    port Q[40] of cell $procdff$170 ($dff)
+    port Q[40] of cell $procdff$169 ($dff)
+    port Q[40] of cell $procdff$168 ($dff)
+    port Q[40] of cell $procdff$167 ($dff)
+    module input bidir_in[40]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [39]:
+    port Q[39] of cell $procdff$171 ($dff)
+    port Q[39] of cell $procdff$170 ($dff)
+    port Q[39] of cell $procdff$169 ($dff)
+    port Q[39] of cell $procdff$168 ($dff)
+    port Q[39] of cell $procdff$167 ($dff)
+    module input bidir_in[39]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [38]:
+    port Q[38] of cell $procdff$171 ($dff)
+    port Q[38] of cell $procdff$170 ($dff)
+    port Q[38] of cell $procdff$169 ($dff)
+    port Q[38] of cell $procdff$168 ($dff)
+    port Q[38] of cell $procdff$167 ($dff)
+    module input bidir_in[38]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [37]:
+    port Q[37] of cell $procdff$171 ($dff)
+    port Q[37] of cell $procdff$170 ($dff)
+    port Q[37] of cell $procdff$169 ($dff)
+    port Q[37] of cell $procdff$168 ($dff)
+    port Q[37] of cell $procdff$167 ($dff)
+    module input bidir_in[37]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [36]:
+    port Q[36] of cell $procdff$171 ($dff)
+    port Q[36] of cell $procdff$170 ($dff)
+    port Q[36] of cell $procdff$169 ($dff)
+    port Q[36] of cell $procdff$168 ($dff)
+    port Q[36] of cell $procdff$167 ($dff)
+    module input bidir_in[36]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [35]:
+    port Q[35] of cell $procdff$171 ($dff)
+    port Q[35] of cell $procdff$170 ($dff)
+    port Q[35] of cell $procdff$169 ($dff)
+    port Q[35] of cell $procdff$168 ($dff)
+    port Q[35] of cell $procdff$167 ($dff)
+    module input bidir_in[35]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [34]:
+    port Q[34] of cell $procdff$171 ($dff)
+    port Q[34] of cell $procdff$170 ($dff)
+    port Q[34] of cell $procdff$169 ($dff)
+    port Q[34] of cell $procdff$168 ($dff)
+    port Q[34] of cell $procdff$167 ($dff)
+    module input bidir_in[34]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [33]:
+    port Q[33] of cell $procdff$171 ($dff)
+    port Q[33] of cell $procdff$170 ($dff)
+    port Q[33] of cell $procdff$169 ($dff)
+    port Q[33] of cell $procdff$168 ($dff)
+    port Q[33] of cell $procdff$167 ($dff)
+    module input bidir_in[33]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [32]:
+    port Q[32] of cell $procdff$171 ($dff)
+    port Q[32] of cell $procdff$170 ($dff)
+    port Q[32] of cell $procdff$169 ($dff)
+    port Q[32] of cell $procdff$168 ($dff)
+    port Q[32] of cell $procdff$167 ($dff)
+    module input bidir_in[32]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [31]:
+    port Q[31] of cell $procdff$171 ($dff)
+    port Q[31] of cell $procdff$170 ($dff)
+    port Q[31] of cell $procdff$169 ($dff)
+    port Q[31] of cell $procdff$168 ($dff)
+    port Q[31] of cell $procdff$167 ($dff)
+    module input bidir_in[31]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [30]:
+    port Q[30] of cell $procdff$171 ($dff)
+    port Q[30] of cell $procdff$170 ($dff)
+    port Q[30] of cell $procdff$169 ($dff)
+    port Q[30] of cell $procdff$168 ($dff)
+    port Q[30] of cell $procdff$167 ($dff)
+    module input bidir_in[30]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [29]:
+    port Q[29] of cell $procdff$171 ($dff)
+    port Q[29] of cell $procdff$170 ($dff)
+    port Q[29] of cell $procdff$169 ($dff)
+    port Q[29] of cell $procdff$168 ($dff)
+    port Q[29] of cell $procdff$167 ($dff)
+    module input bidir_in[29]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [28]:
+    port Q[28] of cell $procdff$171 ($dff)
+    port Q[28] of cell $procdff$170 ($dff)
+    port Q[28] of cell $procdff$169 ($dff)
+    port Q[28] of cell $procdff$168 ($dff)
+    port Q[28] of cell $procdff$167 ($dff)
+    module input bidir_in[28]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [27]:
+    port Q[27] of cell $procdff$171 ($dff)
+    port Q[27] of cell $procdff$170 ($dff)
+    port Q[27] of cell $procdff$169 ($dff)
+    port Q[27] of cell $procdff$168 ($dff)
+    port Q[27] of cell $procdff$167 ($dff)
+    module input bidir_in[27]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [26]:
+    port Q[26] of cell $procdff$171 ($dff)
+    port Q[26] of cell $procdff$170 ($dff)
+    port Q[26] of cell $procdff$169 ($dff)
+    port Q[26] of cell $procdff$168 ($dff)
+    port Q[26] of cell $procdff$167 ($dff)
+    module input bidir_in[26]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [25]:
+    port Q[25] of cell $procdff$171 ($dff)
+    port Q[25] of cell $procdff$170 ($dff)
+    port Q[25] of cell $procdff$169 ($dff)
+    port Q[25] of cell $procdff$168 ($dff)
+    port Q[25] of cell $procdff$167 ($dff)
+    module input bidir_in[25]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [24]:
+    port Q[24] of cell $procdff$171 ($dff)
+    port Q[24] of cell $procdff$170 ($dff)
+    port Q[24] of cell $procdff$169 ($dff)
+    port Q[24] of cell $procdff$168 ($dff)
+    port Q[24] of cell $procdff$167 ($dff)
+    module input bidir_in[24]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [23]:
+    port Q[23] of cell $procdff$171 ($dff)
+    port Q[23] of cell $procdff$170 ($dff)
+    port Q[23] of cell $procdff$169 ($dff)
+    port Q[23] of cell $procdff$168 ($dff)
+    port Q[23] of cell $procdff$167 ($dff)
+    module input bidir_in[23]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [22]:
+    port Q[22] of cell $procdff$171 ($dff)
+    port Q[22] of cell $procdff$170 ($dff)
+    port Q[22] of cell $procdff$169 ($dff)
+    port Q[22] of cell $procdff$168 ($dff)
+    port Q[22] of cell $procdff$167 ($dff)
+    module input bidir_in[22]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [21]:
+    port Q[21] of cell $procdff$171 ($dff)
+    port Q[21] of cell $procdff$170 ($dff)
+    port Q[21] of cell $procdff$169 ($dff)
+    port Q[21] of cell $procdff$168 ($dff)
+    port Q[21] of cell $procdff$167 ($dff)
+    module input bidir_in[21]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [20]:
+    port Q[20] of cell $procdff$171 ($dff)
+    port Q[20] of cell $procdff$170 ($dff)
+    port Q[20] of cell $procdff$169 ($dff)
+    port Q[20] of cell $procdff$168 ($dff)
+    port Q[20] of cell $procdff$167 ($dff)
+    module input bidir_in[20]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [19]:
+    port Q[19] of cell $procdff$171 ($dff)
+    port Q[19] of cell $procdff$170 ($dff)
+    port Q[19] of cell $procdff$169 ($dff)
+    port Q[19] of cell $procdff$168 ($dff)
+    port Q[19] of cell $procdff$167 ($dff)
+    module input bidir_in[19]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [18]:
+    port Q[18] of cell $procdff$171 ($dff)
+    port Q[18] of cell $procdff$170 ($dff)
+    port Q[18] of cell $procdff$169 ($dff)
+    port Q[18] of cell $procdff$168 ($dff)
+    port Q[18] of cell $procdff$167 ($dff)
+    module input bidir_in[18]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [17]:
+    port Q[17] of cell $procdff$171 ($dff)
+    port Q[17] of cell $procdff$170 ($dff)
+    port Q[17] of cell $procdff$169 ($dff)
+    port Q[17] of cell $procdff$168 ($dff)
+    port Q[17] of cell $procdff$167 ($dff)
+    module input bidir_in[17]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [16]:
+    port Q[16] of cell $procdff$171 ($dff)
+    port Q[16] of cell $procdff$170 ($dff)
+    port Q[16] of cell $procdff$169 ($dff)
+    port Q[16] of cell $procdff$168 ($dff)
+    port Q[16] of cell $procdff$167 ($dff)
+    module input bidir_in[16]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [15]:
+    port Q[15] of cell $procdff$171 ($dff)
+    port Q[15] of cell $procdff$170 ($dff)
+    port Q[15] of cell $procdff$169 ($dff)
+    port Q[15] of cell $procdff$168 ($dff)
+    port Q[15] of cell $procdff$167 ($dff)
+    module input bidir_in[15]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [14]:
+    port Q[14] of cell $procdff$171 ($dff)
+    port Q[14] of cell $procdff$170 ($dff)
+    port Q[14] of cell $procdff$169 ($dff)
+    port Q[14] of cell $procdff$168 ($dff)
+    port Q[14] of cell $procdff$167 ($dff)
+    module input bidir_in[14]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [13]:
+    port Q[13] of cell $procdff$171 ($dff)
+    port Q[13] of cell $procdff$170 ($dff)
+    port Q[13] of cell $procdff$169 ($dff)
+    port Q[13] of cell $procdff$168 ($dff)
+    port Q[13] of cell $procdff$167 ($dff)
+    module input bidir_in[13]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [12]:
+    port Q[12] of cell $procdff$171 ($dff)
+    port Q[12] of cell $procdff$170 ($dff)
+    port Q[12] of cell $procdff$169 ($dff)
+    port Q[12] of cell $procdff$168 ($dff)
+    port Q[12] of cell $procdff$167 ($dff)
+    module input bidir_in[12]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [11]:
+    port Q[11] of cell $procdff$171 ($dff)
+    port Q[11] of cell $procdff$170 ($dff)
+    port Q[11] of cell $procdff$169 ($dff)
+    port Q[11] of cell $procdff$168 ($dff)
+    port Q[11] of cell $procdff$167 ($dff)
+    module input bidir_in[11]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [10]:
+    port Q[10] of cell $procdff$171 ($dff)
+    port Q[10] of cell $procdff$170 ($dff)
+    port Q[10] of cell $procdff$169 ($dff)
+    port Q[10] of cell $procdff$168 ($dff)
+    port Q[10] of cell $procdff$167 ($dff)
+    module input bidir_in[10]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [9]:
+    port Q[9] of cell $procdff$171 ($dff)
+    port Q[9] of cell $procdff$170 ($dff)
+    port Q[9] of cell $procdff$169 ($dff)
+    port Q[9] of cell $procdff$168 ($dff)
+    port Q[9] of cell $procdff$167 ($dff)
+    module input bidir_in[9]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [8]:
+    port Q[8] of cell $procdff$171 ($dff)
+    port Q[8] of cell $procdff$170 ($dff)
+    port Q[8] of cell $procdff$169 ($dff)
+    port Q[8] of cell $procdff$168 ($dff)
+    port Q[8] of cell $procdff$167 ($dff)
+    module input bidir_in[8]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [7]:
+    port Q[7] of cell $procdff$171 ($dff)
+    port Q[7] of cell $procdff$170 ($dff)
+    port Q[7] of cell $procdff$169 ($dff)
+    port Q[7] of cell $procdff$168 ($dff)
+    port Q[7] of cell $procdff$167 ($dff)
+    module input bidir_in[7]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [6]:
+    port Q[6] of cell $procdff$171 ($dff)
+    port Q[6] of cell $procdff$170 ($dff)
+    port Q[6] of cell $procdff$169 ($dff)
+    port Q[6] of cell $procdff$168 ($dff)
+    port Q[6] of cell $procdff$167 ($dff)
+    module input bidir_in[6]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [5]:
+    port Q[5] of cell $procdff$171 ($dff)
+    port Q[5] of cell $procdff$170 ($dff)
+    port Q[5] of cell $procdff$169 ($dff)
+    port Q[5] of cell $procdff$168 ($dff)
+    port Q[5] of cell $procdff$167 ($dff)
+    module input bidir_in[5]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [4]:
+    port Q[4] of cell $procdff$171 ($dff)
+    port Q[4] of cell $procdff$170 ($dff)
+    port Q[4] of cell $procdff$169 ($dff)
+    port Q[4] of cell $procdff$168 ($dff)
+    port Q[4] of cell $procdff$167 ($dff)
+    module input bidir_in[4]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [3]:
+    port Q[3] of cell $procdff$171 ($dff)
+    port Q[3] of cell $procdff$170 ($dff)
+    port Q[3] of cell $procdff$169 ($dff)
+    port Q[3] of cell $procdff$168 ($dff)
+    port Q[3] of cell $procdff$167 ($dff)
+    module input bidir_in[3]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [2]:
+    port Q[2] of cell $procdff$171 ($dff)
+    port Q[2] of cell $procdff$170 ($dff)
+    port Q[2] of cell $procdff$169 ($dff)
+    port Q[2] of cell $procdff$168 ($dff)
+    port Q[2] of cell $procdff$167 ($dff)
+    module input bidir_in[2]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [1]:
+    port Q[1] of cell $procdff$171 ($dff)
+    port Q[1] of cell $procdff$170 ($dff)
+    port Q[1] of cell $procdff$169 ($dff)
+    port Q[1] of cell $procdff$168 ($dff)
+    port Q[1] of cell $procdff$167 ($dff)
+    module input bidir_in[1]
+Warning: multiple conflicting drivers for $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_in [0]:
+    port Q[0] of cell $procdff$171 ($dff)
+    port Q[0] of cell $procdff$170 ($dff)
+    port Q[0] of cell $procdff$169 ($dff)
+    port Q[0] of cell $procdff$168 ($dff)
+    port Q[0] of cell $procdff$167 ($dff)
+    module input bidir_in[0]
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [63] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [62] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [61] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [60] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [59] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [58] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [57] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [56] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [55] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [54] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [53] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [52] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [51] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [50] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [49] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [48] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [47] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [46] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [45] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [44] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [43] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [42] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [41] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [40] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [39] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [38] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [37] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [36] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [35] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [34] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [33] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [32] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [31] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [30] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [29] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [28] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [27] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [26] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [25] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [24] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [23] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [22] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [21] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [20] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [19] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [18] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [17] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [16] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [15] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [14] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [13] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [12] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [11] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [10] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [9] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [8] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [7] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [6] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [5] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [4] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [3] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [2] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [1] is used but has no driver.
+Warning: Wire $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.\bidir_out [0] is used but has no driver.
+Found and reported 130 problems.
+
+25. Executing OPT_EXPR pass (perform const folding).
+Optimizing module chip_top.
+Optimizing module $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.
+<suppressed ~35 debug messages>
+
+26. Executing FLATTEN pass (flatten design).
+Deleting now unused module $paramod$8e269a9a38877d00e9380a3f6ea0e7fc17ef121a\chip_core.
+<suppressed ~1 debug messages>
+
+27. Executing OPT_EXPR pass (perform const folding).
+Optimizing module chip_top.
+
+28. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \chip_top..
+Removed 106 unused cells and 174 unused wires.
+<suppressed ~121 debug messages>
+
+29. Executing OPT_EXPR pass (perform const folding).
+Optimizing module chip_top.
+
+30. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\chip_top'.
+Computing hashes of 85 cells of `\chip_top'.
+Finding duplicate cells in `\chip_top'.
+Removed a total of 0 cells.
+
+31. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \chip_top..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Removed 0 multiplexer ports.
+
+32. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \chip_top.
+Performed a total of 0 changes.
+
+33. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\chip_top'.
+Computing hashes of 85 cells of `\chip_top'.
+Finding duplicate cells in `\chip_top'.
+Removed a total of 0 cells.
+
+34. Executing OPT_DFF pass (perform DFF optimizations).
+
+35. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \chip_top..
+
+36. Executing OPT_EXPR pass (perform const folding).
+Optimizing module chip_top.
+
+37. Executing FSM pass (extract and optimize FSM).
+
+37.1. Executing FSM_DETECT pass (finding FSMs in design).
+
+37.2. Executing FSM_EXTRACT pass (extracting FSM from design).
+
+37.3. Executing FSM_OPT pass (simple optimizations of FSMs).
+
+37.4. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \chip_top..
+
+37.5. Executing FSM_OPT pass (simple optimizations of FSMs).
+
+37.6. Executing FSM_RECODE pass (re-assigning FSM state encoding).
+
+37.7. Executing FSM_INFO pass (dumping all available information on FSM cells).
+
+37.8. Executing FSM_MAP pass (mapping FSMs to basic logic).
+
+38. Executing OPT_EXPR pass (perform const folding).
+Optimizing module chip_top.
+
+39. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\chip_top'.
+Computing hashes of 85 cells of `\chip_top'.
+Finding duplicate cells in `\chip_top'.
+Removed a total of 0 cells.
+
+40. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \chip_top..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Removed 0 multiplexer ports.
+
+41. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \chip_top.
+Performed a total of 0 changes.
+
+42. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\chip_top'.
+Computing hashes of 85 cells of `\chip_top'.
+Finding duplicate cells in `\chip_top'.
+Removed a total of 0 cells.
+
+43. Executing OPT_DFF pass (perform DFF optimizations).
+
+44. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \chip_top..
+
+45. Executing OPT_EXPR pass (perform const folding).
+Optimizing module chip_top.
+
+46. Executing WREDUCE pass (reducing word size of cells).
+
+47. Executing PEEPOPT pass (run peephole optimizers).
+
+48. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \chip_top..
+
+49. Executing ALUMACC pass (create $alu and $macc cells).
+Extracting $alu and $macc cells in module chip_top:
+  created 0 $alu and 0 $macc cells.
+
+50. Executing SHARE pass (SAT-based resource sharing).
+
+51. Executing OPT_EXPR pass (perform const folding).
+Optimizing module chip_top.
+
+52. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\chip_top'.
+Computing hashes of 85 cells of `\chip_top'.
+Finding duplicate cells in `\chip_top'.
+Removed a total of 0 cells.
+
+53. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \chip_top..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Removed 0 multiplexer ports.
+
+54. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \chip_top.
+Performed a total of 0 changes.
+
+55. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\chip_top'.
+Computing hashes of 85 cells of `\chip_top'.
+Finding duplicate cells in `\chip_top'.
+Removed a total of 0 cells.
+
+56. Executing OPT_DFF pass (perform DFF optimizations).
+
+57. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \chip_top..
+
+58. Executing OPT_EXPR pass (perform const folding).
+Optimizing module chip_top.
+
+59. Executing MEMORY pass.
+
+59.1. Executing OPT_MEM pass (optimize memories).
+Performed a total of 0 transformations.
+
+59.2. Executing OPT_MEM_PRIORITY pass (removing unnecessary memory write priority relations).
+Performed a total of 0 transformations.
+
+59.3. Executing OPT_MEM_FEEDBACK pass (finding memory read-to-write feedback paths).
+
+59.4. Executing MEMORY_BMUX2ROM pass (converting muxes to ROMs).
+
+59.5. Executing MEMORY_DFF pass (merging $dff cells to $memrd).
+
+59.6. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \chip_top..
+
+59.7. Executing MEMORY_SHARE pass (consolidating $memrd/$memwr cells).
+
+59.8. Executing OPT_MEM_WIDEN pass (optimize memories where all ports are wide).
+Performed a total of 0 transformations.
+
+59.9. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \chip_top..
+
+59.10. Executing MEMORY_COLLECT pass (generating $mem cells).
+
+60. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \chip_top..
+
+61. Executing OPT_EXPR pass (perform const folding).
+Optimizing module chip_top.
+<suppressed ~2 debug messages>
+
+62. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\chip_top'.
+Computing hashes of 85 cells of `\chip_top'.
+Finding duplicate cells in `\chip_top'.
+Removed a total of 0 cells.
+
+63. Executing OPT_DFF pass (perform DFF optimizations).
+
+64. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \chip_top..
+
+65. Executing MEMORY_MAP pass (converting memories to logic and flip-flops).
+
+66. Executing OPT_EXPR pass (perform const folding).
+Optimizing module chip_top.
+
+67. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\chip_top'.
+Computing hashes of 85 cells of `\chip_top'.
+Finding duplicate cells in `\chip_top'.
+Removed a total of 0 cells.
+
+68. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \chip_top..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Removed 0 multiplexer ports.
+
+69. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \chip_top.
+Performed a total of 0 changes.
+
+70. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\chip_top'.
+Computing hashes of 85 cells of `\chip_top'.
+Finding duplicate cells in `\chip_top'.
+Removed a total of 0 cells.
+
+71. Executing OPT_SHARE pass.
+
+72. Executing OPT_DFF pass (perform DFF optimizations).
+
+73. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \chip_top..
+
+74. Executing OPT_EXPR pass (perform const folding).
+Optimizing module chip_top.
+
+75. Executing TECHMAP pass (map to technology primitives).
+
+75.1. Executing Verilog-2005 frontend: /nix/store/f1q0w7rd0a4ny4hqvfxlhs4cmariidcy-yosys-0.62/bin/../share/yosys/techmap.v
+Parsing Verilog input from `/nix/store/f1q0w7rd0a4ny4hqvfxlhs4cmariidcy-yosys-0.62/bin/../share/yosys/techmap.v' to AST representation.
+Generating RTLIL representation for module `\_90_simplemap_bool_ops'.
+Generating RTLIL representation for module `\_90_simplemap_reduce_ops'.
+Generating RTLIL representation for module `\_90_simplemap_logic_ops'.
+Generating RTLIL representation for module `\_90_simplemap_compare_ops'.
+Generating RTLIL representation for module `\_90_simplemap_various'.
+Generating RTLIL representation for module `\_90_simplemap_registers'.
+Generating RTLIL representation for module `\_90_shift_ops_shr_shl_sshl_sshr'.
+Generating RTLIL representation for module `\_90_shift_shiftx'.
+Generating RTLIL representation for module `\_90_fa'.
+Generating RTLIL representation for module `\_90_lcu_brent_kung'.
+Generating RTLIL representation for module `\_90_alu'.
+Generating RTLIL representation for module `\_90_macc'.
+Generating RTLIL representation for module `\_90_alumacc'.
+Generating RTLIL representation for module `$__div_mod_u'.
+Generating RTLIL representation for module `$__div_mod_trunc'.
+Generating RTLIL representation for module `\_90_div'.
+Generating RTLIL representation for module `\_90_mod'.
+Generating RTLIL representation for module `$__div_mod_floor'.
+Generating RTLIL representation for module `\_90_divfloor'.
+Generating RTLIL representation for module `\_90_modfloor'.
+Generating RTLIL representation for module `\_90_pow'.
+Generating RTLIL representation for module `\_90_pmux'.
+Generating RTLIL representation for module `\_90_demux'.
+Generating RTLIL representation for module `\_90_lut'.
+Generating RTLIL representation for module `$connect'.
+Generating RTLIL representation for module `$input_port'.
+Successfully finished Verilog frontend.
+
+75.2. Continuing TECHMAP pass.
+No more expansions possible.
+<suppressed ~77 debug messages>
+
+76. Executing OPT_EXPR pass (perform const folding).
+Optimizing module chip_top.
+
+77. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\chip_top'.
+Computing hashes of 85 cells of `\chip_top'.
+Finding duplicate cells in `\chip_top'.
+Removed a total of 0 cells.
+
+78. Executing OPT_DFF pass (perform DFF optimizations).
+
+79. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \chip_top..
+
+80. Executing OPT_EXPR pass (perform const folding).
+Optimizing module chip_top.
+
+81. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\chip_top'.
+Computing hashes of 85 cells of `\chip_top'.
+Finding duplicate cells in `\chip_top'.
+Removed a total of 0 cells.
+
+82. Executing OPT_DFF pass (perform DFF optimizations).
+
+83. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \chip_top..
+
+84. Executing ABC pass (technology mapping using ABC).
+
+84.1. Extracting gate netlist of module `\chip_top' to `<abc-temp-dir>/input.blif'..
+Don't call ABC as there is nothing to map.
+
+84.1.1. Executed ABC.
+Extracted 0 gates and 0 wires to a netlist network with 0 inputs and 0 outputs.
+Removing temp directory.
+Removing global temp directory.
+
+85. Executing OPT pass (performing simple optimizations).
+
+85.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module chip_top.
+
+85.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\chip_top'.
+Computing hashes of 85 cells of `\chip_top'.
+Finding duplicate cells in `\chip_top'.
+Removed a total of 0 cells.
+
+85.3. Executing OPT_DFF pass (perform DFF optimizations).
+
+85.4. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \chip_top..
+
+85.5. Finished fast OPT passes.
+
+86. Executing HIERARCHY pass (managing design hierarchy).
+
+86.1. Analyzing design hierarchy..
+Top module:  \chip_top
+
+86.2. Analyzing design hierarchy..
+Top module:  \chip_top
+Removed 0 unused modules.
+
+87. Executing CHECK pass (checking for obvious problems).
+Checking module chip_top...
+Found and reported 0 problems.
+
+88. Printing statistics.
+
+=== chip_top ===
+
+        +----------Local Count, excluding submodules.
+        | 
+       31 wires
+     1424 wire bits
+       31 public wires
+     1424 public wire bits
+        5 ports
+       70 port bits
+       85 cells
+        1   $scopeinfo
+       64   gf180mcu_fd_io__bi_24t
+        8   gf180mcu_ws_io__dvdd
+       10   gf180mcu_ws_io__dvss
+        1   gf180mcu_ws_ip__id
+        1   gf180mcu_ws_ip__logo
+
+89. Executing OPT pass (performing simple optimizations).
+
+89.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module chip_top.
+
+89.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\chip_top'.
+Computing hashes of 85 cells of `\chip_top'.
+Finding duplicate cells in `\chip_top'.
+Removed a total of 0 cells.
+
+89.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \chip_top..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Removed 0 multiplexer ports.
+
+89.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \chip_top.
+Performed a total of 0 changes.
+
+89.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\chip_top'.
+Computing hashes of 85 cells of `\chip_top'.
+Finding duplicate cells in `\chip_top'.
+Removed a total of 0 cells.
+
+89.6. Executing OPT_DFF pass (perform DFF optimizations).
+
+89.7. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \chip_top..
+
+89.8. Executing OPT_EXPR pass (perform const folding).
+Optimizing module chip_top.
+
+89.9. Finished fast OPT passes. (There is nothing left to do.)
+
+90. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \chip_top..
+Removed 1 unused cells and 25 unused wires.
+<suppressed ~26 debug messages>
+{
+   "creator": "Yosys 0.62 (git sha1 7326bb7d6641500ecb285c291a54a662cb1e76cf, clang++ 21.1.2 -fPIC -O3)",
+   "invocation": "stat -json -liberty /var/home/dory/ASCON/librelane/runs/RUN_2026-04-16_12-50-32/tmp/ec8060232c9d4013a0e4cd39e0bb5b28.lib -liberty /var/home/dory/ASCON/librelane/runs/RUN_2026-04-16_12-50-32/tmp/055aecc675ff46c0b9a394e90f57e035.lib -liberty /var/home/dory/ASCON/librelane/runs/RUN_2026-04-16_12-50-32/tmp/12ade67f68c04f938926d6b64ee96aca.lib ",
+   "modules": {
+      "\\chip_top": {
+         "num_wires":         6,
+         "num_wire_bits":     134,
+         "num_pub_wires":     6,
+         "num_pub_wire_bits": 134,
+         "num_ports":         5,
+         "num_port_bits":     70,
+         "num_memories":      0,
+         "num_memory_bits":   0,
+         "num_processes":     0,
+         "num_cells":         84,
+         "num_submodules":       0,
+         "area":              2152500.000000,
+         "sequential_area":    0.000000,
+         "num_cells_by_type": {
+            "gf180mcu_fd_io__bi_24t": 64,
+            "gf180mcu_ws_io__dvdd": 8,
+            "gf180mcu_ws_io__dvss": 10,
+            "gf180mcu_ws_ip__id": 1,
+            "gf180mcu_ws_ip__logo": 1
+         }
+      }
+   },
+      "design": {
+         "num_wires":         6,
+         "num_wire_bits":     134,
+         "num_pub_wires":     6,
+         "num_pub_wire_bits": 134,
+         "num_ports":         5,
+         "num_port_bits":     70,
+         "num_memories":      0,
+         "num_memory_bits":   0,
+         "num_processes":     0,
+         "num_cells":         84,
+         "num_submodules":       0,
+         "area":              2152500.000000,
+         "sequential_area":    0.000000,
+         "num_cells_by_type": {
+            "gf180mcu_fd_io__bi_24t": 64,
+            "gf180mcu_ws_io__dvdd": 8,
+            "gf180mcu_ws_io__dvss": 10,
+            "gf180mcu_ws_ip__id": 1,
+            "gf180mcu_ws_ip__logo": 1
+         }
+      }
+}
+
+91. Printing statistics.
+
+=== chip_top ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+        6        - wires
+      134        - wire bits
+        6        - public wires
+      134        - public wire bits
+        5        - ports
+       70        - port bits
+       84  2152500 cells
+       64  1680000   gf180mcu_fd_io__bi_24t
+        8   210000   gf180mcu_ws_io__dvdd
+       10   262500   gf180mcu_ws_io__dvss
+        1        -   gf180mcu_ws_ip__id
+        1        -   gf180mcu_ws_ip__logo
+
+   Area for cell type \gf180mcu_ws_ip__id is unknown!
+   Area for cell type \gf180mcu_ws_ip__logo is unknown!
+
+   Chip area for module '\chip_top': 2152500.000000
+     of which used for sequential elements: 0.000000 (0.00%)
+
+92. Executing DFFLIBMAP pass (mapping DFF cells to sequential cells from liberty file).
+  cell gf180mcu_fd_sc_mcu7t5v0__dffnq_1 (noninv, pins=3, area=65.86) is a direct match for cell type $_DFF_N_.
+  cell gf180mcu_fd_sc_mcu7t5v0__dffq_1 (noninv, pins=3, area=63.66) is a direct match for cell type $_DFF_P_.
+  cell gf180mcu_fd_sc_mcu7t5v0__dffnrnq_1 (noninv, pins=4, area=74.64) is a direct match for cell type $_DFF_NN0_.
+  cell gf180mcu_fd_sc_mcu7t5v0__dffnsnq_1 (noninv, pins=4, area=79.03) is a direct match for cell type $_DFF_NN1_.
+  cell gf180mcu_fd_sc_mcu7t5v0__dffrnq_1 (noninv, pins=4, area=74.64) is a direct match for cell type $_DFF_PN0_.
+  cell gf180mcu_fd_sc_mcu7t5v0__dffsnq_1 (noninv, pins=4, area=79.03) is a direct match for cell type $_DFF_PN1_.
+  cell gf180mcu_fd_sc_mcu7t5v0__dffnrsnq_1 (noninv, pins=5, area=94.39) is a direct match for cell type $_DFFSR_NNN_.
+  cell gf180mcu_fd_sc_mcu7t5v0__dffrsnq_1 (noninv, pins=5, area=85.61) is a direct match for cell type $_DFFSR_PNN_.
+  final dff cell mappings:
+    \gf180mcu_fd_sc_mcu7t5v0__dffnq_1 _DFF_N_ (.CLKN( C), .D( D), .Q( Q));
+    \gf180mcu_fd_sc_mcu7t5v0__dffq_1 _DFF_P_ (.CLK( C), .D( D), .Q( Q));
+    \gf180mcu_fd_sc_mcu7t5v0__dffnrnq_1 _DFF_NN0_ (.CLKN( C), .D( D), .Q( Q), .RN( R));
+    \gf180mcu_fd_sc_mcu7t5v0__dffnsnq_1 _DFF_NN1_ (.CLKN( C), .D( D), .Q( Q), .SETN( R));
+    unmapped dff cell: $_DFF_NP0_
+    unmapped dff cell: $_DFF_NP1_
+    \gf180mcu_fd_sc_mcu7t5v0__dffrnq_1 _DFF_PN0_ (.CLK( C), .D( D), .Q( Q), .RN( R));
+    \gf180mcu_fd_sc_mcu7t5v0__dffsnq_1 _DFF_PN1_ (.CLK( C), .D( D), .Q( Q), .SETN( R));
+    unmapped dff cell: $_DFF_PP0_
+    unmapped dff cell: $_DFF_PP1_
+    unmapped dff cell: $_DFFE_NN_
+    unmapped dff cell: $_DFFE_NP_
+    unmapped dff cell: $_DFFE_PN_
+    unmapped dff cell: $_DFFE_PP_
+    \gf180mcu_fd_sc_mcu7t5v0__dffnrsnq_1 _DFFSR_NNN_ (.CLKN( C), .D( D), .Q( Q), .RN( R), .SETN( S));
+    unmapped dff cell: $_DFFSR_NNP_
+    unmapped dff cell: $_DFFSR_NPN_
+    unmapped dff cell: $_DFFSR_NPP_
+    \gf180mcu_fd_sc_mcu7t5v0__dffrsnq_1 _DFFSR_PNN_ (.CLK( C), .D( D), .Q( Q), .RN( R), .SETN( S));
+    unmapped dff cell: $_DFFSR_PNP_
+    unmapped dff cell: $_DFFSR_PPN_
+    unmapped dff cell: $_DFFSR_PPP_
+
+92.1. Executing DFFLEGALIZE pass (convert FFs to types supported by the target).
+Mapping DFF cells in module `\chip_top':
+{
+   "creator": "Yosys 0.62 (git sha1 7326bb7d6641500ecb285c291a54a662cb1e76cf, clang++ 21.1.2 -fPIC -O3)",
+   "invocation": "stat -json -liberty /var/home/dory/ASCON/librelane/runs/RUN_2026-04-16_12-50-32/tmp/ec8060232c9d4013a0e4cd39e0bb5b28.lib -liberty /var/home/dory/ASCON/librelane/runs/RUN_2026-04-16_12-50-32/tmp/055aecc675ff46c0b9a394e90f57e035.lib -liberty /var/home/dory/ASCON/librelane/runs/RUN_2026-04-16_12-50-32/tmp/12ade67f68c04f938926d6b64ee96aca.lib ",
+   "modules": {
+      "\\chip_top": {
+         "num_wires":         6,
+         "num_wire_bits":     134,
+         "num_pub_wires":     6,
+         "num_pub_wire_bits": 134,
+         "num_ports":         5,
+         "num_port_bits":     70,
+         "num_memories":      0,
+         "num_memory_bits":   0,
+         "num_processes":     0,
+         "num_cells":         84,
+         "num_submodules":       0,
+         "area":              2152500.000000,
+         "sequential_area":    0.000000,
+         "num_cells_by_type": {
+            "gf180mcu_fd_io__bi_24t": 64,
+            "gf180mcu_ws_io__dvdd": 8,
+            "gf180mcu_ws_io__dvss": 10,
+            "gf180mcu_ws_ip__id": 1,
+            "gf180mcu_ws_ip__logo": 1
+         }
+      }
+   },
+      "design": {
+         "num_wires":         6,
+         "num_wire_bits":     134,
+         "num_pub_wires":     6,
+         "num_pub_wire_bits": 134,
+         "num_ports":         5,
+         "num_port_bits":     70,
+         "num_memories":      0,
+         "num_memory_bits":   0,
+         "num_processes":     0,
+         "num_cells":         84,
+         "num_submodules":       0,
+         "area":              2152500.000000,
+         "sequential_area":    0.000000,
+         "num_cells_by_type": {
+            "gf180mcu_fd_io__bi_24t": 64,
+            "gf180mcu_ws_io__dvdd": 8,
+            "gf180mcu_ws_io__dvss": 10,
+            "gf180mcu_ws_ip__id": 1,
+            "gf180mcu_ws_ip__logo": 1
+         }
+      }
+}
+
+93. Printing statistics.
+
+=== chip_top ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+        6        - wires
+      134        - wire bits
+        6        - public wires
+      134        - public wire bits
+        5        - ports
+       70        - port bits
+       84  2152500 cells
+       64  1680000   gf180mcu_fd_io__bi_24t
+        8   210000   gf180mcu_ws_io__dvdd
+       10   262500   gf180mcu_ws_io__dvss
+        1        -   gf180mcu_ws_ip__id
+        1        -   gf180mcu_ws_ip__logo
+
+   Area for cell type \gf180mcu_ws_ip__id is unknown!
+   Area for cell type \gf180mcu_ws_ip__logo is unknown!
+
+   Chip area for module '\chip_top': 2152500.000000
+     of which used for sequential elements: 0.000000 (0.00%)
+
+[INFO] Using generated ABC script '/var/home/dory/ASCON/librelane/runs/RUN_2026-04-16_12-50-32/06-yosys-synthesis/AREA_0.abc'…
+
+94. Executing ABC pass (technology mapping using ABC).
+
+94.1. Extracting gate netlist of module `\chip_top' to `/tmp/yosys-abc-Ed5ItD/input.blif'..
+Don't call ABC as there is nothing to map.
+
+94.1.1. Executed ABC.
+Extracted 0 gates and 0 wires to a netlist network with 0 inputs and 0 outputs.
+Removing temp directory.
+Removing global temp directory.
+
+95. Executing SETUNDEF pass (replace undef values with defined constants).
+
+96. Executing HILOMAP pass (mapping to constant drivers).
+
+97. Executing SPLITNETS pass (splitting up multi-bit signals).
+
+98. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \chip_top..
+
+99. Executing INSBUF pass (insert buffer cells for connected wires).
+
+100. Executing CHECK pass (checking for obvious problems).
+Checking module chip_top...
+Found and reported 0 problems.
+{
+   "creator": "Yosys 0.62 (git sha1 7326bb7d6641500ecb285c291a54a662cb1e76cf, clang++ 21.1.2 -fPIC -O3)",
+   "invocation": "stat -json -liberty /var/home/dory/ASCON/librelane/runs/RUN_2026-04-16_12-50-32/tmp/ec8060232c9d4013a0e4cd39e0bb5b28.lib -liberty /var/home/dory/ASCON/librelane/runs/RUN_2026-04-16_12-50-32/tmp/055aecc675ff46c0b9a394e90f57e035.lib -liberty /var/home/dory/ASCON/librelane/runs/RUN_2026-04-16_12-50-32/tmp/12ade67f68c04f938926d6b64ee96aca.lib ",
+   "modules": {
+      "\\chip_top": {
+         "num_wires":         517,
+         "num_wire_bits":     582,
+         "num_pub_wires":     69,
+         "num_pub_wire_bits": 134,
+         "num_ports":         5,
+         "num_port_bits":     70,
+         "num_memories":      0,
+         "num_memory_bits":   0,
+         "num_processes":     0,
+         "num_cells":         532,
+         "num_submodules":       0,
+         "area":              2156433.798400,
+         "sequential_area":    0.000000,
+         "num_cells_by_type": {
+            "gf180mcu_fd_io__bi_24t": 64,
+            "gf180mcu_fd_sc_mcu7t5v0__tieh": 64,
+            "gf180mcu_fd_sc_mcu7t5v0__tiel": 384,
+            "gf180mcu_ws_io__dvdd": 8,
+            "gf180mcu_ws_io__dvss": 10,
+            "gf180mcu_ws_ip__id": 1,
+            "gf180mcu_ws_ip__logo": 1
+         }
+      }
+   },
+      "design": {
+         "num_wires":         517,
+         "num_wire_bits":     582,
+         "num_pub_wires":     69,
+         "num_pub_wire_bits": 134,
+         "num_ports":         5,
+         "num_port_bits":     70,
+         "num_memories":      0,
+         "num_memory_bits":   0,
+         "num_processes":     0,
+         "num_cells":         532,
+         "num_submodules":       0,
+         "area":              2156433.798400,
+         "sequential_area":    0.000000,
+         "num_cells_by_type": {
+            "gf180mcu_fd_io__bi_24t": 64,
+            "gf180mcu_fd_sc_mcu7t5v0__tieh": 64,
+            "gf180mcu_fd_sc_mcu7t5v0__tiel": 384,
+            "gf180mcu_ws_io__dvdd": 8,
+            "gf180mcu_ws_io__dvss": 10,
+            "gf180mcu_ws_ip__id": 1,
+            "gf180mcu_ws_ip__logo": 1
+         }
+      }
+}
+
+101. Printing statistics.
+
+=== chip_top ===
+
+        +----------Local Count, excluding submodules.
+        |        +-Local Area, excluding submodules.
+        |        | 
+      517        - wires
+      582        - wire bits
+       69        - public wires
+      134        - public wire bits
+        5        - ports
+       70        - port bits
+      532 2.16E+06 cells
+       64  1680000   gf180mcu_fd_io__bi_24t
+       64  561.971   gf180mcu_fd_sc_mcu7t5v0__tieh
+      384 3.37E+03   gf180mcu_fd_sc_mcu7t5v0__tiel
+        8   210000   gf180mcu_ws_io__dvdd
+       10   262500   gf180mcu_ws_io__dvss
+        1        -   gf180mcu_ws_ip__id
+        1        -   gf180mcu_ws_ip__logo
+
+   Area for cell type \gf180mcu_ws_ip__id is unknown!
+   Area for cell type \gf180mcu_ws_ip__logo is unknown!
+
+   Chip area for module '\chip_top': 2156433.798400
+     of which used for sequential elements: 0.000000 (0.00%)
+
+102. Executing Verilog backend.
+Dumping module `\chip_top'.
+
+103. Executing JSON backend.

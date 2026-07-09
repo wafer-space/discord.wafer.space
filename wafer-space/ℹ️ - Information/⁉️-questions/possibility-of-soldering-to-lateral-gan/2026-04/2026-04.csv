@@ -1,0 +1,42 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"262706220073222144","namibj","2026-04-26T16:46:30.4690000+00:00","Given the small size of these and need for low gate loop inductance, would it be feasible to overlap the gate pad are aof one of these over the edge of a WS die and have top metal structured to allow these to be soldered together?
+I guess it would need some diffusion barrier plating stackup on top of the regular bond pad surface to prevent the top metal from just dissolving in the solder?
+https://epc-co.com/epc/portals/0/epc/documents/datasheets/EPC8010_datasheet.pdf","2026-04_media/epc8010-die-A8809.png",""
+"262706220073222144","namibj","2026-04-26T16:46:55.9230000+00:00","","2026-04_media/image-A6471.png",""
+"262706220073222144","namibj","2026-04-27T01:42:06.5360000+00:00","Rough math suggests gate drive currents under conditons of ""clamp gate to gate-return, starting from a nicely charged gate"" may peak at about 500 mA per such EPC8010, if that one is cooled well to support high operating currents and such nuances.
+This stems from the mandate to keep the GaN chanel pinched off while the drain voltage rises from slightly above on-state (the gate driver won't turn on instantly, so it's better to start thinking from once the final output stage actually reaches full slew rate) to ful off-state operating voltage, with that speed governed by the LC ""resonance"" of the stray inductance discharging into the output capacitance of the GaN until the load current has fallen to zero.
+So the limit is essentially defined by maximum operating load current and minimum guaranteed total drain charge for going from on-state to operating voltage.
+The maximum current that this can reasonably sustain under excellent cooling and restriction to <=50% duty-cycle is about 5A; the datasheet specifies some 2.2 nC total drain charge for 50V situations.
+That counters the approximately 0.3 nC of total gate charge required to slew from comfortably sustained saturation on-state gate voltage down below the miller plateu.","",""
+"169786952432746498","mithro_","2026-04-27T05:06:47.6570000+00:00","@namibj - I suggest chatting with @Tim Edwards - I believe that he had some friends who where exploring how to do things like this.","",""
+"169786952432746498","mithro_","2026-04-27T05:07:25.2610000+00:00","They where doing high current direct die bonding or something similar.","",""
+"262706220073222144","namibj","2026-04-27T05:10:08.6430000+00:00","sounds at least fairly closely related.","",""
+"262706220073222144","namibj","2026-04-27T05:10:45.8920000+00:00","https://epc-co.com/epc/portals/0/epc/documents/datasheets/EPC2019_datasheet.pdf btw is another possible ""option"" vs. the above one","",""
+"262706220073222144","namibj","2026-04-27T05:11:12.3100000+00:00","","2026-04_media/epc2019-die-FA19C.png",""
+"262706220073222144","namibj","2026-04-27T05:11:52.5980000+00:00","0.95mm wide ""bar""; top left ball source, bottom left bar gate.","",""
+"262706220073222144","namibj","2026-04-27T05:12:34.8440000+00:00","","2026-04_media/image-86D5F.png",""
+"262706220073222144","namibj","2026-04-27T05:13:21.3910000+00:00","tbf that one might take stronger objection to the source ball closest to the gate ball being used as a dedicated gate-return.","",""
+"262706220073222144","namibj","2026-04-27T05:18:16.4530000+00:00","(Some more reading meanwhile suggested that one might want to try bonding the opposite edge of the die normally as COB, adding that drop of resin to protect the bonds and act as passivation for the otherwise-exposed metal surfaces, and then do zincate pre-treatment folllowed with basically regular ENIG on exposed pads of suitable shape, before then doing mostly-normal reflow and ideally finishing with underfill to make up for the overhang-aspect.)","",""
+"169786952432746498","mithro_","2026-04-27T05:18:30.8330000+00:00","@namibj - You are welcome to put any type of pads on the top metal you want as long as it passes the DRC rules.","",""
+"262706220073222144","namibj","2026-04-27T05:18:47.6850000+00:00","yeah but they're aluminium surface, right?","",""
+"169786952432746498","mithro_","2026-04-27T05:19:28.6140000+00:00","@namibj - It would be super interesting to see if we could figure out a process/standard to put balls/solder directly onto the top metal pads in some way.....","",""
+"169786952432746498","mithro_","2026-04-27T05:19:33.8880000+00:00","I believe so.","",""
+"262706220073222144","namibj","2026-04-27T05:24:09.6040000+00:00","to be clear I was ""planning"" to use the GaN die's WLCSP balls/bars to do a cantilever-arranged flip-chip setup, where the overhanging part of the GaN die has the drain and high-current-source pads that get soldered to a substrate ""slab"" _right_ next to the wafer.space die's edge, with just thermal expansion/dicing margin left between.
+I mathed a little and it seems it's fairly practical to ""just"" dump large area MIM cap through a high-side switch into the GaN gate to rapidly turn it on; turn-off is obviously just shorting out the GaN's gate to the gate-return with an open-drain nmos array.","",""
+"262706220073222144","namibj","2026-04-27T05:25:58.2580000+00:00","for scale, this one has approximately 5x the gate charge vs. the smaller faster one above.
+That smaller one appears to just quite heavily limit it's active area for reasons I don't quite understand; there should be space for far higher saturation current at that breakdown voltage on that size die.","",""
+"262706220073222144","namibj","2026-04-27T05:26:57.0850000+00:00","the bottom one is approximately 50% more area but 400% more current _despite_ also having twice the breakdown voltage.","",""
+"262706220073222144","namibj","2026-04-27T05:33:21.6780000+00:00","If you're ina a convenient position consider asking the bonding house if they do/can recommend someone who does do selective pad metallization; ENEPIG should also be an option (just a minor premium vs. ENIG) that retains the ability to do the wire bonding COB to such-plated pads; that would allow the chips which get such flip-chip soldering to undergo non-selective plating before they meet the wire bonder.
+I don't see a reason why it should not work post-dicing; the chips might need to be attached to a carrier for handling in the plating system, though.
+
+As this doesn't involve the traditional WLCSP mask layers it has good potential to scale down to the small batches we'd have.","",""
+"169786952432746498","mithro_","2026-04-27T05:58:01.0640000+00:00","@namibj - Depend on how much funds you have, you could hire @stuart to see if he can find options for you in China. He is the person who is currently helping wafer.space get the wire bonding done.","",""
+"262706220073222144","namibj","2026-04-27T06:01:30.8110000+00:00","next year, then, I guess.","",""
+"262706220073222144","namibj","2026-04-27T14:31:38.7660000+00:00","@stuart I mean I am open to consider sponsoring some searching for affordable flip-chip mounting of wafer.space dies; I'd assume there'd be more general use with attaching some modern-node 0.2~0.35 mm pitch WLCSP part to a wafer.space ASIC without the usual downsides.
+
+Like, a small chip could fit entirely on the inside of the standard-COB-compatible pad ring.
+
+And the otherwise usual large ESD structures could be shrunk a lot if those IOs are sealed in underfill before the chips leave high-class antistatic rooms. Nor do they need high drive current because there's no real distance to cover/wires to pick up noise.
+
+TL;DR: any estimates on what you'd expect to need to bill for keeping an eye and ear out regarding mask less (or practically maskless, like just hiding one die edge that's filled with wire bond pads from the plating) post-metallization that would turn (part of) the die into reflow-capable LGA ""packaging""?","",""
+"169786952432746498","mithro_","2026-04-27T16:55:49.0200000+00:00","@namibj - I am exploring the idea of co-packaging known good die for SRAM/SPI flash with your custom ASIC - but in that case it would all be wire bonded together.","",""

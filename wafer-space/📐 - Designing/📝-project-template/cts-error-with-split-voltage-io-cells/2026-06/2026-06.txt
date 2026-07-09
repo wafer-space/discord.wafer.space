@@ -1,0 +1,47 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 📐 - Designing / 📝-project-template / CTS error with split voltage IO cells
+After: 2026-05-31 11:59 p.m.
+Before: 2026-07-01 12:00 a.m.
+==============================================================
+
+[2026-06-07 9:29 a.m.] rebelmike
+When trying to use the ocd version of the IO cells, I see this error in CTS:
+```
+[INFO CTS-0007] Net "clk_PAD2CORE" found for clock "clk_PAD".
+[INFO CTS-0122] Clock net "clk_PAD2CORE" is skipped for CTS because it is not connected to any output instance pin or input block terminal.
+[WARNING CTS-0083] No clock nets have been found.
+[INFO CTS-0008] TritonCTS found 0 clock nets.
+[WARNING CTS-0082] No valid clock nets in the design.
+```
+I've confirmed it happens on the default template too.  There it doesn't cause the build to fail - presumably the tooling can cope without needing a clock tree for a small number of registers, but it's obviously bad, and in a larger design it does cause failures.
+
+
+[2026-06-07 9:44 a.m.] mole99
+Can confirm, that is not a nice clock tree. (I'm also wondering why I don't see the SPEF delays here.)
+
+{Attachments}
+2026-06_media/Bildschirmfoto_vom_2026-06-07_11-40-26-E7A56.png
+
+
+[2026-06-07 9:44 a.m.] mole99
+I'll compare the LEF/LIB views of the OCD cells with the foundry ones.
+
+
+[2026-06-07 9:55 a.m.] mole99
+Found the issue: `PIN Y` in the LEF does not have a direction set, making it `INPUT` by default.
+
+You can edit `libs.ref/gf180mcu_ocd_io/lef/gf180mcu_ocd_io.lef` and add `DIRECTION OUTPUT ;` after line 3432.
+
+{Reactions}
+👍
+
+[2026-06-07 9:55 a.m.] mole99
+Thanks for the report, Mike! I'll make sure the PDK is updated accordingly.
+
+{Reactions}
+💜
+
+==============================================================
+Exported 5 message(s)
+==============================================================

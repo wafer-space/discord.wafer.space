@@ -1,0 +1,89 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 📐 - Designing / 📝-project-template / Hmm, _might_ have found a bug in the LVS
+After: 2026-04-30 11:59 p.m.
+Before: 2026-06-01 12:00 a.m.
+==============================================================
+
+[2026-05-11 5:31 p.m.] mole99
+
+
+
+[2026-05-11 5:32 p.m.] mole99
+Thanks for the report!
+
+Yes, it really seems `diode_connections.lvs` is the only place where `nwell` is used for the connection to the devices.
+Everywhere else, i.e. `moscap_extraction.lvs/mos_extraction.lvs/mos_sab_extraction.lvs/res_extraction.lvs`, `nwell_con` is used.
+
+If you take a look at `general_derivations.lvs` you can see that `nwell_con` is defined as:
+
+```
+nwell_con       = nwell.not(res_mk)
+```
+I think this is so that nwell resistors are correctly extracted. They are extracted as:
+
+```
+# NWELL
+logger.info('Extracting NWELL device')
+extract_devices(resistor_with_bulk('nwell', 1000, BResistor), { 'R' => nwell_res, 'C' => nwell_con, 'W' => sub })
+```
+
+You can find a description about the extractor here: https://www.klayout.de/doc/manual/lvs_device_extractors.html
+
+Taking a look at the connectivity setup in `general_connections.lvs`, only `nwell_con` is connected to `ntap`:
+
+```
+# Inter-layer
+connect(lvpwell_con, ptap)
+connect(lvpwell_con, ptap_dw)
+connect(dnwell, ntap_dw)
+connect(nwell_con, ntap)
+connect(ptap, contact)
+...
+```
+
+That's the reason why you get anonymous pins with just `nwell`.
+
+Long story short, I agree that `nwell_con` should be used :)
+
+
+[2026-05-11 5:32 p.m.] mole99
+If you would like to be credited, you can open a PR in the upstream repo: https://github.com/fossi-foundation/globalfoundries-pdk-libs-gf180mcu_fd_pv
+Otherwise, I will do it for you.
+
+
+[2026-05-11 5:32 p.m.] mole99
+You might want to use the LVS setup in this directory anyway, as @Clyde Laforge has made some important improvements around substrate cuts recently.
+
+We are working on creating a new open_pdks PDK, which will allow us to switch from the current wafer.space PDK fork. However, this probably won't happen until next week, as I'll be at Hackaday Europe this weekend :)
+
+
+[2026-05-11 5:43 p.m.] polyfractal
+Awesome, thanks for taking a look @Leo Moser (mole99)! No credit needed, probably easier/faster for you to make the fix than for me to cobble together a PR 🙂 
+
+Will take a look at that LVS setup for my own experiments! and goodluck/have fun at hackaday conf 🙂
+
+
+[2026-05-11 6:01 p.m.] mole99
+PR is up: https://github.com/fossi-foundation/globalfoundries-pdk-libs-gf180mcu_fd_pv/pull/20
+
+Great, and thank you! 😃
+
+{Embed}
+https://github.com/fossi-foundation/globalfoundries-pdk-libs-gf180mcu_fd_pv/pull/20
+fix: diode_nw2ps_* connect to nwell_con by mole99 · Pull Request #...
+Discovered thanks to a report by Zachary.
+diode_nw2ps_* used the wrong layer for the bulk connection. general_connections.lvs uses nwell_con to connect to ntap.
+
+{Reactions}
+❤️
+
+[2026-05-11 6:18 p.m.] polyfractal
+woo!
+
+{Reactions}
+🙌
+
+==============================================================
+Exported 7 message(s)
+==============================================================

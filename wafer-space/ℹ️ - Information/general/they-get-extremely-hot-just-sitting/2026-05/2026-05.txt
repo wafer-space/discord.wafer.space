@@ -1,0 +1,67 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / general / They get extremely hot just sitting
+After: 2026-04-30 11:59 p.m.
+Before: 2026-06-01 12:00 a.m.
+==============================================================
+
+[2026-05-15 12:52 a.m.] tdextrous
+
+
+
+[2026-05-15 12:52 a.m.] tdextrous
+Without knowing any additional details, this sounds like it could be latch up. Does your design have sufficient well taps and substrate taps throughout the layout? Or are these included in the standard cells?
+
+
+[2026-05-15 12:58 a.m.] tholin
+They are included with the standard cells
+
+{Reactions}
+👍
+
+[2026-05-15 1:21 a.m.] namibj
+I guess the epoxy isn't transparent to thermal IR? You could otherwise maybe use a macro lens on a thermal camera to hunt for it
+
+
+[2026-05-15 2:58 p.m.] namibj
+Well, my offer of trying to reproduce in Xyce if it happens static from POR or external reset/reset-release after POR, does still stand.
+
+
+[2026-05-15 3:01 p.m.] tholin
+I think its the DACs
+
+
+[2026-05-15 3:02 p.m.] tholin
+The resistors in the R2R are small, requiring a buf_12 cell to drive and I have 11 DACs on here
+
+
+[2026-05-15 3:03 p.m.] tholin
+But I thought I wired each design that uses a DAC to send all 0s into the DAC when held in reset, to reduce the static power consumption to near zero
+
+
+[2026-05-15 3:03 p.m.] tholin
+But after checking with a multimeter, at least 4 of the analog outputs generate a non-zero voltage in reset
+
+
+[2026-05-15 3:03 p.m.] tholin
+So, I messed that up
+
+
+[2026-05-15 3:10 p.m.] namibj
+Ahhh. 
+
+I'd still offer to try on reproducing from GDS though. 
+I hope the rest of the chip is nicely held when in reset at least to not burden Xyce with changing things; I'd happily use your chip to learn how to get things like this working on layouts this large.
+
+
+[2026-05-15 3:12 p.m.] namibj
+I just don't like the idea of rebuilding the GDS from the GitHub repo because I'd expect it to not be a reproducible build given you didn't even hash-pin the PDK in the makefile (it's tag-pinned).
+
+
+[2026-05-15 3:43 p.m.] namibj
+Hey, at least the DACs aren't internally shorted to GND....
+
+
+==============================================================
+Exported 13 message(s)
+==============================================================

@@ -1,0 +1,168 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / general / DIY SCL
+After: 2026-04-30 11:59 p.m.
+Before: 2026-06-01 12:00 a.m.
+==============================================================
+
+[2026-05-01 5:50 p.m.] namibj
+
+
+
+[2026-05-01 5:50 p.m.] namibj
+I'm guessing my MCML SCL efforts are not particularly relevant for those/that application?
+
+
+[2026-05-01 5:50 p.m.] ravenslofty
+MCML?
+
+
+[2026-05-01 5:50 p.m.] namibj
+@Lofty @Tholin
+
+
+[2026-05-01 5:50 p.m.] namibj
+
+
+{Attachments}
+2026-05_media/60781_llcrop-6B6A0.jpg
+
+
+[2026-05-01 5:50 p.m.] ravenslofty
+"mos current mode logic"
+
+
+[2026-05-01 5:50 p.m.] namibj
+MUX2
+
+
+[2026-05-01 5:51 p.m.] ravenslofty
+um, does this use differential signalling?
+
+
+[2026-05-01 5:52 p.m.] namibj
+stacks up to about 4~5 on sky130; probably more on gf180mcu due to higher voltage margins allowing for more stacked nmos to be in saturation, at least if there's near-zero-native-threshold voltage devices that can be placed in a raised pwell
+
+
+[2026-05-01 5:52 p.m.] namibj
+yes!
+
+
+[2026-05-01 5:52 p.m.] namibj
+means inverters are free
+
+
+[2026-05-01 5:53 p.m.] namibj
+this is a delay cell of which you can use just 2 to get a quadrature VCO
+
+{Attachments}
+2026-05_media/image_10-53BC3.png
+
+
+[2026-05-01 5:53 p.m.] namibj
+well, you want a bias generator to adjust the load to get good swing at the tail current that gives the desired frequency
+
+
+[2026-05-01 5:55 p.m.] ravenslofty
+so, Tholin's 3.3V static CMOS library will fit naturally into a synthesisable flow. mine will require...some finagling but *is* intended to be targetable by synthesis tools.
+
+I'm...much less convinced about the feasibility of dual-rail logic from a synthesis tool. Of course people can hand-design all they want, but I think both Tholin and I want a library which is "good enough" for people.
+
+
+[2026-05-01 5:55 p.m.] namibj
+I'm _trying_ to get the TX part of a serdes onto my tile on ttsky26a and would be porting the design to wafer.space Run2.
+I'd expect to get a sprinkle of SCL done for the fall ttsky26
+
+
+[2026-05-01 5:55 p.m.] namibj
+wdym dual-rail?
+
+
+[2026-05-01 5:56 p.m.] ravenslofty
+"dual-rail" is the term for differential logic inside an integrated circuit
+
+
+[2026-05-01 5:56 p.m.] namibj
+the cells once done as actual SCL blocks are just sipped with what currently looks to be a second metal trace over or right adjacent to the Vdd and GND power rails of a normal SCL footprint setup.
+
+
+[2026-05-01 5:58 p.m.] namibj
+The GND-side one is the tail bias; the Vdd-side one is the PMOS active tie one; that one is skippable in exchange for loosing the ability to dial power-delay-product without having to do dynamic Vdd scaling.
+
+
+[2026-05-01 5:58 p.m.] namibj
+ohhhh
+
+
+[2026-05-01 5:59 p.m.] namibj
+(I mean I'm pretty sure it can be routed as just a double-pitch track on the usual DRCs for metal corners.)
+
+
+[2026-05-01 6:00 p.m.] ravenslofty
+um, not what I meant, exactly.
+
+
+[2026-05-01 6:00 p.m.] namibj
+But yes, sure.
+The bigger hurdle would likely be to teach yosys that some cells _exist_ but are often slower than decomposing (not always, and usually not smaller).
+
+
+[2026-05-01 6:01 p.m.] ravenslofty
+Well, that's the job of the liberty library.
+
+
+[2026-05-01 6:01 p.m.] namibj
+Are you suggesting that yosys would have more fundamental issues coping with the concept of free inversion?
+
+
+[2026-05-01 6:01 p.m.] namibj
+can't google
+
+
+[2026-05-01 6:03 p.m.] ravenslofty
+I'm... going to assume this was asked in good faith and you're not trying to imply I don't know how inverters work.
+
+
+[2026-05-01 6:04 p.m.] ravenslofty
+https://people.eecs.berkeley.edu/~alanmi/publications/other/liberty07_03.pdf
+
+It's a specification by Synopsis that basically all standard cell libraries use (sky130, gf180mcu, ihp sg13g2...)
+
+
+[2026-05-01 6:06 p.m.] namibj
+No I'm well aware you know yosys and almost certianly the gate names way better than me.
+
+
+[2026-05-01 6:07 p.m.] namibj
+But without differential logic it's AFAIK not the case that inversion is (close enough to) free.
+
+
+[2026-05-01 6:09 p.m.] ravenslofty
+So, ABC flatly does not understand differential logic, so you have to treat your differential cells as single-rail (non-differential logic) for the purposes of mapping it, and then map from single-rail to dual-rail and duplicate the single-rail nets. 
+
+Realistically? That means writing a Yosys pass to do that transform.
+
+
+[2026-05-01 6:09 p.m.] ravenslofty
+In domino logic inversion is free because it's impossible to express inverting functions :p
+
+
+[2026-05-01 6:17 p.m.] namibj
+oh right forgot that single-ended companion exists
+
+
+[2026-05-01 6:18 p.m.] namibj
+well, more like, that it (a) does exist and that (b) domino logic refers to it.
+
+
+[2026-05-01 6:19 p.m.] namibj
+which makes them somewhat similar in synthesis considerations, though MCML isn't as forced to use a dedicated one-shot precharge
+
+
+[2026-05-01 6:23 p.m.] namibj
+I've been more concerned with the difficulty of power gating MCML and it's near indifference to clock gating (and related, abhorrent power consumption of DFF-RAM), regarding practical usability.
+
+
+==============================================================
+Exported 36 message(s)
+==============================================================

@@ -1,0 +1,691 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / ⁉️-questions / Tons of DRC issues
+After: 2026-03-31 11:59 p.m.
+Before: 2026-05-01 12:00 a.m.
+==============================================================
+
+[2026-04-26 11:17 p.m.] thecomputerguy
+While working on https://github.com/MidstallSoftware/aegis/pull/21, I've seen all of these DRC issues and I am stuck:
+
+```
+26-Apr-2026 21:54:06 | ERROR   | Violated rules are : {'M1.2b', 'V2.2a', 'M2.1', 'M4.2a', 'M1.2a', 'V1.1', 'M1.1', 'M3.2a', 'V2.1', 'M2.2a', 'M3.1', 'V1.3c', 'V1.2a'}
+```
+
+I'm not sure what I am doing wrong but it would be nice to have some help. I've been running my DRC via `nix build .#checks.aarch64-linux.luna-1-gds-verify` and producing the GDS via `nix build .#luna-1-tapeout`.
+
+
+[2026-04-27 1:24 a.m.] namibj
+Try opening the gds in KLayout; `KLAYOUT_PATH=$PDK_ROOT/$PDK/libs.tech/klayout klayout`, then just open the file via the menu; you can then trigger the DRC by clicking run full drc in
+
+{Attachments}
+2026-04_media/image-B2F54.png
+
+
+[2026-04-27 1:24 a.m.] namibj
+you might have to hit the rightmost one of these that says sky130a for me here (the drop-down button on the right edge of it) and select the option that isn't just "default".
+
+{Attachments}
+2026-04_media/image-01F21.png
+
+
+[2026-04-27 1:25 a.m.] namibj
+then maybe press that full Torx-shaped button with the T in the shape once after seelcting, before the DRC option in the main menu bar becomes available.
+
+
+[2026-04-27 1:26 a.m.] namibj
+You can then press on any individual line of the report and the offending segments show up in the layout view window as black lines; you can adjust colors and such on the right side of the report window.
+
+
+[2026-04-27 2:48 a.m.] thecomputerguy
+Huh? What would that do?
+
+
+[2026-04-27 2:49 a.m.] thecomputerguy
+Shouldn't I have this information in the log I got from KLayout running through the GDS?
+
+
+[2026-04-27 2:59 a.m.] namibj
+Oh yeah if you have the log file you should be able to open it and view, like this:
+
+{Attachments}
+2026-04_media/image-DE59E.png
+
+
+[2026-04-27 3:00 a.m.] thecomputerguy
+Huh?
+
+
+[2026-04-27 3:00 a.m.] namibj
+run DRC (custom), unselect all (make sure you're not gonna overwrite your nice log), top right file -> open, select the log, enjoy.
+
+
+[2026-04-27 3:01 a.m.] namibj
+I'm assuming you don't want to search for the offending coordinates/shapes in the text files by hand, to try and make sense of what exactly the DRC log entries are blaming/complaining about.
+
+
+[2026-04-27 3:01 a.m.] thecomputerguy
+Do I have to use the GUI for this?
+
+
+[2026-04-27 3:03 a.m.] namibj
+The DRC complaints only narrow down to which cell, and I'm not sure if they blame specific instances of a cell or only "all".
+
+
+[2026-04-27 3:08 a.m.] namibj
+The engine itself only really operates on (polygonal, for efficciency, but it might as well be literal as the outcome wouldn't change, just the runtime/memory usage) rasterized/bitmap-view of the GDS layers at the native coordinate quantization "pixel size", as the rules rely heavily on performing boolean operations between/across layers to determine things.
+
+It unfortunately doesn't know what source shape caused the problem, only what edge/edge-pair (as in, location) caused the problem. If there are edges at that location from more than one layer you have to guess based on the rule's description which of the options it was.
+
+
+[2026-04-27 3:08 a.m.] namibj
+Technically you can reason about the files without the GUI.
+Have you found the file yet?
+
+
+[2026-04-27 3:11 a.m.] thecomputerguy
+I think so
+
+
+[2026-04-27 3:11 a.m.] thecomputerguy
+```
+result-4/netlist.spice
+result-4/v2spice.log
+result-4/raw_netlist.spice
+result-4/drc_output/contact.drc
+result-4/drc_output/metal1.drc
+result-4/drc_output/luna_1_metal4.lyrdb
+result-4/drc_output/luna_1_via4.lyrdb
+result-4/drc_output/metaltop.drc
+result-4/drc_output/via1.drc
+result-4/drc_output/layers_def.drc
+result-4/drc_output/drc_run_2026_04_26_21_21_23.log
+result-4/drc_output/luna_1_geom.lyrdb
+result-4/drc_output/luna_1_metal5.lyrdb
+result-4/drc_output/luna_1_via2.lyrdb
+result-4/drc_output/luna_1_metal2.lyrdb
+result-4/drc_output/metal5.drc
+result-4/drc_output/metal2.drc
+result-4/drc_output/luna_1_metal3.lyrdb
+result-4/drc_output/luna_1_via3.lyrdb
+result-4/drc_output/via2.drc
+result-4/drc_output/luna_1_contact.lyrdb
+result-4/drc_output/geom.drc
+result-4/drc_output/via4.drc
+result-4/drc_output/luna_1_via1.lyrdb
+result-4/drc_output/luna_1_metal1.lyrdb
+result-4/drc_output/via3.drc
+result-4/drc_output/luna_1_metaltop.lyrdb
+result-4/drc_output/metal3.drc
+result-4/drc_output/metal4.drc
+result-4/drc.log
+result-4/gds_check.log
+```
+I think it might be one of the `.drc` files?
+
+
+[2026-04-27 3:12 a.m.] namibj
+given it's named "output", I'd presume so.
+
+
+[2026-04-27 3:12 a.m.] namibj
+can you show the first few hundred bytes or so of one of them, I'd start with the `rc_run_2026_04_26_21_21_23.log`?
+
+
+[2026-04-27 3:13 a.m.] thecomputerguy
+That file is quite small
+
+
+[2026-04-27 3:13 a.m.] thecomputerguy
+
+
+{Attachments}
+2026-04_media/message-D9C0B.txt
+
+
+[2026-04-27 3:14 a.m.] namibj
+This is one of the drc result formats that I've encountered; I'm not sure if this is the one you'd have.
+
+{Attachments}
+2026-04_media/sky130_drc-516D3.txt
+
+
+[2026-04-27 3:14 a.m.] thecomputerguy
+Oh, that's the `.lyrdb` files I have
+
+
+[2026-04-27 3:14 a.m.] namibj
+yeah I know it's not the same PDK
+
+
+[2026-04-27 3:15 a.m.] thecomputerguy
+Yeah
+
+
+[2026-04-27 3:15 a.m.] thecomputerguy
+Though I plan on using Sky130 in the future heh
+
+
+[2026-04-27 3:16 a.m.] thecomputerguy
+There's a lot of V1.1 violations for Via1
+
+
+[2026-04-27 3:16 a.m.] thecomputerguy
+> V1.1 : Min/max Via1 size . : 0.26µm
+
+
+[2026-04-27 3:17 a.m.] namibj
+this XML refers to the generator. This XML itself is a clean DRC result.
+You should see content in the XML if you have that format.
+I'd try grepping for a fragment of the XML that you'd expect to show up, like maybe the lydrc file as a string.
+
+
+[2026-04-27 3:17 a.m.] thecomputerguy
+Huh the `.drc` files I have are python
+
+
+[2026-04-27 3:19 a.m.] namibj
+if you violate that you're somehow creating vias that are not the size they should be, like, there's no room for options there, vias have exactly that size, and thus it's either some generator script thinking it knows better (unlikely unless you wrote something like that for this AegisFPGA), or somewhere a misconfig about coordinate system scaling.
+
+
+[2026-04-27 3:20 a.m.] thecomputerguy
+Shouldn't OpenROAD have done that automatically in the way the PDK wanted?
+
+
+[2026-04-27 3:20 a.m.] namibj
+See if you find `</report-database>` at the end of any of those files
+
+
+[2026-04-27 3:20 a.m.] namibj
+sure, should, but vias don't tend to just malform themselves.
+
+
+[2026-04-27 3:21 a.m.] thecomputerguy
+```
+$ grep -r "</report-database>" result-4/drc_output
+result-4/drc_output/luna_1_metal4.lyrdb:</report-database>
+result-4/drc_output/luna_1_via4.lyrdb:</report-database>
+result-4/drc_output/luna_1_geom.lyrdb:</report-database>
+result-4/drc_output/luna_1_metal5.lyrdb:</report-database>
+result-4/drc_output/luna_1_via2.lyrdb:</report-database>
+result-4/drc_output/luna_1_metal2.lyrdb:</report-database>
+result-4/drc_output/luna_1_metal3.lyrdb:</report-database>
+result-4/drc_output/luna_1_via3.lyrdb:</report-database>
+result-4/drc_output/luna_1_contact.lyrdb:</report-database>
+result-4/drc_output/luna_1_via1.lyrdb:</report-database>
+result-4/drc_output/luna_1_metal1.lyrdb:</report-database>
+result-4/drc_output/luna_1_metaltop.lyrdb:</report-database>
+```
+
+
+[2026-04-27 3:21 a.m.] namibj
+great, so that's probably the files of interest.
+
+
+[2026-04-27 3:21 a.m.] namibj
+`result-4/drc_output/luna_1_via1.lyrdb`?
+
+
+[2026-04-27 3:21 a.m.] namibj
+If it's not secret ofc
+
+
+[2026-04-27 3:22 a.m.] thecomputerguy
+Oh, that's 56kb
+
+
+[2026-04-27 3:23 a.m.] namibj
+yeah a bunch of your errors
+
+
+[2026-04-27 3:23 a.m.] thecomputerguy
+```
+  <category>
+   <name>V1.1</name>
+   <description>V1.1 : Min/max Via1 size . : 0.26µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>V1.2a</name>
+   <description>V1.2a : min. via1 spacing : 0.26µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>V1.2b</name>
+   <description>V1.2b : Via1 Space in 4x4 or larger via1 array : 0.36µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>V1.3a</name>
+   <description>V1.3a : metal1 overlap of via1 &gt;= 0.0</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>V1.3c</name>
+   <description>V1.3c : metal1 (&lt; 0.34um) end-of-line overlap. (Applies to all &lt; 0.34µm wide Metal lines,
+                    excluding Metal branches shorter than 0.28µm.) : 0.06µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>V1.3d</name>
+   <description>V1.3d : If metal1 overlap via1 by &lt; 0.04um on one side, adjacent metal1 edges overlap. : 0.06µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>V1.4a</name>
+   <description>V1.4a : metal2 overlap of via1 &gt;= 0.01 um</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>V1.4b</name>
+   <description>V1.4p : metal2 (&lt; 0.34um) end-of-line overlap. (Applies to all &lt; 0.34µm wide Metal lines,
+                    excluding Metal branches shorter than 0.28µm.) : 0.06µm</description>
+   <categories>
+   </categories>
+  </category>
+  <category>
+   <name>V1.4c</name>
+   <description>V1.4c : If metal2 overlap via1 by &lt; 0.04um on one side, adjacent metal2 edges overlap. : 0.06µm</description>
+   <categories>
+   </categories>
+  </category>
+```
+
+
+[2026-04-27 3:23 a.m.] namibj
+if you open the GDS you can just load it or you can look at it's contents more programmatically
+
+
+[2026-04-27 3:23 a.m.] namibj
+yeah that's just the header/legend 😄
+
+
+[2026-04-27 3:23 a.m.] thecomputerguy
+I have the GDS open on my laptop in KLayout
+
+
+[2026-04-27 3:24 a.m.] namibj
+you can feed this file in then
+
+
+[2026-04-27 3:24 a.m.] thecomputerguy
+How do I open the lyrdb file?
+
+
+[2026-04-27 3:24 a.m.] namibj
+can you show me the menu bar? Or rather, what's teh right most main menu bar name?
+
+
+[2026-04-27 3:25 a.m.] thecomputerguy
+
+
+{Attachments}
+2026-04_media/image-77582.png
+
+
+[2026-04-27 3:25 a.m.] namibj
+actually, try "Tools -> Marker Browser"
+
+
+[2026-04-27 3:25 a.m.] thecomputerguy
+Ah cool, that looks promising
+
+
+[2026-04-27 3:26 a.m.] namibj
+you might want to point klayout at the PDK path though
+
+
+[2026-04-27 3:26 a.m.] namibj
+e.g. `KLAYOUT_PATH=$PDK_ROOT/$PDK/libs.tech/klayout klayout -e`
+
+
+[2026-04-27 3:26 a.m.] namibj
+(if using ciel)
+
+
+[2026-04-27 3:26 a.m.] thecomputerguy
+
+
+{Attachments}
+2026-04_media/image-07C4A.png
+
+
+[2026-04-27 3:27 a.m.] namibj
+yeah you select a row possibly after expanding a folded one, and while a row is selected/highlighted, you'll see them highlighted as lines in the layout view window
+
+
+[2026-04-27 3:28 a.m.] namibj
+(SerDes? Noice....)
+
+
+[2026-04-27 3:28 a.m.] thecomputerguy
+Cool, I see it
+
+{Attachments}
+2026-04_media/image-EF9A9.png
+
+
+[2026-04-27 3:29 a.m.] thecomputerguy
+https://github.com/Midstall/aegis/pull/21/changes#diff-297415984077469f4bd6bc71cb8e9dc8615316b804cca6335ca1b89eecaaccf1 I'll have to change something here I think to fix it
+
+{Embed}
+https://github.com/Midstall/aegis/pull/21/changes
+fix: verification by RossComputerGuy · Pull Request #21 · Midstal...
+2026-04_media/19699320-8166B
+
+
+[2026-04-27 3:30 a.m.] thecomputerguy
+I'm not exactly sure what I need to do to fix this
+
+
+[2026-04-27 3:38 a.m.] thecomputerguy
+Ah, OpenROAD stopped short on iterating. I wonder if increasing the routing iterations would fix a lot of problems.
+
+
+[2026-04-27 3:44 a.m.] namibj
+auto routing "gave up" before finishing into a state where it passed LVS to the point where it at least thinks it has finished routing the entire netlist it was tasked with?
+
+
+[2026-04-27 3:45 a.m.] thecomputerguy
+Idk, I've tried doing LVS but I skipped LVS because it caused the DRC + LVS job to run for like 30 hours
+
+
+[2026-04-27 3:46 a.m.] namibj
+LVS comes after DRC (personally; this is not inherently strict but some DRC fails will result in bogus LVS)
+
+
+[2026-04-27 3:47 a.m.] namibj
+note you probably want to exempt "casual" LVS from operating at granularity below the standard cell "abstract block with ports and nominal behavior/named-behavior", at least in usual design loop.
+
+
+[2026-04-27 3:48 a.m.] thecomputerguy
+Oh
+
+
+[2026-04-27 3:49 a.m.] namibj
+no sadly don't know how
+
+
+[2026-04-27 3:50 a.m.] thecomputerguy
+This is my first design so idk how either lol
+
+
+[2026-04-27 3:50 a.m.] namibj
+I'd suggest you tell openroad to not give up so soon; it might have been tuned for tiles that are substantially less packed vs. your FPGA.
+
+
+[2026-04-27 3:50 a.m.] thecomputerguy
+Yeah
+
+
+[2026-04-27 3:51 a.m.] namibj
+Like I read mention of that yesterday but don't even remember for which tool let alone in what docs.
+
+
+[2026-04-27 3:51 a.m.] namibj
+(And I don't need to for my tiny 1x2 analog tile on ttsky26a.)
+
+
+[2026-04-27 3:53 a.m.] namibj
+(....can you link the actual analog PLL that is mentioned by the code in your repo? I'd like to look at it this evening a little bit for some dose of inspiration.)
+
+
+[2026-04-27 3:56 a.m.] thecomputerguy
+https://github.com/Midstall/aegis/blob/f375157ff1c4b5b1cfcac49411b3b2164238857a/ip/lib/src/components/analog/pll.dart
+
+{Embed}
+https://github.com/Midstall/aegis/blob/f375157ff1c4b5b1cfcac49411b3b2164238857a/ip/lib/src/components/analog/pll.dart
+aegis/ip/lib/src/components/analog/pll.dart at f375157ff1c4b5b1cfca...
+Open source FPGA silicon. Contribute to Midstall/aegis development by creating an account on GitHub.
+2026-04_media/aegis-91DBA
+
+
+[2026-04-27 4:06 a.m.] namibj
+No I found that.
+But that's not doing PLL.
+It's _wrapping,_ sure, but it's not _doing_ PLL.
+
+
+[2026-04-27 4:07 a.m.] thecomputerguy
+:SubaThink:
+
+
+[2026-04-27 4:10 a.m.] namibj
+PLL is some sort of oscillating thingy that can be somehow controlled, and is somehow phase-compared to some kind of reference, and what makes it PLL is that these two things (the "controllable oscillator" and the "oscillator [output] phase comparing to reference") are wired into a control _loop._
+
+
+[2026-04-27 4:11 a.m.] namibj
+If correctly designed/configured, it then has to actually manage to _lock_ to deserve the title of "Phase-**Locked** Loop".
+
+
+[2026-04-27 4:11 a.m.] namibj
+(I don't want to keep you from finishing the FPGA into a functional state in time for the WS Run2 deadline.)
+
+
+[2026-04-27 4:17 a.m.] thecomputerguy
+Yeah, I'm just wrapping the one from the PDK for simplicity
+
+
+[2026-04-27 4:26 a.m.] namibj
+....there is one in the PDK? (I tried and failed to find one, but maybe I searched wrong)
+
+
+[2026-04-27 4:28 a.m.] thecomputerguy
+`gf180mcu_fd_pr__pll.sym` lol
+
+
+[2026-04-27 4:29 a.m.] namibj
+....that's a symbol, not an actual thing. It's just an abstract placeholder for a schematic.
+
+
+[2026-04-27 4:31 a.m.] thecomputerguy
+Oh
+
+
+[2026-04-27 5:07 a.m.] mithro_
+@Leo Moser (mole99) - Dunno if you have any ideas about this?
+
+
+[2026-04-27 6:23 a.m.] mole99
+The vias are indeed of a fixed size, so the only issues I can think of are that the manufacuring grid is not set correctly (everything is scaled by a factor of 5), or there is some other setup issue.
+
+I suggest checking the wafers.space [gf180mcu-project-template](https://github.com/wafer-space/gf180mcu-project-template) against your custom set up.
+
+
+[2026-04-27 5:18 p.m.] thecomputerguy
+I've been checking what I have vs the template. I might've forgotten about PDN lol
+
+
+[2026-04-29 3:31 p.m.] thecomputerguy
+Hmm, 0 violations in OpenROAD's DRC but KLayout says like 3.5k
+
+
+[2026-04-29 3:40 p.m.] thecomputerguy
+@Tim 'mithro' Ansell which DRC is more believable?
+
+
+[2026-04-29 3:45 p.m.] mole99
+You need to pass KLayout DRC in order to tape out. OpenROAD only has an abstract view of the cells and routing.
+
+
+[2026-04-29 3:47 p.m.] thecomputerguy
+Oh. Most of my KLayout DRC violations are on metal1, 2.2k.
+
+
+[2026-04-29 4:04 p.m.] thecomputerguy
+I don't think I'll be able to get the early bird deadline. Everything I try to do does not fix the DRC violations. I'm not sure what I am doing wrong and idk how to fix the violations.
+
+
+[2026-04-29 6:44 p.m.] mole99
+You should be able to buy a slot even if you don't have the design ready yet.
+
+
+[2026-04-29 6:44 p.m.] mole99
+As for the DRC violations, if you could share your current layout, I can take a quick look to see what's going on.
+
+
+[2026-04-29 7:16 p.m.] thecomputerguy
+Like the GDS file?
+
+
+[2026-04-29 7:16 p.m.] thecomputerguy
+Cool, hopefully I can do that soon.
+
+
+[2026-04-29 7:32 p.m.] mole99
+Yes
+
+
+[2026-04-29 7:46 p.m.] thecomputerguy
+Cool, here you go
+
+{Attachments}
+https://media.githubusercontent.com/media/wafer-space/discord.wafer.space/master/large_media/wafer-space/%E2%84%B9%EF%B8%8F%20-%20Information/%E2%81%89%EF%B8%8F-questions/tons-of-drc-issues/2026-04/2026-04_media/luna_1-16CF7.gds
+
+
+[2026-04-29 10:04 p.m.] bailey8889
+It looks to me like all the metal layers have been removed from the standard cells and merged at the top level. This appears to be result in power shorts and very thin metal1 maybe due to resizing. See screenshot.
+
+I don't think that this will be easy to extract with open source tools.
+
+{Attachments}
+2026-04_media/2026-04-30_6.58.18-C280A.png
+
+
+[2026-04-29 10:16 p.m.] thecomputerguy
+Fun, lemme try something
+
+
+[2026-04-29 10:17 p.m.] thecomputerguy
+Gonna drop the `pkgs/aegis-tapeout/scripts/drc_repair.py` script
+
+
+[2026-04-30 2:56 a.m.] thecomputerguy
+I have this now btw
+
+{Attachments}
+https://media.githubusercontent.com/media/wafer-space/discord.wafer.space/master/large_media/wafer-space/%E2%84%B9%EF%B8%8F%20-%20Information/%E2%81%89%EF%B8%8F-questions/tons-of-drc-issues/2026-04/2026-04_media/luna_1-CC0DB.gds
+
+
+[2026-04-30 4:11 a.m.] bailey8889
+Looks like the standard cell rows are missing filler cells. Can you confirm?
+
+
+[2026-04-30 4:12 a.m.] thecomputerguy
+I think I see standard cells, what exactly are standard cell rows?
+
+
+[2026-04-30 4:14 a.m.] thecomputerguy
+Ah, sounds like I need to run `filler_placement`?
+
+{Reactions}
+👍
+
+[2026-04-30 4:28 a.m.] thecomputerguy
+Cool, I've added that in
+
+{Attachments}
+https://media.githubusercontent.com/media/wafer-space/discord.wafer.space/master/large_media/wafer-space/%E2%84%B9%EF%B8%8F%20-%20Information/%E2%81%89%EF%B8%8F-questions/tons-of-drc-issues/2026-04/2026-04_media/luna_1-EDAF4.gds
+
+
+[2026-04-30 4:28 a.m.] thecomputerguy
+KLayout is getting a little slow
+
+
+[2026-04-30 4:33 a.m.] bailey8889
+Better, but still not seeing power grid connections to all the macros or cell rows.
+
+
+[2026-04-30 4:34 a.m.] thecomputerguy
+Weird, I did do the PDN stuff
+
+
+[2026-04-30 4:34 a.m.] bailey8889
+Are you using librelane or OpenROAD directly?
+
+
+[2026-04-30 4:35 a.m.] thecomputerguy
+OpenROAD directly and orchestrated through Nix.
+
+
+[2026-04-30 4:35 a.m.] thecomputerguy
+The OpenROAD scripts are generated from Dart.
+
+
+[2026-04-30 4:35 a.m.] thecomputerguy
+Do I need to do `define_pdn_grid`?
+
+
+[2026-04-30 4:52 a.m.] thecomputerguy
+```
+aegis-top-pnr-luna_> [INFO PDN-0001] Inserting grid: macro_grid - io_fabric/lut_fabric/tile_325
+aegis-top-pnr-luna_> [INFO PDN-0001] Inserting grid: macro_grid - io_fabric/lut_fabric/tile_326
+aegis-top-pnr-luna_> [INFO PDN-0001] Inserting grid: macro_grid - io_fabric/lut_fabric/tile_327
+aegis-top-pnr-luna_> [INFO PDN-0001] Inserting grid: macro_grid - io_fabric/lut_fabric/tile_328
+aegis-top-pnr-luna_> [INFO PDN-0001] Inserting grid: macro_grid - io_fabric/lut_fabric/tile_329
+aegis-top-pnr-luna_> [INFO PDN-0001] Inserting grid: macro_grid - io_fabric/lut_fabric/tile_33
+aegis-top-pnr-luna_> [INFO PDN-0001] Inserting grid: macro_grid - io_fabric/lut_fabric/tile_330
+aegis-top-pnr-luna_> [INFO PDN-0001] Inserting grid: macro_grid - io_fabric/lut_fabric/tile_331
+```
+This seems promising
+
+
+[2026-04-30 4:59 a.m.] bailey8889
+TBH, what you're are attempting is beyond my level of experience. 
+
+What I've seen in the past, is that hard macros have their own power grid with the top metal layer one lower than the max. (metal4 in this case). Since metal 4 is a vertical layer, you should be able to have the power grid for the macros, connect directly to metal1 through a metal1-via-metal2-via2-metal3-via3-metal4 stack at the metal1 power rail for each cell row. How many metal4 power rails you use depends on the width of the macro. Since you need metal4 routing over the macros, you'll want to be careful where you place the power rails.
+
+Some of the macros currently have metal5, and while that may be doable, I suggest the top metal routing layer be limited to metal4.
+
+Next you need to design your top level power gird so that both power and ground horizontal metal5 power lines intersect with all the hard macros. The top power grid will be vertical metal4 and horizontal metal5. In this case, metal4 power rails are not generally routed over macros that already have metal4 power rails.
+
+Another consideration is the power connections for the standard cell rows placed between the macros. Normally, the metal1 power rails in these standard cells is connected to metal4 power rails at the top level, but in your case, these rows are narrow and may not intersect with the power grid. You may want to consider setting these regions as no cell placement.
+
+Also noticed that you are using fill cells and not fillcap cells. fillcap cells add capacitance between the power and ground lines for better stability.
+
+
+[2026-04-30 4:59 a.m.] thecomputerguy
+Alright. Thank you for the help though.
+
+{Reactions}
+👍
+
+[2026-04-30 7:14 a.m.] mole99
+I can only repeat what bailey said. The power connections are missing, and decap cells would be better than fillcaps.
+
+
+[2026-04-30 7:14 a.m.] mole99
+Independent of that, your layout is missing a padring and a sealring. This is your interface to the outside world.
+
+
+[2026-04-30 7:14 a.m.] mole99
+
+
+{Attachments}
+2026-04_media/Bildschirmfoto_vom_2026-04-30_09-10-29-2847F.png
+
+
+[2026-04-30 7:14 a.m.] mole99
+Here is your layout alongside the gf180mcu project template.
+
+
+[2026-04-30 7:15 a.m.] mole99
+I would recommend implementing the gf180mcu project template and comparing the output with your setup.
+
+
+[2026-04-30 6:54 p.m.] thecomputerguy
+Cool, will see what that can do for me. Thanks. I'm not really familiar with LibreLane or any of this stuff so this has been quite new for me. Hopefully I can integrate some of this trial and error into my asix and harbor repos which help out for ASIC/FPGA design/dev.
+
+{Reactions}
+👍
+
+==============================================================
+Exported 121 message(s)
+==============================================================

@@ -1,0 +1,24 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"691780627338625077","rebelmike","2026-05-18T23:15:24.5540000+00:00","","",""
+"691780627338625077","rebelmike","2026-05-18T23:15:26.3510000+00:00","Cool!  I have not checked anything yet but I think I see what you're trying to do.
+Is the idea to produce a different breakout with the same footprint but different routing for each chip, so that they can be used in the same motherboard?
+My concern is that from experience so far, non-trivial routing on the CoB breakout is tricky - but I agree at least making clk, rst, UART and (Q)SPI flash match up would be good, and hopefully possible.  After that it would probably just be informed by what makes routing easiest - it doesn't really matter because they are just GPIO pins.","",""
+"691780627338625077","rebelmike","2026-05-18T23:15:38.3590000+00:00","I'll look in more detail tomorrow","",""
+"274535015969456128","greg.hashtag.9468","2026-05-18T23:21:12.7700000+00:00","I'm not sure what I'm looking at 😅  Is this comparing each of the smaller sizes back to a golden design? I can't quite tell what net name A/net name B link from/to.","",""
+"274535015969456128","greg.hashtag.9468","2026-05-18T23:23:26.9110000+00:00","I guess this is interesting because there are only 3 designs in the 0.5x1 and 1x0.5 slots.","",""
+"691780627338625077","rebelmike","2026-05-18T23:26:26.6460000+00:00","I think net name A is from the template, net name B for TinyQV looks like the function of the pin.  I'm not sure what it is for the other designs.","",""
+"691780627338625077","rebelmike","2026-05-19T20:07:56.0540000+00:00","OK, I've checked and agree with net name B for TinyQV on the Pins sheet.
+I think I understand the ""Conn pin #"" column for TQVB - it is giving the pin number on the 70-pin connector that you would get if you naturally routed the die pads to the 70-pin.
+The ""Conn pin #"" in column AL for TQVC looks like it is matching with the TQVB version.  So I guess that's saying how it would be routed to match TQVB.  Similarly for TQVA.  I'm not sure this would necessarily be the best pinout, but it's a reasonable starting point.
+On Common signals, I think you're trying to match signals that would make sense to get on the same mezzanine pins across different projects.  One note here is that it would be better to use the dedicated UART RX for TinyQV instead of the muxed one (though if using the muxed one made it significantly easier then fine).
+It would be very good to match CLK, RST_N, UART and the SPI flash interface across all GD and TQVs.  It would be very good to match the rest of the QSPI interface across the TQVs.
+It would be good to try and route uo_out0-7 consistently across the TQVs, and then present those on a PMOD so that could work with the Tiny Tapeout VGA PMOD.
+Other than that, matching the signals across TQVs is a nice to have, but some inconsistency would be OK.  Note that in2-3, all the analogs and bidirs from 33 up are completely unused so if the CoB board was specific to TQV they wouldn't even necessarily need to be connected.
+For GD I assume the situation for most of the GPIO is similar - it might be nice if they were consistent but it would not really be a big problem if they weren't - you'd just need to refer to different pinout diagrams to understand which GPIO was where on the motherboard.
+I haven't looked at the Z80 - presumably that would need a completely different motherboard anyway.","",""
+"691780627338625077","rebelmike","2026-05-19T20:18:24.7400000+00:00","From the table at the bottom of common signals, I guess that you want to base the expected pinout on GD03 mounted on the standard CoB breakout.
+Have I understood correctly that your interested in a custom CoB per design that would work with that, matching clk, rst_n, UART and SPI?  If so, would you like me to work on custom CoBs for TQV that would match that?","",""
+"169786952432746498","mithro_","2026-05-20T08:17:37.7990000+00:00","@RebelMike / @Greg - This was start of an manual and AI based investigation on if we could make CoB boards so that all the Raquet and TinyQV devices could share a motherboard.","",""
+"274535015969456128","greg.hashtag.9468","2026-05-20T10:04:12.6710000+00:00","Ahh I see now. It would have been easy to swap pins before these were taped out 😆","",""
+"691780627338625077","rebelmike","2026-05-20T11:51:48.0240000+00:00","Yeah definitely, but I’m not sure even the standard CoB had been figured out at that stage!","",""
+"169786952432746498","mithro_","2026-05-26T08:56:11.3490000+00:00","Yes it would have been, but hindsight is 20 20 as they say 😛","",""

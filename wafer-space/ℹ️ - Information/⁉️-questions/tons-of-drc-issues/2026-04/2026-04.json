@@ -1,0 +1,3799 @@
+{
+  "guild": {
+    "id": "1361349522684510449",
+    "name": "wafer.space Community",
+    "iconUrl": "2026-04_media/fb143eaa45770cbb40493d09b625e98b-09FD1.png"
+  },
+  "channel": {
+    "id": "1498100763388284938",
+    "type": "GuildPublicThread",
+    "categoryId": "1409660288822673408",
+    "category": "\u2049\ufe0f-questions",
+    "name": "Tons of DRC issues",
+    "topic": null
+  },
+  "dateRange": {
+    "after": "2026-03-31T23:59:59.999+00:00",
+    "before": "2026-05-01T00:00:00+00:00"
+  },
+  "exportedAt": "2026-07-09T04:25:57.4924356+00:00",
+  "messages": [
+    {
+      "id": "1498100763388284938",
+      "type": "Default",
+      "timestamp": "2026-04-26T23:17:35.358+00:00",
+      "timestampEdited": "2026-04-26T23:19:17.428+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "While working on https://github.com/MidstallSoftware/aegis/pull/21, I've seen all of these DRC issues and I am stuck:\n\n```\n26-Apr-2026 21:54:06 | ERROR   | Violated rules are : {'M1.2b', 'V2.2a', 'M2.1', 'M4.2a', 'M1.2a', 'V1.1', 'M1.1', 'M3.2a', 'V2.1', 'M2.2a', 'M3.1', 'V1.3c', 'V1.2a'}\n```\n\nI'm not sure what I am doing wrong but it would be nice to have some help. I've been running my DRC via `nix build .#checks.aarch64-linux.luna-1-gds-verify` and producing the GDS via `nix build .#luna-1-tapeout`.",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498132580933963959",
+      "type": "Default",
+      "timestamp": "2026-04-27T01:24:01.252+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Try opening the gds in KLayout; `KLAYOUT_PATH=$PDK_ROOT/$PDK/libs.tech/klayout klayout`, then just open the file via the menu; you can then trigger the DRC by clicking run full drc in",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [
+        {
+          "id": "1498132580795678962",
+          "url": "2026-04_media/image-B2F54.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 1690
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498132820806336522",
+      "type": "Default",
+      "timestamp": "2026-04-27T01:24:58.442+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "you might have to hit the rightmost one of these that says sky130a for me here (the drop-down button on the right edge of it) and select the option that isn't just \"default\".",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [
+        {
+          "id": "1498132820256620584",
+          "url": "2026-04_media/image-01F21.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 8216
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498133010359390369",
+      "type": "Default",
+      "timestamp": "2026-04-27T01:25:43.635+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "then maybe press that full Torx-shaped button with the T in the shape once after seelcting, before the DRC option in the main menu bar becomes available.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498133275640856626",
+      "type": "Default",
+      "timestamp": "2026-04-27T01:26:46.883+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You can then press on any individual line of the report and the offending segments show up in the layout view window as black lines; you can adjust colors and such on the right side of the report window.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498153948282884097",
+      "type": "Reply",
+      "timestamp": "2026-04-27T02:48:55.625+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Huh? What would that do?",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "262706220073222144",
+          "name": "namibj",
+          "discriminator": "0000",
+          "nickname": "namibj",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1498133275640856626",
+        "channelId": "1498100763388284938",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498154049357353061",
+      "type": "Default",
+      "timestamp": "2026-04-27T02:49:19.723+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Shouldn't I have this information in the log I got from KLayout running through the GDS?",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498156541860384909",
+      "type": "Reply",
+      "timestamp": "2026-04-27T02:59:13.982+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Oh yeah if you have the log file you should be able to open it and view, like this:",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [
+        {
+          "id": "1498156541499412591",
+          "url": "2026-04_media/image-DE59E.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 20400
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "319853768550121473",
+          "name": "thecomputerguy",
+          "discriminator": "0000",
+          "nickname": "The Computer Guy",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1498154049357353061",
+        "channelId": "1498100763388284938",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498156904327942285",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:00:40.401+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Huh?",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498156910854275083",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:00:41.957+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "run DRC (custom), unselect all (make sure you're not gonna overwrite your nice log), top right file -> open, select the log, enjoy.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498157170967973898",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:01:43.973+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I'm assuming you don't want to search for the offending coordinates/shapes in the text files by hand, to try and make sense of what exactly the DRC log entries are blaming/complaining about.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498157189561581618",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:01:48.406+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Do I have to use the GUI for this?",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498157599772639275",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:03:26.208+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The DRC complaints only narrow down to which cell, and I'm not sure if they blame specific instances of a cell or only \"all\".",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498158783422140486",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:08:08.412+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The engine itself only really operates on (polygonal, for efficciency, but it might as well be literal as the outcome wouldn't change, just the runtime/memory usage) rasterized/bitmap-view of the GDS layers at the native coordinate quantization \"pixel size\", as the rules rely heavily on performing boolean operations between/across layers to determine things.\n\nIt unfortunately doesn't know what source shape caused the problem, only what edge/edge-pair (as in, location) caused the problem. If there are edges at that location from more than one layer you have to guess based on the rule's description which of the options it was.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498158940691632290",
+      "type": "Reply",
+      "timestamp": "2026-04-27T03:08:45.908+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Technically you can reason about the files without the GUI.\nHave you found the file yet?",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "319853768550121473",
+          "name": "thecomputerguy",
+          "discriminator": "0000",
+          "nickname": "The Computer Guy",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1498157189561581618",
+        "channelId": "1498100763388284938",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498159520197902347",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:11:04.073+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I think so",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498159713446002869",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:11:50.147+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "```\nresult-4/netlist.spice\nresult-4/v2spice.log\nresult-4/raw_netlist.spice\nresult-4/drc_output/contact.drc\nresult-4/drc_output/metal1.drc\nresult-4/drc_output/luna_1_metal4.lyrdb\nresult-4/drc_output/luna_1_via4.lyrdb\nresult-4/drc_output/metaltop.drc\nresult-4/drc_output/via1.drc\nresult-4/drc_output/layers_def.drc\nresult-4/drc_output/drc_run_2026_04_26_21_21_23.log\nresult-4/drc_output/luna_1_geom.lyrdb\nresult-4/drc_output/luna_1_metal5.lyrdb\nresult-4/drc_output/luna_1_via2.lyrdb\nresult-4/drc_output/luna_1_metal2.lyrdb\nresult-4/drc_output/metal5.drc\nresult-4/drc_output/metal2.drc\nresult-4/drc_output/luna_1_metal3.lyrdb\nresult-4/drc_output/luna_1_via3.lyrdb\nresult-4/drc_output/via2.drc\nresult-4/drc_output/luna_1_contact.lyrdb\nresult-4/drc_output/geom.drc\nresult-4/drc_output/via4.drc\nresult-4/drc_output/luna_1_via1.lyrdb\nresult-4/drc_output/luna_1_metal1.lyrdb\nresult-4/drc_output/via3.drc\nresult-4/drc_output/luna_1_metaltop.lyrdb\nresult-4/drc_output/metal3.drc\nresult-4/drc_output/metal4.drc\nresult-4/drc.log\nresult-4/gds_check.log\n```\nI think it might be one of the `.drc` files?",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498159802705252524",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:12:11.428+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "given it's named \"output\", I'd presume so.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498159998109352036",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:12:58.016+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "can you show the first few hundred bytes or so of one of them, I'd start with the `rc_run_2026_04_26_21_21_23.log`?",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498160212169982122",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:13:49.052+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "That file is quite small",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498160222575792228",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:13:51.533+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [
+        {
+          "id": "1498160222198562907",
+          "url": "2026-04_media/message-D9C0B.txt",
+          "fileName": "message.txt",
+          "fileSizeBytes": 4764
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498160266171388074",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:14:01.927+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "This is one of the drc result formats that I've encountered; I'm not sure if this is the one you'd have.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [
+        {
+          "id": "1498160265781444799",
+          "url": "2026-04_media/sky130_drc-516D3.txt",
+          "fileName": "sky130_drc.txt",
+          "fileSizeBytes": 40521
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498160441099292842",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:14:43.633+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Oh, that's the `.lyrdb` files I have",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498160464335470612",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:14:49.173+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "yeah I know it's not the same PDK",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498160529242591403",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:15:04.648+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yeah",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498160575287660584",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:15:15.626+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Though I plan on using Sky130 in the future heh",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498160853340651672",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:16:21.919+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "There's a lot of V1.1 violations for Via1",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498160941240422400",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:16:42.876+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "> V1.1 : Min/max Via1 size . : 0.26\u00b5m",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498161025814626466",
+      "type": "Reply",
+      "timestamp": "2026-04-27T03:17:03.04+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "this XML refers to the generator. This XML itself is a clean DRC result.\nYou should see content in the XML if you have that format.\nI'd try grepping for a fragment of the XML that you'd expect to show up, like maybe the lydrc file as a string.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "319853768550121473",
+          "name": "thecomputerguy",
+          "discriminator": "0000",
+          "nickname": "The Computer Guy",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1498160441099292842",
+        "channelId": "1498100763388284938",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498161254781681694",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:17:57.63+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Huh the `.drc` files I have are python",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498161526844952678",
+      "type": "Reply",
+      "timestamp": "2026-04-27T03:19:02.495+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "if you violate that you're somehow creating vias that are not the size they should be, like, there's no room for options there, vias have exactly that size, and thus it's either some generator script thinking it knows better (unlikely unless you wrote something like that for this AegisFPGA), or somewhere a misconfig about coordinate system scaling.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "319853768550121473",
+          "name": "thecomputerguy",
+          "discriminator": "0000",
+          "nickname": "The Computer Guy",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1498160941240422400",
+        "channelId": "1498100763388284938",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498161812766589050",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:20:10.664+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Shouldn't OpenROAD have done that automatically in the way the PDK wanted?",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498161823508201492",
+      "type": "Reply",
+      "timestamp": "2026-04-27T03:20:13.225+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "See if you find `</report-database>` at the end of any of those files",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "319853768550121473",
+          "name": "thecomputerguy",
+          "discriminator": "0000",
+          "nickname": "The Computer Guy",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1498161254781681694",
+        "channelId": "1498100763388284938",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498161929007534121",
+      "type": "Reply",
+      "timestamp": "2026-04-27T03:20:38.378+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "sure, should, but vias don't tend to just malform themselves.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "319853768550121473",
+          "name": "thecomputerguy",
+          "discriminator": "0000",
+          "nickname": "The Computer Guy",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1498161812766589050",
+        "channelId": "1498100763388284938",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498162021336743936",
+      "type": "Reply",
+      "timestamp": "2026-04-27T03:21:00.391+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "```\n$ grep -r \"</report-database>\" result-4/drc_output\nresult-4/drc_output/luna_1_metal4.lyrdb:</report-database>\nresult-4/drc_output/luna_1_via4.lyrdb:</report-database>\nresult-4/drc_output/luna_1_geom.lyrdb:</report-database>\nresult-4/drc_output/luna_1_metal5.lyrdb:</report-database>\nresult-4/drc_output/luna_1_via2.lyrdb:</report-database>\nresult-4/drc_output/luna_1_metal2.lyrdb:</report-database>\nresult-4/drc_output/luna_1_metal3.lyrdb:</report-database>\nresult-4/drc_output/luna_1_via3.lyrdb:</report-database>\nresult-4/drc_output/luna_1_contact.lyrdb:</report-database>\nresult-4/drc_output/luna_1_via1.lyrdb:</report-database>\nresult-4/drc_output/luna_1_metal1.lyrdb:</report-database>\nresult-4/drc_output/luna_1_metaltop.lyrdb:</report-database>\n```",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "262706220073222144",
+          "name": "namibj",
+          "discriminator": "0000",
+          "nickname": "namibj",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1498161823508201492",
+        "channelId": "1498100763388284938",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498162088202473522",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:21:16.333+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "great, so that's probably the files of interest.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498162111216488501",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:21:21.82+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "`result-4/drc_output/luna_1_via1.lyrdb`?",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498162142732353678",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:21:29.334+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "If it's not secret ofc",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498162369195540511",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:22:23.327+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Oh, that's 56kb",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498162619826307113",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:23:23.082+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "yeah a bunch of your errors",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498162669948244121",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:23:35.032+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "```\n  <category>\n   <name>V1.1</name>\n   <description>V1.1 : Min/max Via1 size . : 0.26\u00b5m</description>\n   <categories>\n   </categories>\n  </category>\n  <category>\n   <name>V1.2a</name>\n   <description>V1.2a : min. via1 spacing : 0.26\u00b5m</description>\n   <categories>\n   </categories>\n  </category>\n  <category>\n   <name>V1.2b</name>\n   <description>V1.2b : Via1 Space in 4x4 or larger via1 array : 0.36\u00b5m</description>\n   <categories>\n   </categories>\n  </category>\n  <category>\n   <name>V1.3a</name>\n   <description>V1.3a : metal1 overlap of via1 &gt;= 0.0</description>\n   <categories>\n   </categories>\n  </category>\n  <category>\n   <name>V1.3c</name>\n   <description>V1.3c : metal1 (&lt; 0.34um) end-of-line overlap. (Applies to all &lt; 0.34\u00b5m wide Metal lines,\n                    excluding Metal branches shorter than 0.28\u00b5m.) : 0.06\u00b5m</description>\n   <categories>\n   </categories>\n  </category>\n  <category>\n   <name>V1.3d</name>\n   <description>V1.3d : If metal1 overlap via1 by &lt; 0.04um on one side, adjacent metal1 edges overlap. : 0.06\u00b5m</description>\n   <categories>\n   </categories>\n  </category>\n  <category>\n   <name>V1.4a</name>\n   <description>V1.4a : metal2 overlap of via1 &gt;= 0.01 um</description>\n   <categories>\n   </categories>\n  </category>\n  <category>\n   <name>V1.4b</name>\n   <description>V1.4p : metal2 (&lt; 0.34um) end-of-line overlap. (Applies to all &lt; 0.34\u00b5m wide Metal lines,\n                    excluding Metal branches shorter than 0.28\u00b5m.) : 0.06\u00b5m</description>\n   <categories>\n   </categories>\n  </category>\n  <category>\n   <name>V1.4c</name>\n   <description>V1.4c : If metal2 overlap via1 by &lt; 0.04um on one side, adjacent metal2 edges overlap. : 0.06\u00b5m</description>\n   <categories>\n   </categories>\n  </category>\n```",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498162687727767664",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:23:39.271+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "if you open the GDS you can just load it or you can look at it's contents more programmatically",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498162755189080164",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:23:55.355+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "yeah that's just the header/legend \ud83d\ude04",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\ud83d\ude04",
+          "code": "smile",
+          "isAnimated": false,
+          "imageUrl": "2026-04_media/1f604-BF863.svg"
+        }
+      ]
+    },
+    {
+      "id": "1498162761543188532",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:23:56.87+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I have the GDS open on my laptop in KLayout",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498162798952452176",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:24:05.789+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "you can feed this file in then",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498162800433037343",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:24:06.142+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "How do I open the lyrdb file?",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498162918691442698",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:24:34.337+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "can you show me the menu bar? Or rather, what's teh right most main menu bar name?",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498163096328470661",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:25:16.689+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [
+        {
+          "id": "1498163095326036028",
+          "url": "2026-04_media/image-77582.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 15582
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498163177693777921",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:25:36.088+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "actually, try \"Tools -> Marker Browser\"",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498163257574293647",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:25:55.133+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Ah cool, that looks promising",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498163364810063914",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:26:20.7+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "you might want to point klayout at the PDK path though",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498163442132062258",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:26:39.135+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "e.g. `KLAYOUT_PATH=$PDK_ROOT/$PDK/libs.tech/klayout klayout -e`",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498163490077147247",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:26:50.566+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "(if using ciel)",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498163494275514442",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:26:51.567+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [
+        {
+          "id": "1498163494384828488",
+          "url": "2026-04_media/image-07C4A.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 24984
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498163714925400196",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:27:44.174+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "yeah you select a row possibly after expanding a folded one, and while a row is selected/highlighted, you'll see them highlighted as lines in the layout view window",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498163834630705342",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:28:12.714+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "(SerDes? Noice....)",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498163944370470982",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:28:38.878+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Cool, I see it",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [
+        {
+          "id": "1498163943988924497",
+          "url": "2026-04_media/image-EF9A9.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 6230
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498164061609791579",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:29:06.83+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "https://github.com/Midstall/aegis/pull/21/changes#diff-297415984077469f4bd6bc71cb8e9dc8615316b804cca6335ca1b89eecaaccf1 I'll have to change something here I think to fix it",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "fix: verification by RossComputerGuy \u00b7 Pull Request #21 \u00b7 Midstal...",
+          "url": "https://github.com/Midstall/aegis/pull/21/changes",
+          "timestamp": null,
+          "description": "",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "2026-04_media/19699320-8166B",
+            "width": 400,
+            "height": 400
+          },
+          "images": [],
+          "fields": [],
+          "inlineEmojis": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498164471762260028",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:30:44.618+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I'm not exactly sure what I need to do to fix this",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498166510063976601",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:38:50.587+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Ah, OpenROAD stopped short on iterating. I wonder if increasing the routing iterations would fix a lot of problems.",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498168008424554507",
+      "type": "Reply",
+      "timestamp": "2026-04-27T03:44:47.824+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "auto routing \"gave up\" before finishing into a state where it passed LVS to the point where it at least thinks it has finished routing the entire netlist it was tasked with?",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "319853768550121473",
+          "name": "thecomputerguy",
+          "discriminator": "0000",
+          "nickname": "The Computer Guy",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1498166510063976601",
+        "channelId": "1498100763388284938",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498168286720950352",
+      "type": "Reply",
+      "timestamp": "2026-04-27T03:45:54.175+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Idk, I've tried doing LVS but I skipped LVS because it caused the DRC + LVS job to run for like 30 hours",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "262706220073222144",
+          "name": "namibj",
+          "discriminator": "0000",
+          "nickname": "namibj",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1498168008424554507",
+        "channelId": "1498100763388284938",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498168429583138906",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:46:28.236+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "LVS comes after DRC (personally; this is not inherently strict but some DRC fails will result in bogus LVS)",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498168702435065968",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:47:33.289+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "note you probably want to exempt \"casual\" LVS from operating at granularity below the standard cell \"abstract block with ports and nominal behavior/named-behavior\", at least in usual design loop.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498168836833411194",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:48:05.332+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Oh",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498169308776366231",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:49:57.852+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "no sadly don't know how",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498169433040883804",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:50:27.479+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "This is my first design so idk how either lol",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498169491975311370",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:50:41.53+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I'd suggest you tell openroad to not give up so soon; it might have been tuned for tiles that are substantially less packed vs. your FPGA.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498169537282048010",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:50:52.332+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yeah",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498169652881129502",
+      "type": "Reply",
+      "timestamp": "2026-04-27T03:51:19.893+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Like I read mention of that yesterday but don't even remember for which tool let alone in what docs.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "319853768550121473",
+          "name": "thecomputerguy",
+          "discriminator": "0000",
+          "nickname": "The Computer Guy",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1498169433040883804",
+        "channelId": "1498100763388284938",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498169769935896679",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:51:47.801+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "(And I don't need to for my tiny 1x2 analog tile on ttsky26a.)",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498170125138788422",
+      "type": "Default",
+      "timestamp": "2026-04-27T03:53:12.488+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "(....can you link the actual analog PLL that is mentioned by the code in your repo? I'd like to look at it this evening a little bit for some dose of inspiration.)",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498170898388095136",
+      "type": "Reply",
+      "timestamp": "2026-04-27T03:56:16.845+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "https://github.com/Midstall/aegis/blob/f375157ff1c4b5b1cfcac49411b3b2164238857a/ip/lib/src/components/analog/pll.dart",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "aegis/ip/lib/src/components/analog/pll.dart at f375157ff1c4b5b1cfca...",
+          "url": "https://github.com/Midstall/aegis/blob/f375157ff1c4b5b1cfcac49411b3b2164238857a/ip/lib/src/components/analog/pll.dart",
+          "timestamp": null,
+          "description": "Open source FPGA silicon. Contribute to Midstall/aegis development by creating an account on GitHub.",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "2026-04_media/aegis-91DBA",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": [],
+          "inlineEmojis": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "262706220073222144",
+          "name": "namibj",
+          "discriminator": "0000",
+          "nickname": "namibj",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1498170125138788422",
+        "channelId": "1498100763388284938",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498173500140290231",
+      "type": "Reply",
+      "timestamp": "2026-04-27T04:06:37.151+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "No I found that.\nBut that's not doing PLL.\nIt's _wrapping,_ sure, but it's not _doing_ PLL.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "319853768550121473",
+          "name": "thecomputerguy",
+          "discriminator": "0000",
+          "nickname": "The Computer Guy",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1498170898388095136",
+        "channelId": "1498100763388284938",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498173726364139540",
+      "type": "Reply",
+      "timestamp": "2026-04-27T04:07:31.087+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": ":SubaThink:",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "262706220073222144",
+          "name": "namibj",
+          "discriminator": "0000",
+          "nickname": "namibj",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1498173500140290231",
+        "channelId": "1498100763388284938",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": [
+        {
+          "id": "764249299650871327",
+          "name": "SubaThink",
+          "code": "SubaThink",
+          "isAnimated": false,
+          "imageUrl": "2026-04_media/764249299650871327-8EC80.png"
+        }
+      ]
+    },
+    {
+      "id": "1498174406768201768",
+      "type": "Default",
+      "timestamp": "2026-04-27T04:10:13.308+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "PLL is some sort of oscillating thingy that can be somehow controlled, and is somehow phase-compared to some kind of reference, and what makes it PLL is that these two things (the \"controllable oscillator\" and the \"oscillator [output] phase comparing to reference\") are wired into a control _loop._",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498174661538873404",
+      "type": "Default",
+      "timestamp": "2026-04-27T04:11:14.05+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "If correctly designed/configured, it then has to actually manage to _lock_ to deserve the title of \"Phase-**Locked** Loop\".",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498174804552056913",
+      "type": "Default",
+      "timestamp": "2026-04-27T04:11:48.147+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "(I don't want to keep you from finishing the FPGA into a functional state in time for the WS Run2 deadline.)",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498176316074364998",
+      "type": "Reply",
+      "timestamp": "2026-04-27T04:17:48.522+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yeah, I'm just wrapping the one from the PDK for simplicity",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "262706220073222144",
+          "name": "namibj",
+          "discriminator": "0000",
+          "nickname": "namibj",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1498174406768201768",
+        "channelId": "1498100763388284938",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498178400580403261",
+      "type": "Default",
+      "timestamp": "2026-04-27T04:26:05.507+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "....there is one in the PDK? (I tried and failed to find one, but maybe I searched wrong)",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498178959760953364",
+      "type": "Reply",
+      "timestamp": "2026-04-27T04:28:18.826+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "`gf180mcu_fd_pr__pll.sym` lol",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "262706220073222144",
+          "name": "namibj",
+          "discriminator": "0000",
+          "nickname": "namibj",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1498178400580403261",
+        "channelId": "1498100763388284938",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498179225218191541",
+      "type": "Default",
+      "timestamp": "2026-04-27T04:29:22.116+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "....that's a symbol, not an actual thing. It's just an abstract placeholder for a schematic.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498179657374367876",
+      "type": "Default",
+      "timestamp": "2026-04-27T04:31:05.15+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Oh",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498188906972184626",
+      "type": "Default",
+      "timestamp": "2026-04-27T05:07:50.426+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Leo Moser (mole99) - Dunno if you have any ideas about this?",
+      "author": {
+        "id": "169786952432746498",
+        "name": "mithro_",
+        "discriminator": "0000",
+        "nickname": "Tim 'mithro' Ansell",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "323371864074485771",
+          "name": "mole99",
+          "discriminator": "0000",
+          "nickname": "Leo Moser (mole99)",
+          "color": null,
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1423020172595298314",
+              "name": "Mod",
+              "color": null,
+              "position": 4
+            }
+          ],
+          "avatarUrl": "2026-04_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498208034319761570",
+      "type": "Default",
+      "timestamp": "2026-04-27T06:23:50.741+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The vias are indeed of a fixed size, so the only issues I can think of are that the manufacuring grid is not set correctly (everything is scaled by a factor of 5), or there is some other setup issue.\n\nI suggest checking the wafers.space [gf180mcu-project-template](https://github.com/wafer-space/gf180mcu-project-template) against your custom set up.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-04_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1498372713121579118",
+      "type": "Default",
+      "timestamp": "2026-04-27T17:18:13.227+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I've been checking what I have vs the template. I might've forgotten about PDN lol",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1499070581201440869",
+      "type": "Default",
+      "timestamp": "2026-04-29T15:31:17.943+00:00",
+      "timestampEdited": "2026-04-29T15:40:06.913+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hmm, 0 violations in OpenROAD's DRC but KLayout says like 3.5k",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1499072923909099723",
+      "type": "Default",
+      "timestamp": "2026-04-29T15:40:36.488+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Tim 'mithro' Ansell which DRC is more believable?",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "169786952432746498",
+          "name": "mithro_",
+          "discriminator": "0000",
+          "nickname": "Tim 'mithro' Ansell",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-04_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1499074212659466300",
+      "type": "Default",
+      "timestamp": "2026-04-29T15:45:43.75+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You need to pass KLayout DRC in order to tape out. OpenROAD only has an abstract view of the cells and routing.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-04_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1499074556583874571",
+      "type": "Default",
+      "timestamp": "2026-04-29T15:47:05.748+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Oh. Most of my KLayout DRC violations are on metal1, 2.2k.",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1499078869523763331",
+      "type": "Default",
+      "timestamp": "2026-04-29T16:04:14.033+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I don't think I'll be able to get the early bird deadline. Everything I try to do does not fix the DRC violations. I'm not sure what I am doing wrong and idk how to fix the violations.",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1499119206417957025",
+      "type": "Default",
+      "timestamp": "2026-04-29T18:44:31.098+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You should be able to buy a slot even if you don't have the design ready yet.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-04_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1499119265528287292",
+      "type": "Default",
+      "timestamp": "2026-04-29T18:44:45.191+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "As for the DRC violations, if you could share your current layout, I can take a quick look to see what's going on.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-04_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1499127150933053500",
+      "type": "Reply",
+      "timestamp": "2026-04-29T19:16:05.218+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Like the GDS file?",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "323371864074485771",
+          "name": "mole99",
+          "discriminator": "0000",
+          "nickname": "Leo Moser (mole99)",
+          "color": null,
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1423020172595298314",
+              "name": "Mod",
+              "color": null,
+              "position": 4
+            }
+          ],
+          "avatarUrl": "2026-04_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1499119265528287292",
+        "channelId": "1498100763388284938",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1499127338074509322",
+      "type": "Reply",
+      "timestamp": "2026-04-29T19:16:49.836+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Cool, hopefully I can do that soon.",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "323371864074485771",
+          "name": "mole99",
+          "discriminator": "0000",
+          "nickname": "Leo Moser (mole99)",
+          "color": null,
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1423020172595298314",
+              "name": "Mod",
+              "color": null,
+              "position": 4
+            }
+          ],
+          "avatarUrl": "2026-04_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1499119206417957025",
+        "channelId": "1498100763388284938",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1499131175229460530",
+      "type": "Reply",
+      "timestamp": "2026-04-29T19:32:04.685+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yes",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-04_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "319853768550121473",
+          "name": "thecomputerguy",
+          "discriminator": "0000",
+          "nickname": "The Computer Guy",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1499127150933053500",
+        "channelId": "1498100763388284938",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1499134726781272219",
+      "type": "Reply",
+      "timestamp": "2026-04-29T19:46:11.441+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Cool, here you go",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [
+        {
+          "id": "1499134726584406138",
+          "url": "https://media.githubusercontent.com/media/wafer-space/discord.wafer.space/master/large_media/wafer-space/%E2%84%B9%EF%B8%8F%20-%20Information/%E2%81%89%EF%B8%8F-questions/tons-of-drc-issues/2026-04/2026-04_media/luna_1-16CF7.gds",
+          "fileName": "luna_1.gds",
+          "fileSizeBytes": 269400498,
+          "originalUrl": "2026-04_media/luna_1-16CF7.gds"
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "323371864074485771",
+          "name": "mole99",
+          "discriminator": "0000",
+          "nickname": "Leo Moser (mole99)",
+          "color": null,
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1423020172595298314",
+              "name": "Mod",
+              "color": null,
+              "position": 4
+            }
+          ],
+          "avatarUrl": "2026-04_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1499131175229460530",
+        "channelId": "1498100763388284938",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1499169625039175820",
+      "type": "Default",
+      "timestamp": "2026-04-29T22:04:51.834+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It looks to me like all the metal layers have been removed from the standard cells and merged at the top level. This appears to be result in power shorts and very thin metal1 maybe due to resizing. See screenshot.\n\nI don't think that this will be easy to extract with open source tools.",
+      "author": {
+        "id": "738396032295108721",
+        "name": "bailey8889",
+        "discriminator": "0000",
+        "nickname": "bailey",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/0-EB806.png"
+      },
+      "attachments": [
+        {
+          "id": "1499169624825135115",
+          "url": "2026-04_media/2026-04-30_6.58.18-C280A.png",
+          "fileName": "2026-04-30_6.58.18.png",
+          "fileSizeBytes": 308432
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1499172534367813742",
+      "type": "Reply",
+      "timestamp": "2026-04-29T22:16:25.472+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Fun, lemme try something",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "738396032295108721",
+          "name": "bailey8889",
+          "discriminator": "0000",
+          "nickname": "bailey",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-04_media/0-EB806.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1499169625039175820",
+        "channelId": "1498100763388284938",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1499172766044131498",
+      "type": "Default",
+      "timestamp": "2026-04-29T22:17:20.708+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Gonna drop the `pkgs/aegis-tapeout/scripts/drc_repair.py` script",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1499242952768225320",
+      "type": "Reply",
+      "timestamp": "2026-04-30T02:56:14.527+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I have this now btw",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [
+        {
+          "id": "1499242952231485550",
+          "url": "https://media.githubusercontent.com/media/wafer-space/discord.wafer.space/master/large_media/wafer-space/%E2%84%B9%EF%B8%8F%20-%20Information/%E2%81%89%EF%B8%8F-questions/tons-of-drc-issues/2026-04/2026-04_media/luna_1-CC0DB.gds",
+          "fileName": "luna_1.gds",
+          "fileSizeBytes": 76839762,
+          "originalUrl": "2026-04_media/luna_1-CC0DB.gds"
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "738396032295108721",
+          "name": "bailey8889",
+          "discriminator": "0000",
+          "nickname": "bailey",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-04_media/0-EB806.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1499169625039175820",
+        "channelId": "1498100763388284938",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1499261902562525296",
+      "type": "Reply",
+      "timestamp": "2026-04-30T04:11:32.51+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Looks like the standard cell rows are missing filler cells. Can you confirm?",
+      "author": {
+        "id": "738396032295108721",
+        "name": "bailey8889",
+        "discriminator": "0000",
+        "nickname": "bailey",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/0-EB806.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "319853768550121473",
+          "name": "thecomputerguy",
+          "discriminator": "0000",
+          "nickname": "The Computer Guy",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1499242952768225320",
+        "channelId": "1498100763388284938",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1499262268196524043",
+      "type": "Reply",
+      "timestamp": "2026-04-30T04:12:59.684+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I think I see standard cells, what exactly are standard cell rows?",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "738396032295108721",
+          "name": "bailey8889",
+          "discriminator": "0000",
+          "nickname": "bailey",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-04_media/0-EB806.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1499261902562525296",
+        "channelId": "1498100763388284938",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1499262720787218503",
+      "type": "Default",
+      "timestamp": "2026-04-30T04:14:47.59+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Ah, sounds like I need to run `filler_placement`?",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\ud83d\udc4d",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "2026-04_media/1f44d-27259.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "738396032295108721",
+              "name": "bailey8889",
+              "discriminator": "0000",
+              "nickname": "bailey",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-04_media/0-EB806.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1499266134938222654",
+      "type": "Reply",
+      "timestamp": "2026-04-30T04:28:21.587+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Cool, I've added that in",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [
+        {
+          "id": "1499266134699016322",
+          "url": "https://media.githubusercontent.com/media/wafer-space/discord.wafer.space/master/large_media/wafer-space/%E2%84%B9%EF%B8%8F%20-%20Information/%E2%81%89%EF%B8%8F-questions/tons-of-drc-issues/2026-04/2026-04_media/luna_1-EDAF4.gds",
+          "fileName": "luna_1.gds",
+          "fileSizeBytes": 74908878,
+          "originalUrl": "2026-04_media/luna_1-EDAF4.gds"
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "738396032295108721",
+          "name": "bailey8889",
+          "discriminator": "0000",
+          "nickname": "bailey",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-04_media/0-EB806.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1499261902562525296",
+        "channelId": "1498100763388284938",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1499266295374544906",
+      "type": "Default",
+      "timestamp": "2026-04-30T04:28:59.838+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "KLayout is getting a little slow",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1499267401441742951",
+      "type": "Default",
+      "timestamp": "2026-04-30T04:33:23.545+00:00",
+      "timestampEdited": "2026-04-30T04:34:14.412+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Better, but still not seeing power grid connections to all the macros or cell rows.",
+      "author": {
+        "id": "738396032295108721",
+        "name": "bailey8889",
+        "discriminator": "0000",
+        "nickname": "bailey",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/0-EB806.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1499267615250579498",
+      "type": "Default",
+      "timestamp": "2026-04-30T04:34:14.521+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Weird, I did do the PDN stuff",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1499267748579250197",
+      "type": "Default",
+      "timestamp": "2026-04-30T04:34:46.309+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Are you using librelane or OpenROAD directly?",
+      "author": {
+        "id": "738396032295108721",
+        "name": "bailey8889",
+        "discriminator": "0000",
+        "nickname": "bailey",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/0-EB806.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1499267818406023178",
+      "type": "Default",
+      "timestamp": "2026-04-30T04:35:02.957+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "OpenROAD directly and orchestrated through Nix.",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1499267881194622986",
+      "type": "Default",
+      "timestamp": "2026-04-30T04:35:17.927+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The OpenROAD scripts are generated from Dart.",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1499268039579799582",
+      "type": "Default",
+      "timestamp": "2026-04-30T04:35:55.689+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Do I need to do `define_pdn_grid`?",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1499272276917616772",
+      "type": "Default",
+      "timestamp": "2026-04-30T04:52:45.949+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "```\naegis-top-pnr-luna_> [INFO PDN-0001] Inserting grid: macro_grid - io_fabric/lut_fabric/tile_325\naegis-top-pnr-luna_> [INFO PDN-0001] Inserting grid: macro_grid - io_fabric/lut_fabric/tile_326\naegis-top-pnr-luna_> [INFO PDN-0001] Inserting grid: macro_grid - io_fabric/lut_fabric/tile_327\naegis-top-pnr-luna_> [INFO PDN-0001] Inserting grid: macro_grid - io_fabric/lut_fabric/tile_328\naegis-top-pnr-luna_> [INFO PDN-0001] Inserting grid: macro_grid - io_fabric/lut_fabric/tile_329\naegis-top-pnr-luna_> [INFO PDN-0001] Inserting grid: macro_grid - io_fabric/lut_fabric/tile_33\naegis-top-pnr-luna_> [INFO PDN-0001] Inserting grid: macro_grid - io_fabric/lut_fabric/tile_330\naegis-top-pnr-luna_> [INFO PDN-0001] Inserting grid: macro_grid - io_fabric/lut_fabric/tile_331\n```\nThis seems promising",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1499273853401170030",
+      "type": "Default",
+      "timestamp": "2026-04-30T04:59:01.812+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "TBH, what you're are attempting is beyond my level of experience. \n\nWhat I've seen in the past, is that hard macros have their own power grid with the top metal layer one lower than the max. (metal4 in this case). Since metal 4 is a vertical layer, you should be able to have the power grid for the macros, connect directly to metal1 through a metal1-via-metal2-via2-metal3-via3-metal4 stack at the metal1 power rail for each cell row. How many metal4 power rails you use depends on the width of the macro. Since you need metal4 routing over the macros, you'll want to be careful where you place the power rails.\n\nSome of the macros currently have metal5, and while that may be doable, I suggest the top metal routing layer be limited to metal4.\n\nNext you need to design your top level power gird so that both power and ground horizontal metal5 power lines intersect with all the hard macros. The top power grid will be vertical metal4 and horizontal metal5. In this case, metal4 power rails are not generally routed over macros that already have metal4 power rails.\n\nAnother consideration is the power connections for the standard cell rows placed between the macros. Normally, the metal1 power rails in these standard cells is connected to metal4 power rails at the top level, but in your case, these rows are narrow and may not intersect with the power grid. You may want to consider setting these regions as no cell placement.\n\nAlso noticed that you are using fill cells and not fillcap cells. fillcap cells add capacitance between the power and ground lines for better stability.",
+      "author": {
+        "id": "738396032295108721",
+        "name": "bailey8889",
+        "discriminator": "0000",
+        "nickname": "bailey",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/0-EB806.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1499274045911334992",
+      "type": "Default",
+      "timestamp": "2026-04-30T04:59:47.71+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Alright. Thank you for the help though.",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\ud83d\udc4d",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "2026-04_media/1f44d-27259.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "738396032295108721",
+              "name": "bailey8889",
+              "discriminator": "0000",
+              "nickname": "bailey",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-04_media/0-EB806.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1499307985976037497",
+      "type": "Default",
+      "timestamp": "2026-04-30T07:14:39.652+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I can only repeat what bailey said. The power connections are missing, and decap cells would be better than fillcaps.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-04_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1499308004586295327",
+      "type": "Default",
+      "timestamp": "2026-04-30T07:14:44.089+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Independent of that, your layout is missing a padring and a sealring. This is your interface to the outside world.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-04_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1499308036181852180",
+      "type": "Default",
+      "timestamp": "2026-04-30T07:14:51.622+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-04_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [
+        {
+          "id": "1499308035938451476",
+          "url": "2026-04_media/Bildschirmfoto_vom_2026-04-30_09-10-29-2847F.png",
+          "fileName": "Bildschirmfoto_vom_2026-04-30_09-10-29.png",
+          "fileSizeBytes": 122274
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1499308055945543824",
+      "type": "Default",
+      "timestamp": "2026-04-30T07:14:56.334+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Here is your layout alongside the gf180mcu project template.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-04_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1499308094658838608",
+      "type": "Default",
+      "timestamp": "2026-04-30T07:15:05.564+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I would recommend implementing the gf180mcu project template and comparing the output with your setup.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-04_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1499484127995625615",
+      "type": "Reply",
+      "timestamp": "2026-04-30T18:54:35.182+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Cool, will see what that can do for me. Thanks. I'm not really familiar with LibreLane or any of this stuff so this has been quite new for me. Hopefully I can integrate some of this trial and error into my asix and harbor repos which help out for ASIC/FPGA design/dev.",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\ud83d\udc4d",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "2026-04_media/1f44d-27259.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "738396032295108721",
+              "name": "bailey8889",
+              "discriminator": "0000",
+              "nickname": "bailey",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-04_media/0-EB806.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "323371864074485771",
+          "name": "mole99",
+          "discriminator": "0000",
+          "nickname": "Leo Moser (mole99)",
+          "color": null,
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1423020172595298314",
+              "name": "Mod",
+              "color": null,
+              "position": 4
+            }
+          ],
+          "avatarUrl": "2026-04_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1499308004586295327",
+        "channelId": "1498100763388284938",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    }
+  ],
+  "messageCount": 121
+}

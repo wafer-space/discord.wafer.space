@@ -1,0 +1,322 @@
+{
+  "guild": {
+    "id": "1361349522684510449",
+    "name": "wafer.space Community",
+    "iconUrl": "2026-04_media/fb143eaa45770cbb40493d09b625e98b-09FD1.png"
+  },
+  "channel": {
+    "id": "1490920503991337082",
+    "type": "GuildPublicThread",
+    "categoryId": "1361349523724570941",
+    "category": "general",
+    "name": "speaking of multi-threading, last",
+    "topic": null
+  },
+  "dateRange": {
+    "after": "2026-03-31T23:59:59.999+00:00",
+    "before": "2026-05-01T00:00:00+00:00"
+  },
+  "exportedAt": "2026-07-09T04:09:45.1158065+00:00",
+  "messages": [
+    {
+      "id": "1490971812601794692",
+      "type": "21",
+      "timestamp": "2026-04-07T07:09:41.041+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-04_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "384390069412429834",
+          "name": "polyfractal",
+          "discriminator": "0000",
+          "nickname": "BreakingTaps",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-04_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1490920503991337082",
+        "channelId": "1361349523724570941",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1490971821263294586",
+      "type": "Default",
+      "timestamp": "2026-04-07T07:09:43.106+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Would you be willing to open an issue, or perhaps even contribute to LibreLane?\n\nIf enabling certain options would provide some speed improvements, that would definitely be appreciated. At first glance, I didn't see anything obvious in [Gate Resizer](https://openroad.readthedocs.io/en/latest/main/src/rsz/README.html).",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-04_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1491096947992559652",
+      "type": "Default",
+      "timestamp": "2026-04-07T15:26:55.643+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "ahhh sorry, that's what I get for responding without looking at my code changes.\n\nI meant OpenSTA not resizer, my bad! I can disentangle the change from the rest of my stuff and send a PR, was a minor tweak to openroad.py in the OpenSTAStep.\n\n(also added a blanket thread parameter since it looked like some other steps could take threads but I don't think that had much effect and is probably not very principled. Might have been redundant too)",
+      "author": {
+        "id": "384390069412429834",
+        "name": "polyfractal",
+        "discriminator": "0000",
+        "nickname": "BreakingTaps",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1491134544697364631",
+      "type": "Default",
+      "timestamp": "2026-04-07T17:56:19.396+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Right! Yes, OpenSTA added native multithreading in its recent 3.0 release afaik.\n\nDonn added [a compatibility layer](https://github.com/librelane/librelane/pull/881) to LibreLane, so we can continue using the same scripts for the LibreLane 3.0 release.\n\nCurrently, LibreLane spawns an OpenSTA process for each corner using the [MultiCornerSTA](https://github.com/librelane/librelane/blob/b1095babdafd1d0ceb8182b39a2485989903a81c/librelane/steps/openroad.py#L710) class.\nThis was great at the time and definitely better than running each corner sequentially ^^\nHowever, if you only have three corners, like on gf180mcu, there isn't much to be gained.\n\nDoing multithreading directly in OpenSTA is a major improvement, as many more threads can probably be used in parallel this way. It also means that we only need to keep the database in memory once, reducing the memory footprint and (likely) increasing cache hits. So running OpenSTA multithreaded is definitely desired :)",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-04_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1491134768006566139",
+      "type": "Default",
+      "timestamp": "2026-04-07T17:57:12.637+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "How did you modify LibreLane to run OpenSTA multithreaded? You should probably make sure that OpenSTA is only spawned once. Otherwise, you could end up with more software threads than hardware threads.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-04_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1491134878035476520",
+      "type": "Default",
+      "timestamp": "2026-04-07T17:57:38.87+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "By default, each step should try to use up to `--jobs` threads if possible. This is done [here](https://github.com/librelane/librelane/blob/b1095babdafd1d0ceb8182b39a2485989903a81c/librelane/steps/klayout.py#L512), for example. As you can see, each step should also have local overrides e.g. in case running DRC with all available threads exhausts the system memory.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-04_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1491478334406791248",
+      "type": "Default",
+      "timestamp": "2026-04-08T16:42:25.25+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "ahh good to know! I was only running small tests, will rerun with my full design to see if I accidentally blow up the machine \uD83D\uDE42\n\n> How did you modify LibreLane to run OpenSTA multithreaded?\n\nIIRC I was just passing in `-threads` when invoking OpenSTA process. It was a very small / targeted change",
+      "author": {
+        "id": "384390069412429834",
+        "name": "polyfractal",
+        "discriminator": "0000",
+        "nickname": "BreakingTaps",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83D\uDE42",
+          "code": "slight_smile",
+          "isAnimated": false,
+          "imageUrl": "2026-04_media/1f642-83E8A.svg"
+        }
+      ]
+    },
+    {
+      "id": "1491478409988018336",
+      "type": "Default",
+      "timestamp": "2026-04-08T16:42:43.27+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "will doublecheck when i get home",
+      "author": {
+        "id": "384390069412429834",
+        "name": "polyfractal",
+        "discriminator": "0000",
+        "nickname": "BreakingTaps",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1491699940169220118",
+      "type": "Default",
+      "timestamp": "2026-04-09T07:23:00.181+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Haha, it won't blow up the machine, but it could potentially slow things down because of all the context switching \uD83D\uDE01\n\nGood to know that's all that's needed. So, we just need to disable the explicit multiprocessing in LibreLane and enable `-threads`.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-04_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83D\uDE01",
+          "code": "grin",
+          "isAnimated": false,
+          "imageUrl": "2026-04_media/1f601-4E9BD.svg"
+        }
+      ]
+    }
+  ],
+  "messageCount": 9
+}

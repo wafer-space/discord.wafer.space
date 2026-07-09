@@ -1,0 +1,149 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 📐 - Designing / 📝-project-template / Only thing I can think of is the nix
+After: 2026-05-31 11:59 p.m.
+Before: 2026-07-01 12:00 a.m.
+==============================================================
+
+[2026-06-06 8:49 a.m.] mole99
+
+
+
+[2026-06-06 8:49 a.m.] mole99
+Your flake.nix and flake.lock matches the ones in the repo? Does a `nix flake update` change anything in flake.lock?
+
+
+[2026-06-06 8:52 a.m.] rebelmike
+Weirdly the XOR stage ran fine on `librelane --smoke-test`
+
+
+[2026-06-06 8:52 a.m.] rebelmike
+`nix flake update` didn't change anything - flake.lock is still clean
+
+
+[2026-06-06 8:54 a.m.] mole99
+That's very strange. Are you running on Linux, macOS, or WSL?
+
+
+[2026-06-06 8:54 a.m.] mole99
+Can you share a reproducible with me? I can try it locally on my end.
+
+
+[2026-06-06 8:59 a.m.] rebelmike
+Linux, Ubuntu 24.04.  I've just tried wiping the pdk as that's the only other thing I can think of, so will see if that works
+
+{Reactions}
+🤞
+
+[2026-06-06 9:04 a.m.] rebelmike
+How do I create a reproducible?  Or is one already hiding in the run directory somewhere?
+
+
+[2026-06-06 9:11 a.m.] bailey8889
+@RebelMike can you try to open `/home/mdb36/wafer-space/ws02-tinyQV/librelane/runs/RUN_2026-06-06_09-45-39/56-magic-streamout/chip_top.magic.gds` in klayout?
+
+
+[2026-06-06 9:12 a.m.] bailey8889
+If that doesn't work, can you try in magic?
+
+
+[2026-06-06 9:16 a.m.] rebelmike
+Ah no - the chip_top.magic.gds is zero size - that'll do it 😄
+
+
+[2026-06-06 9:19 a.m.] bailey8889
+Is the klayout data ok? Can you figure out why the magic gds file size is zero?
+
+
+[2026-06-06 9:20 a.m.] rebelmike
+```
+File /home/mdb36/wafer-space/ws02-tinyQV/gf180mcu/gf180mcuD/libs.ref/gf180mcu_ocd_ip_sram/mag/pmos_5p04310591302058_3v512x8m81.mag couldn't be read
+Failure to read entire subtree of the cell.
+Failed on cell pmos_5p04310591302058_3v512x8m81.
+```
+So maybe redownloading the pdk will have fixed it?  That file is there now and looks plausible.  The design takes a while to route so it's still going
+
+
+[2026-06-06 9:30 a.m.] rebelmike
+No, it's failed in the exact same way.  That is very weird
+
+
+[2026-06-06 9:38 a.m.] rebelmike
+I have no idea why this would be different on github to locally.  I am patching the pdk with a version from the latest build artfiact in Tholin's repo, but that should be unrelated - and is done the same way on github as locally.
+
+
+[2026-06-06 10:25 a.m.] mole99
+You can try this PR: https://github.com/wafer-space/gf180mcu-project-template/pull/61
+It updates the PDK to include Tholin's latest SCL updates.
+
+{Embed}
+https://github.com/wafer-space/gf180mcu-project-template/pull/61
+Update PDK by mole99 · Pull Request #61 · wafer-space/gf180mcu-pr...
+
+
+[2026-06-06 11:05 a.m.] rebelmike
+Thanks, I’m out for the day but will try this this evening. I’ll also try building the vanilla project template as logically that should also show the issue
+
+{Reactions}
+👍
+
+[2026-06-06 8:15 p.m.] rebelmike
+I've upgraded to the new project template and got rid of my hacky update of the pdk - thanks!  I've verified that the vanilla project template builds ok - it does.  But on two different machines here the magic streamout fails at that point.  This is incredibly strange because the build does work on github!  My next attempt is to blow away the nix cache, clone a clean copy of my project and try that but I'm very much grasping at straws.
+
+
+[2026-06-06 9:11 p.m.] rebelmike
+Well unsurprisingly that didn't work.  It must be an environment thing but I can't work out what.  I'm going to see if I can get github to store the full logs from the run
+
+
+[2026-06-06 9:17 p.m.] mole99
+Now that you are mentioning the environment, magic did have issues with the max open file descriptor limit in the past. Maybe you can try increasing that?
+
+{Reactions}
+👍
+
+[2026-06-06 9:19 p.m.] mole99
+If that's not it, I'll send you the instructions to create the reproducible tomorrow and will give it a try on my machine.
+
+
+[2026-06-06 9:35 p.m.] rebelmike
+I feel like that could be it!  Running now 🙂
+
+
+[2026-06-06 10:07 p.m.] rebelmike
+Increasing max open file descriptors to 4k worked 🎉   Thank you!
+
+
+[2026-06-06 10:07 p.m.] rebelmike
+(Failed at the default of 1024)
+
+
+[2026-06-07 7:51 a.m.] mole99
+This is great to hear! 🙌
+
+
+[2026-06-07 7:52 a.m.] mole99
+I remember now that there was a solution to the problem that I never got around to implementing 😅
+Magic keeps the files open to "lock" them. Disabling this behavior using `locking disable` should solve the issue once and for all.
+
+I opened a PR here: https://github.com/librelane/librelane/pull/959
+Maybe you could give this a try with the default of 1024 descriptors.
+
+Simply edit `flake.nix` to point to the LibreLane branch you want to use: https://github.com/wafer-space/gf180mcu-project-template/blob/7cbd17465ca1446b4daf93f543f899fb1b3489c3/flake.nix#L12
+And update `flake.lock` by running `nix flake update`.
+
+
+[2026-06-07 8:09 a.m.] rebelmike
+Thanks, I'll give that a try
+
+
+[2026-06-07 8:46 a.m.] rebelmike
+Looks like that worked 🙂
+
+
+[2026-06-07 8:54 a.m.] mole99
+Thanks for testing! I'll get this merged asap.
+
+
+==============================================================
+Exported 29 message(s)
+==============================================================

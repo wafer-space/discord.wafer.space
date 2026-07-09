@@ -1,0 +1,63 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"325334453213986816","were491.","2026-06-02T04:15:09.2590000+00:00","*Insert obligatory ""Sorry if this was really obvious..."" here.*
+
+When placing mimcaps in layout, we have the option for mimcap option MIM-A or MIM-B, and also the option to choose which layers we place between.
+
+[This post](https://discord.com/channels/1361349522684510449/1444137681712971898/1444236820249317426) seems to suggest that we should use MIM-B between M4-M5 (on top of M4).
+
+* Is MIM-B with M4-M5 the only MIM configuration we're allowed to use? What others can we use, if any?
+
+The docs page [referenced](https://gf180mcu-pdk.readthedocs.io/en/latest/analog/layout/inter_specs/inter_specs_3_43.html) in the above message suggests there are two possibilities for the SiN thickness, which lead to different capacitances.
+
+* What is the SiN thickness used in waferspace gf180mcu?
+
+Thanks.","",""
+"596068704471482370","246tnt","2026-06-02T05:28:24.2340000+00:00","Yes, MIM-B is what you can use.","",""
+"596068704471482370","246tnt","2026-06-02T05:28:36.5650000+00:00","1.5 fF / um^2 is the config used","","❤️ (1)"
+"596068704471482370","246tnt","2026-06-02T05:31:57.2650000+00:00","This is for a full wafer.space slot right ? Not for tinytapeout ?","","✅ (1)"
+"323371864074485771","mole99","2026-06-02T07:31:11.1050000+00:00","Stackup can be found here: https://gf180mcu-pdk.readthedocs.io/en/latest/analog/layout/inter_specs/inter_specs_3_43.html
+(Sorry, already linked above).","","❤️ (1)"
+"325334453213986816","were491.","2026-06-02T21:39:33.6790000+00:00","it's half height on wafer.space. it's not tinytapeout
+
+tbqh, i have a hard time finding the specific options chosen by wafer.space for gf180mcu, is there a more organized doc anywhere that lists all details of the specific configuration?","",""
+"596068704471482370","246tnt","2026-06-02T21:47:34.2090000+00:00","Like what ?","",""
+"596068704471482370","246tnt","2026-06-02T21:48:30.5910000+00:00","The PDK itself `gf180mcuD` variant will show most details when looking in the tech files.","",""
+"325334453213986816","were491.","2026-06-02T23:21:58.3940000+00:00","does that mention (for examples) which mimcap config is used and that the ppolyf_u_high_Rs is 1k? i could just have not read them properly","",""
+"323371864074485771","mole99","2026-06-03T06:23:35.5880000+00:00","For now, the best way to get that information is to read the magic techfile for gf180mcuD.
+
+> **Note that there are multiple mutually exclusive process options for the
+>  high sheet rho resistor and MiM capacitor.  This tech file assumes the
+>  options 1kOhm/sq for the resistor and 2fF/um for the MiM capacitor.
+
+However, this is a surprise to me, since I would have expected 1.5fF/um2 or 1.0fF/um2.
+
+The device is called cap_mim_2f0_m4m5_noshield, which would also suggest 2fF, but I don't even see that option the in the stackup?
+
+The only place I can find 2.0fF in the documentation is on this page, which shows strange model names for the MIM caps: https://gf180mcu-pdk.readthedocs.io/en/latest/analog/model_parameters/LV/LV_1_4_6.html
+It seems to incorrectly use the model names from the MOSCAP models: https://gf180mcu-pdk.readthedocs.io/en/latest/analog/model_parameters/LV/LV_1_4_5.html
+
+@Tim Edwards do you have any idea what's going on here?","","👍 (1)"
+"596068704471482370","246tnt","2026-06-03T06:38:08.3770000+00:00","@Leo Moser (mole99) Interestingly I was seeing that in the E-Test results.  The test result is named ""MIM15_A"" suggesting 1.5fF/um^2  but then the spec is 1.7 fF/um^2 minumum and 2.3 fF/um^2 maximum and we hit 1.92 fF/um^2 on run 1.","",""
+"323371864074485771","mole99","2026-06-03T06:54:33.1300000+00:00","That is indeed strange. I would also have expected ""B"" in the name, not ""A"".","",""
+"596068704471482370","246tnt","2026-06-03T07:31:13.6960000+00:00","@Leo Moser (mole99) Looking at https://mithro-gf180mcu-pdk.readthedocs.io/en/latest/analog/spice/elec_specs/elec_specs_6_4.html","",""
+"596068704471482370","246tnt","2026-06-03T07:36:51.6940000+00:00","I think there are two orthogonal options. Where the cap is in the metal and what thickness of dielecric.","",""
+"596068704471482370","246tnt","2026-06-03T07:38:10.2480000+00:00","So the ""A"" in tha test might refer to option `a` on that page which is indeed 1.5 f/F.
+Now why doesn't that match the option we think we have and the min/max value ... I'm starting to think the labels have been cut or only reflect the first option or somethign which would also explain why the label mention 9K top metal while we should have 11 K one.","",""
+"1365118310701600900","rtimothyedwards_19428","2026-06-03T13:41:03.6700000+00:00","The choice of MiM capacitance and the choice of poly high sheet rho resistance is entirely by process option, and there is *no* indication in the way of layer ID markers to indicate which option is which, or to prevent the end user from designing to the wrong option and then submitting the design.  It is entirely up to everyone involved to be on the same page, which is honestly a bit scary.  This is why I have in the magic tech file the comment about ""this tech file assumes the options. . ."".  There is literally no other way to convey that information.  The only other place it's decided is when Wafer Space submits the form to GF.
+
+I expect that the E-test structures are just named the same thing without regard to the actual options chosen, which probably works better with the automation doing the testing.
+
+The actual options chosen are a bit arbitrary;  I made those choices in deciding what options Efabless would use for the Google/GF shuttle run.  My intent was to try to get the same MiM cap density as the double MiM structure on sky130.  In retrospect, the sky130 res_xhigh (2kohms/square) is used much more often than the res_high and would probably have been a better choice.","",""
+"325334453213986816","were491.","2026-06-03T21:06:19.9850000+00:00","Thanks, I totally missed that scrolling through/grepping for things I thought would match. Based on the defined subckts from `gf180mcuD/libs.tech/ngspice/sm141064_mim.ngspice` (the path as in IIC-OSIC-TOOLS), it seems the documentation is incorrect here. ('documentation' referring to the stackup page: https://gf180mcu-pdk.readthedocs.io/en/latest/analog/layout/inter_specs/inter_specs_3_43.html)
+
+So, I assume in layout (KLayout) I can use cap_mim with MIM-B and M4-M5 options selected, but expect the final capacitance to be ~2.0fF/um^2 for simulation purposes. Is this correct?","",""
+"262706220073222144","namibj","2026-06-03T23:26:26.2890000+00:00","Once I have PCells for the R-4R (or possibly closer to R-3R; it will depend on yield target and demands on output impedance/how-buffered the output is; e.g. current-mode feeds a virtual ground instead of directly the load) DAC and some replica-bias based MCML logic gates, I'd happily provide comparisons on performance and area impact of instead instantiating them with different sheet resistor option; ofc. assuming them to be re-tuned to make the most of the different option.
+
+I.e., comparing 1000 Ω/□ vs. 2000 Ω/□ vs. 3000 Ω/□ noting the 3k option has +-25% while the two other have just +-20% (at leas tso listed in the PDK).
+
+Regarding the lower-density MIM-cap options, I don't think they are necessarily worth it for the rather low-voltage optimized things that seem to mostly be done on wafer.space; the 1.5fF/um^2 option is rated to 10V and the 1fF/um^2 even to 20V, vs. the 2fF/um^2's 6.6V and the just 10V LD[N,P]MOS devices we have and the somehwat limiting 10~14V breakdown voltage of the Nwell/Psubstrate junction.","",""
+"169786952432746498","mithro_","2026-06-06T06:53:55.8350000+00:00","I wonder how we can make this clearer and where to document this?","",""
+"596068704471482370","246tnt","2026-06-06T06:58:43.5320000+00:00","Some ""process options"" details on https://wafer.space/technology.html to specify :
+- `gf180mcuD` variant
+- Link to the stackup page
+- Specify MIM option is 2fF/um^2 and High Res is 1k/sq","","👍 (2)"

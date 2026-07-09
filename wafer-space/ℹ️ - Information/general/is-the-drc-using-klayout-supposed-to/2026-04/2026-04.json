@@ -1,0 +1,164 @@
+{
+  "guild": {
+    "id": "1361349522684510449",
+    "name": "wafer.space Community",
+    "iconUrl": "2026-04_media/fb143eaa45770cbb40493d09b625e98b-09FD1.png"
+  },
+  "channel": {
+    "id": "1497441633611026463",
+    "type": "GuildPublicThread",
+    "categoryId": "1361349523724570941",
+    "category": "general",
+    "name": "Is the DRC using KLayout supposed to",
+    "topic": null
+  },
+  "dateRange": {
+    "after": "2026-03-31T23:59:59.999+00:00",
+    "before": "2026-05-01T00:00:00+00:00"
+  },
+  "exportedAt": "2026-07-09T04:22:27.225315+00:00",
+  "messages": [
+    {
+      "id": "1497511249108275200",
+      "type": "21",
+      "timestamp": "2026-04-25T08:15:04.201+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-04_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "319853768550121473",
+          "name": "thecomputerguy",
+          "discriminator": "0000",
+          "nickname": "The Computer Guy",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1497441633611026463",
+        "channelId": "1361349523724570941",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1497511258822541332",
+      "type": "Default",
+      "timestamp": "2026-04-25T08:15:06.517+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yes, KLayout DRC takes a while to run. KLayout can make use of multiple threads, but only in certain situations.\n\nThere is a `run_drc.py` script (not sure if its still included in the ws PDK fork) that splits the DRC deck into individual rule decks and runs them in separate processes. This is a naive implementation and has many drawbacks.\n\nWe are currently working on a substantially better implementation that uses only KLayout and Ruby scripting. @Clyde Laforge is spearheading this work.\nIt should be ready to try in ~1/2 weeks, initially with just one worker as before, but with the option to increase the number of workers that run in parallel.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-04_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1401841055975870476",
+          "name": "scafir",
+          "discriminator": "0000",
+          "nickname": "Clyde Laforge",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-04_media/e9fd582c6cd4273d01cbf5dfd4bb3455-27807.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1497659452726313021",
+      "type": "Default",
+      "timestamp": "2026-04-25T18:03:58.697+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Great, it would be nice if it worked better with 128 cores lol",
+      "author": {
+        "id": "319853768550121473",
+        "name": "thecomputerguy",
+        "discriminator": "0000",
+        "nickname": "The Computer Guy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/cb1033d824ad5ed651e8f2b5bbdba391-BCBFE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1499494684651819191",
+      "type": "Default",
+      "timestamp": "2026-04-30T19:36:32.085+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hey, so the merge request is pretty much ready, and it would be nice to have people try out the new DRC approach. It only work with cli for now. To try it out, clone my repo and branch `git clone -b drc_structure git@github.com:Scafir/globalfoundries-pdk-libs-gf180mcu_fd_pv.git` and you can run it with `klayout -b -r globalfoundries-pdk-libs-gf180mcu_fd_pv/klayout/drc/gf180mcu_drc.rb -rd help=true`\nYou probably want `-rd workers=<absurd_amount> -rd threads=1` . I would be very interested to hear about total runtime and amount of RAM usage (compared to whatever method you are currently using `run_drc.py` , gui, ...).",
+      "author": {
+        "id": "1401841055975870476",
+        "name": "scafir",
+        "discriminator": "0000",
+        "nickname": "Clyde Laforge",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-04_media/e9fd582c6cd4273d01cbf5dfd4bb3455-27807.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    }
+  ],
+  "messageCount": 4
+}

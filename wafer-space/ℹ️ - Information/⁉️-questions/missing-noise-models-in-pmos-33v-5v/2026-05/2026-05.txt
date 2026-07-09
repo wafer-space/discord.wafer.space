@@ -1,0 +1,73 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / ⁉️-questions / Missing noise models in PMOS (3.3V & 5V/6V)
+After: 2026-04-30 11:59 p.m.
+Before: 2026-06-01 12:00 a.m.
+==============================================================
+
+[2026-05-05 10:07 p.m.] hipstair
+I'm running Gm/Id sweeps for analog design, specifically using the 3.3V transistors (and possibly 5V/6V as well), and not getting any noise for PMOS models (onoise_total id and 1overf both return 0). This is not the case for the NMOS models. Has anyone else ran into this before?
+
+
+[2026-05-06 10:30 a.m.] mithro_
+@Tim Edwards - Any ideas?
+
+
+[2026-05-06 1:18 p.m.] rtimothyedwards_19428
+No, not really.  That's the first time I've heard of it.
+
+
+[2026-05-06 11:54 p.m.] mithro_
+@Tim Edwards - Any idea of other people who might have done stuff using the noise models?
+
+
+[2026-05-07 12:12 a.m.] rtimothyedwards_19428
+We did essentially zero analog stuff for the two MPW runs at Efabless.  The one thing I can think of is the last Chipathon, which was run on GF180MCU and had some analog projects.  For that, the best people to ask would be Mehdi Saligane, Mitch Bailey, and Peter Kinget.
+
+
+[2026-05-07 2:14 a.m.] bailey8889
+I asked on Element.
+
+
+[2026-05-07 1:55 p.m.] christoph_36502
+For me it does work just fine using ngspice.
+
+
+[2026-05-08 1:36 a.m.] namibj
+@Brandon Hippe if you can share a testbench of that sort with @Christoph , he can probably verify if it works for him. 
+Also, @Christoph might be so kind as to share a testbench + PDK revision hash + ngspice version + ngspice user/system config that "works for him".
+
+
+[2026-05-08 4:39 p.m.] hipstair
+
+
+{Attachments}
+2026-05_media/sweep-C3381.spice
+
+
+[2026-05-08 4:40 p.m.] hipstair
+This is the spice file I'm running
+
+
+[2026-05-11 11:53 a.m.] christoph_36502
+Try to reduce it first to a simple simulation without all the loops. Also your save statements inside the control block should not be prefixed by "." and be stated before the simulation command.
+
+
+[2026-05-11 11:56 a.m.] christoph_36502
+Here is what my working control section looks like: 
+
+``` 
+.control
+save all
+noise v(out,vss) vin dec 10 100 1e6 1
+print inoise_total
+print all
+setplot noise1
+gnuplot p1 inoise_spectrum
+.endc
+```
+
+
+==============================================================
+Exported 12 message(s)
+==============================================================

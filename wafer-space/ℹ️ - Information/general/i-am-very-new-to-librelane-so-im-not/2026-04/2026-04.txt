@@ -1,0 +1,105 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / general / I am very new to LibreLane so I'm not
+After: 2026-03-31 11:59 p.m.
+Before: 2026-05-01 12:00 a.m.
+==============================================================
+
+[2026-04-16 10:55 a.m.] mole99
+
+
+
+[2026-04-16 10:55 a.m.] mole99
+Hi! You need to look in `06-yosys-synthesis` for the Yosys log. The checks are running in a later step.
+
+
+[2026-04-16 10:55 a.m.] ravenslofty
+`06-yosys-synthesis/yosys-synthesis.log`
+
+{Reactions}
+👍
+
+[2026-04-16 10:56 a.m.] ravenslofty
+if it begins with "yosys" it's a yosys pass, if it begins with "checker" it's not a yosys pass
+
+
+[2026-04-16 10:58 a.m.] dorythecat_v2
+OHHH alt thx I'll look into it!!
+
+
+[2026-04-16 11:00 a.m.] ravenslofty
+(Leo's a LibreLane maintainer, and I'm a Yosys dev, so we'd both be happy to help with issues you might have)
+
+
+[2026-04-16 11:02 a.m.] dorythecat_v2
+Oh that's so awesome! Very glad to have you helping! <3
+
+
+[2026-04-16 11:03 a.m.] dorythecat_v2
+I'll let you both know what the issues were and if I managed to fix them or need a hand with em lol
+
+
+[2026-04-16 11:57 a.m.] dorythecat_v2
+This is the log. It seems to complain about the bidir configuration???
+
+{Attachments}
+2026-04_media/yosys-synthesis-8C67E.log
+
+
+[2026-04-16 11:59 a.m.] dorythecat_v2
+Any clues on waht the fix might be? It says multiple conflicting drivers :(
+
+
+[2026-04-16 12:07 p.m.] dorythecat_v2
+According to this it's becaue I'm using the register in multiple places? huuuuh
+
+
+[2026-04-16 2:42 p.m.] ravenslofty
+no, it's not that you're *using* it in multiple places, it's that you're *driving* it in multiple places
+
+
+[2026-04-16 2:43 p.m.] dorythecat_v2
+fair
+
+
+[2026-04-16 2:43 p.m.] ravenslofty
+librelane should lint your code with Verilator - `01-verilator-lint`; what does it have to say
+
+
+[2026-04-16 2:44 p.m.] dorythecat_v2
+Turned up being that I was doing:
+```
+...
+s0 <= bidir_in;
+s1 <= bidir_in;
+...
+```
+
+
+[2026-04-16 2:44 p.m.] ravenslofty
+that shouldn't cause issues.
+
+
+[2026-04-16 2:44 p.m.] dorythecat_v2
+Upon removing it the issue stopped showing up
+
+
+[2026-04-16 2:45 p.m.] dorythecat_v2
+Rn I'm just testing my workflow but if this comes back to bite my ass I will lyk
+
+
+[2026-04-16 2:45 p.m.] dorythecat_v2
+-# I just want to make sure I can generate the silicon and goddamit is it not wanting to 😭
+
+
+[2026-04-17 5:20 p.m.] dorythecat_v2
+@Lofty mind if I share my code with you? I updated it and it is back to causing "multiple driver" issues xd
+
+
+[2026-04-17 5:20 p.m.] ravenslofty
+Sure.
+
+
+==============================================================
+Exported 21 message(s)
+==============================================================

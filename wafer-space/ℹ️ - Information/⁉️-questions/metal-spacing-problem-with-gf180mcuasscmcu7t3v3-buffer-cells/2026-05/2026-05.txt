@@ -1,0 +1,76 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / ⁉️-questions / Metal spacing problem with gf180mcu_as_sc_mcu7t3v3 buffer cells
+After: 2026-04-30 11:59 p.m.
+Before: 2026-06-01 12:00 a.m.
+==============================================================
+
+[2026-05-20 10:16 p.m.] ethan21329
+Hello, is anyone else running into metal spacing errors with the gf180mcu_as_sc_mcu7t3v3 buffer cells? I submitted an issue on their github here: https://github.com/AvalonSemiconductors/gf180mcu_as_sc_mcu7t3v3/issues/1
+ My current workaround is to exclude those cells.
+
+{Embed}
+https://github.com/AvalonSemiconductors/gf180mcu_as_sc_mcu7t3v3/issues/1
+Spacing problem on parameter of buffer cells · Issue #1 · AvalonS...
+I am trying to run librelane using the gf180mcu_as_sc_mcu7t3v3 standard library and I'm constantly getting metal spacing errors on some buffer cells with VDD/VSS straps. I am currently getting ...
+2026-05_media/1-A1A31
+
+{Reactions}
+👍
+
+[2026-05-20 10:27 p.m.] namibj
+Could you try to manually edit the cell to give minimum gap there?
+Looking at it it should allow for enough space to shift the pin area over towards teh center of the cell.
+
+IMO this feels like blame should be not with the shapes in the cell but rather the routing choices above that choose this violation; perhaps the straps need a larger keepout than configured and it might not have been noticed earlier because it might not have hit this with other cells before.
+
+
+[2026-05-20 10:34 p.m.] ethan21329
+I wasn't aware that I could manually edit the cell. This is for my chip design class so I'll ask my professor about it. Thanks!
+
+
+[2026-05-20 10:59 p.m.] namibj
+Oh it's not going to be hard, it might be documented in the repo actually how to build it from whatever authoritative design file version it's defined from.
+
+
+[2026-05-20 11:01 p.m.] namibj
+I mean you could fix these few DRCs manually easily in KLayout if you need them to be gone for tapeout and won't re-synthesize the design. Just "select as new top" in the cell hierarchy on the offending cell and mangle it a bit; then adjust the routing artifacts that came from it to make them also no longer offend DRC.
+
+That's not the proper way because it's manual work done after the authomated synthesis, but it's probably the easiest way for a one-off if you can't get anywhere within half an hour of messing with the repo to try and fix it before synthesis.
+
+
+[2026-05-20 11:18 p.m.] mguthaus
+Can you specify keep-out regions for straps?
+
+
+[2026-05-20 11:20 p.m.] mguthaus
+It would probably be better to get a fix upstreamed for others though. Yes, this would be a hack workaround. So is disabling the cell but that would be at the expense of less flexibility in the buffer library.
+
+
+[2026-05-20 11:51 p.m.] namibj
+Oh sure they should be fixed upstream; but I'd rather this be manually edited once to at least have _a_ submission for the tapeout slot filed that isn't expected to be buggy by best understanding at the time of filing, than to risk something happeneing like idk even jst one's computer releasing magic smoke and ending up without any expected-functional submission filed.
+
+
+[2026-05-20 11:52 p.m.] namibj
+Given the offending metal appears to not be itself part of the cell, I expect the keepout/distance-violation bug to be in whatever routing or strap placement code messed up to do this.
+
+
+[2026-05-20 11:55 p.m.] mguthaus
+It is a pin accessibility problem with the library. Yes, the offending metal isn't part of the cell, but the router cannot access the pin with a nearby blockage (that is legal at that location).
+
+
+[2026-05-20 11:57 p.m.] namibj
+did you look at the shown layout? It looks to me that the router choose to put the via left-aligned instead of right-aligned in the m1 contact area.
+
+
+[2026-05-21 1:25 a.m.] mithro_
+@Tholin - FYI
+
+
+[2026-05-21 2:59 a.m.] mguthaus
+I did. Typically any pin that causes a violation to adjacent shapes is a problem in many tools. Usually this is solved by having "on grid" pins.
+
+
+==============================================================
+Exported 13 message(s)
+==============================================================

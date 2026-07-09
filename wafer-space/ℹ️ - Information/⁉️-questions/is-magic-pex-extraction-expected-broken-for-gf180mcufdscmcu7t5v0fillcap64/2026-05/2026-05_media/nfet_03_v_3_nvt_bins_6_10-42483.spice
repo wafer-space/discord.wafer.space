@@ -1,0 +1,205 @@
+* -----------------------------------------------------------------------------
+* nfet_03v3_nvt_model.inc -- compact two-bin draft: bins .6 and .10
+* -----------------------------------------------------------------------------
+* NON-FOUNDRY / NON-SIGNOFF.
+*
+* Selected native-overlap bins:
+*   nfet_03v3_nvt.6   L = 1.8..10 um, W = 0.8..1.2 um
+*   nfet_03v3_nvt.10  L = 1.8..10 um, W = 1.2..10  um
+*
+* Construction:
+*   - keep 3.3 V oxide / junction / geometry statistical base values
+*   - transplant native-like deltas from nfet_06v0 -> nfet_06v0_nvt
+*   - expose the uncertain transplant as global process-like knobs
+*   - keep mismatch separate via sw_stat_mismatch
+*
+* Include-order assumption:
+*   .include 'design.ngspice'
+*   .lib     'sm141064.ngspice' statistical
+*   .lib     'nfet_03v3_nvt_model.inc' nfet_03v3_nvt_stat
+* -----------------------------------------------------------------------------
+
+.lib nfet_03v3_nvt_stat
+
+* ---- user switches -----------------------------------------------------------
+.param
++ sw_03nvt_guess_global = 0
++ nvt_guess_skew        = 1
+
+* ---- random sources ----------------------------------------------------------
+* ngspice authoring version: agauss() everywhere.
+* Xyce port: replace body/subvt/beta/rout with AUNIF(0,1) if desired.
+.param
++ mc_03nvt_vth_guess2   = agauss(0, 1, 3)
++ mc_03nvt_body_guess2  = agauss(0, 1, 3)
++ mc_03nvt_subvt_guess2 = agauss(0, 1, 3)
++ mc_03nvt_beta_guess2  = agauss(0, 1, 3)
++ mc_03nvt_rout_guess2  = agauss(0, 1, 3)
++ mc_03nvt_rsd_guess2   = agauss(0, 1, 3)
++ mc_03nvt_geom_guess2  = agauss(0, 1, 3)
++ mc_03nvt_cox_guess2   = agauss(0, 1, 3)
++ mc_03nvt_junc_guess2  = agauss(0, 1, 3)
++ mc_03nvt_noise_guess2 = agauss(0, 1, 3)
+
+.param
++ e_03nvt_vth_guess   = 'mc_03nvt_vth_guess2   * sw_03nvt_guess_global * nvt_guess_skew'
++ e_03nvt_body_guess  = 'mc_03nvt_body_guess2  * sw_03nvt_guess_global * nvt_guess_skew'
++ e_03nvt_subvt_guess = 'mc_03nvt_subvt_guess2 * sw_03nvt_guess_global * nvt_guess_skew'
++ e_03nvt_beta_guess  = 'mc_03nvt_beta_guess2  * sw_03nvt_guess_global * nvt_guess_skew'
++ e_03nvt_rout_guess  = 'mc_03nvt_rout_guess2  * sw_03nvt_guess_global * nvt_guess_skew'
++ e_03nvt_rsd_guess   = 'mc_03nvt_rsd_guess2   * sw_03nvt_guess_global * nvt_guess_skew'
++ e_03nvt_geom_guess  = 'mc_03nvt_geom_guess2  * sw_03nvt_guess_global * nvt_guess_skew'
++ e_03nvt_cox_guess   = 'mc_03nvt_cox_guess2   * sw_03nvt_guess_global * nvt_guess_skew'
++ e_03nvt_junc_guess  = 'mc_03nvt_junc_guess2  * sw_03nvt_guess_global * nvt_guess_skew'
++ e_03nvt_noise_guess = 'mc_03nvt_noise_guess2 * sw_03nvt_guess_global * nvt_guess_skew'
+
+* ---- bounded transplant strengths ------------------------------------------
+* a = 0: no transplant, a = 1: full observed 6V native transplant.
+.param
++ raw_a_03nvt_vth   = '1 + 0.35*e_03nvt_vth_guess'
++ raw_a_03nvt_body  = '1 + 0.60*e_03nvt_body_guess'
++ raw_a_03nvt_subvt = '1 + 0.60*e_03nvt_subvt_guess'
++ raw_a_03nvt_beta  = '1 + 0.45*e_03nvt_beta_guess'
++ raw_a_03nvt_rout  = '1 + 0.85*e_03nvt_rout_guess'
++ raw_a_03nvt_rsd   = '1 + 0.50*e_03nvt_rsd_guess'
++ a_03nvt_vth   = '(raw_a_03nvt_vth   < 0.30) ? 0.30 : ((raw_a_03nvt_vth   > 1.70) ? 1.70 : raw_a_03nvt_vth)'
++ a_03nvt_body  = '(raw_a_03nvt_body  < 0.20) ? 0.20 : ((raw_a_03nvt_body  > 2.20) ? 2.20 : raw_a_03nvt_body)'
++ a_03nvt_subvt = '(raw_a_03nvt_subvt < 0.20) ? 0.20 : ((raw_a_03nvt_subvt > 2.20) ? 2.20 : raw_a_03nvt_subvt)'
++ a_03nvt_beta  = '(raw_a_03nvt_beta  < 0.30) ? 0.30 : ((raw_a_03nvt_beta  > 2.00) ? 2.00 : raw_a_03nvt_beta)'
++ a_03nvt_rout  = '(raw_a_03nvt_rout  < 0.00) ? 0.00 : ((raw_a_03nvt_rout  > 3.00) ? 3.00 : raw_a_03nvt_rout)'
++ a_03nvt_rsd   = '(raw_a_03nvt_rsd   < 0.30) ? 0.30 : ((raw_a_03nvt_rsd   > 3.00) ? 3.00 : raw_a_03nvt_rsd)'
+
+* ---- global guessed-model base parameters ----------------------------------
+.param
++ d_03nvt_vth06 = -0.71214
++ nfet_03v3_nvt_tox  = 'nfet_03v3_tox * exp(log(1.03)*e_03nvt_cox_guess)'
++ nfet_03v3_nvt_toxm = '8e-9 * exp(log(1.03)*e_03nvt_cox_guess)'
++ nfet_03v3_nvt_xl   = 'nfet_03v3_xl + 50e-9*e_03nvt_geom_guess'
++ nfet_03v3_nvt_xw   = 'nfet_03v3_xw + 50e-9*e_03nvt_geom_guess'
++ nfet_03v3_nvt_xj   = 'nfet_03v3_xj * exp(log(1.10)*e_03nvt_junc_guess)'
++ nfet_03v3_nvt_rdsw = 'nfet_03v3_rdsw * exp(a_03nvt_rsd*log(3480/2175))'
++ nfet_03v3_nvt_noia = 'nfet_03v3_noia * exp(log(3)*e_03nvt_noise_guess)'
++ nfet_03v3_nvt_noib = 'nfet_03v3_noib * exp(log(3)*e_03nvt_noise_guess)'
++ nfet_03v3_nvt_noic = 'nfet_03v3_noic * exp(log(3)*e_03nvt_noise_guess)'
+
+* ---- wrapper ----------------------------------------------------------------
+.subckt nfet_03v3_nvt d g s b w=10u l=1.8u nf=1 m=1 par=1 s_sab=0.48u d_sab=1.78u as=0 ad=0 ps=0 pd=0 nrd=0 nrs=0 dtemp=0 sa=0 sb=0 sd=0
+.param
++ par_vth=0.007148
++ par_k=0.007008
++ par_l=1.5e-7
++ par_w=-1e-7
++ par_leff='l-par_l'
++ par_weff='par*(w-par_w)'
++ p_sqrtarea='sqrt((par_leff)*(par_weff))'
++ var_k='0.7071*par_k*1e-06/p_sqrtarea'
++ var_vth='0.7071*par_vth*1e-06/p_sqrtarea'
++ mis_k=agauss(0,var_k,1)
++ mis_vth=agauss(0,var_vth,1)
+
+xr1 d d1 b nplus_u_m1 wr='w' lr='(d_sab==0) ? 1e-15 : d_sab'
+xr2 s s1 b nplus_u_m1 wr='w' lr='(s_sab==0) ? 1e-15 : s_sab'
+
+m0 d1 g s1 b nfet_03v3_nvt w='w' l='l' as=as ad=ad ps=ps pd=pd nrd=nrd nrs=nrs nf=nf sa=sa sb=sb sd=sd m=m
++ delvto='mis_vth*sw_stat_mismatch' mulu0='1-mis_k*sw_stat_mismatch'
+.ends nfet_03v3_nvt
+
+* -----------------------------------------------------------------------------
+* Bin .6: original nfet_03v3.6, clipped to native region
+*   L = 1.8..10 um, W = 0.8..1.2 um
+* -----------------------------------------------------------------------------
+.model nfet_03v3_nvt.6 nmos
++ level=54 version=4.5 binunit=2 paramchk=1
++ lmin=1.8e-6 lmax=1e-5 wmin=8e-7 wmax=1.2e-6
++ mobmod=0 capmod=2 igcmod=0 igbmod=0 geomod=0 diomod=1
++ rdsmod=0 rbodymod=0 rgatemod=0 permod=1 acnqsmod=0 trnqsmod=0
++ tnom=25 epsrox=3.9
++ toxe=nfet_03v3_nvt_tox toxp=nfet_03v3_nvt_tox toxm=nfet_03v3_nvt_toxm toxref=8e-9
++ wint=1e-8 lint=0 xl=nfet_03v3_nvt_xl xw=nfet_03v3_nvt_xw dlc=0 dwc=0 dlcig=1.5e-7
++ xj=nfet_03v3_nvt_xj ngate=6e19 ndep=3e17 nsd=1e20 vbm=-3 phin=0.07
++ vth0='nfet_03v3_vth0_6 + a_03nvt_vth*d_03nvt_vth06 + 0.050*e_03nvt_vth_guess'
++ k1='0.79418892 * exp(a_03nvt_body*log(0.165/0.9))'
++ k2=-0.0057236965 k3=0 k3b=0 w0=5e-7
++ dvt0=0 dvt1=0.53 dvt2=0 dvt0w=0 dvt1w=0 dvt2w=0 dsub=0.5
++ minv=-0.25 voff='-0.12197591 + 0.020*a_03nvt_subvt + 0.020*e_03nvt_subvt_guess' voffl=0
++ cdsc=0 cdscb=0 cdscd=0 cit=0
++ nfactor='1.0 * exp(a_03nvt_subvt*log(0.40241/0.864))'
++ eta0=0.75 etab=-0.32
++ u0='0.036490513 * exp(a_03nvt_beta*log(0.070102/0.052500014))'
++ ua=-7.881063e-10 ub=3.0594896e-18 uc=9.7557278e-11 eu=1.67
++ vsat='85000 * exp(a_03nvt_beta*log(106700/103999.98))'
++ a0='1.2333595 * exp(a_03nvt_beta*log(0.88/0.725))'
++ ags='0.28370796 + a_03nvt_beta*(0.72 - 0.137)'
++ a1=0 a2='1.0 * exp(a_03nvt_beta*log(0.47/0.96))' b0=0 b1=0
++ dwg=0 dwb=0 keta=-0.021025909
++ pclm='0.22708279 * exp(a_03nvt_rout*log(3.0/0.22708279))'
++ pdiblc1='0.39 * exp(a_03nvt_rout*log(1.41/1.6))'
++ pdiblc2='0.00064013636 * exp(a_03nvt_rout*log(1e-5/0.0022))'
++ pdiblcb=0 drout='0.56 * exp(a_03nvt_rout*log(0.16/0.4))'
++ pvag='a_03nvt_rout' delta='0.01 * exp(a_03nvt_rout*log(0.005/0.01))'
++ fprout='65*a_03nvt_rout'
++ pdits=0 pditsd=0 pditsl=0 pscbe1=4e9 pscbe2=5e-8
++ rsh=7 rdsw=nfet_03v3_nvt_rdsw rsw=100 rdw=100 rdswmin=0 rswmin=0 rdwmin=0
++ prwg=1 prwb=0 wr=1
++ alpha0=0 alpha1=0 beta0=10 agidl=1e-8 bgidl=2.3e9 cgidl=0.5 egidl=0.8
++ cgso='1e-10*exp(log(1.25)*e_03nvt_cox_guess)' cgdo='1e-10*exp(log(1.25)*e_03nvt_cox_guess)'
++ cgbo='1e-13*exp(log(1.25)*e_03nvt_cox_guess)' cgdl='1e-10*exp(log(1.25)*e_03nvt_cox_guess)' cgsl='1e-10*exp(log(1.25)*e_03nvt_cox_guess)'
++ clc=1e-7 cle=0.6 ckappas=0.6 ckappad=0.6 acde=0.3 moin=15 noff=1.5 voffcv=0
++ kt1=-0.11 kt1l=0 kt2=0.022 ute=-1.5 ua1=1e-9 ub1=-1e-18 uc1=-5.6e-11 prt=0 at=33000
++ fnoimod=1 tnoimod=0 em=4.1e7 ef=1 noia=nfet_03v3_nvt_noia noib=nfet_03v3_nvt_noib noic=nfet_03v3_nvt_noic
++ jss='2.3e-7*exp(log(10)*e_03nvt_junc_guess)' jsws='2.12e-13*exp(log(10)*e_03nvt_junc_guess)' jswgs=0
++ njs=1.5 xtis=3 bvs=11 xjbvs=1 pbs='0.70172 + 0.025*e_03nvt_junc_guess' cjs='9.6797e-4*exp(log(1.5)*e_03nvt_junc_guess)' mjs=0.379
++ pbsws='0.70172 + 0.025*e_03nvt_junc_guess' cjsws='1.4107e-10*exp(log(1.5)*e_03nvt_junc_guess)' mjsws=0.20036
++ pbswgs='0.70172 + 0.025*e_03nvt_junc_guess' cjswgs='4.2235e-10*exp(log(1.5)*e_03nvt_junc_guess)' mjswgs=0.37801
++ gbmin=1e-12 rbpb=50 rbpd=50 rbps=50 rbdb=50 rbsb=50 ngcon=1
+
+* -----------------------------------------------------------------------------
+* Bin .10: original nfet_03v3.10, clipped to native region
+*   L = 1.8..10 um, W = 1.2..10 um
+* -----------------------------------------------------------------------------
+.model nfet_03v3_nvt.10 nmos
++ level=54 version=4.5 binunit=2 paramchk=1
++ lmin=1.8e-6 lmax=1e-5 wmin=1.2e-6 wmax=1e-5
++ mobmod=0 capmod=2 igcmod=0 igbmod=0 geomod=0 diomod=1
++ rdsmod=0 rbodymod=0 rgatemod=0 permod=1 acnqsmod=0 trnqsmod=0
++ tnom=25 epsrox=3.9
++ toxe=nfet_03v3_nvt_tox toxp=nfet_03v3_nvt_tox toxm=nfet_03v3_nvt_toxm toxref=8e-9
++ wint=1e-8 lint=0 xl=nfet_03v3_nvt_xl xw=nfet_03v3_nvt_xw dlc=0 dwc=0 dlcig=1.5e-7
++ xj=nfet_03v3_nvt_xj ngate=6e19 ndep=3e17 nsd=1e20 vbm=-3 phin=0.07
++ vth0='nfet_03v3_vth0_10 + a_03nvt_vth*d_03nvt_vth06 + 0.050*e_03nvt_vth_guess'
++ k1='0.79747612 * exp(a_03nvt_body*log(0.165/0.9))'
++ k2=-0.0074231864 k3=0 k3b=0 w0=5e-7
++ dvt0=0 dvt1=0.53 dvt2=0 dvt0w=0 dvt1w=0 dvt2w=0 dsub=0.5
++ minv=-0.25 voff='-0.12197591 + 0.020*a_03nvt_subvt + 0.020*e_03nvt_subvt_guess' voffl=0
++ cdsc=0 cdscb=0 cdscd=0 cit=0
++ nfactor='1.0 * exp(a_03nvt_subvt*log(0.40241/0.864))'
++ eta0=0.75 etab=-0.32
++ u0='0.040494054 * exp(a_03nvt_beta*log(0.070102/0.052500014))'
++ ua=-8.4083014e-10 ub=2.5548273e-18 uc=9.629122e-11 eu=1.67
++ vsat='85000 * exp(a_03nvt_beta*log(106700/103999.98))'
++ a0='1.175342 * exp(a_03nvt_beta*log(0.88/0.725))'
++ ags='0.26729169 + a_03nvt_beta*(0.72 - 0.137)'
++ a1=0 a2='1.0 * exp(a_03nvt_beta*log(0.47/0.96))' b0=0 b1=0
++ dwg=0 dwb=0 keta=-0.021025909
++ pclm='0.23344442 * exp(a_03nvt_rout*log(3.0/0.23344442))'
++ pdiblc1='0.39 * exp(a_03nvt_rout*log(1.41/1.6))'
++ pdiblc2='0.00064013636 * exp(a_03nvt_rout*log(1e-5/0.0022))'
++ pdiblcb=0 drout='0.56 * exp(a_03nvt_rout*log(0.16/0.4))'
++ pvag='a_03nvt_rout' delta='0.01 * exp(a_03nvt_rout*log(0.005/0.01))'
++ fprout='65*a_03nvt_rout'
++ pdits=0 pditsd=0 pditsl=0 pscbe1=4e9 pscbe2=5e-8
++ rsh=7 rdsw=nfet_03v3_nvt_rdsw rsw=100 rdw=100 rdswmin=0 rswmin=0 rdwmin=0
++ prwg=1 prwb=0 wr=1
++ alpha0=0 alpha1=0 beta0=10 agidl=1e-8 bgidl=2.3e9 cgidl=0.5 egidl=0.8
++ cgso='1e-10*exp(log(1.25)*e_03nvt_cox_guess)' cgdo='1e-10*exp(log(1.25)*e_03nvt_cox_guess)'
++ cgbo='1e-13*exp(log(1.25)*e_03nvt_cox_guess)' cgdl='1e-10*exp(log(1.25)*e_03nvt_cox_guess)' cgsl='1e-10*exp(log(1.25)*e_03nvt_cox_guess)'
++ clc=1e-7 cle=0.6 ckappas=0.6 ckappad=0.6 acde=0.3 moin=15 noff=1.5 voffcv=0
++ kt1=-0.11 kt1l=0 kt2=0.022 ute=-1.5 ua1=1e-9 ub1=-1e-18 uc1=-5.6e-11 prt=0 at=33000
++ fnoimod=1 tnoimod=0 em=4.1e7 ef=1 noia=nfet_03v3_nvt_noia noib=nfet_03v3_nvt_noib noic=nfet_03v3_nvt_noic
++ jss='2.3e-7*exp(log(10)*e_03nvt_junc_guess)' jsws='2.12e-13*exp(log(10)*e_03nvt_junc_guess)' jswgs=0
++ njs=1.5 xtis=3 bvs=11 xjbvs=1 pbs='0.70172 + 0.025*e_03nvt_junc_guess' cjs='9.6797e-4*exp(log(1.5)*e_03nvt_junc_guess)' mjs=0.379
++ pbsws='0.70172 + 0.025*e_03nvt_junc_guess' cjsws='1.4107e-10*exp(log(1.5)*e_03nvt_junc_guess)' mjsws=0.20036
++ pbswgs='0.70172 + 0.025*e_03nvt_junc_guess' cjswgs='4.2235e-10*exp(log(1.5)*e_03nvt_junc_guess)' mjswgs=0.37801
++ gbmin=1e-12 rbpb=50 rbpd=50 rbps=50 rbdb=50 rbsb=50 ngcon=1
+
+.endl nfet_03v3_nvt

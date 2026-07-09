@@ -1,0 +1,132 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / ⁉️-questions / Is magic PEX extraction expected broken for `gf180mcu_fd_sc_mcu7t5v0__fillcap_64`?
+After: 2026-05-31 11:59 p.m.
+Before: 2026-07-01 12:00 a.m.
+==============================================================
+
+[2026-06-08 12:38 a.m.] rtimothyedwards_19428
+@namibj :  Well, I finally clawed my way back up out of that rabbit hole. . .  I am now on magic version 8.3.660, and I am happy to say that this version extracted a correct (as far as I can tell) R-C netlist of the `tinyqv_quarter_label_edited_01.gds` full chip layout.  Complete extraction took exactly 30 minutes on my desktop.
+
+{Reactions}
+ferrisCatOwO
+
+[2026-06-08 12:40 a.m.] namibj
+[Yeah extracting power parasitics out of the spice let's Xyce do singleton elimination on the matrix; apparently it's a trick where some node voltages can be calculated directly from fixed inputs instead of having to be iteratively solved for.]
+(Somehow this was stuck in discord's edit buffer.)
+
+
+[2026-06-08 12:43 a.m.] namibj
+I assume any sort of (mutual) inductance extraction isn't planned to become part of this toolkit?
+
+
+[2026-06-08 12:44 a.m.] rtimothyedwards_19428
+Not now, at any rate.
+
+
+[2026-06-08 12:44 a.m.] namibj
+And what about thermal extraction to the spice?
+
+
+[2026-06-08 12:45 a.m.] rtimothyedwards_19428
+There is an open source tool that does thermal modeling;  I've forgotten where it is but I can look it up.
+
+
+[2026-06-08 12:47 a.m.] namibj
+Not this week for me, for as I have to draw and a bit of tune and somewhat characterize a couple CML gates mostly just praying I can't fry the die with appropriate care in e.g. duty cycling.
+
+
+[2026-06-08 12:48 a.m.] namibj
+I've asked because spice does tend to support inclusion of lumped network thermal modeling.
+
+
+[2026-06-08 12:53 a.m.] rtimothyedwards_19428
+First I need to rework the parasitic capacitances so that the coupling caps get properly redistributed along the resistor networks, instead of being redirected to the substrate as they are now.  Redirecting to the substrate preserves the signal propagation delay characteristics but eliminates all the cross-talk.
+
+
+[2026-06-08 12:55 a.m.] rtimothyedwards_19428
+@namibj :  I would be interested in knowing if you can take the full R-C extracted netlist now produced by magic for an entire chip design and run it through Xyce and actually get it to simulate.
+
+
+[2026-06-08 12:57 a.m.] namibj
+I probably won't get around to it before the Run 2 deadline unless I'll try to do it as part of verifying a Run2 chip's design's integration.
+
+
+[2026-06-08 12:59 a.m.] namibj
+Ehhh, does that claim still hold if it's a high speed differential pair?
+
+
+[2026-06-08 1:22 a.m.] rtimothyedwards_19428
+The claim is mainly valid for standard cell designs.
+
+
+[2026-06-08 1:23 a.m.] namibj
+ok yeah I figured.
+
+
+[2026-06-08 6:30 a.m.] 246tnt
+@Tim Edwards BTW did that rework include making the new capacitor model work with extresist ? I know previously the new modelling  ( that you presented at FSiC 2024 IIRC ) was not used when combined with extresistor.
+
+
+[2026-06-08 6:52 a.m.] namibj
+The slow/mildly buggy flattened-gds PEX I started this thread with had C and R extracted using at least supposedly tee-connected lumped components modeling. 
+
+Not sure if that's answering the question?
+
+
+[2026-06-08 7:26 a.m.] 246tnt
+It doesn't.
+
+
+[2026-06-08 12:52 p.m.] rtimothyedwards_19428
+Actually that was an incorrect statement I made at the time.  The capacitance *does* use the new modeling, but what it does is to redirect the coupling capacitances to the substrate, which is the next problem I'm going to work on.
+
+
+[2026-06-10 5:58 p.m.] rtimothyedwards_19428
+@namibj :  FYI, the thermal analysis tool is this one:  https://github.com/peaclab/PACT
+
+{Embed}
+https://github.com/peaclab/PACT
+GitHub - peaclab/PACT: PACT: A Parallel Compact Thermal Simulator
+PACT: A Parallel Compact Thermal Simulator. Contribute to peaclab/PACT development by creating an account on GitHub.
+
+
+[2026-06-10 6:01 p.m.] rtimothyedwards_19428
+It has a very interesting approach.  They note that thermal diffusion equations are basically the same equations as you use to solve a resistor network, so they convert a layout into a SPICE netlist and use a SPICE simulator to solve the equations, then convert that back into temperature.
+
+
+[2026-06-10 7:32 p.m.] namibj
+Well yeah, I thought more of e.g. https://www.analog.com/en/resources/technical-articles/ltspice-soatherm-support-for-pcb-and-heat-sink-thermal-models.html or how Xyce supports a "temperature node" for some BSIM (not the ones of our two main PDKs) and some MEXTRAM and VBIC models.
+
+Of course that's mostly applicable to low-frequency/small-circuit transients (LTSpice SOA and thermal runaway/stability checking) and periodic steady state/harmonic balance cases of larger circuits (e.g. mmWave MMICs with very power dense HBTs or HEMTs) where thermal convergence is deliberately solved as an operating point that's static under the timescales of the fast electromagnetic simulation... at least all the heat sink effects; thermal contribution to device transient non-linearity and coupling isn't inherently ignored.
+
+
+[2026-06-10 7:53 p.m.] namibj
+Thanks for making me read the docs though rn, I had a minor eureka moment for how to tune the VCO to operate at the simulation frequency prescribed by harmonic balance: I just use an idealized PLL.
+
+
+[2026-06-22 9:07 p.m.] namibj
+@Tim Edwards Do you happen to be able to say/judge to what extend the existing extraction techniques and model parametrizations cover multi-gate-finger structures that do not include intermediate "source/drain" contacts, like the nmos section in a classic CMOS NAND gate?:https://gf180mcu-pdk.readthedocs.io/en/latest/digital/standard_cells/gf180mcu_fd_sc_mcu9t5v0/cells/and4/gf180mcu_fd_sc_mcu9t5v0__and4_1.html
+
+{Attachments}
+2026-06_media/gf180mcu_fd_sc_mcu9t5v0__nand4_1.layout-54A2C.png
+
+
+[2026-06-22 9:15 p.m.] 246tnt
+In GF180 the salicide is pretty good so diffusion resistance is really small compared to the Rds_on of the transistor channel ...
+
+
+[2026-06-22 9:24 p.m.] namibj
+I'm asking in particular  because to my understanding none of the PCells around cover that situation.
+And while I have it blocked on better PCell technology/scripting, I do expect to need 3-finger (nMOS logic `NAND3`basically; well, technically nmos logic's `AOI3333`) structures with "advanced" gate signal routing [one per each AND3 segment is unique; the other's are all re-used twice; then there's a complement that has again unique ones in the same places but re-uses the same 4 (clock lines) non-unique ones], and it'd be fairly sad if extraction turns out to not be sufficiently representative of circuit behavior.
+
+
+[2026-06-22 11:23 p.m.] rtimothyedwards_19428
+I would expect that any difference between the layout and the model will be lost in the noise of all other mismatch effects.
+
+{Reactions}
+ferrisCatOwO
+
+==============================================================
+Exported 26 message(s)
+==============================================================

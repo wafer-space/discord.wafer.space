@@ -1,0 +1,28 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / ⁉️-questions / SDF annotation issues with Icarus
+After: 2026-05-31 11:59 p.m.
+Before: 2026-07-01 12:00 a.m.
+==============================================================
+
+[2026-06-18 6:44 p.m.] .pogeg
+Currently trying out SDF annotated gate simulations as well. 
+Would adding specify timing blocks be useful if Librelane can generate SDF annotations from STA  for you?
+
+
+[2026-06-19 6:20 a.m.] mole99
+I don't understand the question. LibreLane already generates SDF timing data, gf180mcu_as_sc_mcu7t3v3 just needs the specify blocks.
+If you would like to add them, it would probably be a good idea to gate them behind an `` `ifndef FUNCTIONAL`` same as in sky130.
+
+
+[2026-06-19 6:22 a.m.] .pogeg
+Since Librelane can already generate SDF timing data for you, would there be a point in adding the specify blocks in the Verilog models
+
+
+[2026-06-19 6:24 a.m.] mole99
+The specify blocks in the Verilog models act as placeholders that the simulator populates with the SDF data. Often they are just simply empty triplets `(0.0,0.0,0.0)`.
+
+
+==============================================================
+Exported 4 message(s)
+==============================================================

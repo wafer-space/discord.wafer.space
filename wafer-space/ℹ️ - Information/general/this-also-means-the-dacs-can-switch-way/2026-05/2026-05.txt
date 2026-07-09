@@ -1,0 +1,50 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / general / This also means the DACs can switch way
+After: 2026-04-30 11:59 p.m.
+Before: 2026-06-01 12:00 a.m.
+==============================================================
+
+[2026-05-13 4:16 p.m.] namibj
+
+
+
+[2026-05-13 4:16 p.m.] namibj
+what topology of DAC are you uisng?
+
+
+[2026-05-13 4:21 p.m.] tholin
+R2R
+
+
+[2026-05-13 4:21 p.m.] tholin
+With an op-amp buffer
+
+
+[2026-05-13 4:39 p.m.] namibj
+R2R has natural fairly constant impedance already, likely less than 1kOhm btw.
+
+
+[2026-05-13 5:05 p.m.] tholin
+Depends on what’s driving the resistors
+
+
+[2026-05-13 5:05 p.m.] tholin
+The buf_12 cells can barely keep up, at least in the sim,
+
+
+[2026-05-13 6:14 p.m.] namibj
+17 digits; R-4R network; should be about exactly 12 ENOB. Serial digit input; latched parallel output; It's sky130 design though.
+I'm looking forward to tuning it though for future usage to be a bit more compact; that design uses unnecessary gaps between width of poly along the string (fair for aiming at binary R-2R by praying for sufficiently good matching to not catch DNL; not necessary if the PDK is to be believed for a sub-radix version) and the DFFs are strength 2 not 1 and have space for a tap lengthwise between each one.
+Cutting those out of there and a sliver of rounding-up size to make them line up with the resistor network, saves (up to) 0.94; the pitch savings in the resistor array from combining the 4 parallel 0p35 resistors of each string-wise leg into one 1p41 are if I mathed correctly 0.85, so one tap every `5 1/9` DFFs.
+Or I fit it in with a normal digital cell layout and slightly extend the thin ones but cut  the thick ones to "just" 0p65 (and possibly even slightly shorten) for up to 1.57 saving (not in addition to the 0.85 possible by just alternating 0p35 with 1p41 fixed-width devices) ....
+
+Oh wait it's two compacted strings per cell pitch because double-sided, so actually the resistor shrink would no longer fit these vertical cells anyways; it would fit with the stronger shrink 2 cells vertically though (5.44 for those two cells height; 5.16 with the 0p69 resistor and assumed shortening; 6.6 with the equal-length-kept 1p41 resistor; it's the narrow resistors though driven from the logic outputs that dictate minimum length (for current density reasons) so a slightly shorter 0.69 to be more R-3R than R-2R should suffice and probably even yields extra resolution per digit at the same time.
+
+{Attachments}
+2026-05_media/image-D5381.png
+
+
+==============================================================
+Exported 8 message(s)
+==============================================================

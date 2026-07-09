@@ -1,0 +1,119 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 📐 - Designing / 🖱️-usb
+Topic: Channel for discussing the implementation of USB cores on #gf180mcu
+
+Initially targeting USB full speed (12Mbit/s) but hopefully expanding to high speed (480Mbit/s) and super speed (5Gbit/s) in the future.
+After: 2026-04-30 11:59 p.m.
+Before: 2026-06-01 12:00 a.m.
+==============================================================
+
+[2026-05-26 6:57 a.m.] mithro_
+@Greg - could you explain more about your USB stuff with Luna here?
+
+
+[2026-05-26 6:58 a.m.] mithro_
+@tnt - I have already forgotten the state of your USB core on gf180mcu
+
+
+[2026-05-26 7:00 a.m.] mithro_
+@Lofty - Have you had a chance to test your UTMI (or was it ULPI) interface yet?
+
+
+[2026-05-26 7:01 a.m.] ravenslofty
+not yet (it was ULPI)
+
+
+[2026-05-26 7:26 a.m.] rebelmike
+There’s https://tinytapeout.com/chips/ttgf0p2/tt_um_urish_usb_cdc on the run 1 Tiny Tapeout. I might grab that for the next TinyQV
+
+{Embed}
+https://tinytapeout.com/chips/ttgf0p2/tt_um_urish_usb_cdc
+130 USB CDC (Serial) Device - Tiny Tapeout
+USB to UART bridge, 115200 baud rate
+2026-05_media/social-preview-CBA28
+
+{Reactions}
+👍
+
+[2026-05-26 8:45 a.m.] mithro_
+@urish - I think you showed that your USB-CDC design was working on the GF180MCU shuttle?
+
+
+[2026-05-26 8:50 a.m.] 246tnt
+I tested it. Although it's based off the tinyfpga code, so not sure exactly how "spec compliant" it is, I never ran test suites on it to validate behavior in the various edge cases.
+
+
+[2026-05-26 8:57 a.m.] mithro_
+@Greg has been getting some stuff going @ https://github.com/gregdavill/tinyfpga-boot/actions
+
+{Embed}
+https://github.com/gregdavill/tinyfpga-boot/actions
+Workflow runs · gregdavill/tinyfpga-boot
+A UF2 bootloader targeting tinyfpga bx, written in amaranth - Workflow runs · gregdavill/tinyfpga-boot
+2026-05_media/tinyfpga-boot-5D14D
+
+
+[2026-05-26 8:59 a.m.] mithro_
+
+
+{Attachments}
+2026-05_media/image-E42F2.png
+
+
+[2026-05-26 9:09 a.m.] namibj
+Hmmm, I should get started pre-layout-SPICE plus then drawing the MCML cells (of proportions approximately matching what the simulations suggest to be ideal) for what I had planned to get into my ttsky26a tile (an MCML partial positive feedback 2-delay-cell VCO (no inductor) plus between a mere PA to launch the clock directly and a an actual serializer launching a PRBS-31 stream to allow estimating/prediction/measuring what TX equalizer parameters would be needed).
+
+I do for now at least still have hope to squeeze a (if it had TX equalization done, at least) USB 3.0 SS (the 5Gbit/s stuff) compliant signal out of it on W.S.
+
+
+[2026-05-26 9:10 a.m.] namibj
+I'm assuming we'd expect Run2 chips to hit testbenches at least a week before the GDS deadline for Run3?
+
+
+[2026-05-26 9:57 a.m.] ravenslofty
+Um, did you mean to post this in #🖱️-usb
+
+
+[2026-05-26 10:09 a.m.] mithro_
+He did say "hope to squeeze a USB 3.0 Super Speed compliant signal out of it on wafer.space"
+
+
+[2026-05-26 10:09 a.m.] mithro_
+I have yet to plan things that far ahead 😛
+
+
+[2026-05-26 10:39 a.m.] greg.hashtag.9468
+I probably need to rename this at some point. Since with the luna backend it's supporting FS/HS(ULPI), and already builds for ECP5 and iCE40 targets. not just the tinyfpga bx.
+
+
+[2026-05-26 11:15 a.m.] namibj
+USB 3.0 5 Gbit/s SS, PCIe 2.0, and 5GBASE-KR (which is just a 10 Gbit/s SFP+ port's PHY but for backplane (think: where PCIe would have been a normal/expected sight) which is then called 10GBASE-KR, just clocked at half with adjusted error counter thresholds/timeouts) are the 5GBaud high speed standards I hope to be feasible on gf180mcuD with at least "usable" (if not spec-compliant) link margin, to connect to modern computers.
+
+I'd expect PCIe to be the hardest to pull off (it's quite complicated), 5GBASE-KR to suffer from relatively expensive switch ports to get one's that'll do that speed (most only do 1G/10G[/25G]) but possibly lowest-overhead and lowest required buffer size (SRAM space usage!), and SS to be at most risk of sad trade-offs between SRAM allocation and feasible goodput.
+
+With luck and prayers at least TX for 10GBASE-KR should be possible though and would allow cheap exfiltration of bulk data from a W.S die.
+We'd know more after my SPICE trials that are looking for feasible frequency performance of the core buffer cell (needed for VCO and clock tree) and especially after that has hit layout (w/ PEX, to do post-layout SPICE of at least a VCO core and it's clock extraction/take-off clock tree buffers.
+
+
+[2026-05-26 11:16 a.m.] namibj
+Oh I thought you at least would have an expectation and probably a "yes, per current expectations, ofc conditional on Run3 even happening".
+
+
+[2026-05-26 11:16 a.m.] ravenslofty
+I feel these might be possible on gf180bcd; gf180mcuD might be a stretch
+
+
+[2026-05-26 1:28 p.m.] mithro_
+I think my goal is something like atleast 6-8 weeks between people getting back silicon and the next run closing
+
+{Reactions}
+ferrisCatOwO 🔥
+
+[2026-05-26 1:29 p.m.] mithro_
+Possibly! But I'm not going to stop people from trying 🙂
+
+
+==============================================================
+Exported 20 message(s)
+==============================================================

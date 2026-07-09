@@ -1,0 +1,151 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / ⁉️-questions / LVS_IGNORE_CELLS for fill/cap cells?
+After: 2026-04-30 11:59 p.m.
+Before: 2026-06-01 12:00 a.m.
+==============================================================
+
+[2026-05-15 4:43 p.m.] mguthaus
+If you have a design with a lot of fill/cap cells, LVS takes an incredibly long time. This is likely due to the single/no pin connections of these cells and the isomorphism checking during LVS to do the matching of cells. Should the PDK ignore these fill cells? 
+
+@Leo Moser (mole99) @Tim Edwards ?
+
+
+[2026-05-15 5:05 p.m.] rtimothyedwards_19428
+Netgen has a clever way to deal with this.  It treats every "cell X with an unconnected pin" like every other "cell X with an unconnected pin" and combines them in parallel, making sure to flag that the pin is unconnected instead of all the pins being connected together.
+
+So if LVS is taking a long time for this reason, then you are doing something to subvert that method.  This could happen, for example, if the cells get renamed, as can happen when magic tries to disambiguate different projects which are using cells with the same name that may or may not be the same cell.  Mitch had a nice setup file for netgen that handled that case;  I do not think it has been ported to GF or IHP.
+
+If you can post an example use case, I can quickly figure out if this is being caused by magic prefixing a library, and I can transfer Mitch's solution for sky130 over to gf180mcu.
+
+
+[2026-05-15 5:14 p.m.] mguthaus
+@Tim Edwards Here was my patch with the change on the template example:
+https://github.com/VLSIDA/gf180mcu-project-template/commit/2bd281386bac9fdf845696a617b356a9b9ef87a6
+Note that I'm using the 3.3V libraries and memories in the branch.
+https://github.com/VLSIDA/gf180mcu-project-template/tree/3v3-libraries
+
+Without those changes, it was running 16+ hours and not finishing LVS.
+
+{Embed}
+https://github.com/VLSIDA/gf180mcu-project-template/commit/2bd281386bac9fdf845696a617b356a9b9ef87a6
+fix: ignore fill/tap/decap cells during LVS to avoid netgen hang ·...
+The 3.3V flow inserts ~315k fillcap_16 and ~82k tap_2 instances at
+chip_top — roughly 3x the device count of the 5V flow and ~257x more
+fillcap_16. Netgen&#39;s iterative partition refinement d...
+2026-05_media/2bd281386bac9fdf845696a617b356a9b9ef87a6-5D375
+
+{Embed}
+https://github.com/VLSIDA/gf180mcu-project-template/tree/3v3-libraries
+GitHub - VLSIDA/gf180mcu-project-template at 3v3-libraries
+All-Digital PLL for GF180MCU using standard cells. Contribute to VLSIDA/gf180mcu-project-template development by creating an account on GitHub.
+2026-05_media/gf180mcu-project-template-54141
+
+
+[2026-05-15 5:15 p.m.] mguthaus
+It was indeed for gf180mcu
+
+
+[2026-05-15 5:16 p.m.] mguthaus
+Interestingly, the 5V cells didn't really run into the issue since the cell density means many fewer fill/cap/tap cells.
+
+
+[2026-05-16 12:00 a.m.] bailey8889
+@Matt G. (Mobius) The netgen setup can reduce not only devices, but also parallel cells. As you have noticed, if the parallel fill cells are reduced, then netgen can take a long time.
+
+Currently, this is the setup
+```
+#---------------------------------------------------------------
+# Allow the fill, decap, etc., cells to be parallelized
+#---------------------------------------------------------------
+
+foreach cell $cells1 {
+    if {[regexp {gf180mcu_fd_sc_[^_]+__fillcap_[[:digit:]]+} $cell match]} {
+        property "-circuit1 $cell" parallel enable
+    }
+    if {[regexp {gf180mcu_fd_sc_[^_]+__endcap} $cell match]} {
+        property "-circuit1 $cell" parallel enable
+    }
+    if {[regexp {gf180mcu_fd_sc_[^_]+__fill_[[:digit:]]+} $cell match]} {
+        property "-circuit1 $cell" parallel enable
+    }
+    if {[regexp {gf180mcu_fd_sc_[^_]+__filltie} $cell match]} {
+        property "-circuit1 $cell" parallel enable
+    }
+    if {[regexp {gf180mcu_fd_sc_[^_]+__antenna} $cell match]} {
+        property "-circuit1 $cell" parallel enable
+    }
+}
+
+foreach cell $cells2 {
+    if {[regexp {gf180mcu_fd_sc_[^_]+__fillcap_[[:digit:]]+} $cell match]} {
+        property "-circuit2 $cell" parallel enable
+    }
+    if {[regexp {gf180mcu_fd_sc_[^_]+__endcap} $cell match]} {
+        property "-circuit2 $cell" parallel enable
+    }
+    if {[regexp {gf180mcu_fd_sc_[^_]+__fill_[[:digit:]]+} $cell match]} {
+        property "-circuit2 $cell" parallel enable
+    }
+    if {[regexp {gf180mcu_fd_sc_[^_]+__filltie} $cell match]} {
+        property "-circuit2 $cell" parallel enable
+    }
+    if {[regexp {gf180mcu_fd_sc_[^_]+__antenna} $cell match]} {
+        property "-circuit2 $cell" parallel enable
+    }
+}
+```
+
+
+[2026-05-16 1:53 a.m.] rtimothyedwards_19428
+@Matt G. (Mobius) :  I'm not sure what version of the PDK you have, but from the last WaferSpace tapeout, I added the Avalon 3.3V standard cells to the netgen setup (gf180mcuD/libs.tech/netgen/gf180mcuD_setup.tcl):
+```
+# And do the same for the Avalon semiconductor 3.3V standard cell library.
+
+foreach cell $cells1 {
+    if {[regexp {gf180mcu_as_sc_[^_]+__fill_[[:digit:]]+} $cell match]} {
+        property "-circuit1 $cell" parallel enable
+    }
+    if {[regexp {gf180mcu_as_sc_[^_]+__fillcap_[[:digit:]]+} $cell match]} {
+        property "-circuit1 $cell" parallel enable
+    }
+    if {[regexp {gf180mcu_as_sc_[^_]+__decap_[[:digit:]]+} $cell match]} {
+        property "-circuit1 $cell" parallel enable
+    }
+}
+
+foreach cell $cells2 {
+    if {[regexp {gf180mcu_as_sc_[^_]+__fill_[[:digit:]]+} $cell match]} {
+        property "-circuit2 $cell" parallel enable
+    }
+    if {[regexp {gf180mcu_as_sc_[^_]+__fillcap_[[:digit:]]+} $cell match]} {
+        property "-circuit2 $cell" parallel enable
+    }
+    if {[regexp {gf180mcu_as_sc_[^_]+__decap_[[:digit:]]+} $cell match]} {
+        property "-circuit2 $cell" parallel enable
+    }
+}
+```
+If you have that version of the PDK or newer, then you should not run into long LVS run-times with the Avalon 3.3V library.
+
+
+[2026-05-16 2:30 p.m.] mguthaus
+@Tim Edwards I've been using tag 1.4.0 of the wafer space template which is the newest
+
+
+[2026-05-16 2:31 p.m.] mguthaus
+Version 1.8.0 of the PDK
+
+
+[2026-05-18 6:31 p.m.] mithro_
+@Leo Moser (mole99) - Where does this stuff fit into your PDK work?
+
+
+[2026-05-19 5:56 a.m.] mole99
+If the netgen setup was updated after the last sync of the wafer.space PDK with open_pdks, which is likely the case, then one would need to handpick the patch.
+However, since we will soon be switching to the open_pdks PDK (I’m trying to finish a preview version of the template that uses it by the end of the week), this patch will be included then.
+
+
+==============================================================
+Exported 11 message(s)
+==============================================================

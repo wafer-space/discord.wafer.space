@@ -1,0 +1,227 @@
+{
+  "guild": {
+    "id": "1361349522684510449",
+    "name": "wafer.space Community",
+    "iconUrl": "2026-06_media/fb143eaa45770cbb40493d09b625e98b-09FD1.png"
+  },
+  "channel": {
+    "id": "1513112664635867288",
+    "type": "GuildPublicThread",
+    "categoryId": "1423348662318272592",
+    "category": "\uD83D\uDCDD-project-template",
+    "name": "CTS error with split voltage IO cells",
+    "topic": null
+  },
+  "dateRange": {
+    "after": "2026-05-31T23:59:59.999+00:00",
+    "before": "2026-07-01T00:00:00+00:00"
+  },
+  "exportedAt": "2026-07-09T05:00:28.5639679+00:00",
+  "messages": [
+    {
+      "id": "1513112673695301723",
+      "type": "Default",
+      "timestamp": "2026-06-07T09:29:33.683+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "When trying to use the ocd version of the IO cells, I see this error in CTS:\n```\n[INFO CTS-0007] Net \"clk_PAD2CORE\" found for clock \"clk_PAD\".\n[INFO CTS-0122] Clock net \"clk_PAD2CORE\" is skipped for CTS because it is not connected to any output instance pin or input block terminal.\n[WARNING CTS-0083] No clock nets have been found.\n[INFO CTS-0008] TritonCTS found 0 clock nets.\n[WARNING CTS-0082] No valid clock nets in the design.\n```\nI've confirmed it happens on the default template too.  There it doesn't cause the build to fail - presumably the tooling can cope without needing a clock tree for a small number of registers, but it's obviously bad, and in a larger design it does cause failures.",
+      "author": {
+        "id": "691780627338625077",
+        "name": "rebelmike",
+        "discriminator": "0000",
+        "nickname": "RebelMike",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-06_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1513116323670917251",
+      "type": "Default",
+      "timestamp": "2026-06-07T09:44:03.905+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Can confirm, that is not a nice clock tree. (I'm also wondering why I don't see the SPEF delays here.)",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-06_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [
+        {
+          "id": "1513116323700543608",
+          "url": "2026-06_media/Bildschirmfoto_vom_2026-06-07_11-40-26-E7A56.png",
+          "fileName": "Bildschirmfoto_vom_2026-06-07_11-40-26.png",
+          "fileSizeBytes": 307782
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1513116488989413526",
+      "type": "Default",
+      "timestamp": "2026-06-07T09:44:43.32+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I'll compare the LEF/LIB views of the OCD cells with the foundry ones.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-06_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1513119181040779364",
+      "type": "Default",
+      "timestamp": "2026-06-07T09:55:25.155+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Found the issue: `PIN Y` in the LEF does not have a direction set, making it `INPUT` by default.\n\nYou can edit `libs.ref/gf180mcu_ocd_io/lef/gf180mcu_ocd_io.lef` and add `DIRECTION OUTPUT ;` after line 3432.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-06_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "2026-06_media/1f44d-27259.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "691780627338625077",
+              "name": "rebelmike",
+              "discriminator": "0000",
+              "nickname": "RebelMike",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-06_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1513119322644680815",
+      "type": "Default",
+      "timestamp": "2026-06-07T09:55:58.916+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Thanks for the report, Mike! I'll make sure the PDK is updated accordingly.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-06_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC9C",
+            "code": "purple_heart",
+            "isAnimated": false,
+            "imageUrl": "2026-06_media/1f49c-71A75.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "691780627338625077",
+              "name": "rebelmike",
+              "discriminator": "0000",
+              "nickname": "RebelMike",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-06_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    }
+  ],
+  "messageCount": 5
+}

@@ -1,0 +1,11 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"323371864074485771","mole99","2026-04-25T08:15:04.2010000+00:00","","",""
+"323371864074485771","mole99","2026-04-25T08:15:06.5170000+00:00","Yes, KLayout DRC takes a while to run. KLayout can make use of multiple threads, but only in certain situations.
+
+There is a `run_drc.py` script (not sure if its still included in the ws PDK fork) that splits the DRC deck into individual rule decks and runs them in separate processes. This is a naive implementation and has many drawbacks.
+
+We are currently working on a substantially better implementation that uses only KLayout and Ruby scripting. @Clyde Laforge is spearheading this work.
+It should be ready to try in ~1/2 weeks, initially with just one worker as before, but with the option to increase the number of workers that run in parallel.","",""
+"319853768550121473","thecomputerguy","2026-04-25T18:03:58.6970000+00:00","Great, it would be nice if it worked better with 128 cores lol","",""
+"1401841055975870476","scafir","2026-04-30T19:36:32.0850000+00:00","Hey, so the merge request is pretty much ready, and it would be nice to have people try out the new DRC approach. It only work with cli for now. To try it out, clone my repo and branch `git clone -b drc_structure git@github.com:Scafir/globalfoundries-pdk-libs-gf180mcu_fd_pv.git` and you can run it with `klayout -b -r globalfoundries-pdk-libs-gf180mcu_fd_pv/klayout/drc/gf180mcu_drc.rb -rd help=true`
+You probably want `-rd workers=<absurd_amount> -rd threads=1` . I would be very interested to hear about total runtime and amount of RAM usage (compared to whatever method you are currently using `run_drc.py` , gui, ...).","",""

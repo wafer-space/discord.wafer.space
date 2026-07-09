@@ -1,0 +1,28 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"323371864074485771","mole99","2026-04-16T10:55:05.3510000+00:00","","",""
+"323371864074485771","mole99","2026-04-16T10:55:05.8860000+00:00","Hi! You need to look in `06-yosys-synthesis` for the Yosys log. The checks are running in a later step.","",""
+"1187141985530818611","ravenslofty","2026-04-16T10:55:44.4920000+00:00","`06-yosys-synthesis/yosys-synthesis.log`","","👍 (1)"
+"1187141985530818611","ravenslofty","2026-04-16T10:56:03.9120000+00:00","if it begins with ""yosys"" it's a yosys pass, if it begins with ""checker"" it's not a yosys pass","",""
+"1447738536638943333","dorythecat_v2","2026-04-16T10:58:47.8190000+00:00","OHHH alt thx I'll look into it!!","",""
+"1187141985530818611","ravenslofty","2026-04-16T11:00:47.2200000+00:00","(Leo's a LibreLane maintainer, and I'm a Yosys dev, so we'd both be happy to help with issues you might have)","",""
+"1447738536638943333","dorythecat_v2","2026-04-16T11:02:52.8000000+00:00","Oh that's so awesome! Very glad to have you helping! <3","",""
+"1447738536638943333","dorythecat_v2","2026-04-16T11:03:53.9420000+00:00","I'll let you both know what the issues were and if I managed to fix them or need a hand with em lol","",""
+"1447738536638943333","dorythecat_v2","2026-04-16T11:57:48.4060000+00:00","This is the log. It seems to complain about the bidir configuration???","2026-04_media/yosys-synthesis-8C67E.log",""
+"1447738536638943333","dorythecat_v2","2026-04-16T11:59:29.0640000+00:00","Any clues on waht the fix might be? It says multiple conflicting drivers :(","",""
+"1447738536638943333","dorythecat_v2","2026-04-16T12:07:15.9300000+00:00","According to this it's becaue I'm using the register in multiple places? huuuuh","",""
+"1187141985530818611","ravenslofty","2026-04-16T14:42:11.8010000+00:00","no, it's not that you're *using* it in multiple places, it's that you're *driving* it in multiple places","",""
+"1447738536638943333","dorythecat_v2","2026-04-16T14:43:04.5130000+00:00","fair","",""
+"1187141985530818611","ravenslofty","2026-04-16T14:43:18.7650000+00:00","librelane should lint your code with Verilator - `01-verilator-lint`; what does it have to say","",""
+"1447738536638943333","dorythecat_v2","2026-04-16T14:44:17.8900000+00:00","Turned up being that I was doing:
+```
+...
+s0 <= bidir_in;
+s1 <= bidir_in;
+...
+```","",""
+"1187141985530818611","ravenslofty","2026-04-16T14:44:37.2900000+00:00","that shouldn't cause issues.","",""
+"1447738536638943333","dorythecat_v2","2026-04-16T14:44:57.9560000+00:00","Upon removing it the issue stopped showing up","",""
+"1447738536638943333","dorythecat_v2","2026-04-16T14:45:09.9730000+00:00","Rn I'm just testing my workflow but if this comes back to bite my ass I will lyk","",""
+"1447738536638943333","dorythecat_v2","2026-04-16T14:45:36.3990000+00:00","-# I just want to make sure I can generate the silicon and goddamit is it not wanting to 😭","",""
+"1447738536638943333","dorythecat_v2","2026-04-17T17:20:01.6240000+00:00","@Lofty mind if I share my code with you? I updated it and it is back to causing ""multiple driver"" issues xd","",""
+"1187141985530818611","ravenslofty","2026-04-17T17:20:14.2990000+00:00","Sure.","",""

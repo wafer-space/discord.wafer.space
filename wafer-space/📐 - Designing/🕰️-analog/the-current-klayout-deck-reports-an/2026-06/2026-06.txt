@@ -1,0 +1,182 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 📐 - Designing / 🕰️-analog / The current KLayout deck reports an
+After: 2026-05-31 11:59 p.m.
+Before: 2026-07-01 12:00 a.m.
+==============================================================
+
+[2026-06-14 4:11 p.m.] bailey8889
+
+
+
+[2026-06-14 4:11 p.m.] bailey8889
+Maybe the real question is "Is this a real via array error?" The design rules show a via array inside a single metal shape, not an array across separate metal shapes.
+
+If it's the case where a only a large metal shape causes an error, then the klayout rule might be changed to 
+```
+  poss_4_4_via1 = via1.sized(0.2, 'square_limit').merged.sized(-0.2, 'square_limit').and(metal1).and(metal2)
+```
+
+The magic tech file already has 2 spacing rules for vias, but it's based on the size of the via region.
+```
+ templayer via1large via1
+        shrink 915
+        grow 915
+  
+ layer VIA1     via1
+        and-not via1large
+        squares-grid 0 260 260
+        calma   35 0
+  
+ layer VIA1     via1 
+        and via1large
+        squares-grid 0 260 360
+        calma   35 0
+```
+I wonder if something like
+```
+templayer via1large via1
+        grow 180
+        shrink 915
+        grow 915
+        and via1
+```
+would work?
+The `grow 180` is to merge shapes less than 0.36um apart.
+
+@Tim Edwards ?
+
+
+[2026-06-14 4:18 p.m.] 246tnt
+Yeah, the question of if it's a real or not was my first question 🙂
+
+
+[2026-06-14 7:19 p.m.] rtimothyedwards_19428
+I have no idea whether the error is valid or not.  But I would tend to go with "yes", and Mitch's solution seems like it would work.  Generally, there is no harm in being overly cautious about via arrays.
+
+{Reactions}
+👍
+
+[2026-06-14 8:13 p.m.] 246tnt
+Close but no cigar. Although the vias on each line are now 0.36u appart ... the line themselves are still at the same spacing which is smaller than 0.36u, nothing magic can do about that realistically.
+
+
+[2026-06-14 9:04 p.m.] rtimothyedwards_19428
+That's the result I was expecting but I guess it's still ambiguous.  I guess in the end it depends on how much capacitance you're expecting to get from the sidewalls of the vias.  You can stagger the vias in a checkerboard pattern which would maintain the larger distance without increasing the spacing between fingers.  But I would suggest submitting the original version just to see if it passes checks at GF or not.  Have the alternative version handy in case it gets rejected.
+
+How are you estimating the capacitance of that structure?
+
+
+[2026-06-14 9:13 p.m.] rtimothyedwards_19428
+Understanding _why_ the vias need to be spaced further apart is instructive for understanding why the rule exists and in what situations it should be applied.
+
+Google's (long-winded) AI answer to the search question "In VLSI backend processes, why is it necessary for contact cuts in large arrays to be spaced farther apart than individual contact cuts or contact cuts in small arrays?":
+
+"In VLSI backend processes, large contact arrays require wider spacing than individual contacts to prevent pattern-dependent manufacturing defects. This ensures the structural integrity of the underlying layers during etching and polishing, and mitigates lithography distortion caused by light interference in dense patterns.
+
+1. Etching and Pattern Loading Effects
+During reactive-ion etching (RIE), the chemical etchant consumes material from the wafer. In isolated or small contact areas, byproducts diffuse easily and the etchant supply is steady. In large contact arrays, the sheer density of openings concentrates the chemical reaction. This can lead to the "microloading effect," where etchants are depleted. This causes uneven etch depths or undercutting. Increasing the spacing allows for proper mass transport and uniform etching.
+(continued)
+
+
+[2026-06-14 9:13 p.m.] rtimothyedwards_19428
+2. Dishing and Erosion (CMP Stress)
+Chemical-Mechanical Polishing (CMP) is used to planarize dielectric and metal layers. When large areas of contacts are placed too closely together, the polishing pad deflects into the dense contact openings instead of just skimming the surface. This leads to surface defects: 
+﻿
+    Erosion: The dielectric material between the contacts is worn away too deeply.
+    Dishing: The entire array area bows downward into a shallow crater.
+    Spacing the contacts farther apart provides a stable "dummy" or dielectric structure for the CMP pad to glide across.
+﻿
+3. Optical Proximity Correction (OPC) Limits
+During photolithography, light passing through closely spaced contact mask openings experiences diffraction. Light from neighboring holes overlaps, causing constructive and destructive interference. This distorts the square/rectangular contact shapes into circles, or causes "bridging" (short circuits) between them. Large arrays are highly susceptible to these proximity effects, so designers are forced to space them farther apart to maintain the integrity of the light pattern. 
+4. Mechanical Stress and Delamination
+Contacts create physical holes cut into the silicon substrate or dielectric stack. A dense cluster of these cuts weakens the mechanical foundation of the chip. During thermal cycling, this can cause stress concentration points, leading to delamination (layer peeling), voids, or cracking in the barrier metal/tungsten plugs. Wider spacing ensures enough dielectric support remains intact."
+
+
+[2026-06-14 9:16 p.m.] 246tnt
+To be clear, this is @htamas 's project, I'm just looking into it because he's currently away/unavailable so I was trying to see if (1) it needed fixing at all and (2) if it did, was there a quick fix.
+
+
+[2026-06-14 9:18 p.m.] 246tnt
+For cap estimation, AFAIR he said he ran magic extraction.
+
+
+[2026-06-14 11:58 p.m.] bailey8889
+Let's clarify the definition of via array. My current understanding is arrays of 4x4 or more vias where the space between the vias is less than 0.36um, right? 
+
+Could it be that klayout is (incorrectly?) including vias **at** 0.36 too? Would increasing the `squares-grid` spacing for large vias to 370 make a difference?
+```
+squares-grid 0 260 370
+```
+
+
+[2026-06-15 12:02 a.m.] bailey8889
+Well, looking at the klayout rule,
+```
+  poss_4_4_via1 = via1.sized(0.2, 'square_limit').merged.sized(-0.2, 'square_limit')
+```
+it seems that it's merging everything up-to and including 0.4um spacing.
+
+I wonder if changing this to 
+```
+  poss_4_4_via1 = via1.sized(0.18-1.dbu, 'square_limit').merged.sized(-0.18-1.dbu, 'square_limit')
+```
+would pass with the modified magic tech?
+
+
+[2026-06-15 10:55 a.m.] 246tnt
+The change by @bailey above also seem to trigger the 0.36u spacing where it's not needed.
+
+
+[2026-06-15 1:33 p.m.] bailey8889
+@tnt can you be more specific (maybe a screenshot)? 
+Do you think tweaking the parameters yield a better result?
+
+
+[2026-06-15 1:47 p.m.] 246tnt
+Ok, it's not as bad as I thought. At first I was doing a XOR and saw tons of difference, but it's because they all shifted.
+
+It did remove some it didn't need to. A bit annoying still because I'd rather keep them.
+
+{Attachments}
+2026-06_media/2026-06-15_401x316_scrot-38391.png
+2026-06_media/2026-06-15_419x350_scrot-C718F.png
+
+
+[2026-06-15 2:20 p.m.] bailey8889
+Can you post the magic via regions at this location?
+
+I'd like to calculate what the merged region would look like.
+
+Ahh. I think I see my mistake.
+Does this yield a reasonable result?
+```
+templayer via1large via1
+        grow 180
+        shrink 1095
+        grow 915
+        and via1
+```
+
+{Reactions}
+👍
+
+[2026-06-15 2:26 p.m.] 246tnt
+Yup, that seems to have generated exactly same via before/after for this project.
+
+
+[2026-06-15 2:27 p.m.] 246tnt
+And still generated 0.36u spacing for the original project where it should.
+
+{Reactions}
+👍
+
+[2026-06-18 7:03 p.m.] nmz787
+For litho itself, it shouldn't matter about the adjacent metal layers (i.e. is the via part of a array under one metal, or are they vias pertaining to separate metal tracks/shapes). For the other fab steps, it can matter. It could also be an electrical check (i.e. breakdown, capacitance, etc)
+
+{Reactions}
+👍
+
+==============================================================
+Exported 19 message(s)
+==============================================================

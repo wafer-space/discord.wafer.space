@@ -1,0 +1,255 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 📐 - Designing / 📝-project-template / Yosys Issue
+After: 2026-04-30 11:59 p.m.
+Before: 2026-06-01 12:00 a.m.
+==============================================================
+
+[2026-05-27 8:17 p.m.] mole99
+
+
+
+[2026-05-27 8:17 p.m.] mole99
+Dang, this really is an issue in Yosys then. After updating Yosys to 0.64 I saw similar issues in the LibreLane CI: https://github.com/librelane/librelane/pull/916
+I dismissed them for now and didn't merge, hoping that the recent 0.65 release would rectify things, but it doesn't.
+If you are able to create a Yosys-only reproducible, you could submit an issue upstream. If not, I'll try to create one tomorrow or simply explain the issue, perhaps someone has an idea what's going on.
+
+{Embed}
+https://github.com/librelane/librelane/pull/916
+chore: update nix-eda to 6.16.0 by mole99 · Pull Request #916 · l...
+Updated nix-eda to 6.16.0
+
+Updated Magic to 8.3.635
+Updated Netgen to 1.5.318
+Updated Yosys to 0.64
+
+Updated yosys-eqy 0.64
+Updated yosys-sby 0.64
+Updated yosys-slang to 2026-03-25
+Removed yosys-li...
+2026-05_media/916-89463
+
+
+[2026-05-27 8:17 p.m.] mole99
+Changed the channel name: Yosys Issue
+
+
+[2026-05-27 8:18 p.m.] rebelmike
+The yosys version that the build is using is 0.64:
+` Yosys 0.64 (git sha1 d8dab5b32666564eca8e18f412973853ce006e61, clang++ 21.1.2 -fPIC -O3)`
+
+
+[2026-05-27 8:18 p.m.] rebelmike
+Or did you try it with 0.65 and that didn't fix it?
+
+
+[2026-05-27 8:21 p.m.] mole99
+I tried 0.65 with the LibreLane CI: https://github.com/fossi-foundation/nix-eda/pull/69
+
+{Reactions}
+👍
+
+[2026-05-27 8:22 p.m.] mole99
+I could also update the wafer.space branch to nix-eda with Yosys 0.65, but it probably wouldn't help :)
+
+
+[2026-05-27 8:24 p.m.] rebelmike
+Fair enough, I guess we need to roll back to 0.63 until it is fixed, and work out how to report the issue.
+
+In config.yaml if I set the DESIGN_NAME to `uart_tx` and remove chip_top and chip_core I still get the issue, so that is getting towards a small repro.  But I'm not quite sure how to then wrap that up into something I can report to yosys
+
+
+[2026-05-27 8:30 p.m.] mole99
+Yes, I'll try overriding the Yosys version with 0.63 in the project template for now.
+I think LibreLane should be able to create a standalone reproducible, as it does for OpenROAD. Maybe pyosys complicates things, but we'll see.
+The easiest way would be to write a small Yosys script that reads the Verilog and reproduces the issue, but I'm not sure it will be that easy :)
+
+
+[2026-05-27 8:32 p.m.] mole99
+In any case, thanks Mike, for giving this a try and identifying the issue!
+
+
+[2026-05-27 8:34 p.m.] rebelmike
+Ah - this may not be so hard to repro 😄
+```
+yosys> read_verilog src/uart_tx.v
+
+1. Executing Verilog-2005 frontend: src/uart_tx.v
+Parsing Verilog input from `src/uart_tx.v' to AST representation.
+Generating RTLIL representation for module `\uart_tx'.
+Successfully finished Verilog frontend.
+
+yosys> check
+
+2. Executing CHECK pass (checking for obvious problems).
+Checking module uart_tx...
+Warning: Wire uart_tx.\next_fsm_state$func$src/uart_tx.v:128$1.tx_en is used but has no driver.
+Warning: Wire uart_tx.\next_fsm_state$func$src/uart_tx.v:128$1.$result [3] is used but has no driver.
+Warning: Wire uart_tx.\next_fsm_state$func$src/uart_tx.v:128$1.$result [2] is used but has no driver.
+Warning: Wire uart_tx.\next_fsm_state$func$src/uart_tx.v:128$1.$result [1] is used but has no driver.
+Warning: Wire uart_tx.\next_fsm_state$func$src/uart_tx.v:128$1.$result [0] is used but has no driver.
+Found and reported 5 problems.
+```
+
+{Reactions}
+❤️
+
+[2026-05-27 8:38 p.m.] rebelmike
+I'll raise a yosys issue
+
+
+[2026-05-27 8:40 p.m.] mole99
+Awesome!
+
+
+[2026-05-27 8:48 p.m.] rebelmike
+https://github.com/YosysHQ/yosys/issues/5911
+
+{Embed}
+https://github.com/YosysHQ/yosys/issues/5911
+Check command fails with undriven nets · Issue #5911 · YosysHQ/yosys
+Version Yosys 0.64 (git sha1 d8dab5b, clang++ 21.1.2 -fPIC -O3) On which OS did this happen? Linux Reproduction Steps Run yosys, read and check the verilog: yosys> read_verilog src/uart_tx.v yos...
+
+
+[2026-05-27 8:51 p.m.] rebelmike
+I tried to help them isolate by grabbing a couple of OSS CAD suite builds, it was present in a 0.63+ build, but not a 0.62+ (but I think OSS CAD suite might build off the dev branch so possibly the release 0.63 is ok)
+
+{Reactions}
+👍
+
+[2026-05-28 6:31 a.m.] mole99
+I've pushed an update to the project template that overrides Yosys with version 0.62: https://github.com/wafer-space/gf180mcu-project-template/pull/60/changes/9f23d7e3dad93aba1b9c8d15c748cc486014628a
+However, before merging the PR I hope that the issue will be fixed upstream.
+
+
+[2026-05-28 7:04 a.m.] mole99
+Well, something else fails with this older version. So we might just have to wait for a fix :)
+
+{Reactions}
+😞
+
+[2026-05-28 7:04 p.m.] 246tnt
+@Leo Moser (mole99) I see you got CI working on the PR now ?
+
+
+[2026-05-28 7:13 p.m.] mole99
+Yeah, it was already working before since the template does not trigger the regression in Yosys. When I backported Yosys to 0.62 something else broke, so I dropped that commit and am now waiting on a proper fix.
+
+
+[2026-05-28 7:55 p.m.] rebelmike
+Yosys 0.63 looks to be working for me - that might be worth a try
+
+
+[2026-05-28 8:05 p.m.] 246tnt
+@RebelMike Which versions of oss cad did you try  that was 0.63+?
+
+
+[2026-05-28 8:07 p.m.] rebelmike
+20260331
+
+
+[2026-05-28 8:13 p.m.] rebelmike
+Ah hah, 20260307 fails
+
+
+[2026-05-28 8:14 p.m.] rebelmike
+So regression very early in dev after 0.63 release
+
+
+[2026-05-28 8:17 p.m.] 246tnt
+What's the reported hash ?
+
+
+[2026-05-28 8:22 p.m.] rebelmike
+Yosys 0.63+87 (git sha1 2f1cdc2df, clang++ 18.1.8 -fPIC -O3)
+
+
+[2026-05-28 8:23 p.m.] 246tnt
+```
+commit e9442194f27140e3e80cb3bf407c3259d562c449
+Author: likeamahoney <likeamahoney@gmail.com>
+Date:   Fri Feb 27 20:42:40 2026 +0300
+
+    support automatic lifetime qualifier on procedural variables
+```
+
+
+[2026-05-28 8:23 p.m.] 246tnt
+this sounds like a possible culprit ?
+
+
+[2026-05-28 8:35 p.m.] 246tnt
+```
+0.62+119        04113eb95       bad     20260304
+0.62+117        1d3f9b790       works   20260302
+```
+
+{Reactions}
+👀
+
+[2026-05-28 9:03 p.m.] 246tnt
+@Leo Moser (mole99) You coul dtry reverting that
+
+
+[2026-05-28 9:55 p.m.] 246tnt
+Confirmed. I reverted this on `master` and that fixed the issue.
+
+
+[2026-05-28 10:20 p.m.] rebelmike
+Thank you!  Hopefully Leo can confirm if reverting that fixes the various other failures that Librelane CI picked up: https://github.com/librelane/librelane/actions/runs/26505823629
+
+{Embed}
+https://github.com/librelane/librelane/actions/runs/26505823629
+chore: update nix-eda · librelane/librelane@3dec125
+ASIC implementation flow infrastructure, successor to OpenLane - chore: update nix-eda · librelane/librelane@3dec125
+
+
+[2026-05-29 6:43 a.m.] mole99
+Thanks for pinpointing the faulty commit!
+
+
+[2026-05-29 6:44 a.m.] mole99
+Let's see if this works:
+
+- https://github.com/fossi-foundation/nix-eda/pull/70
+- https://github.com/librelane/librelane/pull/916
+
+I also noticed a slight fmax regression as well, so I'll have to adjust the target frequency for some designs. But what can you do...
+
+
+[2026-05-29 7:12 a.m.] 246tnt
+Not done yet, but looking so far ...
+
+
+[2026-05-29 8:31 a.m.] mole99
+It seems that does the trick. Had to fix `CLOCK_PERIOD` slightly for two designs. `full_chip_sky130` now has issues which are likely due to a magic update, but I think those are valid issues. Looking into it.
+
+
+[2026-05-29 8:41 a.m.] mole99
+If this runs through I can properly rebase everything and finally update nix-eda in LibreLane again.
+
+https://github.com/librelane/librelane/pull/916/changes/d867039ca70d301a784f5b65e206076372d635b0
+
+
+[2026-05-29 8:44 a.m.] mole99
+The issue with `full_chip_sky130` was in the power ports. The sky130 pads have a separate port for the bondpad. But LibreLane would short all of the global connections for it. Until now I somehow managed to convince magic to short them during extraction as well. Not sure if this was actually buggy behavior or not? With a recent magic update this does not work anymore, so I've properly implemented power/ground busses in LibreLane.
+
+
+[2026-05-29 8:45 a.m.] mole99
+
+
+{Attachments}
+2026-05_media/message-B818F.txt
+
+
+[2026-05-29 8:45 a.m.] mole99
+LVS now looks like this. Instead of a single `VCCD_PAD` there is now `VCCD_PAD[0]` and `VCCD_PAD[1]`, as it should be.
+
+
+[2026-05-29 11:25 a.m.] mole99
+Merged, and I've updated the template: https://github.com/wafer-space/gf180mcu-project-template/pull/60
+
+
+==============================================================
+Exported 41 message(s)
+==============================================================
