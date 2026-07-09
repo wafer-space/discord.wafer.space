@@ -1,0 +1,36 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / ⁉️-questions / Antenna error
+After: 2025-11-30 11:59 p.m.
+Before: 2026-01-01 12:00 a.m.
+==============================================================
+
+[2025-12-13 4:41 p.m.] luighiv
+Hi.
+We are running the pre-checks for our design and we are getting no DRC violations but some antenna errors. 
+Looking at the report all of them are related to the via1(area)/poly gate(area)  ratio.
+Have anyone got something similar? Could explaing a little bit more about the error and how to fix it?
+Any feedback would be appreciated.
+Thanks,
+Luighi
+
+{Attachments}
+2025-12_media/image-BFD58.png
+
+
+[2025-12-13 5:28 p.m.] egorxe
+Hi! This error could appear if you have too much VIAs on a single layer on a wire connected to a gate. See rules here: https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_08.html . If you select a single violation in lyrdb you could see which gate has violations and the values of calculated antenna parameters for this gate for the violated check.
+
+
+[2025-12-13 5:50 p.m.] luighiv
+Hi @Egor Lukyanchenko, thank you for the comment! 😃  
+Yes, I was checking the page you shared, however, wasn't too clear for me why it is triggering in this case, while we have similar structures in other places and didn't trigger anything. 
+Thank you for the tip to check individual error. Although, a bit curious how the antena area is calculated there
+
+{Attachments}
+2025-12_media/image-78B46.png
+
+
+==============================================================
+Exported 3 message(s)
+==============================================================

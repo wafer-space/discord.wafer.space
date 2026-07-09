@@ -1,0 +1,85 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 📐 - Designing / 📝-project-template / chore: update to LibreLane dev (#55) · w...
+After: 2026-02-28 11:59 p.m.
+Before: 2026-04-01 12:00 a.m.
+==============================================================
+
+[2026-03-16 8:05 a.m.] mole99
+
+
+
+[2026-03-16 8:05 a.m.] mole99
+In general, we trust KLayout. Passing magic DRC is not required for tapeout.
+
+In some cases, such as for contacts, magic does not operate directly on the GDS layout (at least on gf180mcu), which can lead to false reports of DRC violations. That's why `ERROR_ON_MAGIC_DRC` is False in the LibreLane config.
+
+However, the issue you mentioned came up with the latest LibreLane (and thus magic) update. The errors are M2.2a/M3.2a/M4.2a violations on the bondpad, which look like false positives to me.
+
+I'll ask magic upstream about it. Thanks for reporting the issue!
+
+{Reactions}
+❤️
+
+[2026-03-16 8:16 a.m.] nmz787
+is it possible to read the magic DRC logs/results from that #55 run?
+
+
+[2026-03-16 8:21 a.m.] mole99
+You can reproduce it locally, open the layout in KLayout (`make librelane-klayout`), and then load the .lyrdb marker database from `67-magic-drc/reports/` of the run folder.
+
+
+[2026-03-16 8:25 a.m.] nmz787
+basically running `gf180mcu-project-template/.github/workflows/ci.yml` locally?
+
+
+[2026-03-16 8:25 a.m.] nmz787
+oh, I see the root of the repo has run instructions
+
+{Reactions}
+👍
+
+[2026-03-16 9:20 a.m.] .monkeyonkeyboard.
+cool cool, if needed i can also attach the log files, but it is also reproducible in CI or from the gf180mcu template repo
+
+
+[2026-03-16 9:26 a.m.] mole99
+Thanks, but I already managed to reproduce them locally.
+
+{Reactions}
+👍
+
+[2026-03-17 5:55 a.m.] nmz787
+it's odd that the errors only show up under 4 pads
+
+{Attachments}
+2026-03_media/image-C5F34.png
+
+
+[2026-03-17 7:02 a.m.] mole99
+KLayout has a limit on the number of markers it shows for a single rule. This is noted in the marker browser.
+
+
+[2026-03-17 2:34 p.m.] mole99
+The false positive DRC errors reported by magic have now been fixed: https://github.com/wafer-space/gf180mcu-project-template/actions/runs/23190573468?pr=56
+
+This was related to a recent regression in magic and how offsets were calculated in instance arrays.
+
+{Embed}
+https://github.com/wafer-space/gf180mcu-project-template/actions/runs/23190573468?pr=56
+chore: update LibreLane dev · wafer-space/gf180mcu-project-templat...
+Project template for wafer.space MPW runs using the gf180mcu PDK - chore: update LibreLane dev · wafer-space/gf180mcu-project-template@50b46ea
+2026-03_media/gf180mcu-project-template-DD373
+
+{Reactions}
+🥳
+
+[2026-03-18 3:54 a.m.] .monkeyonkeyboard.
+great to hear!! i'll merge this into my template
+
+{Reactions}
+👍
+
+==============================================================
+Exported 12 message(s)
+==============================================================

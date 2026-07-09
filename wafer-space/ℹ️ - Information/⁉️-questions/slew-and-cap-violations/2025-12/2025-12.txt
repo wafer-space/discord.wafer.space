@@ -1,0 +1,113 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / ⁉️-questions / Slew and Cap Violations
+After: 2025-11-30 11:59 p.m.
+Before: 2026-01-01 12:00 a.m.
+==============================================================
+
+[2025-12-11 2:24 p.m.] trev5514
+LibreLane says (https://librelane.readthedocs.io/en/stable/usage/timing_closure/index.html):
+
+"Violating maximum capacitance and maximum transition constraints are OK if you don’t have setup/hold vios. It is always good to check them as they are indicators of design issues. For example, a high capacitance on a net means high fanout and/or long interconnect. Also, high transition time means a high capacitive load and leads to a higher short circuit power and delays."
+
+My design is passing timing, however I have massive slew and capacitance violations from:
+
+bidir_PAD[13] (inout)
+Fanout: 1
+Cap: 3.530755
+Slew: 99.174812
+Delay: 54.912
+Time 72.9128
+
+This is roughly the same for every bidir_PAD.
+
+I've been trying to make the pad capacitance more realistic to the .lib files with no luck. Any ideas?
+
+
+[2025-12-11 2:39 p.m.] 246tnt
+That's unreadable ...
+
+
+[2025-12-11 2:40 p.m.] 246tnt
+put the full timing report as a .txt not pasted like that because with discord reformating it's impossible to read it unless you already knows what it says.
+
+
+[2025-12-11 2:40 p.m.] 246tnt
+Also post a link to your repo so we can refer to the code and config.
+
+
+[2025-12-11 2:43 p.m.] trev5514
+@tnt It was tab delimited, so I thought it was semi-redable sorry about that. Updated with a cleaner version.
+
+
+[2025-12-11 2:44 p.m.] trev5514
+My code is not open source, I'm using the default project-template sdc and config. The exception is a 90ns clock.
+
+
+[2025-12-11 3:51 p.m.] ravenslofty
+(my understanding is that this advice was intended for sky130; I do not know how well it applies to gf180mcu)
+
+
+[2025-12-11 10:10 p.m.] meinhard
+`DESIGN_REPAIR_MAX_SLEW_PCT`, `DESIGN_REPAIR_MAX_CAP_PCT`, `GRT_DESIGN_REPAIR_MAX_SLEW_PCT`, 
+`GRT_DESIGN_REPAIR_MAX_CAP_PCT` (edit: and also limiting the max wire length)
+helped on my design to get better slew/cap. But that slew seems to be very large. Which corner are you looking at?
+
+
+[2025-12-12 12:49 a.m.] trev5514
+All of them!
+
+
+[2025-12-12 12:50 a.m.] trev5514
+Awesome, didn't know about those, I'll give them a try.
+
+
+[2025-12-12 12:52 a.m.] trev5514
+So an update (still in progress):
+
+I removed the max_capacitance from the project template SDC and that seemed to help significantly, looks like things are falling back to the .lib files. Is there a major downside to doing this?
+
+
+[2025-12-12 12:58 a.m.] trev5514
+Also, this line is from the 7t std cell:
+
+```tcl
+# update these
+set ::env(OUTPUT_CAP_LOAD) "72.91" ; # femtofarad from pin I in liberty file
+```
+
+But this is being applied / 1000 to all outputs in the project-template:
+
+```tcl
+set cap_load [expr $::env(OUTPUT_CAP_LOAD) / 1000.0]
+puts "\[INFO] Setting load to: $cap_load"
+set_load $cap_load [all_outputs]
+```
+
+This seems very low to me for output cells. I upped it to 25000  to have a cap of 25 and it removes most cap violations. Again can anyone inform me if this is a very bad idea and I'm missing something?
+
+
+[2025-12-12 12:00 p.m.] mole99
+Hi @Trevor Peyton!
+
+The default setting of `OUTPUT_CAP_LOAD` is intended to be used for macros, i.e., circuits that you integrate into a larger circuit.
+When we implement the macro, we want to consider the external capacitance, which, in the case of standard cells, could be a large buffer e.g. `mcu7t5v0__buf_16`.
+From what I see, the input capacitance of the `mcu7t5v0__buf_16` is ~0.03683 pF = 36.83 fF, so I'm not sure where the exact number here comes from, but it's close enough.
+
+Now, for a chip top-level design we should set `OUTPUT_CAP_LOAD` to the capacitance that is actually outside of your chip, i.e., whatever your chip will drive.
+However, if we think about it, from the point of view of the implementation it doesn't really matter what we set `OUTPUT_CAP_LOAD` to because OpenROAD can't resize that path anyway.
+
+The reason is the following:
+
+```
+core -> pad -> port -> external capacitance
+```
+
+OpenROAD can resize all of the paths inside the core. However, once a signal goes to the pad, that's it. The output of the pad is the bondpad, so nothing can be changed in that path.
+
+Given that we set a very low output cap with 72.91 fF, and that the pad is a very strong driver (max cap of 30pF in the libs), I'm surprised that you see violations in this path. Also, increasing `OUTPUT_CAP_LOAD` should make it harder to meet the maximum capacitance limit.
+
+
+==============================================================
+Exported 13 message(s)
+==============================================================

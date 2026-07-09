@@ -1,0 +1,36 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"376976238528692225","nmz787","2026-03-24T17:43:35.9740000+00:00","Is passing DRC strictly required to tapeout? Is there any waiver system? For example I want to make topmetal ""pads"" smaller than design rule pad sizes, as I want to post-process dies/wafers to add additional layers to the design.","",""
+"376976238528692225","nmz787","2026-03-24T18:24:36.7410000+00:00","@Matt Venn  your comments were helpful 🙂","",""
+"376976238528692225","nmz787","2026-03-24T18:25:07.1650000+00:00","Though I assume your ""yes"" was in regards to ""strictly must pass DRC""","",""
+"492702620759228416","mattvenn","2026-03-24T18:33:01.3090000+00:00","I thought I was in the tt discord","",""
+"492702620759228416","mattvenn","2026-03-24T18:33:27.4870000+00:00","Where the answer is no, but I don't know for wafer.space","",""
+"596068704471482370","246tnt","2026-03-24T19:33:09.8610000+00:00","For last run, they wouldn't even waive the antenna rule 😅","",""
+"376976238528692225","nmz787","2026-03-24T20:57:59.1070000+00:00","that makes sense though, because of charging during plasma steps","",""
+"376976238528692225","nmz787","2026-03-24T20:59:08.2960000+00:00","a discharge event will cause spallation and can cover not only your wafer with particles, but the entire chamber... leading to later batches to get particle contam","","😮 (1)"
+"323371864074485771","mole99","2026-03-26T13:09:10.8170000+00:00","Tim wants wsrun-2 to follow the DRC rules much more strictly, as per the PDK docs.
+
+The only rule I can find for the pad layer is for the top metal overlap: https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_09_1.html
+All the other rules are guidelines: https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_09_2.html
+However, as there is no mention of a minimum pad width anywhere, wafer.space has to assume a minimum width of 40x40 according to PAD.1.","",""
+"169786952432746498","mithro_","2026-03-27T06:44:37.8280000+00:00","Passing DRC is strictly required for tapeout, there is no waiver system and there won't be any support for waivers.","",""
+"169786952432746498","mithro_","2026-03-27T06:48:05.3900000+00:00","@Leo Moser (mole99) - What about the rules @ https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_09_4_3.html and https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_09_4_5.html ?","",""
+"376976238528692225","nmz787","2026-03-27T06:48:19.3350000+00:00","Oh  i thought 4 microns was allowed (some rule or guideline about ""gold"")","",""
+"376976238528692225","nmz787","2026-03-27T06:48:44.5610000+00:00","But that still is larger than ideal for ""a via"" to an additional layer","",""
+"376976238528692225","nmz787","2026-03-27T06:49:01.1940000+00:00","Ideally we'd know exactly the fab minimum CD limit","",""
+"376976238528692225","nmz787","2026-03-27T06:55:47.6690000+00:00","It looks like there's 4 different bonding processes...","",""
+"376976238528692225","nmz787","2026-03-27T06:56:16.2990000+00:00","Which one is offered for ""bare wafer"" purchase option  needs clarification though","",""
+"169786952432746498","mithro_","2026-03-29T05:11:11.6090000+00:00","None of these bonding processes are really on offer, we are using an external wire bonding house.","",""
+"323371864074485771","mole99","2026-03-29T08:29:38.3100000+00:00","Unfortunately, they don't apply to our use case and specify different numbers. While the solder bump (solder ball) rules specify a min. passivation opening of 40um, the probe guidelines specify min. probe passivation opening of 50um.
+
+There's an interesting note in the bond pad guidelines:
+
+> These are just default numbers for DRC purpose only, however, these are VARIABLE and the customer is advised to use the appropriate value acceptable to their assembly house.
+
+So I suppose there's no min. limit for the passivation opening specified, because they assume that you are going to use sane numbers anyway, in order to do the bonding process.","",""
+"169786952432746498","mithro_","2026-03-29T08:32:40.9490000+00:00","Do you see a maximum size for the passivation opening?","",""
+"323371864074485771","mole99","2026-03-29T08:54:33.6890000+00:00","No, I haven't seen one.","",""
+"376976238528692225","nmz787","2026-03-29T16:20:20.4490000+00:00","Minimum is likely more important for the litho operating point for that layer","",""
+"169786952432746498","mithro_","2026-03-29T23:01:22.2270000+00:00","Well, if there is no maximum, then you could just have a completely open top of the chip with no passivation.","",""
+"376976238528692225","nmz787","2026-03-29T23:08:39.4540000+00:00","Wouldn't ""Min Probe pad top layer metal overlap of pad opening"" flag?","",""
+"169786952432746498","mithro_","2026-03-29T23:10:37.2440000+00:00","Dunno, that is why I was asking.","",""
+"323371864074485771","mole99","2026-03-30T08:26:22.6130000+00:00","Even if there's no rule against it, I'm not sure if that doesn't lead to planarity issues at any of the processing steps.","",""

@@ -1,0 +1,101 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"701803458495512666","luighiv","2025-12-16T06:18:12.8690000+00:00","Hi,
+
+I was running some prechecks for a multiproject chip and it is failing at certain instance throwing this error: 
+```
+Non-integer magnification (0.2) in transform. Rounding to 0.
+```
+Has anyone faced something similiar?, and have an idea how to solve it?
+
+Thanks,
+Luighi","2025-12_media/ab738aec-86e8-448c-8614-81bde0995d7c-17D71.png",""
+"169786952432746498","mithro_","2025-12-16T16:03:23.8090000+00:00","@Leo Moser (mole99) / @Tim Edwards - Any ideas on this error?","",""
+"323371864074485771","mole99","2025-12-16T16:04:28.9360000+00:00","@LuighiV can you post a link to the layout?","",""
+"701803458495512666","luighiv","2025-12-16T16:11:16.0680000+00:00","Hi @Leo Moser (mole99) @Tim 'mithro' Ansell  this is the link https://drive.google.com/file/d/1GgmRQ5E_GbQYZFp6ogSY1hEyT46GxshO/view?usp=sharing","",""
+"701803458495512666","luighiv","2025-12-16T16:14:09.5240000+00:00","In the meantime I was doing  some tests, and  I think I found the root cause of the issue (seemed to have some empty subhierarchies inside A3) I deleted those empty hierarchies and right now I'm running the pre-checks again to confirm if those were the responsible of raising the error","",""
+"323371864074485771","mole99","2025-12-16T16:24:17.2420000+00:00","That's great! However I see some other issues:","",""
+"323371864074485771","mole99","2025-12-16T16:24:19.2210000+00:00","","2025-12_media/image-65E3E.png",""
+"323371864074485771","mole99","2025-12-16T16:24:56.0310000+00:00","The SRAMs from the default template were not correctly deleted. Their PR_bndry layers still exist and their instances can be found in the cell tree.","","😮 (1)"
+"323371864074485771","mole99","2025-12-16T16:25:42.0240000+00:00","The seal ring (guard ring) is missing around the outer padring.","",""
+"701803458495512666","luighiv","2025-12-16T16:35:31.1990000+00:00","Oh... didn't noticed it, I guessed I have deleted it completely, going to update it, thanks for noticing 🙂 👍","","👍 (1)"
+"701803458495512666","luighiv","2025-12-16T16:36:28.1530000+00:00","regarding the seal ring, do you have a Pcell or script I can use to add it?","",""
+"323371864074485771","mole99","2025-12-16T16:36:57.4190000+00:00","I'm adding a check to the precheck to ensure there are some shapes on GUARD_RING_MK: https://github.com/wafer-space/gf180mcu-precheck/pull/36
+This way we should catch such issues earlier :)","","🙌 (1)"
+"323371864074485771","mole99","2025-12-16T16:37:41.7690000+00:00","This is the PCell: https://github.com/wafer-space/gf180mcu/tree/main/gf180mcuD/libs.tech/klayout/tech/pymacros/sealring_cells","",""
+"323371864074485771","mole99","2025-12-16T16:38:18.2560000+00:00","Did you create the padring using `make librelane-padring`?","","🙌 (1)"
+"323371864074485771","mole99","2025-12-16T16:39:00.2690000+00:00","This script adds the sealring to the padring: https://github.com/wafer-space/gf180mcu-project-template/blob/01d1540414fefce2d3c8fca2086c425688fe389a/scripts/padring.py#L59","",""
+"701803458495512666","luighiv","2025-12-16T16:40:34.4120000+00:00","yes, I have created it using that instruction","",""
+"323371864074485771","mole99","2025-12-16T16:42:00.2900000+00:00","Maybe you deleted it accidentally?","",""
+"323371864074485771","mole99","2025-12-16T16:42:06.2480000+00:00","For me it works fine:","2025-12_media/image-D1640.png",""
+"701803458495512666","luighiv","2025-12-16T16:43:18.1050000+00:00","yeah, that's probably the reason, let me generate it again here, thanks for the advice 🙂","","👍 (1)"
+"323371864074485771","mole99","2025-12-16T16:43:38.6090000+00:00","You're welcome!","","🙌 (1)"
+"701803458495512666","luighiv","2025-12-17T02:19:12.6690000+00:00","Hi @Leo Moser (mole99)  thanks for your feeback, now the padframe has the sealring and I deleted completly the SRAM devices:","2025-12_media/image-5C5E8.png",""
+"701803458495512666","luighiv","2025-12-17T02:34:38.9060000+00:00","however now I'm facing an issue with DRC errors, because as I'm following the embedded approach, I use a previous padframe we were using for Chipathon, however, that padframe seems to have some issues with CUP DRC. Do you know how can I fix it?","",""
+"701803458495512666","luighiv","2025-12-17T02:40:09.4040000+00:00","this is the report I got:","2025-12_media/image-834D6.png,2025-12_media/drc1216.klayout-3228E.lyrdb",""
+"169786952432746498","mithro_","2025-12-17T03:11:23.6490000+00:00","@LuighiV - I guess the chipathon padframe needs to be updated with the fixed cells that Leo updated for wafer.space shuttle.","",""
+"169786952432746498","mithro_","2025-12-17T03:11:41.6220000+00:00","In theory you should just be able to drop in a replacement?","",""
+"701803458495512666","luighiv","2025-12-17T04:55:55.2890000+00:00","Hi @Tim 'mithro' Ansell, thanks for the advice 🙂 . Yes, I think I can do that, I'm trying right now to update the library from Leo's repo in my environment so it could get the fixed cells. Hope it goes fine 🤞","",""
+"323371864074485771","mole99","2025-12-17T08:21:14.2330000+00:00","@LuighiV Yes exactly, the bondpad cells have been updated. You need to replace the bondpads in the chipathon padframe with the bondpads in: https://github.com/wafer-space/gf180mcu/blob/main/gf180mcuD/libs.ref/gf180mcu_fd_io/gds/gf180mcu_fd_io.gds
+Note: only the ""Bondpad_5LM"" cell has been changed.","",""
+"701803458495512666","luighiv","2025-12-17T11:56:12.1000000+00:00","Hi @Leo Moser (mole99)  thanks for the comment. I've tried to replace the main pads by the new ones in your repo, however, when I run again, it is violating other rules with metal spacing, and the corner pads, have you modified them as well?","2025-12_media/image-D3E87.png",""
+"323371864074485771","mole99","2025-12-17T12:42:31.5250000+00:00","No, I didn't modify any other cells.
+Did you perhaps delete some of the I/O filler cells? The errors always seem to be at the boundary of I/O cells (well, except for the corner cells).","",""
+"701803458495512666","luighiv","2025-12-17T12:57:43.0950000+00:00","Hi Leo, I don't think so, I mean, I haven't delete the fills, what I did was just replace the old pads by the new ones by using the **Replace** cell option in the **Cells** panel","",""
+"323371864074485771","mole99","2025-12-17T12:58:21.8440000+00:00","That sounds like the correct approach. Could you share the current GDS so I can take a look?","",""
+"701803458495512666","luighiv","2025-12-17T12:59:07.9300000+00:00","yes!, please, give me a moment","","👍 (1)"
+"701803458495512666","luighiv","2025-12-17T13:03:16.4250000+00:00","this is the link: https://drive.google.com/file/d/1GgmRQ5E_GbQYZFp6ogSY1hEyT46GxshO/view?usp=drive_link","",""
+"701803458495512666","luighiv","2025-12-17T13:04:13.4680000+00:00","and this was the report","2025-12_media/drc1217.klayout-E586A.lyrdb",""
+"169786952432746498","mithro_","2025-12-17T13:15:01.0150000+00:00","@LuighiV - It would be good to load your latest GDS into the platform even if it is currently failing the precheck.","","🙌 (1)"
+"323371864074485771","mole99","2025-12-17T13:19:21.0130000+00:00","Something happened when you swapped out the bondpad cells:","",""
+"323371864074485771","mole99","2025-12-17T13:19:34.2690000+00:00","","2025-12_media/image-D58C7.png",""
+"323371864074485771","mole99","2025-12-17T13:19:47.2170000+00:00","This is the top right corner of the outer padring.","",""
+"323371864074485771","mole99","2025-12-17T13:19:58.5340000+00:00","","2025-12_media/image-99866.png",""
+"323371864074485771","mole99","2025-12-17T13:20:26.8320000+00:00","And this is the top right corner of the inner padring (chipathon).","",""
+"323371864074485771","mole99","2025-12-17T13:24:38.3930000+00:00","These manual edits are dangerous and error prone. How about we create a KLayout script to merge the GDS files and swap the bondpads? :)
+
+Can you share the separate GDS of the empty template project, and the GDS of the chipathon?","",""
+"701803458495512666","luighiv","2025-12-17T13:29:19.1520000+00:00","sure, I'm going to upload it, thanks","",""
+"701803458495512666","luighiv","2025-12-17T13:31:06.3170000+00:00","that would be great 🙂 , let me restore the previous version of the chipathon then, and going to share both","","👌 (1)"
+"701803458495512666","luighiv","2025-12-17T15:08:22.1560000+00:00","Hi @Tim 'mithro' Ansell  I'm having issues to upload from Google Drive. I was using this link https://drive.google.com/file/d/1GgmRQ5E_GbQYZFp6ogSY1hEyT46GxshO/view but it says it has size 0. I've tried with github but it has more than 100Mb so doesn't allow me to upload there","2025-12_media/image-DF967.png",""
+"323371864074485771","mole99","2025-12-17T15:16:00.9330000+00:00","@LuighiV Tim is currently asleep.
+You need a direct link to your layout. However you can compress it, if you didn't already?","",""
+"701803458495512666","luighiv","2025-12-17T15:16:30.5980000+00:00","that's a good point, let me try it here","",""
+"701803458495512666","luighiv","2025-12-17T15:26:10.2570000+00:00","Hi @Leo Moser (mole99)  regarding this point, these are the links for :
+- Original Chipathon GDS: https://github.com/AutoMOS-project/AutoMOS-chipathon2025/blob/update-for-ws/designs/libs/A_track_core/chiptop_A_track/chiptop_A_track__exported.gds
+- Empty WS Padframe: https://github.com/AutoMOS-project/AutoMOS-chipathon2025/blob/update-for-ws/designs/libs/A_track_core/padring_ws/padring_ws.gds","",""
+"701803458495512666","luighiv","2025-12-17T15:26:46.9350000+00:00","It worked! thanks, now it is running the checks","",""
+"323371864074485771","mole99","2025-12-17T15:44:35.1940000+00:00","It seems I got it working, but there is something very strange going on, as you can see:","",""
+"323371864074485771","mole99","2025-12-17T15:44:37.8710000+00:00","","2025-12_media/image-F306E.png",""
+"323371864074485771","mole99","2025-12-17T15:44:58.9040000+00:00","If I open `chiptop_A_track__exported.gds` I can see that something is wrong:","",""
+"323371864074485771","mole99","2025-12-17T15:45:08.1210000+00:00","","2025-12_media/image-39653.png",""
+"323371864074485771","mole99","2025-12-17T15:45:35.3510000+00:00","Normally, the design should be centered and fill the whole screen. KLayout thinks that the design is larger than it actually is?","",""
+"323371864074485771","mole99","2025-12-17T15:45:59.6020000+00:00","There is this strange `Axx_top` cell in the cell hierarchy. If I hide it, you can see its outline:","",""
+"323371864074485771","mole99","2025-12-17T15:46:10.6680000+00:00","","2025-12_media/image-1C535.png",""
+"323371864074485771","mole99","2025-12-17T15:47:19.7200000+00:00","If I open the hierarchy of this cell, there are many, many subcells:","",""
+"323371864074485771","mole99","2025-12-17T15:47:22.1670000+00:00","","2025-12_media/image-0B3B4.png",""
+"323371864074485771","mole99","2025-12-17T15:47:45.4180000+00:00","It seems there is a second separate padring hidden inside this cell?","",""
+"323371864074485771","mole99","2025-12-17T15:49:13.1220000+00:00","You need to clean up the layout, but once that's done I think you should be able to use this script:","","🙌 (1)"
+"323371864074485771","mole99","2025-12-17T15:50:00.7230000+00:00","Enable the Nix shell of the template project and run the following (adjust the paths):
+
+```
+python3 scripts/merge_chipathon.py chipathon/padring_ws.gds chipathon/chiptop_A_track__exported.gds
+```","","😮 (1)"
+"323371864074485771","mole99","2025-12-17T15:50:16.1270000+00:00","","2025-12_media/merge_chipathon-7A261.py","🙌 (1)"
+"701803458495512666","luighiv","2025-12-17T15:51:08.4220000+00:00","Hi Leo, indeed that come from one of the teams, they joined later as they didn't have a number was assigned Axx 😅 . On the other hand, didn't notice they have a second separated padring there. Let me check that, thanks for noticing 🙂","","👍 (1)"
+"701803458495512666","luighiv","2025-12-17T15:53:10.8580000+00:00","that's great! thank you @Leo Moser (mole99)  going to try to clean up and run the script you provided, It will be really helpful, thank you 🙌","",""
+"323371864074485771","mole99","2025-12-17T15:56:09.1040000+00:00","I'm looking forward to your submission :)
+Let me know if there are any issues with the script.","","🙌 (1)"
+"701803458495512666","luighiv","2025-12-17T15:59:05.6740000+00:00","sure! thank you! 🙂","",""
+"701803458495512666","luighiv","2025-12-17T17:29:36.2390000+00:00","Hi Leo, just to comment that in the klayout version we have in the docker image used during the Chipathon (0.30.2) I cannot see those outlines. I was able to see it just in version 0.30.4. Maybe it is in an improvement in recent versions","",""
+"323371864074485771","mole99","2025-12-17T17:52:26.6510000+00:00","That could very well be 👍","","🙌 (1)"
+"323371864074485771","mole99","2025-12-17T17:54:07.5870000+00:00","FYI, after you have merged the designs, you need to run filler generation.
+
+```
+klayout -b -zz -r ${PDK_ROOT}/${PDK}/libs.tech/klayout/tech/drc/filler_generation/fill_all.rb -rd input=chip_top.gds -rd output=chip_top_filled.gds
+```","","🙌 (1)"
+"701803458495512666","luighiv","2025-12-17T18:15:26.9280000+00:00","sure, thank you for sharing it 🙂","","👍 (1)"
+"701803458495512666","luighiv","2025-12-17T21:42:13.5230000+00:00","Hi @Leo Moser (mole99) now the design passed all the checks, thanks for your help 🙂 🙌","2025-12_media/image-5CA10.png","👏 (2)"
+"169786952432746498","mithro_","2025-12-18T01:46:11.9050000+00:00","Congradulations! Make sure you click the ""Submit for Manufacturing"" button!","","🙌 (1)"
+"701803458495512666","luighiv","2025-12-18T03:09:59.4430000+00:00","Hi @Tim 'mithro' Ansell yes! I did it, thank you 🙌","2025-12_media/image-8ED85.png",""
+"169786952432746498","mithro_","2025-12-18T03:16:51.8160000+00:00","At the current time, it does look like there should be room on the shuttle for your design.","","🙌 (1)"
+"701803458495512666","luighiv","2025-12-18T03:22:32.5830000+00:00","that's great! hope the possibility remains open till the end of submission time 🤞","",""

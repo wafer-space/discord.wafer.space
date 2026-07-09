@@ -1,0 +1,136 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 𐦂𖨆𐀪𖠋 - Friends / fpgas-online
+Topic: Channel for continued development of https://fpgas.online
+After: 2026-03-31 11:59 p.m.
+Before: 2026-05-01 12:00 a.m.
+==============================================================
+
+[2026-04-08 3:30 a.m.] carlfk
+Im still in disbelief that this works to install packages into the pi: videoteam@val2:~$ sudo chroot /srv/nfs/rpi/trixie/root apt install libcamera-tools
+
+
+[2026-04-08 3:31 a.m.] carlfk
+val2 is x86, I can't just run arm code.  it's not right.
+
+
+[2026-04-08 12:52 p.m.] mithro_
+@carlfk - https://github.com/fpgas-online/rpi-qemu
+
+{Embed}
+https://github.com/fpgas-online/rpi-qemu
+GitHub - fpgas-online/rpi-qemu: Test Raspberry Pi 4B in emulation -...
+Test Raspberry Pi 4B in emulation -- QEMU with GENET Ethernet, PXE boot, and CI-ready packages for testing without real hardware - fpgas-online/rpi-qemu
+2026-04_media/rpi-qemu-785B2
+
+{Reactions}
+💚
+
+[2026-04-08 6:59 p.m.] carlfk
+Temperature monitoring ?!   we are back into the supernatural :p
+
+
+[2026-04-09 12:44 a.m.] mithro_
+@carlfk - I think I'm close to having the CI system able to build the tftp/nfsroot server and verify a virtual pi is able to tftp boot and run from the nfs mount.
+
+
+[2026-04-09 12:46 a.m.] carlfk
+what is the test for "did the pi boot" ?
+
+
+[2026-04-09 12:49 a.m.] mithro_
+@carlfk - That is what the rpi-qemu work above was for. It builds the x86 system in QEMU and then connects the virtual QEMU RPi to the x86 network and verifies that the RPi PXEboots, mounts the nfsroot and then starts the fpgas.online stuff.
+
+
+[2026-04-09 12:50 a.m.] carlfk
+I understand what it does.  I am curious how you implemented "verifies"
+
+
+[2026-04-11 6:02 p.m.] carlfk
+looooook!!! https://www.reddit.com/r/FPGA/comments/1shbhyv/free_access_to_fpgas/
+
+{Embed}
+r/FPGA
+https://www.reddit.com/r/FPGA/comments/1shbhyv/free_access_to_fpgas/
+Free access to FPGA's
+Hi guys, For all of you out there looking to start working on FPGA's you might want to checkout…
+2026-04_media/1shbhyv-1376A
+Reddit
+
+{Reactions}
+🔥
+
+[2026-04-12 2:41 a.m.] essen__
+You are famous now 💪
+
+
+[2026-04-12 2:41 a.m.] carlfk
+so much fame
+
+
+[2026-04-12 2:42 a.m.] mithro_
+@carlfk - My last name has two ls 🙂
+
+
+[2026-04-12 2:43 a.m.] carlfk
+I edit
+
+
+[2026-04-12 3:55 a.m.] essen__
+Backstage if you guys are interested. Overwhelmingly positive:
+
+{Attachments}
+2026-04_media/image-E239E.png
+
+{Reactions}
+blobclap
+
+[2026-04-14 2:13 a.m.] mithro_
+@carlfk - In theory I now have running in GitHub Actions the Ansible scripts building the x86 host machine with nfsroot and such and then testing that a RPi is able to PXEboot and nfsmount+overlayfs from that host machine. https://github.com/fpgas-online/fpgas.online-infra
+
+{Embed}
+https://github.com/fpgas-online/fpgas.online-infra
+GitHub - fpgas-online/fpgas.online-infra: Ansible infrastructure fo...
+Ansible infrastructure for fpgas.online. Contribute to fpgas-online/fpgas.online-infra development by creating an account on GitHub.
+2026-04_media/fpgas-651E7.online-infra
+
+
+[2026-04-14 2:15 a.m.] mithro_
+Claude and myself came up with the following kind of interesting approach:
+> The server uses systemd-nspawn with qemu-user-static ARM syscall emulation to create a chroot environment from the Pi NFS root, runs sshd inside it, and Ansible connects via SSH as if it were a real Pi. This ensures all packages, services, and configuration are pre-installed before any Pi boots.
+
+Kinda like the chroot approach you were playing with but works more naturally with ansible.
+
+
+[2026-04-14 2:57 a.m.] mithro_
+@carlfk - Another group kind of interested in the fpgas.online stuff https://github.com/chili-chips-ba/openCologne-PCIE/issues/1#issuecomment-4240999492
+
+{Embed}
+https://github.com/chili-chips-ba/openCologne-PCIE/issues/1
+Add support to LiteX SQRL baseboard (mini variant) · Issue #1 · c...
+https://github.com/enjoy-digital/litex-acorn-baseboard
+2026-04_media/1-64273
+
+
+[2026-04-30 8:19 a.m.] carlfk
+post looks ilke it is getting some traction - I hink there are 10+"likes" great.
+
+
+[2026-04-30 8:20 a.m.] carlfk
+except comment # 2 says  Guys, did you know that Claude ✴️, Anthropic #ai coding agent, was extensively used to create the fpga.online code base‼️   https://www.linkedin.com/feed/update/urn:li:activity:7449678757650518016/?dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287455437480092393472%2Curn%3Ali%3Aactivity%3A7449678757650518016%29
+
+{Embed}
+https://www.linkedin.com/feed/update/urn:li:activity:7449678757650518016/?dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287455437480092393472%2Curn%3Ali%3Aactivity%3A7449678757650518016%29
+#fpga #opensource | Chili .CHIPS
+Yearn to learn #fpga, playing virtually on real hardware⁉️
+▶️ enter fpgas.online
+
+Tapping into #opensource tools, the platform is currently exclusive to Xilinx.
+
+We hope for Cologne Chip AG, Efinix, Inc., Gowin Semiconductor Corp to join the pack...
+2026-04_media/1776141822872-F6526
+
+
+==============================================================
+Exported 19 message(s)
+==============================================================

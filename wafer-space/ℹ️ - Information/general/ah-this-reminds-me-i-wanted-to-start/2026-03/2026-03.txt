@@ -1,0 +1,97 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / general / Ah, this reminds me I wanted to start
+After: 2026-02-28 11:59 p.m.
+Before: 2026-04-01 12:00 a.m.
+==============================================================
+
+[2026-03-20 11:54 a.m.] tholin
+
+
+
+[2026-03-20 11:54 a.m.] tholin
+The idea is that you just specify a projects.yaml listing the projects you have, as well as having each LibreLane project in its own directory, and then the tool automatically clones the template repo, generates a top-level config, generates the multiplexer verilog source and runs the flow.
+
+
+[2026-03-20 11:55 a.m.] tholin
+
+
+{Attachments}
+2026-03_media/image-30C93.png
+
+
+[2026-03-20 11:56 a.m.] tholin
+pin mapping is a long list showing how a design’s module outputs map to the pads when selected
+
+
+[2026-03-20 11:56 a.m.] tholin
+You can actually map these connections arbitrarily
+
+
+[2026-03-20 11:57 a.m.] tholin
+Consider this design, where I wish to save on signals by not having enables for every pad
+
+{Attachments}
+2026-03_media/image-5F410.png
+
+
+[2026-03-20 11:57 a.m.] tholin
+Which I can then map like this
+
+{Attachments}
+2026-03_media/image-0D154.png
+
+
+[2026-03-20 11:58 a.m.] tholin
+If the number of outputs of a design is equal to the total number of outputs available, there is a special shorthand syntax where you just type "out" for a 1:1 mapping, such that
+```
+1: out[1]
+2: out[2]
+3: out[3]
+```
+is equivalent to just
+```
+1: out
+2: out
+3: out
+```
+
+
+[2026-03-20 11:59 a.m.] tholin
+If you have less outputs, you need an explicit mapping, though
+
+
+[2026-03-20 12:00 p.m.] tholin
+As for inputs, there is no mapping. Every design receives all available inputs always.
+
+
+[2026-03-20 12:00 p.m.] tholin
+This solution has worked for me for many tapeouts
+
+
+[2026-03-20 12:03 p.m.] tholin
+(And, of course, the syntax of `in_pu` just means constant input with pull-up)
+
+
+[2026-03-20 12:03 p.m.] tholin
+The syntax is pretty simple. Its just a list of attributes separated by underscores
+
+
+[2026-03-20 12:04 p.m.] tholin
+
+
+{Attachments}
+2026-03_media/projects-FBC0B.yaml
+
+
+[2026-03-20 12:05 p.m.] tholin
+TODO: allow the placement of arbitrary macros with connections between them so you can, for instance, have SRAM macros on your multi-project die
+
+
+[2026-03-20 1:33 p.m.] tholin
+Is there any python library I can use to help me procedurally generate code, or is there some preferred way to do this?
+
+
+==============================================================
+Exported 16 message(s)
+==============================================================
