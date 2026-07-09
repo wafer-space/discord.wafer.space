@@ -1,0 +1,1165 @@
+{
+  "guild": {
+    "id": "1361349522684510449",
+    "name": "wafer.space Community",
+    "iconUrl": "2026-05_media/fb143eaa45770cbb40493d09b625e98b-09FD1.png"
+  },
+  "channel": {
+    "id": "1423348662318272592",
+    "type": "GuildTextChat",
+    "categoryId": "1409664731760955403",
+    "category": "\uD83D\uDCD0 - Designing",
+    "name": "\uD83D\uDCDD-project-template",
+    "topic": "[template-github](https://github.com/wafer-space/gf180mcu-project-template)"
+  },
+  "dateRange": {
+    "after": "2026-04-30T23:59:59.999+00:00",
+    "before": "2026-06-01T00:00:00+00:00"
+  },
+  "exportedAt": "2026-07-09T09:12:36.0304505+00:00",
+  "messages": [
+    {
+      "id": "1501173863046709350",
+      "type": "Default",
+      "timestamp": "2026-05-05T10:48:59.412+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "is https://github.com/wafer-space/gf180mcu-project-template/issues/38 still valid?",
+      "author": {
+        "id": "1498420485531111548",
+        "name": "robtaylor_52029",
+        "discriminator": "0000",
+        "nickname": "Rob Taylor",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/3-FB033.png"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "RAM models sample read condition on delayed clock · Issue #38 · w...",
+          "url": "https://github.com/wafer-space/gf180mcu-project-template/issues/38",
+          "timestamp": null,
+          "description": "The attached image shows a read from SRAM location 0 using the foundry RAM models from the PDK. However the SRAM Q does not transition, instead remaining at the value of SRAM location 1. I think th...",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "2026-05_media/38-458D0",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": [],
+          "inlineEmojis": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1501198567245877430",
+      "type": "Default",
+      "timestamp": "2026-05-05T12:27:09.352+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yes, this is still valid. I'm in the process of upstreaming the wafer.space changes to open_pdks. I'll take a look at the open issues then.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-05_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "2026-05_media/1f44d-27259.svg"
+          },
+          "count": 2,
+          "users": [
+            {
+              "id": "543162393413287956",
+              "name": "h.tamas",
+              "discriminator": "0000",
+              "nickname": "htamas",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-05_media/1-B2132.png"
+            },
+            {
+              "id": "1498420485531111548",
+              "name": "robtaylor_52029",
+              "discriminator": "0000",
+              "nickname": "Rob Taylor",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-05_media/3-FB033.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1503418680451792966",
+      "type": "Default",
+      "timestamp": "2026-05-11T15:29:05.588+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hmm, _might_ have found a bug in the LVS deck for nw2ps diode? This is pretty outside my knowledge so not sure. I was trying to get an nw2ps photodiode to work in an analog circuit, but the diode kept failing to extract in LVS (remained anonymous pins) despite the geometry looking correct.\n\nAI slop machines helped debug and it looks like the deck ties the n terminal to `nwell` which you can't connect to directly? Other diodes use `ntap` or `nwell_con`\n\nI've switched to a dnwell diode and unblocked, but thought I'd mention here in case someone more knowledgeable than me might know.\n\n```\n# diode_nw2ps_03v3 diode\nconnect(diode_nw2ps_03v3_terminal_p, contact)\nconnect(diode_nw2ps_03v3_terminal_n, nwell)\n```",
+      "author": {
+        "id": "384390069412429834",
+        "name": "polyfractal",
+        "discriminator": "0000",
+        "nickname": "BreakingTaps",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1503449604736417806",
+      "type": "ThreadCreated",
+      "timestamp": "2026-05-11T17:31:58.512+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Started a thread.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-05_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "reference": {
+        "messageId": null,
+        "channelId": "1503418680451792966",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1509176448223674489",
+      "type": "Default",
+      "timestamp": "2026-05-27T12:48:24.399+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": true,
+      "content": "\uD83D\uDCE2 It's been a while since the last update to the project template, but we worked on a lot of improvements in the background, which I'm happy to share with you now!\n\nAll of the wafer.space PDK changes have finally been upstreamed to [open_pdks](https://github.com/RTimothyEdwards/open_pdks), which allows us to sunset the wafer.space PDK fork.\nThis is important since we want one common target for community efforts and avoid unnecessary fragmentation. Many of the community-created IPs are already part of open_pdks (SCL, PAD, SRAM and eFuse libraries).\nYou can now use [Ciel](https://github.com/fossi-foundation/ciel), the PDK manager, to manage your PDKs. The project template will use Ciel as well.\n\nIn addition, I have enabled support for the community-created 3v3/5v I/Os, the 3v3 SRAMs and the 3v3 standard cell library in the template. Not all of the IPs have been tested yet, so support for them is experimental!\n\nGive it a try in this pull request: https://github.com/wafer-space/gf180mcu-project-template/pull/60\nI plan to merge it soon and would appreciate any feedback beforehand.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-05_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83C\uDF89",
+            "code": "tada",
+            "isAnimated": false,
+            "imageUrl": "2026-05_media/1f389-5C738.svg"
+          },
+          "count": 3,
+          "users": [
+            {
+              "id": "384390069412429834",
+              "name": "polyfractal",
+              "discriminator": "0000",
+              "nickname": "BreakingTaps",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-05_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+            },
+            {
+              "id": "543162393413287956",
+              "name": "h.tamas",
+              "discriminator": "0000",
+              "nickname": "htamas",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-05_media/1-B2132.png"
+            },
+            {
+              "id": "691780627338625077",
+              "name": "rebelmike",
+              "discriminator": "0000",
+              "nickname": "RebelMike",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-05_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83D\uDCE2",
+          "code": "loudspeaker",
+          "isAnimated": false,
+          "imageUrl": "2026-05_media/1f4e2-C9D9D.svg"
+        }
+      ]
+    },
+    {
+      "id": "1509176501181087835",
+      "type": "Default",
+      "timestamp": "2026-05-27T12:48:37.025+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Another major change in this upcoming update is the new KLayout DRC runner by @Clyde Laforge.\nThanks to this, the KLayout DRC deck is now parallelized across rule decks while sharing some of the memory!\nThis makes it possible to build the 1x1 project template, including DRC checks, in 40 minutes on my machine (24 threads).\n\nCurrently, the number of workers is set to \"max\" in the LibreLane config. If RAM usage is too high, reduce the number of workers. For a best possible utilization choose: threads * workers = hardware threads.\n\nClyde also considerably improved the KLayout LVS setup, including the handling of substrate cuts. So if you are interested in doing an analog design with KLayout, now is the time to give this a try!\n\nPlease let me know if you have any questions regarding these changes.\nIf you plan to tape out on ws-run #2, you will need to use the updated template, since a few changes are required to pass the precheck. More on that once the update is live.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-05_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1401841055975870476",
+          "name": "scafir",
+          "discriminator": "0000",
+          "nickname": "Clyde Laforge",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/e9fd582c6cd4273d01cbf5dfd4bb3455-27807.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1509176586190983168",
+      "type": "ChannelPinnedMessage",
+      "timestamp": "2026-05-27T12:48:57.293+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Pinned a message.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-05_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "reference": {
+        "messageId": "1509176448223674489",
+        "channelId": "1423348662318272592",
+        "guildId": null
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1509177279438393545",
+      "type": "Default",
+      "timestamp": "2026-05-27T12:51:42.576+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Huh ... I'd like to know about those change because in TT we don't use the template at all and I'm working right now to finalize the run 2 builder.",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1509280353049776358",
+      "type": "Default",
+      "timestamp": "2026-05-27T19:41:17.24+00:00",
+      "timestampEdited": "2026-05-27T19:41:43.778+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I've hit a problem upgrading to this version of the template.  I've tracked it down to the new librelane version - if the only change I make is to switch nix to use the `leo/wafer-space` branch of librelane then I see the same issue.\n\nThe problem is undriven net errors, e.g.:\n```\nWarning: Wire tqvp_uart_tx.\\next_fsm_state$func$/home/mdb36/wafer-space/ws02-tinyQV/src/user_peripherals/uart/uart_tx.v:116$2738.tx_en is used but has no driver.\nWarning: Wire tqvp_uart_tx.\\next_fsm_state$func$/home/mdb36/wafer-space/ws02-tinyQV/src/user_peripherals/uart/uart_tx.v:116$2738.$result [3] is used but has no driver.\n```\nThis particular case is using a verilog function, and I tried changing the uart_tx module to remove the function (inlining it into the process that calls it), and that fixes that instance of the warnings.  So I suspect it's a regression in yosys.",
+      "author": {
+        "id": "691780627338625077",
+        "name": "rebelmike",
+        "discriminator": "0000",
+        "nickname": "RebelMike",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1509285266941153461",
+      "type": "Default",
+      "timestamp": "2026-05-27T20:00:48.803+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "ok, a minimal repro where I just wire up that uart module does hit the error.  See https://github.com/MichaelBell/wafer-space-repro/commit/76eb8c6123fbd1c241e89a2f7ca8dd394ea7112b",
+      "author": {
+        "id": "691780627338625077",
+        "name": "rebelmike",
+        "discriminator": "0000",
+        "nickname": "RebelMike",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "Minimal repro · MichaelBell/wafer-space-repro@76eb8c6",
+          "url": "https://github.com/MichaelBell/wafer-space-repro/commit/76eb8c6123fbd1c241e89a2f7ca8dd394ea7112b",
+          "timestamp": null,
+          "description": "",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "2026-05_media/76eb8c6123fbd1c241e89a2f7ca8dd394ea7112b-37316",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": [],
+          "inlineEmojis": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1509289387740102661",
+      "type": "ThreadCreated",
+      "timestamp": "2026-05-27T20:17:11.278+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Started a thread.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-05_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "reference": {
+        "messageId": null,
+        "channelId": "1509285266941153461",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1509590982453104804",
+      "type": "Default",
+      "timestamp": "2026-05-28T16:15:37.061+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "3v3 SRAM macros are exciting! Has anyone had a chance to test those yet? I forget who taped them out for this run",
+      "author": {
+        "id": "384390069412429834",
+        "name": "polyfractal",
+        "discriminator": "0000",
+        "nickname": "BreakingTaps",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1509596612312305996",
+      "type": "Default",
+      "timestamp": "2026-05-28T16:37:59.324+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Tim Edwards did, but he has a custom pad frame in his test chip AFAIU so he needs to get them wire bonded himself.",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1365118310701600900",
+          "name": "rtimothyedwards_19428",
+          "discriminator": "0000",
+          "nickname": "Tim Edwards",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1509599804140032021",
+      "type": "Default",
+      "timestamp": "2026-05-28T16:50:40.315+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@BreakingTaps :  I did have one full-size chip that I called my \"Hail Mary\" project, as everything in it was experimental.  But I also had a half-size test chip with the SRAM macros wired out to the pads for testing and characterization.  That was not a custom frame other than that it was a half-size chip.  So I'd appreciate anyone who pushes on @Tim 'mithro' Ansell to get those packaged and mailed out.  The sooner that's done, the sooner I have an answer for you.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "2026-05_media/1f44d-27259.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "384390069412429834",
+              "name": "polyfractal",
+              "discriminator": "0000",
+              "nickname": "BreakingTaps",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-05_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "169786952432746498",
+          "name": "mithro_",
+          "discriminator": "0000",
+          "nickname": "Tim 'mithro' Ansell",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+        },
+        {
+          "id": "384390069412429834",
+          "name": "polyfractal",
+          "discriminator": "0000",
+          "nickname": "BreakingTaps",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1509602909321564313",
+      "type": "Reply",
+      "timestamp": "2026-05-28T17:03:00.648+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Is it 1xp5 or p5x1?  I believe some 1xp5 CoB boards have been/are being made.",
+      "author": {
+        "id": "691780627338625077",
+        "name": "rebelmike",
+        "discriminator": "0000",
+        "nickname": "RebelMike",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1365118310701600900",
+          "name": "rtimothyedwards_19428",
+          "discriminator": "0000",
+          "nickname": "Tim Edwards",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1509599804140032021",
+        "channelId": "1423348662318272592",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1509605161218084864",
+      "type": "Default",
+      "timestamp": "2026-05-28T17:11:57.542+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@RebelMike :  It's `1x0p5` (which I guess is good!).",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83E\uDD1E",
+            "code": "fingers_crossed",
+            "isAnimated": false,
+            "imageUrl": "2026-05_media/1f91e-2A114.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "691780627338625077",
+              "name": "rebelmike",
+              "discriminator": "0000",
+              "nickname": "RebelMike",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-05_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "691780627338625077",
+          "name": "rebelmike",
+          "discriminator": "0000",
+          "nickname": "RebelMike",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1509667016259272747",
+      "type": "Reply",
+      "timestamp": "2026-05-28T21:17:44.933+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Those boards are due to be delivered to the  people who would bring it to the wirebonders on Jun 1",
+      "author": {
+        "id": "756011607603019777",
+        "name": "anfroholic",
+        "discriminator": "0000",
+        "nickname": "Andrew Wingate",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-05_media/67bd670a335a2f955fb2ded57088a2cb-675B3.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "2026-05_media/1f44d-27259.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "854091366099451924",
+              "name": "mikea1238",
+              "discriminator": "0000",
+              "nickname": "mikea",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-05_media/7f2ff01a306c951630dba44b88c2044d-9CD24.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "1365118310701600900",
+          "name": "rtimothyedwards_19428",
+          "discriminator": "0000",
+          "nickname": "Tim Edwards",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1509605161218084864",
+        "channelId": "1423348662318272592",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1509705787554005024",
+      "type": "Reply",
+      "timestamp": "2026-05-28T23:51:48.73+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "If your design works with the 1x0p5 CoB that @RebelMike made, then I'll get them bonded at the same time and get them sent out.",
+      "author": {
+        "id": "169786952432746498",
+        "name": "mithro_",
+        "discriminator": "0000",
+        "nickname": "Tim 'mithro' Ansell",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1365118310701600900",
+          "name": "rtimothyedwards_19428",
+          "discriminator": "0000",
+          "nickname": "Tim Edwards",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+        },
+        {
+          "id": "691780627338625077",
+          "name": "rebelmike",
+          "discriminator": "0000",
+          "nickname": "RebelMike",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1509599804140032021",
+        "channelId": "1423348662318272592",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1509819009351024671",
+      "type": "Default",
+      "timestamp": "2026-05-29T07:21:42.91+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "As long as the vdd and vss pads were in the same place as the project template it should work, and it should also be usable with the breadboard breakout.",
+      "author": {
+        "id": "691780627338625077",
+        "name": "rebelmike",
+        "discriminator": "0000",
+        "nickname": "RebelMike",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1510072883446022194",
+      "type": "Default",
+      "timestamp": "2026-05-30T00:10:31.211+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Tim Edwards - I believe you kept the VDD/VSS in the same places as the default on that one?",
+      "author": {
+        "id": "169786952432746498",
+        "name": "mithro_",
+        "discriminator": "0000",
+        "nickname": "Tim 'mithro' Ansell",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1365118310701600900",
+          "name": "rtimothyedwards_19428",
+          "discriminator": "0000",
+          "nickname": "Tim Edwards",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1510073437165453383",
+      "type": "Default",
+      "timestamp": "2026-05-30T00:12:43.228+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Tim 'mithro' Ansell :  Yes.  It was only the \"openframe\" where I was following the original Caravel padframe for reasons of compatibility with my original Efabless Caravel-GF development board.  The SRAM test chip just followed the template pad assignments.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "169786952432746498",
+          "name": "mithro_",
+          "discriminator": "0000",
+          "nickname": "Tim 'mithro' Ansell",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1510318588391854251",
+      "type": "Default",
+      "timestamp": "2026-05-30T16:26:51.835+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi everyone. First time commenter. I've tried to read all the discord first. I am working on a 1×1 slot design with a custom analog-heavy padring (18 'asig_5p0' pads total). LibreLane places everything without error, but I want to confirm the precheck won't flag the supply topology.\n\nMy north side has 9 analog pads with 2 DVDD and 3 DVSS power pads interspersed. My east side has 9 analog pads with 4 DVDD and 3 DVSS. Is there any precheck rule that requires a minimum number of DVDD/DVSS pads per side, or a minimum ratio to analog pad count? Or does the precheck only validate physical DRC (spacing, overlap, well rules)?\n\nRight now, this is mostly a design/viability exercise (can I get this idea to simulate, working in a space I'm not very familiar with) so I'm probably going to have more questions about the practical bits. This is the first inquiry where just reading everyone else's progress wasn't enough to resolve. Thank you in advance.",
+      "author": {
+        "id": "356185479911047169",
+        "name": ".dmv",
+        "discriminator": "0000",
+        "nickname": "dmv",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/cf91f9947bc37b8a1071311863f9c4b7-14667.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1510320793622413433",
+      "type": "Reply",
+      "timestamp": "2026-05-30T16:35:37.603+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You don't need that many supply pads; note that if you use a padframe that (beyond customizing what pad type a non-supply-pad is populated with) deviates from the reference, the plain standard COB offer doesn't work.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "❤️",
+            "code": "heart",
+            "isAnimated": false,
+            "imageUrl": "2026-05_media/2764-A3D25.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "356185479911047169",
+              "name": ".dmv",
+              "discriminator": "0000",
+              "nickname": "dmv",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-05_media/cf91f9947bc37b8a1071311863f9c4b7-14667.png"
+            }
+          ]
+        },
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC46",
+            "code": "point_up_2",
+            "isAnimated": false,
+            "imageUrl": "2026-05_media/1f446-9CC34.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "596068704471482370",
+              "name": "246tnt",
+              "discriminator": "0000",
+              "nickname": "tnt",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-05_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "356185479911047169",
+          "name": ".dmv",
+          "discriminator": "0000",
+          "nickname": "dmv",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/cf91f9947bc37b8a1071311863f9c4b7-14667.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1510318588391854251",
+        "channelId": "1423348662318272592",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1510320805110616196",
+      "type": "Default",
+      "timestamp": "2026-05-30T16:35:40.342+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@dmv Note if you change the power pad position, you will have to handle bonding yourself.",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "❤️",
+            "code": "heart",
+            "isAnimated": false,
+            "imageUrl": "2026-05_media/2764-A3D25.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "356185479911047169",
+              "name": ".dmv",
+              "discriminator": "0000",
+              "nickname": "dmv",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-05_media/cf91f9947bc37b8a1071311863f9c4b7-14667.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "356185479911047169",
+          "name": ".dmv",
+          "discriminator": "0000",
+          "nickname": "dmv",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-05_media/cf91f9947bc37b8a1071311863f9c4b7-14667.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1510323095003467978",
+      "type": "Default",
+      "timestamp": "2026-05-30T16:44:46.295+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "When building my design, which is getting fairly full but from the render seems like there's a bit more space, the metrics now say ```\n    \"design__instance__utilization\": 1.06565,\n    \"design__instance__utilization__stdcell\": 1.1131,\n```\nI had thought that both of these would max out at 1.  What do these actually measure?  Might going above 1 related to using Tholin's 3v3 library, or is it expected anyway?",
+      "author": {
+        "id": "691780627338625077",
+        "name": "rebelmike",
+        "discriminator": "0000",
+        "nickname": "RebelMike",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1510323665475211466",
+      "type": "Default",
+      "timestamp": "2026-05-30T16:47:02.306+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Do you have a density target set? I'd figure that it's reported relative to that?",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1510325035074715648",
+      "type": "Default",
+      "timestamp": "2026-05-30T16:52:28.844+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Ah, possibly.  My density target is 60%.  Global placement is saying utilization 54.8%, but obviously once buffers, clock tree, etc have gone in utilization to be somewhat higher.",
+      "author": {
+        "id": "691780627338625077",
+        "name": "rebelmike",
+        "discriminator": "0000",
+        "nickname": "RebelMike",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-05_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    }
+  ],
+  "messageCount": 27
+}

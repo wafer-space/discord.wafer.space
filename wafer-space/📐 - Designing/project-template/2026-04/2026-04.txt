@@ -1,0 +1,137 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 📐 - Designing / 📝-project-template
+Topic: [template-github](https://github.com/wafer-space/gf180mcu-project-template)
+After: 2026-03-31 11:59 p.m.
+Before: 2026-05-01 12:00 a.m.
+==============================================================
+
+[2026-04-01 12:42 a.m.] mithro_
+Yeah, there are a bunch of NDA stuff in it if I understand correctly.
+
+
+[2026-04-07 6:13 p.m.] dnaltews
+sqlite has something along those lines (but not *only* that)
+> The Test Harness #3 (TH3) is a suite of test cases for SQLite that provide 100% branch test coverage (and 100% modified condition/decision coverage) for the core SQLite in an as-deployed configuration using only published and documented interfaces. TH3 is designed for use with embedded devices, and is compatible with DO-178B. Every release of the public-domain SQLite is tested using TH3, and so all users benefit from the TH3 tests. But the TH3 tests are not themselves public. Hardware or system manufactures who want to have TH3 test run on their systems can negotiate a service agreement to have the SQLite Developers run those tests.
+
+
+[2026-04-08 4:36 p.m.] polyfractal
+wow, TIL!
+
+
+[2026-04-09 8:22 p.m.] .pogeg
+In the project template, is there `slot_defines.svh` for maximum, all edges pin configuration variant?
+
+
+[2026-04-09 8:23 p.m.] .pogeg
+The slot_defines  in the template seems to be defined for the default configuration, which makes sense
+
+
+[2026-04-10 6:29 a.m.] mole99
+Yes, those are the default configurations for each slot.
+
+You can try increasing the number of pads to see what fits. Make sure to update the [yaml config](https://github.com/wafer-space/gf180mcu-project-template/tree/main/librelane/slots) for your slot accordingly.
+
+However, you need to consider both the minimum pitch of the bondpads and the capabilities of your PCB supplier.
+This depends on the bonding service you are targeting and where you manufacture your PCB.
+
+{Embed}
+https://github.com/wafer-space/gf180mcu-project-template/tree/main/librelane/slots
+gf180mcu-project-template/librelane/slots at main · wafer-space/gf...
+Project template for wafer.space MPW runs using the gf180mcu PDK - wafer-space/gf180mcu-project-template
+2026-04_media/gf180mcu-project-template-CA20D
+
+
+[2026-04-11 3:20 a.m.] mithro_
+I did an exploration of what IOs options might be possible at https://mithro.github.io/gf180mcu-project-template/
+
+
+[2026-04-30 2:26 p.m.] tholin
+@Leo Moser (mole99) Setting NUM_ANALOG_PADS to 0 doesn’t work in the project template. Might need to guard some lines with `if NUM_ANALOG_PADS != 0` (is that even valid syntax?)
+
+{Attachments}
+2026-04_media/image-64C6E.png
+
+
+[2026-04-30 2:27 p.m.] tholin
+I think setting it to exactly 1 will also break since that generates `[0:0]`
+
+
+[2026-04-30 2:27 p.m.] tholin
+Same for all of them, actually, but this one feels the most likely to get set to 0
+
+
+[2026-04-30 2:27 p.m.] 246tnt
+`[0:0]` should be valid AFAIK.
+
+
+[2026-04-30 2:29 p.m.] dorythecat_v2
+I already reported this a whileago. This is because the generation code is not in an ifdef
+
+
+[2026-04-30 2:29 p.m.] dorythecat_v2
+I believe I had said I would open an issue and try to fix it...
+
+
+[2026-04-30 2:29 p.m.] dorythecat_v2
+And never did...
+
+
+[2026-04-30 2:29 p.m.] dorythecat_v2
+Oops...
+
+
+[2026-04-30 3:06 p.m.] mole99
+Yeah, please open an issue so that I remember to fix it (or anyone that comes before me).
+
+
+[2026-04-30 3:06 p.m.] dorythecat_v2
+I will open an issue and try to fix it myself, since I said I would I now feel a bit obligated lol
+
+
+[2026-04-30 3:07 p.m.] dorythecat_v2
+Brb
+
+
+[2026-04-30 3:10 p.m.] mithro_
+I suggest opening the issue, then even if you fix it or not you are half way there 🙂
+
+
+[2026-04-30 3:14 p.m.] dorythecat_v2
+Yeah I already opened it
+
+
+[2026-04-30 3:15 p.m.] dorythecat_v2
+[#58](https://github.com/wafer-space/gf180mcu-project-template/issues/58)
+
+{Embed}
+https://github.com/wafer-space/gf180mcu-project-template/issues/58
+Setting number of pins of a type to 0 throws error · Issue #58 · ...
+When adjusting slot_defines.svh, if setting any of the NUM_XXX_PADS variables to zero, the make librelane routine will throw an error, as it will try to generate zero pins.
+2026-04_media/58-9E3A5
+
+
+[2026-04-30 3:17 p.m.] dorythecat_v2
+Seeing if a quick fix does it (it should but always gotta test xd)
+
+
+[2026-04-30 3:35 p.m.] dorythecat_v2
+@Leo Moser (mole99) please test and lmk if [this pull request](https://github.com/wafer-space/gf180mcu-project-template/pull/59) fixes it! :D
+
+{Embed}
+https://github.com/wafer-space/gf180mcu-project-template/pull/59
+Fixed #58 by dorythecat · Pull Request #59 · wafer-space/gf180mcu...
+2026-04_media/59-099C6
+
+
+[2026-04-30 4:40 p.m.] mole99
+Thank you, I will take a look soon.
+
+
+[2026-04-30 4:43 p.m.] dorythecat_v2
+No worries;
+
+
+==============================================================
+Exported 25 message(s)
+==============================================================

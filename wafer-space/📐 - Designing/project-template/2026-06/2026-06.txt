@@ -1,0 +1,538 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 📐 - Designing / 📝-project-template
+Topic: [template-github](https://github.com/wafer-space/gf180mcu-project-template)
+After: 2026-05-31 11:59 p.m.
+Before: 2026-07-01 12:00 a.m.
+==============================================================
+
+[2026-06-03 1:23 p.m.] mole99 (pinned)
+@everyone 📢 The project template update is now live!
+
+- Project Template [1.5.0](https://github.com/wafer-space/gf180mcu-project-template/releases/tag/1.5.0)
+  - Switch to [open_pdks](https://github.com/RTimothyEdwards/open_pdks) for the PDK, managed by [Ciel](https://github.com/fossi-foundation/ciel). This enables a number of new community IPs. 
+  - Add SCL, PAD and SRAM environment variables to the flow. This allows building a chip with 3.3V standard cells, 3.3V SRAMs, and 3.3V/5V compatible I/Os, for example.
+  - Enable the new DRC runner. The KLayout DRC deck is now parallelized across rule decks while sharing some of the memory.
+    For a best possible utilization choose: threads * workers = hardware threads. If RAM usage is too high, reduce the number of workers. 
+  - Rename the QR code ID, add readable shuttle and project IDs, add a marker. Only required if CoB option is selected.
+
+- Precheck [1.6.0](https://github.com/wafer-space/gf180mcu-precheck/releases/tag/1.6.0)
+  - Switch to [open_pdks](https://github.com/RTimothyEdwards/open_pdks) for the PDK, managed by [Ciel](https://github.com/fossi-foundation/ciel).
+  - Add the `--cob` flag.
+  - Enable the new DRC runner.
+
+I've seen a significant reduction in runtime running the precheck on my machine with 24 cores: 0p5x0p5 slot: 0:06:36, and 1x1 slot: 0:40:14.
+Please note that the platform still needs to be updated to benefit of the new DRC runner and to make the CoB packaging option selectable.
+
+{Reactions}
+🎉 (11) 👍 (3) ❤️ (2) 🥳 waferspace
+
+[2026-06-03 1:23 p.m.] mole99
+Pinned a message.
+
+
+[2026-06-03 1:23 p.m.] mole99
+If you are planning to tape out on wafer.space GF180MCU Run 2, please ensure your project is updated accordingly.
+There will be further updates before the tapeout. Though they won't be as significant as this one, so they can be easily applied to your existing projects.
+
+{Reactions}
+👍 ❤️
+
+[2026-06-05 2:19 a.m.] robtaylor_52029
+just checking, is the 3.3v library there @Tholin's?
+
+
+[2026-06-05 5:18 a.m.] mole99
+Correct, it's the gf180mcu_as_sc_mcu7t3v3 SCL.
+
+{Reactions}
+🎉
+
+[2026-06-05 10:50 a.m.] robtaylor_52029
+@Leo Moser (mole99) just checking, is it required to move to 1.5.0 for the run 2 tapeout?
+
+
+[2026-06-05 5:16 p.m.] mole99
+If you use the CoB packaging option, then yes. You need the new ID and marker macros in the correct positions in order to pass precheck.
+
+
+[2026-06-05 10:29 p.m.] robtaylor_52029
+thanks!
+
+
+[2026-06-06 8:39 a.m.] rebelmike
+Any idea why I might be getting this error when running the KLayout.XOR step locally (but not on GitHub - it's running fine there!): ```
+ERROR: In /nix/store/x0ckywq495x29y1q4bldarafacwzzsxj-python3-3.13.9-env/lib/python3.13/site-packages/librelane/scripts/klayout/xor.drc: 'source': Stream has unknown format: /home/mdb36/wafer-space/ws02-tinyQV/librelane/runs/RUN_2026-06-06_09-45-39/56-magic-streamout/chip_top.magic.gds in Layout::read
+```
+
+
+[2026-06-06 8:47 a.m.] rebelmike
+Only thing I can think of is the nix install is old.  But it's a bit weird it's otherwise working.  Can I upgrade nix by rerunning the install script from https://librelane.readthedocs.io/en/stable/installation/nix_installation/installation_linux.html ?
+
+
+[2026-06-06 3:27 p.m.] mole99 (pinned)
+📢 Minor project template update!
+
+- Project Template [1.5.1](https://github.com/wafer-space/gf180mcu-project-template/releases/tag/1.5.1)
+  - Update PDK to `9233c192`.
+  - Automatically fetch new PDK if hash has changed.
+
+{Reactions}
+🎉 (2)
+
+[2026-06-06 3:27 p.m.] mole99
+Pinned a message.
+
+
+[2026-06-07 9:29 a.m.] rebelmike
+Started a thread.
+
+
+[2026-06-08 2:14 p.m.] mole99 (pinned)
+📢 Bugfix project template update!
+
+- Project Template [1.5.2](https://github.com/wafer-space/gf180mcu-project-template/releases/tag/1.5.2)
+  - Update PDK to `f6bfbd4d`
+    - Fix port attributes on the `gf180mcu_ocd_io__in_s` cell, which previously caused OpenROAD to skip CTS (clock tree synthesis)! Thanks @RebelMike for reporting this issue!
+  - Update LibreLane dev to latest
+    - Magic scripts use `locking disable`, which prevents the maximum open file descriptor limit from being reached.
+
+{Reactions}
+💜 (2)
+
+[2026-06-08 2:15 p.m.] mole99
+Pinned a message.
+
+
+[2026-06-11 9:46 p.m.] polyfractal
+Hmm, cautionary note. May be specific to my setup and something I goofed up.
+
+Discovered my project template was on an old verison of the PDK despite being on latest git commit and running `make clone-pdk`. Turns out the newer PDK version was downloaded but the symlink was still pointing at the old version.  No idea how that happened, I might have interrupted it mid-updating or something.
+
+
+[2026-06-11 10:59 p.m.] namibj
+I forgot to put the pdk root env into scope before I updated, then wondered 2 days later why something was buggy that I had thought to have been fixed, just to realize what I had done... 😄
+
+{Reactions}
+😁 (2)
+
+[2026-06-13 7:06 a.m.] 246tnt
+@Leo Moser (mole99) We need to use librelane dev branch for stuff to work correctly right ?
+
+
+[2026-06-13 7:54 p.m.] 246tnt
+It would also be nice if the action on the repo could save the resuls ... I'd like an example GDS as "reference" since I'm using a different build process and trying to match it without having to build it myself.
+
+
+[2026-06-13 8:36 p.m.] mole99
+Yes, the project template currently uses LibreLane dev due to some required updates.
+
+
+[2026-06-13 8:39 p.m.] mole99
+The action in the project template actually builds all of the different slot sizes and uploads their GDS. But I think you can't access them because you're not the owner of the repository.
+You can fork the repository and should then be able to download the final GDS.
+
+
+[2026-06-13 8:40 p.m.] 246tnt
+Mmm, is that a settings ? I mean on TT's action anyone can download the artefacts.
+
+
+[2026-06-13 8:44 p.m.] mole99
+Maybe. At first, I thought that everyone could download them, but Tim E. let me know that he can't access them.
+I'll take a look at the settings tomorrow.
+
+{Reactions}
+👍
+
+[2026-06-14 7:05 a.m.] 246tnt
+@Leo Moser (mole99) Oh my bad, I can download the artefact ...
+
+
+[2026-06-14 8:17 a.m.] mole99
+Good to know! I think you at least need to be logged in to GitHub.
+
+{Reactions}
+👍
+
+[2026-06-14 8:30 p.m.] furanfuranfuran
+hi, I hit the following w/make librelane on the latest template after a successful make clone-pdk:
+Writing src/generated_defines.svh
+SRAM_DEFINE=SRAM_gf180mcu_fd_ip_sram librelane librelane/slots/slot_1x1.yaml librelane/macros/macros_5v.yaml librelane/config.yaml --pdk gf180mcuD --pdk-root /opt/chip/gf180mcu-project-template/gf180mcu --manual-pdk --scl gf180mcu_fd_sc_mcu7t5v0 --pad gf180mcu_fd_io --save-views-to /opt/chip/gf180mcu-project-template/final
+[14:29:35] ERROR    Errors have occurred while loading the       __main__.py:160
+                    design configuration file.                                  
+[14:29:35] ERROR    Unknown key                                  __main__.py:162
+                    'PDN_CORE_RING_CONNECT_TO_PAD_LAYERS'                       
+                    provided.                                                   
+[14:29:35] ERROR    LibreLane will now quit. Please check your   __main__.py:164
+                    configuration.                                              
+make: *** [Makefile:94: librelane] Error 1
+
+
+[2026-06-14 9:26 p.m.] rebelmike
+That is surprising, it suggests you have the wrong version of LibreLane.  Have you installed locally rather than running through nix?
+
+
+[2026-06-14 9:29 p.m.] furanfuranfuran
+running through nix - I'm still digging, might have an old install
+
+
+[2026-06-14 9:34 p.m.] rebelmike
+`librelane --version` should say `LibreLane v3.1.0.dev1`
+
+
+[2026-06-14 9:37 p.m.] furanfuranfuran
+[nix-shell:~]$ librelane --version
+LibreLane v3.0.4
+[nix-shell:~]$ which librelane
+/nix/store/qjkqjsc147pnkgdr6lm288f5p757bliv-devshell-dir/bin/librelane
+
+
+[2026-06-14 9:42 p.m.] furanfuranfuran
+it's my nix install, 1 sec
+
+
+[2026-06-14 9:45 p.m.] furanfuranfuran
+good to go now - I think I had a newer nix installed, it was erroring updating the ciel package on startup
+
+
+[2026-06-14 9:52 p.m.] furanfuranfuran
+the error I had before was some sort of issue with the way nixpkgs is used vs the nix I had installed, so I removed/reinstalled using the curl command from the website. here's the error, if it's interesting:
+         … while calling the 'import' builtin
+           at «string»:1:2:
+              1| (import <nixpkgs> {}).bashInteractive
+               |  ^
+
+         … while realising the context of a path
+
+         … while calling the 'findFile' builtin
+           at «string»:1:9:
+              1| (import <nixpkgs> {}).bashInteractive
+               |         ^
+
+         error: file 'nixpkgs' was not found in the Nix search path (add it using $NIX_PATH or -I)
+  uses bash from your environment
+
+
+[2026-06-14 9:52 p.m.] furanfuranfuran
+template build is at step 63 so I think I'm set up, thanks
+
+{Reactions}
+🎉
+
+[2026-06-15 7:52 a.m.] mole99
+@Ian Hanschen Nice to see you here!
+I'm glad to hear that you managed to set up the project template.
+
+{Reactions}
+👍
+
+[2026-06-15 11:22 a.m.] 246tnt
+@Leo Moser (mole99) `f741b96babd3517a01e6cc9efc3ab1eef8cbacee` from the "old" wafer space PDK doesn't seem to have been applied upstream.
+
+
+[2026-06-15 11:22 a.m.] 246tnt
+`Change ANTENNAGATEPLUSDIFF multiplier from 2 to 15 in gf180mcu_fd_sc_mcu7t5v0 techlefs`
+
+
+[2026-06-15 11:22 a.m.] 246tnt
+Kind of a useful one 😅
+
+
+[2026-06-15 11:25 a.m.] mole99
+@tnt Thank you! It looks like that one slipped through. I will update the PDK shortly. However, open_pdks won't be synced until tomorrow.
+
+{Reactions}
+👌
+
+[2026-06-15 11:58 a.m.] egorxe
+@Tim Edwards Is there any know time frame for your 3.3V OCD SRAM tests? I suspect a lot of people are eagerly awaiting your results 😅 .
+
+
+[2026-06-15 12:01 p.m.] anfroholic
+Wow, can't believe it's been 2 weeks or more since I wrote that. Unfortunately his boards are currently still in China. I am hoping they will ship in the coming day(s) 
+Then there's a few days for it to get to him. 
+Yeah, we're all eager 😂 but want to keep a bit of pressure off Tim
+
+{Reactions}
+👍
+
+[2026-06-15 12:06 p.m.] 246tnt
+But those are just the COB ? Are you shipping some breakout to 100mil headers too ? Because else, he will need to design some kind of host board and getting any kind of results before the submission deadline sounds pretty tight.
+
+
+[2026-06-15 12:17 p.m.] anfroholic
+Good point.
+
+
+[2026-06-15 2:32 p.m.] mole99
+Started a thread.
+
+
+[2026-06-15 4:23 p.m.] rtimothyedwards_19428
+@tnt :  I was thinking the same thing the other day.  Have any host board designs been made yet that are compatible with the COBs?  I could probably make do with a simple board that just routes the connector pins to a standard header.
+
+
+[2026-06-15 4:33 p.m.] rebelmike
+I have some of these https://codeberg.org/rebelmike/ws-breakout, but they aren't tested yet as my COBs should arrive at roughly the same time as yours.  Since I made that the breakouts in the WS repo have been updated: https://github.com/wafer-space/chip-on-board-wire-bonded-pcbs/tree/main/run-1/motherboards but I don't know if anyone has made any of those yet.  I think various people have tested with the previous version of that (which as far as I'm aware was fine except the pin 1 marker was the wrong side)
+
+
+[2026-06-15 4:41 p.m.] rebelmike
+The 1x0p5 COB is pinout compatible with the 1x1 COB in terms of power and ground.  The signal pads are mostly in the same order too, but for (probably bad) reasons I reversed the order of pads 67-70.  You can view the schematic here (pin/pad names are those on the default project template): https://kicanvas.org/?repo=https%3A%2F%2Fgithub.com%2Fwafer-space%2Fchip-on-board-wire-bonded-pcbs%2Ftree%2Fmain%2Frun-1%2F1x0p5-cob
+
+
+[2026-06-15 5:21 p.m.] polyfractal
+I've used the long breakoutboards from that repo, seem to be working for the minimal tests I've tried.
+
+I have some of the PCBs unpopulated and some of the mezzanine connectors, happy to fedex you one if you want @Tim Edwards . Will have to do the soldering yourself since my soldering skills are terrible and it took me many tries to get one working 😅
+
+{Attachments}
+2026-06_media/AP1GczMbT2o-W_EDtoIsbkqbQFQkZ-7c6ZdVF7VlBW-7D5D9.png
+
+{Reactions}
+💜
+
+[2026-06-15 5:22 p.m.] polyfractal
+(oh, mine are the pre-updated version. I think it was just the silkscreen that changed)
+
+
+[2026-06-15 5:24 p.m.] rtimothyedwards_19428
+@BreakingTaps : Sure, I'll take you up on that offer.  I assume that unless I'm _really_ bad at soldering, I should only need one board.  I can get the connector myself as long as somebody can tell me what the part number is from Digi-Key or Mouser.
+
+{Reactions}
+👍
+
+[2026-06-15 5:25 p.m.] 246tnt
+It's 0.4mm pitch 🙂
+
+
+[2026-06-15 5:27 p.m.] rebelmike
+Yeah, I got JLC to solder mine. Though having seen those photos of the CoB boards I might go double check they actually managed that..
+
+
+[2026-06-15 5:30 p.m.] polyfractal
+i definitely regret thinking I could do it by hand 🫣
+
+
+[2026-06-15 5:30 p.m.] 246tnt
+I believe mouser 798-DF40C2070DS04V51 is compatible.
+
+
+[2026-06-15 5:46 p.m.] rtimothyedwards_19428
+Thanks for the heads-up on the pin pitch.  That indeed will be difficult to hand solder.
+
+
+[2026-06-15 5:47 p.m.] rtimothyedwards_19428
+@RebelMike :  Will JLC assemble from parts that you send to them?
+
+
+[2026-06-15 5:54 p.m.] namibj
+yes, it's expensive
+
+
+[2026-06-15 5:55 p.m.] namibj
+like 70$ for each 50qty, each batch seems to be billed in full iirc
+
+
+[2026-06-15 5:56 p.m.] namibj
+(I've done so)
+
+
+[2026-06-15 5:57 p.m.] 246tnt
+But JLC can also get the part from LCSC directly.
+
+
+[2026-06-15 5:57 p.m.] namibj
+yes
+
+
+[2026-06-15 5:57 p.m.] namibj
+if mouser or digikey have them it's different fee structure if you use global sourcing
+
+
+[2026-06-15 6:14 p.m.] rebelmike
+At least when I ordered LCSC had the part in stock so it was easy to get them to use it. 5 PCBs and assembly was ~$25 + shipping and duties
+
+
+[2026-06-15 6:19 p.m.] mole99
+Yeah, I just sent my [PCB](https://github.com/mole99/waferspace-main-pcb) for fabrication via JLCPCB, including assembly with parts from LCSC.
+
+{Embed}
+https://github.com/mole99/waferspace-main-pcb
+GitHub - mole99/waferspace-main-pcb: Main PCB for wafer.space FABul...
+Main PCB for wafer.space FABulous FPGA. Contribute to mole99/waferspace-main-pcb development by creating an account on GitHub.
+2026-06_media/waferspace-main-pcb-0847D
+
+{Reactions}
+❤️
+
+[2026-06-16 4:37 a.m.] anfroholic
+I should have some around as well I can send if you like. 
+I consider myself a touch above average with soldering. I still mucked a few of them before I got a good one. 
+0.4mm is quite tiny.
+
+
+[2026-06-16 4:13 p.m.] rtimothyedwards_19428
+Yeah, I'm decently good at soldering but I struggle with 0.5mm pitch and so I think I'll leave 0.4mm pitch to the experts.
+
+
+[2026-06-16 4:17 p.m.] rtimothyedwards_19428
+@Tim 'mithro' Ansell :  You need to be selling these boards on the Wafer.Space site!
+
+
+[2026-06-16 5:31 p.m.] polyfractal
+++ i would definitely have bought them (plus some margin for profit/sustainability) over doing it myself
+
+{Reactions}
+👍 (2)
+
+[2026-06-17 5:59 a.m.] mithro_
+If someone want to design a "support dev kit" for wafer space chips, I would happily figure out how to get them manufactured and such.
+
+
+[2026-06-18 11:36 a.m.] mole99 (pinned)
+@everyone 📢 Important update!
+
+A regression was introduced to the LibreLane padring generation script, resulting in the north and south bond pads being off-center by 0.5 µm. This project template update resolves this issue. Additionally, a step has been added to the precheck that compares the pad layer with a golden mask to ensure that the pads match the default CoB padring for the given slot size.
+
+- Project Template [1.5.3](https://github.com/wafer-space/gf180mcu-project-template/releases/tag/1.5.3)
+  - Update LibreLane dev to latest
+    - Fix an issue in the padring script, ensuring the pads are correctly aligned again.
+  - Update PDK to `019cf7a3`
+    - Port a missing fix regarding antenna insertion for the foundry standard cells from the wafer.space PDK fork. Thanks, @tnt!
+
+- Precheck [1.7.0](https://github.com/wafer-space/gf180mcu-precheck/releases/tag/1.7.0)
+  - Add a pad mask check to verify that the layout is compatible with the CoB packaging option. Enabled via the `--cob` flag.
+  - Render the layout.
+
+Please update your designs accordingly. The pad mask check will soon be activated on the submission platform. Until then, you can run the precheck locally with the `--cob` option to ensure a compatible layout.
+
+
+[2026-06-18 11:36 a.m.] mole99
+Pinned a message.
+
+
+[2026-06-18 12:57 p.m.] rtimothyedwards_19428
+@Tim 'mithro' Ansell :  The "support kit" in question is Mike's board at https://codeberg.org/rebelmike/ws-breakout.  It is a trivially simple breakout board---takes the mezzanine connector with absurdly small pin pitch out to a pair of 0.1" row headers.  The sole components are the mezzanine connector and the headers.  Getting the mezzanine connector soldered down professionally on short notice locally is going to cost me in the range of $200.  So I would definitely like to see this cheaply assembled and sold to me on the Wafer.Space online store.  I would pay a considerable markup to avoid a one-off, $200 job.
+
+
+[2026-06-18 1:40 p.m.] gojimmypi
+Does everyone on the gf180 track need to resubmit? Any local changes needed to GH actions?
+
+
+[2026-06-18 1:42 p.m.] mole99
+What do you mean by "gf180 track"?
+As for the changes to the project template, you need to update `flake.lock` and the PDK hash: https://github.com/wafer-space/gf180mcu-project-template/commit/a4bca2f870986b4232f47378168334cb30b1a0da
+
+
+[2026-06-18 1:50 p.m.] gojimmypi
+If I'm on the gf26a shuttle due Monday, do I need to rebuild & resubmit?
+
+
+[2026-06-18 1:52 p.m.] mole99
+If you have a question about the Tiny Tapeout shuttle, you should ask on the Tiny Tapeout Discord server.
+But no, this only affects the padring, which the Tiny Tapeout team has already fixed.
+
+{Reactions}
+👍 (2)
+
+[2026-06-18 2:21 p.m.] tisse2274
+thanks for information
+
+
+[2026-06-23 4:13 p.m.] tholin
+How can I launch magic in the template and have it load the rcfile correctly? Even when I point it to the .magicrc file for the PDK with `-rcfile` and an absolute path, it claims it can’t find the file.
+
+
+[2026-06-23 4:13 p.m.] tholin
+I am still relying on iic-osic-tools just for magic
+
+
+[2026-06-23 4:16 p.m.] mole99
+Could you please share the command that you are using?
+
+
+[2026-06-23 4:19 p.m.] tholin
+`magic -rcfile $(pwd)/gf180mcu/gf180mcuD/libs.tech/magic/gf180mcuD.magicrc`
+
+
+[2026-06-23 4:20 p.m.] tholin
+The `$(pwd)` is illustrative, I am not going to paste the whole absolute path of my working directory in there, but imagine I did
+
+
+[2026-06-23 4:20 p.m.] tholin
+A relative path also doesn’t work
+
+
+[2026-06-23 4:21 p.m.] tholin
+```Could not find file '/home/tholin/work/open_pdks/open_pdks/root/ciel/gf180mcu/build/019cf7a3e0de79bb0e4b6213758882d283c65816/gf180mcuD/libs.tech/magic/gf180mcuD.tech' in any of these directories:
+         . $CAD_ROOT/magic/sys $CAD_ROOT/magic/sys/current```
+it goes in response, which is not the path I entered, and it also doesn’t exist
+
+
+[2026-06-23 4:22 p.m.] tholin
+There is no "work" directory in my home dir
+
+
+[2026-06-23 8:18 p.m.] rebelmike
+@Leo Moser (mole99) I've integrated the latest template update and I'm hitting a DRC error in the padring.  The problem occurs if a bidir pad is first on the north side on a quarter size slot.  I've just pushed up a branch with a minimal change to the template that repros the problem: https://github.com/MichaelBell/ws02-tinyQV/tree/template
+
+{Embed}
+https://github.com/MichaelBell/ws02-tinyQV/tree/template
+GitHub - MichaelBell/ws02-tinyQV at template
+TinyQV for Wafer Space run 2 on gf180mcuD. Contribute to MichaelBell/ws02-tinyQV development by creating an account on GitHub.
+2026-06_media/ws02-tinyQV-14F3A
+
+
+[2026-06-23 8:30 p.m.] mole99
+Thanks Mike, that issue also happened in a full slot. It should be fixed with the PDK update tomorrow.
+
+
+[2026-06-23 8:32 p.m.] rebelmike
+Ah that's good to hear it is fixed!  I'll get that integrated tomorrow evening
+
+
+[2026-06-24 2:47 p.m.] mole99 (pinned)
+📢 PDK update!
+
+This is a minor update that is only necessary if you encountered DRC violations in your padring when using the 3.3V/5V I/Os.
+
+- Project Template [1.5.5](https://github.com/wafer-space/gf180mcu-project-template/releases/tag/1.5.5)
+  - Update PDK to `140b0494`
+    - Adjust the layout of `bi_24t` of the `gf180mcu_ocd_io` library to prevent DRC violations in certain cases.
+
+
+[2026-06-24 2:47 p.m.] mole99
+Pinned a message.
+
+
+[2026-06-30 2:45 p.m.] bunnievorpal
+stupid question - what's the procedure to submit GDS to the upcoming run? probably there's a link in some obvious place and i've just missed it.
+
+
+[2026-06-30 2:47 p.m.] anfroholic
+https://platform.wafer.space/
+
+{Embed}
+https://platform.wafer.space/
+Welcome to wafer.space
+…
+Platform for wafer.space low cost silicon manufacturing.
+
+{Reactions}
+👍
+
+[2026-06-30 6:57 p.m.] osvel
+Is there a template for writing hierarchical designs and hardened macros? I assume I can just copy the normal one and remove some IO restrictions and padding? Is there something else one should consider?
+
+
+[2026-06-30 7:41 p.m.] 246tnt
+How you handle PDN for macros is usually a pain point ... different options with different trade-offs and often incompatible between then so you got to pick one.
+
+
+[2026-06-30 9:53 p.m.] bailey8889
+Does this help? https://platform.chipfoundry.io/knowledge-base/article/hardening-options
+
+
+==============================================================
+Exported 95 message(s)
+==============================================================

@@ -1,0 +1,3293 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 📐 - Designing / 📝-project-template
+Topic: [template-github](https://github.com/wafer-space/gf180mcu-project-template)
+After: 2025-11-30 11:59 p.m.
+Before: 2026-01-01 12:00 a.m.
+==============================================================
+
+[2025-12-01 12:29 a.m.] _luke_w_
+The `.sdc` in the template has this at the end:
+
+```
+if { [info exists ::env(OPENLANE_SDC_IDEAL_CLOCKS)] && $::env(OPENLANE_SDC_IDEAL_CLOCKS) } {
+    unset_propagated_clock [all_clocks]
+} else {
+    set_propagated_clock [all_clocks]
+}
+```
+
+However I've instrumented this and that variable is never set in any stages, which is probably why I have multi-hundred-ns clock slew times in pre-CTS STA. @Leo Moser (mole99) do you know what's up with that? librelane sets it here: https://github.com/librelane/librelane/blob/774d6e6f221ccf21bd499e9b8ccba4afeffff4fd/librelane/steps/openroad.py#L725-L728
+
+{Embed}
+https://github.com/librelane/librelane/blob/774d6e6f221ccf21bd499e9b8ccba4afeffff4fd/librelane/steps/openroad.py
+librelane/librelane/steps/openroad.py at 774d6e6f221ccf21bd499e9b8c...
+ASIC implementation flow infrastructure, successor to OpenLane - librelane/librelane
+2025-12_media/librelane-02AD5
+
+
+[2025-12-01 12:36 a.m.] _luke_w_
+(context for suddenly caring about pre-CTS STA is I wanted to try enabling the resizer earlier in the flow to help with some stubborn setup paths)
+
+
+[2025-12-01 1:15 a.m.] _luke_w_
+I have a dumb workaround:
+
+```tcl
+set clk_pins [get_pins  -of_objects [get_net -of_objects [get_pins i_chip_core.clkroot_sys_u.magic_clkroot_anchor_u/Z]]]
+set clk_loads [llength $clk_pins]
+puts "clk_sys has $clk_loads directly connected pins"
+
+if { [expr $clk_loads > 10] } {
+    puts "Setting all clocks to ideal!"
+    unset_propagated_clock [all_clocks]
+} else {
+    puts "Setting all clocks to non-ideal"
+    set_propagated_clock [all_clocks]
+}
+```
+
+This prints the right messages in the right phases (ideal until after CTS), but even with `unset_propagated_clock [all_clocks]` my early STAs still have enormous clock rise/fall times. Is this just a me problem or do other people's pre-CTS STAs also have huge setup violations due to clock slew?
+
+
+[2025-12-01 1:33 a.m.] rebelmike
+I thought that was just how it was pre-CTS. I guess there should be some option to tell STA to ignore the load on the clock pin?
+
+
+[2025-12-01 1:35 a.m.] _luke_w_
+yeah, that is what the `unset_propagated_clock` is supposed to do:
+
+{Attachments}
+2025-12_media/image-74793.png
+
+
+[2025-12-01 1:35 a.m.] _luke_w_
+
+
+{Attachments}
+2025-12_media/image-DB48B.png
+
+
+[2025-12-01 1:37 a.m.] _luke_w_
+(from OpenSTA docs). Ok so it's not just me, it's other people too 😅 right now there isn't really any usable timing information in the early STA which I imagine is part of the reason the early resizer step has been turned off
+
+
+[2025-12-01 1:49 a.m.] rebelmike
+Ah no, hold on - I think it is working.  I have massive slew but it's on my rst_n net, not my clock net:
+
+
+[2025-12-01 1:50 a.m.] rebelmike
+```                      0.150000    0.000000    0.000000   clock clk_PAD (rise edge)
+                                  0.000000    0.000000   clock network delay (ideal)
+                      0.150000    0.000000    0.000000 ^ i_chip_core.tt.i_peripherals.i_simple_peri16.i_spi_ctrl.rstn_gf180mcu_fd_sc_mcu7t5v0__dffq_1_Q/CLK (gf180mcu_fd_sc_mcu7t5v0__dffq_1)
+   832    4.638381  110.209221   63.362564   63.362564 ^ i_chip_core.tt.i_peripherals.i_simple_peri16.i_spi_ctrl.rstn_gf180mcu_fd_sc_mcu7t5v0__dffq_1_Q/Q (gf180mcu_fd_sc_mcu7t5v0__dffq_1)
+                                                         i_chip_core.tt.i_peripherals.i_simple_peri16.i_spi_ctrl.rstn (net)
+                    110.209221    0.000000   63.362564 ^ i_chip_core.tt.i_peripherals.i_simple_peri19.ay8913.noise_generator.reset_gf180mcu_fd_sc_mcu7t5v0__clkinv_1_ZN/I (gf180mcu_fd_sc_mcu7t5v0__clkinv_1)
+   164    0.691456    3.280350   53.123268  116.485832 v i_chip_core.tt.i_peripherals.i_simple_peri19.ay8913.noise_generator.reset_gf180mcu_fd_sc_mcu7t5v0__clkinv_1_ZN/ZN (gf180mcu_fd_sc_mcu7t5v0__clkinv_1)
+                                                         i_chip_core.tt.i_peripherals.i_simple_peri19.ay8913.noise_generator.reset (net)
+```
+
+{Reactions}
+👍
+
+[2025-12-01 1:50 a.m.] _luke_w_
+huhhhh ok, thanks for the datapoint
+
+
+[2025-12-01 1:50 a.m.] rebelmike
+That's from 12-openroad-staprepnr
+
+
+[2025-12-01 2:05 a.m.] _luke_w_
+...it's possible this was just me being dumb. There is a whole bunch of other tcl that librelane runs during STA and it might handle ideal clocks there. But yeah I also see the slow unbuffered reset
+
+
+[2025-12-01 2:05 a.m.] _luke_w_
+normally there is a command like `set_ideal_network` which you can use to do the same thing for resets but I don't think OpenSTA supports it
+
+
+[2025-12-01 2:14 a.m.] rebelmike
+I'm so used to being extremely area constrained on TT that I completely forgot until now that you can set the synth strategy to trade area for speed!
+
+
+[2025-12-01 2:29 a.m.] _luke_w_
+Here is an ugly trick to get it to ignore reset timing pre-CTS (relies on the name of a manual flop instances in my reset synchronisers):
+
+```tcl
+set main_clk_pin [get_pins i_chip_core.clkroot_sys_u.magic_clkroot_anchor_u/Z]
+set rst_pins [get_pins i_chip_core.*sync*flop2/Q]
+
+set clk_pins [get_pins  -of_objects [get_net -of_objects ${main_clk_pin}]]
+set clk_loads [llength ${clk_pins}]
+puts "clk_sys has ${clk_loads} directly connected pins"
+
+if { [expr $clk_loads > 10] } {
+    puts "Setting all clocks to ideal!"
+    unset_propagated_clock [all_clocks]
+    puts "Case analysing reset nets:"
+    foreach pin ${rst_pins} {puts [sta::get_full_name ${pin}]}
+    set_case_analysis 1 ${rst_pins}
+} else {
+    puts "Setting all clocks to non-ideal"
+    set_propagated_clock [all_clocks]
+    unset_case_analysis ${rst_pins}
+}
+```
+
+Seems to work for me. Might give better placement as the datapath delays are actually realistic.
+
+{Reactions}
+👍 (2)
+
+[2025-12-01 3:21 a.m.] polyfractal
+I've been working through the synth strategies and haven't seen any real correlation unfortunately. 🙁  `AREA 3` seems to be working best/fastest for my design so far
+
+
+[2025-12-01 3:24 a.m.] rebelmike
+Yeah I was hoping it would fix it as I only needed a couple of ns, but it didn’t seem to
+
+
+[2025-12-01 3:24 a.m.] _luke_w_
+If you add this to your Makefile:
+
+```
+librelane-explore: ## Run synthesis exploration
+    librelane librelane/config.yaml --pdk ${PDK} --pdk-root ${PDK_ROOT} --manual-pdk --last-run --flow SynthesisExploration
+.PHONY: librelane-explore
+```
+
+And then run `make librelane-explore` it will try all 9 strategies and tell you which is best (though it's just synthesis timing)
+
+{Reactions}
+😮 (2) 🙏 (2)
+
+[2025-12-01 3:24 a.m.] polyfractal
+likewise 😭  got it down to about 3ns but just can't seem to improve from there. might need to just drop the clock at this point
+
+
+[2025-12-01 3:32 a.m.] polyfractal
+been pretty surprised by timing in general. For a while I assumed reducing density would help the optimizer spread out, insert buffers more easily, etc. but cranking up the density (in addition to more margins) helped a lot
+
+
+[2025-12-01 3:33 a.m.] _luke_w_
+What's your density set to at the moment?
+
+
+[2025-12-01 3:37 a.m.] polyfractal
+between 45 and 55 is yielding best results so far (still -3ns in some corners though)
+
+{Reactions}
+👍
+
+[2025-12-01 4:27 a.m.] _luke_w_
+There's a step disabled by default which I found helped a little:
+
+```
+RUN_POST_GRT_RESIZER_TIMING: True
+```
+
+
+[2025-12-01 4:29 a.m.] _luke_w_
+from: https://github.com/librelane/librelane/blob/774d6e6f221ccf21bd499e9b8ccba4afeffff4fd/librelane/flows/classic.py#L156-L161
+
+{Embed}
+https://github.com/librelane/librelane/blob/774d6e6f221ccf21bd499e9b8ccba4afeffff4fd/librelane/flows/classic.py
+librelane/librelane/flows/classic.py at 774d6e6f221ccf21bd499e9b8cc...
+ASIC implementation flow infrastructure, successor to OpenLane - librelane/librelane
+2025-12_media/librelane-02AD5
+
+
+[2025-12-01 4:31 a.m.] polyfractal
+ooh, will try that on my next run!
+
+
+[2025-12-01 4:34 a.m.] polyfractal
+if/when I do another shuttle, I think I'll just write a quick optimizer to churn through config options for like a week. beats doing it by hand 😅
+
+
+[2025-12-01 4:36 a.m.] _luke_w_
+yeah, I mean it should be possible to do this stuff methodically, but this flow does things in weird places
+
+
+[2025-12-01 4:36 a.m.] _luke_w_
+like it doesn't do any gate sizing until after detailed placement
+
+
+[2025-12-01 4:36 a.m.] _luke_w_
+but I am also just trying random shit to make my design meet timing at this point
+
+{Reactions}
+this
+
+[2025-12-01 4:37 a.m.] _luke_w_
+I have had one run that I think I could make pass with some manual netlist changes but I don't really want to do that
+
+
+[2025-12-01 4:38 a.m.] polyfractal
+i'm very nearly read to call it with my best -3ns case, and just slap a big heatsink on it 😄 looked fine in the normal corners, just the hot ones were bad
+
+
+[2025-12-01 4:39 a.m.] polyfractal
+how would you go about doing this btw? not sure I'd know what to tweak even if I wanted to
+
+
+[2025-12-01 4:40 a.m.] _luke_w_
+You can run `librelane` with a `--last-run --from (some pass)` argument to make it restart a run from part way. Since I'm pressed for time I'd probably just edit the netlist with a text editor and re-run from there
+
+
+[2025-12-01 4:41 a.m.] _luke_w_
+I just need some gate upsizing on some gates that are consistently on the critical path on my processor
+
+
+[2025-12-01 4:41 a.m.] _luke_w_
+I think there is a "more proper" way of doing this in LibreLane, by adding an ECO pass
+
+
+[2025-12-01 4:43 a.m.] _luke_w_
+At work our synth and pnr flows are just TCL and my understanding is they'll do pretty much the same thing: write a list of ECO scripts applied at a given point in the flow to apply a manual (but repeatable) fix. That's normally for slightly more esoteric stuff though, not just making the gates the right size on the critical path 😅
+
+{Reactions}
+😁
+
+[2025-12-01 4:44 a.m.] polyfractal
+interesting, thanks! is there a way for librelane to tell you the critical path? Or is that just based on your knowledge of how the processor works?
+
+
+[2025-12-01 4:44 a.m.] _luke_w_
+Yeah, just from reading the `max.rpt` from the final STA
+
+
+[2025-12-01 4:45 a.m.] polyfractal
+oh gotcha, roger
+
+
+[2025-12-01 4:45 a.m.] _luke_w_
+the reports are a bit inscrutable partly because this flow doesn't correctly attribute flops to their original names in the source code
+
+
+[2025-12-01 4:45 a.m.] _luke_w_
+but you can usually make educated guesses
+
+
+[2025-12-01 4:46 a.m.] polyfractal
+yeah it feels like reading tea leaves 🙁  I'm using a transpiled HDL which makes everything even more inscrutable too
+
+
+[2025-12-01 4:48 a.m.] mithro_
+
+
+
+[2025-12-01 6:38 a.m.] polyfractal
+this helped me a bunch btw, thanks! gained me +5ns on setup and now using that to help beat down cap/slew violations 🙂
+
+
+[2025-12-01 9:22 a.m.] rzioma
+The same here... since yesterday.
+
+
+[2025-12-01 10:05 a.m.] urish
+Same for me
+
+
+[2025-12-01 11:30 a.m.] rzioma
+@Leo Moser (mole99) I think including another `yaml` before `config.yaml` **broke** 9t cell support!
+
+{Attachments}
+2025-12_media/image-FA1BF.png
+
+
+[2025-12-01 11:32 a.m.] rzioma
+`resloved.json` in the runs folder gets confused
+
+{Attachments}
+2025-12_media/image-856F4.png
+
+
+[2025-12-01 11:33 a.m.] rzioma
+My quick-and-dirty workaround is to place `STD_CELL_LIBRARY: gf180mcu_fd_sc_mcu9t5v0` in `slot_*.yaml` file instead of `config.yaml`
+
+
+[2025-12-01 11:34 a.m.] rzioma
+But begs a question which other parameters are ignored by the flow, if they are not in the first `yaml` file passed into the librelane 🤷‍♂️
+
+
+[2025-12-01 11:45 a.m.] mole99
+Very sorry about that! I think this is either a LibreLane bug, or at least strange behaviour (user config resolved too early). I'll open an issue in the LibreLane repro.
+Yes, adding `STD_CELL_LIBRARY` to `slot_*.yaml` instead is a workaround.
+
+I'm suspect that only `STD_CELL_LIBRARY` is affected because it is a special variable that can be set by passing `--scl` to LibreLane. If you see other variables being overwritten, please let me know. However, I think that's unlikely.
+
+
+[2025-12-01 11:49 a.m.] rzioma
+I agree that it is very unlikely!
+
+
+[2025-12-01 11:50 a.m.] mole99
+Here is the issue: https://github.com/librelane/librelane/issues/827
+
+{Embed}
+https://github.com/librelane/librelane/issues/827
+`STD_CELL_LIBRARY` not correctly resolved · Issue #827 · librelan...
+Description It seems that if you specify two (or more?) user configuration files to read in, STD_CELL_LIBRARY will only be considered in the first one. Scenario: Trying to override the stdcell libr...
+2025-12_media/827-DE3DE
+
+{Reactions}
+👍 ❤️ 🙏
+
+[2025-12-01 12:19 p.m.] rebelmike
+You can improve this with `SYNTH_AUTONAME: True`, however that results in very long names so you'll likely have to go up to Magic 8.3.578 or later to avoid LVS errors
+
+
+[2025-12-01 12:57 p.m.] rebelmike
+Thanks, this along with sorting the resets helped a fair bit!
+
+
+[2025-12-01 3:20 p.m.] tholin
+Alright. Finished with the RISC-V core on my multi-project die. Feature set is rv32ima_zicsr_smrnmi
+
+
+[2025-12-01 3:21 p.m.] tholin
+That’s the second-to-last thing on my to-do list
+
+
+[2025-12-01 3:22 p.m.] tholin
+Tomorrow I will do a final code review. Should be pretty relaxed.
+
+
+[2025-12-01 3:27 p.m.] polyfractal
+https://tenor.com/view/community-chaos-chaotic-fire-gif-17636558
+
+{Embed}
+https://tenor.com/view/community-chaos-chaotic-fire-gif-17636558
+2025-12_media/community-chaos-C6518.png
+
+{Reactions}
+😄 (3) 🔥
+
+[2025-12-01 3:27 p.m.] polyfractal
+meanwhile over here
+
+
+[2025-12-01 3:32 p.m.] tholin
+What I have here is actually almost the bare minimum you need to boot mainline Linux
+
+
+[2025-12-01 3:32 p.m.] tholin
+But its missing the interrupt controller.
+
+
+[2025-12-01 4:13 p.m.] polyfractal
+hm, trying to add a logo similar to the WS logo in the corner. I used the same layers (0/0 background, 81/0 art, 152/5 foreground) but I'm getting an error:
+
+> Failed to extract PR boundary from GDSII view of macro 'gf180mcu_bt_ip__logo'. Ensure that the GDSII view has a PR boundary layer.
+
+any ideas? from checking the docs 0/0 should be the PR_bndry
+
+
+[2025-12-01 5:10 p.m.] _luke_w_
+Looking into why my CTS is weird, I saw there is no max wire length defined. This is my `config.json` from the CTS pass:
+
+```
+    "CTS_CLK_MAX_WIRE_LENGTH": 0,
+```
+
+Would limiting the max wire length help with the pre/post extraction differences?
+
+
+[2025-12-01 5:13 p.m.] _luke_w_
+(trying a run now with 500 um just as an experiment)
+
+
+[2025-12-01 5:15 p.m.] polyfractal
+need to check my notes but if that's the same max_wire_length that I set, it made things much worse. I tried 50 (lol), 500 and 1000 and in all cases the design was notably worse and sometimes failed routing/congestion
+
+
+[2025-12-01 5:15 p.m.] _luke_w_
+ha
+
+
+[2025-12-01 5:18 p.m.] polyfractal
+ah ok, so I set `DESIGN_REPAIR_MAX_WIRE_LENGTH` in the config, not sure if that ends up being the same as the CTS setting
+
+
+[2025-12-01 5:18 p.m.] polyfractal
+i assume not
+
+
+[2025-12-01 5:19 p.m.] _luke_w_
+ah yeah that is something different I believe -- that is a limit on all of the datapath wires that is applied after global placement
+
+{Reactions}
+👍
+
+[2025-12-01 5:19 p.m.] _luke_w_
+500 um is barely enough to get across an SRAM (440 um wide I believe)
+
+
+[2025-12-01 5:20 p.m.] _luke_w_
+I looked at my clock tree and the first net has a routed length of over 3.5 mm which is long enough to see from space
+
+{Reactions}
+😁 (3)
+
+[2025-12-01 5:21 p.m.] polyfractal
+🤞 it works!
+
+
+[2025-12-01 5:22 p.m.] polyfractal
+this last month has been the steepest learning curve of my life haha 😂
+
+{Reactions}
+🎉 (4)
+
+[2025-12-01 5:23 p.m.] logic_destroyer
+same 🙂
+
+
+[2025-12-01 5:24 p.m.] logic_destroyer
+ASIC design is like waging war. It is exhausting and brutal.
+
+{Reactions}
+😂 (2)
+
+[2025-12-01 5:24 p.m.] _luke_w_
+seemed to increase my clock skew by about 1.5 ns so I don't necessarily recommend this 😅
+
+{Reactions}
+😢 (3)
+
+[2025-12-01 5:28 p.m.] logic_destroyer
+I had  M3.2b violations yesterday, but @Leo Moser (mole99) told me to change DENSITY from 30 to 30.1 and it is gone - lol
+
+
+[2025-12-01 5:31 p.m.] logic_destroyer
+My Intel i9 PC has been crunching LibreLAN for weeks – this is going to be expensive. Electricity in Germany is among the most expensive in the world.
+
+
+[2025-12-01 5:40 p.m.] rzioma
+
+
+{Attachments}
+2025-12_media/image-47367.png
+
+{Reactions}
+🎉 (4)
+
+[2025-12-01 5:42 p.m.] logic_destroyer
+just do it! 🙂
+
+{Reactions}
+😅
+
+[2025-12-01 6:52 p.m.] mole99
+If you're still getting the same error, you can send me a repo/branch so I can take a look.
+
+
+[2025-12-01 6:55 p.m.] mole99
+`CTS_CLK_MAX_WIRE_LENGTH` only constraints the wire from the clock input pin to the clock root buffer. So it would only shift the whole clock tree, as I understand it.
+
+{Reactions}
+😮
+
+[2025-12-01 6:56 p.m.] mole99
+Yes, there was a strange violation where a trace would be too close to one of the SRAMs.
+Just reroll the RNG dice! 😁
+
+{Reactions}
+😀
+
+[2025-12-01 6:57 p.m.] _luke_w_
+yeah I looked at the TCL and it seems to be a post-CTS repair step, doesn't do anything during CTS
+
+{Reactions}
+👌
+
+[2025-12-01 6:57 p.m.] _luke_w_
+Also the related `CTS_DISTANCE_BETWEEN_BUFFERS` seems to do nothing at all
+
+{Reactions}
+😮
+
+[2025-12-01 6:59 p.m.] mole99
+> -distance_between_buffers: Distance (in microns) between buffers that cts should use when creating the tree. When using this parameter, the clock tree algorithm is simplified and only uses a fraction of the segments from the LUT.
+
+Doesn't sound too useful? But I would have at least expected a change.
+
+
+[2025-12-01 6:59 p.m.] _luke_w_
+oh and `CTS_TOLERANCE` from OpenLANE was removed 😅
+
+
+[2025-12-01 7:00 p.m.] _luke_w_
+I have a weird long clock branch that contains my SRAM, processor register files (which have clock gates due to latches) and nothing else. I was hoping to segment the clock nets a bit more and bring the SRAMs onto the same branch as the logic
+
+
+[2025-12-01 7:00 p.m.] _luke_w_
+but I might stop messing with CTS for now
+
+
+[2025-12-01 7:01 p.m.] logic_destroyer
+When we complete the tapeout, I’ll be so happy to have my old life back.
+
+{Reactions}
+matt_oh_no hardlol 😎 this
+
+[2025-12-01 7:04 p.m.] mole99
+Fighting with CTS is no fun. This place is not a place of honour.
+By the way, what does your clock tree look like before and after SPEF extraction? Is there a significant mismatch?
+
+{Reactions}
+😮
+
+[2025-12-01 7:38 p.m.] polyfractal
+Will do, thanks! I was looking through logs and noticed that I forgot to add it to the ignore_disconnected, flatten, etc parts of the config for logo/ID.  hoping that resolves things 🤞
+
+{Reactions}
+👍
+
+[2025-12-01 8:27 p.m.] ravenslofty
+`Chip' - Stage 68 - Design Rule Check (KLayout) ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸━━━━━ 67/77 7:51:20`
+I am having a time of it
+
+{Reactions}
+🎉
+
+[2025-12-01 8:52 p.m.] logic_destroyer
+I’d like to learn how to produce nice like @Tholin  GDS renderings, and how to use the TinyTapeout GDS viewer with GF180MCU designs. I noticed that you’ve already integrated support for GF180, and it appears to be working. @urish @Matt Venn
+
+
+[2025-12-01 9:02 p.m.] logic_destroyer
+hmm -
+https://www.zerotoasiccourse.com/post/3drendering/
+
+{Embed}
+https://www.zerotoasiccourse.com/post/3drendering/
+3D Rendering of GDS Files
+The 3D structures created within a silicon die are spectacular to see.
+Thanks to Maximo (@maxiborga on Twitter), there’s now a video for 3D rendering ASIC designs enabling anyone to convert their ASIC design into a beautiful 3D rendering.
+3D-rendered chip in Blender
+His walkthrough shows how to convert GDS to STL files, enabling you to import ...
+2025-12_media/maximo_render_4-053D2.jpeg
+
+
+[2025-12-01 9:09 p.m.] kris____
+i made a fork of gdsiistl that automatically puts the layers at the right height for sky130, if that's of any interest to you: <https://github.com/diy-ic/gdsiistl>
+
+
+[2025-12-01 9:09 p.m.] kris____
+not sure how it'd work with gf180, probably won't without some fiddling
+
+{Reactions}
+❤️
+
+[2025-12-01 9:32 p.m.] logic_destroyer
+I have changed the layerstack...let see
+
+
+[2025-12-01 9:34 p.m.] kris____
+good luck 🫡
+
+{Reactions}
+❤️
+
+[2025-12-01 9:54 p.m.] tholin
+Final GDSII for me. I was going to keep adding to it and look for any remaining bugs, but I sustained injury to my hand, so that's it for me. Typing with one hand right now, but managed to struggle my way into running make librelane one final time.
+
+{Attachments}
+2025-12_media/chip_top_black-1474D.png
+
+{Reactions}
+🎉 (2) ❤️
+
+[2025-12-01 9:55 p.m.] 246tnt
+@Tholin I'd be curious to explore it. Got it online somewhere ?
+
+
+[2025-12-01 9:56 p.m.] tholin
+Will commit whenever I'm able to
+
+
+[2025-12-01 9:56 p.m.] tholin
+And write docs. Also once recovered.
+
+
+[2025-12-01 10:28 p.m.] logic_destroyer
+I have forgotten to use this from tholin
+https://github.com/AvalonSemiconductors/gfmpw1-multi/blob/main/gds2gltf.py
+
+
+[2025-12-02 12:20 a.m.] ravenslofty
+`Chip' - Stage 68 - Design Rule Check (KLayout) ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸━━━━━ 67/77 11:45:25`
+um. what do I do when klayout gets stuck on my design.
+
+
+[2025-12-02 12:24 a.m.] ravenslofty
+I am increasingly concerned I will have nothing to tape out because I cannot get it to pass KLayout DRC in any sensible amount of time.
+
+
+[2025-12-02 12:31 a.m.] bailey8889
+@Lofty that is concerning. Is your design pure digital or do you have hard macros? Are you using any type of SRAM?
+
+
+[2025-12-02 12:31 a.m.] ravenslofty
+pure digital, no hard macros, no SRAM.
+
+
+[2025-12-02 3:21 a.m.] _luke_w_
+There are some super cool projects on this die and I'm looking forward to studying it and learning from your schematics once the dust clears post-tapeout 🙂
+
+
+[2025-12-02 5:06 a.m.] polyfractal
+ffffff DRC failures 💀 
+
+time to learn how to debug...hopefully it's just the logo art I added 🤞
+
+
+[2025-12-02 5:11 a.m.] _luke_w_
+Nothing but zeroes 🥳
+
+{Attachments}
+2025-12_media/image-5255C.png
+
+
+[2025-12-02 5:11 a.m.] _luke_w_
+except for this one
+
+{Attachments}
+2025-12_media/image-684F5.png
+
+
+[2025-12-02 5:14 a.m.] _luke_w_
+They are all `Poly overlap of contact < 0.065um (CO.3)` in 9-track std cells
+
+
+[2025-12-02 5:43 a.m.] bailey8889
+Looking at the rules in the ciel managed `gf180mcuD` pdk, 
+```
+co3_l.output('CO.3', 'CO.3 : Poly2 overlap of contact. : 0.07µm')
+```
+Does wafer.space have it's own version of the pdk?
+
+
+[2025-12-02 5:45 a.m.] _luke_w_
+I think Leo might have some patches that aren't yet merged (then again that might just be LibreLane)
+
+
+[2025-12-02 5:46 a.m.] _luke_w_
+ah yeah
+```
+clone-pdk: ## Clone the GF180MCU PDK repository
+    rm -rf $(MAKEFILE_DIR)/gf180mcu
+    git clone https://github.com/wafer-space/gf180mcu.git $(MAKEFILE_DIR)/gf180mcu --depth 1
+.PHONY: clone-pdk
+```
+
+
+[2025-12-02 5:47 a.m.] _luke_w_
+He mentioned there is something odd about how Magic handles contact on this issue: https://github.com/wafer-space/gf180mcu-project-template/issues/34
+
+KLayout doesn't flag those cells (for that rule)
+
+{Embed}
+https://github.com/wafer-space/gf180mcu-project-template/issues/34
+9-track foundry standard cells are not clean with KLayout or Magic ...
+KLayout violations The clock gating cell icgtp_1 is flagged with the following by klayout: CO.6a : (i) Metal1 (&lt; 0.34um) end-of-line overlap contact (Applies to all &lt; 0.34µm wide metal lines,...
+2025-12_media/34-BF360
+
+
+[2025-12-02 5:54 a.m.] bailey8889
+Started a thread.
+
+
+[2025-12-02 5:58 a.m.] polyfractal
+ok so I think my DRC issues are just the logo, looking at the final GDS it's misplaced (apparently the origin being set to lower right corner wasn't honored). A few questions:
+
+- I know KLayout can show DRC violations, but where/what file is that stored in? I'm just seeing json files in the klayout DRC directories
+- if I edit the GDS and move it over by hand, think I could restart the flow towards the end? Or will I need to go through the whole build again, fixing it in the config?
+
+{Attachments}
+2025-12_media/image-7D824.png
+
+
+[2025-12-02 5:59 a.m.] polyfractal
+weirdly it passed all the non-DRC steps which is why I didn't catch it. even renders out to images fine 🙁
+
+
+[2025-12-02 5:59 a.m.] _luke_w_
+iirc the file you want ends with `.lyrdb`
+
+
+[2025-12-02 6:00 a.m.] _luke_w_
+you can open that in klayout after opening your GDS and it will flag coordinates of the violations and which rules they violate
+
+{Reactions}
+❤️
+
+[2025-12-02 6:00 a.m.] polyfractal
+_begins grepping_
+
+
+[2025-12-02 6:02 a.m.] polyfractal
+aha
+
+> ./63-klayout-density/reports/density.klayout.lyrdb
+> ./66-klayout-drc/reports/drc.klayout.lyrdb
+
+
+[2025-12-02 6:02 a.m.] polyfractal
+hiding in reports 🙂
+
+
+[2025-12-02 6:02 a.m.] _luke_w_
+yeah you want the second one
+
+
+[2025-12-02 6:03 a.m.] _luke_w_
+it's a bit confusing because the directory with the report is not from the step whose job it is to raise errors when you have DRCs (`checker-klayoutdrc`)
+
+
+[2025-12-02 6:03 a.m.] polyfractal
+yeah that is confusing for sure
+
+
+[2025-12-02 6:03 a.m.] polyfractal
+oh happy days, it's all just this stupid logo art 😅
+
+{Attachments}
+2025-12_media/image-D49F4.png
+
+{Reactions}
+👍
+
+[2025-12-02 6:04 a.m.] polyfractal
+reckon I can fix by hand and then start the run from somewhere towards the end? maybe like 57-magic-streamout?
+
+
+[2025-12-02 6:06 a.m.] mole99
+If you use my script and Makefile to generate the layout for the logo, there's also a make target to run DRC on the logo itself. Once that is clean you can continue with the integration.
+
+
+[2025-12-02 6:06 a.m.] _luke_w_
+it's possible in theory, if you copy your `librelane` Makefile target and add `--last-run --from KLayout.DRC` or some  such. I never got the re-runs to work though
+
+
+[2025-12-02 6:06 a.m.] _luke_w_
+ah, ignore me and  listen to the expert
+
+
+[2025-12-02 6:07 a.m.] mole99
+No, that's right 😄 
+But you also need to pass the initial state.
+
+
+[2025-12-02 6:08 a.m.] mole99
+`--with-initial-state` should point to the input state of e.g. Klayout DRC.
+
+
+[2025-12-02 6:08 a.m.] polyfractal
+ah, well I made the logo using my own jank script and then just copied the layout/structure of the WS logo. 🙁  probably easiest to just redo the whole thing, the DRC is the timesuck anyway and that cant be avoided
+
+
+[2025-12-02 6:08 a.m.] mole99
+However, to see the changes of your macro, you would need to start the flow from the StreamOut step.
+
+
+[2025-12-02 6:09 a.m.] mole99
+If you need more logo examples, I added two more in my design here: https://github.com/mole99/gf180mcu-fabulous-fpga
+
+{Embed}
+https://github.com/mole99/gf180mcu-fabulous-fpga
+GitHub - mole99/gf180mcu-fabulous-fpga
+Contribute to mole99/gf180mcu-fabulous-fpga development by creating an account on GitHub.
+2025-12_media/gf180mcu-fabulous-fpga-FC31E
+
+
+[2025-12-02 6:09 a.m.] bailey8889
+@BreakingTaps I seen strange placements due to cells not having a bounding box when the lef is created from magic.
+
+If you created the logo in magic, then I recommend loading the logo, setting the bounding box with
+```
+select top cell
+property FIXED_BBOX [box values]
+lef write <lef_file> -hide
+```
+
+Before that, you could load the lef in klayout to see if the coordinates match the gds. If they don't, then you might try the above solution.
+
+
+[2025-12-02 6:10 a.m.] polyfractal
+will check, thanks for the tip!
+
+{Reactions}
+👍
+
+[2025-12-02 6:12 a.m.] polyfractal
+coordinates do appear to be correct (lower right) in klayout
+
+
+[2025-12-02 6:17 a.m.] polyfractal
+ah, ok I think I see. since I just manually created all the extra stuff (lef, vh, etc) I neglected to see that the lef file specifies an origin too
+
+
+[2025-12-02 6:28 a.m.] polyfractal
+aaand restarted...hopefully I did that right otherwise it would have been best to start all the way over 😅
+
+
+[2025-12-02 6:29 a.m.] polyfractal
+shame DRC is single-threaded, seems like it'd be low hanging fruit to run in parallel? I assume each rule is independent of the others?
+
+
+[2025-12-02 6:34 a.m.] polyfractal
+(i'm also assuming the DRC engine is ruby inside of KLayout but maybe a bad assumption 🙂 )
+
+
+[2025-12-02 6:43 a.m.] urish
+Started a thread.
+
+
+[2025-12-02 10:23 a.m.] greg.hashtag.9468
+The 0p5x0p5 slots are very pad-frame heavy 😅
+
+{Attachments}
+2025-12_media/chip_top_black-A0242.png
+
+{Reactions}
+🥺
+
+[2025-12-02 10:55 a.m.] mole99
+Any smaller and you would need to remove the padring on some of the sides 😉
+
+{Reactions}
+💜
+
+[2025-12-02 11:15 a.m.] _luke_w_
+Huh, that's a DRC I've not seen before: `DF.6_MV : Min. COMP extend beyond gate (it also means source/drain overhang). : 0.4µm`.
+
+COMP on top belongs to a `sdffrnq_4` and poly below belongs to a `nand3_4`
+
+{Attachments}
+2025-12_media/image-5BCEA.png
+
+
+[2025-12-02 11:19 a.m.] _luke_w_
+I... think it's just checking in the wrong direction? Also sorry for using cursed cells nobody else uses, in my defence they are faster
+
+{Reactions}
+🚀
+
+[2025-12-02 11:35 a.m.] mithro_
+Someone has to be first 🙂
+
+
+[2025-12-02 11:53 a.m.] mole99
+Issue report please 👏
+
+
+[2025-12-02 11:53 a.m.] _luke_w_
+Sure, can I just add it to my existing 9-track DRC issue?
+
+
+[2025-12-02 11:54 a.m.] _luke_w_
+(being  https://github.com/wafer-space/gf180mcu-project-template/issues/34)
+
+{Embed}
+https://github.com/wafer-space/gf180mcu-project-template/issues/34)
+wafer-space/gf180mcu-project-template
+Project template for wafer.space MPW runs using the gf180mcu PDK - wafer-space/gf180mcu-project-template
+2025-12_media/gf180mcu-project-template-6ACD3
+
+
+[2025-12-02 11:54 a.m.] mole99
+Yes, that's fine 👌
+
+
+[2025-12-02 12:46 p.m.] _luke_w_
+actually I do have a tech map file to map DFFEs and sync set/clear flops as scan flops, which other people could use to improve QoR on their designs, so there might be a lot more `sdffrnq_4` in the future 🙂 https://github.com/Wren6991/RISCBoy-180/blob/main/librelane/gf180_scanflop_map.v
+
+{Embed}
+https://github.com/Wren6991/RISCBoy-180/blob/main/librelane/gf180_scanflop_map.v
+RISCBoy-180/librelane/gf180_scanflop_map.v at main · Wren6991/RISC...
+Games console SoC for GF180MCU process. Contribute to Wren6991/RISCBoy-180 development by creating an account on GitHub.
+2025-12_media/RISCBoy-180-E3D06
+
+{Reactions}
+👏 (2) 👍
+
+[2025-12-02 12:47 p.m.] _luke_w_
+the only reason I don't recommend using that right now is to get good results you have to disable hold checks on the Q->D path, which I am 99% sure is fine since Q is stable when D is selected, but I'd like to be the guinea pig for one tapeout
+
+
+[2025-12-02 3:06 p.m.] logic_destroyer
+What topology does your chain have?
+
+
+[2025-12-02 3:35 p.m.] ravenslofty
+it's not a chain
+
+
+[2025-12-02 4:02 p.m.] logic_destroyer
+I assumed to avoid  a big shift register split into multiple chains. Is that correct?
+
+
+[2025-12-02 4:04 p.m.] ravenslofty
+Luke's design has no scan chains. use of scan flops does not imply a scan chain
+
+
+[2025-12-02 4:09 p.m.] logic_destroyer
+Is it just to reduce logic like muxes and so on?
+
+
+[2025-12-02 4:09 p.m.] ravenslofty
+yes, by using scan flops which have that mux merged into the cell.
+
+{Reactions}
+👍🏻
+
+[2025-12-02 4:10 p.m.] logic_destroyer
+I appreciate the clarification.
+
+
+[2025-12-02 4:35 p.m.] _luke_w_
+Following up on the RAM issues I mentioned a few days back: https://github.com/wafer-space/gf180mcu-project-template/issues/38
+
+Am I correct that other RAM enjoyers have their chip selects permanently asserted post startup? That might explain why only I am seeing these issues.
+
+{Embed}
+https://github.com/wafer-space/gf180mcu-project-template/issues/38
+RAM models sample read condition on delayed clock · Issue #38 · w...
+The attached image shows a read from SRAM location 0 using the foundry RAM models from the PDK. However the SRAM Q does not transition, instead remaining at the value of SRAM location 1. I think th...
+
+
+[2025-12-02 5:11 p.m.] logic_destroyer
+
+
+{Attachments}
+2025-12_media/image-1-759E0.png
+
+
+[2025-12-02 5:11 p.m.] logic_destroyer
+Is that okay?
+
+
+[2025-12-02 5:12 p.m.] polyfractal
+I have mine tied to reset. So it's high for the first cycle/holding down reset, and then permanently low after that.
+
+I did play with enabling/disabling to save power when banks aren't being used, but that introduced at least one extra clock cycle for it to turn back on and was too much hassle to deal with so late in my project
+
+
+[2025-12-02 5:12 p.m.] polyfractal
+(well not specifically the reset pin, but the reset logic)
+
+
+[2025-12-02 5:17 p.m.] logic_destroyer
+I’m going to be so happy when the tape-out is done, because every time I look up here now, I flinch. It’s really like being on a carousel.
+
+
+[2025-12-02 5:25 p.m.] polyfractal
+yah seriously. I just know someone is going to post a "Hey make sure XYZ" and I'll realize mine is opposite but it's too late to change 💀
+
+{Reactions}
+😮
+
+[2025-12-02 5:26 p.m.] polyfractal
+oh well, if it arrives totally broken at least I'll have some neat trinkets and a good learning experience 😊
+
+
+[2025-12-02 5:28 p.m.] tholin
+Update: one of my artists got back to me with two PNG files and "sorry I'm late"
+I am turning my PC on again and making this happen, no matter what.
+
+
+[2025-12-02 5:29 p.m.] tholin
+I have just a little bit of free space on the right of my layout
+
+
+[2025-12-02 5:29 p.m.] tholin
+About to play high-stakes tetris
+
+
+[2025-12-02 5:31 p.m.] _luke_w_
+yeah this is functionally fine, you just waste power by reading the RAM every cycle
+
+
+[2025-12-02 5:32 p.m.] _luke_w_
+ok so that explains the inconsistency, thanks
+
+
+[2025-12-02 5:35 p.m.] logic_destroyer
+which inconsistency?
+
+
+[2025-12-02 5:36 p.m.] logic_destroyer
+Wasting how much power?
+
+
+[2025-12-02 5:38 p.m.] _luke_w_
+like a milliwatt per RAM instance iirc
+
+
+[2025-12-02 5:39 p.m.] _luke_w_
+there are some power figures in the docs though they're not particularly illuminating
+
+
+[2025-12-02 5:39 p.m.] _luke_w_
+The fact the RAM model worked for other people and fell on its ass for me. It sounds like I'm the only person deasserting chip select when I don't intend to read the RAM.
+
+
+[2025-12-02 5:45 p.m.] _luke_w_
+> but that introduced at least one extra clock cycle for it to turn back on
+I don't understand this part. CEN is aligned with the address
+
+
+[2025-12-02 5:47 p.m.] polyfractal
+honestly no idea. I added a second bank of memory at some point, and noticed that I was throwing away a read each cycle. Checked the docs and saw that I could probably use CEN de-activate unused memory but then tests started failing because the second bank wasn't active when it was needed.
+
+had bigger issues to deal with so went back to just perma-enabled 🙂
+
+
+[2025-12-02 5:48 p.m.] polyfractal
+from a quick skim of the waveforms it looked like it was just one cycle behind but didn't investigate much
+
+
+[2025-12-02 5:48 p.m.] _luke_w_
+you might have hit the bug in the RAM model
+
+
+[2025-12-02 5:49 p.m.] polyfractal
+aha! would make sense given the issues you've run into as well. I just assumed it took the memory an extra cycle to power back up or something 😅
+
+
+[2025-12-02 5:49 p.m.] _luke_w_
+This is the behavioural RAM model I've been using for most of my sims:
+
+```verilog
+reg [WIDTH-1:0] mem [0:DEPTH-1];
+
+reg [WIDTH-1:0] rdata_q;
+assign rdata = rdata_q;
+always @ (posedge clk) begin: update
+    integer i;
+    if (!cs_n && we_n) begin
+        rdata_q <= mem[addr];
+    end
+    if (!cs_n && !we_n) begin
+        for (i = 0; i < WIDTH / 8; i = i + 1) begin
+            if (!be_n[i]) begin
+                mem[addr][i * 8 +: 8] <= wdata[i * 8 +: 8];
+            end
+        end    
+    end
+end
+```
+
+
+[2025-12-02 5:50 p.m.] _luke_w_
+basically all inputs are sampled together on the posedge and rdata is valid some time in the next cycle. Pretty much all synchronous SRAMs look like this
+
+
+[2025-12-02 5:51 p.m.] _luke_w_
+it matches up with the transition table in the RAM docs as well, and matches up with their model if you ignore all the weird behavioural delay stuff they've hacked in
+
+
+[2025-12-02 5:51 p.m.] _luke_w_
+also the fact that read data stays valid if you don't do another read is handy and I exploit it in one place
+
+
+[2025-12-02 5:51 p.m.] polyfractal
+you'd think a model provided by the foundry would be correct 😭   as a complete outsider to the industry, i'm kinda horrified what passes as normal (from the little bit I've peeked behind the curtain)
+
+
+[2025-12-02 5:52 p.m.] _luke_w_
+it's not normal
+
+{Reactions}
+🫠 🙃
+
+[2025-12-02 5:52 p.m.] polyfractal
+especially for such an old node!
+
+
+[2025-12-02 5:53 p.m.] _luke_w_
+we simulate RTL against vendor RAM models all the time and it's fine because the functional behaviour is described synchronously (maybe with a delay on the read data), and then they add timing checks which you can disable for behavioural sims where there are no delays
+
+
+[2025-12-02 5:53 p.m.] _luke_w_
+these models are just kinda hacky
+
+
+[2025-12-02 5:53 p.m.] polyfractal
+welp
+
+
+[2025-12-02 5:54 p.m.] _luke_w_
+but yes it is true the ASIC industry is much messier than people think
+
+
+[2025-12-02 5:54 p.m.] _luke_w_
+lots of people who are actually software engineers and just don't want to admit it
+
+
+[2025-12-02 5:54 p.m.] polyfractal
+maybe they just threw it together as a low priority intern project, since they knew it was part of the original open sourcing efforts?
+
+
+[2025-12-02 5:54 p.m.] logic_destroyer
+Can I leave it as it is? @LukeW
+
+
+[2025-12-02 5:55 p.m.] _luke_w_
+yes
+
+{Reactions}
+❤️
+
+[2025-12-02 5:55 p.m.] _luke_w_
+I did wonder but the model is from 2014:
+
+```
+ * Project:             018 5VGREEN SRAM
+ * Author:              GlobalFoundries PDK Authors
+ * Data Created:        05-06-2014
+ * Revision:        0.0
+```
+
+{Reactions}
+😮
+
+[2025-12-02 5:56 p.m.] logic_destroyer
+When you enable CEN, do you have to wait another clock cycle?
+
+
+[2025-12-02 5:56 p.m.] _luke_w_
+I wouldn't change your design now given there are issues with the RAM models. What you have should work
+
+
+[2025-12-02 5:56 p.m.] _luke_w_
+but no, `!CEN && GWEN` is a read enable which is aligned with the address. If that function is true on cycle _n_ then new read data is valid on Q on cycle _n_ + 1
+
+
+[2025-12-02 5:57 p.m.] _luke_w_
+
+
+{Attachments}
+2025-12_media/image-6077D.png
+
+
+[2025-12-02 5:58 p.m.] logic_destroyer
+When you have caches and a pipelined CPU, should the CEN signal always be low, since the CPU is doing work every cycle anyway?
+
+
+[2025-12-02 5:58 p.m.] _luke_w_
+are you issuing a load/store to your D cache every cycle?
+
+
+[2025-12-02 5:58 p.m.] logic_destroyer
+I$ and D$
+
+
+[2025-12-02 5:58 p.m.] _luke_w_
+are you fetching instructions from your I cache when you're stalled on a `div` or `rem`?
+
+
+[2025-12-02 5:59 p.m.] logic_destroyer
+Out of order, superscalar 🙂
+
+
+[2025-12-02 6:00 p.m.] _luke_w_
+Your icache will still stall -- you normally overprovision icache bandwidth so you can catch up after a flush. Anyway no, it is not normal for production designs to enable RAMs when they don't intend to read or write them.
+
+
+[2025-12-02 6:02 p.m.] logic_destroyer
+Got it
+
+
+[2025-12-02 6:02 p.m.] logic_destroyer
+Every stall counts
+
+
+[2025-12-02 6:08 p.m.] logic_destroyer
+Then you have saved 28 mW?
+
+
+[2025-12-02 6:25 p.m.] _luke_w_
+That's worst case at 1 MHz
+
+{Attachments}
+2025-12_media/image-23A10.png
+
+
+[2025-12-02 6:35 p.m.] logic_destroyer
+k
+
+
+[2025-12-02 7:02 p.m.] _luke_w_
+For anyone else who needs it
+
+```makefile
+librelane-yolo: ## Run full flow, including DRC, but don't quit after DRC errors
+    librelane librelane/config.yaml --pdk ${PDK} --pdk-root ${PDK_ROOT} --manual-pdk --skip Checker.MagicDRC --skip Checker.KLayoutDRC
+.PHONY: librelane-yolo
+```
+
+{Reactions}
+👍 😆
+
+[2025-12-02 7:05 p.m.] mole99
+And if you want to add it to your config:
+
+```yaml
+QUIT_ON_MAGIC_DRC: False
+QUIT_ON_KLAYOUT_DRC: False
+```
+
+
+[2025-12-02 7:07 p.m.] _luke_w_
+ooh nice
+
+
+[2025-12-02 7:39 p.m.] tholin
+No square micrometer unused
+
+{Attachments}
+2025-12_media/padout-D4074.png
+
+{Reactions}
+👏 (2) 🔥 (2) 🎉
+
+[2025-12-02 7:40 p.m.] tholin
+I turned off KLayout DRC and saving that for the precheck.
+
+
+[2025-12-02 7:40 p.m.] tholin
+All the macros individually pass KLayout DRC
+
+
+[2025-12-02 7:40 p.m.] tholin
+So hopefully nothing bad hapens.
+
+
+[2025-12-02 10:05 p.m.] greg.hashtag.9468
+@LukeW I had seen the same thing. I'd initially hooked CEN upto the processor read strobe. But the last byte in a bust would read back incorrect. Seems like the vendor model adjusts Q on that last cycle when CEN=H, which doesn't really match with the "Hold previous data" statement.
+
+
+[2025-12-02 10:37 p.m.] _luke_w_
+Which one do you trust?
+
+
+[2025-12-02 10:37 p.m.] _luke_w_
+Normally I would say the vendor model but...
+
+
+[2025-12-02 11:34 p.m.] tholin
+Alright. This kicks ass!
+
+{Attachments}
+2025-12_media/chip_top_black-756EC.png
+
+{Reactions}
+💜 (4)
+
+[2025-12-02 11:34 p.m.] mithro_
+Passes DRC?
+
+
+[2025-12-02 11:35 p.m.] tholin
+Passes magic DRC
+
+
+[2025-12-02 11:35 p.m.] tholin
+LVS failed because I forgot to add some entries to LVS_FLATTEN_CELLS
+
+
+[2025-12-02 11:35 p.m.] tholin
+Re-running now, then will throw the output straight at precheck.
+
+
+[2025-12-02 11:50 p.m.] bailey8889
+@Tholin What command are you using to run LVS?
+
+Most of the behind the scenes commands have a `--noextract` option which will use the existing extracted data in the `WORK_ROOT` directory.
+
+
+[2025-12-03 12:57 a.m.] greg.hashtag.9468
+I've followed the vendor model. Probably would be nice if a design in this shuttle had signals to RAM so it could be confimed..
+
+
+[2025-12-03 1:55 a.m.] tholin
+Lots of projects on my die
+
+{Attachments}
+2025-12_media/image-F03CC.png
+
+{Reactions}
+🎉
+
+[2025-12-03 2:39 a.m.] _luke_w_
+Aight, well I'm 99% it's actually a synchronous RAM in spite of the model's protests but since I don't have time to run spice on it I'll add a chicken bit to my debugger that forces all the RAM chip selects low 😅
+
+
+[2025-12-03 2:42 a.m.] _luke_w_
+No room for more 😎
+
+{Attachments}
+2025-12_media/chip_top_white-1D464.png
+
+{Reactions}
+👀 👍 🚀 (5)
+
+[2025-12-03 4:04 a.m.] mithro_
+How much memory is that?
+
+
+[2025-12-03 4:35 a.m.] _luke_w_
+* CPU RAM: 8 kB (16 x 512 x 8)
+* APU RAM: 4 kB (8 x 512 x 8)
+* PPU scan buffers: 2 x 512-pixel (4 x 512 x 8)
+* PPU palette RAM: 1 x 256-pixel (2 x 256 x 8)
+
+So I guess 14.5 kB 🙂
+
+
+[2025-12-03 4:35 a.m.] _luke_w_
+then the external RAM is 256 kB 16-bit wide
+
+
+[2025-12-03 5:33 a.m.] mithro_
+14.5kB isn't too bad...
+
+
+[2025-12-03 5:35 a.m.] mithro_
+@LukeW - Well, if you have some spare time then, want to do some 1x0.5 and/or 0.5x1 projects which might work with your external RAM interface?
+
+
+[2025-12-03 6:00 a.m.] urish
+Awesome graphics! Well done 🙂
+
+
+[2025-12-03 6:35 a.m.] _luke_w_
+```c
+/*******************************************************************************
+*                                 SRAM_CHICKEN                                 *
+*******************************************************************************/
+
+// The foundry SRAM models return incorrect data if chip select transitions on a
+// clock edge. 99% sure this is just an issue with the model, but just in case,
+// this register forces all SRAMs to be permanently enabled. You should clear
+// this bit to avoid wasting power.
+
+// Field: SRAM_CHICKEN  Access: RW
+// Reset: 0x1
+#define SYSCFG_SRAM_CHICKEN_LSB  0
+#define SYSCFG_SRAM_CHICKEN_BITS 1
+#define SYSCFG_SRAM_CHICKEN_MASK 0x1
+```
+
+I can simulate with the unmodified foundry models now. When I get chips back I'll find out whether that was necessary.
+
+{Reactions}
+👍 👌
+
+[2025-12-03 6:36 a.m.] _luke_w_
+Sorry, not this tapeout 😅  I'm going to keep testing up until the last minute
+
+
+[2025-12-03 4:54 p.m.] tholin
+Started on docs:
+https://avalonsemiconductors.github.io/WS2025/multiplexer.html
+
+
+[2025-12-03 6:08 p.m.] rzioma
+@Tim 'mithro' Ansell @Leo Moser (mole99) I have my design in 2 formats - a) slot 1x1 and b) quarter slot 0.5x0.5. What do you think is a better for submission for *this* shuttle?
+
+
+[2025-12-03 6:09 p.m.] rzioma
+Would 0.5 x 0.5 give better or worse "yield". Would it be harder to put on board, etc.
+Any benefits of going 0.5 x 0.5 at all?
+
+
+[2025-12-03 6:10 p.m.] rzioma
+I understand it is a lot on your plate, so I might just submit both for now and we finalise that decision next week?
+
+
+[2025-12-03 6:13 p.m.] mole99
+There is only one 0.5x0.5 slot for this shuttle, but this may change for run 2 if there is more demand. Unfortunately, this slot has already been assigned to someone else.
+
+You could use the 0.5x1 or 1x0.5 slots instead of the 1x1 slot.
+However, the CoB is currently only prepared for the 1x1 slot. There is no PCB for the others yet, so it may be better to stay with the 1x1?
+
+
+[2025-12-03 6:14 p.m.] mole99
+Given that most of the 1x1 area is unused, I don't think there's much difference in yield.
+Also, I'm not sure if yield is really an issue for this process.
+
+{Reactions}
+👍
+
+[2025-12-03 6:23 p.m.] rzioma
+Using 1x1 slot is no problem for me!
+
+
+[2025-12-03 6:27 p.m.] mole99
+Sorry! I just checked the spreadsheet and the other 1x1 slot that is assigned to you is for a different project (RZML), correct? If so, could you rather use a 1x0.5 slot?
+
+
+[2025-12-03 6:29 p.m.] rzioma
+I think it should be the other way around - Z80 is the primary project and another one is "good to have". Anyway, I will do 1x0.5 just in case.
+
+
+[2025-12-03 7:10 p.m.] mole99
+Well, you have at least one 1x1 slot reserved. Hopefully Tim can clarify in the morning.
+
+
+[2025-12-03 9:21 p.m.] greg.hashtag.9468
+After improving my in-efficient RTL I did manage to fit 23 servs on a design. 🏁
+
+{Attachments}
+2025-12_media/522086642-dc2fab9a-f3c4-4a27-b435-257d8475-6477A.png
+
+{Reactions}
+❤️ (4)
+
+[2025-12-03 9:21 p.m.] greg.hashtag.9468
+Scales into a half-width slot too with just 9 cores
+
+{Attachments}
+2025-12_media/521857602-407ec62a-1e3e-470a-8a83-89af25b1-21C6A.png
+
+{Reactions}
+❤️
+
+[2025-12-03 9:44 p.m.] mole99
+Can you create a project on the platform for that one too? Maybe there's some space left :)
+
+
+[2025-12-03 9:45 p.m.] polyfractal
+hm a last minute GDS art addition is now triggering MT.1  ("min. metaltop width : 0.44µm") and MT.2a ("min. metaltop spacing : 0.46µm")  DRC errors. Any ideas or try regenerating with a slightly different size?
+
+
+[2025-12-03 9:50 p.m.] _luke_w_
+Yeah I just had the same thing because a hole in the metal generated by the image script left two corners touching
+
+{Attachments}
+2025-12_media/image_2025-12-03_21-44-22-CC4BB.png
+
+
+[2025-12-03 9:51 p.m.] _luke_w_
+I just opened it up in klayout and squished the hole, hopefully that fixes it
+
+
+[2025-12-03 9:51 p.m.] _luke_w_
+(apparently `klayout -e` is the magic flag required to actually let you edit anything)
+
+{Reactions}
+😆
+
+[2025-12-03 9:51 p.m.] greg.hashtag.9468
+It's in and passed the current pre-check 👍
+
+{Reactions}
+👌
+
+[2025-12-03 9:52 p.m.] polyfractal
+yeah that looks like my issues. i'm not great with klayout, how did you close the hole? Just draw a new polygon to fill it, or did you edit the existing polygon?
+
+
+[2025-12-03 9:54 p.m.] greg.hashtag.9468
+The script used for the waferspace logo does a DRC check. But doesn't grep/show errors the DRC found. You have to dig into the .xml report, and look under the <items> tree
+So I had a similar issue on my logo art
+
+
+[2025-12-03 9:58 p.m.] polyfractal
+aha, that's good to know for a faster check. cheers!
+
+
+[2025-12-03 9:58 p.m.] _luke_w_
+ah. I saw it ran a DRC in the Makefile, didn't see that it didn't propagate an exit code 😅  thanks Greg
+
+{Reactions}
+this
+
+[2025-12-03 10:00 p.m.] mole99
+Btw. you can load the DRC results using the Marker Browser in KLayout.
+
+
+[2025-12-03 10:00 p.m.] _luke_w_
+I used the "partial" tool to drag over the edge on the left hand side of the hole until it met the right hand side
+
+{Attachments}
+2025-12_media/image-DFDCA.png
+
+
+[2025-12-03 10:01 p.m.] _luke_w_
+it should snap and the redundant vertices should disappear
+
+
+[2025-12-03 10:03 p.m.] polyfractal
+rad, thanks!
+
+
+[2025-12-03 10:13 p.m.] polyfractal
+aaand fixed, re-drc time
+
+{Reactions}
+👍
+
+[2025-12-03 10:20 p.m.] mithro_
+@ReJ aka Renaldas Zioma - I would suggest making sure ***all*** are on https://platform.wafer.space - that way we have choice. I think we'll find a way to have both.
+
+{Embed}
+https://platform.wafer.space/
+Welcome to wafer.space
+…
+Platform for wafer.space low cost silicon manufacturing.
+
+{Reactions}
+👍
+
+[2025-12-03 10:21 p.m.] mithro_
+I ***think*** I have two 1x1 slots allocated for @ReJ aka Renaldas Zioma
+
+
+[2025-12-03 10:22 p.m.] mithro_
+Think you could do a version of that half-width slot with *just* the SRAM connected to the I/O pins?
+
+
+[2025-12-03 10:26 p.m.] greg.hashtag.9468
+Yeah. Easy could do that. So target the 0.5x1 slot? Just a 512x8 instance?
+
+
+[2025-12-03 10:27 p.m.] greg.hashtag.9468
+We can add the other sizes too, but would require sharing the A/D bus? Along with muxing on the Q
+
+
+[2025-12-03 10:32 p.m.] mithro_
+All the sizes! 😛
+
+
+[2025-12-03 10:32 p.m.] mithro_
+According to @LukeW, something like https://www.renesas.com/en/document/dst/r1rp0416di-series-datasheet?srsltid=AfmBOor09cVZb0I6oElST_hOGtjGlgGKCuuOzj2dmwoCr6L8-vb7cOhK would be the competition 🙂
+
+
+[2025-12-03 10:34 p.m.] greg.hashtag.9468
+Right I misunderstood. So not a test structure for just a single instance. But fill the area with the 512x8 instances and add address decoding. 👍
+
+
+[2025-12-03 10:37 p.m.] _luke_w_
+so we can finally get to the bottom of the CEN controversy
+
+
+[2025-12-03 10:38 p.m.] trev5514
+I tried doing `STD_CELL_LIBRARY: gf180mcu_fd_sc_mcu9t5v0` in the project template and it's not applied (still the 7 track cell). Is this overriden somewhere I'm missing?
+
+
+[2025-12-03 10:39 p.m.] greg.hashtag.9468
+Quick test: try doing an `export STD_CELL_LIBRARY=gf180mcu_fd_sc_mcu9t5v0` in your shell
+
+
+[2025-12-03 10:39 p.m.] _luke_w_
+That was the only flag I had to pass, and I am definitely getting 9-track cells in my layout
+
+
+[2025-12-03 10:40 p.m.] greg.hashtag.9468
+I think this was raised before, in the latest template, the extra yaml for the slot sizes may be applying some defaults
+
+
+[2025-12-03 10:41 p.m.] greg.hashtag.9468
+Your project @LukeW has everything in the one config.yaml
+
+
+[2025-12-03 10:41 p.m.] _luke_w_
+ahh ok, that would make sense. I squashed those commits out when I merged because I didn't want to deal with the huge merge conflict with my padring changes and my other changes in that file 😅
+
+
+[2025-12-03 10:48 p.m.] mithro_
+https://docs.google.com/document/d/1hk0WXCmQ8LYNhn8gIVs8vHymR2MleQx2ro_hQlyOYKU/edit?tab=t.0
+
+{Embed}
+https://docs.google.com/document/d/1hk0WXCmQ8LYNhn8gIVs8vHymR2MleQx2ro_hQlyOYKU/edit?tab=t.0
+wafer.space - GF180MCU SRAM Maximizer
+GF180MCU SRAM Maximizer Goal Work out the maximum amount of SRAM that is able to fit into the GF180MCU configuration.  Specification Layout as many SRAMs as possible that fit in a given die space.  Current die size - 3.88mm x 5.07mm     Die Size         Instances    Total  Wi...
+2025-12_media/AHkbwyLHhGHcIwg_ZYuYpHyMCqtZzGVe9z31Z3An73-6ED65
+
+
+[2025-12-03 10:50 p.m.] mithro_
+If someone wants to do something else random, you could also try filling the die just with capacitors - https://docs.google.com/document/d/1ahoCTmPvKExYtk3qqxvjMpnq5XOcIQvVWMF84zgi82k/edit?tab=t.0#heading=h.psr38aq67ats - I was sure I had more info in that doc but it appears I miss remembered.
+
+{Embed}
+https://docs.google.com/document/d/1ahoCTmPvKExYtk3qqxvjMpnq5XOcIQvVWMF84zgi82k/edit?tab=t.0
+wafer.space - GF180MCU Silicon Capacitor
+GF180MCU Silicon Capacitor Goal Create software which is able to generate a "maximal silicon capacitor" for a given configuration.  Specifications  GDSFactory Uses AI to tune the capacitor capacity Initial targets are the different GF180MCU stack ups.   Why? Empty slots can be filled with silicon...
+2025-12_media/AHkbwyLCE9Q0KfpoWw8BHiWlNnXWgJ6S8UzP-WPL1p-7A899
+
+
+[2025-12-03 11:02 p.m.] polyfractal
+7T vs 9T: is it just that 9T are bigger so they can drive harder and suffer from timing issues less?
+
+
+[2025-12-03 11:05 p.m.] trev5514
+My understanding is that 9T is larger and has more room for routing so it can typically run faster. I believe there is also a power tradeoff with them.
+
+{Reactions}
+👍
+
+[2025-12-03 11:05 p.m.] trev5514
+I didn't see any 7t overrides, do you happen to know where it was brought up?
+
+
+[2025-12-03 11:08 p.m.] polyfractal
+think it was mentioned here: https://discord.com/channels/1361349522684510449/1423348662318272592/1445014108750745621
+
+{Reactions}
+👍
+
+[2025-12-03 11:10 p.m.] trev5514
+That would be it! Easy fix, thank you!
+
+
+[2025-12-04 2:23 a.m.] mithro_
+I'm not sure but I think @LukeW found a bunch of potential DRC violations inside the 9t cells? Or was I confused about that?
+
+{Reactions}
+😲
+
+[2025-12-04 2:45 a.m.] rzioma
+I hope not, I am using 9T. 
+I think I haven't see any DRCs on them.
+
+
+[2025-12-04 2:46 a.m.] mithro_
+https://github.com/wafer-space/gf180mcu-project-template/issues/34
+
+{Embed}
+https://github.com/wafer-space/gf180mcu-project-template/issues/34
+9-track foundry standard cells are not clean with KLayout or Magic ...
+KLayout violations The clock gating cell icgtp_1 is flagged with the following by klayout: CO.6a : (i) Metal1 (&lt; 0.34um) end-of-line overlap contact (Applies to all &lt; 0.34µm wide metal lines,...
+2025-12_media/34-A469D
+
+
+[2025-12-04 2:47 a.m.] mithro_
+Looks like it might just be the clock gate cell
+
+
+[2025-12-04 6:02 a.m.] mole99
+These all seem to be false positives. At least the CO rules in magic are, due to the way the rules are implemented.
+
+
+[2025-12-04 10:05 a.m.] _luke_w_
+I haven't been updating that issue with all the flagged DRCs because I think we need to just DRC the whole library post-tapeout. I no longer have any ICGTPs in my design (just two ICGTNs) but I do have a lot of `sdffq_4` which are also flagged by Magic.
+
+
+[2025-12-04 1:18 p.m.] polyfractal
+hot damn these 9T cells are giving much better results for my design
+
+{Reactions}
+🔥 (3)
+
+[2025-12-04 1:59 p.m.] rzioma
+Is your design 3.3 or 5V?
+
+
+[2025-12-04 2:00 p.m.] polyfractal
+5V
+
+
+[2025-12-04 2:02 p.m.] polyfractal
+went from barely scraping by the ss/hot corners with tonnnns of slack/margin/buffer tweaking, to gobs of margin and I'm starting to dial back the settings (and increase the speed). like 0.2ns slack up to 30ns slack in some corners
+
+{Reactions}
+🔥 (2)
+
+[2025-12-04 3:46 p.m.] logic_destroyer
+What is the current flow? Do I just run libralane-nodrc to generate the GDS, and then verify the GDS using fg180mcu-precheck?
+
+
+[2025-12-04 7:29 p.m.] trev5514
+I think a separate GF180 macro template would be a great addition to complement this template. The further along this template has come, the more focused it is on top level, but it has lots of great features that are specific to GF180 that would be useful for making macros.
+
+
+[2025-12-04 8:12 p.m.] mole99
+Started a thread.
+
+
+[2025-12-04 8:13 p.m.] mole99 (pinned)
+📢 The PDK and project template have been updated with the following changes:
+
+- PDK [1.3.1](https://github.com/wafer-space/gf180mcu/releases/tag/1.3.1)
+  - Implement CUP.2 and CUP.3 rules.
+  - Modify the pad library to conform to CUP.2 and CUP.3.
+  - Flatten the guard ring and merge the marker polygons.
+  - Correct `ANTENNAGATEPLUSDIFF` in the techlef for thick oxide devices. (thanks @egor!)
+
+- Project template [1.2.2](https://github.com/wafer-space/gf180mcu-project-template/releases/tag/1.2.2)
+  - Update the PDK to 1.3.1.
+  - Enable KLayout antenna checks by default.
+  - Add a script to generate standalone padrings for analog designs.
+
+Please ensure you update your project and clone the latest PDK version.
+
+Note: This is not the final update to the project template and PDK before the tapeout. At least one more update to the filler generation is planned.
+
+
+[2025-12-04 8:13 p.m.] mole99
+Pinned a message.
+
+{Reactions}
+❤️ (3)
+
+[2025-12-04 9:11 p.m.] logic_destroyer
+PDK_TAG in Makefile is 1.3.0 is that ok?
+I built a chip via  PDK_TAG=1.3.1 make librelane-nodrc
+
+
+[2025-12-04 9:38 p.m.] mole99
+The PDK_TAG in the Makefile should be 1.3.1: https://github.com/wafer-space/gf180mcu-project-template/blob/6ca8397bb7542385b5537af4e4b6d5ed80882b57/Makefile#L8
+
+{Reactions}
+😮
+
+[2025-12-05 12:05 a.m.] polyfractal
+after updating and rebuilding, should we re-submit to platform.wafer.space ? or just hold off until the final update with filler changes?
+
+
+[2025-12-05 1:34 a.m.] mithro_
+There is a bit of a queue on the precheck at the moment. I'm working on an upgrade for the queueing that should make things go faster.
+
+{Reactions}
+❤️ (3)
+
+[2025-12-05 10:20 a.m.] mole99 (pinned)
+📢 Major performance update!
+
+A long-standing issue in the KLayout DRC deck has been discovered and fixed 🎉
+Many thanks to Matthias for [investigating the issue and providing a solution](https://github.com/KLayout/klayout/issues/2241#issuecomment-3612915372).
+This reduces the time taken by KLayout DRC for one tested design from several hours to just 1.5h ⏱️
+
+- PDK [1.4.1](https://github.com/wafer-space/gf180mcu/releases/tag/1.4.1)
+  - Fix the connectivity setup in KLayout DRC.
+  - Check for both P/N-type diodes in the KLayout antenna script. (thanks @tnt!)
+
+Make sure to update your project and your local precheck with the latest PDK:
+
+- Project template [1.2.3](https://github.com/wafer-space/gf180mcu-project-template/releases/tag/1.2.3)
+- Precheck [1.4.2](https://github.com/wafer-space/gf180mcu-precheck/releases/tag/1.4.2)
+
+{Reactions}
+blobclap (6) 🙌 (2) 🥳
+
+[2025-12-05 10:20 a.m.] mole99
+Pinned a message.
+
+
+[2025-12-05 10:39 a.m.] thorben_61995
+Awesome, my current precheck is still not finished after > 27 hours and was stuck for most of the time in the connectivity setup 😆
+
+
+[2025-12-05 10:44 a.m.] mole99
+Well, let me know how it goes 😉
+
+{Reactions}
+👍
+
+[2025-12-05 11:01 a.m.] 246tnt
+BTW, running antenna check pre-fill GDS also seemed to speed it up a bit FWIW.
+
+
+[2025-12-05 11:28 a.m.] mole99
+Yes, this is because both the antenna script and the DRC deck consider the dummy shapes for their checks. Since we have dedicated DRC rules for dummy, which ensures they are spaced from active metal, there's no need to include them here. It's on my list :)
+In fact, I have already removed the dummy shapes from the connectivity setup.
+
+{Reactions}
+👌 (3)
+
+[2025-12-05 3:22 p.m.] thorben_61995
+So the old precheck took a whopping "1 day, 12:33:53" to complete on my design (luckily successfully) on a big server. I'm currently running the updated one to see how much faster it goes. If the current pipeline on platform.wafer.space is still running with the old precheck version, you might want to remove my submission from the queue (seems like a waste of time).
+
+
+[2025-12-05 4:13 p.m.] logic_destroyer
+@Lofty What is the likelihood that the gate-level implementation might no longer match the behavioral specification? I’m asking because we constantly build chips, and although we could preserve stage 6, I wanted to understand whether this mismatch is actually possible.
+
+
+[2025-12-05 4:14 p.m.] ravenslofty
+Um. I think I'm lacking context here. I assume you mean stage 6 of LibreLane, which is Yosys synthesis
+
+
+[2025-12-05 4:15 p.m.] logic_destroyer
+yes
+
+
+[2025-12-05 4:15 p.m.] ravenslofty
+Then the likelihood being above zero is a bug :p
+
+{Reactions}
+❤️
+
+[2025-12-05 4:16 p.m.] logic_destroyer
+Otherwise, we would always have to completely rebuild everything starting from stage 6, even though that stage has already been thoroughly tested.
+
+
+[2025-12-05 4:17 p.m.] ravenslofty
+I assume you're rebuilding the chips because you need to change some librelane `config.yaml` setting?
+
+
+[2025-12-05 4:18 p.m.] logic_destroyer
+And many other things as well, but they’re mostly only relevant for everything after stage 6.
+
+
+[2025-12-05 4:18 p.m.] ravenslofty
+you should be more specific about what you're changing
+
+
+[2025-12-05 4:18 p.m.] logic_destroyer
+https://github.com/wafer-space/gf180mcu-project-template/tree/main
+
+
+[2025-12-05 4:18 p.m.] ravenslofty
+I mean the librelane settings
+
+
+[2025-12-05 4:19 p.m.] logic_destroyer
+https://github.com/wafer-space/gf180mcu
+
+
+[2025-12-05 4:19 p.m.] ravenslofty
+e.g. if you're changing `STD_CELL_LIBRARY` from 7-track to 9-track, you need to go through Yosys again
+
+
+[2025-12-05 4:19 p.m.] ravenslofty
+this is a PDK, not the librelane settings.
+
+
+[2025-12-05 4:19 p.m.] ravenslofty
+and this is a project template, not the librelane settings.
+
+
+[2025-12-05 4:19 p.m.] ravenslofty
+:p
+
+
+[2025-12-05 4:20 p.m.] logic_destroyer
+The config.yaml is embedded in the template, and everything else is derived from it.
+
+
+[2025-12-05 4:20 p.m.] ravenslofty
+yes.
+
+
+[2025-12-05 4:21 p.m.] ravenslofty
+but you said you are changing some settings
+
+
+[2025-12-05 4:21 p.m.] ravenslofty
+what are the settings you are changing
+
+
+[2025-12-05 4:22 p.m.] logic_destroyer
+I just wanted to ask whether rebuilding from stage 0 could change the Yosys synthesis semantics, but you said it wouldn’t.
+
+
+[2025-12-05 4:23 p.m.] ravenslofty
+assuming the input is the same, it won't
+
+
+[2025-12-05 4:23 p.m.] logic_destroyer
+thank you
+
+
+[2025-12-05 4:25 p.m.] logic_destroyer
+It could be that nothing in the behavioral code changed, yet the synthesis still comes out differently (when buggy)  after many runs.
+
+
+[2025-12-06 8:03 a.m.] mithro_
+I believe Yosys **should** be deterministic / reproducible, same input produces the same output. I don't know if anyone is validating / checking that aspect and it is really easily to make output of tools like Yosys non-deterministic/reproducible. https://reproducible-builds.org/ goes through a lot of what it takes to make things reproducible.
+
+{Embed}
+https://reproducible-builds.org/
+Reproducible Builds
+Reproducible builds are a set of software development practices that create an independently-verifiable path from source to binary code.
+2025-12_media/rb-logo-only-CC1AB.png
+
+{Reactions}
+😀
+
+[2025-12-06 8:04 a.m.] 246tnt
+It's been a while since I checked, but it was deterministic on the same platform / same binary. ( i.e. if you run it twice ). But if you run on different platforms, it might not be. ( And then of course different version could produce different results obviously ).
+
+{Reactions}
+😀
+
+[2025-12-06 8:11 a.m.] mithro_
+If someone (or a CI system) isn't paying attention to it, these things sadly seem to drift 🙁
+
+{Reactions}
+😮
+
+[2025-12-06 9:23 a.m.] logic_destroyer
+normal @Tim 'mithro' Ansell  @Leo Moser (mole99) ?
+How long is it expected to take? I have the latest versions of all three repositories (gf180mcu PDK, template, and checker) from Git.
+
+{Attachments}
+2025-12_media/image-FE158.png
+
+
+[2025-12-06 5:59 p.m.] polyfractal
+the whole precheck takes about 4hrs on my build server atm (Ryzen 9950x3d, about the fastest I could rent on short notice)
+
+{Reactions}
+🎉
+
+[2025-12-06 6:02 p.m.] urish
+Takes 4:30 to 5 hours for Tiny Tapeout on GitHub actions, e.g. a fresh one from today: <https://github.com/TinyTapeout/tinytapeout-gf-0p2/actions/runs/19984611269>
+
+{Reactions}
+😮
+
+[2025-12-06 6:18 p.m.] 246tnt
+If you have the RAM, running magic DRC / KLayout DRC / KLayout antenna in parallel can shorten that.
+
+{Reactions}
+🎉
+
+[2025-12-06 8:11 p.m.] logic_destroyer
+how?
+
+
+[2025-12-06 8:12 p.m.] logic_destroyer
+how to rent, where?
+
+
+[2025-12-06 8:13 p.m.] polyfractal
+I'm using OVH and their "Gaming" dedicated bare metal servers: https://us.ovhcloud.com/bare-metal/
+
+{Embed}
+https://us.ovhcloud.com/bare-metal/
+Bare Metal Dedicated Servers
+
+{Reactions}
+❤️
+
+[2025-12-06 8:18 p.m.] logic_destroyer
+by make librelane-magicdrc, make librelane-klayoutdrc? How antenna (inside DRCs)?
+
+
+[2025-12-06 8:42 p.m.] mole99 (pinned)
+📢 Update Time!
+The PDK has been updated with changes to the KLayout antenna script.
+
+- PDK [1.4.4](https://github.com/wafer-space/gf180mcu/releases/tag/1.4.4)
+  - Skip certain checks in the KLayout antenna script if corresponding layers are empty. Correctly check the top metal layer. (thanks @Egor Lukyanchenko!)
+  - Don't consider dummy metal in the KLayout antenna script (already handled by the DRC rules).
+  - *Actually* check for both P/N-type diodes in the KLayout antenna script. (thanks again @tnt!)
+
+Please make sure to update:
+
+- Project template [1.2.5](https://github.com/wafer-space/gf180mcu-project-template/releases/tag/1.2.5)
+- Precheck [1.4.3](https://github.com/wafer-space/gf180mcu-precheck/releases/tag/1.4.3)
+
+
+[2025-12-06 8:42 p.m.] mole99
+Pinned a message.
+
+{Reactions}
+❤️ (4)
+
+[2025-12-07 4:09 a.m.] noritsunaimamura
+There were thousands of antenna errors and CUP errors, but the fixes have been completed successfully.
+All Green in "Precheck 1.4.3"!
+
+- Fixed antenna and CUP errors in PDK 1.4.4.
+- Replaced the frame with the "template 1.2.5" base generated by the "make librelane-padring".
+https://github.com/ishi-kai/ISHI-KAI_Multiple_Projects_WaferSapce-GF180-1/raw/main/images/precheck_7th_OK.png
+
+- GDS
+https://github.com/ishi-kai/ISHI-KAI_Multiple_Projects_WaferSapce-GF180-1/blob/main/gds/ISHI-KAI_WS_RUN1.zip
+
+{Embed}
+https://github.com/ishi-kai/ISHI-KAI_Multiple_Projects_WaferSapce-GF180-1/raw/main/images/precheck_7th_OK.png
+2025-12_media/precheck_7th_OK-C88AE.png
+
+{Embed}
+https://github.com/ishi-kai/ISHI-KAI_Multiple_Projects_WaferSapce-GF180-1/blob/main/gds/ISHI-KAI_WS_RUN1.zip
+ISHI-KAI_Multiple_Projects_WaferSapce-GF180-1/gds/ISHI-KAI_WS_RUN1....
+ISHI-KAI's Multiple Projects Wafer for Wafer.Sapce GF180 Run 1. - ishi-kai/ISHI-KAI_Multiple_Projects_WaferSapce-GF180-1
+2025-12_media/ISHI-KAI_Multiple_Projects_WaferSapce-GF18-92693
+
+
+[2025-12-07 6:54 a.m.] mithro_
+Great!
+
+{Reactions}
+👍
+
+[2025-12-07 8:46 a.m.] rzioma
+Started a thread.
+
+
+[2025-12-09 10:59 p.m.] mole99 (pinned)
+📢 @everyone Important Update!
+
+This update introduces a reworked filler generation that complies with several rules that the foundry did not allow us to waive. This may result in your design not meeting the necessary metal density requirements. Therefore, an option has been added to the filler generation script which enables the dummy fill shapes to be moved to the active metal layer, in order to allow some of these very restrictive rules to be ignored.
+This option is enabled by default for the Metal2 layer in the project template, as this layer is most likely to be under the minimum density limit for digital designs.
+
+Additionally, the antenna script has been updated to correctly verify the antenna rules according to the PDK docs. Previously, the check did not take the diode area into account correctly. Thanks to @tnt for identifying the issue and to @Egor Lukyanchenko for providing an updated KLayout implementation.
+
+Furthermore, another issue was discovered in the antenna script.
+Similar to the DRC deck, the comp layer needs to be cut by the poly gate to prevent shorts in the extracted netlist. This was less obvious than in the DRC deck, since the antenna check starts with the lower layers and progresses to the upper layers. It is expected for the check to get progressively slower - but not to this extent!
+The antenna check should now finish in reasonable time, even for very complex designs.
+(Previously, one design with a lot of combinatorial logic timed out on the online platform. Now the antenna check for this design completes in 13.7 minutes on my machine.)
+
+{Reactions}
+❤️ (5) 👍
+
+[2025-12-09 10:59 p.m.] mole99 (pinned)
+- PDK [1.6.3](https://github.com/wafer-space/gf180mcu/releases/tag/1.6.1)
+  - Correctly implement antenna checks based on `ANTENNADIFFSIDEAREARATIO`.
+  - Fix shorts in the antenna connectivity setup.
+  - Update the magic tech file from open_pdks.
+  - Filler generation:
+    - Comply with DPF.12, DPF.13, DM.4_DM.6, DM.5_DM.7 and DPF.1.
+    - Add option to the filler generation to move a dummy metal layer to active metal and ignore DM.4_DM.6 and DM.5_DM.7.
+
+- Project template [1.3.0](https://github.com/wafer-space/gf180mcu-project-template/releases/tag/1.3.0)
+  - Update the LibreLane branch.
+  - Enable active dummy fill for Metal2 layer.
+
+- Precheck [1.5.0](https://github.com/wafer-space/gf180mcu-precheck/releases/tag/1.5.0)
+  - Update the LibreLane branch.
+
+Please make sure to update the wafer.space logo in the template repo, as its shapes have been copied to all metal layers to make it easier to meet the global density requirements.
+
+Note: If your design passes the latest precheck, it is eligible for tapeout.
+
+{Reactions}
+💜
+
+[2025-12-09 10:59 p.m.] mole99
+Pinned a message.
+
+
+[2025-12-09 11:00 p.m.] mole99
+Pinned a message.
+
+
+[2025-12-09 11:04 p.m.] polyfractal
+Since this affects dummy fill well after synthesis/routing/etc and the rest is DRC/antenna checks, I assume we can restart the build process later down the line? Do you happen to know at what step we should restart it?
+
+
+[2025-12-09 11:11 p.m.] mole99
+It's probably best to start from the beginning of the flow. The manual macro placement comes right after synthesis, so there isn't much gained.
+
+
+[2025-12-09 11:15 p.m.] polyfractal
+ah ok. will do, thanks!
+
+
+[2025-12-09 11:20 p.m.] polyfractal
+followup question: if we have art in the corners similar to the ID/WS logo, shoudl we also copy it to all the metal layers? or only needed if the dummy fill generation struggles for some reason?
+
+
+[2025-12-09 11:21 p.m.] buck_042
+Previously, when we used the analog-style top integration, we ran the fill step with
+klayout -b -zz -r ${PDK_ROOT}/${PDK}/libs.tech/klayout/tech/drc/filler_generation/fill_all.rb -rd input=chip_top.gds -rd output=chip_top_filled.gds.
+
+Now that the filler scripts have been updated, could you please let me know whether this command should also be updated (for example, by adding any additional options)? Thanks!
+
+
+[2025-12-10 12:05 a.m.] mithro_
+@Leo Moser (mole99) - Any idea?
+
+
+[2025-12-10 5:29 a.m.] polyfractal
+> 973618 KLayout DRC errors found.
+
+oh lawdy
+
+
+[2025-12-10 5:29 a.m.] polyfractal
+i'm hoping I didn't update the repo correctly or something 😅
+
+{Attachments}
+2025-12_media/image-5919E.png
+
+
+[2025-12-10 5:39 a.m.] polyfractal
+hmm, I was hopeful config.yaml merged without the new `Metal2_active` or accidentally left in `COMP_fill_cell` / `Poly2_fill_cell`... but no, that merged cleanly
+
+
+[2025-12-10 5:40 a.m.] trev5514
+Wow, on my beefy CPU, I was at 2 days total, roughly 1 day 16 hours alone on the antenna check. I updated to this and it finished within 12 minutes!
+
+{Reactions}
+waferspace (2) 🙌
+
+[2025-12-10 5:49 a.m.] mole99
+Sure, when I'm not asleep 😄
+
+
+[2025-12-10 5:50 a.m.] mithro_
+BTW What is your "beefy CPU"?
+
+
+[2025-12-10 5:50 a.m.] mole99
+Yes, that would be to meet the global target density more easily. If you have no issue meeting it, then it's not necessary.
+
+
+[2025-12-10 5:53 a.m.] mole99
+If you're making an analog design, you should be able to use the filler generation as is and still meet all density limits.
+If you have problems meeting the density limit for one of the layers, you can pass `-rd Metaln_active` to the script, where n is the number of the metal layer. This moves the fill shapes to the active metal layer and thus ignores some of the dummy fill rules.
+
+
+[2025-12-10 5:54 a.m.] mole99
+Did you also clone the latest PDK, not just update the tag? 😁
+
+
+[2025-12-10 5:56 a.m.] polyfractal
+pretty sure I did! will redo all the steps just to be safe
+
+
+[2025-12-10 5:57 a.m.] trev5514
+"Relatively beefy" - for what I could afford at the time (2 years ago), not sure how it holds up now days!
+
+13th Gen Intel(R) Core(TM) i7-13700K
+
+My main computer (powerhouse) is an M1 max mac which the above CPU keeps up with nicely. With all the issues from librelane on mac, I loaded ubuntu onto the Intel chip and have been running pnr for my design on that. No issues since. I still use the mac for cocotb tb and everything else.
+
+
+[2025-12-10 7:02 a.m.] 246tnt
+@Leo Moser (mole99) Moving the filler to active should not be done during fill generation. It should be kept as a filler layer until the very end so you can run DRC with it as a filler metal except for those DF rules.
+
+
+[2025-12-10 7:04 a.m.] 246tnt
+And you can't just move say Metal2 anyway because if you move it to active, then you'll violate the rules for the Metal3 dummy so it's pretty much an all or nothing.
+
+
+[2025-12-10 7:26 a.m.] mole99
+@tnt I see your point. However, I was considering the consequences of moving all dummy fill to active metal during the precheck. If we place the fill as dummy metal, but ignore DM.4_DM.6, DM.5_DM.7, we would need to remove these rules from the DRC deck.
+
+This means, even designs where we don't need to use these exceptions (analog designs and the smaller slot sizes for digital designs) will have their dummy fill moved to active metal. I'm also not sure how happy GF will be about us circumventing these rules. Therefore, I thought it would be better to violate this rule on only one layer.
+
+However, you're right. I'm seeing issues with the dummy fill on Metal3 that I didn't notice yesterday: it's getting placed on top of active Metal2.
+
+I'll try to fix this and see if Metal3 can still meet density. If not we may need to resort to the all or nothing method.
+
+
+[2025-12-10 7:26 a.m.] mole99
+@BreakingTaps This is the issue you're seeing. Sorry about that! I'll look into what went wrong.
+
+{Reactions}
+❤️
+
+[2025-12-10 7:36 a.m.] 246tnt
+Ideally you'd have the option to ignore the distance to next/prev layers but still put them as dummy metal. And then another option in the DRC deck to ignore those rules, then as the last step of the hardening process, move them from `filler` to `drawing` and then run the full precheck on that.
+
+{Reactions}
+👍
+
+[2025-12-10 7:37 a.m.] rebelmike
+I guess an ideal solution would be, per layer, to add dummy fill as normal first, and then if the min density isn’t met add as little active metal as possible to meet the density requirement. That would then tend not to be so much that the dummy fill on the layer above is too blocked.
+
+Maybe that could be achieved by only converting some of the dummy to active during fill generation for each layer?
+
+
+[2025-12-10 7:39 a.m.] 246tnt
+Thing is if you add active on one layer, you now need to remove filler above/below it if you want to meet that rule ..
+
+
+[2025-12-10 7:43 a.m.] urish
+Let's think like a smart LLM. 
+
+Instead of solving the actual problem, we'll simply write a script that will delete the problematic rule  from the calibre deck. Then find a vulnerability in calibre that will allow code execution. Run this script. Problem solved!
+
+{Reactions}
+💜
+
+[2025-12-10 7:48 a.m.] 246tnt
+I was more thinking like ... add some solid `Metal2.drawing` between the bond pads.
+
+
+[2025-12-10 7:49 a.m.] 246tnt
+Tons of area far from everything that matters ...
+
+
+[2025-12-10 8:01 a.m.] mole99
+Alright, I found the issue in the filler script. The top-level filler cells were only added to the layout once they had been generated for all layers. This means that subsequent layers did not consider previous ones (which was fine when it all was dummy metal).
+
+By using `start_changes()` and `end_changes()` I can add the top-level filler cells before generating the actual fill. This allows each fill layer to consider the previous one. However, it does not allow to consider the subsequent layer, i.e. if you generate dummy metal on Metal2, you would need to consider this when placing active Metal3. Therefore, fill would need to be done in two passes: first generate the active metal fill for some layers, then generate the dummy metal fill for the other layers. But yeah, it would prevent fill on the layers above and below the active fill, so not a solution anyways...
+
+
+[2025-12-10 8:02 a.m.] mole99
+The truly general solution is to ignore DM.4_DM.6 and DM.5_DM.7 when generating the dummy fill, and to move these shapes to active metal during the precheck.
+
+{Reactions}
+👍
+
+[2025-12-10 10:21 a.m.] mole99 (pinned)
+@everyone Filler Generation Hotfix!
+
+Yesterday's update to the filler generation did not work as expected. Sorry about that!
+
+The new approach is to keep the metal fill as dummy metal until the submission. The precheck will then move the dummy metal shapes to active metal.
+This allows us to ignore the previous/subsequent dummy metal rules, which are disabled by default for Metal2 in the project template.
+
+- PDK [1.6.4](https://github.com/wafer-space/gf180mcu/releases/tag/1.6.4)
+  - Keep fill on dummy metal layers.
+  - Rename option to `Metaln_ignore_active`.
+
+- Project template [1.3.1](https://github.com/wafer-space/gf180mcu-project-template/releases/tag/1.3.1)
+  - Update the PDK and use the new filler option for Metal2.
+
+- Precheck [1.5.1](https://github.com/wafer-space/gf180mcu-precheck/releases/tag/1.5.1)
+  - Move dummy metal shapes to active metal.
+
+Please update your projects and clone the latest PDK.
+Should any issues arise during this process, please let us know.
+
+
+[2025-12-10 10:21 a.m.] mole99
+Pinned a message.
+
+
+[2025-12-10 12:28 p.m.] mithro_
+
+
+{Reactions}
+🔥 (3)
+
+[2025-12-10 1:01 p.m.] rtimothyedwards_19428
+How much do you want to bet that when GF itself runs fill generation, that they just fill all layers and don't run DRC afterwards?
+
+It would be instructive and maybe helpful in the long term to get photos of one of the original GF open MPW runs, etching the surface away to get a view of each metal layer's fill pattern.  Then we will either come to an understanding of what GF actually does to get correct fill density without violating their own rules, or we'll have evidence to go back to them and insist that they change their rules.
+
+
+[2025-12-10 1:03 p.m.] tholin
+Tim Ansell has a bunch of raw dies from me, ready for destructive testing
+
+{Reactions}
+👍
+
+[2025-12-10 1:04 p.m.] rtimothyedwards_19428
+@Leo Moser (mole99) :  The implication of the "new approach" is that the previous simple fill pattern generation works correctly with the new method.  So if we submitted something with the original fill pattern generation, do we need to do anything other than re-run precheck?  Is there even a way on the server to simply re-run the precheck without doing a new upload?
+
+
+[2025-12-10 1:14 p.m.] mole99
+Yes, if you have previously generated the fill pattern when these rules were completely ignored, you can submit your design, as all the dummy layers will be moved to active metal.
+
+However, it might be better to only enable the exception for those layers that really need it :)
+
+
+[2025-12-10 1:14 p.m.] mole99
+When it comes to the server, that's @Tim 'mithro' Ansell's domain.
+
+
+[2025-12-10 1:16 p.m.] mithro_
+There is a bunch of images at https://siliconpr0n.org/archive/doku.php?id=vendor:efabless&s[]=gf180mcu#master_page_list but I don't think we ever got as far as delayering
+
+
+[2025-12-10 1:18 p.m.] tholin
+Also no images from GFMPW-1 dies, which might've been different.
+
+
+[2025-12-10 1:26 p.m.] rtimothyedwards_19428
+This looks like about the best image of fill patterns I can get from the GFMPW-0 photos.  It's hard to tell which layers are represented other than top metal.
+
+{Attachments}
+2025-12_media/gf_mpw0_die_photo-7E5C1.png
+
+
+[2025-12-10 1:31 p.m.] mole99
+There doesn't seem to be much fill at all next to the bondpads, but it should be allowed according to their rule. But then again, the density might already be achieved in that local area:
+
+> 1. Check the metal density in an area of 200um by 200um at a step of 100um.
+> 2. Add dummy metal if total die metal density is less than 30%
+
+We don't do that, we fill globally and as much as we can.
+
+
+[2025-12-10 3:12 p.m.] _luke_w_
+Are the foundry 9-track cells DRC-clean with the latest changes to the DRC decks?
+
+
+[2025-12-10 3:16 p.m.] mole99
+No, we would waive them in the online platform. The long term plan is to either adjust the GDS slightly or to add GDS-based rules to the magic tech file.
+
+However, there were talks about making magic DRC errors not fail the precheck, which seems to be the likely way forward: https://discord.com/channels/1361349522684510449/1448059137593184366/1448295208683962420
+
+{Reactions}
+👍
+
+[2025-12-10 6:49 p.m.] trev5514
+I'm trying to work through my thousands of capacitance and slew violations all related to the pads. Does anyone know where OUTPUT_CAP_LOAD and MAX_CAPACITANCE_CONSTRAINT is defined? Also, I quickly looked through the IO lib files and noticed a max capacitance of 30 while MAX_CAPACITANCE_CONSTRAINT is set to  0.2. I'm assuming this is good for internal cells but is 0.2 correct for the pads and can it be relaxed? Has anyone gotten around the cap and slew violations?
+
+
+[2025-12-10 7:32 p.m.] tholin
+Submitting this to precheck. Wish me luck.
+
+{Attachments}
+2025-12_media/chip_top_black-E9BF0.png
+
+{Reactions}
+🤞 (10)
+
+[2025-12-10 8:36 p.m.] digshadow
+I'm not really closely watching this, but if there is an image that you want let me know ASAP
+
+
+[2025-12-10 8:36 p.m.] digshadow
+As I'm actively tearing down my lab right now for an indeterminate amount of time
+
+
+[2025-12-10 8:39 p.m.] 246tnt
+The block between the two large drawing has a tenuous link to power 😅   I guess at 5V the IR drop isn't all that big a deal but still, not sure if IR Drop stuff is properly setup in the default template.
+
+
+[2025-12-10 8:53 p.m.] tholin
+There isn’t actually a lot of standard cells in there. 10% density. Its the project multiplexer
+
+{Reactions}
+👍
+
+[2025-12-10 9:48 p.m.] tholin
+9 Magic DRC Errors
+
+
+[2025-12-10 9:49 p.m.] tholin
+I guess I can’t access the report right away.
+
+
+[2025-12-10 10:12 p.m.] tholin
+No idea how to run just the magic DRC checks locally.
+
+
+[2025-12-10 10:17 p.m.] tholin
+Actually, I believe I know which specific rule is being violated in KLayout. Can I run just that rule?
+
+
+[2025-12-11 12:56 a.m.] mithro_
+@Tholin - Coming to platform.wafer.space "real soon now"
+
+{Attachments}
+2025-12_media/image-76A5A.png
+
+
+[2025-12-11 1:48 a.m.] tholin
+Passed magic DRC just now
+
+
+[2025-12-11 1:49 a.m.] tholin
+So I’m probably good
+
+
+[2025-12-11 2:40 a.m.] mithro_
+@Tholin - \o/
+
+
+[2025-12-11 1:23 p.m.] tholin
+I ran the full KLayout DRC locally and got hit with a 500 megabyte DRC report file with millions of dummy metal violations, but I didn’t get these on the online precheck?
+
+
+[2025-12-11 1:24 p.m.] tholin
+Actually crashed my text editor
+
+
+[2025-12-11 1:25 p.m.] 246tnt
+The default template now ignores one of the DRC rule when generating fill because it's basically impossible to meet density and full fill that rule ...
+
+
+[2025-12-11 1:26 p.m.] 246tnt
+The DRC deck has some option IIRC to now disable that part of the deck.
+
+
+[2025-12-11 1:28 p.m.] tholin
+Yeah, I now. I saw and was like "why is this disabled? curious!"
+
+
+[2025-12-11 1:28 p.m.] tholin
+So I tried it
+
+
+[2025-12-11 1:28 p.m.] tholin
+Mistakes were made
+
+
+[2025-12-11 1:28 p.m.] tholin
+I lost some unsaved changes in that text editor
+
+
+[2025-12-11 1:29 p.m.] tholin
+I assume the fab waived this?
+
+
+[2025-12-11 1:34 p.m.] 246tnt
+Nope
+
+
+[2025-12-11 1:35 p.m.] 246tnt
+waferspace will copy the "fill" shape to the "drawing" layer before submission to fab and cross their finger the fab doesn't complain about it.
+
+
+[2025-12-11 1:38 p.m.] tholin
+Is this done during precheck and DRC checked?
+
+
+[2025-12-11 1:47 p.m.] mole99
+Yes
+
+
+[2025-12-11 1:59 p.m.] tholin
+Very good. Then I have not observed any issues with this yet.
+
+
+[2025-12-11 2:00 p.m.] tholin
+With how large the dummy block areas around my art blocks are, I was worried about not meeting density requirements, but it appears I’m all good.
+
+
+[2025-12-11 6:36 p.m.] tholin
+
+
+{Attachments}
+2025-12_media/image-7CABB.png
+
+
+[2025-12-11 6:37 p.m.] tholin
+I had to manually edit out some DRC errors in KLayout, but its all good to go now!
+
+
+[2025-12-11 6:37 p.m.] tholin
+So, does that mean I can finally click this?
+
+{Attachments}
+2025-12_media/image-66912.png
+
+
+[2025-12-11 8:19 p.m.] trev5514
+I'm getting this: `Required PDK variable 'DPL_CELL_PADDING' did not get a specified value. This PDK may be incompatible with your flow` while trying to run the make `librelane-openroad` (launching openroad). I'm not sure if it's something I did, and I'm looking around, but I did just update the PDK. Does anyone else have this issue on the latest pdk update?
+
+
+[2025-12-11 9:11 p.m.] logic_destroyer
+@Tim 'mithro' Ansell @Leo Moser (mole99) should I?
+
+{Attachments}
+2025-12_media/image-E99CE.png
+
+
+[2025-12-11 9:15 p.m.] tholin
+I made another thing real quick. I doubt its gonna get fabbed during this run. But after the logo, there was still plenty of space in the margins for logic, so I put the wafer.space screensaver VGA demo that got submitted to TT. Felt appropriate.
+
+{Attachments}
+2025-12_media/chip_top_black-00CBD.png
+
+{Reactions}
+👍 (2) waferspace
+
+[2025-12-11 10:31 p.m.] logic_destroyer
+
+
+{Attachments}
+2025-12_media/G7651_SWAAAtOHX-62D9D.png
+
+
+[2025-12-12 12:56 a.m.] rtimothyedwards_19428
+@Tim 'mithro' Ansell :  I'm not allowed to change my own project description?  My project description changed slightly with the last submission, but "Edit" does not allow me to edit that description.  I can see locking it after the chip has been submitted for manufacture, but not before.
+
+
+[2025-12-12 3:22 a.m.] mithro_
+@Tim Edwards - What happens when you try to edit the description?
+
+
+[2025-12-12 3:36 a.m.] rtimothyedwards_19428
+@Tim 'mithro' Ansell :  I can't.  There's no option to do so.
+
+
+[2025-12-12 3:38 a.m.] mithro_
+Can you send me a screenshot of the project page? Do you see a blue edit button in the "Project Details" section?
+
+
+[2025-12-12 3:43 a.m.] rtimothyedwards_19428
+There's an Edit button, but when I click on it, the options to edit are limited.  Just a public/private checkbox, URL, and license (if I recall correctly---Not at my desk now).
+
+
+[2025-12-12 5:01 a.m.] mithro_
+The description and project title should be on that edit page.
+
+
+[2025-12-12 10:21 a.m.] greg.hashtag.9468
+I noticed that too. descriptions don't appear on the edit page..
+
+
+[2025-12-12 10:21 a.m.] greg.hashtag.9468
+
+
+{Attachments}
+2025-12_media/image-F23A6.png
+
+
+[2025-12-12 10:25 a.m.] tholin
+Can’t create a new project either, which I guess makes sense. I just wanted to see if the wafer.space logo die passes prechecks, since DRC struggles with art that big.
+
+
+[2025-12-12 12:51 p.m.] tholin
+Tip: start writing your documentation ASAP. I am a handful of paragraphs into writing mine and I already discovered and fixed two bugs in my designs.
+
+{Reactions}
+💜
+
+[2025-12-12 2:00 p.m.] rtimothyedwards_19428
+I see what Greg showed in the screenshot.  No editable title, no editable description.
+
+
+[2025-12-12 3:58 p.m.] logic_destroyer
+I was able to edit all fields
+
+
+[2025-12-12 8:31 p.m.] rtimothyedwards_19428
+Really?  What does the edit page for "Project Details" look like for you?
+
+
+[2025-12-12 8:37 p.m.] rtimothyedwards_19428
+@Leo Moser (mole99) :  I'm getting antenna violations on I/O pins.  The I/O pins are on the 3.3V set and I may be seeing violations which others don't see because the 3.3V transistors at the input are smaller and so the ratio is easier to exceed (plus the ratio was only slightly above 400).  The problem is that these pins _are_ connected to antenna diodes.  They have a (to me) weird configuration in which the signal is connected to the nwell of an nwell-to-pdiff diode.  But it is still a valid diode.  But klayout reports zero diode area for the net.
+
+
+[2025-12-12 8:43 p.m.] rtimothyedwards_19428
+@Leo Moser (mole99) :  Also, I am getting nearly no metal2 fill inside the core area of the chip.  This sounds like the issue everyone was having before the latest implementation.  But I'm supposed to be using the latest fill.  How do I know if the fill pattern generator is current?
+
+
+[2025-12-12 9:07 p.m.] mole99
+Thanks for the report @Tim Edwards, I can take a look tomorrow.
+
+
+[2025-12-12 9:07 p.m.] mole99
+You need to explicitly allow the metal fill to ignore the active metal below/above it. The project template sets this in the LibreLane config, however, if you run fill manually then you need to pass the following: `-rd Metal2_ignore_active`
+
+
+[2025-12-12 9:09 p.m.] rtimothyedwards_19428
+Thanks.  Somehow my SRAM test chip worked without it, probably because of all the blank space.
+
+{Reactions}
+👍
+
+[2025-12-12 9:14 p.m.] rtimothyedwards_19428
+@Tim 'mithro' Ansell :  I confirmed the issue of not being able to edit the title or description of the project using Chrome, so it's not browser-specific.  That was the first time I had logged into wafer.space on that computer, so it isn't cookie-specific, either.
+
+
+[2025-12-12 9:20 p.m.] logic_destroyer
+Sorry! My fault!
+
+
+[2025-12-12 11:26 p.m.] mithro_
+You should still be able to create projects - Issue reported @ https://github.com/wafer-space/platform.wafer.space/issues/218
+
+{Embed}
+https://github.com/wafer-space/platform.wafer.space/issues/218
+Users are reporting being unable to create a new project · Issue #...
+From Tholin on Discord: Can’t create a new project either, which I guess makes sense. I just wanted to see if the wafer.space logo die passes prechecks, since DRC struggles with art that big.
+
+
+[2025-12-12 11:27 p.m.] mithro_
+(and @Greg) - Bug reported @ https://github.com/wafer-space/platform.wafer.space/issues/217
+
+{Embed}
+https://github.com/wafer-space/platform.wafer.space/issues/217
+Users unable to edit project title or description · Issue #217 · ...
+Users are reporting being unable to edit their project title or description, the fields are not appearing on the edit page, see screenshot below: They do appear for staff users:
+2025-12_media/217-F8442
+
+
+[2025-12-12 11:28 p.m.] mithro_
+@Greg - I started having Claude Code work on trying to do tiles with just SRAM - https://github.com/mithro/gf180mcu-sram-forge and the output repos -> https://github.com/mithro?tab=repositories&q=gf180mcu-ic&type=&language=&sort=
+
+{Embed}
+https://github.com/mithro/gf180mcu-sram-forge
+GitHub - mithro/gf180mcu-sram-forge
+Contribute to mithro/gf180mcu-sram-forge development by creating an account on GitHub.
+2025-12_media/gf180mcu-sram-forge-40FEE
+
+{Embed}
+https://github.com/mithro?tab=repositories&q=gf180mcu-ic&type=&language=&sort=
+mithro - Repositories
+Founder and Leader of @timvideos . mithro has 499 repositories available. Follow their code on GitHub.
+2025-12_media/21212-3D290
+
+{Reactions}
+😮
+
+[2025-12-13 12:00 a.m.] mithro_
+Seems like the project creation and project title/description problems are somewhat related.
+
+
+[2025-12-13 12:16 a.m.] polyfractal
+oh! I didn't know you could put multiple instances in one macro block in the tcl stuff: https://github.com/mithro/gf180mcu-ic-1x1-sram-u8b24k/blob/main/librelane/pdn_cfg.tcl#L177
+
+i dumbly repeated the _grid,_connect, and _stripe stuff for each macro block 🤦‍♂️
+
+
+[2025-12-13 12:17 a.m.] mithro_
+Be careful, the AI might have hallucinated it can do that 😛
+
+{Reactions}
+😀
+
+[2025-12-13 12:17 a.m.] polyfractal
+oh haha
+
+
+[2025-12-13 12:17 a.m.] polyfractal
+😄
+
+{Reactions}
+😀
+
+[2025-12-13 12:32 a.m.] mithro_
+Although if an AI hallucinates an API, that has been a good indicator that maybe that API ***should*** actually exist.
+
+{Reactions}
+😮
+
+[2025-12-13 12:47 a.m.] rtimothyedwards_19428
+@Tim 'mithro' Ansell : "Users are reporting being unable to edit their project title. . . They do appear for staff users"---Quick solution:  Make everybody part of the staff!  Then you can also promote how quickly your company has grown!
+
+{Reactions}
+😂 (3) ❤️
+
+[2025-12-13 12:49 a.m.] mithro_
+As the only investor in this company is me, I doubt they will be convinced 😉
+
+{Reactions}
+😀 (2)
+
+[2025-12-13 1:32 a.m.] greg.hashtag.9468
+The instance name does not have to be complete. I used `u_sram` in my pdn.tcl
+
+{Reactions}
+😮
+
+[2025-12-13 1:33 a.m.] greg.hashtag.9468
+https://github.com/gregdavill/gf180mcu-racquet/blob/develop/librelane/pdn_cfg.tcl#L200 
+Which matches all the `u_chip_core.gen_proc_wrapper[<instance_number>].u_proc_wrapper.u_sram` blocks
+
+{Embed}
+https://github.com/gregdavill/gf180mcu-racquet/blob/develop/librelane/pdn_cfg.tcl
+gf180mcu-racquet/librelane/pdn_cfg.tcl at develop · gregdavill/gf1...
+Multicore SoC based on the serv core. Contribute to gregdavill/gf180mcu-racquet development by creating an account on GitHub.
+2025-12_media/gf180mcu-racquet-5BC78
+
+
+[2025-12-13 1:34 a.m.] greg.hashtag.9468
+I was having a hard time working out the voodoo incantation to match both placement in the .yaml, and pdn config. tcl doesn't seem to like `[` `]`, but escaping them stopped them matching anything 🙃
+
+
+[2025-12-13 2:58 a.m.] mithro_
+The issues should be fixed in an hour or two.
+
+{Reactions}
+👍 (2)
+
+[2025-12-13 9:03 a.m.] mithro_
+@Tholin / @Tim Edwards - The fix for the project creation and project edit has been deployed.
+
+{Reactions}
+👍🏻
+
+[2025-12-13 2:28 p.m.] tholin
+Submitted the die with the wafer.space logo to precheck and I’m expecting it to succeed. If you end up fabbing it, feel free to use it for all the marketing purposes. Its all yours.
+
+
+[2025-12-13 3:51 p.m.] tholin
+Clean & submitted
+
+{Reactions}
+🎉 (2)
+
+[2025-12-14 2:15 a.m.] mithro_
+Thank you so much!
+
+
+[2025-12-14 2:20 a.m.] mithro_
+@Tholin - Some kinda related terrible ideas:
+ * There was a bunch of discussion around seeing if we could make the silicon be something like really bad/inefficient infrared LEDs due to silicon being mostly transparent to IR. (I think @Ethan Mahintorabi and @BreakingTaps where part of that discussion but might have it confused with being infrared sensors -- might have instead been @digshadow and bunnie?) -- I wonder if you could make a logo that glows? (or maybe the metal just blocks the light?) 😛 
+ * I wonder if you could make the logo be some type of capacitor or connected to the power rails so the logo does something 😛
+
+
+[2025-12-14 2:59 a.m.] digshadow
+You can do 1060 nanometer fairly easily. Whether that's power efficient or useful is a different question
+
+
+[2025-12-14 3:00 a.m.] digshadow
+I should be clear though, you can't easily do something that's visible to human eye without putting a coating on
+
+
+[2025-12-14 3:15 a.m.] mithro_
+Glows in an Infrared camera would be fine....
+
+{Reactions}
+😮
+
+[2025-12-14 5:31 p.m.] mole99 (pinned)
+📢 One More Update!
+
+No worries - if your design passed precheck before, it will pass precheck now, too.
+
+This update makes magic DRC optional: magic DRC violations won't block the submission process.
+This decision was made due to a number of false positive errors that can show up if you read in a layout in magic that was not generated by magic.
+However, please note that you should still **closely verify** all magic DRC violations. If you have any doubts, or magic catches a DRC violation that KLayout does not, please let us know.
+
+The other change is that the antenna check will also consider nwell-to-pcomp diodes. Previously, it only considered pcomp-to-nwell and nplus-to-substrate diodes.
+These structures are found inside the foundry-provided I/O cells, so this change should help reduce antenna violations in some cases.
+
+- PDK [1.6.5](https://github.com/wafer-space/gf180mcu/releases/tag/1.6.5)
+- Project Template [1.3.3](https://github.com/wafer-space/gf180mcu-project-template/releases/tag/1.3.3)
+- Precheck [1.5.3](https://github.com/wafer-space/gf180mcu-precheck/releases/tag/1.5.3)
+
+PS: Another reminder to submit your designs @ https://platform.wafer.space/ by [17th Dec @ 11:59pm AoE](https://discord.com/channels/1361349522684510449/1361349523724570938/1448290154966945936)❗
+And please make sure to update your project description, visibility, license, and URL.
+
+
+[2025-12-14 5:31 p.m.] mole99
+Pinned a message.
+
+{Reactions}
+😮
+
+[2025-12-14 6:32 p.m.] rebelmike
+Ah, just realised that the template doesn't fail the GitHub action if the GL test fails!
+
+
+[2025-12-14 6:42 p.m.] rzioma
+Indeed, I guess there are cons & pros. It is useful in the sense that you get the GDS for inspection even if the test fails,  but easy to miss the failure
+
+
+[2025-12-14 6:46 p.m.] rebelmike
+A failing action can still upload artifacts - think I would prefer it to fail but still give you GDS.  It would also be nice to upload the final netlist as an artifact so you could then run GL tests locally.  Fortunately my test fail was just a setup issue I'd introduced at some point, looks like all is good (not that my tests actually test much - I've had very limited time to work on this - hoping that the fact it's basically the same as the Tiny Tapeout version of TinyQV will save me!)
+
+{Reactions}
+👍
+
+[2025-12-14 8:44 p.m.] mole99
+Thanks Mike, that's good feedback. I'll look into it tomorrow.
+
+{Reactions}
+👍
+
+[2025-12-14 9:09 p.m.] noritsunaimamura
+I ran the new PDK and Precheck on the GDS where I had already submitted on platform.wafer.space, and it was successful.
+Do I need to precheck this GDS again and submit it on the platform.wafer.space?
+https://github.com/ishi-kai/ISHI-KAI_Multiple_Projects_WaferSapce-GF180-1/raw/main/images/precheck_9th_OK.png
+
+{Embed}
+https://github.com/ishi-kai/ISHI-KAI_Multiple_Projects_WaferSapce-GF180-1/raw/main/images/precheck_9th_OK.png
+2025-12_media/precheck_9th_OK-1B9F5.png
+
+
+[2025-12-15 7:36 a.m.] mole99
+Great! No, you don't need to resubmit your design.
+If it passed the precheck previously, then it is fine.
+
+{Reactions}
+🆗
+
+[2025-12-15 12:09 p.m.] simi150500
+@Jonathan (JMU, Germany) and I (JKU, Austria) have just submitted our multi-project chip. 🎉 
+This tapeout has 13 different projects on it, coming from our students or from our research departments.
+Some of our highlights are the game Tetris and a RISC-V CPU for our TinyWhisper project. And of course, our students are excited to tape their first chip. 🙌 
+
+The starting template has also been extended with some more Makefile targets to also build specific macros, copy important reports `copy-reports`, and copy & ZIP the GDS for submission `copy-gds`. There is also a Makefile target `build-all`, which enables everyone to simply clone the repo, install the `nix-shell`, execute `make build-all` in it, and the whole chip will be built submission-ready. Maybe this is useful for someone for future runs. Feel free to use it. 🙂
+
+A big shoutout to @Leo Moser (mole99), who supported us during this journey. Another thanks to @Tholin and his project (https://github.com/AvalonSemiconductors/ws-submission-2025/), which served as a reference for using macros. Thanks @Tim 'mithro' Ansell and everyone else involved, for making this possible. 🙂
+
+GitHub Repo: https://github.com/iic-jku/gf180mcu-jku-projects
+
+{Attachments}
+2025-12_media/chip_top_white-5A0D7.png
+
+{Embed}
+https://github.com/iic-jku/gf180mcu-jku-projects
+GitHub - iic-jku/gf180mcu-jku-projects: This wafer.space tapeout in...
+This wafer.space tapeout includes various projects from the IICQC at JKU and a TinyWhisper RISC-V from JMU. - iic-jku/gf180mcu-jku-projects
+2025-12_media/gf180mcu-jku-projects-8CC86
+
+{Reactions}
+🎉 (7) ❤️
+
+[2025-12-15 12:14 p.m.] tholin
+Not having reset overrides for non-selected projects is....a choice. Dynamic power consumption on gf180 is particularly high. You’re gonna have some HOT chips!
+
+{Reactions}
+🚒
+
+[2025-12-15 2:57 p.m.] simi150500
+Good catch. Thanks for pointing that out. Maybe we find some time to fix this. But probably not until the next run.
+Anyway, only the smaller designs are connected to the MUX. The bigger designs are running simultaneously. Therefore, adding reset overrides probably won't significantly affect the chip temperature. It still would be pretty hot. 😅
+
+
+[2025-12-15 8:42 p.m.] rebelmike
+I've just submitted TinyQV!  https://github.com/MichaelBell/ws01-tinyQV?tab=readme-ov-file#tinyqv-for-wafer-space-run-1
+
+TinyQV is an RV32EC system on chip which I designed to work well within Tiny Tapeout's constraints.  Earlier in the year there was a competition where Tiny Tapeout contributors could submit compatible peripherals to be taped out as part of the ttsky25a shuttle.
+
+This version is a slight tweak to the Tiny Tapeout version, with UART and audio broken out on extra pins to allow a bit more flexibility in how it can be used, and the ability to work standalone (without the aid of another microcontroller to bring up the flash and PSRAM chips).  There's also an SRAM macro providing some scratch memory.  There's much more that could be done with the extra pins, possibility of analog interfaces, and using more area - but I've been very tight on time since the Wafer Space announcement (I initially didn't expect to contribute because of this - thanks @Leo Moser (mole99) for encouraging me to take part!)
+
+All the Tiny Tapeout competition winning peripherals are present, plus basic UART, SPI, PWM blocks.  Additionally there's a peripheral to interface with the Tiny Tapeout gamepad Pmod, a quickly hacked together change to my VGA display peripheral that should allow a 256x120 resolution video mode, and @ReJ aka Renaldas Zioma's AY-3-819x sound generator - so some retro style games should be possible.
+
+Many thanks to @Tim 'mithro' Ansell and @Leo Moser (mole99) for offering to put TinyQV on the shuttle!  I have submitted quarter, half height and half width versions - they are all functionally identical, so use whichever one you have space for.
+
+{Embed}
+https://github.com/MichaelBell/ws01-tinyQV?tab=readme-ov-file
+GitHub - MichaelBell/ws01-tinyQV: TinyQV for Wafer Space run 1 on g...
+TinyQV for Wafer Space run 1 on gf180mcu. Contribute to MichaelBell/ws01-tinyQV development by creating an account on GitHub.
+2025-12_media/38e69b03-b35a-47ee-b464-223d70be2016-01495
+
+{Reactions}
+🎉 (8) 👏 (5) blobclap (4)
+
+[2025-12-15 11:48 p.m.] mithro_
+Great to see all the submissions!
+
+
+[2025-12-16 12:10 p.m.] mole99 (pinned)
+📢 Minor Update!
+
+This update fixes a regression introduced in the previous update (sorry!).
+If your precheck was clean with PDK version 1.6.4, it will be clean with the latest version as well.
+
+- PDK [1.6.6](https://github.com/wafer-space/gf180mcu/releases/tag/1.6.6)
+- Project Template [1.3.5](https://github.com/wafer-space/gf180mcu-project-template/releases/tag/1.3.5)
+- Precheck [1.5.4](https://github.com/wafer-space/gf180mcu-precheck/releases/tag/1.5.4)
+
+{Reactions}
+👍 (3)
+
+[2025-12-16 12:10 p.m.] mole99
+Pinned a message.
+
+
+[2025-12-16 5:06 p.m.] tholin
+I re-ran my top-level flow with the new PDK and got this NP.2 and PP.2 violation
+
+{Attachments}
+2025-12_media/image-5DE7E.png
+
+{Reactions}
+😮 (2)
+
+[2025-12-16 5:27 p.m.] tholin
+Check #111 on the platform
+
+
+[2025-12-16 6:36 p.m.] mole99
+Did you open an issue on GitHub? I haven't seen anything yet.
+
+The update to the precheck only affected the antenna check. These issues are probably due to some bad RNG luck.
+
+Are these violations from magic DRC or from KLayout DRC?
+Did you verify that these violations are false positives?
+
+If you want help with that issue on Discord, please create a post under #⁉️-questions.
+
+{Reactions}
+😮
+
+[2025-12-17 4:34 a.m.] polyfractal
+ah ok, @Tim 'mithro' Ansell I think my precheck might actually be stuck this time. running for 10hr, but the resource usage checkpoints stop at 4 minutes. that tracks with the log timestamps too. Gonna restart it but wanted to drop a ping in case it's helpful for debugging or something
+
+{Attachments}
+2025-12_media/image-500E5.png
+2025-12_media/image-878BC.png
+
+
+[2025-12-17 4:38 a.m.] mithro_
+Have you done that already?
+
+
+[2025-12-17 4:39 a.m.] polyfractal
+yep just restarted it. seems to be crunching along nicely now 👍
+
+
+[2025-12-17 4:40 a.m.] mithro_
+There is suppose to be code which finds containers and checks which become orphaned
+
+
+[2025-12-17 4:40 a.m.] polyfractal
+maybe got in a weird state since it was started right around the redeploy earlier?
+
+
+[2025-12-17 5:30 a.m.] mithro_
+Yeah, the system "should" be self healing but I guess that isn't working
+
+
+[2025-12-17 2:01 p.m.] trev5514
+Has anyone submitted since? My design I submitted this morning with this flow returned:
+
+[Error]: Layer 'GUARD_RING_MK' is not used. wafers.space requires a seal ring (guard ring) around the die.                                                                                              
+From the wesbite
+
+
+[2025-12-18 10:10 a.m.] tholin
+I can’t run GL anymore, so I guess no verification for me.
+
+
+[2025-12-18 10:11 a.m.] mithro_
+You break your graphics stack?
+
+
+[2025-12-18 10:11 a.m.] tholin
+Not that GL
+
+
+[2025-12-18 10:12 a.m.] tholin
+This one
+
+{Attachments}
+2025-12_media/image-96F71.png
+
+
+[2025-12-18 10:17 a.m.] mole99
+``default_nettype wire`?
+
+
+[2025-12-18 10:18 a.m.] mole99
+The stdcells require that to be set. The last statement even from a previous file is used.
+
+
+[2025-12-18 10:23 a.m.] tholin
+That is very annoying
+
+
+[2025-12-18 10:26 a.m.] mole99
+That is Verilog. You should set `` `default_nettype none`` at the start of all your files and `` `default_nettype wire`` at the end.
+
+
+[2025-12-18 2:44 p.m.] rtimothyedwards_19428
+Verilog is the worst hardware description language except for all the others.
+
+{Reactions}
+😆 (4)
+
+[2025-12-18 8:39 p.m.] mithro_
+My mental model is -- "Verilog is to C" is as "VHDL is to Ada" is as "SystemVerilog is to C++". 
+
+That includes things like:
+ * C is full of foot guns, people think it's a low level language and they know the direct mapping to hardware but don't realise all bets are off when a compiler is involved, etc.
+ * C++ is a massive language which includes multiple other languages internally, every restricts their usage to some small subsection of the language -- but no one can agree what the right subsection is, etc.
+
+{Reactions}
+❤️ (2)
+
+[2025-12-18 9:32 p.m.] rtimothyedwards_19428
+@Tim 'mithro' Ansell :  "The UNIX-Hater's Handbook" (Simson Garfinkel, Danie Weise, and Steven Strassmann, IDG Books, 1994) is a great read, if a bit "over the top".  It has an entire chapter devoted to C++, with sections like "C++ is to C as Lung Cancer is to Lung".
+
+{Reactions}
+😆 (2)
+
+[2025-12-18 9:33 p.m.] rtimothyedwards_19428
+"Q:  Where did the names "C" and "C++" come from?
+ A:  They were grades."  ---Jerry Leichter
+
+
+[2025-12-19 12:59 a.m.] mithro_
+@Tim Edwards - The thing I like about C++ people is they don't pretend they actually understand how it works, people like to /think/ they know what is happening with C code but are very frequently proven wrong.
+
+{Reactions}
+😆 👌🏻
+
+[2025-12-19 3:29 p.m.] logic_destroyer
+I don’t have any issues with Verilog and find it quite pleasant to work with. SystemVerilog is, of course, even better.
+
+
+[2025-12-19 3:29 p.m.] logic_destroyer
+I started doing logic design in 2021.
+
+
+[2025-12-19 3:36 p.m.] ravenslofty
+VHDL doesn't have an official synthesisable subset either, which doesn't help.
+
+{Reactions}
+😮
+
+[2025-12-19 9:24 p.m.] egorxe
+It had one, but I'm not sure if anyone actually adhered to it https://standards.ieee.org/ieee/1076.6/3466/
+
+{Embed}
+https://standards.ieee.org/ieee/1076.6/3466/
+IEEE Standards Association
+2025-12_media/iStock-1413210242-DM-r1-352F6.jpg
+
+{Reactions}
+😱
+
+[2025-12-22 5:53 p.m.] polyfractal
+@Leo Moser (mole99) (not-important-question): I'm trying to familiarize myself with how LibreLane/OpenRoad works. In `gf180mcu/flows/chip.py` I see a list of steps that are executed for the whole flow. Then in `gf180mcu/steps/*` all the actual step processing logic and config/parameters lives, correct?
+
+So when you add a `OpenROAD.Floorplan` step to `chip.py`, the corresponding logic is defined in the `Floorplan(OpenROADStep)` class residing in `steps/openroad.py`  Is that the gist of how it works?
+
+context: was investigating adding an optional `rtl_macro_placer ` step to the flow  (ala https://github.com/librelane/librelane/issues/537).  Placing macros by hand was super tedious for me, and probably terrible layout performance 😅
+
+
+[2025-12-22 5:58 p.m.] ravenslofty
+yes, that's roughly correct
+
+
+[2025-12-22 5:59 p.m.] ravenslofty
+but you don't need to dump your plugin into there
+
+
+[2025-12-22 5:59 p.m.] ravenslofty
+for example, I wanted to play around with openroad's `rmp` step
+
+
+[2025-12-22 5:59 p.m.] ravenslofty
+```python
+from decimal import Decimal
+import os
+from typing import Literal, Optional, Tuple
+
+from librelane.steps.openroad import Step, TclStep, OpenROADStep, CompositeStep, State, Variable, ViewsUpdate, MetricsUpdate, dpl_variables
+from librelane.common import get_script_dir, process_list_file
+
+@Step.factory.register()
+class RMP(OpenROADStep):
+    id = "OpenROAD.RMP"
+    name = "Restructure RMP"
+    version = "0.1.0"
+
+    config_vars = OpenROADStep.config_vars + dpl_variables + [
+        Variable(
+            "RMP_CORNER",
+            Optional[str],
+            description="IPVT corner to use during restructure. If unspecified, the value for `DEFAULT_CORNER` from the PDK will be used.",
+            default="max_ss_125C_4v50"
+        ),
+        Variable(
+            "RMP_TARGET",
+            Literal["timing", "area"],
+            description="In area mode, the focus is area reduction, and timing may degrade. In delay mode, delay is likely reduced, but the area may increase",
+            default="area",
+        ),
+        Variable(
+            "RMP_SLACK_THRESHOLD",
+            Optional[Decimal],
+            description="Specifies a (setup) timing slack value below which timing paths need to be analyzed for restructuring",
+            default=Decimal()
+        ),
+        Variable(
+            "RMP_DEPTH_THRESHOLD",
+            Optional[int],
+            description="Specifies the path depth above which a timing path would be considered for restructuring",
+        ),
+    ]
+
+    def get_script_path(self):
+        return "~/gf180mcu-chess/restructure.tcl"
+
+    def run(self, state_in: State, **kwargs) -> Tuple[ViewsUpdate, MetricsUpdate]:
+        self.config = self.config.copy(DEFAULT_CORNER=self.config["RMP_CORNER"])
+
+        kwargs, env = self.extract_env(kwargs)
+        lib_list = self.toolbox.filter_views(
+            self.config, self.config["LIB"], timing_corner=self.config.get("RMP_CORNER")
+        )
+
+        excluded_cells: Set[str] = set(self.config["EXTRA_EXCLUDED_CELLS"] or [])
+        excluded_cells.update(
+            process_list_file(self.config["SYNTH_EXCLUDED_CELL_FILE"])
+        )
+        excluded_cells.update(process_list_file(self.config["PNR_EXCLUDED_CELL_FILE"]))
+        trimmed_lib = self.toolbox.remove_cells_from_lib(
+            frozenset([str(lib) for lib in lib_list]),
+            excluded_cells=frozenset(excluded_cells),
+        )
+
+        env["_RMP_LIB"] = TclStep.value_to_tcl(trimmed_lib)
+        env["_RMP_ABC_LOG"] = TclStep.value_to_tcl(
+            os.path.join(self.step_dir, "abc.log")
+        )
+        env["RMP_CORNER"] = TclStep.value_to_tcl(self.config.get("RMP_CORNER"))
+        return super().run(state_in, env=env, **kwargs)
+
+@Step.factory.register()
+class RMPPlus(CompositeStep):
+    id = "OpenROAD.RMPPlus"
+    Steps = [
+        RMP,
+        Step.factory.get("OpenROAD.GlobalPlacement"),
+        Step.factory.get("OpenROAD.DetailedPlacement"),
+        Step.factory.get("OpenROAD.GlobalRouting"),
+    ]
+```
+
+
+[2025-12-22 6:02 p.m.] polyfractal
+ooh interesting. where do "user plugins" live in the project template, and how do you specify where the step is inserted into the standard chip flow? Might be missing it from skimming that code but I don't think I see how it slots into the flow? Or is it run as a standalone step?
+
+
+[2025-12-22 6:03 p.m.] ravenslofty
+anything which is in `PYTHONPATH`, and which has a filename which begins with `librelane_plugin_`
+
+
+[2025-12-22 6:03 p.m.] ravenslofty
+(e.g. the above file is called `librelane_plugin_rmp.py`)
+
+
+[2025-12-22 6:04 p.m.] ravenslofty
+> how do you specify where the step is inserted into the standard chip flow?
+same as any other step in the flow; you add it in `librelane/config.yaml` under `substituting_steps`.
+
+
+[2025-12-22 6:05 p.m.] polyfractal
+oh! I didn't realize that's what the `substituting_steps` section was for (makes sense in retrospect). awesome, thank you!
+
+
+[2025-12-22 6:06 p.m.] polyfractal
+so just to check my understanding, for your `rmp` you would have nulled out the `GlobalPlacement`, `DetailedPlacement` and `GlobalRouting` , then inserted your `RMP` to run (and which includes the others)?
+
+
+[2025-12-22 6:09 p.m.] ravenslofty
+actually, the intent was to run those, and then `OpenROAD.RMPPlus` afterwards to try to use the information
+
+
+[2025-12-22 6:09 p.m.] ravenslofty
+||but RMP sucks, so it didn't help any||
+
+
+[2025-12-22 6:10 p.m.] polyfractal
+hehe
+
+
+[2025-12-22 6:10 p.m.] polyfractal
+gotcha 🙂 👍
+
+
+[2025-12-22 6:12 p.m.] ravenslofty
+I know it's quite insulting to call things like this *toys*, but having passes that have little documentation, only work in very specific situations and have crippling flaws, mixed in alongside the Serious Stuff for Serious People makes it confusing to know what to use
+
+
+[2025-12-22 6:12 p.m.] ravenslofty
+*cough*
+
+
+[2025-12-22 6:12 p.m.] ravenslofty
+anyway
+
+
+[2025-12-22 6:14 p.m.] polyfractal
+state of documentation in general was a real hindrance to me personally (as a complete newbie). Even simple things, like is this parameter unitless? nanoseconds? percentage? who knows! 🙃 
+
+And even moreso for how parameters interact. optimizing was a lot of tweaking and seeing how it adjusted things
+
+
+[2025-12-22 6:15 p.m.] polyfractal
+(not project template that is, Openroad/librelane)
+
+
+[2025-12-22 6:16 p.m.] polyfractal
+that said I recognize docs are hard and no fun for OSS contributors 🙂
+
+
+[2025-12-22 6:16 p.m.] ravenslofty
+tbqh I have decided to do something very stupid in the hopes of improving gf180mcu performance :p
+
+
+[2025-12-22 6:16 p.m.] polyfractal
+oh? any details to share or wait until the silicon is back?
+
+
+[2025-12-22 6:17 p.m.] ravenslofty
+you might be aware that tholin's been working on a new standard cell library
+
+
+[2025-12-22 6:18 p.m.] ravenslofty
+well, I've decided to make a new standard cell library too
+
+
+[2025-12-22 6:18 p.m.] ravenslofty
+except I'm going with domino logic
+
+
+[2025-12-22 6:20 p.m.] polyfractal
+oooh neat! will have to do some reading on that, only passingly familiar
+
+
+[2025-12-22 6:28 p.m.] polyfractal
+(had a quick refresher, very cool! can't wait to see how it turns out 🙂 )
+
+
+[2025-12-22 7:47 p.m.] ravenslofty
+so, admittedly, the tooling is not really set up for domino logic
+
+
+[2025-12-22 7:47 p.m.] ravenslofty
+but, I think there's a chicken-and-egg situation of "no open domino logic libraries, so why support domino logic in open tooling"
+
+
+[2025-12-22 7:48 p.m.] ravenslofty
+and so, a shitty domino logic library can pave the way for a good one :p
+
+
+[2025-12-24 10:07 a.m.] mithro_
+@Lofty / @BreakingTaps - The more people we get using the tools, the better things like documentation will hopefully get.
+
+{Reactions}
+😮
+
+[2025-12-24 10:39 a.m.] ravenslofty
+Unfortunately more people using the tools might not pay Precision to add important things to OpenROAD...
+
+{Reactions}
+😮
+
+[2025-12-24 10:50 a.m.] mithro_
+The great thing is that it only takes a *few* people to pay Precision to add things.
+
+
+[2025-12-24 10:50 a.m.] mithro_
+Most people don't pay to improve gcc or llvm
+
+{Reactions}
+😮
+
+[2025-12-24 4:35 p.m.] polyfractal
+Who pays Precision currently? University grants? or maybe startups looking for extra support?
+
+
+[2025-12-28 2:35 a.m.] polyfractal
+How did you enable ICG cells btw?
+
+
+[2025-12-28 2:49 a.m.] nxmq99
+USE_LIGHTER will turn DFF Enables to ICGs
+
+
+[2025-12-28 2:50 a.m.] polyfractal
+thanks!
+
+
+[2025-12-30 2:33 a.m.] mithro_
+@BreakingTaps - A whole bunch of people pay them, for example Google pays them.
+
+
+[2025-12-30 2:33 a.m.] mithro_
+@BreakingTaps - They have contracts with other groups that I'm not at liberty to share.
+
+
+[2025-12-30 2:34 a.m.] mithro_
+@BreakingTaps - FWIW - Precision was *originally* paid by DARPA as part of the IDEA project.
+
+
+[2025-12-30 2:34 a.m.] mithro_
+I believe there will also be an OpenROAD Foundation created at some point...
+
+
+[2025-12-30 5:07 p.m.] polyfractal
+aha, interesting! didnt know they were part of that chronology
+
+
+[2025-12-30 5:07 p.m.] polyfractal
+well i'm happy they are getting paid! doing good work it seems 🙂
+
+
+[2025-12-30 11:49 p.m.] mithro_
+@BreakingTaps - If you know companies that want to pay them, I'm happy to set up an introduction! 🙂
+
+{Reactions}
+👍
+
+==============================================================
+Exported 575 message(s)
+==============================================================

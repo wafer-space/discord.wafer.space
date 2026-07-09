@@ -1,0 +1,187 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 📐 - Designing / 📝-project-template
+Topic: [template-github](https://github.com/wafer-space/gf180mcu-project-template)
+After: 2026-04-30 11:59 p.m.
+Before: 2026-06-01 12:00 a.m.
+==============================================================
+
+[2026-05-05 10:48 a.m.] robtaylor_52029
+is https://github.com/wafer-space/gf180mcu-project-template/issues/38 still valid?
+
+{Embed}
+https://github.com/wafer-space/gf180mcu-project-template/issues/38
+RAM models sample read condition on delayed clock · Issue #38 · w...
+The attached image shows a read from SRAM location 0 using the foundry RAM models from the PDK. However the SRAM Q does not transition, instead remaining at the value of SRAM location 1. I think th...
+2026-05_media/38-458D0
+
+
+[2026-05-05 12:27 p.m.] mole99
+Yes, this is still valid. I'm in the process of upstreaming the wafer.space changes to open_pdks. I'll take a look at the open issues then.
+
+{Reactions}
+👍 (2)
+
+[2026-05-11 3:29 p.m.] polyfractal
+Hmm, _might_ have found a bug in the LVS deck for nw2ps diode? This is pretty outside my knowledge so not sure. I was trying to get an nw2ps photodiode to work in an analog circuit, but the diode kept failing to extract in LVS (remained anonymous pins) despite the geometry looking correct.
+
+AI slop machines helped debug and it looks like the deck ties the n terminal to `nwell` which you can't connect to directly? Other diodes use `ntap` or `nwell_con`
+
+I've switched to a dnwell diode and unblocked, but thought I'd mention here in case someone more knowledgeable than me might know.
+
+```
+# diode_nw2ps_03v3 diode
+connect(diode_nw2ps_03v3_terminal_p, contact)
+connect(diode_nw2ps_03v3_terminal_n, nwell)
+```
+
+
+[2026-05-11 5:31 p.m.] mole99
+Started a thread.
+
+
+[2026-05-27 12:48 p.m.] mole99 (pinned)
+📢 It's been a while since the last update to the project template, but we worked on a lot of improvements in the background, which I'm happy to share with you now!
+
+All of the wafer.space PDK changes have finally been upstreamed to [open_pdks](https://github.com/RTimothyEdwards/open_pdks), which allows us to sunset the wafer.space PDK fork.
+This is important since we want one common target for community efforts and avoid unnecessary fragmentation. Many of the community-created IPs are already part of open_pdks (SCL, PAD, SRAM and eFuse libraries).
+You can now use [Ciel](https://github.com/fossi-foundation/ciel), the PDK manager, to manage your PDKs. The project template will use Ciel as well.
+
+In addition, I have enabled support for the community-created 3v3/5v I/Os, the 3v3 SRAMs and the 3v3 standard cell library in the template. Not all of the IPs have been tested yet, so support for them is experimental!
+
+Give it a try in this pull request: https://github.com/wafer-space/gf180mcu-project-template/pull/60
+I plan to merge it soon and would appreciate any feedback beforehand.
+
+{Reactions}
+🎉 (3)
+
+[2026-05-27 12:48 p.m.] mole99
+Another major change in this upcoming update is the new KLayout DRC runner by @Clyde Laforge.
+Thanks to this, the KLayout DRC deck is now parallelized across rule decks while sharing some of the memory!
+This makes it possible to build the 1x1 project template, including DRC checks, in 40 minutes on my machine (24 threads).
+
+Currently, the number of workers is set to "max" in the LibreLane config. If RAM usage is too high, reduce the number of workers. For a best possible utilization choose: threads * workers = hardware threads.
+
+Clyde also considerably improved the KLayout LVS setup, including the handling of substrate cuts. So if you are interested in doing an analog design with KLayout, now is the time to give this a try!
+
+Please let me know if you have any questions regarding these changes.
+If you plan to tape out on ws-run #2, you will need to use the updated template, since a few changes are required to pass the precheck. More on that once the update is live.
+
+
+[2026-05-27 12:48 p.m.] mole99
+Pinned a message.
+
+
+[2026-05-27 12:51 p.m.] 246tnt
+Huh ... I'd like to know about those change because in TT we don't use the template at all and I'm working right now to finalize the run 2 builder.
+
+
+[2026-05-27 7:41 p.m.] rebelmike
+I've hit a problem upgrading to this version of the template.  I've tracked it down to the new librelane version - if the only change I make is to switch nix to use the `leo/wafer-space` branch of librelane then I see the same issue.
+
+The problem is undriven net errors, e.g.:
+```
+Warning: Wire tqvp_uart_tx.\next_fsm_state$func$/home/mdb36/wafer-space/ws02-tinyQV/src/user_peripherals/uart/uart_tx.v:116$2738.tx_en is used but has no driver.
+Warning: Wire tqvp_uart_tx.\next_fsm_state$func$/home/mdb36/wafer-space/ws02-tinyQV/src/user_peripherals/uart/uart_tx.v:116$2738.$result [3] is used but has no driver.
+```
+This particular case is using a verilog function, and I tried changing the uart_tx module to remove the function (inlining it into the process that calls it), and that fixes that instance of the warnings.  So I suspect it's a regression in yosys.
+
+
+[2026-05-27 8:00 p.m.] rebelmike
+ok, a minimal repro where I just wire up that uart module does hit the error.  See https://github.com/MichaelBell/wafer-space-repro/commit/76eb8c6123fbd1c241e89a2f7ca8dd394ea7112b
+
+{Embed}
+https://github.com/MichaelBell/wafer-space-repro/commit/76eb8c6123fbd1c241e89a2f7ca8dd394ea7112b
+Minimal repro · MichaelBell/wafer-space-repro@76eb8c6
+2026-05_media/76eb8c6123fbd1c241e89a2f7ca8dd394ea7112b-37316
+
+
+[2026-05-27 8:17 p.m.] mole99
+Started a thread.
+
+
+[2026-05-28 4:15 p.m.] polyfractal
+3v3 SRAM macros are exciting! Has anyone had a chance to test those yet? I forget who taped them out for this run
+
+
+[2026-05-28 4:37 p.m.] 246tnt
+@Tim Edwards did, but he has a custom pad frame in his test chip AFAIU so he needs to get them wire bonded himself.
+
+
+[2026-05-28 4:50 p.m.] rtimothyedwards_19428
+@BreakingTaps :  I did have one full-size chip that I called my "Hail Mary" project, as everything in it was experimental.  But I also had a half-size test chip with the SRAM macros wired out to the pads for testing and characterization.  That was not a custom frame other than that it was a half-size chip.  So I'd appreciate anyone who pushes on @Tim 'mithro' Ansell to get those packaged and mailed out.  The sooner that's done, the sooner I have an answer for you.
+
+{Reactions}
+👍
+
+[2026-05-28 5:03 p.m.] rebelmike
+Is it 1xp5 or p5x1?  I believe some 1xp5 CoB boards have been/are being made.
+
+
+[2026-05-28 5:11 p.m.] rtimothyedwards_19428
+@RebelMike :  It's `1x0p5` (which I guess is good!).
+
+{Reactions}
+🤞
+
+[2026-05-28 9:17 p.m.] anfroholic
+Those boards are due to be delivered to the  people who would bring it to the wirebonders on Jun 1
+
+{Reactions}
+👍
+
+[2026-05-28 11:51 p.m.] mithro_
+If your design works with the 1x0p5 CoB that @RebelMike made, then I'll get them bonded at the same time and get them sent out.
+
+
+[2026-05-29 7:21 a.m.] rebelmike
+As long as the vdd and vss pads were in the same place as the project template it should work, and it should also be usable with the breadboard breakout.
+
+
+[2026-05-30 12:10 a.m.] mithro_
+@Tim Edwards - I believe you kept the VDD/VSS in the same places as the default on that one?
+
+
+[2026-05-30 12:12 a.m.] rtimothyedwards_19428
+@Tim 'mithro' Ansell :  Yes.  It was only the "openframe" where I was following the original Caravel padframe for reasons of compatibility with my original Efabless Caravel-GF development board.  The SRAM test chip just followed the template pad assignments.
+
+
+[2026-05-30 4:26 p.m.] .dmv
+Hi everyone. First time commenter. I've tried to read all the discord first. I am working on a 1×1 slot design with a custom analog-heavy padring (18 'asig_5p0' pads total). LibreLane places everything without error, but I want to confirm the precheck won't flag the supply topology.
+
+My north side has 9 analog pads with 2 DVDD and 3 DVSS power pads interspersed. My east side has 9 analog pads with 4 DVDD and 3 DVSS. Is there any precheck rule that requires a minimum number of DVDD/DVSS pads per side, or a minimum ratio to analog pad count? Or does the precheck only validate physical DRC (spacing, overlap, well rules)?
+
+Right now, this is mostly a design/viability exercise (can I get this idea to simulate, working in a space I'm not very familiar with) so I'm probably going to have more questions about the practical bits. This is the first inquiry where just reading everyone else's progress wasn't enough to resolve. Thank you in advance.
+
+
+[2026-05-30 4:35 p.m.] namibj
+You don't need that many supply pads; note that if you use a padframe that (beyond customizing what pad type a non-supply-pad is populated with) deviates from the reference, the plain standard COB offer doesn't work.
+
+{Reactions}
+❤️ 👆
+
+[2026-05-30 4:35 p.m.] 246tnt
+@dmv Note if you change the power pad position, you will have to handle bonding yourself.
+
+{Reactions}
+❤️
+
+[2026-05-30 4:44 p.m.] rebelmike
+When building my design, which is getting fairly full but from the render seems like there's a bit more space, the metrics now say ```
+    "design__instance__utilization": 1.06565,
+    "design__instance__utilization__stdcell": 1.1131,
+```
+I had thought that both of these would max out at 1.  What do these actually measure?  Might going above 1 related to using Tholin's 3v3 library, or is it expected anyway?
+
+
+[2026-05-30 4:47 p.m.] namibj
+Do you have a density target set? I'd figure that it's reported relative to that?
+
+
+[2026-05-30 4:52 p.m.] rebelmike
+Ah, possibly.  My density target is 60%.  Global placement is saying utilization 54.8%, but obviously once buffers, clock tree, etc have gone in utilization to be somewhat higher.
+
+
+==============================================================
+Exported 27 message(s)
+==============================================================
