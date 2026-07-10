@@ -19,3 +19,8 @@ Btw would it effect the tapeout if the dlyb buffers are used instead of normal b
 "591049455499739147","crockpotveggies","2026-07-09T18:25:26.1020000+00:00","Anyone here have full SOC designs and having issues with very long synthesis times? Our same design for fpga on vivado takes 15-30 minutes to synth, but on yosys we’re seeing 12+ hours despite enabling multi threading and other usual suspects. Is this a known issue?
 
 I opened a PR with yosys to merge some optimizations and it was rejected because it was “AI assisted” and I must admit the attitude was very disappointing despite providing follow ups, asking questions, etc.","",""
+"596068704471482370","246tnt","2026-07-09T19:16:51.5070000+00:00","That's usually a sign you have synthesized memories or something like that","",""
+"323371864074485771","mole99","2026-07-09T20:09:01.2110000+00:00","@J-Lo If you haven't read this page yet, you should do so before contributing to Yosys: https://yosyshq.readthedocs.io/projects/yosys/en/latest/yosys_internals/extending_yosys/contributing.html
+There are also some rules on LLM usage.","",""
+"323371864074485771","mole99","2026-07-09T20:09:43.5630000+00:00","Often you can also speed up synthesis by keeping some parts of your design hierarchical.","",""
+"591049455499739147","crockpotveggies","2026-07-09T20:24:53.8360000+00:00","Yes we do leverage the keep_hierarchy. I’m aware of the LLM rules but frankly it felt like an aversion not a guardrail. But I’m not keen to focus this discussion on that, I’m trying to understand if our synth times are abnormal and if we need to investigate a problem","",""
