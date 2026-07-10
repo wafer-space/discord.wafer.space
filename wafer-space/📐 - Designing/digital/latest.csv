@@ -25,3 +25,13 @@ There are also some rules on LLM usage.","",""
 "323371864074485771","mole99","2026-07-09T20:09:43.5630000+00:00","Often you can also speed up synthesis by keeping some parts of your design hierarchical.","",""
 "591049455499739147","crockpotveggies","2026-07-09T20:24:53.8360000+00:00","Yes we do leverage the keep_hierarchy. I’m aware of the LLM rules but frankly it felt like an aversion not a guardrail. But I’m not keen to focus this discussion on that, I’m trying to understand if our synth times are abnormal and if we need to investigate a problem","",""
 "738396032295108721","bailey8889","2026-07-10T00:04:39.1380000+00:00","Just to be clear, you're referring to the actual yosys synthesis step and not the any of the place and routing steps, right?","",""
+"591049455499739147","crockpotveggies","2026-07-10T17:42:33.8900000+00:00","This is a summary from my team, and because I’m seeing openroad yes it might be PNR
+
+> synthesis/signoff runs were spending huge time in OpenROAD.RepairDesignPostGPL. The dominant cause was a massive high-fanout reset net: i_chip_core.rst_n had about 38,354 terminals, and OpenROAD was serially building buffer trees for it. LibreLane parallelism knobs do not help this step much.","",""
+"738396032295108721","bailey8889","2026-07-10T17:57:40.3410000+00:00","Place and route runtimes are highly dependent on routing areas. Placing macros too close together or too close to the edges can result in unroutable designs.","",""
+"591049455499739147","crockpotveggies","2026-07-10T17:59:06.6500000+00:00","Thanks we do have an SRAM macro in there and I wonder if that’s what’s causing some of our issues. I will note it is routable and we get a GDS, it just takes an obscenely long time to create","",""
+"738396032295108721","bailey8889","2026-07-10T18:00:22.1810000+00:00","Do you see any obvious congestion in the gds?","",""
+"591049455499739147","crockpotveggies","2026-07-10T18:08:40.8820000+00:00","Waiting for a file transfer of the final report but in summary I think you’re on to something, probably to do with the SRAM macro:
+
+>     Dense SRAM macro grid. The current report has 39 SRAM macros consuming 4.48365 mm²; total core payload is 8.23514 / 12.90200 mm², about 64% including macros. In macros_3v3.yaml⁠, SRAM columns at x=1040 and x=1380 are only about 38.7 µm apart after subtracting the 301.3 µm SRAM width.","","😮 (1)"
+"591049455499739147","crockpotveggies","2026-07-10T18:12:11.3420000+00:00","I’m not sure how solvable this problem is with such a short time until tape out. I think it’s just a challenge posed by the small chip area and requirement to have an SRAM","",""
