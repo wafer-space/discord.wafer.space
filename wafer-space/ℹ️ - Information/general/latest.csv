@@ -261,3 +261,79 @@ so that I can do the write-up for them on my travel (to a meetup, in a little bi
 "262706220073222144","namibj","2026-07-11T17:27:37.6310000+00:00","Started a thread.","",""
 "220639106915368960","tholin","2026-07-11T21:39:10.9910000+00:00","Does LibreLane throw any kind of error if it detects a VDD/VSS short anywhere?","",""
 "596068704471482370","246tnt","2026-07-11T21:51:36.1750000+00:00","If it detects it ... sure. But by default the LVS is abstract so depending on where the short comes from it could be missed.","",""
+"262706220073222144","namibj","2026-07-11T22:12:46.1860000+00:00","Are you worried about a chip being DOA?","",""
+"220639106915368960","tholin","2026-07-11T22:16:36.7480000+00:00","Sortof?","",""
+"220639106915368960","tholin","2026-07-11T22:16:42.7380000+00:00","I have the FeatherLane generated layouts on there","",""
+"220639106915368960","tholin","2026-07-11T22:23:06.0960000+00:00","After determining that this issue is caused by quirks of this specific design, I’m re-enabling mux4_2 for synthesis","",""
+"262706220073222144","namibj","2026-07-11T22:29:03.3080000+00:00","I can see to get extraction running through the recently (weeks) improved magic PEX and get Xyce to solve at least DC op point for it, if you want?","",""
+"220639106915368960","tholin","2026-07-11T22:34:41.9800000+00:00","Yes","",""
+"262706220073222144","namibj","2026-07-11T22:35:10.3660000+00:00","(I take a `.gds`, of which I expect to have to delete all labels but the pad labels myself, followed by fully flattening it. If you have any conventions on pad labeling, I'd prefer those to be applied already and this includes separating the VDD and the VSS pads individually.)","",""
+"220639106915368960","tholin","2026-07-11T22:35:10.6720000+00:00","https://github.com/AvalonSemiconductors/ws-submission-2026/tree/main/FeatherLaneStuff","",""
+"220639106915368960","tholin","2026-07-11T22:35:29.0530000+00:00","There’s two in there. Use the GDSII files. fl_mcpu32 is way smaller, test with that","",""
+"262706220073222144","namibj","2026-07-11T22:35:43.7230000+00:00","I'm ETA about 40 minutes from my desk.","",""
+"262706220073222144","namibj","2026-07-11T22:40:32.8690000+00:00","I hope `magic 8.3.674` is pretty recent?","",""
+"262706220073222144","namibj","2026-07-11T22:42:27.5570000+00:00","How is that to be biased/connected?","",""
+"262706220073222144","namibj","2026-07-11T22:43:11.8370000+00:00","Answer only needed if not obvious from looking.","",""
+"220639106915368960","tholin","2026-07-11T22:43:41.9950000+00:00","You can look at the .v files to see what is an input and an output","",""
+"220639106915368960","tholin","2026-07-11T22:43:49.6560000+00:00","If you wanna just do DC, tie all inputs low","",""
+"220639106915368960","tholin","2026-07-11T22:44:46.4530000+00:00","If you want to check if the outputs are outputting, you may do that.","",""
+"738396032295108721","bailey8889","2026-07-11T22:47:03.6780000+00:00","There's a series of commands in magic that will flatten the layout but ignore the text. I don't think you need to prepare a flattened version outside of magic.","",""
+"262706220073222144","namibj","2026-07-11T22:47:58.1390000+00:00","Oh, good; I'd need hand-holding magic just confuses me 🙁","",""
+"262706220073222144","namibj","2026-07-11T22:53:20.9770000+00:00","(I'll proceed to use the same tactic as last time, provided this is with a padframe.)","",""
+"738396032295108721","bailey8889","2026-07-11T23:18:08.4290000+00:00","This magic manual page describes the 2 magic pex extraction flows. Search for `PEX` http://www.opencircuitdesign.com/magic//howto.html
+
+One with just capacitances and one with resistors and capacitances.","",""
+"262706220073222144","namibj","2026-07-11T23:21:19.6230000+00:00","Ahh I'll just take only the m4 labels","","👍 (1)"
+"262706220073222144","namibj","2026-07-11T23:30:46.1690000+00:00","","2026-07_media/fl_mcpu32_flattened_only_m4_labels-086A8.gds",""
+"262706220073222144","namibj","2026-07-11T23:31:16.9550000+00:00","I got a script around that wrangles it through.","",""
+"262706220073222144","namibj","2026-07-11T23:36:58.9960000+00:00","```
+.subckt fl_mcpu32 VSS VDD le clk rst_n rst_override_n din[0] clk_n din[11] din[10] 
++ din[9] din[8] din[7] din[6] din[5] din[4] din[3] din[2] din[1] din[12] din[13] din[15]
++ din[14] address[0] address[1] address[11] address[7] address[8] address[6] address[4]
++ address[3] address[13] address[14] address[12] address[9] address[2] address[15]
++ address[10] address[5] dout[1] dout[2] dout[3] dout[4] dout[5] dout[6] dout[7] dout[15]
++ dout[14] dout[13] dout[12] dout[11] dout[10] dout[9] dout[8] dout[0] oeb bus_enable 
++ web unused[0] unused[1] unused[2] unused[3] unused[4] unused[5] unused[6]
+```","",""
+"262706220073222144","namibj","2026-07-11T23:37:14.6850000+00:00","","https://media.githubusercontent.com/media/wafer-space/discord.wafer.space/master/large_media/wafer-space/%E2%84%B9%EF%B8%8F%20-%20Information/general/2026-07/2026-07_media/fl_rv32i_flattened_only_m4_labels-44896.gds",""
+"262706220073222144","namibj","2026-07-11T23:55:27.2850000+00:00","> ```
+> Netlist error in file tb_fl_mcpu32.xyce at or near line 15
+> Model is required for device D0 and no valid model card found.
+> ```
+> great!","",""
+"262706220073222144","namibj","2026-07-11T23:59:14.5400000+00:00","looks like diode models need explicit importing as library....","",""
+"262706220073222144","namibj","2026-07-12T00:00:56.6570000+00:00","> ***** Device Count Summary ...
+>        C level 1 (Capacitor)                  280984
+>        D level 1,2 (Diode)                      9694
+>        M level 14 (BSIM4)                      44848
+>        R level 1 (Resistor)                   267528
+>        V level 1 (Independent Voltage Source)     22
+>        ---------------------------------------------
+>        Total Devices                          603076
+> ***** Setting up matrix structure...
+> ***** Number of Unknowns = 292543
+> ***** Initializing...
+> 
+> 
+> Analyzed Singleton Problem:
+> ---------------------------
+> Singletons Detected!
+> Num Singletons:      44
+> ---------------------------
+> 
+> 
+> ConstructedSingleton Problem:
+> ---------------------------
+> RatioOfDimensions:   0.99985
+> RatioOfNonzeros:     0.765899
+> ---------------------------
+> 
+> ZOLTAN Load balancing method = 10 (HYPERGRAPH)","",""
+"262706220073222144","namibj","2026-07-12T00:01:46.1480000+00:00","(that's the small one; the large one is still extracting)","",""
+"220639106915368960","tholin","2026-07-12T00:08:23.2700000+00:00","Oh, so that’s what that happens! I usually just remove the diodes from the netlist.","",""
+"262706220073222144","namibj","2026-07-12T00:29:27.0750000+00:00","(Yeah it's LLM-prepared; minor manual edits have been done to it; nothing about this testbench seemed too complex to be likely to break and it's hot here... really hot, for 2:30 am.)","2026-07_media/tb_fl_mcpu32-7547B.xyce",""
+"262706220073222144","namibj","2026-07-12T00:31:07.4500000+00:00","mayhaps continuation=2 (natural MOS parameter homotopy) was not the efficcient thing to do, for as it's still stuck on the same screen/output as shown above.)","",""
+"262706220073222144","namibj","2026-07-12T00:34:42.8730000+00:00","let's try without continuation and to directly solve for the 3.3V case.","",""
+"262706220073222144","namibj","2026-07-12T00:38:37.3350000+00:00","(affording the 2.5 + 1.7 GB of ram usage for the continuation attempt, I've paused that and am trying now without continuation.)","",""
+"262706220073222144","namibj","2026-07-12T00:40:27.9210000+00:00","(maybe full-die PEX usage is actually only for cluster usage... hmmmpf)","",""
+"262706220073222144","namibj","2026-07-12T00:57:23.3110000+00:00","Started a thread.","",""
