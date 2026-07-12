@@ -1273,6 +1273,79 @@ https://discord.com/channels/1361349522684510449/1523053835864637510/15240757662
 @RebelMike is the free edge possibly free of top metal, and as such possibly suited for putting flip chip bond pads there?
 
 
+[2026-07-12 1:00 p.m.] rebelmike
+metal5 is used for power rails, so there's probably not loads of space.  But if you want to try and prove some flip chip bonding method maybe it would be better to make a test project where you didn't need most of the pads to work in order to get anything useful out?  If Tim thinks that is an interesting project it might get accepted by the sounds of things
+
+
+[2026-07-12 1:05 p.m.] namibj
+Yeah so, the thing is, most of the chip would be barren if only housing connectivity (4-wire kelvin measurements) test pads.
+And in this time I can't get much interesting structure done below, sadly, especially given that I'm not allowed to test vaguely-short channel native nfet's because someone decided years ago what amount of subthreshold leakage would be permissible to design with, and banned all channels narrower than that.
+Though I guess I should check again if the 0.5um channels would pass DRC.
+
+
+[2026-07-12 1:11 p.m.] namibj
+Oh I see now.
+Would that chip need more than one VDD/VSS pair per SRAM tile?
+
+Even if, feeding the m4 straps both at the bottom and the top of each tile (or like, connecting the m4 through and putting a shared m5 connection at the border between SRAM tiles, freeing up m5 over the active memory region), that would give plenty of freedom for some varied pad designs.
+
+Also would conveniently test "circuit under [flip-chip] pad".
+
+
+[2026-07-12 1:33 p.m.] thezoq2
+How fast are the available IO pins? The possibility of free silicon is almost irresistable but I think the best path I'd have to doing something relatively cool would be to use my ethernet library. Unfortunately I only have RGMII support, so i'd need 125MHz IO 🤔
+
+
+[2026-07-12 1:39 p.m.] rebelmike
+Feeding power to those SRAMs is a bit tricky as they ideally need connections around their edges.  I'm in the final stages of finishing this design so don't really want to be messing with things, but I'm not paying for it so if Tim/Leo would like to dedicate some area to a flip chip pin test I could potentially just remove some of the SRAMs if you had a macro that would drop in their place.  I'm pretty sure the PDN grid will just drop some straps if you block met5, which maybe isn't ideal for power distribution integrity, but probably also not a disaster.
+
+And if you had a ready to go macro i would also be easy for someone to drop into a different design.
+
+
+[2026-07-12 1:40 p.m.] namibj
+I mean in principle the edges would be free? The wiring would ideally be escaped somehow to an e.g. ESD diode or something.
+
+
+[2026-07-12 1:41 p.m.] namibj
+That should work.
+
+
+[2026-07-12 1:42 p.m.] namibj
+Re: ready-to-go macro: basically I'm hoping to test a few mostly pairs of pads of sufficciently varied size and pitch, primarily targeting the "ACF + JLC's special 2L 0.33oz (each) flex" affordable baseline.
+
+
+[2026-07-12 1:42 p.m.] rebelmike
+I think the best answer we have is: probably.  A 200MHz input clock worked ok.  The outputs are strong so likely to work at that speed, but as far as I know I don't think anyone has tried anything non-trivial running at a fast clock in run 1.
+
+
+[2026-07-12 1:43 p.m.] namibj
+Yeah not sure how fast the 3v3 library is in practice, but the foundry 5V library even the 9T one is apparently fairly slow.
+
+
+[2026-07-12 1:43 p.m.] thezoq2
+Cool, I might give this project a shot then 🤔
+
+
+[2026-07-12 1:44 p.m.] rebelmike
+Indeed - the challenge will likely be more in driving the logic that fast, not the speed of the IO pads
+
+
+[2026-07-12 1:46 p.m.] namibj
+IMO prepare to immediately put a DDR serdes by the IO pads without much routing, drop down to at least 4 if not 8 wide per-IO-lane; then your core should likely have no severe issues synthesizing to timing.
+
+
+[2026-07-12 1:51 p.m.] namibj
+@RebelMike For the record, a major practical use case I'm hoping to prove viable with this is putting more than one flip chip pad on a standard-size TT analog tile, i.e., on that 340x325um area, and in  a way that can be extended sideways to cover up to maximum-size analog tile.
+
+So we're not talking about large areas here, for the most part at least.
+
+
+[2026-07-12 1:51 p.m.] tholin
+I think this is my most scuffed tapeout so far, seeing as I have to make manual edits in KLayout to the top-level GDSII to fix DRC errors.
+
+{Reactions}
+😬
+
 ==============================================================
-Exported 244 message(s)
+Exported 259 message(s)
 ==============================================================
