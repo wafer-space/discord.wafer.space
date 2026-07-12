@@ -26,6 +26,62 @@ to be clear, the step is 5nm and the sections are 0.32 um and 0.325 um.
 2026-07_media/image-E2419.png
 
 
+[2026-07-11 7:22 p.m.] 246tnt
+Channel width is the other direction.
+
+
+[2026-07-11 7:23 p.m.] 246tnt
+Not that it justifies an error...
+
+
+[2026-07-11 7:44 p.m.] namibj
+Width is measured along the edge of "poly on comp"; length is measured normal to that edge.
+
+
+[2026-07-11 7:48 p.m.] namibj
+Yeah, I'm hoping to at least lay down a couple calibration gates to allow calibrating magic extraction and SPICE models for bent gates at least a week ahead of Run3's GDS deadline.
+
+Would be bad to have the DRC deck break that.
+
+
+[2026-07-11 7:53 p.m.] namibj
+Might as well post the writeup I did on one use case where bends would/might come up:
+
+https://www.tumblr.com/namibj/821872240790503424/rotationally-symmetric-pseudo-nmos-multiplexers
+
+{Embed}
+Untitled
+https://www.tumblr.com/namibj/821872240790503424/rotationally-symmetric-pseudo-nmos-multiplexers
+Rotationally symmetric pseudo-NMOS multiplexers, part1: Overview
+There are two main variants relevant in common bulk\-CMOS processes\:
+the 4\:1 MUX, and the 8\:1 MUX\.
+
+I have a corner\-pair \(double\-segment\) of the 8\:1  MUX drawn in KLayout for gf180mcuD, mostly as a POC and somewhat nicer visualization of the structure involved\. Notably, I hven't dialed in the DRC\-compliant _Nplus_​ implant for it, but that will pretty much just follow the _COMP_​ geometry; possibly pushing the active channel away from the 8 corners to meet minimum spacing where it runs into the channel; more on that later\.
+
+I will also share a hand\-drawn illustration of the 4\:1 MUX, primarily for completeness though\.
+
+## Octagonal corner \(the diagonal segment is the most complete; the vertical segment notably misses it's data line, and the horizontal segment skipped drawing how it's bottom\-most gate will join up to the contact it shares with the other \(not\-drawn\) diagonal segment it will be adjacent to\)\:...
+2026-07_media/357b3834e135a63585d4e5903f27478f73169dab-F209F.png
+Tumblr
+
+{Embed}
+https://www.tumblr.com/namibj/821872240790503424/rotationally-symmetric-pseudo-nmos-multiplexers
+2026-07_media/657a69a4806ab42974e4caaba30d8143be980d7e-1D48C.png
+
+{Embed}
+https://www.tumblr.com/namibj/821872240790503424/rotationally-symmetric-pseudo-nmos-multiplexers
+2026-07_media/2a8a13b389d6b23e2460c07fae6dad3075b27815-7B611.png
+
+
+[2026-07-11 8:03 p.m.] 246tnt
+0.22 um min channel width is the minimal width of the diffusion for a transistor. i.e. the "W" of the transistor.
+the measurement you took correspond to the length L of the transistor and the min for that is 0.28um.
+
+
+[2026-07-11 9:26 p.m.] namibj
+Oh that yeah; I meant the DRC highlight in bright yellow that was complained about being not wide enough.
+
+
 ==============================================================
-Exported 3 message(s)
+Exported 10 message(s)
 ==============================================================
