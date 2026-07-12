@@ -1,0 +1,132 @@
+* Xyce Testbench Harness for fl_mcpu32
+* Target PDK: GlobalFoundries gf180mcuD
+
+*** 1. INCLUDE PDK & DESIGN RULES ***
+.include /home/namibj/projects/asic/pdk/gf180mcuD/libs.tech/xyce/design.xyce
+.lib /home/namibj/projects/asic/pdk/gf180mcuD/libs.tech/xyce/sm141064.xyce typical
+.lib /home/namibj/projects/asic/pdk/gf180mcuD/libs.tech/xyce/sm141064.xyce res_typical
+.lib /home/namibj/projects/asic/pdk/gf180mcuD/libs.tech/xyce/sm141064.xyce diode_typical
+
+*** 2. INCLUDE EXTRACTED SUBCIRCUIT ***
+.include fl_mcpu32_flattened_only_m4_labels_pex__pdk_gf180mcuD__cthresh_0__subckt_top_on__hier_off.spice
+
+*** 3. GLOBAL SIMULATION OPTIONS ***
+*.OPTIONS NONLIN CONTINUATION=2
+*.OPTIONS DEVICE temp=27.0
+
+*** Try to make things faster? ***
+*.OPTIONS LINSOL USE_IFPACK_FACTORY=1
+
+*** 4. POWER SUPPLIES & GROUND REFERENCE ***
+V_VSS VSS 0 DC 0V
+V_VDD VDD 0 DC 3.3V  $ Assuming 5V operation for gf180mcuD standard IO/Core depending on your flavor $ actually it's 3.3V here!
+
+*** 5. INPUT STIMULUS (TIED LOW FOR DC ANALYSIS) ***
+V_clk            clk            0 DC 0V
+V_clk_n          clk_n          0 DC 0V
+V_rst_n          rst_n          0 DC 0V
+V_rst_override_n rst_override_n 0 DC 0V
+
+* 16-bit Data Input (din)
+V_din0  din[0]  0 DC 0V
+V_din1  din[1]  0 DC 0V
+V_din2  din[2]  0 DC 0V
+V_din3  din[3]  0 DC 0V
+V_din4  din[4]  0 DC 0V
+V_din5  din[5]  0 DC 0V
+V_din6  din[6]  0 DC 0V
+V_din7  din[7]  0 DC 0V
+V_din8  din[8]  0 DC 0V
+V_din9  din[9]  0 DC 0V
+V_din10 din[10] 0 DC 0V
+V_din11 din[11] 0 DC 0V
+V_din12 din[12] 0 DC 0V
+V_din13 din[13] 0 DC 0V
+V_din14 din[14] 0 DC 0V
+V_din15 din[15] 0 DC 0V
+
+*** 6. OUTPUT LOADS (To keep output nodes stable) ***
+* Control Outputs
+C_le         le         0 10fF
+C_oeb        oeb        0 10fF
+C_web        web        0 10fF
+C_bus_enable bus_enable 0 10fF
+
+* 16-bit Address Output
+C_a0  address[0]  0 10fF
+C_a1  address[1]  0 10fF
+C_a2  address[2]  0 10fF
+C_a3  address[3]  0 10fF
+C_a4  address[4]  0 10fF
+C_a5  address[5]  0 10fF
+C_a6  address[6]  0 10fF
+C_a7  address[7]  0 10fF
+C_a8  address[8]  0 10fF
+C_a9  address[9]  0 10fF
+C_a10 address[10] 0 10fF
+C_a11 address[11] 0 10fF
+C_a12 address[12] 0 10fF
+C_a13 address[13] 0 10fF
+C_a14 address[14] 0 10fF
+C_a15 address[15] 0 10fF
+
+* 16-bit Data Output (dout)
+C_d0  dout[0]  0 10fF
+C_d1  dout[1]  0 10fF
+C_d2  dout[2]  0 10fF
+C_d3  dout[3]  0 10fF
+C_d4  dout[4]  0 10fF
+C_d5  dout[5]  0 10fF
+C_d6  dout[6]  0 10fF
+C_d7  dout[7]  0 10fF
+C_d8  dout[8]  0 10fF
+C_d9  dout[9]  0 10fF
+C_d10 dout[10] 0 10fF
+C_d11 dout[11] 0 10fF
+C_d12 dout[12] 0 10fF
+C_d13 dout[13] 0 10fF
+C_d14 dout[14] 0 10fF
+C_d15 dout[15] 0 10fF
+
+* Unused Pin Outputs
+C_u0 unused[0] 0 10fF
+C_u1 unused[1] 0 10fF
+C_u2 unused[2] 0 10fF
+C_u3 unused[3] 0 10fF
+C_u4 unused[4] 0 10fF
+C_u5 unused[5] 0 10fF
+C_u6 unused[6] 0 10fF
+
+*** 7. DUT INSTANTIATION ***
+* Crucial: Order matches your PEX extracted netlist precisely!
+X1 VSS VDD le clk rst_n rst_override_n din[0] clk_n din[11] din[10] 
++ din[9] din[8] din[7] din[6] din[5] din[4] din[3] din[2] din[1] din[12] din[13] din[15]
++ din[14] address[0] address[1] address[11] address[7] address[8] address[6] address[4]
++ address[3] address[13] address[14] address[12] address[9] address[2] address[15]
++ address[10] address[5] dout[1] dout[2] dout[3] dout[4] dout[5] dout[6] dout[7] dout[15]
++ dout[14] dout[13] dout[12] dout[11] dout[10] dout[9] dout[8] dout[0] oeb bus_enable 
++ web unused[0] unused[1] unused[2] unused[3] unused[4] unused[5] unused[6] 
++ fl_mcpu32
+
+*** 8. ANALYSIS & PRINT CONTROL ***
+*.DC V_VDD 0 3.3 0.33
+.DC V_VDD 3.3 3.3 0.33
+
+.PRINT DC V(VDD) V(le) V(oeb) V(web) V(bus_enable)
+.PRINT DC V(address[0]) V(address[1]) V(address[2]) V(address[3]) V(address[4]) V(address[5]) V(address[6]) V(address[7])
+.PRINT DC V(address[8]) V(address[9]) V(address[10]) V(address[11]) V(address[12]) V(address[13]) V(address[14]) V(address[15])
+.PRINT DC V(dout[0]) V(dout[1]) V(dout[2]) V(dout[3]) V(dout[4]) V(dout[5]) V(dout[6]) V(dout[7])
+.PRINT DC V(dout[8]) V(dout[9]) V(dout[10]) V(dout[11]) V(dout[12]) V(dout[13]) V(dout[14]) V(dout[15])
+
+* --- Current Measurements for all Voltage Sources ---
+
+* Power and Control Signals
+.PRINT DC I(V_VSS) I(V_VDD) I(V_clk) I(V_clk_n) I(V_rst_n) I(V_rst_override_n)
+
+* Lower Byte Data Inputs
+.PRINT DC I(V_din0) I(V_din1) I(V_din2) I(V_din3) I(V_din4) I(V_din5) I(V_din6) I(V_din7)
+
+* Upper Byte Data Inputs
+.PRINT DC I(V_din8) I(V_din9) I(V_din10) I(V_din11) I(V_din12) I(V_din13) I(V_din14) I(V_din15)
+
+.END

@@ -42,6 +42,125 @@ on second thought, I'm gonna take the scarce hours of cold to sleep sooner than 
 (done extracting, that is)
 
 
+[2026-07-12 5:19 p.m.] namibj
+@Tholin errrrr, this got 87 mA?
+
+{Attachments}
+2026-07_media/tb_fl_mcpu32_currents_v2.xyce-4A72A.prn
+
+
+[2026-07-12 5:20 p.m.] tholin
+Oh
+
+
+[2026-07-12 5:20 p.m.] tholin
+I wonder if its because the latches have initialized into a metastable state
+
+
+[2026-07-12 5:21 p.m.] tholin
+87 mA doesn’t feel like a short
+
+
+[2026-07-12 5:22 p.m.] tholin
+I wish I could simulate a few clock cycles
+
+
+[2026-07-12 5:22 p.m.] tholin
+The best thing I can suggest for a DC analysis is pulling clk_n high
+
+
+[2026-07-12 5:24 p.m.] namibj
+it should be solving until they stabilize; I'm running with the other solver from earlier again to check though.
+
+
+[2026-07-12 5:24 p.m.] namibj
+Feel free to compare the voltages between the two `.prn` files to see if they may be meaningfully different.
+
+
+[2026-07-12 5:28 p.m.] namibj
+Feel free to edit this into a smol testbench for that; think about `MINTIMESTEPSBP` and the tolerance tunables please to dial in a minimum of actually to-be-taken timesteps that would still be expected to give meaningful results.
+A full nonlin solve there didn't take _thaaaat_ long:
+```
+***** Solution Summary *****
+        Number Successful Steps Taken:          1
+        Number Failed Steps Attempted:          0
+        Number Jacobians Evaluated:             362
+        Number Linear Solves:                   362
+        Number Failed Linear Solves:            0
+        Number Linear Solver Iterations:        70583
+        Number Residual Evaluations:            373
+        Number Nonlinear Convergence Failures:  0
+        Total Residual Load Time:               78.2002 seconds
+        Total Jacobian Load Time:               61.0558 seconds
+        Total Linear Solution Time:             1952.14 seconds
+
+
+***** Total Simulation Solvers Run Time: 2152.39 seconds
+***** Total Elapsed Run Time:            2247.1 seconds
+*****
+```
+
+{Attachments}
+2026-07_media/tb_fl_mcpu32_currents_v3.2-2A9A5.xyce
+
+
+[2026-07-12 5:31 p.m.] tholin
+I’m not sure if there are any syntax differences with xyce
+
+
+[2026-07-12 5:34 p.m.] tholin
+But, in theory, all you need to do is update the beginning of the input stimulus section to
+```
+*** 5. INPUT STIMULUS ***
+V_clk            clk            VSS PULSE( 0 3.3 0 0.1ns 0.1ns 50ns 200ns )
+V_clk_n          clk_n          VSS PULSE( 0 3.3 100ns 0.1ns 0.1ns 50ns 200ns )
+V_rst_n          rst_n          VSS PULSE( 0 3.3 375ns 0.1ns 0.1ns 5us 6us )
+V_rst_override_n rst_override_n VSS PULSE( 0 3.3 375ns 0.1ns 0.1ns 5us 6us )
+```
+And then run that for a few clock cycles and observe the outputs. This is set up for a 5us long run.
+
+
+[2026-07-12 5:35 p.m.] tholin
+I tried this in ngspice and it just never even started
+
+
+[2026-07-12 6:00 p.m.] namibj
+feel free to check; notably btw. I've thought you _might_ want to use `.option timeint ERROPTION=1` to explicitly **not** use the classic SPICE "local truncation error", but instead just adjust step size based on how many newton (or whatever nonlinear solver was selected) iterations it took to turn the predictor's (the trapezoidal/backwards-euler/2nd-order-gear time integration forward-model) estimate of the solution variable's values (e.g. node voltages and a bunch of (internal) port currents) into a new solution that is newly compliant with all the non-linear device interaction models up to the configured tolerances (absolute, relative, and what the scale reference is for "relative"; sadly AFAIK there's no straight-forward way to distinguish between current and voltage quantities for that config option, which would be IMO fairly relevant for abstol as e.g. tolerance better than like a single millivolt is probably not required for this type of circuit if one wants to check against DOA and isn't trying to do fancy calibration stuff; also not to forget update-norm and unweighted l2-norm of the residual which are also tunables for deeming the nonlinear solve "sufficciently converged").
+
+{Attachments}
+2026-07_media/Xyce_UG_2-87380.pdf
+2026-07_media/Xyce_RG_1-1002B.pdf
+
+
+[2026-07-12 6:07 p.m.] namibj
+I can mint you a rawfile that you can use with the xschem-integrated viewer. I'd suggest you take a single standard cell from your library, let me run it through the PEX extractor script, and let me hand you a starter-pack Xyce testbench for it (half machine-generated per your wishes as to the excitation pattern for it, but then substantially manually checked by me for not being broken and actually tested), if you want.
+
+Also, if you can generate me a `.gds` flattened as much as this and with no stray labels littered around, you are then allowed to _have labels on internal nets of interest_ or I'd guess there would be some way from the LVS machinery to slap semantically meaningful labels on nets and/or devices.
+I'll see to get a `.nodeset`-based initial conditions dump next run which should make it much faster to jump in and test things.
+
+{Attachments}
+2026-07_media/fl_mcpu32_flattened_only_m4_labels-2D116.gds
+
+
+[2026-07-12 8:04 p.m.] tholin
+Hold on, I’m trying again with ngspice
+
+{Attachments}
+2026-07_media/image-23F6F.png
+
+
+[2026-07-12 8:04 p.m.] tholin
+I flattened the layout in magic before extracting it, maybe that helps
+
+
+[2026-07-12 8:24 p.m.] tholin
+It did it!
+
+
+[2026-07-12 8:24 p.m.] tholin
+And oh man am I happy I tested this because there is a breaking bug in the RTL that I see now
+
+
 ==============================================================
-Exported 7 message(s)
+Exported 25 message(s)
 ==============================================================
