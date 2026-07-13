@@ -16,7 +16,7 @@
     "after": "2026-06-30T23:59:59.999+00:00",
     "before": "2026-08-01T00:00:00+00:00"
   },
-  "exportedAt": "2026-07-13T11:10:43.253423+00:00",
+  "exportedAt": "2026-07-13T14:44:50.4357355+00:00",
   "messages": [
     {
       "id": "1525554176711459058",
@@ -450,7 +450,138 @@
         }
       ],
       "inlineEmojis": []
+    },
+    {
+      "id": "1526212919631810591",
+      "type": "Default",
+      "timestamp": "2026-07-13T13:05:15.705+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@namibj :  I did a set of annular/enclosed drain devices for GF180MCU last week, and these all appear to be DRC clean.  I will post the layout and netlist.  Only device type \"E\" is extracted incorrectly, and that's because without the source terminals connected, it is effectively a 5-terminal device and the tech file does not describe how to extract a 5-terminal device (even when I connect the sides, the extracted width is lower than I would expect).",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-07_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [
+        {
+          "id": "1526212919241736312",
+          "url": "2026-07_media/annular_fet_types-06F50.png",
+          "fileName": "annular_fet_types.png",
+          "fileSizeBytes": 20704
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "262706220073222144",
+          "name": "namibj",
+          "discriminator": "0000",
+          "nickname": "namibj",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-07_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1526213159956775015",
+      "type": "Default",
+      "timestamp": "2026-07-13T13:06:13.003+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "These are the layout and netlist files.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-07_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [
+        {
+          "id": "1526213159159988356",
+          "url": "2026-07_media/annular_fet_potpourri-18A02.mag",
+          "fileName": "annular_fet_potpourri.mag",
+          "fileSizeBytes": 1217
+        },
+        {
+          "id": "1526213159898058772",
+          "url": "2026-07_media/annular_fet_potpourri-7ACC4.spice",
+          "fileName": "annular_fet_potpourri.spice",
+          "fileSizeBytes": 1220
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1526213952730693782",
+      "type": "Default",
+      "timestamp": "2026-07-13T13:09:22.015+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "When I run extraction, I am getting an error that I expect is related to some development work I did a few months ago;  that development work resulted in much better estimates of width for these type of transistors.  But it appears that magic is having problems with an angled edge at one specific orientation, which might make the width calculations slightly off.  I will investigate this.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-07_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1526215506602889276",
+      "type": "Default",
+      "timestamp": "2026-07-13T13:15:32.487+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Note that there are various methods for calculating effective width of an annular or enclosed-drain device.  Ultimately there is no real exact answer;  to reproduce the exact device characteristics in simulation would require a dedicated model.  Trying to force it into a model for a rectangular device can only be an approximation.  My approach (which is similar to others' approaches if not exact in detail) is to use the minimum length as the length of the transistor, then find all other parts of the geometry and measure the (W / L) and then scale those to the minimum length.",
+      "author": {
+        "id": "1365118310701600900",
+        "name": "rtimothyedwards_19428",
+        "discriminator": "0000",
+        "nickname": "Tim Edwards",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-07_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
     }
   ],
-  "messageCount": 11
+  "messageCount": 15
 }

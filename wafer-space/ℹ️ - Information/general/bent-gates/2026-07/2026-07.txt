@@ -92,6 +92,29 @@ This is specifically to check your way of calculating the BSIM4 instance paramet
 2026-07_media/image-34E9C.png
 
 
+[2026-07-13 1:05 p.m.] rtimothyedwards_19428
+@namibj :  I did a set of annular/enclosed drain devices for GF180MCU last week, and these all appear to be DRC clean.  I will post the layout and netlist.  Only device type "E" is extracted incorrectly, and that's because without the source terminals connected, it is effectively a 5-terminal device and the tech file does not describe how to extract a 5-terminal device (even when I connect the sides, the extracted width is lower than I would expect).
+
+{Attachments}
+2026-07_media/annular_fet_types-06F50.png
+
+
+[2026-07-13 1:06 p.m.] rtimothyedwards_19428
+These are the layout and netlist files.
+
+{Attachments}
+2026-07_media/annular_fet_potpourri-18A02.mag
+2026-07_media/annular_fet_potpourri-7ACC4.spice
+
+
+[2026-07-13 1:09 p.m.] rtimothyedwards_19428
+When I run extraction, I am getting an error that I expect is related to some development work I did a few months ago;  that development work resulted in much better estimates of width for these type of transistors.  But it appears that magic is having problems with an angled edge at one specific orientation, which might make the width calculations slightly off.  I will investigate this.
+
+
+[2026-07-13 1:15 p.m.] rtimothyedwards_19428
+Note that there are various methods for calculating effective width of an annular or enclosed-drain device.  Ultimately there is no real exact answer;  to reproduce the exact device characteristics in simulation would require a dedicated model.  Trying to force it into a model for a rectangular device can only be an approximation.  My approach (which is similar to others' approaches if not exact in detail) is to use the minimum length as the length of the transistor, then find all other parts of the geometry and measure the (W / L) and then scale those to the minimum length.
+
+
 ==============================================================
-Exported 11 message(s)
+Exported 15 message(s)
 ==============================================================
