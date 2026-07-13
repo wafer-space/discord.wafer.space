@@ -161,6 +161,158 @@ It did it!
 And oh man am I happy I tested this because there is a breaking bug in the RTL that I see now
 
 
+[2026-07-12 8:50 p.m.] tholin
+I also see the 87mA static current consumption. Not sure what’s up with that.
+
+
+[2026-07-12 9:26 p.m.] tholin
+I ran a simulation on a LibreLane generated layout. Less standard cells in it, but still had a ~9mA static current consumption.
+
+
+[2026-07-12 9:26 p.m.] tholin
+Possible that its an issue with my SCL? Or the 3.3V FETs have that much of a leakage current?
+
+
+[2026-07-12 9:27 p.m.] tholin
+Because it roughly scales up to the 87mA consumption by standard cell count
+
+
+[2026-07-12 9:48 p.m.] tholin
+Cursed spice deck just containing 3000 buff_16s with the input tied low seems to suggest leakage
+
+
+[2026-07-12 9:52 p.m.] tholin
+Whoa! what the hell? It freaks the hell out if I instantiate 4000 fillcap cells!
+
+{Attachments}
+2026-07_media/image-5BFE2.png
+
+
+[2026-07-12 9:52 p.m.] tholin
+I guess its the inrush?
+
+
+[2026-07-12 9:52 p.m.] tholin
+It crashed, btw
+
+
+[2026-07-12 9:53 p.m.] tholin
+It was supposed to run for much longer
+
+
+[2026-07-12 9:54 p.m.] tholin
+I also noticed that well tap cells extract into.... nothing. Like, empty spice file. So, what exactly is energizing the wells during these simulations, then?
+
+
+[2026-07-12 10:16 p.m.] tholin
+I don’t think I have the time to figure out why the static current consumption on my SCL is so high
+
+
+[2026-07-12 10:16 p.m.] tholin
+I’m just going to have to tape out and pray
+
+
+[2026-07-12 10:26 p.m.] namibj
+> . The P(*) and W(*) wildcards are supported for analysis
+> modes (TRAN and DC) that support power calculations.
+YAY
+
+
+[2026-07-12 10:47 p.m.] tholin
+Not sure how to approach this. If it is one specific cell that is at fault, it might be somewhat difficult to find.
+
+
+[2026-07-12 10:47 p.m.] namibj
+I'm back on the settings that did the fast results.
+
+
+[2026-07-12 10:48 p.m.] tholin
+I’m going to leave my computer running overnight to see if I can get a analysis done on a extract with parasitics
+
+
+[2026-07-12 10:48 p.m.] namibj
+Going by earlier processing speed, we should have info in about 30~40 minutes which extracted device(s) are to blame for the power dissipation.
+
+
+[2026-07-12 10:48 p.m.] namibj
+I'm not doing transient here btw.
+
+
+[2026-07-12 10:49 p.m.] namibj
+Can you share the testbench spice?
+
+
+[2026-07-12 10:50 p.m.] namibj
+And/or that for this mentioned smaller/"more minimized" SCL-bug-reproducer?
+
+
+[2026-07-12 10:52 p.m.] tholin
+I just extracted with
+`extract all;ext2sim labels on;ext2sim;extresist tolerance 10;extresist;ext2spice lvs;ext2spice cthresh 0;ext2spice extresist on;ext2spice;`
+
+
+[2026-07-12 10:53 p.m.] tholin
+This seems to pull 7.5mA static
+
+{Attachments}
+2026-07_media/secret_message-E9EAA.gds
+
+
+[2026-07-12 10:56 p.m.] tholin
+Inputs low
+
+
+[2026-07-12 11:17 p.m.] namibj
+Here ya go!
+
+{Attachments}
+2026-07_media/tb_fl_mcpu32_currents_v4.xyce-8C1B3.ic
+2026-07_media/tb_fl_mcpu32_currents_v4.xyce-D39CC.powers
+https://media.githubusercontent.com/media/wafer-space/discord.wafer.space/master/large_media/wafer-space/%E2%84%B9%EF%B8%8F%20-%20Information/general/featherlane-pex/2026-07/2026-07_media/tb_fl_mcpu32_currents_v4.xyce.ascii-C0232.raw
+2026-07_media/tb_fl_mcpu32_currents_v4.xyce-29E72.prn
+2026-07_media/tb_fl_mcpu32_currents_v4-5722C.xyce
+
+
+[2026-07-12 11:20 p.m.] tholin
+I decided to be funny and re-run the flow of secret_message with all logic cells disabled in my SCL except NAND and NOT
+
+
+[2026-07-12 11:20 p.m.] tholin
+And that made it WORSE
+
+
+[2026-07-12 11:20 p.m.] tholin
+7.5mA static to 12mA static
+
+
+[2026-07-12 11:20 p.m.] tholin
+Corresponding roughly to the increase in the number of transistors
+
+
+[2026-07-12 11:20 p.m.] tholin
+This feels like leakage
+
+
+[2026-07-12 11:21 p.m.] namibj
+I mean, I guess?
+
+
+[2026-07-12 11:22 p.m.] namibj
+And if that's the case, this sounds like runaway self-heating waiting to happen.
+
+
+[2026-07-12 11:22 p.m.] tholin
+As I said, I’m going to have to just tape out and hope
+
+
+[2026-07-12 11:23 p.m.] namibj
+re-running with the other possibly-easier-to-digest print formats active for the power print line
+
+
+[2026-07-12 11:23 p.m.] namibj
+(using the initial conditions file created)
+
+
 ==============================================================
-Exported 25 message(s)
+Exported 59 message(s)
 ==============================================================
