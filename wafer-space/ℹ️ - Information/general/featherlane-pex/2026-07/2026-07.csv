@@ -92,3 +92,59 @@ YAY","",""
 "220639106915368960","tholin","2026-07-12T23:22:55.2700000+00:00","As I said, I’m going to have to just tape out and hope","",""
 "262706220073222144","namibj","2026-07-12T23:23:34.0210000+00:00","re-running with the other possibly-easier-to-digest print formats active for the power print line","",""
 "262706220073222144","namibj","2026-07-12T23:23:47.9740000+00:00","(using the initial conditions file created)","",""
+"220639106915368960","tholin","2026-07-13T00:55:00.0600000+00:00","I did an extraction with resistors and it now idles at 1.9mA instead of 12mA","",""
+"262706220073222144","namibj","2026-07-13T01:03:50.9310000+00:00","""with resistors""? as opposed to including capacitors, or what?","",""
+"262706220073222144","namibj","2026-07-13T01:04:53.8760000+00:00","","2026-07_media/tb_fl_mcpu32_currents_v4.1.xyce-0CA99.ic,2026-07_media/tb_fl_mcpu32_currents_v4.xyce.powers-8DED5.tecplot,2026-07_media/tb_fl_mcpu32_currents_v4.xyce.powers-9F661.probe,2026-07_media/tb_fl_mcpu32_currents_v4.1.xyce-58D16.prn,https://media.githubusercontent.com/media/wafer-space/discord.wafer.space/master/large_media/wafer-space/%E2%84%B9%EF%B8%8F%20-%20Information/general/featherlane-pex/2026-07/2026-07_media/tb_fl_mcpu32_currents_v4.xyce.ascii-F9368.raw,2026-07_media/tb_fl_mcpu32_currents_v4.xyce.powers-ED43D.csv",""
+"262706220073222144","namibj","2026-07-13T01:04:59.7620000+00:00","one of the ""powers"" should be fairly easy to wrangle into a comfy table","",""
+"220639106915368960","tholin","2026-07-13T01:05:57.7900000+00:00","Oh, I’ve been doing only transistors so far","",""
+"262706220073222144","namibj","2026-07-13T01:07:08.6690000+00:00","oh, I've been doing full PEX","",""
+"262706220073222144","namibj","2026-07-13T01:07:28.7550000+00:00","```
+***** Device Count Summary ...
+       C level 1 (Capacitor)                  280984
+       D level 1,2 (Diode)                      9694
+       M level 14 (BSIM4)                      44848
+       R level 1 (Resistor)                   267528
+       V level 1 (Independent Voltage Source)     22
+       ---------------------------------------------
+       Total Devices                          603076
+***** Setting up matrix structure...
+***** Number of Unknowns = 292543
+***** Initializing...
+
+
+Analyzed Singleton Problem:
+---------------------------
+Singletons Detected!
+Num Singletons:      44
+---------------------------
+
+
+ConstructedSingleton Problem:
+---------------------------
+RatioOfDimensions:   0.99985
+RatioOfNonzeros:     0.765899
+---------------------------
+
+ZOLTAN Load balancing method = 10 (HYPERGRAPH)
+
+***** Solution Summary *****
+        Number Successful Steps Taken:          1
+        Number Failed Steps Attempted:          0
+        Number Jacobians Evaluated:             558
+        Number Linear Solves:                   558
+        Number Failed Linear Solves:            0
+        Number Linear Solver Iterations:        69386
+        Number Residual Evaluations:            571
+        Number Nonlinear Convergence Failures:  0
+        Total Residual Load Time:               103.587 seconds
+        Total Jacobian Load Time:               104.901 seconds
+        Total Linear Solution Time:             2080.07 seconds
+
+
+***** Total Simulation Solvers Run Time: 2370.69 seconds
+***** Total Elapsed Run Time:            2547.76 seconds
+*****
+***** End of Xyce(TM) Simulation
+*****
+```","",""
+"262706220073222144","namibj","2026-07-13T01:08:02.7550000+00:00","(turns out, loading from `.nodeset`'s doesn't make it faster; it takes almost twice as long instead... maybe only +50% time)","",""

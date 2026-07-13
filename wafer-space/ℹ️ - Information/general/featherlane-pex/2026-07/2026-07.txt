@@ -313,6 +313,94 @@ re-running with the other possibly-easier-to-digest print formats active for the
 (using the initial conditions file created)
 
 
+[2026-07-13 12:55 a.m.] tholin
+I did an extraction with resistors and it now idles at 1.9mA instead of 12mA
+
+
+[2026-07-13 1:03 a.m.] namibj
+"with resistors"? as opposed to including capacitors, or what?
+
+
+[2026-07-13 1:04 a.m.] namibj
+
+
+{Attachments}
+2026-07_media/tb_fl_mcpu32_currents_v4.1.xyce-0CA99.ic
+2026-07_media/tb_fl_mcpu32_currents_v4.xyce.powers-8DED5.tecplot
+2026-07_media/tb_fl_mcpu32_currents_v4.xyce.powers-9F661.probe
+2026-07_media/tb_fl_mcpu32_currents_v4.1.xyce-58D16.prn
+https://media.githubusercontent.com/media/wafer-space/discord.wafer.space/master/large_media/wafer-space/%E2%84%B9%EF%B8%8F%20-%20Information/general/featherlane-pex/2026-07/2026-07_media/tb_fl_mcpu32_currents_v4.xyce.ascii-F9368.raw
+2026-07_media/tb_fl_mcpu32_currents_v4.xyce.powers-ED43D.csv
+
+
+[2026-07-13 1:04 a.m.] namibj
+one of the "powers" should be fairly easy to wrangle into a comfy table
+
+
+[2026-07-13 1:05 a.m.] tholin
+Oh, I’ve been doing only transistors so far
+
+
+[2026-07-13 1:07 a.m.] namibj
+oh, I've been doing full PEX
+
+
+[2026-07-13 1:07 a.m.] namibj
+```
+***** Device Count Summary ...
+       C level 1 (Capacitor)                  280984
+       D level 1,2 (Diode)                      9694
+       M level 14 (BSIM4)                      44848
+       R level 1 (Resistor)                   267528
+       V level 1 (Independent Voltage Source)     22
+       ---------------------------------------------
+       Total Devices                          603076
+***** Setting up matrix structure...
+***** Number of Unknowns = 292543
+***** Initializing...
+
+
+Analyzed Singleton Problem:
+---------------------------
+Singletons Detected!
+Num Singletons:      44
+---------------------------
+
+
+ConstructedSingleton Problem:
+---------------------------
+RatioOfDimensions:   0.99985
+RatioOfNonzeros:     0.765899
+---------------------------
+
+ZOLTAN Load balancing method = 10 (HYPERGRAPH)
+
+***** Solution Summary *****
+        Number Successful Steps Taken:          1
+        Number Failed Steps Attempted:          0
+        Number Jacobians Evaluated:             558
+        Number Linear Solves:                   558
+        Number Failed Linear Solves:            0
+        Number Linear Solver Iterations:        69386
+        Number Residual Evaluations:            571
+        Number Nonlinear Convergence Failures:  0
+        Total Residual Load Time:               103.587 seconds
+        Total Jacobian Load Time:               104.901 seconds
+        Total Linear Solution Time:             2080.07 seconds
+
+
+***** Total Simulation Solvers Run Time: 2370.69 seconds
+***** Total Elapsed Run Time:            2547.76 seconds
+*****
+***** End of Xyce(TM) Simulation
+*****
+```
+
+
+[2026-07-13 1:08 a.m.] namibj
+(turns out, loading from `.nodeset`'s doesn't make it faster; it takes almost twice as long instead... maybe only +50% time)
+
+
 ==============================================================
-Exported 59 message(s)
+Exported 67 message(s)
 ==============================================================

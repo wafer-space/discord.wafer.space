@@ -1,0 +1,310 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"183309006767521792","jorropo","2026-07-13T00:11:10.3680000+00:00","Hello I own a small PnP business.
+
+We very reliably Pick-and-Place 300µm pitch BGA family part.
+
+Without much knowledge of the silicon making process.
+Would it be possible to create a 300µm grid of 100µm gold pads on the top metal layer;
+reflow some ready made balls on the top of the chip;
+And reflow it directly to the PCB ?
+
+(I guess add some epoxy at some point too)
+
+---
+
+I don't particularly care for WLCSP or BGA, QFN is much easier to inspect, but WLCSP looks like a packaging method which doesn't require much equipement beyond a good 0402 or 0201 class pick and place machine.","",""
+"183309006767521792","jorropo","2026-07-13T00:12:48.2120000+00:00","(Such pick and place cost start at 1k$ to 2k$ but they come with a steep learning curve to get such good results.)","",""
+"183309006767521792","jorropo","2026-07-13T00:20:33.7470000+00:00","Hum if my search is to believed I would need an extra masked sputtering step to deposit gold on the top side of the IC.","",""
+"183309006767521792","jorropo","2026-07-13T00:21:05.9640000+00:00","sounds highly automatable, I guess it would be much cheaper than wire bonding ?","",""
+"262706220073222144","namibj","2026-07-13T00:22:37.4380000+00:00","The chip itself has aluminium top metal and silicon nitride passivation.
+
+It is possible to expose only the bond pads from the passivation (there are options already prepared in the design rule checks).
+
+If you have an ability to bond that out through a flip-chip process, at a cost cheaper than the chips themselves, at these quantities you can see on the website (i.e., 1k chips for 4~10 $ each depending on if half or full slot and depending on whether early bird discount applies), please share.","",""
+"262706220073222144","namibj","2026-07-13T00:23:49.9720000+00:00","Notably, per my research, there are electroless zincate base plating methods available to build up a standard ENIG stackup or other such solderable surface on the aluminium, without needing high vacuum or any further lithography.","",""
+"183309006767521792","jorropo","2026-07-13T00:24:01.5120000+00:00","oohh","",""
+"262706220073222144","namibj","2026-07-13T00:28:10.6600000+00:00","I'll draw a few test pad-pairs of realistic proportions (but not the same proportions throughout) that target bonding via AnisotropicConductiveFilm to high-fidelity (mostly due to copper thickness though) COTS FPC (polyimide core, 0.33 oz copper either side, ""solder mask"" much less detailed than the copper features themselves, so fine pitch would have to be without solder mask bridges between pads), specifically the 2L FPC special offer at JLCPCB (for prototyping convenience, and as it's realistic).
+
+If you happen to have some plating/bumping targeted pad-pair geometries in mind, feel free to join/contribute/share.","",""
+"262706220073222144","namibj","2026-07-13T00:29:43.7610000+00:00","we haven't yet found an affordable performant (more than the ACF can offer, at least) option for flip-chip packaging at the quantities we're dealing with here, sadly, so therefore contributions would be well-received.","",""
+"183309006767521792","jorropo","2026-07-13T00:32:26.9440000+00:00","Ok so I see 3 problems
+1. readying the ICs for accepting the balls
+2. applying balls, I don't have experience given commerce ICs come with balls
+  I've seen plenty of electronics repair people doing this everyday with nearly 100% yield and artiasanal equipement (jigs and laser cut steel stencils), so we should be able to find that knowledge in the wild
+3. soldering to a PCB, that I know how to do, there are lots of tricks, but basically you must have a flat PCB (ENIG), a good PCB footprint, and a well callibrated pnp, then you ""just"" place it correctly ~+-80µm in XY and it always work (/ I never had a failure yet)","",""
+"183309006767521792","jorropo","2026-07-13T00:33:23.2820000+00:00","I'm not sure I understand that, is your ""roadmap"" different ?","",""
+"262706220073222144","namibj","2026-07-13T00:33:26.5150000+00:00","(AFAIK, as long as this does not inhibit the wire bonding ability for those customers/slots who have planned to do that, it would be possible to do the electroless/plating build-up pre-dicing at wafer-scale, provided it's not a significant expense to treat the other dies; but aside from any thick gold options, I don't think any of the plating here would have reason to be too expensive to afford wasting it on the non-flip-chip dies just to get to plate the flip-chip-dies before the wafers get diced.)","","👍 (1),❤️ (1)"
+"262706220073222144","namibj","2026-07-13T00:34:01.4030000+00:00","Essentially the chip itself is bare aluminium LGA","",""
+"183309006767521792","jorropo","2026-07-13T00:34:13.4280000+00:00","I would suspect that if we can do flip-chip no one would want wire bonding ¿ 😄","",""
+"183309006767521792","jorropo","2026-07-13T00:34:33.1010000+00:00","(take that with a huge grain of salt I'm no where an expert here)","",""
+"183309006767521792","jorropo","2026-07-13T00:35:37.8700000+00:00","ok sorry what is that trying to test ?
+Afait you want to make a PCB that an analog for the top of the IC and try to develop a flipped die process on it ?","",""
+"262706220073222144","namibj","2026-07-13T00:35:57.9650000+00:00","If you have connections/access to plating that can turn that into something you can ""just"" solder, I believe appropriate stencil thickness should suffice to form a robust-to-manufacture gap between the die and the PCB?
+Because that's the main reason for the balls, right, vs. ""just"" using LGA?","",""
+"183309006767521792","jorropo","2026-07-13T00:37:08.5360000+00:00","I have zero LGA experience.
+If you get balls on an IC it's really easy to reflow*
+
+*assuming you've got high quality balls and they havn't been reflowed more than 2 times already and are full of oxides.","",""
+"183309006767521792","jorropo","2026-07-13T00:37:37.6170000+00:00","Well I don't know the right word in english, but I and plenty of other peoples are making this happen every day like it's nothing.","",""
+"262706220073222144","namibj","2026-07-13T00:42:36.9050000+00:00","ACF is the flip-chip/non-soldering bonding technology that's mainstream used to attach active-matrix displays and other such circuits on glass to more traditional printed circuits and also to directly attach driver ASIC dies to the display glass.
+
+It's low cost and doesn't necessarily need plating, but it's high resistance compared to soldering and only liked by the display industry because it's much easier to hot-press an epoxy carrier tape (the ACF matrix loaded with nickel balls that when compressed perform the anisotropic conductive aspect) for 10 seconds at 200C than to deal with flux and solder-melting temperatures when a TFT display's traces-on-glass are involved.
+
+I'm placing a few test pad pairs (likely one connected to GND and the other to VDD, or something; to ideally test that the adjacent pads don't short out to each other) on otherwise ""spare"" silicon area on the current tapeout (Run2), to hopefully qualify this flip-chip process for (limited) production use on the next run.","",""
+"183309006767521792","jorropo","2026-07-13T00:43:46.3800000+00:00","how will you attach it to the IC ?","",""
+"262706220073222144","namibj","2026-07-13T00:44:00.7800000+00:00","We don't know where to affordably get balls onto the currently produced chips; though their aluminium is actually more a hindrance than the shape.","",""
+"183309006767521792","jorropo","2026-07-13T00:44:29.3910000+00:00","I have found a TI resources about their ENIG on IC process","",""
+"262706220073222144","namibj","2026-07-13T00:44:33.2870000+00:00","https://www.youtube.com/watch?v=0HZ35CyHVxQ&pp=ygURYnJlYWtpbmcgdGFwcyBhY2Y%3D","",""
+"183309006767521792","jorropo","2026-07-13T00:44:46.7440000+00:00","yeah after googling I've remembered","",""
+"183309006767521792","jorropo","2026-07-13T00:45:09.9920000+00:00","I call it Z conductive tape but I guess that not the industry term 😄","",""
+"262706220073222144","namibj","2026-07-13T00:45:11.1490000+00:00","I'll be back later my dinner is getting cold 😉","","Sparkles (1)"
+"183309006767521792","jorropo","2026-07-13T00:45:36.4880000+00:00","bonne appétit","",""
+"262706220073222144","namibj","2026-07-13T00:45:53.6320000+00:00","this ACF style is afaik from a family of z-conductive tape stuff","",""
+"262706220073222144","namibj","2026-07-13T00:49:03.7800000+00:00","Also, you mentioned 300um pitch; we'd prefer to hit about 100~150 um pitch at least in an appriximately-QFN-style pad layout (i.e., single-row, all or at least multiple sides).","",""
+"183309006767521792","jorropo","2026-07-13T00:49:58.9130000+00:00","100µm is tight","",""
+"183309006767521792","jorropo","2026-07-13T00:50:25.3760000+00:00","on a good day (aka not heatwave) my placement deviation is like 25~50µm","",""
+"183309006767521792","jorropo","2026-07-13T00:50:34.2710000+00:00","altho I have a cheap opensource pick and place","",""
+"183309006767521792","jorropo","2026-07-13T00:51:47.2830000+00:00","if you've spent 10k$ or gave me 6 months to make and refine my own pnp we could probably make it happen","",""
+"262706220073222144","namibj","2026-07-13T00:52:08.4890000+00:00","the chips take about that long to finish anyways","",""
+"183309006767521792","jorropo","2026-07-13T00:53:12.1660000+00:00","If you just wanted to place on a carrier, you could use some kind of micro manipulator with openpnp and a high resolution camera and optics and you should be able to place with single digit µm accuracy
+
+(the hardest thing is keeping everything square at all time, thermal dilation of 1m aluminium is so anoying)","",""
+"262706220073222144","namibj","2026-07-13T00:53:26.3760000+00:00","what to think of _now_ is what geometry is still practical enough (both pad size and spacing between) to work; notably, accounting for whatever the plating process does","","👍 (1)"
+"183309006767521792","jorropo","2026-07-13T00:54:51.4340000+00:00","If my researches are to be believied, adding gold to the top of a wafer is a standard process. Is that something the fab would be able to offer ? (altho I guess it would do the whole wafer)","",""
+"262706220073222144","namibj","2026-07-13T00:55:07.7350000+00:00","yeah I'm planning for https://www.youtube.com/watch?v=MgQbPdiuUTw -based motion of the die and see-through optics through at least alignment holes in the copper of the 2L flex to line up with the die.","","Sparkles (1)"
+"183309006767521792","jorropo","2026-07-13T00:55:53.1410000+00:00","Just so you know lots of the software work is accounting for the X Y and Z axis not being at perfect 90° of each other","",""
+"183309006767521792","jorropo","2026-07-13T00:56:18.0180000+00:00","there are so many layers of self calibration and compensations","",""
+"262706220073222144","namibj","2026-07-13T00:57:46.6230000+00:00","I'm not aware of global foundries offering us plating options, sadly; at least not at these quantities we buy from them (for them it's literally ""singular full MOQ"" size; they do offer half-batches for very small quantities but the cost per chip is like +50% or even +80%, so it's not suitable for production orders).
+
+There should be some third party facilities offering such services, though.","",""
+"183309006767521792","jorropo","2026-07-13T00:59:32.4430000+00:00","It looks like it's ""just"" applying chemicals baths to the top of the wafer.
+They could combine it with someone's else big order going through the process","",""
+"183309006767521792","jorropo","2026-07-13T00:59:33.4880000+00:00","¯\_(ツ)_/¯","",""
+"183309006767521792","jorropo","2026-07-13T00:59:44.2020000+00:00","(am I naive about that industry ? 😢)","",""
+"262706220073222144","namibj","2026-07-13T01:01:10.1600000+00:00","I am not planning to have it work open-loop at substantial precision; also it's not that much reach compared to PCBs.
+This example here is appriximately 230 nm step size in a 23mm cube; so ""just"" 100k steps; and that's not accuracy but step size.","",""
+"262706220073222144","namibj","2026-07-13T01:01:51.1790000+00:00","yeah it's just,a nd there's a factory somewhere that has the chemical baths basically around and ready during regular business hours, or at least for a batch once a week.","",""
+"183309006767521792","jorropo","2026-07-13T01:02:30.6490000+00:00","it comes in months anyhow, what's a couple more weeks of queue :Cry:","",""
+"262706220073222144","namibj","2026-07-13T01:02:32.4460000+00:00","finding that factory and convincing them it's worth dealing with us at the small volumes we have for the time being/near-future, _that's_ the not-so-easy part.","",""
+"183309006767521792","jorropo","2026-07-13T01:04:59.1120000+00:00","I'm halfway tempted to try the zincate + enig process myself.","",""
+"183309006767521792","jorropo","2026-07-13T01:05:26.4960000+00:00","you're getting test pads made on run2 right ?","",""
+"262706220073222144","namibj","2026-07-13T01:06:44.4950000+00:00","find out what geometry you'd think you'd need, and what you'd think would certainly be practical enough to pull off, and if it's reasonable numbers I'll draw you a couple pads and you'd (if I don't mess up) be able to expect a couple dies to try with.","","❤️ (1)"
+"183309006767521792","jorropo","2026-07-13T01:07:12.2970000+00:00","sure, I'll give you a couple geometries","",""
+"183309006767521792","jorropo","2026-07-13T01:07:25.9400000+00:00","from I can most likely do this
+to I'll certainly not be able to do this 😄","",""
+"183309006767521792","jorropo","2026-07-13T01:09:40.3190000+00:00","Sputtering UBM looks easier but require a lithographic step.
+I know they sell 2µm maskless lithography machines.
+We need something like 20x less precise than this for my 300µm BGA I'm looking for.","",""
+"183309006767521792","jorropo","2026-07-13T01:10:07.3250000+00:00","What is the best all the open source DMD mask less lithography machines reliably do ?","",""
+"262706220073222144","namibj","2026-07-13T01:10:19.3460000+00:00","the latter shouldn't be necessary for this run 😄
+
+We'll just include realistic gemetires this time, in hopes of all of them actually showing ""somewhat usable"" yield.","",""
+"183309006767521792","jorropo","2026-07-13T01:10:32.8370000+00:00","ok, a 300µm grid ?","",""
+"183309006767521792","jorropo","2026-07-13T01:10:44.5340000+00:00","I'm looking up if I want circles or squarcles","",""
+"183309006767521792","jorropo","2026-07-13T01:10:46.7640000+00:00","I guess circles","",""
+"262706220073222144","namibj","2026-07-13T01:11:14.8860000+00:00","due to not having a redistribution layer, a classic grid of large pads isn't actually that desirable for the chip itself 🙁","",""
+"183309006767521792","jorropo","2026-07-13T01:11:26.2010000+00:00","hum","",""
+"183309006767521792","jorropo","2026-07-13T01:11:34.0620000+00:00","I'm not sure what that means 😄","",""
+"262706220073222144","namibj","2026-07-13T01:11:48.0680000+00:00","the current wire bonding is basically 0.1mm pitch QFN if we'd flip-chip that.","",""
+"183309006767521792","jorropo","2026-07-13T01:12:16.1850000+00:00","pretty small","",""
+"183309006767521792","jorropo","2026-07-13T01:12:39.0800000+00:00","I get you only want pads on the edges, but why tho ?","",""
+"262706220073222144","namibj","2026-07-13T01:12:46.0400000+00:00","we only have one properly thick metal layer on the chip, and it's the very same that forms the pads when we pull the silicon nitride passivation away in a spot","",""
+"183309006767521792","jorropo","2026-07-13T01:12:46.4550000+00:00","what would happen if you didn't ?","",""
+"183309006767521792","jorropo","2026-07-13T01:13:10.3240000+00:00","ah so at worst you couldn't have any gates bellow the pad area","",""
+"183309006767521792","jorropo","2026-07-13T01:13:19.7150000+00:00","you would remove like 1/4 of your mm²","",""
+"262706220073222144","namibj","2026-07-13T01:13:47.1790000+00:00","it'd be straight-forward to use with wire bonding available as a backup if the flip chip process doesn't show sufficcient yield after the chips design is submitted to the factory","",""
+"262706220073222144","namibj","2026-07-13T01:14:32.1190000+00:00","it's more that we can't use it for power distribution as freely when there's pads in the way of the power connections across half the chip","","👍 (1)"
+"262706220073222144","namibj","2026-07-13T01:15:07.8900000+00:00","also we don't have IO cells ready-to-use that can be placed in the middle of a chip; but I don't think that's too big of a blocker.","",""
+"183309006767521792","jorropo","2026-07-13T01:15:47.9900000+00:00","it's a blocker if we want to get tests in this run 😄","",""
+"262706220073222144","namibj","2026-07-13T01:16:12.9630000+00:00","so yeah, figure out pitch feasible, and how large the pads would actually have to be to support the plating process, at least as far as the plans go.","",""
+"262706220073222144","namibj","2026-07-13T01:20:15.4920000+00:00","One of the users, TinyTapeout, has among other parts rows of analog tiles avilable for small users to put test designs on, and those are basically 300um squares; I'd ideally hope we could manage to fit two bumps on each of them at least in a line and contact them out; if the chip has multiple lines it'd be acceptable to use different PCBs that each only contact the bumps of a single row (and the outer normal/generic/multiplexed IO that currently uses the normal wirebonding pad frame).
+
+That would allow economic testing of things like differential receivers/transmitters which would have issues with the analog MUX parasitics today.","",""
+"262706220073222144","namibj","2026-07-13T01:21:31.0570000+00:00","We'll not do useful circuits connected to the flip chip pads this run, there's no time for that; we'll just do enough to let us test if the pad is shorted out and ideally to let us _somewhat_ quantify the contact resistance of the bond.","","👍 (1)"
+"183309006767521792","jorropo","2026-07-13T01:21:44.7820000+00:00","100%","",""
+"262706220073222144","namibj","2026-07-13T01:21:46.8560000+00:00","(for statistics/yield estimation purposes)","",""
+"183309006767521792","jorropo","2026-07-13T01:24:34.9510000+00:00","Ok so the LLM is giving me lots of info and it's hard to verify any of it.
+
+What I know:
+
+About pitches (center to center) worth testing 300µm and 200µm (if room for one go 300µm, less variables).
+You can add 100µm if you want but I don't believe in it, PCB fab shops don't usually go that small so it can't be easy.
+If you've got lots of space add 250µm and 150µm.
+
+Assuming my PCB rules translate to ICs, never use a square will fuck up the ball.
+A square with extremely big corner radius value works, but the best is a plain circle.","",""
+"262706220073222144","namibj","2026-07-13T01:26:27.2110000+00:00","btw, if one can grow pillars from the exposed top metal (aluminium), and those are of a sufficiently ""solderable"" surface, then dipping the pillars onto a sheet of silver/copper low-temperature sintering paste followed by carefully placing it onto a PCB with matching pad geometry, and then applying the sintering heat/pressure (something like 200C for 30 minutes seemd to be realistic to expect, iirc), is also something to keep in mind/consider-as-option; in theory that can also be printed as it's basically like _very_ fine solder paste with consistancy depending on what particular variety (iirc the relevant ones for ourt die sizes are all conveniently available in the more-liquid-y forms, though; it's just larger dies that need the drier stuff to not have issues with letting the fumes escape during the pressing).","",""
+"183309006767521792","jorropo","2026-07-13T01:27:09.8350000+00:00","the pilars thing is something I've found when searching earlier","",""
+"262706220073222144","namibj","2026-07-13T01:27:09.8610000+00:00","we don't get circles but we do get 45 degree lines","",""
+"183309006767521792","jorropo","2026-07-13T01:27:14.4890000+00:00","😄","",""
+"183309006767521792","jorropo","2026-07-13T01:27:15.2340000+00:00","ok","",""
+"183309006767521792","jorropo","2026-07-13T01:27:21.6960000+00:00","well give me an 8 sided circle","",""
+"262706220073222144","namibj","2026-07-13T01:27:41.9410000+00:00","https://jlcpcb.com/capabilities/flex-pcb-capabilities look at flex for the 0.33oz 2L","",""
+"262706220073222144","namibj","2026-07-13T01:27:49.8750000+00:00","(that's the only FPC on special offer)","",""
+"262706220073222144","namibj","2026-07-13T01:29:50.9090000+00:00","100um is not sustainable on laminated PCB (it is I think on build-up organic substrates like you know from modern desktop/server CPUs) for more than like 2 rows due to issues with PCB via manufacturing and layer thickness minimums; it's otherwise not _that_ much of a problem tho.","",""
+"262706220073222144","namibj","2026-07-13T01:30:44.9900000+00:00","Try to figure out how large the pad will need to be, I'm now realy off to eat my dinner before it's properly cold 😄","",""
+"183309006767521792","jorropo","2026-07-13T01:30:54.0640000+00:00","Ok so for he sizes, according to the LLM you want the aluminium diameter to be bigger than the passivation hole by like 15µm","",""
+"183309006767521792","jorropo","2026-07-13T01:31:03.5120000+00:00","yeah go eat 😄","",""
+"183309006767521792","jorropo","2026-07-13T01:31:10.1380000+00:00","for 300µm a good openning diameter is 150µm","",""
+"183309006767521792","jorropo","2026-07-13T01:31:26.1220000+00:00","basically it's really close the enig pad size on the PCB","",""
+"262706220073222144","namibj","2026-07-13T01:31:49.6710000+00:00","let those things be my concern; your concern is the size and shape and spacing of the exposed aluminium only.","",""
+"183309006767521792","jorropo","2026-07-13T01:32:10.7370000+00:00","@namibj sure when your dinner is finished I'll have a wrietup 😄","",""
+"183309006767521792","jorropo","2026-07-13T01:34:50.2360000+00:00","- pitch, opening diameter
+- 500µm, 300µm (easiest, remove process error)
+- **300µm, 180µm** (worth testing)
+- 250µm, 150µm
+- **200µm, 120µm** (might work)
+- 150µm, 90µm ¿not sure?
+- *100µm, 60µm* probably does not work without a HDI lithographic carrier","",""
+"183309006767521792","jorropo","2026-07-13T01:37:30.0660000+00:00","According to the LLM you want the aluminium to be ~15µm bigger than the opening size,
+it also says you want maximum vias on the aluminium to prevent delaminiation when reflow","",""
+"183309006767521792","jorropo","2026-07-13T01:37:58.9870000+00:00","it also says the pads can't be used by a flying probe otherwise the scratches will cause issues for the zincate process","",""
+"183309006767521792","jorropo","2026-07-13T01:39:12.7930000+00:00","I've assumed a 1µm layer of enig, it grows in all directions thus I've knocked down the opening sizes of a couple","",""
+"183309006767521792","jorropo","2026-07-13T01:39:32.7330000+00:00","I doubt it matters","",""
+"183309006767521792","jorropo","2026-07-13T01:41:33.8820000+00:00","~~For the opening diameter I've taken a simple 50% of the pitch~~ nvm I've changed my mind, at worst balls touch and no problem
+some manufacturers prefer a bit bigger because it's easier
+the bottleneck is the bulge of balls, you don't want them touching","",""
+"183309006767521792","jorropo","2026-07-13T01:43:51.3230000+00:00","","",""
+"183309006767521792","jorropo","2026-07-13T01:43:51.5690000+00:00","I guess here is still some unused room on he wafer.
+
+It might be worth making a tile testing a whole range of pitches and opening %.
+Altho that the kind of optimization analysis you do once you know the process work.","",""
+"183309006767521792","jorropo","2026-07-13T01:51:12.7060000+00:00","I've listed 60% opening to part pitch to opening diameter which is what the TI chip I have in front of me uses","",""
+"183309006767521792","jorropo","2026-07-13T01:55:02.8820000+00:00","wait nvm","",""
+"183309006767521792","jorropo","2026-07-13T01:55:11.6410000+00:00","I got it wrong, it's a 400µm pitch part not a 300µm","",""
+"183309006767521792","jorropo","2026-07-13T01:57:23.6900000+00:00","yeah 60% is too big.
+50% would be ok","",""
+"183309006767521792","jorropo","2026-07-13T01:58:10.2470000+00:00","if I read [this](https://www.nxp.com/docs/en/package-information/SOT2152-1.pdf) correctly nxp uses 50µm⌀ openings on their 300µm ICs","2026-07_media/image-36CE7.png",""
+"183309006767521792","jorropo","2026-07-13T01:58:27.7880000+00:00","seems really small","",""
+"262706220073222144","namibj","2026-07-13T01:58:55.8570000+00:00","Assuming (afaik reasonable to do given the pricing fits what I recall as typical for these low end processes) the 2000$/wafer for buying extra undieced wafer(s) is around the marginal per-wafer cost, that'd be a reference price level to compare the plating to, if it's done wafer-at-once in a way that doesn't break the ability to wire-bond dies that expect to get wire-bonded.","",""
+"262706220073222144","namibj","2026-07-13T02:00:13.8190000+00:00","(one of the enig siblings is suited to wire bonding on top of the solderable plating; ofc it can't make a thick bump but doing it wafer-at-once means that one doesn't need to hold onto hundreds of tiny dies during the plating process steps)","",""
+"183309006767521792","jorropo","2026-07-13T02:00:43.7770000+00:00","Then you're back to the factory issue","",""
+"262706220073222144","namibj","2026-07-13T02:00:51.1370000+00:00","that's a typical redistribution layer look","",""
+"183309006767521792","jorropo","2026-07-13T02:01:07.0570000+00:00","Do you want to try that ?","",""
+"262706220073222144","namibj","2026-07-13T02:01:07.7070000+00:00","you are a factory","",""
+"183309006767521792","jorropo","2026-07-13T02:01:12.7480000+00:00","😄","",""
+"183309006767521792","jorropo","2026-07-13T02:01:17.4130000+00:00","I appreciate the compliment","",""
+"183309006767521792","jorropo","2026-07-13T02:01:18.0490000+00:00","hum","",""
+"183309006767521792","jorropo","2026-07-13T02:01:31.4080000+00:00","I'll accept it in the pick and place departement","",""
+"183309006767521792","jorropo","2026-07-13T02:01:40.6660000+00:00","the enig process is still in developpement :kek:","",""
+"183309006767521792","jorropo","2026-07-13T02:01:42.9760000+00:00","to say the least","",""
+"262706220073222144","namibj","2026-07-13T02:02:08.2420000+00:00","(like, 2000$ isn't insane amounts of value to risk by messing up the plasting process and failing QA, at least after having dialed in the process)","",""
+"183309006767521792","jorropo","2026-07-13T02:02:26.9760000+00:00","I'm gonna test the process on a single IC","",""
+"262706220073222144","namibj","2026-07-13T02:02:31.3210000+00:00","yes sure","",""
+"183309006767521792","jorropo","2026-07-13T02:02:52.0220000+00:00","Well here is a gap to processing one IC and a wafer","",""
+"183309006767521792","jorropo","2026-07-13T02:02:54.1620000+00:00","size gap","",""
+"183309006767521792","jorropo","2026-07-13T02:02:56.9800000+00:00","¯\_(ツ)_/¯","",""
+"262706220073222144","namibj","2026-07-13T02:03:17.2090000+00:00","I mean once the testing is over and we'd think about replacing the wafer.space 1.5$/chip COB wire bonding add-on with a flip-chip option.","",""
+"183309006767521792","jorropo","2026-07-13T02:03:26.1460000+00:00","❤️","",""
+"183309006767521792","jorropo","2026-07-13T02:03:41.7150000+00:00","How many chips on one wafer ?","",""
+"183309006767521792","jorropo","2026-07-13T02:03:46.2290000+00:00","doing some math","",""
+"183309006767521792","jorropo","2026-07-13T02:04:07.3620000+00:00","I suspect sputtering would be the cheapest, we need like 20µm resolution lihographic capability
+this sounds doable with an opensource DMD maskless device","",""
+"262706220073222144","namibj","2026-07-13T02:04:15.0150000+00:00","full slot is 3.93 × 5.12 mm = 20.12 mm²","",""
+"262706220073222144","namibj","2026-07-13T02:04:24.6360000+00:00","(that's full die area, not usable-for-transistors)","",""
+"262706220073222144","namibj","2026-07-13T02:04:32.5720000+00:00","full wafer is 200mm","",""
+"262706220073222144","namibj","2026-07-13T02:04:41.4770000+00:00","why'd we need litho?","",""
+"183309006767521792","jorropo","2026-07-13T02:04:59.4660000+00:00","unlike enig sputtering coats the passivation layer","",""
+"262706220073222144","namibj","2026-07-13T02:05:19.8390000+00:00","so don't?","",""
+"183309006767521792","jorropo","2026-07-13T02:05:21.2050000+00:00","so you develop a posiive mask over the opening after sputtering","",""
+"183309006767521792","jorropo","2026-07-13T02:05:36.2390000+00:00","to remove the excess metal","",""
+"183309006767521792","jorropo","2026-07-13T02:06:01.3840000+00:00","the standard way to make that positive is with litho","",""
+"262706220073222144","namibj","2026-07-13T02:06:04.1510000+00:00","or is it not enough to turn the exposed shiny aluminium pads into solderable surfaces and then solder like the LGA it turned into?","",""
+"183309006767521792","jorropo","2026-07-13T02:06:23.4110000+00:00","well that the goal indeed","",""
+"183309006767521792","jorropo","2026-07-13T02:06:42.5840000+00:00","(I don't understand the question)","",""
+"183309006767521792","jorropo","2026-07-13T02:06:50.0790000+00:00","d or r ?","",""
+"262706220073222144","namibj","2026-07-13T02:08:49.5710000+00:00","https://www.circuitinsight.com/pdf/board_level_reliability_comparison_smta.pdf","","gif_eye_see_you (1)"
+"262706220073222144","namibj","2026-07-13T02:08:58.4060000+00:00","d","","👍 (1)"
+"183309006767521792","jorropo","2026-07-13T02:10:19.8530000+00:00","The conclusion from the extract is that both are fine ?","",""
+"183309006767521792","jorropo","2026-07-13T02:10:26.9580000+00:00","Do you want to skip the balls ?","",""
+"183309006767521792","jorropo","2026-07-13T02:10:45.4820000+00:00","it looks to me like the process for LGA and BGA is identical up until the balls","",""
+"262706220073222144","namibj","2026-07-13T02:11:50.3650000+00:00","https://discord.com/channels/1361349522684510449/1361349523724570941/1521779301597450271 you see the shiny squares (iirc about or even exactly 40 um squares) along the edges of the die, extending from the same-width structures that ripple through the stripe-y ring that encloses the inner content's grid?","",""
+"183309006767521792","jorropo","2026-07-13T02:12:08.9770000+00:00","?","2026-07_media/image-94F8E.png",""
+"183309006767521792","jorropo","2026-07-13T02:12:33.0020000+00:00","the yellow on the chip except the edge is the passivation layer ?","",""
+"183309006767521792","jorropo","2026-07-13T02:13:37.9840000+00:00","wait no I get it, that the square in question","2026-07_media/image-1D2F7.png",""
+"262706220073222144","namibj","2026-07-13T02:14:27.0560000+00:00","","",""
+"262706220073222144","namibj","2026-07-13T02:14:36.0260000+00:00","this one also very clearly btw.","",""
+"183309006767521792","jorropo","2026-07-13T02:14:47.8850000+00:00","You are talking about the squares right","",""
+"183309006767521792","jorropo","2026-07-13T02:14:54.2400000+00:00","not the rectangles between the squares ?","",""
+"183309006767521792","jorropo","2026-07-13T02:16:29.8640000+00:00","@namibj btw how was dinner ?","",""
+"262706220073222144","namibj","2026-07-13T02:16:38.7860000+00:00","I'm talking about the silvery vey very mirror shiny squares around the very outside edge of the die (technically there's like about half or third of square size gap to the edge, and there's for these dies from Run1 at least an omnipresent narrow (about iirc 1/5th the width of the squares) shiny ring around the entire die on the outside)","",""
+"262706220073222144","namibj","2026-07-13T02:16:52.6600000+00:00","tasty","",""
+"183309006767521792","jorropo","2026-07-13T02:16:56.3400000+00:00","nice","",""
+"262706220073222144","namibj","2026-07-13T02:17:05.0770000+00:00","yeah","",""
+"183309006767521792","jorropo","2026-07-13T02:17:05.6270000+00:00","ok I see it indeed","",""
+"183309006767521792","jorropo","2026-07-13T02:18:07.5320000+00:00","TIL you can buy 5µm 50k DPI masks for reasonable amount of money, so the sputtering option looks very interesting
+I only need cleaning + a single chemical bath","",""
+"262706220073222144","namibj","2026-07-13T02:18:27.8640000+00:00","the edge is the sealring which for dies marked as ""wire bonding"" has a mandatory exposed strip of metal, which in thse dies is very very close to the squares, which the wire bonding machine doesn't care about but any simple ACF bonding would very much care about.","",""
+"183309006767521792","jorropo","2026-07-13T02:18:30.6470000+00:00","well I also need to get a vastly outdated stepper","",""
+"183309006767521792","jorropo","2026-07-13T02:18:51.8300000+00:00","hum","",""
+"262706220073222144","namibj","2026-07-13T02:19:14.2240000+00:00","well, we don't need litho to build up solderable plating on the aluminium base.....","",""
+"183309006767521792","jorropo","2026-07-13T02:19:36.7790000+00:00","with sputter you get a single pad","",""
+"183309006767521792","jorropo","2026-07-13T02:19:49.8060000+00:00","IC sized pad","",""
+"183309006767521792","jorropo","2026-07-13T02:20:14.1730000+00:00","if feaures aren't too big I guess you could align a stencil to block the sputtering beam","",""
+"183309006767521792","jorropo","2026-07-13T02:30:10.8390000+00:00","@namibj I don't know what is your involvement with the project seems high
+given NXP seems to get by with 50µm openings for balls on the IC
+do you know where I could some existing open source design ICs ? (that havn't been wire bonded)","",""
+"183309006767521792","jorropo","2026-07-13T02:30:31.8280000+00:00","would be enough to try to replicate NXP's setup","",""
+"183309006767521792","jorropo","2026-07-13T02:30:39.5410000+00:00","given it already has 40µm squares","",""
+"183309006767521792","jorropo","2026-07-13T02:31:03.8590000+00:00","(well the surface from 40µm to 50µm is a big jump but worth trying)","",""
+"262706220073222144","namibj","2026-07-13T02:37:57.3690000+00:00","> Dense arrays of 60 microns pitch die, with 30 microns pads and 30 microns spacing, were used.
+uhhhhhh https://www.techblick.com/post/fine-pitch-direct-die-attach-without-thermal-compression-sunray-scientific","",""
+"262706220073222144","namibj","2026-07-13T02:40:14.7120000+00:00","if you can deal with the surrounding edge that's like iirc 7 um or so spaced from the square, you could use ""any"" of the Run 1 dies; I'm not sure who'd most conveniently be able to send you some, but we can see about that in a few days after the tapeout for Run2 closes.","","❤️ (1)"
+"183309006767521792","jorropo","2026-07-13T02:40:46.6480000+00:00","what is the edge made off ?","",""
+"262706220073222144","namibj","2026-07-13T02:41:26.8490000+00:00","should only have a notable but brute-force-able yield impact; we don't care if the prototypes have say 1% failure per joint","",""
+"183309006767521792","jorropo","2026-07-13T02:42:13.1030000+00:00","¯\_(ツ)_/¯","",""
+"262706220073222144","namibj","2026-07-13T02:42:19.3740000+00:00","even for 100 pads that's still over 30% yield","",""
+"262706220073222144","namibj","2026-07-13T02:42:28.2190000+00:00","the same","",""
+"183309006767521792","jorropo","2026-07-13T02:42:42.0230000+00:00","wrong question mb
+is it passivated ?","",""
+"183309006767521792","jorropo","2026-07-13T02:42:55.9330000+00:00","enig will coat all the Al","",""
+"262706220073222144","namibj","2026-07-13T02:43:09.5400000+00:00","as far as the top layher litho is concerned the edge is just a very narrow pad that encloses the entire circuit on the die","",""
+"262706220073222144","namibj","2026-07-13T02:43:19.4220000+00:00","I _know_","",""
+"262706220073222144","namibj","2026-07-13T02:44:15.2360000+00:00","mask the line under a microscope with a micro manipulator of sorts, and paint it with passivation or such, is what I'd try with Run1 silicon.","",""
+"183309006767521792","jorropo","2026-07-13T02:45:19.2470000+00:00","My current plan is
+0. chemical cleaning
+1. sputtering
+2. spin coating a mask
+3. contact mask negative
+4. UV
+5. chemical bath (remove unwanted sputtered)
+6. party
+
+just because that is way less chemical bath compared to enig","",""
+"262706220073222144","namibj","2026-07-13T02:45:43.5070000+00:00","hmmmm","",""
+"262706220073222144","namibj","2026-07-13T02:45:50.2110000+00:00","I guess ok for testing at least","",""
+"262706220073222144","namibj","2026-07-13T02:46:01.2180000+00:00","sputtering isn't easy tho, relatively speaking","",""
+"183309006767521792","jorropo","2026-07-13T02:46:02.8560000+00:00","I'm vastly underequiped tho","",""
+"183309006767521792","jorropo","2026-07-13T02:46:09.3140000+00:00","sure but I hate chemistry","",""
+"183309006767521792","jorropo","2026-07-13T02:46:14.0300000+00:00","hate is a strong word","",""
+"183309006767521792","jorropo","2026-07-13T02:46:16.6010000+00:00","maybe not hate","",""
+"262706220073222144","namibj","2026-07-13T02:46:23.2180000+00:00","(not that electroless plating baths are particularly stable)","","👍 (1)"
+"183309006767521792","jorropo","2026-07-13T02:46:32.2760000+00:00","terrible","",""
+"183309006767521792","jorropo","2026-07-13T02:46:33.1110000+00:00","I know","",""
+"262706220073222144","namibj","2026-07-13T02:46:57.7710000+00:00","I don't think you can get by with a single material layer though, to go from the aluminium to something decent for soldering.","",""
+"183309006767521792","jorropo","2026-07-13T02:47:09.4360000+00:00","Ti → Ni → Au","",""
+"183309006767521792","jorropo","2026-07-13T02:47:11.9610000+00:00","is the classical afait","",""
+"183309006767521792","jorropo","2026-07-13T02:47:31.8120000+00:00","the Au is flashed and gets disolved into the tin","",""
+"183309006767521792","jorropo","2026-07-13T02:47:35.6230000+00:00","from my understanding","",""
+"183309006767521792","jorropo","2026-07-13T02:49:59.0990000+00:00","@namibj btw did I do the math right is there ~1561 ICs on a single wafer ?","",""
+"262706220073222144","namibj","2026-07-13T02:50:47.8370000+00:00","yeah","",""
+"262706220073222144","namibj","2026-07-13T02:51:11.5280000+00:00","though some are chopped into two for smaller projects/customers","",""
+"183309006767521792","jorropo","2026-07-13T02:51:12.7930000+00:00","Is wafer.space combining 1k different projects on a single MPW run ?","",""
+"183309006767521792","jorropo","2026-07-13T02:51:28.4420000+00:00","or is the same customer design repeated many times to reach 1k ICs per customer with less wafers ?","",""
+"262706220073222144","namibj","2026-07-13T02:51:37.4010000+00:00","no, there's a reticle that gets filled and the facvtory stamps that across the die","",""
+"183309006767521792","jorropo","2026-07-13T02:51:59.3760000+00:00","ah hum","",""
+"262706220073222144","namibj","2026-07-13T02:52:32.8310000+00:00","https://discord.com/channels/1361349522684510449/1499473530394378403/1499476068174790868","",""
+"183309006767521792","jorropo","2026-07-13T02:52:49.6660000+00:00","wow","",""
+"183309006767521792","jorropo","2026-07-13T02:53:52.2010000+00:00","afait that reticle is repeated like 40 times on a single wafer ?","",""
+"262706220073222144","namibj","2026-07-13T02:53:53.2170000+00:00","afaik Run2 has one more row and one more column of half-sized slots so only 18 full-sized slots on the reticle.","",""
+"183309006767521792","jorropo","2026-07-13T02:54:05.7700000+00:00","(I didn't counted the edges weirdness)","",""
+"262706220073222144","namibj","2026-07-13T02:54:34.7220000+00:00","sounds about right; as you could see at the edge it's not quite fully reticle-strict-oriented.","",""
+"183309006767521792","jorropo","2026-07-13T02:54:36.9570000+00:00","that seems correct, that makes 25 wafers per MPW","",""
+"262706220073222144","namibj","2026-07-13T02:55:00.7370000+00:00","","",""
+"183309006767521792","jorropo","2026-07-13T02:55:26.1580000+00:00","I thought they always printed half designs because it improved reliability of complete designs","",""
+"183309006767521792","jorropo","2026-07-13T02:56:26.8420000+00:00","","2026-07_media/image-99128.png",""
+"262706220073222144","namibj","2026-07-13T02:57:11.2630000+00:00","it's not worth the litho at the very very edges because there's too much edge close by anyways so the chips aren't too usable anyways; maybe they expose some filler pattern to help the chemical-mechanical-polishing stay more well behaved though, not sure","",""
+"183309006767521792","jorropo","2026-07-13T02:57:43.2610000+00:00","@namibj after some more searching I don't know how NXP is using 50µm opening or if I'm reading that diagram correctly.
+For 300µm pitch an octogon between 180µm and 100µm diameter should be workable","",""
+"183309006767521792","jorropo","2026-07-13T02:58:23.3220000+00:00","I would use 150µm","",""
+"262706220073222144","namibj","2026-07-13T02:58:38.3720000+00:00","https://discord.com/channels/1361349522684510449/1419841819138854993/1454341922326843432","","Sparkles (1)"
