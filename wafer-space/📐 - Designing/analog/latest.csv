@@ -63,3 +63,13 @@ I saw there was a klayout plugin for sg13g2 (https://github.com/mwolodzk/klayout
 "262706220073222144","namibj","2026-07-13T22:47:42.4260000+00:00","Latter.","",""
 "262706220073222144","namibj","2026-07-13T22:51:13.9550000+00:00","If you don't know better, go for them; our PEX flow(s) AFAIK still completely lack support for modeling substrate currents, so we can't ""just"" ""simulate and see"" if it behaves without the dnwell.","",""
 "290925586266980352","osvel","2026-07-14T05:19:35.0350000+00:00","Good tip, thanks! 🙂 I guess I will use them then. :^)","",""
+"290925586266980352","osvel","2026-07-14T11:07:08.3560000+00:00","Oh wait, are all 3.3v PCells totally broken? I have tried both in magic and klayout, both seem to produce illegal nfets (w = 0.36u l = 0.28u, nf=1), mostly regarding grid alignment. For example, the gate metal seems to be misaligned in klayout, but too small in magic.","",""
+"290925586266980352","osvel","2026-07-14T11:08:09.7320000+00:00","Is no-one doing analog stuff using the builtin FETs from gf180_fd_pr?","",""
+"596068704471482370","246tnt","2026-07-14T11:19:01.6750000+00:00","The metal in magic is too small area that's expected. That's because it's where you should be connecting your stuff to ... so area will get bigger when you actually wire it to something.","","👍 (1)"
+"290925586266980352","osvel","2026-07-14T11:19:57.2400000+00:00","ok so its maybe just klayout then that is broken. It doesn't seem to properly align to the grid, which is a problem :^) Will try out magic for a while","",""
+"290925586266980352","osvel","2026-07-14T11:21:51.9050000+00:00","I must say the grid/pixel based system feels nicer than the object based one in klayout","",""
+"596068704471482370","246tnt","2026-07-14T11:27:24.0680000+00:00","Yeah, personally I prefer magic for layout too.  Other prefer KLayout, there is definitely some amount of subjective preference in there, you can make successfull layout in both and there will be things that work well and things that are a bit stickier with both.","",""
+"290925586266980352","osvel","2026-07-14T11:46:34.1330000+00:00","hm.. `Metal1 spacing < 0.23um (M1.2a)`
+
+This is before drawing anything.","2026-07_media/image-2D1D6.png",""
+"290925586266980352","osvel","2026-07-14T11:48:19.2590000+00:00","Sorry, I'm a bit of a noob :^) I guess I can go into it and quickly fix it up?","",""
