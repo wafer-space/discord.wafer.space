@@ -1266,6 +1266,8 @@ You can instruct librelane to use GDS for LVS instead of DEF and then the LVS wi
 [2026-07-12 11:00 a.m.] mithro_
 
 
+{Reactions}
+👀
 
 [2026-07-12 12:14 p.m.] namibj
 https://discord.com/channels/1361349522684510449/1523053835864637510/1524075766219014326
@@ -1409,7 +1411,7 @@ Custom Standard Cell Library for GF180MCU process node on open PDK. - AvalonSemi
 2026-07_media/gf180mcu_as_sc_mcu7t3v3-5423C
 
 {Reactions}
-👍 (2)
+👍 (4) 👀 (2) 😲
 
 [2026-07-13 11:52 p.m.] tholin
 Fuck, it didn’t ping
@@ -1433,12 +1435,147 @@ Basically just trying to confirm the chip as a whole simulates "respectable/acce
 @everyone - Please note this message from @Tholin if you are using their standard cell library.
 
 {Reactions}
-💜 (2) ScaredPig
+💜 (4) ScaredPig 👀 🫂
 
 [2026-07-14 1:45 a.m.] davidbuzz
 Is that relevant to ppl who used the recommended wafer.space template?
 
 
+[2026-07-14 1:57 a.m.] mithro_
+Not unless you used/enabled the 3v3 standard cells from @Tholin.
+
+{Reactions}
+👍
+
+[2026-07-14 2:43 a.m.] namibj
+As part of the couple extraction-calibration structures I hope to include on Run2, I hope to accomplish estimating a more detailed distribution of contact/via resistance than this; if anyone happens to have some ideas for how to realistically measure that/how to embed a DUT-contact in a fashion that sufficciently allows de-embedding during post-processing of e-test measurements, please share.
+
+{Attachments}
+2026-07_media/image-08F6A.png
+
+
+[2026-07-14 3:35 a.m.] azonenberg
+@Tholin out of curiosity what was the actual bug?
+
+{Reactions}
+⬆️
+
+[2026-07-14 3:49 a.m.] azonenberg
+Ratiometric
+
+
+[2026-07-14 3:49 a.m.] azonenberg
+create two identical pairs of structures broken out to analog pins with as identical paths as possible
+
+
+[2026-07-14 3:49 a.m.] azonenberg
+one a via chain of length N, another of N+K
+
+
+[2026-07-14 3:50 a.m.] azonenberg
+the delta gives you the resistance of K vias, modulo process variation between the two
+
+
+[2026-07-14 3:55 a.m.] namibj
+I'm more worried about local mismatch effects in places that can't afford to spam a nice array.
+
+These resistances are easily manageable via 4-wire measurements with one tt_asw instance each to connect the analog pad to the specific DUT.
+
+I guess more worried about the contacts than the vias...
+
+
+[2026-07-14 3:55 a.m.] namibj
+Cc @Essen
+
+{Attachments}
+2026-07_media/Screenshot_2026-07-14-00-40-35-85_f9ee0578-FD593.jpg
+
+{Reactions}
+👀
+
+[2026-07-14 3:57 a.m.] namibj
+Dropped 2.7V over that diode-connected NMOS finger highlighted bottom left.
+
+
+[2026-07-14 3:58 a.m.] namibj
+_in each `buf_8`/`clkbuf_8` instance, around 300μA each_
+
+
+[2026-07-14 3:59 a.m.] azonenberg
+Trying to understand whats going on here, so that bottom right contact is ground and the one at center is the output?
+
+
+[2026-07-14 4:00 a.m.] azonenberg
+it just looks like a nromal multifinger buffer to me so i'm clearly missing something about the well structure
+
+
+[2026-07-14 4:00 a.m.] namibj
+Good thing I weakly but nonetheless insisted on doing at least a full-GDS DC op point run with Xyce after what the last Avalon Semiconductor pulled....
+
+
+[2026-07-14 4:01 a.m.] namibj
+The left finger shouldn't exist
+
+
+[2026-07-14 4:01 a.m.] namibj
+
+
+
+[2026-07-14 4:03 a.m.] azonenberg
+Were these cells not validated with extractions individually already?
+
+
+[2026-07-14 4:03 a.m.] namibj
+It looks harmless enough to the casual non-bitter observer to have lasted until not even 6 hours ago.
+
+
+[2026-07-14 4:03 a.m.] azonenberg
+i mean i'm used to reversing chips that *work* :p
+
+
+[2026-07-14 4:03 a.m.] azonenberg
+i want to understand how
+
+
+[2026-07-14 4:04 a.m.] azonenberg
+but i usually just classify a cell as a buffer and move on lol
+
+
+[2026-07-14 4:05 a.m.] namibj
+Unfortunately the extractor doesn't actually extract static power and this consumption isn't on it's own "too much" current for the cell, so didnt't get caught in the dynamic power measurements, and I'm guessing something something LVS didn't happen with the rigor that would have prevented this.
+
+
+[2026-07-14 4:09 a.m.] namibj
+
+
+{Attachments}
+2026-07_media/IMG20260714060627-FAE16.jpg
+2026-07_media/IMG20260714060859-AE5E4.jpg
+
+
+[2026-07-14 4:11 a.m.] namibj
+Ahhh here without the annoying layers messing up the contrasts:
+
+{Attachments}
+2026-07_media/IMG20260714061031-F3153.jpg
+
+
+[2026-07-14 4:12 a.m.] namibj
+P vs. N doesn't matter as you can see this is symmetric in that direction.
+
+
+[2026-07-14 4:12 a.m.] namibj
+There are no diffusion/comp breaks here
+
+
+[2026-07-14 4:13 a.m.] namibj
+(well, there's one long P-channel diffusion and one long N-channel diffusion)
+
+
+[2026-07-14 4:14 a.m.] namibj
+You don't have to look to the right of the 5th gate finger counting from the left.
+
+
 ==============================================================
-Exported 275 message(s)
+Exported 303 message(s)
 ==============================================================

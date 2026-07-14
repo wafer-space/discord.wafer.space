@@ -339,7 +339,7 @@ One with just capacitances and one with resistors and capacitances.","",""
 "262706220073222144","namibj","2026-07-12T00:57:23.3110000+00:00","Started a thread.","",""
 "596068704471482370","246tnt","2026-07-12T06:31:25.7490000+00:00","There is no need to to PEX ...","",""
 "596068704471482370","246tnt","2026-07-12T06:32:54.5920000+00:00","You can instruct librelane to use GDS for LVS instead of DEF and then the LVS will actually check submodules instead of abstracting then. And you can double check that in the report.","",""
-"169786952432746498","mithro_","2026-07-12T11:00:19.7250000+00:00","","",""
+"169786952432746498","mithro_","2026-07-12T11:00:19.7250000+00:00","","","👀 (1)"
 "262706220073222144","namibj","2026-07-12T12:14:43.9540000+00:00","https://discord.com/channels/1361349522684510449/1523053835864637510/1524075766219014326
 
 @RebelMike is the free edge possibly free of top metal, and as such possibly suited for putting flip chip bond pads there?","",""
@@ -381,12 +381,44 @@ So we're not talking about large areas here, for the most part at least.","",""
 "220639106915368960","tholin","2026-07-13T23:52:32.2540000+00:00","@everyoneI’m sorry for the big ping, but if you have used my 3.3v SCL gf180mcu_as_sc_7t3v3 for your tapeout, YOUR CHIPS ARE GUARANTEED BROKEN RIGHT NOW! I’ve fixed the problem, so you will HAVE to re-run your flows with the hotfix applied.
 Clone the SCL’s GitHub repo or download as .zip from here:
 https://github.com/AvalonSemiconductors/gf180mcu_as_sc_mcu7t3v3/
-You will have to take the `libs.ref` and `libs.tech` directories from inside `pdk` and copy them. Go to your project template and paste them to `gf180mcu/gf180mcuD/`, merging with the existing two directories of the same names. Overwrite existing files. Re-run your flows.","","👍 (2)"
+You will have to take the `libs.ref` and `libs.tech` directories from inside `pdk` and copy them. Go to your project template and paste them to `gf180mcu/gf180mcuD/`, merging with the existing two directories of the same names. Overwrite existing files. Re-run your flows.","","👍 (4),👀 (2),😲 (1)"
 "220639106915368960","tholin","2026-07-13T23:52:37.8890000+00:00","Fuck, it didn’t ping","",""
 "220639106915368960","tholin","2026-07-13T23:52:40.6840000+00:00","Lets hope people see it","",""
 "220639106915368960","tholin","2026-07-14T00:29:39.3330000+00:00","I forgot to push a commit, so that’s there now. You’ll have to repeat the steps if you have done so already.","",""
 "262706220073222144","namibj","2026-07-14T01:05:01.3110000+00:00","when you've updated this to incorporate the fixed buf_8, and if you happen to have ""sufficcient"" stimuli on hand (I'm vaguely assuming the config/instance select pins work by the same principle/UX as last time?), I'd like to test it for at least like 5-or-so clock cycles with the full-die PEX, though with the solver set to low fidelity; if it were to happen to have labels on enough nets to make it impossible to hold a wrong/unwanted state in the registers of the sequential logic, and there's a state snapshot telling whether those nets are VSS or VDD, it may even be affordable-enough to simulate a decent fraction of a scanline of the test pattern modulator output machinery; or the like.
 
 Basically just trying to confirm the chip as a whole simulates ""respectable/acceptable"" behavior and if easy enough to provoke, whether a particularly worrying timing arc works for a process ""corner"" of arbitrary choice and relevance with basically-all RC parasitics included.","",""
-"169786952432746498","mithro_","2026-07-14T01:42:51.2850000+00:00","@everyone - Please note this message from @Tholin if you are using their standard cell library.","","💜 (2),ScaredPig (1)"
+"169786952432746498","mithro_","2026-07-14T01:42:51.2850000+00:00","@everyone - Please note this message from @Tholin if you are using their standard cell library.","","💜 (4),ScaredPig (1),👀 (1),🫂 (1)"
 "292840623634120707","davidbuzz","2026-07-14T01:45:22.7860000+00:00","Is that relevant to ppl who used the recommended wafer.space template?","",""
+"169786952432746498","mithro_","2026-07-14T01:57:17.1450000+00:00","Not unless you used/enabled the 3v3 standard cells from @Tholin.","","👍 (1)"
+"262706220073222144","namibj","2026-07-14T02:43:35.1760000+00:00","As part of the couple extraction-calibration structures I hope to include on Run2, I hope to accomplish estimating a more detailed distribution of contact/via resistance than this; if anyone happens to have some ideas for how to realistically measure that/how to embed a DUT-contact in a fashion that sufficciently allows de-embedding during post-processing of e-test measurements, please share.","2026-07_media/image-08F6A.png",""
+"812217062567051294","azonenberg","2026-07-14T03:35:34.0630000+00:00","@Tholin out of curiosity what was the actual bug?","","⬆️ (1)"
+"812217062567051294","azonenberg","2026-07-14T03:49:19.1310000+00:00","Ratiometric","",""
+"812217062567051294","azonenberg","2026-07-14T03:49:34.5440000+00:00","create two identical pairs of structures broken out to analog pins with as identical paths as possible","",""
+"812217062567051294","azonenberg","2026-07-14T03:49:47.4950000+00:00","one a via chain of length N, another of N+K","",""
+"812217062567051294","azonenberg","2026-07-14T03:50:05.8170000+00:00","the delta gives you the resistance of K vias, modulo process variation between the two","",""
+"262706220073222144","namibj","2026-07-14T03:55:05.3310000+00:00","I'm more worried about local mismatch effects in places that can't afford to spam a nice array.
+
+These resistances are easily manageable via 4-wire measurements with one tt_asw instance each to connect the analog pad to the specific DUT.
+
+I guess more worried about the contacts than the vias...","",""
+"262706220073222144","namibj","2026-07-14T03:55:32.2360000+00:00","Cc @Essen","2026-07_media/Screenshot_2026-07-14-00-40-35-85_f9ee0578-FD593.jpg","👀 (1)"
+"262706220073222144","namibj","2026-07-14T03:57:26.4930000+00:00","Dropped 2.7V over that diode-connected NMOS finger highlighted bottom left.","",""
+"262706220073222144","namibj","2026-07-14T03:58:27.2050000+00:00","_in each `buf_8`/`clkbuf_8` instance, around 300μA each_","",""
+"812217062567051294","azonenberg","2026-07-14T03:59:27.9970000+00:00","Trying to understand whats going on here, so that bottom right contact is ground and the one at center is the output?","",""
+"812217062567051294","azonenberg","2026-07-14T04:00:12.7690000+00:00","it just looks like a nromal multifinger buffer to me so i'm clearly missing something about the well structure","",""
+"262706220073222144","namibj","2026-07-14T04:00:45.9230000+00:00","Good thing I weakly but nonetheless insisted on doing at least a full-GDS DC op point run with Xyce after what the last Avalon Semiconductor pulled....","",""
+"262706220073222144","namibj","2026-07-14T04:01:04.6270000+00:00","The left finger shouldn't exist","",""
+"262706220073222144","namibj","2026-07-14T04:01:18.7600000+00:00","","",""
+"812217062567051294","azonenberg","2026-07-14T04:03:23.7270000+00:00","Were these cells not validated with extractions individually already?","",""
+"262706220073222144","namibj","2026-07-14T04:03:30.3860000+00:00","It looks harmless enough to the casual non-bitter observer to have lasted until not even 6 hours ago.","",""
+"812217062567051294","azonenberg","2026-07-14T04:03:49.2590000+00:00","i mean i'm used to reversing chips that *work* :p","",""
+"812217062567051294","azonenberg","2026-07-14T04:03:58.6840000+00:00","i want to understand how","",""
+"812217062567051294","azonenberg","2026-07-14T04:04:08.2780000+00:00","but i usually just classify a cell as a buffer and move on lol","",""
+"262706220073222144","namibj","2026-07-14T04:05:40.8560000+00:00","Unfortunately the extractor doesn't actually extract static power and this consumption isn't on it's own ""too much"" current for the cell, so didnt't get caught in the dynamic power measurements, and I'm guessing something something LVS didn't happen with the rigor that would have prevented this.","",""
+"262706220073222144","namibj","2026-07-14T04:09:10.4780000+00:00","","2026-07_media/IMG20260714060627-FAE16.jpg,2026-07_media/IMG20260714060859-AE5E4.jpg",""
+"262706220073222144","namibj","2026-07-14T04:11:00.8080000+00:00","Ahhh here without the annoying layers messing up the contrasts:","2026-07_media/IMG20260714061031-F3153.jpg",""
+"262706220073222144","namibj","2026-07-14T04:12:10.6570000+00:00","P vs. N doesn't matter as you can see this is symmetric in that direction.","",""
+"262706220073222144","namibj","2026-07-14T04:12:56.8050000+00:00","There are no diffusion/comp breaks here","",""
+"262706220073222144","namibj","2026-07-14T04:13:34.3380000+00:00","(well, there's one long P-channel diffusion and one long N-channel diffusion)","",""
+"262706220073222144","namibj","2026-07-14T04:14:21.1230000+00:00","You don't have to look to the right of the 5th gate finger counting from the left.","",""
