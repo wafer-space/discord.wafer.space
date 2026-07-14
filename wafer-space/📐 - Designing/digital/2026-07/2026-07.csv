@@ -64,3 +64,15 @@ Figure if the column multiplexer circuity can also be sufficciently squished, it
 I'm using plenty of macros, but directing soft placement would be helpful to fix routing congestion.","",""
 "190171097910607873","embeddedken","2026-07-14T06:04:54.5690000+00:00","AI mentions commands like ""create_region"" ""add_to_region"" and ""report_region"", but I haven't found any documentation for these.
 Is it an AI hallucination?","",""
+"323371864074485771","mole99","2026-07-14T06:20:37.0090000+00:00","I would suggest to check out the LibreLane step configuration variables: https://librelane.readthedocs.io/en/stable/reference/step_config_vars.html
+
+You can place hard and soft obstructions using `FP_OBSTRUCTIONS` and `PL_SOFT_OBSTRUCTIONS`.
+And you can also limit the routing amd PDN generation using `ROUTING_OBSTRUCTIONS` and `PDN_OBSTRUCTIONS`.","",""
+"596068704471482370","246tnt","2026-07-14T06:23:15.7110000+00:00","AFAIU he wants to manually place/contraint some RTL hierarchy sub level to a given location, so I don't think those will help","",""
+"323371864074485771","mole99","2026-07-14T06:28:05.8690000+00:00","Oh, I missed the *hierarchical*! Yes, I wouldn't know either, unless by using macros as he already does.","",""
+"190171097910607873","embeddedken","2026-07-14T07:12:58.0340000+00:00","For FPGAs, you can often softly hint or enforce cell placement of an instance and all of its children within rectangular or polygonal boundary constraints.
+You can usually control whether foreign cells are excluded from place/routing through these blocks.
+Xilinx terminology is ""pblock"", Altera ""logic lock""
+
+Normally every time you re-implement the design, each region is replaced/routed; but you can also lock the placement and routing as well, effectively more like a macro here. Would be good if these tools implemented softer hierarchical placement. I bet commercial ASIC tools have a direct equivalent.","",""
+"323371864074485771","mole99","2026-07-14T09:52:19.8920000+00:00","Started a thread.","",""

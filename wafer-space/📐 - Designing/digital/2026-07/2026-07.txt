@@ -191,6 +191,33 @@ AI mentions commands like "create_region" "add_to_region" and "report_region", b
 Is it an AI hallucination?
 
 
+[2026-07-14 6:20 a.m.] mole99
+I would suggest to check out the LibreLane step configuration variables: https://librelane.readthedocs.io/en/stable/reference/step_config_vars.html
+
+You can place hard and soft obstructions using `FP_OBSTRUCTIONS` and `PL_SOFT_OBSTRUCTIONS`.
+And you can also limit the routing amd PDN generation using `ROUTING_OBSTRUCTIONS` and `PDN_OBSTRUCTIONS`.
+
+
+[2026-07-14 6:23 a.m.] 246tnt
+AFAIU he wants to manually place/contraint some RTL hierarchy sub level to a given location, so I don't think those will help
+
+
+[2026-07-14 6:28 a.m.] mole99
+Oh, I missed the *hierarchical*! Yes, I wouldn't know either, unless by using macros as he already does.
+
+
+[2026-07-14 7:12 a.m.] embeddedken
+For FPGAs, you can often softly hint or enforce cell placement of an instance and all of its children within rectangular or polygonal boundary constraints.
+You can usually control whether foreign cells are excluded from place/routing through these blocks.
+Xilinx terminology is "pblock", Altera "logic lock"
+
+Normally every time you re-implement the design, each region is replaced/routed; but you can also lock the placement and routing as well, effectively more like a macro here. Would be good if these tools implemented softer hierarchical placement. I bet commercial ASIC tools have a direct equivalent.
+
+
+[2026-07-14 9:52 a.m.] mole99
+Started a thread.
+
+
 ==============================================================
-Exported 33 message(s)
+Exported 38 message(s)
 ==============================================================
