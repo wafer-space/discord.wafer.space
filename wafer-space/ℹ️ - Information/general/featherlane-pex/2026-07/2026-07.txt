@@ -507,6 +507,113 @@ Check the net at `x 48500 y 3484` (database units) for mcpu32; there should be a
 Net tracing suggests the voltage is supplied by three pfet fingers of `w/l: 1.38/0.28` who's gates are driven by `din[15]`.
 
 
+[2026-07-13 10:19 p.m.] tholin
+
+
+{Attachments}
+2026-07_media/image-E98D2.png
+
+
+[2026-07-13 10:35 p.m.] namibj
+?
+
+
+[2026-07-13 10:36 p.m.] tholin
+That’s the area in question, roughly
+
+
+[2026-07-13 10:37 p.m.] tholin
+Its in that cell somewhere
+
+
+[2026-07-13 10:37 p.m.] tholin
+Its one of the input buffers
+
+
+[2026-07-13 10:37 p.m.] namibj
+Look what pfet gates `din[15]` connects to.
+
+
+[2026-07-13 10:38 p.m.] tholin
+That would be these
+
+{Attachments}
+2026-07_media/image-EABB8.png
+
+
+[2026-07-13 10:39 p.m.] namibj
+The drains if them, just so simple "trace single net", and it should highlight you (not only, maybe, but certainly not missing) the diode-connected nfet as that very nfet gate is tied to those pfet drains.
+
+
+[2026-07-13 10:40 p.m.] namibj
+
+
+{Attachments}
+2026-07_media/Screenshot_2026-07-14-00-40-35-85_f9ee0578-BC40F.jpg
+
+
+[2026-07-13 10:40 p.m.] namibj
+Be back in 5 minutes!
+
+
+[2026-07-13 10:47 p.m.] namibj
+Can you look at my annotated screenshot/excerpt of this image and explain?
+
+
+[2026-07-13 10:52 p.m.] tholin
+OH NO!
+
+{Attachments}
+2026-07_media/image-75EB3.png
+
+
+[2026-07-13 10:53 p.m.] namibj
+Well the current doesn't come from that VSS, it comes from the 3 pfet's.
+
+
+[2026-07-13 10:53 p.m.] tholin
+Same loop exists on both sides
+
+
+[2026-07-13 10:54 p.m.] namibj
+You have spice based timing extraction for your SCL set up, right?
+
+
+[2026-07-13 10:54 p.m.] namibj
+Yeah that's even worse 😄
+
+
+[2026-07-13 10:55 p.m.] tholin
+Speedrunning a fix. Will go dark while I lock the fuck in.
+
+
+[2026-07-13 10:56 p.m.] namibj
+Could you amend the configured measurements to include supply current, and flag anything that smells like more than subthreshold leakage during any of the "static" moments during the stimuli?
+
+
+[2026-07-13 10:57 p.m.] namibj
+If you lack compute, hand me a self contained nix runner.
+
+
+[2026-07-13 10:58 p.m.] namibj
+You mentioned suspicious behavior for `NAND` and `NOT` .
+
+This is highly concerning.
+
+
+[2026-07-13 11:34 p.m.] namibj
+I'm a little surprised/confused your nand4_2 wires the nmos intermediate nets around instead of doing what the 7-track foundry 5V nand4_2 did (a 4-finger nmos with no contacts etween fingers on the left, one on the right, and alternating between VDD contacts and output-m1-collector-snake-contacts on the pmos side.
+https://gf180mcu-pdk.readthedocs.io/en/latest/digital/standard_cells/gf180mcu_fd_sc_mcu7t5v0/cells/nand4/gf180mcu_fd_sc_mcu7t5v0__nand4_2.html
+
+
+[2026-07-13 11:41 p.m.] namibj
+Don't forget `clkbuf_8`!
+
+
+[2026-07-13 11:42 p.m.] tholin
+I didn’t
+
+
 ==============================================================
-Exported 86 message(s)
+Exported 109 message(s)
 ==============================================================

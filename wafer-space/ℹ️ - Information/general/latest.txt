@@ -100,7 +100,7 @@ https://cdn.discordapp.com/attachments/1474282211376369664/1521663851009933332/i
 
 {Embed}
 https://cdn.discordapp.com/attachments/1474282211376369664/1521663851009933332/image.png?ex=6a45a765&is=6a4455e5&hm=663daf621803cf31bb7fb3f142b0c34c1674c7b016812b34ae04ba2f3d3cb837&
-2026-07_media/image-4A06F.png
+2026-07_media/image-8508D.png
 
 
 [2026-07-01 9:21 p.m.] namibj
@@ -1386,12 +1386,59 @@ There we go!
 2026-07_media/chip_top-8F773.png
 
 {Reactions}
-💜 (2) 👀
+💜 (4) 👀 (2) 👏
 
 [2026-07-13 7:40 p.m.] tholin
 I think this one’s even more crammed with stuff than my last
 
 
+[2026-07-13 11:52 p.m.] anish256
+silly question but are the possibly-spare half slots in the 0.5x1 or 1x0.5 shape?
+
+
+[2026-07-13 11:52 p.m.] tholin
+@everyoneI’m sorry for the big ping, but if you have used my 3.3v SCL gf180mcu_as_sc_7t3v3 for your tapeout, YOUR CHIPS ARE GUARANTEED BROKEN RIGHT NOW! I’ve fixed the problem, so you will HAVE to re-run your flows with the hotfix applied.
+Clone the SCL’s GitHub repo or download as .zip from here:
+https://github.com/AvalonSemiconductors/gf180mcu_as_sc_mcu7t3v3/
+You will have to take the `libs.ref` and `libs.tech` directories from inside `pdk` and copy them. Go to your project template and paste them to `gf180mcu/gf180mcuD/`, merging with the existing two directories of the same names. Overwrite existing files. Re-run your flows.
+
+{Embed}
+https://github.com/AvalonSemiconductors/gf180mcu_as_sc_mcu7t3v3/
+GitHub - AvalonSemiconductors/gf180mcu_as_sc_mcu7t3v3: Custom Stand...
+Custom Standard Cell Library for GF180MCU process node on open PDK. - AvalonSemiconductors/gf180mcu_as_sc_mcu7t3v3
+2026-07_media/gf180mcu_as_sc_mcu7t3v3-5423C
+
+{Reactions}
+👍 (2)
+
+[2026-07-13 11:52 p.m.] tholin
+Fuck, it didn’t ping
+
+
+[2026-07-13 11:52 p.m.] tholin
+Lets hope people see it
+
+
+[2026-07-14 12:29 a.m.] tholin
+I forgot to push a commit, so that’s there now. You’ll have to repeat the steps if you have done so already.
+
+
+[2026-07-14 1:05 a.m.] namibj
+when you've updated this to incorporate the fixed buf_8, and if you happen to have "sufficcient" stimuli on hand (I'm vaguely assuming the config/instance select pins work by the same principle/UX as last time?), I'd like to test it for at least like 5-or-so clock cycles with the full-die PEX, though with the solver set to low fidelity; if it were to happen to have labels on enough nets to make it impossible to hold a wrong/unwanted state in the registers of the sequential logic, and there's a state snapshot telling whether those nets are VSS or VDD, it may even be affordable-enough to simulate a decent fraction of a scanline of the test pattern modulator output machinery; or the like.
+
+Basically just trying to confirm the chip as a whole simulates "respectable/acceptable" behavior and if easy enough to provoke, whether a particularly worrying timing arc works for a process "corner" of arbitrary choice and relevance with basically-all RC parasitics included.
+
+
+[2026-07-14 1:42 a.m.] mithro_
+@everyone - Please note this message from @Tholin if you are using their standard cell library.
+
+{Reactions}
+💜 (2) ScaredPig
+
+[2026-07-14 1:45 a.m.] davidbuzz
+Is that relevant to ppl who used the recommended wafer.space template?
+
+
 ==============================================================
-Exported 267 message(s)
+Exported 275 message(s)
 ==============================================================
