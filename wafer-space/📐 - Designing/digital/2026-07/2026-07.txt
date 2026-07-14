@@ -139,6 +139,37 @@ I don't see why there would be any issue using the pull up/down, it's just not u
 Alright then thank you
 
 
+[2026-07-13 7:54 p.m.] essen__
+Could a kind soul tell me if I am misunderstanding this ? 
+The IO pins have an input capacitance (driven from outside the pad) of: 
+- bidir : 3.635930 (pf) 
+- input: 3.247814 (pf) 
+And since the `max_capacitance` STA check does a blanket check of all max capacitance above a 0.2pf threshold they get incorrectly flagged even though this is perfectly handled ?
+
+
+[2026-07-13 7:56 p.m.] rrichmondr
+Hello everyone, we got our design routed with synopsys, we will place that gds into the padframe.
+
+We have one question, the exported gds has the std cells as lef (only metals not any comp, active, etc)
+is this correct ? or should we see on klayout the std cells with all the parts, comp, active etc
+
+
+[2026-07-13 8:11 p.m.] namibj
+The latter.
+
+Have you tried scrolling the right of the two number pickers on the left panel ?
+
+
+[2026-07-13 9:06 p.m.] rrichmondr
+we tried to increase number, but it doenst show the layers (in the layer viewer on the right the comp, dnwell etc do not appear)
+
+
+[2026-07-13 9:25 p.m.] namibj
+Ok, just making sure. 
+It should be easy to get Klayout to fill in the blanks btw.; I just don't know for lack of experience. 
+I'd suggest trying it's LEF import wizard and making sure all the relevant .GDS with the used cells are provided/listed for the wizard to pull from when materializing the LEF.
+
+
 ==============================================================
-Exported 24 message(s)
+Exported 29 message(s)
 ==============================================================

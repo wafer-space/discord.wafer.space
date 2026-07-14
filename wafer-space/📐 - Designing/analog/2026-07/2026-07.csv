@@ -51,3 +51,14 @@ That's one way at least.","","💖 (1)"
 "262706220073222144","namibj","2026-07-12T23:46:01.4590000+00:00","There is a point where you need to connect your digital and your analog though.","",""
 "692781607102185522","rrichmondr","2026-07-13T17:20:37.2010000+00:00","the connection would i have to do it mannually right ? (i ran the drc on klayout and got errors on the IOs of the padframe not the design itself)
 one friend is thinking about putting the analog cells as macros and let openroad do the routing","",""
+"262706220073222144","namibj","2026-07-13T19:36:55.0060000+00:00","You can pre-route any critical analog connections in the flow with openroad picking up the reminder; @Tholin 's submissions AFAIK rely on the auto-route approach; not sure to what extent they've pre-routed any of the nets though.","",""
+"220639106915368960","tholin","2026-07-13T19:38:47.1390000+00:00","I didn’t know you could do this","",""
+"262706220073222144","namibj","2026-07-13T19:40:31.0960000+00:00","It's like a power wire just less griddy","",""
+"290925586266980352","osvel","2026-07-13T22:11:25.4930000+00:00","https://gf180mcu-pdk.readthedocs.io/en/latest/analog/model_parameters/LV/LV_9.html
+
+Is this not part of the public release or is it just undocumented?","",""
+"290925586266980352","osvel","2026-07-13T22:25:15.4670000+00:00","And one other question... People doing analog designs, are you using deep N-wells / guard rings? Are they really important? 🙂
+
+I saw there was a klayout plugin for sg13g2 (https://github.com/mwolodzk/klayout-sg13g2-tap-guard-ring-plugin) for making these automatically around a selection (for instance when using matched pairs). Thought myself about copying this but using the rules from gf180_fd_pr","",""
+"262706220073222144","namibj","2026-07-13T22:47:42.4260000+00:00","Latter.","",""
+"262706220073222144","namibj","2026-07-13T22:51:13.9550000+00:00","If you don't know better, go for them; our PEX flow(s) AFAIK still completely lack support for modeling substrate currents, so we can't ""just"" ""simulate and see"" if it behaves without the dnwell.","",""

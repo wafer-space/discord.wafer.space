@@ -151,3 +151,31 @@ ZOLTAN Load balancing method = 10 (HYPERGRAPH)
 "220639106915368960","tholin","2026-07-13T11:20:06.0040000+00:00","According to the PDK docs, the 3.3V PFETs have twice the subthreshold current than 5V PFETs. And the NFETs have 10 times the subthreshold current!","",""
 "220639106915368960","tholin","2026-07-13T11:22:26.6850000+00:00","So they seem to leak a lot more...","",""
 "220639106915368960","tholin","2026-07-13T12:28:21.5240000+00:00","I put together a spice bench that is just 256 buff_4 cells back-to-back and a pulse signal source that is low for 500ns, then goes high and stays there for 11us and **good lord what is happening in there?**","2026-07_media/image-FCDEA.png",""
+"262706220073222144","namibj","2026-07-13T19:26:48.0540000+00:00","Share; I wanna feed it to Xyce.","",""
+"262706220073222144","namibj","2026-07-13T19:29:08.2450000+00:00","(in a couple hours tho; I'm not home rn)","",""
+"262706220073222144","namibj","2026-07-13T19:32:29.4340000+00:00","Have you tried/considered longer channels?
+
+Are any of the `_dss` construction perhaps able to squeeze into at least some of your cells and perhaps be less-leaky?","",""
+"262706220073222144","namibj","2026-07-13T19:33:54.6050000+00:00","....and/or could it be that this is better run with `VDD << 3.3V` assuming it's indeed due to DIBL?","",""
+"262706220073222144","namibj","2026-07-13T20:08:55.7090000+00:00","@Tholin ......
+I know I know, ""AI bad"", etc.; but I didn't spend substantial time promoting here, and these numbers look _seriously **sus**_ to me with `less` and `rg` as well....
+Would be great if you could by chance confirm this clock ""phasing"" to be liable for severe power draw.
+
+And if you'd perhaps be so kind as to make us a `_v5.xyce` by adjusting the inputs, I'd even fast-track that through Xyce over Mosh (remote shell).
+https://chatgpt.com/s/t_6a5543dabbc88191a1d7f6b3f8919000","",""
+"262706220073222144","namibj","2026-07-13T20:37:24.9010000+00:00","....
+https://chatgpt.com/s/t_6a554c25a3288191b3b16d66ef7800db
+
+Why do you have hundreds of diode-connected NMOS.....","",""
+"262706220073222144","namibj","2026-07-13T20:40:49.7030000+00:00","Like I know they have some purposes but I don't think they have any reason to exist in that netlist....","",""
+"220639106915368960","tholin","2026-07-13T20:43:02.8190000+00:00","You mean the antenna diodes?","",""
+"262706220073222144","namibj","2026-07-13T20:51:17.3560000+00:00","Those shouldn't involve `poly2 on comp`, though?","",""
+"220639106915368960","tholin","2026-07-13T20:52:52.2490000+00:00","Oh, its probably seeing the decoupling capacitors","",""
+"262706220073222144","namibj","2026-07-13T21:26:02.5910000+00:00","_those account for on the order of 80% of the current draw_","",""
+"262706220073222144","namibj","2026-07-13T21:28:42.4800000+00:00","I've got it to fix me up an evolved extractor script that is supposed to spit out coordinates mapped to the identifiers in SPICE; if the spice identifiers remained the same I likely have ""coordinates of blame"" in a couple minutes; if not it'll take about an hour from now to repeat all the analysis processing to find the offenders again.","",""
+"220639106915368960","tholin","2026-07-13T21:31:17.6740000+00:00","This is the decap cell. It uses the gate capacitance of two FETs as a decoupling capacitor.","2026-07_media/image-901C0.png",""
+"262706220073222144","namibj","2026-07-13T21:44:33.7500000+00:00","Yeah that looks fine.
+
+I'll know soon.","",""
+"262706220073222144","namibj","2026-07-13T22:04:51.8930000+00:00","Check the net at `x 48500 y 3484` (database units) for mcpu32; there should be a w/l 1.0/0.28 nfet with one diffusion to VSS and the other diffusion somehow resistance-extraction tied to it's gate.","",""
+"262706220073222144","namibj","2026-07-13T22:12:19.6910000+00:00","Net tracing suggests the voltage is supplied by three pfet fingers of `w/l: 1.38/0.28` who's gates are driven by `din[15]`.","",""

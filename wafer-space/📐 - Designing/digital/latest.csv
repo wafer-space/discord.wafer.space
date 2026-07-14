@@ -41,3 +41,19 @@ If you send a screenshot, people might be able to help you.","","ferristhumbsup 
 "797470890765582377","deempak","2026-07-13T10:38:39.7090000+00:00","As i have pulled up my cs_n pin for my input spi  in the design so if there is some issue with that i should change that","",""
 "691780627338625077","rebelmike","2026-07-13T10:43:48.1610000+00:00","I don't see why there would be any issue using the pull up/down, it's just not used by default in the template","","✅ (1)"
 "797470890765582377","deempak","2026-07-13T10:47:36.1930000+00:00","Alright then thank you","",""
+"509798510170865675","essen__","2026-07-13T19:54:55.2960000+00:00","Could a kind soul tell me if I am misunderstanding this ? 
+The IO pins have an input capacitance (driven from outside the pad) of: 
+- bidir : 3.635930 (pf) 
+- input: 3.247814 (pf) 
+And since the `max_capacitance` STA check does a blanket check of all max capacitance above a 0.2pf threshold they get incorrectly flagged even though this is perfectly handled ?","",""
+"692781607102185522","rrichmondr","2026-07-13T19:56:02.1860000+00:00","Hello everyone, we got our design routed with synopsys, we will place that gds into the padframe.
+
+We have one question, the exported gds has the std cells as lef (only metals not any comp, active, etc)
+is this correct ? or should we see on klayout the std cells with all the parts, comp, active etc","",""
+"262706220073222144","namibj","2026-07-13T20:11:09.6110000+00:00","The latter.
+
+Have you tried scrolling the right of the two number pickers on the left panel ?","",""
+"692781607102185522","rrichmondr","2026-07-13T21:06:31.4380000+00:00","we tried to increase number, but it doenst show the layers (in the layer viewer on the right the comp, dnwell etc do not appear)","",""
+"262706220073222144","namibj","2026-07-13T21:25:18.0740000+00:00","Ok, just making sure. 
+It should be easy to get Klayout to fill in the blanks btw.; I just don't know for lack of experience. 
+I'd suggest trying it's LEF import wizard and making sure all the relevant .GDS with the used cells are provided/listed for the wizard to pull from when materializing the LEF.","",""

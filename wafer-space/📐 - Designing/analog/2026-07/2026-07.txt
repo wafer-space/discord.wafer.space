@@ -144,6 +144,44 @@ the connection would i have to do it mannually right ? (i ran the drc on klayout
 one friend is thinking about putting the analog cells as macros and let openroad do the routing
 
 
+[2026-07-13 7:36 p.m.] namibj
+You can pre-route any critical analog connections in the flow with openroad picking up the reminder; @Tholin 's submissions AFAIK rely on the auto-route approach; not sure to what extent they've pre-routed any of the nets though.
+
+
+[2026-07-13 7:38 p.m.] tholin
+I didn’t know you could do this
+
+
+[2026-07-13 7:40 p.m.] namibj
+It's like a power wire just less griddy
+
+
+[2026-07-13 10:11 p.m.] osvel
+https://gf180mcu-pdk.readthedocs.io/en/latest/analog/model_parameters/LV/LV_9.html
+
+Is this not part of the public release or is it just undocumented?
+
+
+[2026-07-13 10:25 p.m.] osvel
+And one other question... People doing analog designs, are you using deep N-wells / guard rings? Are they really important? 🙂
+
+I saw there was a klayout plugin for sg13g2 (https://github.com/mwolodzk/klayout-sg13g2-tap-guard-ring-plugin) for making these automatically around a selection (for instance when using matched pairs). Thought myself about copying this but using the rules from gf180_fd_pr
+
+{Embed}
+https://github.com/mwolodzk/klayout-sg13g2-tap-guard-ring-plugin
+GitHub - mwolodzk/klayout-sg13g2-tap-guard-ring-plugin: KLayout Sal...
+KLayout Salt plugin for generating SG13G2 ptap1/ntap1 guard rings. - mwolodzk/klayout-sg13g2-tap-guard-ring-plugin
+2026-07_media/klayout-sg13g2-tap-guard-ring-plugin-DEDF9
+
+
+[2026-07-13 10:47 p.m.] namibj
+Latter.
+
+
+[2026-07-13 10:51 p.m.] namibj
+If you don't know better, go for them; our PEX flow(s) AFAIK still completely lack support for modeling substrate currents, so we can't "just" "simulate and see" if it behaves without the dnwell.
+
+
 ==============================================================
-Exported 23 message(s)
+Exported 30 message(s)
 ==============================================================
