@@ -1,0 +1,8 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"691780627338625077","rebelmike","2026-07-14T13:23:37.5950000+00:00","","",""
+"691780627338625077","rebelmike","2026-07-14T13:23:38.4310000+00:00","Awesome, thanks Leo - that makes the update nice and easy to apply 🙂","","❤️ (1)"
+"262706220073222144","namibj","2026-07-14T14:02:12.8900000+00:00","Notably, the `buf_8` (and the identical in all ways that matter, `clkbuf_8`) had a gate finger (spanning both pmos and nmos) in place of what probably should have been a diffusion break; result was that the 3 active fingers on the input (depends on if high or low; the cell is electrically symmetric between nmos and pmos) fed a diode-connected finger of the 8 output fingers (they all share the same gate) and e.g. on input low resulted in about 2.7V (TT default temperature) across an nmos finger with a little over 300μA through that finger; a side effect should be that the actual output fingers don't properly turn their complement (in that condition, the pmos fingers) off at least on some PVT corners, which causes further but probably overall less significant power dissipation.
+
+TL;DR: an accidentally placed gate in `buf_8` and `clkbuf_8` caused 1 mW static power consumption (and possibly somewhat impaired output logic levels, I'd particularly worry about reduced output-high levels).
+
+Many chips would probably just ""melt"" from the power wastage.","",""
