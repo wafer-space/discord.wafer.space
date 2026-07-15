@@ -530,14 +530,14 @@ If you have a magic extracted layout, I could help with the underdocumented setu
 "169786952432746498","mithro_","2026-07-15T01:16:05.5530000+00:00","BTW When the precheckers are idle between runs I have been letting @bailey use the hardware for doing validation of designs.","","😁 (2)"
 "262706220073222144","namibj","2026-07-15T05:41:18.6770000+00:00","so, well, unless the mux controls turn out to synthesize nicely enough, hope for that to work out is now sadly somewhat limited, welp.","",""
 "262706220073222144","namibj","2026-07-15T05:46:43.5970000+00:00","(just timeline though; the issue at hand is pretty much just due to me being not given sufficcient notice to have things prepared for this scenario of how unsold slots are dealt with; that claim is based on assuming that there was more than a week until deadline when it was known that I should with high probability have that muxed-e-test ready by the deadline)","",""
-"169786952432746498","mithro_","2026-07-15T06:34:03.3940000+00:00","Anyone played with https://alpharomerojl.github.io/reticle/ at all?","","❤️ (1)"
+"169786952432746498","mithro_","2026-07-15T06:34:03.3940000+00:00","Anyone played with https://alpharomerojl.github.io/reticle/ at all?","","❤️ (2)"
 "190171097910607873","embeddedken","2026-07-15T06:35:14.4690000+00:00","Any idea why OpenROAD (ORFS) would not automatically place a seal ring for 6_final.gds?
 ""[Error]: Layer 'GUARD_RING_MK' is not used. wafers.space requires a seal ring (guard ring) around the die.""","",""
 "323371864074485771","mole99","2026-07-15T06:41:43.5170000+00:00","The reason is that the seal ring is not part of the ORFS flow.
 
 If you are not using the LibreLane template, you can ""steal"" a seal ring from the example layouts and place it in KLayout: https://github.com/wafer-space/gf180mcu-example-layouts","","👍 (1)"
 "190171097910607873","embeddedken","2026-07-15T06:42:19.0000000+00:00","Thanks!","","👌 (1)"
-"1071653002986926112","algofoogle","2026-07-15T08:02:32.8160000+00:00","@Tim 'mithro' Ansell Project https://platform.wafer.space/projects/9fed917e-da6f-4613-b725-216f69c12b1b/ is a half-height slot with precheck-passing GDS that I hit ""submit"" on that could be included if there happens to be a spare slot available. If not, no worries: there may be more-eligibile projects lining up. Here's the repo for it: https://github.com/algofoogle/gf180ws2-raybox-zero -- I'll try and do a rev before the deadline tonight.","","🔥 (1),❤️ (5)"
+"1071653002986926112","algofoogle","2026-07-15T08:02:32.8160000+00:00","@Tim 'mithro' Ansell Project https://platform.wafer.space/projects/9fed917e-da6f-4613-b725-216f69c12b1b/ is a half-height slot with precheck-passing GDS that I hit ""submit"" on that could be included if there happens to be a spare slot available. If not, no worries: there may be more-eligibile projects lining up. Here's the repo for it: https://github.com/algofoogle/gf180ws2-raybox-zero -- I'll try and do a rev before the deadline tonight.","","🔥 (1),❤️ (6)"
 "1140876793298047028","mavmaster","2026-07-15T08:19:53.8670000+00:00","I've been having some issues with file uploads to the submission platform as shown in the photo or additionally things like: Security validation failed: URL validation failed: Failed to check file size: 403 Client Error: Forbidden for url:. Wanted to check if anyone had a workaround","2026-07_media/image-7EE7D.png",""
 "169786952432746498","mithro_","2026-07-15T08:24:05.5200000+00:00","That doesn't look like a valid URL to provide the system, what is your project ID?","",""
 "1140876793298047028","mavmaster","2026-07-15T08:27:19.5660000+00:00","We have uploads working now. Tried with an uncompressed file and through google instead of github","",""
@@ -570,4 +570,58 @@ If the flow for this will be that I give someone a GDS that only draws on these 
 "596068704471482370","246tnt","2026-07-15T10:52:59.7030000+00:00","I'm kind of curious why you went for ORFS though ... I see why ORFS was originally created, but now that librelane exist, what's the benefit of ORFS ?","",""
 "190171097910607873","embeddedken","2026-07-15T10:56:57.1960000+00:00","I was not a fan of OpenLane a few years ago; seems like LibreLane would have been much easier.","",""
 "596068704471482370","246tnt","2026-07-15T11:03:14.5970000+00:00","I wasn't a fan of OpenLane , the first version either. But OpenLane 2 and now LibreLane have a much better architecture and design, there is no contest.","",""
-"220639106915368960","tholin","2026-07-15T11:05:32.0440000+00:00","I think this is the most dense thing I’ve ever taped out","2026-07_media/image-099A4.png","👀 (3),waferspace (3)"
+"220639106915368960","tholin","2026-07-15T11:05:32.0440000+00:00","I think this is the most dense thing I’ve ever taped out","2026-07_media/image-099A4.png","👀 (4),waferspace (5)"
+"220639106915368960","tholin","2026-07-15T11:20:39.7290000+00:00","I’m actually slightly anxious that this will fail the fab’s DRC check because of The Palette, since there is some weird combinations in there.","",""
+"262706220073222144","namibj","2026-07-15T11:24:16.5840000+00:00","This just needs the DRC flag `-wedge` as it's not for wedge bonding (but flip chip); and it might need that corner marker stuff if that would trip the platform check.
+Oh, and fill, per the defaults; also with fill in case that's easier:
+(I think the without-fill is also not zeroes to the origin; that's fixed in the `try2` which also has the fill.)","2026-07_media/0.5x0.5_flip_chip_test_pads-0D6A2.gds,2026-07_media/0.5x0.5_flip_chip_test_pads_filled_try2-BC512.gds",""
+"190171097910607873","embeddedken","2026-07-15T11:24:17.7300000+00:00","Looks like the fix would have been to use:
+*set_padring_options -offsets*
+""Specifies the offset, in microns, from the edges of the die area to corresponding edges of the padcells.""","",""
+"262706220073222144","namibj","2026-07-15T11:24:52.7650000+00:00","oh and damn I gues I'm offset..... should be quick to fix tho.","",""
+"262706220073222144","namibj","2026-07-15T11:39:07.3080000+00:00","filled and non-filled with size adjusted; turns out the slot docs page rounded numbers from what I can tell....","2026-07_media/0.5x0.5_flip_chip_test_pads_fized_size_try-5DCF7.gds,2026-07_media/0.5x0.5_flip_chip_test_pads_fized_size-B7353.gds",""
+"220639106915368960","tholin","2026-07-15T11:39:36.9950000+00:00","I put months of effort into building FeatherLane, my custom RTL to Layout flow, and I got it to be just powerful enough to run RTL for a RV32I core through it. And I taped it out. FeatherLane was written in plain C with no external dependencies and the code kept as simple as possible with the hopes that it’ll be able to run on the RV32I core, allowing the CPU to reproduce its own layout from RTL. First open-source self-compiling chip layout. This shall be my claim to fame!","","🎉 (3),♾️ (1)"
+"262706220073222144","namibj","2026-07-15T11:40:03.9010000+00:00","tyos??? 😭","",""
+"220639106915368960","tholin","2026-07-15T11:40:30.3500000+00:00","What?","",""
+"488155070052171816","rahulbhagwat","2026-07-15T11:41:54.7970000+00:00","nope but this looks sick!","",""
+"262706220073222144","namibj","2026-07-15T11:46:23.7600000+00:00","not you, me, doing:
+> Layout size:                                                                                                                                                                        
+> layout width:  1836.0                                                                                                                                                               
+> layout height: 2531.0                                                                                                                                                               
+> Expected slot size:                                                                                                                                                                 
+> slot width:  1936.0                                                                                                                                                                 
+> slot height: 2531.0","",""
+"262706220073222144","namibj","2026-07-15T11:50:32.9370000+00:00","sparkly-clean with the latest DRC deck set to `all,-wedge`. Well, the filled one; the other one obviously misses that filler.","2026-07_media/0.5x0.5_flip_chip_test_pads_fixed_size_try-481E4.gds,2026-07_media/0.5x0.5_flip_chip_test_pads_fixed_size-20B19.gds",""
+"509798510170865675","essen__","2026-07-15T11:52:52.6370000+00:00","I tried to earlier but we made the server crash 😅","",""
+"1071653002986926112","algofoogle","2026-07-15T11:53:13.3980000+00:00","Started a thread.","",""
+"509798510170865675","essen__","2026-07-15T12:00:13.3380000+00:00","**And it's done! ** 🕰️","","🎉 (2)"
+"262706220073222144","namibj","2026-07-15T12:01:25.9260000+00:00","https://platform.wafer.space/projects/96a9e8e4-31b1-4f4a-bdfb-0ccf39343834/ these are a couple flip chip test pads; the smaller ones are for tight and calm pitch targeting ACF bonding to JLCPCB's 0.33oz 2L flex (2~3 mil minimum usable half-pitch); the larger ones are for trying WLCSP-LGA processing options/tactics that would offer high performance (current, thermals, and signal integrity) attachment to affordable PCBs at the cost of reduced/limited pin count vs. the current wire bond option.
+
+The dense ACF tactic would have somewhat higher DC resistance and possibly thermal vulnerabilities, but could (when somewhat extended/pushed) probably double to quadruple the maximum IO count on a full slot.","",""
+"1484537281934131200","dburnett_98395","2026-07-15T12:32:16.4930000+00:00","Looks like our online check took 3 hours and failed with 5 DRC violations despite running clean locally 🙁","","🫂 (1)"
+"596068704471482370","246tnt","2026-07-15T12:33:25.4720000+00:00","Is that magic or klayout violations ?","",""
+"1484537281934131200","dburnett_98395","2026-07-15T12:34:03.7590000+00:00","klayout","","😥 (1)"
+"840182560252624916","logic_destroyer","2026-07-15T14:01:51.2130000+00:00","","2026-07_media/signal-2026-07-15-10-16-14-970-28779.png",""
+"840182560252624916","logic_destroyer","2026-07-15T14:02:20.4490000+00:00","","2026-07_media/IMG-20260714-WA0018-7A276.jpg","🎉 (2)"
+"840182560252624916","logic_destroyer","2026-07-15T14:04:01.0000000+00:00","It looks like mainline Linux with MMU is running on the GF180MCU. Machdyne built the board and did the bring-up. He sent me one board so I can investigate it further.","","💯 (1),🥳 (2)"
+"840182560252624916","logic_destroyer","2026-07-15T14:05:06.7520000+00:00","He wrote to me earlier that the system has already been running for six hours.","",""
+"812217062567051294","azonenberg","2026-07-15T14:33:39.8660000+00:00","Which instance type out of curiosity?","",""
+"220639106915368960","tholin","2026-07-15T14:34:11.5340000+00:00","Don’t remember","",""
+"812217062567051294","azonenberg","2026-07-15T14:34:51.0800000+00:00","skylake-sp is old but better than nothing","",""
+"812217062567051294","azonenberg","2026-07-15T14:37:36.2070000+00:00","If folks working on foundational stuff like open cell libraries and PHY IP need extra compute, i may be able to help","",""
+"812217062567051294","azonenberg","2026-07-15T14:38:09.5170000+00:00","I have a bunch of fairly beefy compute in my home lab that I can offer up VMs on","",""
+"812217062567051294","azonenberg","2026-07-15T14:39:31.5770000+00:00","64 vCPUs and 512GB RAM on one and 52 vCPUs and 128GB on the other. The bigger box also has a bunch of nvidia 3050s in it","",""
+"812217062567051294","azonenberg","2026-07-15T14:40:30.4880000+00:00","so compute wise, i can offer up to roughly a c6i.12xlarge instance equivalent but optionally with a lot more RAM per vCPU, and one or more nvidia cards","",""
+"812217062567051294","azonenberg","2026-07-15T14:40:52.1460000+00:00","Upload bandwidth to the internet is only about 40 Mbps but if you're mostly using it for compute-heavy tasks and RDP/VNCing into it, that should be fine","",""
+"812217062567051294","azonenberg","2026-07-15T14:41:37.3970000+00:00","the big system is a xeon platinum 8362 and the smaller a gold 5320, so both are icelake based, two gens newer than skylake-sp","",""
+"812217062567051294","azonenberg","2026-07-15T14:42:55.7550000+00:00","I do use these same VM hosts to run my own lab production workloads as well as CI builds for ngscopeclient so i'll need to do some balancing to free up a GPU or a huge amount of compute (e.g. by reducing the level of concurrent CI jobs during the time you're using the system) so it's not something to waste lightly, but if the IP you're developing is open source and it will make a significant difference in your ability to iterate/test i'll do what I can","",""
+"812217062567051294","azonenberg","2026-07-15T14:44:41.7770000+00:00","High memory is easy for me to offer within reason, I have a lot of burst capacity for running tons of CI jobs","",""
+"812217062567051294","azonenberg","2026-07-15T14:44:50.0980000+00:00","","2026-07_media/sanquentin-5F403.png",""
+"812217062567051294","azonenberg","2026-07-15T14:44:58.6520000+00:00","","2026-07_media/rikers-C8D94.png",""
+"812217062567051294","azonenberg","2026-07-15T14:47:53.1330000+00:00","@Tholin ^","",""
+"262706220073222144","namibj","2026-07-15T15:02:52.5550000+00:00","You don't happen to have the skills it takes to figure decently efficient hyperparameters for letting Xyce simulate up to a couple mm^2 of gf180mcuD PEX extraction, or do you?
+
+I lack the background to know how to tune the bunch of solver options and solver  choices offered 🙁
+
+I'm just seeing it being highly stalling on memory with also sadly substantial lacks in reasonable prefetching behavior (it's nowhere near 30% bandwidth utilization and hovers around 0.02~0.05 IPC... Yeah it's bad.)","",""
+"812217062567051294","azonenberg","2026-07-15T15:03:54.5050000+00:00","I have no experience with the existing solvers. Optimization in general is something I am good at when I have the time, but it's currently a lot easier for me to spend a few minutes setting up a VPN and instance for someone and letting them play with it than to spend a lot of time doing development","",""

@@ -100,7 +100,7 @@ https://cdn.discordapp.com/attachments/1474282211376369664/1521663851009933332/i
 
 {Embed}
 https://cdn.discordapp.com/attachments/1474282211376369664/1521663851009933332/image.png?ex=6a45a765&is=6a4455e5&hm=663daf621803cf31bb7fb3f142b0c34c1674c7b016812b34ae04ba2f3d3cb837&
-2026-07_media/image-07363.png
+2026-07_media/image-C8975.png
 
 
 [2026-07-01 9:21 p.m.] namibj
@@ -1987,7 +1987,7 @@ Reticle
 Browser-native, GPU-accelerated editor for very large hierarchical 2D IC-layout scenes.
 
 {Reactions}
-❤️
+❤️ (2)
 
 [2026-07-15 6:35 a.m.] embeddedken
 Any idea why OpenROAD (ORFS) would not automatically place a seal ring for 6_final.gds?
@@ -2023,7 +2023,7 @@ Contribute to algofoogle/gf180ws2-raybox-zero development by creating an account
 2026-07_media/e03367bf-e8fd-4c74-a2b1-fa5658565df8-C5073
 
 {Reactions}
-🔥 ❤️ (5)
+🔥 ❤️ (6)
 
 [2026-07-15 8:19 a.m.] mavmaster
 I've been having some issues with file uploads to the submission platform as shown in the photo or additionally things like: Security validation failed: URL validation failed: Failed to check file size: 403 Client Error: Forbidden for url:. Wanted to check if anyone had a workaround
@@ -2167,8 +2167,205 @@ I think this is the most dense thing I’ve ever taped out
 2026-07_media/image-099A4.png
 
 {Reactions}
-👀 (3) waferspace (2)
+👀 (4) waferspace (5)
+
+[2026-07-15 11:20 a.m.] tholin
+I’m actually slightly anxious that this will fail the fab’s DRC check because of The Palette, since there is some weird combinations in there.
+
+
+[2026-07-15 11:24 a.m.] namibj
+This just needs the DRC flag `-wedge` as it's not for wedge bonding (but flip chip); and it might need that corner marker stuff if that would trip the platform check.
+Oh, and fill, per the defaults; also with fill in case that's easier:
+(I think the without-fill is also not zeroes to the origin; that's fixed in the `try2` which also has the fill.)
+
+{Attachments}
+2026-07_media/0.5x0.5_flip_chip_test_pads-0D6A2.gds
+2026-07_media/0.5x0.5_flip_chip_test_pads_filled_try2-BC512.gds
+
+
+[2026-07-15 11:24 a.m.] embeddedken
+Looks like the fix would have been to use:
+*set_padring_options -offsets*
+"Specifies the offset, in microns, from the edges of the die area to corresponding edges of the padcells."
+
+
+[2026-07-15 11:24 a.m.] namibj
+oh and damn I gues I'm offset..... should be quick to fix tho.
+
+
+[2026-07-15 11:39 a.m.] namibj
+filled and non-filled with size adjusted; turns out the slot docs page rounded numbers from what I can tell....
+
+{Attachments}
+2026-07_media/0.5x0.5_flip_chip_test_pads_fized_size_try-5DCF7.gds
+2026-07_media/0.5x0.5_flip_chip_test_pads_fized_size-B7353.gds
+
+
+[2026-07-15 11:39 a.m.] tholin
+I put months of effort into building FeatherLane, my custom RTL to Layout flow, and I got it to be just powerful enough to run RTL for a RV32I core through it. And I taped it out. FeatherLane was written in plain C with no external dependencies and the code kept as simple as possible with the hopes that it’ll be able to run on the RV32I core, allowing the CPU to reproduce its own layout from RTL. First open-source self-compiling chip layout. This shall be my claim to fame!
+
+{Reactions}
+🎉 (3) ♾️
+
+[2026-07-15 11:40 a.m.] namibj
+tyos??? 😭
+
+
+[2026-07-15 11:40 a.m.] tholin
+What?
+
+
+[2026-07-15 11:41 a.m.] rahulbhagwat
+nope but this looks sick!
+
+
+[2026-07-15 11:46 a.m.] namibj
+not you, me, doing:
+> Layout size:                                                                                                                                                                        
+> layout width:  1836.0                                                                                                                                                               
+> layout height: 2531.0                                                                                                                                                               
+> Expected slot size:                                                                                                                                                                 
+> slot width:  1936.0                                                                                                                                                                 
+> slot height: 2531.0
+
+
+[2026-07-15 11:50 a.m.] namibj
+sparkly-clean with the latest DRC deck set to `all,-wedge`. Well, the filled one; the other one obviously misses that filler.
+
+{Attachments}
+2026-07_media/0.5x0.5_flip_chip_test_pads_fixed_size_try-481E4.gds
+2026-07_media/0.5x0.5_flip_chip_test_pads_fixed_size-20B19.gds
+
+
+[2026-07-15 11:52 a.m.] essen__
+I tried to earlier but we made the server crash 😅
+
+
+[2026-07-15 11:53 a.m.] algofoogle
+Started a thread.
+
+
+[2026-07-15 12:00 p.m.] essen__
+**And it's done! ** 🕰️
+
+{Reactions}
+🎉 (2)
+
+[2026-07-15 12:01 p.m.] namibj
+https://platform.wafer.space/projects/96a9e8e4-31b1-4f4a-bdfb-0ccf39343834/ these are a couple flip chip test pads; the smaller ones are for tight and calm pitch targeting ACF bonding to JLCPCB's 0.33oz 2L flex (2~3 mil minimum usable half-pitch); the larger ones are for trying WLCSP-LGA processing options/tactics that would offer high performance (current, thermals, and signal integrity) attachment to affordable PCBs at the cost of reduced/limited pin count vs. the current wire bond option.
+
+The dense ACF tactic would have somewhat higher DC resistance and possibly thermal vulnerabilities, but could (when somewhat extended/pushed) probably double to quadruple the maximum IO count on a full slot.
+
+{Embed}
+https://platform.wafer.space/projects/96a9e8e4-31b1-4f4a-bdfb-0ccf39343834/
+…
+Platform for wafer.space low cost silicon manufacturing.
+
+
+[2026-07-15 12:32 p.m.] dburnett_98395
+Looks like our online check took 3 hours and failed with 5 DRC violations despite running clean locally 🙁
+
+{Reactions}
+🫂
+
+[2026-07-15 12:33 p.m.] 246tnt
+Is that magic or klayout violations ?
+
+
+[2026-07-15 12:34 p.m.] dburnett_98395
+klayout
+
+{Reactions}
+😥
+
+[2026-07-15 2:01 p.m.] logic_destroyer
+
+
+{Attachments}
+2026-07_media/signal-2026-07-15-10-16-14-970-28779.png
+
+
+[2026-07-15 2:02 p.m.] logic_destroyer
+
+
+{Attachments}
+2026-07_media/IMG-20260714-WA0018-7A276.jpg
+
+{Reactions}
+🎉 (2)
+
+[2026-07-15 2:04 p.m.] logic_destroyer
+It looks like mainline Linux with MMU is running on the GF180MCU. Machdyne built the board and did the bring-up. He sent me one board so I can investigate it further.
+
+{Reactions}
+💯 🥳 (2)
+
+[2026-07-15 2:05 p.m.] logic_destroyer
+He wrote to me earlier that the system has already been running for six hours.
+
+
+[2026-07-15 2:33 p.m.] azonenberg
+Which instance type out of curiosity?
+
+
+[2026-07-15 2:34 p.m.] tholin
+Don’t remember
+
+
+[2026-07-15 2:34 p.m.] azonenberg
+skylake-sp is old but better than nothing
+
+
+[2026-07-15 2:37 p.m.] azonenberg
+If folks working on foundational stuff like open cell libraries and PHY IP need extra compute, i may be able to help
+
+
+[2026-07-15 2:38 p.m.] azonenberg
+I have a bunch of fairly beefy compute in my home lab that I can offer up VMs on
+
+
+[2026-07-15 2:39 p.m.] azonenberg
+64 vCPUs and 512GB RAM on one and 52 vCPUs and 128GB on the other. The bigger box also has a bunch of nvidia 3050s in it
+
+
+[2026-07-15 2:40 p.m.] azonenberg
+so compute wise, i can offer up to roughly a c6i.12xlarge instance equivalent but optionally with a lot more RAM per vCPU, and one or more nvidia cards
+
+
+[2026-07-15 2:40 p.m.] azonenberg
+Upload bandwidth to the internet is only about 40 Mbps but if you're mostly using it for compute-heavy tasks and RDP/VNCing into it, that should be fine
+
+
+[2026-07-15 2:41 p.m.] azonenberg
+the big system is a xeon platinum 8362 and the smaller a gold 5320, so both are icelake based, two gens newer than skylake-sp
+
+
+[2026-07-15 2:42 p.m.] azonenberg
+I do use these same VM hosts to run my own lab production workloads as well as CI builds for ngscopeclient so i'll need to do some balancing to free up a GPU or a huge amount of compute (e.g. by reducing the level of concurrent CI jobs during the time you're using the system) so it's not something to waste lightly, but if the IP you're developing is open source and it will make a significant difference in your ability to iterate/test i'll do what I can
+
+
+[2026-07-15 2:44 p.m.] azonenberg
+High memory is easy for me to offer within reason, I have a lot of burst capacity for running tons of CI jobs
+
+
+[2026-07-15 2:44 p.m.] azonenberg
+
+
+{Attachments}
+2026-07_media/sanquentin-5F403.png
+
+
+[2026-07-15 2:44 p.m.] azonenberg
+
+
+{Attachments}
+2026-07_media/rikers-C8D94.png
+
+
+[2026-07-15 2:47 p.m.] azonenberg
+@Tholin ^
+
 
 ==============================================================
-Exported 419 message(s)
+Exported 455 message(s)
 ==============================================================

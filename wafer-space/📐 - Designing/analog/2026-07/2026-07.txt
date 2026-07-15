@@ -229,6 +229,39 @@ Sorry, I'm a bit of a noob :^) I guess I can go into it and quickly fix it up?
 It's because it wants metal on top, without metal over the via you get this DRC
 
 
+[2026-07-15 1:30 p.m.] were491.
+o yea this wasn't an issue with dbu=0.005u so theoretically you can just design with that and then flatten everything before changing dbu back to 0.001u and then it won't be misaligned
+
+
+[2026-07-15 3:04 p.m.] namibj
+Yeah I do question the sense of a dbu smaller than a mandatory minimum quantization/snapping grid.
+
+
+[2026-07-15 3:06 p.m.] were491.
+gf180 pdk said to use 0.005 dbu but waferspace wants 0.001 for some reason
+
+
+[2026-07-15 3:10 p.m.] mole99
+The dbu for gf180mcu is 0.001, the manufacturing grid is 0.005.
+
+
+[2026-07-15 3:12 p.m.] osvel
+Good tip, will keep in mind! I decided to abandon klayout (for better or for worse) and just later import my design to do their DRC.
+
+
+[2026-07-15 3:15 p.m.] osvel
+I figured out the issue in magic also. Seems like picking a too small L causes this. Should probably report it but its a design constraint so don't really know how the pcell generator should work tbh
+
+
+[2026-07-15 3:19 p.m.] namibj
+Yeah; can you justify that choice beyond "it was picked many years ago and _nice round number_ and changing now would break too much"?
+
+
+[2026-07-15 3:23 p.m.] 246tnt
+The latter is quite a big concern 😅 
+For instance, I know in TT because we copy the stream directly when including macro to make sure we don't alter them, they need to all have the same unit or they end up at different scales ...
+
+
 ==============================================================
-Exported 40 message(s)
+Exported 48 message(s)
 ==============================================================

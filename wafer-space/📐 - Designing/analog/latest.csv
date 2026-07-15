@@ -74,3 +74,12 @@ I saw there was a klayout plugin for sg13g2 (https://github.com/mwolodzk/klayout
 This is before drawing anything.","2026-07_media/image-2D1D6.png",""
 "290925586266980352","osvel","2026-07-14T11:48:19.2590000+00:00","Sorry, I'm a bit of a noob :^) I guess I can go into it and quickly fix it up?","",""
 "492702620759228416","mattvenn","2026-07-15T12:19:18.4230000+00:00","It's because it wants metal on top, without metal over the via you get this DRC","",""
+"325334453213986816","were491.","2026-07-15T13:30:06.5680000+00:00","o yea this wasn't an issue with dbu=0.005u so theoretically you can just design with that and then flatten everything before changing dbu back to 0.001u and then it won't be misaligned","",""
+"262706220073222144","namibj","2026-07-15T15:04:14.6650000+00:00","Yeah I do question the sense of a dbu smaller than a mandatory minimum quantization/snapping grid.","",""
+"325334453213986816","were491.","2026-07-15T15:06:47.8120000+00:00","gf180 pdk said to use 0.005 dbu but waferspace wants 0.001 for some reason","",""
+"323371864074485771","mole99","2026-07-15T15:10:56.5090000+00:00","The dbu for gf180mcu is 0.001, the manufacturing grid is 0.005.","",""
+"290925586266980352","osvel","2026-07-15T15:12:11.7890000+00:00","Good tip, will keep in mind! I decided to abandon klayout (for better or for worse) and just later import my design to do their DRC.","",""
+"290925586266980352","osvel","2026-07-15T15:15:13.2950000+00:00","I figured out the issue in magic also. Seems like picking a too small L causes this. Should probably report it but its a design constraint so don't really know how the pcell generator should work tbh","",""
+"262706220073222144","namibj","2026-07-15T15:19:01.5350000+00:00","Yeah; can you justify that choice beyond ""it was picked many years ago and _nice round number_ and changing now would break too much""?","",""
+"596068704471482370","246tnt","2026-07-15T15:23:57.3970000+00:00","The latter is quite a big concern 😅 
+For instance, I know in TT because we copy the stream directly when including macro to make sure we don't alter them, they need to all have the same unit or they end up at different scales ...","",""
