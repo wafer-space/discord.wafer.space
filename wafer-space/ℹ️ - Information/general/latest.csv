@@ -467,7 +467,7 @@ However, I'm not sure if LibreLane has support for adding these things to the Yo
 "812217062567051294","azonenberg","2026-07-14T15:48:05.9580000+00:00","anyway, i guess in a couple months when i've polished this up more, i'll see if anybody is interested in shoving an updated version of it into spare space on a die somewhere - i don't want to do a dedicated tapeout just for it since it's small, but if somebody has spare space and a few GPIOs i can steal, i'd like to give it a try and will gladly cover part of the fab cost","",""
 "812217062567051294","azonenberg","2026-07-14T15:50:58.1480000+00:00","and if it works maybe you'll get the ability to poke around inside your asic :p","",""
 "220639106915368960","tholin","2026-07-14T16:19:14.3270000+00:00","Oh man, I am beyond stressed and worn out now. Finding out you broke not just your own chip, but those of several other people, less than 48 hours before deadline, is not fun.","",""
-"220639106915368960","tholin","2026-07-14T16:19:21.1350000+00:00","I barely slept last night","","🫂 (4),💜 (2)"
+"220639106915368960","tholin","2026-07-14T16:19:21.1350000+00:00","I barely slept last night","","🫂 (4),💜 (3)"
 "262706220073222144","namibj","2026-07-14T16:21:14.3880000+00:00","As long as your involvement makes the successful tapeout of the chip more likely, I'd be able to give you up to about 1mm^2 of core area along the entire top edge IO of the 1x0.5 slot I'm doing the test structures on.","",""
 "812217062567051294","azonenberg","2026-07-14T16:21:46.5600000+00:00","Yeah I mean, it should be low risk as long as you keep the APB segment dedicated to debug IPs and don't put anything else on it","",""
 "812217062567051294","azonenberg","2026-07-14T16:22:15.2410000+00:00","it uses its own dedicated IOs for the bridge and the ILA is input-only other than the internal APB","",""
@@ -527,4 +527,13 @@ At least I was able to get this Skylake-SP system to use.","",""
 
 If you have a magic extracted layout, I could help with the underdocumented setup. It should run in under a minute.","",""
 "220639106915368960","tholin","2026-07-15T00:26:42.3470000+00:00","Yaaaay!","2026-07_media/image-269EA.png","🥳 (1)"
-"169786952432746498","mithro_","2026-07-15T01:16:05.5530000+00:00","BTW When the precheckers are idle between runs I have been letting @bailey use the hardware for doing validation of designs.","","😁 (1)"
+"169786952432746498","mithro_","2026-07-15T01:16:05.5530000+00:00","BTW When the precheckers are idle between runs I have been letting @bailey use the hardware for doing validation of designs.","","😁 (2)"
+"262706220073222144","namibj","2026-07-15T05:41:18.6770000+00:00","so, well, unless the mux controls turn out to synthesize nicely enough, hope for that to work out is now sadly somewhat limited, welp.","",""
+"262706220073222144","namibj","2026-07-15T05:46:43.5970000+00:00","(just timeline though; the issue at hand is pretty much just due to me being not given sufficcient notice to have things prepared for this scenario of how unsold slots are dealt with; that claim is based on assuming that there was more than a week until deadline when it was known that I should with high probability have that muxed-e-test ready by the deadline)","",""
+"169786952432746498","mithro_","2026-07-15T06:34:03.3940000+00:00","Anyone played with https://alpharomerojl.github.io/reticle/ at all?","",""
+"190171097910607873","embeddedken","2026-07-15T06:35:14.4690000+00:00","Any idea why OpenROAD (ORFS) would not automatically place a seal ring for 6_final.gds?
+""[Error]: Layer 'GUARD_RING_MK' is not used. wafers.space requires a seal ring (guard ring) around the die.""","",""
+"323371864074485771","mole99","2026-07-15T06:41:43.5170000+00:00","The reason is that the seal ring is not part of the ORFS flow.
+
+If you are not using the LibreLane template, you can ""steal"" a seal ring from the example layouts and place it in KLayout: https://github.com/wafer-space/gf180mcu-example-layouts","","👍 (1)"
+"190171097910607873","embeddedken","2026-07-15T06:42:19.0000000+00:00","Thanks!","","👌 (1)"
