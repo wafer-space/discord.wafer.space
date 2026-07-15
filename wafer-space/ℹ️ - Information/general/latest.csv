@@ -601,9 +601,9 @@ The dense ACF tactic would have somewhat higher DC resistance and possibly therm
 "1484537281934131200","dburnett_98395","2026-07-15T12:32:16.4930000+00:00","Looks like our online check took 3 hours and failed with 5 DRC violations despite running clean locally 🙁","","🫂 (1)"
 "596068704471482370","246tnt","2026-07-15T12:33:25.4720000+00:00","Is that magic or klayout violations ?","",""
 "1484537281934131200","dburnett_98395","2026-07-15T12:34:03.7590000+00:00","klayout","","😥 (1)"
-"840182560252624916","logic_destroyer","2026-07-15T14:01:51.2130000+00:00","","2026-07_media/signal-2026-07-15-10-16-14-970-28779.png",""
+"840182560252624916","logic_destroyer","2026-07-15T14:01:51.2130000+00:00","@Tim 'mithro' Ansell @Leo Moser (mole99) @Andrew Wingate","2026-07_media/signal-2026-07-15-10-16-14-970-28779.png",""
 "840182560252624916","logic_destroyer","2026-07-15T14:02:20.4490000+00:00","","2026-07_media/IMG-20260714-WA0018-7A276.jpg","🎉 (2)"
-"840182560252624916","logic_destroyer","2026-07-15T14:04:01.0000000+00:00","It looks like mainline Linux with MMU is running on the GF180MCU. Machdyne built the board and did the bring-up. He sent me one board so I can investigate it further.","","💯 (1),🥳 (2)"
+"840182560252624916","logic_destroyer","2026-07-15T14:04:01.0000000+00:00","It looks like mainline Linux with MMU is running on the GF180MCU. Machdyne built the board and did the bring-up. He sent me one board so I can investigate it further.","","💯 (1),🥳 (4)"
 "840182560252624916","logic_destroyer","2026-07-15T14:05:06.7520000+00:00","He wrote to me earlier that the system has already been running for six hours.","",""
 "812217062567051294","azonenberg","2026-07-15T14:33:39.8660000+00:00","Which instance type out of curiosity?","",""
 "220639106915368960","tholin","2026-07-15T14:34:11.5340000+00:00","Don’t remember","",""
@@ -625,3 +625,196 @@ I lack the background to know how to tune the bunch of solver options and solver
 
 I'm just seeing it being highly stalling on memory with also sadly substantial lacks in reasonable prefetching behavior (it's nowhere near 30% bandwidth utilization and hovers around 0.02~0.05 IPC... Yeah it's bad.)","",""
 "812217062567051294","azonenberg","2026-07-15T15:03:54.5050000+00:00","I have no experience with the existing solvers. Optimization in general is something I am good at when I have the time, but it's currently a lot easier for me to spend a few minutes setting up a VPN and instance for someone and letting them play with it than to spend a lot of time doing development","",""
+"812217062567051294","azonenberg","2026-07-15T15:04:07.9610000+00:00","Long term down the road i wanted to try my hand at making GPU accelerated blocks for some passes","",""
+"812217062567051294","azonenberg","2026-07-15T15:04:14.6350000+00:00","possibly including extractions","",""
+"812217062567051294","azonenberg","2026-07-15T15:04:24.6780000+00:00","but i'd need to understand the existing algorithms much better first and have not had time to do that","",""
+"262706220073222144","namibj","2026-07-15T15:06:54.2990000+00:00","Well it's ""just"" some non-linear solving that seems to typically include a lot of linear solving in its course, so I don't think it's particularly Xyce-specific how one understands which solving strategies to use/try to make it faster.","",""
+"262706220073222144","namibj","2026-07-15T15:16:58.1220000+00:00","Yeah I am hoping to eventually get analytic autodiff capable models to use for some fancier higher-order-derivatives-using numerical solvers/optimizers.
+
+Including enabling a way to do harmonic balance (-like) solves with intrusive sensitivity and approximated Bayesian modeling of process variations (notably local mismatch is a concern).
+
+But it's not looking too good; and a better start might be to port the mosfet models away from the crusty legacy BSIM4 code to numerically much nicer modern mosfet code that also allows physically realistic simulation of more-asymmetric FETs.
+
+(A particular interest are annual FETs and related structures.)","",""
+"812217062567051294","azonenberg","2026-07-15T15:17:34.9820000+00:00","This is all way beyond my understanding, the only solver i've dug into the internals of at all is method-of-moments EM analysis","",""
+"812217062567051294","azonenberg","2026-07-15T15:18:01.2310000+00:00","and i dont grok the math there either, i was focusing on the computationally heavy bit that solves a huge system of linear equations by LU decomposition of a matrix","",""
+"812217062567051294","azonenberg","2026-07-15T15:18:08.1600000+00:00","where those equations come from is somebody else's problem :p","",""
+"812217062567051294","azonenberg","2026-07-15T15:18:17.6970000+00:00","solving a matrix more efficiently, that i can do","",""
+"265875544552243200","vpro","2026-07-15T15:19:34.7050000+00:00","Sorry, beginner question. What are the modern models of MOSFETs represented as? What’s the successor to BSIM?","",""
+"262706220073222144","namibj","2026-07-15T15:19:55.5100000+00:00","Yeah; occasionally Xyce has to evaluate the non linear device models again.","",""
+"812217062567051294","azonenberg","2026-07-15T15:22:16.0150000+00:00","(most of the parasitics etc extraction i have experience with is transmission line modeling on PCBs running at tens of GHz)","",""
+"262706220073222144","namibj","2026-07-15T15:27:46.8670000+00:00","BSIM4 is the bad one; BSIM6 and PSP103 should help a lot.","",""
+"265875544552243200","vpro","2026-07-15T15:30:00.1230000+00:00","Cool! I assume these models often packaged with closed source PDKs?","",""
+"265875544552243200","vpro","2026-07-15T15:31:08.0290000+00:00","What does it take to complete a BSIM6 model as opposed to a BSIM4 on the development of the kit?","",""
+"262706220073222144","namibj","2026-07-15T15:31:33.9660000+00:00","Does that care much about the fiber-ness of the glass or does it approximate the fiber layer as a homogenous (even if not isotropic) medium while at most having separate layers for the non-fiber sheets of matrix (typically epoxy) between them (the layers exist because the stacked fiber sheets aren't interwoven together, but it's just a stack of cloth sheets that got epoxied together into a block that's faaaar weaker to delamination than to in-plane loads)?","",""
+"265875544552243200","vpro","2026-07-15T15:32:44.8860000+00:00","SI? For SerDes? Is the industry still using Matlab for this?","",""
+"265875544552243200","vpro","2026-07-15T15:33:06.7430000+00:00","Apologies for the tirade of questions lol","",""
+"812217062567051294","azonenberg","2026-07-15T15:36:09.4400000+00:00","The solver I am using does not model nonuniform dielectrics in the x-y plane. you can have arbitrary numbers of layers of any thickness, Dk, Df you want","",""
+"812217062567051294","azonenberg","2026-07-15T15:36:17.6400000+00:00","but the parameters cannot vary with spatial position","",""
+"812217062567051294","azonenberg","2026-07-15T15:36:22.6170000+00:00","So it won't model fiber weave effect","",""
+"812217062567051294","azonenberg","2026-07-15T15:36:35.2010000+00:00","but you can model e.g. cores and prepregs having different resin density no problem","",""
+"812217062567051294","azonenberg","2026-07-15T15:37:02.5730000+00:00","Yeah. I'm sure some people use matlab i use sonnet for the extractions then do time domain modeling in ngscopeclient to do TDR/eye pattern transforms off the touchstone files","",""
+"265875544552243200","vpro","2026-07-15T15:38:31.8180000+00:00","Oh cool! I’ve been meaning to find some open source tooling around the space. Are these OSS?","",""
+"265875544552243200","vpro","2026-07-15T15:40:01.5080000+00:00","A couple friends / peers of mine did some tangential work:
+
+- https://github.com/richard259/serdespy
+- https://github.com/capybara-capstone/PLLPy
+
+but this is not really a full suite, nor would I say is it super high fidelity","",""
+"812217062567051294","azonenberg","2026-07-15T15:41:49.9610000+00:00","Sonnet is not, it's one of the lower priced commercial EM solvers","","👍 (1)"
+"812217062567051294","azonenberg","2026-07-15T15:42:05.9950000+00:00","I have a really good relationship with the developers, AVX code I wrote is in the inner loop of the solver now, and get a huge discount as a result","",""
+"265875544552243200","vpro","2026-07-15T15:42:20.6400000+00:00","Oh no way! That’s awesome","",""
+"812217062567051294","azonenberg","2026-07-15T15:42:57.8780000+00:00","ngscopeclient is F/OSS and I'm the lead dev","","🤩 (1)"
+"812217062567051294","azonenberg","2026-07-15T15:43:28.8590000+00:00","it's also gpu accelerated and ludicrously fast, it'll do eye patterns something like 2-3 OOMs faster than my lecroy scope's vendor software","",""
+"812217062567051294","azonenberg","2026-07-15T15:43:45.1470000+00:00","the bottleneck is often getting data from the scope into the software, not the compute","",""
+"265875544552243200","vpro","2026-07-15T15:44:11.4880000+00:00","Makes sense, often the case nowadays","",""
+"265875544552243200","vpro","2026-07-15T15:44:25.6830000+00:00","Smth smth latency bound haha","",""
+"812217062567051294","azonenberg","2026-07-15T15:44:30.8340000+00:00","Which is why i am so excited about the ThunderScope","2026-07_media/quad-fft-52243.mp4",""
+"812217062567051294","azonenberg","2026-07-15T15:45:08.8580000+00:00","this is 4 Gsps of live streaming sample data FFT'd in real time. 32 Gbps of waveform data, every sample off the ADC, from four different scopes around the lab firehosing over 100GbE to a single workstation","","🔥 (1)"
+"265875544552243200","vpro","2026-07-15T15:45:21.8980000+00:00","So I assume your workflow is first simulating some high speed link across a PCB, then actually testing it after manufacturing?","",""
+"812217062567051294","azonenberg","2026-07-15T15:46:26.5870000+00:00","Yeah I iterate a bunch doing the layout in kicad, exporting to gerber, a pass through klayout to convert from gerber to dxf and crop out the region of interest, extract to s-parameters in sonnet (the one non-f/oss part of the flow) then TDR transforms and simulated eye patterns in ngscopeclient","","👍 (1)"
+"265875544552243200","vpro","2026-07-15T15:46:29.0280000+00:00","Holy parallel processing Batman.
+
+That’s sick, what’s the key enabler from ThunderScope? Is it just an easier way to access high speed output?","",""
+"812217062567051294","azonenberg","2026-07-15T15:46:45.8590000+00:00","Yeah there's plenty of scopes with higher analog performance than the TS","",""
+"812217062567051294","azonenberg","2026-07-15T15:47:01.4870000+00:00","nothing comes even *close* to the back end data streaming capability","",""
+"265875544552243200","vpro","2026-07-15T15:47:06.8640000+00:00","I’ve heard yeah, was fortunate enough to see it at Latch Up this year","",""
+"812217062567051294","azonenberg","2026-07-15T15:47:09.7640000+00:00","picoscopes push about 2.5 Gbps max and they're the industry leader","",""
+"812217062567051294","azonenberg","2026-07-15T15:47:12.7040000+00:00","TS will do 8","","👍 (1)"
+"812217062567051294","azonenberg","2026-07-15T15:47:17.3600000+00:00","that demo above is four ganged together pushing 32","",""
+"812217062567051294","azonenberg","2026-07-15T15:47:44.0890000+00:00","my GPU can barely keep up, it'll do FFT and draw the waveforms but when i turn on a waterfall it slows from 50 Hz refresh rate to 45","",""
+"812217062567051294","azonenberg","2026-07-15T15:47:48.0980000+00:00","(at 20M points per channel)","",""
+"812217062567051294","azonenberg","2026-07-15T15:48:36.1190000+00:00","But I want to use this same platform, and my higher bandwidth LeCroy scopes, to do open SERDES IP characterization whenever someone tapes one out with some semblance of success and gets me samples","","🔥 (1)"
+"812217062567051294","azonenberg","2026-07-15T15:48:50.6850000+00:00","I'm capable of doing full characterization out to around 10 Gbps NRZ and BER / BER eye measurements out to 25G NRZ","","👍 (1)"
+"812217062567051294","azonenberg","2026-07-15T15:49:21.7200000+00:00","The software can do PAM3/PAM4 as well","","👍 (1)"
+"265875544552243200","vpro","2026-07-15T15:50:17.0420000+00:00","Yeah! I’ve been looking into atleast building some open source educational material around SerDes","",""
+"265875544552243200","vpro","2026-07-15T15:50:27.4180000+00:00","Not sure if a full tapeout is in scope nowadays","",""
+"812217062567051294","azonenberg","2026-07-15T15:50:29.4760000+00:00","I assume you've seen sam palermo's course notes, they're excellent","",""
+"812217062567051294","azonenberg","2026-07-15T15:50:42.5010000+00:00","I wrote most of the wikipedia page on eye patterns and need to add more meat there","",""
+"265875544552243200","vpro","2026-07-15T15:50:54.5200000+00:00","No I haven’t! I’ve been using the Springer textbook on HSS for most context so far","",""
+"265875544552243200","vpro","2026-07-15T15:50:56.5410000+00:00","I’ll take a peek","",""
+"812217062567051294","azonenberg","2026-07-15T15:51:35.1290000+00:00","ngscopeclient can do CDR (using a not-perfect but good enough for most purposes PLL), eye patterns, all kinds of measurements like TIE histograms and jitter spectra and bathtub curves","",""
+"812217062567051294","azonenberg","2026-07-15T15:51:41.5020000+00:00","most of these are GPU accelerated","",""
+"265875544552243200","vpro","2026-07-15T15:52:04.5740000+00:00","I will definitely take a peek then, I’ve been drowning in the MATLAB SerDes designer so far","",""
+"265875544552243200","vpro","2026-07-15T15:52:14.0380000+00:00","Which has been an absolute pita","",""
+"812217062567051294","azonenberg","2026-07-15T15:52:38.4470000+00:00","There is also a wip simulation flow. you can generate PRBses then convert to NRZ or PAM4 analog waveforms","",""
+"812217062567051294","azonenberg","2026-07-15T15:52:48.1890000+00:00","add sinusoidal Pj or gaussian RJ","",""
+"812217062567051294","azonenberg","2026-07-15T15:52:50.2640000+00:00","add AWGN","",""
+"265875544552243200","vpro","2026-07-15T15:52:53.6830000+00:00","Would be curious to learn more about workflows that ingest IBIS-AMI models, how are those actually used in verification / validation for SI?","",""
+"812217062567051294","azonenberg","2026-07-15T15:52:59.0480000+00:00","do FFT channel emulation of a s-parameter channel","",""
+"812217062567051294","azonenberg","2026-07-15T15:53:07.0070000+00:00","we do not support IBIS-AMI and have very very limited regular-IBIS support","",""
+"812217062567051294","azonenberg","2026-07-15T15:53:17.0460000+00:00","(it just replays canned rising./falling edge waveforms)","",""
+"812217062567051294","azonenberg","2026-07-15T15:53:30.3430000+00:00","we can do CTLE and tap-based FIR equalization","",""
+"265875544552243200","vpro","2026-07-15T15:53:47.3920000+00:00","That’s sick!","",""
+"812217062567051294","azonenberg","2026-07-15T15:53:48.4910000+00:00","simulate TX FFE pre/de emphasis or remove it","",""
+"812217062567051294","azonenberg","2026-07-15T15:53:58.5980000+00:00","no DFE currently","",""
+"812217062567051294","azonenberg","2026-07-15T15:54:06.6960000+00:00","all of these blocks can apply to real scope waveforms too","",""
+"812217062567051294","azonenberg","2026-07-15T15:54:24.3460000+00:00","so like, you can take a not-great eye off a scope and throw a CTLE with specific pole/zero frequencies on it in post","","👍 (1)"
+"265875544552243200","vpro","2026-07-15T15:55:06.9280000+00:00","I guess the real question is the transition from this simulation tool to the (presumably) DSP-based equalization circuits on both ends. If you wanted to tape it out?","",""
+"812217062567051294","azonenberg","2026-07-15T15:55:42.0440000+00:00","i mean, ngscopeclient is fundamentally a waveform processing sandbox. it's not a simulation tool per se","",""
+"265875544552243200","vpro","2026-07-15T15:55:47.4160000+00:00","Gotcha","",""
+"265875544552243200","vpro","2026-07-15T15:55:56.5010000+00:00","Right, makes sense","",""
+"812217062567051294","azonenberg","2026-07-15T15:55:57.8840000+00:00","it just doesnt care if the waveform you're looking at came from a CSV file or a scope or was generated by another filter graph node","",""
+"812217062567051294","azonenberg","2026-07-15T15:56:08.0830000+00:00","data in, stuff happens, data out","","👍 (1)"
+"265875544552243200","vpro","2026-07-15T15:56:16.9540000+00:00","I guess I meant the translation of the logic from a GPU kernel to some logic on a chip","",""
+"265875544552243200","vpro","2026-07-15T15:56:24.8020000+00:00","Right, understood","",""
+"812217062567051294","azonenberg","2026-07-15T15:56:38.5730000+00:00","Yeah. Making an analog block that matches the behavior of a specific filter kernel is not my area of expertise","",""
+"812217062567051294","azonenberg","2026-07-15T15:57:02.5790000+00:00","But like, TX FIR equalization in hardware matches very closely to how you would do it in DSP","",""
+"812217062567051294","azonenberg","2026-07-15T15:57:12.4230000+00:00","you just have three output drivers on a sliding window of 3 output bits X, X-1, X+1","","👍 (1)"
+"812217062567051294","azonenberg","2026-07-15T15:57:21.6670000+00:00","and adjustable weights for each","",""
+"812217062567051294","azonenberg","2026-07-15T15:59:34.7480000+00:00","@vpro also if you want to play with ngscopeclient please either build from source or grab the latest CI build","",""
+"812217062567051294","azonenberg","2026-07-15T15:59:46.1800000+00:00","there have been massive improvements since v0.1.1 and 0.2 is coming out in the next week or so probably","",""
+"265875544552243200","vpro","2026-07-15T15:59:57.9210000+00:00","Ok perfect will do, has the GPU util been built for WSL2 stations?","",""
+"265875544552243200","vpro","2026-07-15T16:00:10.3980000+00:00","Unfortunately on the go, so I'm working off my laptop haha","",""
+"812217062567051294","azonenberg","2026-07-15T16:00:21.4060000+00:00","No idea about WSL but it runs natively on windows, we have binaries built with msys2 that you can just install as a MSI","","👍 (1)"
+"812217062567051294","azonenberg","2026-07-15T16:00:25.3950000+00:00","and macos","",""
+"265875544552243200","vpro","2026-07-15T16:00:28.8460000+00:00","ok perfect","",""
+"812217062567051294","azonenberg","2026-07-15T16:00:34.8730000+00:00","(the CI binaries are not signed although the releases are)","","👍 (1)"
+"265875544552243200","vpro","2026-07-15T16:00:45.2430000+00:00","Yeah WSL is a bit weird, whenever I try to get GPU util on linux sw it's gets a bit wonky","",""
+"812217062567051294","azonenberg","2026-07-15T16:00:59.2110000+00:00","https://dl1.antikernel.net/ngscopeclient-ci/2026/07/2026-07-14-0845PDT-cfed471e/win11-x64/ this is the latest build","",""
+"262706220073222144","namibj","2026-07-15T16:16:55.7550000+00:00","First step should be filling in the physical base parameters like doping concentrations and oxide thickness, second step would IMO be synthesizing a large dump of synthetic e-test DC operating conditions with full global& local process variations enabled (and probably ideally exposed, i.e., the random values it picked from the statistical distribution should be reported with the DC operating point ""measurements""), and then using an optimizer (e.g. through Xyce's sensitivity analysis or by plucking the calls to the BSIM6 code out of Xyce and stuffing it into a more targeted harness) to model-fit the tunables of the BSIM6 model bins to make it match the synthesized e-test ""measurements"" under the specified values for the random variables that encode the local&global process variations (those random variables with physically reasoned statistical distribution shapes get mangled by the non-linear mosfet model into whatever effect they have on the synthetic-e-test ""measurements"").
+
+I kinda hoped to include some actual e-test DUTs on a convenient analog MUX on Run2 so we could have set up to collect real e-test measurements from literally a couple hundred dies, to give us the ability to much better calibrate the statistical models of ""single-FOUP batch-of-wafers"" ""pseudo-local"" mismatch.
+
+..including a way to model how location on the wafer affects things, and, to an extent, _at least approximating_ a multi-scale stochastic model of the ""locality"" concept for mismatch/matching. 
+
+Like, @tnt always says to bias MOSFET current sources (for e.g. differential amplifier tail current biasing) by copying a master reference current for all consumer blocks, wiring to those consumer blocks the thus constant-current lines, and receiving these reference currents into a current mirror locally at each block.
+Sure, there are some effects that can shift reference potential, like IR drop in the PDN on the VSS connection, but beyond those aspects (which are just cases of ""single ended signaling is sensitive to ground bounce""), and ofc temperature differences from gradients across the die, but otherwise it's some form of currently-not-modeled locality-sensitive mismatch.
+
+I'd like to have a stochastic model that can _quantify_ the trade-off between more sequential stages of current mirrors/current-fan-out multi-output buffers, and using larger transistors but fewer stages, which could both be dialed to have equal area and power, differing only in ""performance"".
+
+And without a model that actually differentiates between a nicely laid out matched pair, and someone placing the input and output of a simple current mirror 500μm apart, I'm very-not-happy about that concept.
+Because everything in the choice of shapes and their arrangement in the GDS is a trade-off. Starts with higher density SCL PnR taking prohibitively long to succeed creating a legal routing that meets timing, and ends somewhere around dreaming up structures like the free vertical PNP & NPN of sky130A/gf180mcuD, the ldmos structures of both, and some esd-clamping structures that can be made with the same mask set fabrication process (but not necessarily the same mask layer generation from drawn layers (I don't mean OPC, but rather that some masks (pre-OPC) are kinda indirect Boolean functions of several drawn layers)) while behaving as a poly-gate-triggered thyristor.
+
+(Such thyristor approaches can beat passive ESD diodes by a lot, especially in situations where there are no convenient fat power rails a diode could clamp to, like a 5V CMOS GPIO on a chip that's otherwise running a 1.8V core; it'd be easy to overload the entire 5V VDD rail if there are just a couple GPIO cells on that supply.)","",""
+"262706220073222144","namibj","2026-07-15T16:18:14.3920000+00:00","_working towards it_","",""
+"262706220073222144","namibj","2026-07-15T16:19:45.2450000+00:00","Btw, is there practical utility to creating a 10GBaud PAM3/4 TX on gf180mcuD/sky130A?","",""
+"812217062567051294","azonenberg","2026-07-15T16:22:44.5560000+00:00","I am not aware of any existing protocols that do this, but it would be fun to characterize","",""
+"812217062567051294","azonenberg","2026-07-15T16:23:04.0520000+00:00","1000baseT1 is 750 Mbaud PAM3 and 100baseT1 is 66 Mbaud PAM3","",""
+"812217062567051294","azonenberg","2026-07-15T16:23:18.8100000+00:00","i do not know of anyone using PAM4 below about 28 gbaud","",""
+"812217062567051294","azonenberg","2026-07-15T16:24:26.8460000+00:00","I also do not see a point in making an open ethernet PHY IP at this stage because those are cheap jellybean parts you can buy","",""
+"812217062567051294","azonenberg","2026-07-15T16:24:49.6550000+00:00","the key enablers will be high speed IO interfaces you can't practically buy as an external peripheral, e.g. PCIe","",""
+"812217062567051294","azonenberg","2026-07-15T16:25:42.5030000+00:00","The minimum viable ""actually useful"" high speed PHY, in my opinion, is a 2.5 Gbaud NRZ SERDES that supports the PCIe receiver detect stuff, and can run at half-rate for SGMII / 1000base-X","",""
+"812217062567051294","azonenberg","2026-07-15T16:25:55.3980000+00:00","that will give you ethernet and pcie gen1","",""
+"812217062567051294","azonenberg","2026-07-15T16:26:24.5030000+00:00","the next notches up on the list of interesting targets are 5 Gbaud NRZ for pcie gen2, 8 Gbaud NRZ for pcie gen3, and 10.3125 G NRZ for 10GbaseR","",""
+"812217062567051294","azonenberg","2026-07-15T16:27:08.7820000+00:00","and then in between all of this, JESD204 doesnt have fixed speed targets and you can run it at whatever speed depending on your adc clock and lane count, so it would be enabled by any of the above and there's not like a ""jesd204 gen1"" speed we can aim for","",""
+"812217062567051294","azonenberg","2026-07-15T16:27:33.1220000+00:00","5G NRZ would also enable usb3","",""
+"812217062567051294","azonenberg","2026-07-15T16:27:43.4520000+00:00","the usb3 phy is almost identical to pcie gen2 and dual-mode PHYs are very common","",""
+"812217062567051294","azonenberg","2026-07-15T16:28:04.6150000+00:00","so any serdes capable of doing one can likely, with few if any changes, do the other","",""
+"262706220073222144","namibj","2026-07-15T16:29:11.4080000+00:00","I have like 70% of the cells for 10GBaud NRZ TX on gf180mcuD with a couple taps of FIR, and current-mode output driver, behaving themselves in xschem/SPICE for a few weeks now, and about 20% of the overall cells through layout, so it should be realistic to finish the rest and then do a bit of post-layout SPICE tuning to make them run significantly more efficiently (to afford the power of several FIR taps), months before the Run3 deadline. 
+
+Help would be VERY appreciated.
+Let's talk in 10~15 days on details if you're interested; expressing interest or chatting about rough plans for the project and that can be discussed sooner.","",""
+"812217062567051294","azonenberg","2026-07-15T16:29:43.3480000+00:00","I am interested in post silicon characterization but am not familiar enough with the analog side of things to be able to contribute significantly to the design","",""
+"812217062567051294","azonenberg","2026-07-15T16:29:49.8450000+00:00","I want it to exist and will happily test once it's made","",""
+"812217062567051294","azonenberg","2026-07-15T16:30:10.7360000+00:00","and I am  very comfortable with line coding and similar stuff that can be paired with said serdes once it's validated to do Real Work (tm)","",""
+"812217062567051294","azonenberg","2026-07-15T16:30:59.0690000+00:00","e.g. I have an FPGA proven 64/66b coder and 10gbaseR PCS block that I also used the 64/66b block from on a 28nm ASIC and it worked there too","",""
+"812217062567051294","azonenberg","2026-07-15T16:32:08.8750000+00:00","And I can assist with things like board layout and test fixture design","",""
+"812217062567051294","azonenberg","2026-07-15T16:32:28.5830000+00:00","but i do not know transistor level analog design/layout at all","",""
+"812217062567051294","azonenberg","2026-07-15T16:33:11.1690000+00:00","and in a couple weeks if access to some big iron VMs will help your simulations and tuning, i can probably help with that too","",""
+"262706220073222144","namibj","2026-07-15T16:39:45.4630000+00:00","IMO ""it just spits out Ethernet frames into a regular 10GBASE-SR/25GBSE-SR(-C) SFP+/SFP28, with a comfy 100BASE-T or RGMII back-channel for the reverse of the link"" is a fairly convenient to consume high speed output option for these MPW options, because it's one of the few not-horribly-proprietary/-exotic SerDes MAC protocols that works without a high speed RX on the ASIC and hyper-COTS reception equipment on the way from the ASIC into a computer.
+
+PCIe&USB need duplex PHYs; MIPI DSI/CSI are generic but not cheap COTS to funnel into a computer; DP/HDMI are waaaay more expensive but likely still cheaper than DSI/CSI to funnel into a computer without the dongle forcing lossy image compression; imfiniband fiber channel SAS and SATA AFAIK all demand duplex PHYs; that leaves what other option besides Ethernet?","",""
+"262706220073222144","namibj","2026-07-15T16:40:01.1260000+00:00","Yeah I know.","",""
+"812217062567051294","azonenberg","2026-07-15T16:43:07.1900000+00:00","what i mean is i dont see a point in making a baseT PHY because you can easily just hang a RGMII off your chip","",""
+"812217062567051294","azonenberg","2026-07-15T16:43:55.6730000+00:00","ideally i would like a bidirectional high speed PHY but a TX-only 10G PHY is certainly a good starting point","",""
+"812217062567051294","azonenberg","2026-07-15T16:49:44.4300000+00:00","(and a TX is probably easier to validate than a RX)","",""
+"262706220073222144","namibj","2026-07-15T16:51:08.2890000+00:00","Oh yeah, especially because the non-rare-variant BASE-T speeds that would even be properly interesting for direct usage are AFAIK all full-duplex with echo-cancellation.
+Which is not reasonable to do ""casually""; pretty sure it's much easier to do 1000BASE-KR than to do 1000BASE-T.","",""
+"812217062567051294","azonenberg","2026-07-15T16:52:00.4290000+00:00","yes by *far*","",""
+"812217062567051294","azonenberg","2026-07-15T16:52:19.1530000+00:00","I would much rather slap a SGMII PHY or baseT SFP+ in a cage next to a chip than try to put a 1000baseT PHY on it","",""
+"812217062567051294","azonenberg","2026-07-15T16:52:50.6150000+00:00","100baseTX is probably reasonable to do for fun but there's no practical point","",""
+"262706220073222144","namibj","2026-07-15T16:59:38.4320000+00:00","Sure some use cases need high speed RX, but it's much harder to push RX speed on a process node people traditionally question the possibility of that SerDes speed with, than it is to RX.
+
+E.g. I'm pretty sure with inductors and using about half of a w.s quarter slot I could get to spec-compliant 25GBASE-KR TX; and on a full slot probably upgrade that to 50GBASE-KR with it's PAM4, but I have no hope getting even just 25GBASE-R RX anywhere near nominal RX equalization quality/eye-tolerance on a full slot, unless you let me burn like 10~20 W or thereabouts which would need gaming overclocking levels of die TDP/heatsink solutions to pull off..
+The 25G TX should not need more than a decent QFN package and a decent PCB with thermal vias in a not-hot-stuffy-enclosure environment to run, in comparison...","",""
+"262706220073222144","namibj","2026-07-15T17:00:04.9930000+00:00","IIRC there's PHY for that on a recent TT.","",""
+"812217062567051294","azonenberg","2026-07-15T17:00:55.9750000+00:00","yeah 25G is a whole different ballgame","",""
+"262706220073222144","namibj","2026-07-15T17:00:57.9440000+00:00","Well, maybe missing the differential impedance matched line driver/receiver but that's harmless at that speed.","",""
+"812217062567051294","azonenberg","2026-07-15T17:01:09.7370000+00:00","for me, 2.5G full duplex would be more interesting as a baseline because then i could hang the chip off of pcie","",""
+"812217062567051294","azonenberg","2026-07-15T17:01:29.4460000+00:00","i would even be OK with needing an external repeater/retimer because its buitl in receiver can't handle as much insertion loss as the spec demands","",""
+"262706220073222144","namibj","2026-07-15T17:01:44.8270000+00:00","I'm not sure 10G RX is easy, at least not with non-peachy eyes.","",""
+"812217062567051294","azonenberg","2026-07-15T17:02:59.3350000+00:00","How feasible do you think a 2.5G RX / as-fast-as-you-can TX would be?","",""
+"812217062567051294","azonenberg","2026-07-15T17:03:15.2530000+00:00","i.e. you can use it for pcie or 1000baseX, or a super-fast one-way link","",""
+"812217062567051294","azonenberg","2026-07-15T17:03:24.2870000+00:00","perhaps as separate physical IPs for tx, rx, and common/pll","",""
+"812217062567051294","azonenberg","2026-07-15T17:03:27.2350000+00:00","that you can gang in any combo","",""
+"262706220073222144","namibj","2026-07-15T17:04:36.9450000+00:00","5G should not be a problem as long as the eye is open enough with 2-""tap"" (it's not taps but I forgot the unit, it's the ""2"" though) CTLE and no DFE to have a decent jitter tolerance. 
+Only 8b/10b though because CDR gets much harder to lock on without that many forced transitions.","",""
+"812217062567051294","azonenberg","2026-07-15T17:05:49.6950000+00:00","well all of the common 5G protocols like pcie gen1/2 and usb3 use 8b10b anyway","",""
+"812217062567051294","azonenberg","2026-07-15T17:05:52.9800000+00:00","so that's fine","",""
+"262706220073222144","namibj","2026-07-15T17:09:10.5280000+00:00","There's two parts to the PLL; the fast VCO directly tuned to the gigabit current mode logic gates, and whatever 100s of MHz intermediate you can handle with CMOS SCL clock trees that you use with probably a reference crystal and dial in to give you the CDR because it's comfy to work with; the fast VCO would run a fixed divider wide bandwidth PLL from that, likely matching the MUX ratio of the SerDes.","",""
+"262706220073222144","namibj","2026-07-15T17:09:37.2460000+00:00","Yeah except 5GBASE-R 😄","",""
+"812217062567051294","azonenberg","2026-07-15T17:22:48.6300000+00:00","5gbaseR is not 5gbaud","",""
+"812217062567051294","azonenberg","2026-07-15T17:22:52.7730000+00:00","or wait baseR","",""
+"812217062567051294","azonenberg","2026-07-15T17:22:54.4670000+00:00","is that a thing","",""
+"812217062567051294","azonenberg","2026-07-15T17:23:03.0390000+00:00","is it like downclocked 10gbaseR","",""
+"812217062567051294","azonenberg","2026-07-15T17:23:14.4080000+00:00","i wanted this yaears ago when artix7 was the new hotness to get >1 gbps off a cheap fpga to a lan","",""
+"812217062567051294","azonenberg","2026-07-15T17:23:24.0910000+00:00","i could have hypothetically built it but nothing spoke it that i could put on the far end of the link","",""
+"262706220073222144","namibj","2026-07-15T17:33:11.1430000+00:00","If I make you a parametric SPICE model for a tunable CT""L""E input buffer/limiting amplifier, where you ""design time"" tune the sizing parameters and ""run time/link tuning"" tune the bias currents, would you be in a position to subject that to sufficiently-realistic input eyes and see if there's a set of sizing parameters that let you turn the relevant range of input eyes into a ""reasonably open, with enough Vp-p opening to work for the CDR samplers (what number that means I can estimate in a few days)"" eye, while only needing to tune the bias currents to adapt between the various realistic input eyes?
+
+If the 2-stage version with like 7 bias currents (DC offset cancellation strength applied to I guess a cascode input stage that exploits the low impedance to recover some initial sensible signal amplitude for the subsequent CTLE activity; 2 second-order cells w/active-negative-feedback that work to first calmly then forcefully spread the eye open by delivering peaky gain with flatness towards DC) would be ""manageable"" for you approaches to that task, we could hope for the preparations on my side for that being done in 10~15 days...","",""
+"262706220073222144","namibj","2026-07-15T17:35:09.5720000+00:00","Exactly.
+They also adjusted the error counter fault state trigger thresholds to maintain some nominal time constant for trip speed of sorts, but other than this error monitoring/fault state adjustment, and probably fine details on the nominal eye shapes, it's literally half-rate 10GBASE-R.","",""
+"262706220073222144","namibj","2026-07-15T17:39:05.5780000+00:00","Yeah I don't know of any decent COTS switches that speak it. 
+I feel it only exists for 5GBASE-T SFP+ modules or maybe SFP+ option on something that is not supposed to be 10G PHY capable for arbitrary reason but wants to use 5GBASE-T for some forsaken reason of those two applying together... Like no one can use it so just do 10GBASE-R and throw pause packets at the far end when your small packet buffer gets full...","",""
+"812217062567051294","azonenberg","2026-07-15T17:51:34.2760000+00:00","I don't have any easy way to work with spice models. if i can get s-parameters i can use those","",""
