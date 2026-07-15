@@ -530,10 +530,44 @@ If you have a magic extracted layout, I could help with the underdocumented setu
 "169786952432746498","mithro_","2026-07-15T01:16:05.5530000+00:00","BTW When the precheckers are idle between runs I have been letting @bailey use the hardware for doing validation of designs.","","😁 (2)"
 "262706220073222144","namibj","2026-07-15T05:41:18.6770000+00:00","so, well, unless the mux controls turn out to synthesize nicely enough, hope for that to work out is now sadly somewhat limited, welp.","",""
 "262706220073222144","namibj","2026-07-15T05:46:43.5970000+00:00","(just timeline though; the issue at hand is pretty much just due to me being not given sufficcient notice to have things prepared for this scenario of how unsold slots are dealt with; that claim is based on assuming that there was more than a week until deadline when it was known that I should with high probability have that muxed-e-test ready by the deadline)","",""
-"169786952432746498","mithro_","2026-07-15T06:34:03.3940000+00:00","Anyone played with https://alpharomerojl.github.io/reticle/ at all?","",""
+"169786952432746498","mithro_","2026-07-15T06:34:03.3940000+00:00","Anyone played with https://alpharomerojl.github.io/reticle/ at all?","","❤️ (1)"
 "190171097910607873","embeddedken","2026-07-15T06:35:14.4690000+00:00","Any idea why OpenROAD (ORFS) would not automatically place a seal ring for 6_final.gds?
 ""[Error]: Layer 'GUARD_RING_MK' is not used. wafers.space requires a seal ring (guard ring) around the die.""","",""
 "323371864074485771","mole99","2026-07-15T06:41:43.5170000+00:00","The reason is that the seal ring is not part of the ORFS flow.
 
 If you are not using the LibreLane template, you can ""steal"" a seal ring from the example layouts and place it in KLayout: https://github.com/wafer-space/gf180mcu-example-layouts","","👍 (1)"
 "190171097910607873","embeddedken","2026-07-15T06:42:19.0000000+00:00","Thanks!","","👌 (1)"
+"1071653002986926112","algofoogle","2026-07-15T08:02:32.8160000+00:00","@Tim 'mithro' Ansell Project https://platform.wafer.space/projects/9fed917e-da6f-4613-b725-216f69c12b1b/ is a half-height slot with precheck-passing GDS that I hit ""submit"" on that could be included if there happens to be a spare slot available. If not, no worries: there may be more-eligibile projects lining up. Here's the repo for it: https://github.com/algofoogle/gf180ws2-raybox-zero -- I'll try and do a rev before the deadline tonight.","","🔥 (1),❤️ (5)"
+"1140876793298047028","mavmaster","2026-07-15T08:19:53.8670000+00:00","I've been having some issues with file uploads to the submission platform as shown in the photo or additionally things like: Security validation failed: URL validation failed: Failed to check file size: 403 Client Error: Forbidden for url:. Wanted to check if anyone had a workaround","2026-07_media/image-7EE7D.png",""
+"169786952432746498","mithro_","2026-07-15T08:24:05.5200000+00:00","That doesn't look like a valid URL to provide the system, what is your project ID?","",""
+"1140876793298047028","mavmaster","2026-07-15T08:27:19.5660000+00:00","We have uploads working now. Tried with an uncompressed file and through google instead of github","",""
+"691780627338625077","rebelmike","2026-07-15T08:30:06.9400000+00:00","My solution for hosting the gds file was to put it in a GitHub release. Also added the librelane logs from the build to the same release so they can be inspected if necessary","","👍 (1)"
+"169786952432746498","mithro_","2026-07-15T08:30:32.6530000+00:00","Where you trying to use https://github.com/Purdue-IEEE-EDS/WaferSpace-GF180-June26/blob/LVDS_IO/blocks/top/iref_master.gds ?","",""
+"1140876793298047028","mavmaster","2026-07-15T08:35:16.6560000+00:00","It was a different GDS but same repo","",""
+"169786952432746498","mithro_","2026-07-15T08:42:14.6550000+00:00","I just tested and it seemed to work okay? Can you give me your project code?","2026-07_media/image-6A6F2.png",""
+"262706220073222144","namibj","2026-07-15T09:21:39.1810000+00:00","ok I (practically) give up on completing any useful part of the actual _muxed e-test_ in time, librelane strikes again with confusion and lack of sufficient documentation on the matters of how-to-handle-things-that-are-not-plain-SCL-synthesis, once a user dares to try and have it ""just integrate""... welp.
+
+Can anyone help me just stamp out a DRC-legal (filler and a legal sealring) blank slate without the normal pad ring, where I can at least draw up a couple test pads for flip-chip trials that won't require boards with details/specs beyond what JLCPCB has on offer?","",""
+"262706220073222144","namibj","2026-07-15T09:26:05.9340000+00:00","@Essen @Tim 'mithro' Ansell I'm sorry the e-test MUX stuff won't make; if there's sufficient expected spare silicon/otherwise-blank slots, I'd like to at least include 2 or 3 candidates of flip chip pads; that won't touch anything but M5 and the nitride passivation/""pad opening"" layers; if it's DRC-legal to have floating pads (not connected to diffusion), would I have to do the filler for the other layers myself, necessarily?","","🫂 (1)"
+"190171097910607873","embeddedken","2026-07-15T09:31:37.2050000+00:00","Is there an existing example of a density fill script for OpenROAD?","",""
+"323371864074485771","mole99","2026-07-15T09:32:42.8190000+00:00","Yes: `gf180mcuD/libs.tech/klayout/tech/scripts/fill_all.rb`
+
+`klayout -b -zz -r path/to/script -rd input=input.gds -rd output=input.gds`","","waferspace (1),❤️ (1)"
+"323371864074485771","mole99","2026-07-15T09:32:57.8620000+00:00","The LibreLane template does the fill and density check for you :)","",""
+"262706220073222144","namibj","2026-07-15T09:33:21.5210000+00:00","I saw something on the matter in KLayout's PDK-loaded menu, iirc. No idea how functional it is, though.
+
+If the flow for this will be that I give someone a GDS that only draws on these two layers of interest, to get it plopped down onto a filler+sealring combo that's otherwise sufficciently DRC-legal due to filler and all, that'd also work.","",""
+"1161210755169919007","sudonet","2026-07-15T10:00:50.0300000+00:00","damn it's 8:00 pm here in sydney","",""
+"1161210755169919007","sudonet","2026-07-15T10:01:04.6130000+00:00","still another 2 hours till deadline","",""
+"1484537281934131200","dburnett_98395","2026-07-15T10:28:22.6620000+00:00","We have had sealring error issues since yesterday that only appeared when uploading the GDS for final checks online, but they seem to be sorted out. Unfortunately the online GDS verification has been running for an hour already. Hopefully it finishes in the next 90 minutes :\","",""
+"1161210755169919007","sudonet","2026-07-15T10:32:32.3030000+00:00","hope it gets accepted in time!","",""
+"190171097910607873","embeddedken","2026-07-15T10:49:32.7980000+00:00","Yea I kinda shot myself in the foot using OpenROAD","",""
+"190171097910607873","embeddedken","2026-07-15T10:49:47.9830000+00:00","","2026-07_media/overlap-395EA.png","👀 (1),💦 (1)"
+"190171097910607873","embeddedken","2026-07-15T10:50:37.3330000+00:00","OpenROAD's pad placement naturally presses directly against the DIE AREA without any padding.","",""
+"190171097910607873","embeddedken","2026-07-15T10:50:57.6340000+00:00","I imagine pad/seal ring overlap is not allowed","",""
+"596068704471482370","246tnt","2026-07-15T10:51:06.4030000+00:00","Huh no.","",""
+"596068704471482370","246tnt","2026-07-15T10:51:35.0040000+00:00","I mean, even it was, that'd be useless, shorting all the pads together, there isn't much difference between that and nothing.","","😂 (2)"
+"596068704471482370","246tnt","2026-07-15T10:52:59.7030000+00:00","I'm kind of curious why you went for ORFS though ... I see why ORFS was originally created, but now that librelane exist, what's the benefit of ORFS ?","",""
+"190171097910607873","embeddedken","2026-07-15T10:56:57.1960000+00:00","I was not a fan of OpenLane a few years ago; seems like LibreLane would have been much easier.","",""
+"596068704471482370","246tnt","2026-07-15T11:03:14.5970000+00:00","I wasn't a fan of OpenLane , the first version either. But OpenLane 2 and now LibreLane have a much better architecture and design, there is no contest.","",""
+"220639106915368960","tholin","2026-07-15T11:05:32.0440000+00:00","I think this is the most dense thing I’ve ever taped out","2026-07_media/image-099A4.png","👀 (3),waferspace (3)"

@@ -1986,6 +1986,8 @@ https://alpharomerojl.github.io/reticle/
 Reticle
 Browser-native, GPU-accelerated editor for very large hierarchical 2D IC-layout scenes.
 
+{Reactions}
+❤️
 
 [2026-07-15 6:35 a.m.] embeddedken
 Any idea why OpenROAD (ORFS) would not automatically place a seal ring for 6_final.gds?
@@ -2006,6 +2008,167 @@ Thanks!
 {Reactions}
 👌
 
+[2026-07-15 8:02 a.m.] algofoogle
+@Tim 'mithro' Ansell Project https://platform.wafer.space/projects/9fed917e-da6f-4613-b725-216f69c12b1b/ is a half-height slot with precheck-passing GDS that I hit "submit" on that could be included if there happens to be a spare slot available. If not, no worries: there may be more-eligibile projects lining up. Here's the repo for it: https://github.com/algofoogle/gf180ws2-raybox-zero -- I'll try and do a rev before the deadline tonight.
+
+{Embed}
+https://platform.wafer.space/projects/9fed917e-da6f-4613-b725-216f69c12b1b/
+…
+Platform for wafer.space low cost silicon manufacturing.
+
+{Embed}
+https://github.com/algofoogle/gf180ws2-raybox-zero
+GitHub - algofoogle/gf180ws2-raybox-zero
+Contribute to algofoogle/gf180ws2-raybox-zero development by creating an account on GitHub.
+2026-07_media/e03367bf-e8fd-4c74-a2b1-fa5658565df8-C5073
+
+{Reactions}
+🔥 ❤️ (5)
+
+[2026-07-15 8:19 a.m.] mavmaster
+I've been having some issues with file uploads to the submission platform as shown in the photo or additionally things like: Security validation failed: URL validation failed: Failed to check file size: 403 Client Error: Forbidden for url:. Wanted to check if anyone had a workaround
+
+{Attachments}
+2026-07_media/image-7EE7D.png
+
+
+[2026-07-15 8:24 a.m.] mithro_
+That doesn't look like a valid URL to provide the system, what is your project ID?
+
+
+[2026-07-15 8:27 a.m.] mavmaster
+We have uploads working now. Tried with an uncompressed file and through google instead of github
+
+
+[2026-07-15 8:30 a.m.] rebelmike
+My solution for hosting the gds file was to put it in a GitHub release. Also added the librelane logs from the build to the same release so they can be inspected if necessary
+
+{Reactions}
+👍
+
+[2026-07-15 8:30 a.m.] mithro_
+Where you trying to use https://github.com/Purdue-IEEE-EDS/WaferSpace-GF180-June26/blob/LVDS_IO/blocks/top/iref_master.gds ?
+
+{Embed}
+https://github.com/Purdue-IEEE-EDS/WaferSpace-GF180-June26/blob/LVDS_IO/blocks/top/iref_master.gds
+WaferSpace-GF180-June26/blocks/top/iref_master.gds at LVDS_IO · Pu...
+Contribute to Purdue-IEEE-EDS/WaferSpace-GF180-June26 development by creating an account on GitHub.
+2026-07_media/WaferSpace-GF180-June26-AD549
+
+
+[2026-07-15 8:35 a.m.] mavmaster
+It was a different GDS but same repo
+
+
+[2026-07-15 8:42 a.m.] mithro_
+I just tested and it seemed to work okay? Can you give me your project code?
+
+{Attachments}
+2026-07_media/image-6A6F2.png
+
+
+[2026-07-15 9:21 a.m.] namibj
+ok I (practically) give up on completing any useful part of the actual _muxed e-test_ in time, librelane strikes again with confusion and lack of sufficient documentation on the matters of how-to-handle-things-that-are-not-plain-SCL-synthesis, once a user dares to try and have it "just integrate"... welp.
+
+Can anyone help me just stamp out a DRC-legal (filler and a legal sealring) blank slate without the normal pad ring, where I can at least draw up a couple test pads for flip-chip trials that won't require boards with details/specs beyond what JLCPCB has on offer?
+
+
+[2026-07-15 9:26 a.m.] namibj
+@Essen @Tim 'mithro' Ansell I'm sorry the e-test MUX stuff won't make; if there's sufficient expected spare silicon/otherwise-blank slots, I'd like to at least include 2 or 3 candidates of flip chip pads; that won't touch anything but M5 and the nitride passivation/"pad opening" layers; if it's DRC-legal to have floating pads (not connected to diffusion), would I have to do the filler for the other layers myself, necessarily?
+
+{Reactions}
+🫂
+
+[2026-07-15 9:31 a.m.] embeddedken
+Is there an existing example of a density fill script for OpenROAD?
+
+
+[2026-07-15 9:32 a.m.] mole99
+Yes: `gf180mcuD/libs.tech/klayout/tech/scripts/fill_all.rb`
+
+`klayout -b -zz -r path/to/script -rd input=input.gds -rd output=input.gds`
+
+{Reactions}
+waferspace ❤️
+
+[2026-07-15 9:32 a.m.] mole99
+The LibreLane template does the fill and density check for you :)
+
+
+[2026-07-15 9:33 a.m.] namibj
+I saw something on the matter in KLayout's PDK-loaded menu, iirc. No idea how functional it is, though.
+
+If the flow for this will be that I give someone a GDS that only draws on these two layers of interest, to get it plopped down onto a filler+sealring combo that's otherwise sufficciently DRC-legal due to filler and all, that'd also work.
+
+
+[2026-07-15 10:00 a.m.] sudonet
+damn it's 8:00 pm here in sydney
+
+
+[2026-07-15 10:01 a.m.] sudonet
+still another 2 hours till deadline
+
+
+[2026-07-15 10:28 a.m.] dburnett_98395
+We have had sealring error issues since yesterday that only appeared when uploading the GDS for final checks online, but they seem to be sorted out. Unfortunately the online GDS verification has been running for an hour already. Hopefully it finishes in the next 90 minutes :\
+
+
+[2026-07-15 10:32 a.m.] sudonet
+hope it gets accepted in time!
+
+
+[2026-07-15 10:49 a.m.] embeddedken
+Yea I kinda shot myself in the foot using OpenROAD
+
+
+[2026-07-15 10:49 a.m.] embeddedken
+
+
+{Attachments}
+2026-07_media/overlap-395EA.png
+
+{Reactions}
+👀 💦
+
+[2026-07-15 10:50 a.m.] embeddedken
+OpenROAD's pad placement naturally presses directly against the DIE AREA without any padding.
+
+
+[2026-07-15 10:50 a.m.] embeddedken
+I imagine pad/seal ring overlap is not allowed
+
+
+[2026-07-15 10:51 a.m.] 246tnt
+Huh no.
+
+
+[2026-07-15 10:51 a.m.] 246tnt
+I mean, even it was, that'd be useless, shorting all the pads together, there isn't much difference between that and nothing.
+
+{Reactions}
+😂 (2)
+
+[2026-07-15 10:52 a.m.] 246tnt
+I'm kind of curious why you went for ORFS though ... I see why ORFS was originally created, but now that librelane exist, what's the benefit of ORFS ?
+
+
+[2026-07-15 10:56 a.m.] embeddedken
+I was not a fan of OpenLane a few years ago; seems like LibreLane would have been much easier.
+
+
+[2026-07-15 11:03 a.m.] 246tnt
+I wasn't a fan of OpenLane , the first version either. But OpenLane 2 and now LibreLane have a much better architecture and design, there is no contest.
+
+
+[2026-07-15 11:05 a.m.] tholin
+I think this is the most dense thing I’ve ever taped out
+
+{Attachments}
+2026-07_media/image-099A4.png
+
+{Reactions}
+👀 (3) waferspace (2)
+
 ==============================================================
-Exported 391 message(s)
+Exported 419 message(s)
 ==============================================================
