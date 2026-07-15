@@ -129,6 +129,51 @@ Takes around 12 hrs
 Just use a buf2 into a buf4 maybe?
 
 
+[2026-07-14 9:27 p.m.] essen__
+~~Hi, I think there is an issue with the default template for the 1x0.5 slot. 
+Seems to only have 54 IO pins, not the expected 56 : 
+https://github.com/wafer-space/gf180mcu-project-template/blob/33194e694f02a392dcf561d7d9fbcc70714cf3af/src/slot_defines.svh#L33-L47~~
+
+{Embed}
+https://github.com/wafer-space/gf180mcu-project-template/blob/33194e694f02a392dcf561d7d9fbcc70714cf3af/src/slot_defines.svh
+gf180mcu-project-template/src/slot_defines.svh at 33194e694f02a392d...
+Project template for wafer.space MPW runs using the gf180mcu PDK - wafer-space/gf180mcu-project-template
+2026-07_media/gf180mcu-project-template-79AA9
+
+
+[2026-07-14 9:29 p.m.] namibj
+
+
+
+[2026-07-14 9:29 p.m.] namibj
+@Essen was so nice as to help with the project wrapper aspects for the _multiplexed e-test,_ but has run into breakage of some kind trying to set up the COB-supported default pad ring of the 1x0.5 slot.
+
+
+[2026-07-14 9:29 p.m.] namibj
+
+
+
+[2026-07-14 9:29 p.m.] namibj
+The repo where things are happening
+
+
+[2026-07-14 9:33 p.m.] essen__
+~~Same for 0.5x0.5 it looks suss: 
+```
+56 (48 IO + 8 power)
+```
+But there are only have 46 ? Is there something I am missing here ?~~
+
+
+[2026-07-14 9:48 p.m.] essen__
+Ah ! I figure it out, I am in idiot 🤦 ( I really need to sleep more ) 
+**It's clk and rst !**
+
+
+[2026-07-14 9:48 p.m.] essen__
+Sorry for the noise.
+
+
 ==============================================================
-Exported 24 message(s)
+Exported 32 message(s)
 ==============================================================
