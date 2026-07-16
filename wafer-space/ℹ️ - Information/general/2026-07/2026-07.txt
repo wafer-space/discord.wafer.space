@@ -2813,6 +2813,8 @@ Because everything in the choice of shapes and their arrangement in the GDS is a
 
 (Such thyristor approaches can beat passive ESD diodes by a lot, especially in situations where there are no convenient fat power rails a diode could clamp to, like a 5V CMOS GPIO on a chip that's otherwise running a 1.8V core; it'd be easy to overload the entire 5V VDD rail if there are just a couple GPIO cells on that supply.)
 
+{Reactions}
+🔥
 
 [2026-07-15 4:18 p.m.] namibj
 _working towards it_
@@ -3056,6 +3058,174 @@ I feel it only exists for 5GBASE-T SFP+ modules or maybe SFP+ option on somethin
 I don't have any easy way to work with spice models. if i can get s-parameters i can use those
 
 
+[2026-07-15 7:42 p.m.] namibj
+Behavior is non-linear; how would you handle a DFE?
+
+I think I could set it up to have you feed a time-series in, possibly parametric, possibly subjected to parametric distortion, and produce the gradient of the output waveform with respect to the parameters?
+
+Gradient-free output from SPICE would of course be trivial but I'd guess it might be substantially less powerful.
+
+
+[2026-07-15 7:46 p.m.] azonenberg
+I mean you could probably build something as a dedicated filter block
+
+
+[2026-07-15 7:47 p.m.] azonenberg
+but the existing channel emulation block just works with s-parameters
+
+
+[2026-07-15 7:48 p.m.] namibj
+(I'm thinking have the cascode (common-gate) input stage be DC current biased through the output load of it and at the source side sink into the 50 Ohm input termination resistor, while matching/compensating the input capacitance of the cascode with an input series inductor.)....
+
+
+[2026-07-15 7:48 p.m.] azonenberg
+in general ngscopeclient is not really a circuit simulator it works with waveform data
+
+
+[2026-07-15 7:49 p.m.] azonenberg
+it assumes you have a waveform plugged into an ideal termination and then do something to it
+
+
+[2026-07-15 7:49 p.m.] azonenberg
+so like, you can add emphasis or equalization from a simple tap model or something
+
+
+[2026-07-15 8:02 p.m.] namibj
+Ok so the idea was that I could relatively straight forward adapt the recently tuned 10 Gbit/s limiting amplifier cell I wanted to use to boost the drive of the MUX to 50 Ohm output strength levels; add an impedance matching input stage dual-acting to handle DC offset cancellation (I.e., drop the low frequency gain towards zero); figure out how to present a representative load to the output that loads the CTLE stage's output like a CDR sampler would; then give that to you.
+
+So that you can use whatever approaches you would normally apply for figuring out whichever tuning dial settings of a CT"L"E properly open the eye after a simulated channel.
+
+Then you'd loop that thing to force progressively worse channels onto it, tuning the SPICE model's tunables/synthesis-instantiation-arguments to let it keep up with the worsening channels, while still always checking that the less-bad channels don't end up exceeding the input amplitude "linear" range (despite attempting to adjust the run-time-dials (bias currents) to get the equalizer "back" to acceptable emphasis, considering that we're expecting the circuit to become suited for more and more peaking and a gain).
+
+
+[2026-07-15 8:07 p.m.] vpro
+Haha, this is super cool. Makes sense, we did some characterization work in labs and classes, so this seems like it would make sense with regards to having fixed designs with certain curves to fit
+
+
+[2026-07-15 8:07 p.m.] vpro
+I'll definitely take some time to read up on this though, I can't say I fully understood everything
+
+
+[2026-07-15 8:08 p.m.] vpro
+Let's do it! I'm pretty green with SerDes design, but would like to help in any capacity I can.
+
+
+[2026-07-15 8:08 p.m.] namibj
+If this CT"L"E was Verilog instead of spice, how would you search for instantiation arguments that allow the run-time-tunable registers to cover the entire range of expected channels (open the eye enough for the slicer to maintain negligible BER), starting off with conservative instantiation arguments that are incapable of providing substantial gain or peaking, but are sufficiently obvious to come up with by hand, forcing it to handle worse and worse channels as the instantiation arguments become better?
+
+
+[2026-07-15 8:09 p.m.] vpro
+For simulation, isn't this somewhat of a "closed" problem with the prevalence of the IBIS-AMI spec?
+
+
+[2026-07-15 8:10 p.m.] vpro
+Something I wanted to build to help folks onboard onto playing around with SerDes modules (through simulation), is essentially designing a harness to allow verilator C++ to be linked to the dlls that AMI would consume to define the "algorithm" portion of simulation
+
+
+[2026-07-15 8:11 p.m.] vpro
+Unsure if I'm missing something / making some misguided assumptions
+
+
+[2026-07-15 8:11 p.m.] vpro
+https://github.com/WXY163/ezAMI was looking at this work (and the associated paper) as inspiration
+
+{Embed}
+https://github.com/WXY163/ezAMI
+GitHub - WXY163/ezAMI: an C++ IBIS-AMI generation tool
+an C++ IBIS-AMI generation tool. Contribute to WXY163/ezAMI development by creating an account on GitHub.
+2026-07_media/ezAMI-1E5E4
+
+
+[2026-07-15 8:15 p.m.] namibj
+Well so my case is not verilog.
+
+
+[2026-07-15 8:16 p.m.] vpro
+I assume some analog blocks?
+
+
+[2026-07-15 8:17 p.m.] namibj
+It's a spice subcircuit parametrized by a bunch of synthesis-time adjustables, which it then turns into underlying spice model instance parameters with the built in expression support of the SPICE engine.
+
+
+[2026-07-15 8:17 p.m.] vpro
+realistically it seems like you can pipe any function into the spec for the Init or GetWave, and still reap the benefits. At some point you have to wonder if there is any merit to using the spec as opposed to simply creating a bespoke simulator
+
+
+[2026-07-15 8:18 p.m.] vpro
+but it should be plenty useful if you could model the eqns in C++ and just link it into some AMI model
+
+
+[2026-07-15 8:19 p.m.] namibj
+There's also the mentioned about 7 bias currents it takes that in a tapeout are adjusted by suitably configured DACs. (Like, think number of bits, offset, amplitude of LSB.)
+
+
+[2026-07-15 8:21 p.m.] vpro
+makes sense, afaik there's a reason why the industry tended away from doing pure spice simulations of the whole SerDes module. Though, I'm curious what your intended goal is and what software doesn't exist to simulate it?
+
+
+[2026-07-15 8:23 p.m.] namibj
+The goal is to start with hand picked synthesis parameters that give behavior closer to a unity gain buffer than a wide range adjustable variable-gain-amplifier/CT"L"E combo, and maybe also give a set of  bias currents that make it behave like that unity-ish-gain buffer so the optimizer can rely on some trust-region search algorithm to not get lost in non-functional regions of the parameter space.
+
+
+[2026-07-15 8:25 p.m.] namibj
+It's not for the full SerDes we're just trying to find a tuple of the about 20~30 transistor sizing parameters which instantiated a CT"L"E that can be run-time-tuned from a good channel all the way to a mildly-shitty channel.
+
+
+[2026-07-15 8:26 p.m.] vpro
+I see. Why not just use QSpice or Xyce or something to simulate and design it? Or is this just like a "this is what we have to do, but haven't done yet", kinda thing
+
+
+[2026-07-15 8:27 p.m.] namibj
+The difficulty for me is that I don't know how I should ideally do the tuning of the bias currents for various channels to verify that it will be capable of tuning to all those channels when taped out.
+
+
+[2026-07-15 8:30 p.m.] namibj
+I guess an idea would be to have a set of representative channels and keep the bias currents needed for each one updated as the parameter tuning goes on, enforcing boundaries on the searched space by banning movement in parameter space that would force any of the already tunable channels's bias currents to get out-of-legal-range?
+
+
+[2026-07-15 8:31 p.m.] namibj
+Then it's "just" a question of how to properly express the ability to eye open in the Xyce run?
+
+
+[2026-07-15 8:32 p.m.] vpro
+I think you need "the rest of the owl" at some point, or to design some heuristic which provides a similar amount of confidence
+
+
+[2026-07-15 8:32 p.m.] vpro
+this is kind of why I think folks use Matlab to export models of "whole serdes", and then just poke around with the parameters to solve and isolate for values (biases in your case) that they care about
+
+
+[2026-07-15 8:33 p.m.] vpro
+I'm not too sure, I probably need to look into this a lot more and start breaking things before I can give definitive answers
+
+
+[2026-07-15 8:35 p.m.] vpro
+if you're designing a CT"L"E, maybe it does actually make sense to port over some compiled C++ that fits into the Algorithm portion of an AMI. The AMI will give you the simulation harness to see the eye and test the "whole system" in operation, whereas you can write the code which updates the logic based on the spice subcircuits you defined
+
+
+[2026-07-15 8:37 p.m.] namibj
+If you could express that eye opening aspect in transient mode Xyce I think it should be fairly straight forward to use it's `.SENS` to compute gradients of the bias current choices w.r.t. the resulting output eye (locally for each channel that's already open), and for-subsequent-aggregated-summing the gradients of the instantiation parameters which are shared across all tested channels and therefore have to be basically just added up (iirc differentiation rules correctly) over those channels, to get the global shared desire of how the parameters should evolve to enable better eyes.
+
+{Reactions}
+👍
+
+[2026-07-15 8:40 p.m.] namibj
+Well it's wired like a plain active CTLE (gain-peaking linear amplifier), it just has an ability to somewhat deliberately clip it's output amplitude by essentially having too much gain for the voltage supply/bias conditions of the output to possibly remain linear.
+
+
+[2026-07-15 8:42 p.m.] namibj
+(I've noticed the limiting amplifier gain cell I've already mostly tuned to exhibit notable run-time-adjustable amounts of gain-peaking and overall/low-frequency gain, which AFAIK is basically what one wants from a CTLE anyways?)
+
+
+[2026-07-15 8:52 p.m.] namibj
+Because I have not yet figured out how to measure the eye quality in a way where I could hope to get useful gradients from Xyce, which I btw. low key need to get _anywhere_ without days of compute trying to explore a 10~30 dimensional (even if reasonably compressing it by rotating the vector space until only a few dimensions still experience substantial changes during the optimization) search space of transistor sizing, and let's not forget that we constantly have to keep the run time tunables updated for all channels that we already solved so that we'll notice if it ever tries to sacrifice the ability to read a good channel to learn how to (better) understand the newest shitty channel.
+
+
+[2026-07-15 8:53 p.m.] namibj
+Clear enough what this upcoming CT"L"E optimization/search is supposed to accomplish?
+
+
 ==============================================================
-Exported 609 message(s)
+Exported 647 message(s)
 ==============================================================

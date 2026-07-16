@@ -33,6 +33,27 @@ Fortunately on my SRAM test chip I went for a `buf_12`.  But I expect that my or
 I'll try to simulate the old broken buffer behavior on very low supply voltage around next week or thereabouts; there's a chance it's operable at least if you don't have any deliberate power gating transistors in your design that would rely on sufficiently strong gate drive for sufficiently tame voltage drop.
 
 
+[2026-07-15 8:37 p.m.] rtimothyedwards_19428
+Well, I did a count of the `buff_8` on `gf180mcu_ocd_openframe` (my PicoRV32 test chip with all 3.3V components) and it uses `buff_8` 2,498 times, so that is potentially a lot of current.
+
+
+[2026-07-15 8:42 p.m.] rtimothyedwards_19428
+I assume that the buffer is _functional_ or else `lctime` would have produced garbage output in the .lib file for it.  The amount of current is going to be the issue.  I estimate somewhere between a half an amp and an amp total.
+
+
+[2026-07-15 8:54 p.m.] namibj
+It does _buffer,_ on tt 3v3 default spice temperature it has an output high of like 2.71 V.
+
+
+[2026-07-15 8:57 p.m.] namibj
+The pertinent question will be how the STA holds up as you drop voltage and clock.
+Does it reach a point where it won't try to melt the die (2.5W is "manageable") and still doesn't experience hold violations?
+
+
+[2026-07-15 8:58 p.m.] namibj
+(I'm thinking that maybe at like 1.2V or something the static power stops needing a heatsink and the chip can run at still like 1% nominal clock speed or such.)
+
+
 ==============================================================
-Exported 5 message(s)
+Exported 10 message(s)
 ==============================================================
