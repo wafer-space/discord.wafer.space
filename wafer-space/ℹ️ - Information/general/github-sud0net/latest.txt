@@ -1,0 +1,108 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / general / GitHub - SUD0NET/as16: 16-bit RISC CPU d...
+After: 2026-06-30 11:59 p.m.
+Before: 2026-08-01 12:00 a.m.
+==============================================================
+
+[2026-07-16 10:46 p.m.] kcolley
+
+
+
+[2026-07-16 10:46 p.m.] kcolley
+Very cool! Documentation of instruction format could use some improvement though. It took me a while to figure out that this architecture **CAN** in fact read memory, as the opcode is actually only 3 bits (not 4 like in the readme) and the top bit is actually the "read memory bit". Predicates aren't defined either, so I'm still a bit confused on what bits to set for the C/Z/Invert predicate bits to do something logical, or if there's a way to make an unconditional instruction.
+
+
+[2026-07-16 10:48 p.m.] kcolley
+And if I'm correct the only way to branch is by writing to the PC register? Which combined with predicates instructions allows for conditional branching, nice
+
+{Reactions}
+✅
+
+[2026-07-16 10:51 p.m.] kcolley
+Also I think there's no way to add reg + reg, you can only add reg + imm or reg + mem?
+
+{Reactions}
+✅
+
+[2026-07-16 11:52 p.m.] sudonet
+documentation, indeed, needs improvement
+
+
+[2026-07-16 11:52 p.m.] sudonet
+the opcode is actually 3-bit, as you stated
+
+
+[2026-07-16 11:56 p.m.] sudonet
+but there is a modifier for the ADD/ADC mnemonics in line 35 of as16.v: `ADD, ADC : {carry, result} = grf_dout + OR_q + (!IR_q[8] & C_q);`
+
+
+[2026-07-17 12:02 a.m.] kcolley
+Though bit 8 is just one of the normal opcode bits, specifically the low bit that distinguishes between ADD and ADC. So still a 3-bit opcode
+
+{Reactions}
+✅
+
+[2026-07-17 12:02 a.m.] sudonet
+exactly.
+
+
+[2026-07-17 12:23 a.m.] kcolley
+Oh also it looks like you can only read and write to constant memory addresses? No array indexing or stack?
+
+
+[2026-07-17 12:24 a.m.] kcolley
+Unless you do some self modifying code shenanigans, I guess...
+
+
+[2026-07-17 12:27 a.m.] sudonet
+well, `EA_ED` does let you add a reg to an offset to form an address...
+
+
+[2026-07-17 12:29 a.m.] kcolley
+Ah, missed that
+
+{Reactions}
+👍
+
+[2026-07-17 12:29 a.m.] kcolley
+I also don't see how sram is connected to anything in the core module. Seems unconnected?
+
+{Reactions}
+✅
+
+[2026-07-17 12:29 a.m.] sudonet
+exactly
+
+
+[2026-07-17 12:30 a.m.] sudonet
+kinda just hardwired it outside from the cpu
+
+
+[2026-07-17 12:30 a.m.] kcolley
+So you're planning to use an external SRAM chip and ignore the internal SRAM you're generating?
+
+
+[2026-07-17 12:30 a.m.] sudonet
+yep
+
+
+[2026-07-17 12:31 a.m.] sudonet
+just going to treat the as16 as a microprocessor
+
+
+[2026-07-17 12:31 a.m.] sudonet
+besides, i kinda rushed the design in those 3 days
+
+
+[2026-07-17 12:32 a.m.] kcolley
+Gotcha, yeah that was a very quick window haha
+
+
+[2026-07-17 12:36 a.m.] sudonet
+overall, i'm kinda happy for my first tapeout
+
+
+==============================================================
+Exported 22 message(s)
+==============================================================
