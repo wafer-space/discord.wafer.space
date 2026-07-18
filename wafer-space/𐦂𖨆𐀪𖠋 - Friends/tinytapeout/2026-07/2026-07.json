@@ -16,7 +16,7 @@
     "after": "2026-06-30T23:59:59.999+00:00",
     "before": "2026-08-01T00:00:00+00:00"
   },
-  "exportedAt": "2026-07-18T14:54:26.604838+00:00",
+  "exportedAt": "2026-07-18T18:55:16.1991814+00:00",
   "messages": [
     {
       "id": "1521979221751238837",
@@ -546,7 +546,80 @@
       ],
       "mentions": [],
       "inlineEmojis": []
+    },
+    {
+      "id": "1528111708634091620",
+      "type": "Default",
+      "timestamp": "2026-07-18T18:50:22.281+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "✅ rohanverma94 reported @RebelMike's [TinyQV Risc-V SoC](https://www.tinytapeout.com/chips/ttgf0p2/tt_um_MichaelBell_tinyQV) as working: CORDIC peripheral on TinyQV works. Tested sine and cosine for angles from 0 to 2π. Check the results and the MicroPython script [here](https://gist.github.com/rohanverma94/89673a98bc9b98547edd95e2b623e5a7).\n\n- Problem: the core only converges within ±99.9° (sum of micro-rotations, Σatan(2⁻ⁱ)). Push it past that and the rotator diverges into garbage.\n- Fix: fold every angle into [-π/2, π/2], track the quadrant, adjust signs accordingly.\n- Result: accurate across the whole range. RMS error ~0.23e-3, mean absolute error ~0.16e-3.\n- Worst case lands right at the fold boundaries (±90°), where the input angle is largest so the rotator runs the most micro-rotations and piles up the most residual, hence peak error 0.57e-3 at 168.75°/348.75°.\n- Folding checks out: all four quadrants mirror each other cleanly, and the exact angles (0/90/180/270°) come out within 0.6e-4.",
+      "author": {
+        "id": "1167741026950197258",
+        "name": "TTBot",
+        "discriminator": "6027",
+        "nickname": "TTBot",
+        "color": null,
+        "isBot": true,
+        "roles": [
+          {
+            "id": "1439357874168926249",
+            "name": "TTBot",
+            "color": null,
+            "position": 2
+          }
+        ],
+        "avatarUrl": "2026-07_media/a244356b12ec079a6c73b0b535d1cc67-73745.png"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "39 TinyQV Risc-V SoC - Tiny Tapeout",
+          "url": "https://www.tinytapeout.com/chips/ttgf0p2/tt_um_MichaelBell_tinyQV",
+          "timestamp": null,
+          "description": "A Risc-V SoC for Tiny Tapeout",
+          "thumbnail": {
+            "url": "2026-07_media/social-preview-A67C6",
+            "width": 1200,
+            "height": 630
+          },
+          "images": [],
+          "fields": [],
+          "inlineEmojis": []
+        },
+        {
+          "title": "Results for CORDIC peripheral on tinyQV (gf180mcu)",
+          "url": "https://gist.github.com/rohanverma94/89673a98bc9b98547edd95e2b623e5a7",
+          "timestamp": null,
+          "description": "Results for CORDIC peripheral on tinyQV (gf180mcu) - results_tinyqv_cordic.md",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "2026-07_media/gist-og-image-54fd7dc0713e-84C3B.png",
+            "width": 1280,
+            "height": 640
+          },
+          "images": [],
+          "fields": [],
+          "inlineEmojis": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "691780627338625077",
+          "name": "rebelmike",
+          "discriminator": "0000",
+          "nickname": "RebelMike",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-07_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+        }
+      ],
+      "inlineEmojis": []
     }
   ],
-  "messageCount": 7
+  "messageCount": 8
 }
