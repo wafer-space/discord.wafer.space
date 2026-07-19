@@ -3342,6 +3342,26 @@ yeah this makes a lot of sense, I'm going to read up more on what current simula
 Silly question - has anyone done a rom generator?
 
 
+[2026-07-19 5:47 a.m.] egorxe
+No, as far as I'm aware. I've done an efuse array generator, but not a regular ROM. There is no much reason to implement a ROM generator for gf180mcu, because Librelane-implemented ROM would usually be smaller and faster than classic VIA-programnable ROM array, and there is no option to patch only a VIA mask with wafer.space.
+
+
+[2026-07-19 7:47 a.m.] mole99
+Sylvain is working on a ROM compiler. See:
+
+- https://www.youtube.com/watch?v=MlqDm_Kg0u8
+- https://www.youtube.com/watch?v=j_K0H7tIKok
+
+It has already been silicon-verified on sky130.
+At some point, it may be ported to gf180mcu.
+
+I do think that a ROM compiler would be very useful as it should be denser much more predictable than just a standard-cell ROM: you can swap out the data late in the design process and the size and timing will stay the same.
+
+
+[2026-07-19 8:40 a.m.] 246tnt
+Started a thread.
+
+
 ==============================================================
-Exported 668 message(s)
+Exported 671 message(s)
 ==============================================================
