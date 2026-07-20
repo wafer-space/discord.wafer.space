@@ -5,3 +5,11 @@ AuthorID,Author,Date,Content,Attachments,Reactions
 I have been drafing how to adapt it to gf180. Some of the tricks and structure I used in sky130 don't really apply here ( actually then end up being counter productive ) but I have a few things up my sleeve that I hope will pan out.
 
 Priority ATM is however to validate the sky130 one. Although it's been silicon proven as far as it outputs the right data, the whole timing validation remains to be done and that's not a small thing 😅","","👍 (2)"
+"1498420485531111548","robtaylor_52029","2026-07-20T12:11:17.1980000+00:00","Thank you both. 
+
+I guess a possible sythesis based solution could be to have a librelane step that builds a macro for the rom (cached om rom content), which would give the benefits @Leo Moser (mole99) mentioned without needing to port to every process.","",""
+"596068704471482370","246tnt","2026-07-20T12:43:07.7800000+00:00","I don't see how that would work. If you use a normal synthesis process to build a ROM, the size of that macro is heavily dependent  on the ROM content. If you change the rom content, the size would change.","",""
+"262706220073222144","namibj","2026-07-20T12:50:37.4430000+00:00","I think the idea is to avoid paying the ROM's PnR cost each time?","",""
+"1498420485531111548","robtaylor_52029","2026-07-20T13:41:19.1320000+00:00","true.. isn't that also the case for a ram generator? I guess you could configure a macro block size, pins etc","",""
+"1498420485531111548","robtaylor_52029","2026-07-20T13:41:44.0700000+00:00","could cache based on pdk and hash of rom contents","",""
+"1498420485531111548","robtaylor_52029","2026-07-20T13:46:02.0570000+00:00","I wonder if there's a way to calculate what the max area could be for a given rom size. I'm finding it hard to think about that though 😅","",""

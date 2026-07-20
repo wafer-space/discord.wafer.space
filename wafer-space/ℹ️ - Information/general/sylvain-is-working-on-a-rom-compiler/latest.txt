@@ -19,6 +19,32 @@ Priority ATM is however to validate the sky130 one. Although it's been silicon p
 {Reactions}
 👍 (2)
 
+[2026-07-20 12:11 p.m.] robtaylor_52029
+Thank you both. 
+
+I guess a possible sythesis based solution could be to have a librelane step that builds a macro for the rom (cached om rom content), which would give the benefits @Leo Moser (mole99) mentioned without needing to port to every process.
+
+
+[2026-07-20 12:43 p.m.] 246tnt
+I don't see how that would work. If you use a normal synthesis process to build a ROM, the size of that macro is heavily dependent  on the ROM content. If you change the rom content, the size would change.
+
+
+[2026-07-20 12:50 p.m.] namibj
+I think the idea is to avoid paying the ROM's PnR cost each time?
+
+
+[2026-07-20 1:41 p.m.] robtaylor_52029
+true.. isn't that also the case for a ram generator? I guess you could configure a macro block size, pins etc
+
+
+[2026-07-20 1:41 p.m.] robtaylor_52029
+could cache based on pdk and hash of rom contents
+
+
+[2026-07-20 1:46 p.m.] robtaylor_52029
+I wonder if there's a way to calculate what the max area could be for a given rom size. I'm finding it hard to think about that though 😅
+
+
 ==============================================================
-Exported 2 message(s)
+Exported 8 message(s)
 ==============================================================
