@@ -3411,6 +3411,135 @@ Twenty years ago, getting a custom circuit board made was slow, expensive, and p
 {Reactions}
 👀 (3) 👍 (9) 💜 🥳 ❤️
 
+[2026-07-21 7:47 p.m.] namibj
+Hmm, so, I've done some more thinking and reading (e.g. https://downloads.graniteriverlabs.com/hubfs/Presentation-and-Publication/PCIe_EQ_and_Optimization_Fulldeck-FINAL.pdf ), and well, I think I could get Xyce to produce a sufficiently dense grid of S-parameter tables if the concrete frequencies of concern are known, including probably first-order gradients of those S-parameters w.r.t. the sweep-tunables; that's for each block in the CTLE setup, i.e., the resistive loads, and the differential pairs on their tail current sources; approximating reasonably representative bias-to-substrate voltages.
+
+@azonenberg 
+If I thus can provide the (probably 2, I think: diff pair & resistive load) blocks as interpolatable (||if needed with interpolator and/or Xyce script to generate fresh on-the-fly to runtime requested exact values||) S-parameter specs (Touchstone?), and a nominal connection topology for how they assemble into the CTLE, would that suffice to let the equalizer tuning scripts (or whatever exists) figure out if they can _even just under nominal conditions_ be assembled and then biased into a CTLE that's powerful enough to give a usably-open eye as part of a 10GBASE-SR "serdes in the receive path?
+
+
+[2026-07-21 7:52 p.m.] namibj
+(Tim Edwards's project proposal deadlines for the first of the iiuc 6 planned chips would want us to figure out if 10GBASE-R reception from (ideally spec-compliant (worst the spec still allows), but at least practically realistically degraded) non-retimed signals could (with enough praying, at least, to the dieties of PVT robustness) work out on all 3 targeted PDK's, without _needing_ to drag in DFEs.)
+
+
+[2026-07-21 8:00 p.m.] azonenberg
+for my own flows, there's no "equalizer tuning scripts". I can simulate a PRBS with various impairments and channel models through an s-parameter model of the various equalizer blocks
+
+
+[2026-07-21 8:00 p.m.] azonenberg
+but you have to decide manually how to combine them, and there's not like a trivial pass/fail at the output
+
+
+[2026-07-21 8:00 p.m.] azonenberg
+you need to define an eye mask for what your receiver can tolerate after equalization and i can check BER
+
+
+[2026-07-21 8:04 p.m.] namibj
+Oh yeah I have like 2 or 3 topologies that I'd consider relevant to explore/check "for starters"; what I don't have is any good idea with what tuning knob values to instantiate the blocks (those translate to transistor sizing and biasing conditions). I can create an overview and a script that feeds particular values into Xyce and spits out the exact corresponding Touchstone file; but I don't really know how to actually fiddle them until they start to sufficiently approximate a useful CTLE response.
+
+
+[2026-07-21 8:04 p.m.] azonenberg
+i mean if you are able to just plot the s-parameters i can look at them to get a starting idea
+
+
+[2026-07-21 8:06 p.m.] namibj
+I'd start with 0.1 UI and 10% of peak amplitude, I know that's aggressive but if it can't equalize for such an IMO tolerant slicer, I don't think it'd work out without involving a DFE.
+
+
+[2026-07-21 8:07 p.m.] namibj
+plot how?
+
+
+[2026-07-21 8:08 p.m.] namibj
+(I'm trying to understand today; and have a productive day at my desk and _only_ my desk (no travel!!!) tomorrow to implement that.)
+
+
+[2026-07-21 8:08 p.m.] azonenberg
+just S21 log mag vs frequency
+
+
+[2026-07-21 8:08 p.m.] azonenberg
+ngscopeclient or any of a ton of other tools can just display this
+
+
+[2026-07-21 8:08 p.m.] azonenberg
+off the s2p
+
+
+[2026-07-21 8:09 p.m.] azonenberg
+and then probably also time domain step response is good to have to look for any weird phase nonlinearities
+
+
+[2026-07-21 8:09 p.m.] namibj
+Note that the naive S-parameters will be horribly unmatched-impedance because these are not blocks with transmission line ports, these are blocks with discrete (probably usually aluminium, iirc the PDKs) wires of a few 10's of um's length.
+
+
+[2026-07-21 8:11 p.m.] azonenberg
+what about your input buffer?
+
+
+[2026-07-21 8:11 p.m.] namibj
+We're gonna drive them all nice in the region they act linear for comfy CTLE action; they will eventually behave as a limiting amplifier depending on how the knobs were tuned at least, but I'm relegating that behavior to a stage after the CTLE because AFAIK your simulation setup is _not_ accustomed to dealing with translinear blocks.
+
+
+[2026-07-21 8:11 p.m.] azonenberg
+i assume you're buffering the input before it goes into the equalizer?
+
+
+[2026-07-21 8:12 p.m.] azonenberg
+and yeah i can't easily model anything nonlinear
+
+
+[2026-07-21 8:13 p.m.] namibj
+We can dream up a T-coil via the power of imagination (and remembering that inductor Q over 5 will be questionable) to deal with that issue.
+
+
+[2026-07-21 8:14 p.m.] namibj
+(Ok I make another "block" that's a common-gate diff pair which should allow nicer matching there.)
+
+
+[2026-07-21 8:16 p.m.] namibj
+ideally not really, given it's an active one (I was figuring for starters to use the second-order gain cell with it's integrated active negative feedback, as it looked to exhibit a nice peaking response).
+
+
+[2026-07-21 8:19 p.m.] namibj
+
+
+
+[2026-07-21 8:19 p.m.] namibj
+1.78 simulated fan-out
+
+
+[2026-07-21 8:20 p.m.] namibj
+
+
+
+[2026-07-21 8:20 p.m.] namibj
+still that fan out, and the knob for the negative feedback adjusted
+
+
+[2026-07-21 8:22 p.m.] namibj
+blue is continuos phase in degrees, orange is group delay in 10's of ps, red is db voltage gain.
+All differential mode only; that's for one unit of "2nd order gain cell"; that's not in any special way tuned for CTLE targeted behavior.
+
+
+[2026-07-21 8:24 p.m.] namibj
+@azonenberg do those plots I had around give you _some_ idea already?
+Particularly towards maybe what deformations you'd want to see me do to the plot's shape, for the regions I'd run/sample you responses over?
+
+
+[2026-07-21 8:26 p.m.] namibj
+(that testbench has it sitting sandwiched between identical cells; it's representing behavior in a clock buffer or pre-driver that'll deliberately operate in mildly-limiting-amplifier conditions to keep amplitudes stable)
+
+
+[2026-07-21 8:40 p.m.] azonenberg
+Those look plausible at a glance. If you get me a s2p i can try to apply it to some signals through various lossy channels
+
+
+[2026-07-21 8:40 p.m.] azonenberg
+this is targeting 10.3125 Gbps I assume
+
+
 ==============================================================
-Exported 677 message(s)
+Exported 708 message(s)
 ==============================================================
