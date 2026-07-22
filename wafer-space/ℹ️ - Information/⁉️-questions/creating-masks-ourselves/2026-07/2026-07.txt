@@ -35,6 +35,47 @@ ATM they even wince at minor antenna violations ... so I don't see them just acc
 that's interesting, i never thought about how design mistakes could bring down a production line, but makes sense.
 
 
+[2026-07-22 12:42 p.m.] chips4makers
+You also need to be aware that the shapes you design are not the ones that will be put on the mask. The shapes will go through [OPC](https://en.wikipedia.org/wiki/Optical_proximity_correction) before put on the mask to correct for the 2D (non-linear) low-pass filtering of lithography.
+You don't have the information to be able to do the OPC and I don't think you will be able to get that information.
+
+{Embed}
+https://en.wikipedia.org/wiki/Optical_proximity_correction
+Optical proximity correction
+Optical proximity correction (OPC) is a photolithography enhancement technique commonly used to compensate for image errors due to diffraction or process effects. The need for OPC is seen mainly in the making of semiconductor devices and is due to the limitations of light to maintain the edge placement integrity of the original design, after pro...
+2026-07_media/Optical_proximity_correction-99F70.png
+
+
+[2026-07-22 12:43 p.m.] chips4makers
+BTW, although it is called *optical* proximity correction it also takes into account other processing effects like etch.
+
+
+[2026-07-22 12:44 p.m.] chips4makers
+And even if you would be able to do it, I don't think a fab will ever except masks not from a qualified mask supplier.
+
+
+[2026-07-22 12:50 p.m.] namibj
+The OPC aspects would likely be among the least secret aspects there, going by that the wavelength of light is known, AFAIK the type of mask (negative/positive/phase-shift??) is documented (or was that just for sky130, not gf180mcuD?), and it takes only a few test features if done explicitly or likely just a couple dies I guess distributed well across the reticle and wafer scanned under an electron microscope being compared with the actual (post-OPC-editing) masks responsible for the studied shapes, to calibrate a model for like https://opg.optica.org/oe/fulltext.cfm?uri=oe-33-17-37229 or https://arxiv.org/html/2606.00228v1 (the latter literally has https://github.com/laiyao1/LithoGRPO linked in the abstract!)
+
+{Embed}
+https://github.com/laiyao1/LithoGRPO
+GitHub - laiyao1/LithoGRPO: [ICML 2026] LithoGRPO: Fast Inverse Lit...
+[ICML 2026] LithoGRPO: Fast Inverse Lithography via GRPO Reinforced Flow Matching - laiyao1/LithoGRPO
+2026-07_media/LithoGRPO-15647
+
+
+[2026-07-22 12:58 p.m.] chips4makers
+Both the exact exposure conditions (NA, conventional/annular/quadruple illumination) and the resist are considered trade secrets and are critical to be able to do OPC.
+
+
+[2026-07-22 12:59 p.m.] chips4makers
+resist = photosenstive layer.
+
+
+[2026-07-22 1:22 p.m.] chips4makers
+I don't see anything of substance in that repo; only shotcounting analysis.
+
+
 ==============================================================
-Exported 5 message(s)
+Exported 12 message(s)
 ==============================================================
