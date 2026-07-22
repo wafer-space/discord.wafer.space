@@ -76,6 +76,49 @@ resist = photosenstive layer.
 I don't see anything of substance in that repo; only shotcounting analysis.
 
 
+[2026-07-22 4:05 p.m.] namibj
+At least to my understanding the optics themselves at least as far as needed to be understood to pull off decent inverse lithography on a process node that does not utilize any multi patterning at all, is not under so much secrecy/"trade secret" (of the genuine, warranted kind) that it has a legitimate reason to block us from knowing enough detail/nuances about how the mask shapes print, as we'd need to calibrate and then add an ILT tech to the PDK.... though I did now in the past few minutes since posting that read that the above Github doesn't yet include anything but their `FastShotCounter`, the `ShotCounter` reference baseline for that, "plus the comparison/plotting example". Though they _are_ mentioning that they are planning to ("TODO (coming soon):" release the Group Relative Policy Optimization reinforcement-learning fine-tuning code, Flow-matching prior (training + pretrained checkpoints), Physics-based ILT reward and lithography simulator, End-to-end inference / mask-optimization pipeline, and some IMO far less necessary Datasets and evaluation scripts
+...
+
+
+... I particularly remembered https://www.semanticscholar.org/reader/765568c040eddfcfc17a578b3a0b82ece5223058 (`arXiv:2303.08435v4`), which encodes the physics of
+["coherent imaging especially with single-wavelength light in linear media with no birefrigence can be appropriately modeled as complex-valued _'phasors'_ in place of classic intensity amplitude and will provide a good approximation to finer physical reality for tasks that are about understanding the interference pattern at the target from several independent mask openings/light paths that have been understood and their phasors calculated individually (in isolation) as long as they are all fed by the same coherent source in the situation where their combined effect on the image pattern wants to be understood"]
+_directly into the model's mathematical structure_
+through the "Sum of Coherent Sources Approach".
+
+{Embed}
+https://www.semanticscholar.org/reader/765568c040eddfcfc17a578b3a0b82ece5223058
+[PDF] Physics-Informed Optical Kernel Regression Using Complex-valu...
+An academic search engine that utilizes artificial intelligence methods to provide highly relevant results and novel tools to filter them with ease.
+2026-07_media/semantic_scholar_og-88FDF.png
+
+
+[2026-07-22 4:05 p.m.] namibj
+Yeah I realized after that message 🙁
+
+
+[2026-07-22 4:09 p.m.] namibj
+hmmmm, I thought at least the imaging even if not the chemistry was by now no longer a real secret, it's not like they cook their steppers up in-house, or that this was so bleeding edge that a normal competitor wouldn't already have had plenty of time to try out the options themselves.
+Though I don't think the actual NA and illumination pattern is actually required to be known to pull off `arXiv:2303.08435v4`.
+
+
+[2026-07-22 4:16 p.m.] namibj
+But you're right in so far as that by the looks of it, we don't yet have actual runnable code published that would pull off ILT/non-classic OPC without spamming shots for the mask that the mask shop would rapidly start billing a lot extra for.
+Nor do we have reason to expect to get ground-truth training data of lithography prints resulting from known masks for the relevant layers, as some of those seem to be consumed too indirectly by the processing to be anywhere close enough to directly observable with even a fancy electron microscope (incl. extra element detection and FIB machining and all those) from finished dies, and I certainly don't expect the fab to hand over ground truth reference data for a major process like this one, measured between litho and those follow up steps.
+
+
+[2026-07-22 4:30 p.m.] chips4makers
+From the repo you linked to you can come to following repo: https://github.com/shelljane/lithobench (and I think there is also a related paper). What I see is that the repo seems to only consider images of the printed structures in best focus and best exposure but ILT is actually mostly needed to optimize the process window e.g. shape variations over the focus and exposure non-uniformity you have in your exposure system.
+So when I look at that repo I get the feeling of some people want to show AI/ML can solve any problem without knowing fully the actual problem they are solving.
+BTW, for the open source PDKs you don't need ILT as that would make masks too expensive. You only need it for 22nm and below for 193nm litho. I don't know about EUV as I left litho group @ imec before we came to that stage.
+
+{Embed}
+https://github.com/shelljane/lithobench
+GitHub - shelljane/lithobench: LithoBench: Benchmarking AI Computat...
+LithoBench: Benchmarking AI Computational Lithography for Semiconductor Manufacturing - shelljane/lithobench
+2026-07_media/lithobench-7E710
+
+
 ==============================================================
-Exported 12 message(s)
+Exported 17 message(s)
 ==============================================================
