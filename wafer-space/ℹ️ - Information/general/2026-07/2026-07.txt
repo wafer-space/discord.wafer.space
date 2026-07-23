@@ -100,7 +100,7 @@ https://cdn.discordapp.com/attachments/1474282211376369664/1521663851009933332/i
 
 {Embed}
 https://cdn.discordapp.com/attachments/1474282211376369664/1521663851009933332/image.png?ex=6a45a765&is=6a4455e5&hm=663daf621803cf31bb7fb3f142b0c34c1674c7b016812b34ae04ba2f3d3cb837&
-2026-07_media/image-0127D.png
+2026-07_media/image-80B4B.png
 
 
 [2026-07-01 9:21 p.m.] namibj
@@ -3417,6 +3417,8 @@ Hmm, so, I've done some more thinking and reading (e.g. https://downloads.granit
 @azonenberg 
 If I thus can provide the (probably 2, I think: diff pair & resistive load) blocks as interpolatable (||if needed with interpolator and/or Xyce script to generate fresh on-the-fly to runtime requested exact values||) S-parameter specs (Touchstone?), and a nominal connection topology for how they assemble into the CTLE, would that suffice to let the equalizer tuning scripts (or whatever exists) figure out if they can _even just under nominal conditions_ be assembled and then biased into a CTLE that's powerful enough to give a usably-open eye as part of a 10GBASE-SR "serdes in the receive path?
 
+{Reactions}
+❤️
 
 [2026-07-21 7:52 p.m.] namibj
 (Tim Edwards's project proposal deadlines for the first of the iiuc 6 planned chips would want us to figure out if 10GBASE-R reception from (ideally spec-compliant (worst the spec still allows), but at least practically realistically degraded) non-retimed signals could (with enough praying, at least, to the dieties of PVT robustness) work out on all 3 targeted PDK's, without _needing_ to drag in DFEs.)
@@ -4743,10 +4745,14 @@ I'd expect a mere 10G redriver to only run about 10~15$ then; considering that a
 [2026-07-23 3:56 a.m.] mithro_
 @namibj - If you manage to achieve even close to 10G SERDES on GF180MCU you'll be forever my hero. Just hitting 5G to get the slowest USB3 would be pretty amazing.
 
+{Reactions}
+❤️
 
 [2026-07-23 4:02 a.m.] azonenberg
 personally 2.5G for pcie gen1 would already be very real-world useful
 
+{Reactions}
+❤️
 
 [2026-07-23 4:02 a.m.] azonenberg
 but i will take as fast as i can get :p
@@ -4786,6 +4792,186 @@ It'd be obvious in the reticle, for not having the pad frame ring on any side.
 ~~and for Ethernet ~~
 
 
+[2026-07-23 1:12 p.m.] azonenberg
+i mean yes cursed unidirectional ethernet could exist but
+
+
+[2026-07-23 1:22 p.m.] robtaylor_52029
+@azonenberg @namibj I wish i understood half of this conversation, but it's certainly cool!
+
+
+[2026-07-23 1:32 p.m.] azonenberg
+if you want some background read https://people.engr.tamu.edu/spalermo/ecen720.html
+
+
+[2026-07-23 1:33 p.m.] azonenberg
+nami is way ahead of me on the analog design side of things, I work with high speed SERDES all the time as an FPGA/ASIC RTL developer and board designer but for me they're mostly a magic black box lol
+
+
+[2026-07-23 1:34 p.m.] azonenberg
+it gives me a clock, i feed it parallel bits, serial bits come out the other side, i give it a differential channel with the right impedance and not too much loss, serial bits come into the rx, parallel bits and a recovered clock out the other side
+
+
+[2026-07-23 1:34 p.m.] azonenberg
+and like, i know which knobs in the equalizers to tweak when i scope the line and the eye isn't open enough or something
+
+
+[2026-07-23 1:34 p.m.] azonenberg
+but how to design the circuit that makes that happen, vs just poking register values? that bit is beyond me
+
+
+[2026-07-23 1:35 p.m.] osvel
+Thanks for sharing! Super cool stuff
+
+
+[2026-07-23 1:36 p.m.] osvel
+I'm playing around a bit myself on this topic
+
+
+[2026-07-23 1:37 p.m.] osvel
+The eye diagrams in ngscopeclient you shared, are those just generated from a .raw dump of a simulation? 🙂
+
+
+[2026-07-23 1:38 p.m.] osvel
+I'm trying to build my own TX serializer but targeting a WAYY lower clock (maybe going for PCIe 1 if possible).
+
+
+[2026-07-23 1:39 p.m.] azonenberg
+ngscopeclient can generate an eye pattern from a digital clock (DDR, sampling on both edges centered in the data valid window) and an analog waveform
+
+
+[2026-07-23 1:39 p.m.] azonenberg
+There are two common flows that end up with you having that
+
+
+[2026-07-23 1:39 p.m.] azonenberg
+first is to use the cdr pll filter, second is to have the clock propagated from the source in some way
+
+
+[2026-07-23 1:40 p.m.] azonenberg
+where that waveform comes from, it doesn't care one bit
+
+
+[2026-07-23 1:40 p.m.] azonenberg
+it can be a PRBS that you generated in the digital domain, converted to an analog NRZ or PAM4 or whatever waveform, passed through an s-parameter channel model, added some noise and jitter to, etc
+
+
+[2026-07-23 1:40 p.m.] azonenberg
+it can be a raw measurement off a scope
+
+
+[2026-07-23 1:40 p.m.] azonenberg
+it can be loaded from a CSV or binary waveform file you imported from somewhere else
+
+
+[2026-07-23 1:41 p.m.] azonenberg
+it can be the output of another filter block, e.g. I plotted an eye a while back that had y axis units of Hz because I was demodulating FSK data
+
+
+[2026-07-23 1:41 p.m.] azonenberg
+so i downconverted and filtered the waveform then used the frequency-measurement block to measure frequency of the IF vs time
+
+
+[2026-07-23 1:42 p.m.] azonenberg
+then fed that into the eye as well as thresholding it at like 1 MHz or so to get back to a digital NRZ waveform i could run decodes on
+
+
+[2026-07-23 1:43 p.m.] azonenberg
+one of the most key things about ngscopeclient's architecture is that it's basically a DSP/protocol decode/math sandbox, if you can provide a stream of data in the right format nothing cares hwo it got there
+
+
+[2026-07-23 1:44 p.m.] azonenberg
+you can decode PCIe just as well from an oscilloscope waveform as from some kind of FPGA based protocol analyzer where the native data format an instrument channel measures is "time series of 8b/10b code words"
+
+
+[2026-07-23 1:44 p.m.] azonenberg
+and this is not a made-up use case, i built exactly that - you compile it into an FPGA design and on trigger it records a configurable number of raw line-coded symbols off your transceiver into a block ram then you read out
+
+
+[2026-07-23 1:45 p.m.] osvel
+Super cool! Thanks for the explanation!
+
+
+[2026-07-23 1:48 p.m.] azonenberg
+For the specific screenshots I shared, the flow was roughly digital PRBS31 -> add some gaussian RJ -> convert to ideal NRZ waveform -> add AWGN -> pass through s-parameter channel derived from spice simulation -> CDR PLL -> eye
+
+
+[2026-07-23 1:49 p.m.] azonenberg
+but you could just as well have replaced the synthetic test waveform with a real scope measurement
+
+
+[2026-07-23 1:50 p.m.] azonenberg
+or the simulated s-parameter dataset with live VNA measurements of a real on-wafer device if you had suitable RF GSG / GSSG probes, etc
+
+
+[2026-07-23 1:50 p.m.] azonenberg
+everything is fungible, you just have to acquire/create/convert the data into whatever format the next block in the chain wants
+
+
+[2026-07-23 1:56 p.m.] robtaylor_52029
+nice, thank you!
+
+
+[2026-07-23 2:06 p.m.] namibj
+The part that isn't quite there yet is streaming through a transient SPICE.
+
+
+[2026-07-23 2:07 p.m.] azonenberg
+Yeah I would like to have some way to make a virtual instrument that runs a ngspice or whatever model then runs the filter graph on that waveform
+
+
+[2026-07-23 2:07 p.m.] azonenberg
+just hasnt been a priority yet
+
+
+[2026-07-23 2:07 p.m.] azonenberg
+Too many other things to do and not enough time
+
+
+[2026-07-23 2:08 p.m.] azonenberg
+Most of my recent work on ngscopeclient has been focused on thunderscope integration, performance, and specific protocol blocks that I needed at work
+
+
+[2026-07-23 2:16 p.m.] namibj
+Oh I don't mean pre-recorded SPICE waveform: transient mode SPICE is just adaptive time step time integration of a non-linear system of differential equations.
+
+
+[2026-07-23 2:16 p.m.] azonenberg
+I dont mean pre recorded either
+
+
+[2026-07-23 2:16 p.m.] azonenberg
+i mean having an "instrument" that is literally a wrapper around a pipe to ngspice
+
+
+[2026-07-23 2:17 p.m.] azonenberg
+when you click trigger it starts the sim
+
+
+[2026-07-23 2:17 p.m.] namibj
+In some cases it's possible to simulate analog audio filters (think "guitar tube amplifier") in real time.
+
+
+[2026-07-23 2:17 p.m.] azonenberg
+Or a filter block i guess
+
+
+[2026-07-23 2:17 p.m.] azonenberg
+it could be possible to work in both modes, as a signal source or a flow-through processing block
+
+
+[2026-07-23 2:18 p.m.] namibj
+Hmmm.
+
+
+[2026-07-23 2:18 p.m.] azonenberg
+I do not have the time to build such an integration any time soon
+
+
+[2026-07-23 2:18 p.m.] azonenberg
+But it would be nice to have eventually
+
+
 ==============================================================
-Exported 986 message(s)
+Exported 1,031 message(s)
 ==============================================================
