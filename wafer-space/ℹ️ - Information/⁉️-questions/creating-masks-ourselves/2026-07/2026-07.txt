@@ -119,6 +119,23 @@ LithoBench: Benchmarking AI Computational Lithography for Semiconductor Manufact
 2026-07_media/lithobench-7E710
 
 
+[2026-07-22 7:34 p.m.] namibj
+sky130's hand-crafted-tuned-OPC needs are the reason why we can't use the foundry standard cell local-interconnect DRC's outside of those cells; while the earlier ILT works seemed to not put as much focus on mask writer shot economy, the more recent ones like e.g. that LithoGRPO _very much_ put in effort to not use excessive shot count.
+
+What you need for 22nm and below is multi-patterning _on top of some kind of ILT/OPC tactics,_ because you're unable to image economic pitches even if you can squeeze desired gate widths out of a single exposure.
+
+Nothing about ILT _in principle_ necessitates spending large quantities of mask writer shots, it's only the early works that paid zero respect to the traditional rectangle writers and effectively assumed a pixel writer if not even assuming some kind of grayscale-variable-like phase shift mask (or similar) to gain continuos control.
+
+
+[2026-07-22 7:42 p.m.] namibj
+ILT is just closed loop automatic tuning of OPC features, at least if targeting traditional mask writers.
+It's just that you can't enumerate the OPC features that would be needed, for all possible affordably printable (if only you knew what mask prints that and is affordable: there is one by definition) structures, unless you're working on some highly regular device pitch (_cough_ FinFET), so for these larger bulk-CMOS processes you either accept the excessive DRC limitations to design density from only using fixed rule based OPC features (banning printable but not-obviously-so fine structures via DRC) or you use an ad-hoc automatic feedback-loop-based algorithm to synthesize affordable OPC features for arbitrary fine structures you encounter during mask gen.
+
+
+[2026-07-22 8:12 p.m.] namibj
+E.g. there has to be a reason why on sky130A, `(difftap.2)` limits custom FETs to 0.42 width but `(difftap.2b)` allows standard cells to use FETs with only 0.36 width.
+
+
 ==============================================================
-Exported 17 message(s)
+Exported 20 message(s)
 ==============================================================

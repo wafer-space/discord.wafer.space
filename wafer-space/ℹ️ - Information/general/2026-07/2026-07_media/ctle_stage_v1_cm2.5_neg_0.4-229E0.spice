@@ -1,0 +1,125 @@
+** sch_path: /home/namibj/eda/designs/tt_gf-0p3_mcml/xschem/receiver/ctle_stage_v1.sch
+**.subckt ctle_stage_v1 VSS VDD out_n out_p in_p in_n tail_bias neg_tail_bias
+*.ipin VSS
+*.ipin VDD
+*.opin out_n
+*.opin out_p
+*.ipin in_p
+*.ipin in_n
+*.ipin tail_bias
+*.ipin neg_tail_bias
+XM1 net2 in_p net1 VSS nfet_03v3 L=0.28u W='clk_buf_fwd_w * clk_buf_in_out_ratio' nf='clk_buf_fwd_fingers' ad='int((nf+1)/2) * W/nf * 0.18u'
++ as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)' ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W'
++ sa=0 sb=0 sd=0
+XM3 net1 tail_bias VSS VSS nfet_03v3 L='clk_buf_tail_l' W='clk_buf_fwd_w * clk_buf_in_out_ratio * clk_buf_tail_ratio' nf='clk_buf_tail_fingers'
++ ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)' ps='2*int((nf+2)/2) * (W/nf + 0.18u)'
++ nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM2 net3 in_n net1 VSS nfet_03v3 L=0.28u W='clk_buf_fwd_w * clk_buf_in_out_ratio' nf='clk_buf_fwd_fingers' ad='int((nf+1)/2) * W/nf * 0.18u'
++ as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)' ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W'
++ sa=0 sb=0 sd=0
+XR1 net2 VDD VSS ppolyf_u_1k r_width='clk_buf_load_w' r_length='clk_buf_load_l / clk_buf_in_out_ratio'
+XR2 net3 VDD VSS ppolyf_u_1k r_width='clk_buf_load_w' r_length='clk_buf_load_l / clk_buf_in_out_ratio'
+XM4 out_n net3 net4 VSS nfet_03v3 L=0.28u W='clk_buf_fwd_w' nf='clk_buf_fwd_fingers' ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u'
++ pd='2*int((nf+1)/2) * (W/nf + 0.18u)' ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM5 net4 tail_bias VSS VSS nfet_03v3 L='clk_buf_tail_l' W='clk_buf_fwd_w * clk_buf_tail_ratio' nf='clk_buf_tail_fingers' ad='int((nf+1)/2) * W/nf * 0.18u'
++ as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)' ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W'
++ sa=0 sb=0 sd=0
+XM6 out_p net2 net4 VSS nfet_03v3 L=0.28u W='clk_buf_fwd_w' nf='clk_buf_fwd_fingers' ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u'
++ pd='2*int((nf+1)/2) * (W/nf + 0.18u)' ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XR3 out_n VDD VSS ppolyf_u_1k r_width='clk_buf_load_w' r_length='clk_buf_load_l'
+XR4 out_p VDD VSS ppolyf_u_1k r_width='clk_buf_load_w' r_length='clk_buf_load_l'
+XM7 net2 out_n net5 VSS nfet_03v3 L=0.28u W='clk_buf_neg_w' nf='clk_buf_neg_fingers' ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u'
++ pd='2*int((nf+1)/2) * (W/nf + 0.18u)' ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM8 net5 neg_tail_bias VSS VSS nfet_03v3 L='clk_buf_tail_l' W='clk_buf_neg_w * clk_buf_neg_tail_ratio' nf=1 ad='int((nf+1)/2) * W/nf * 0.18u'
++ as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)' ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W'
++ sa=0 sb=0 sd=0
+XM9 net3 out_p net5 VSS nfet_03v3 L=0.28u W='clk_buf_neg_w' nf='clk_buf_neg_fingers' ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u'
++ pd='2*int((nf+1)/2) * (W/nf + 0.18u)' ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM10 tail_bias_ref tail_bias_ref 0 0 nfet_03v3 L='clk_buf_tail_l' W='clk_buf_fwd_w * clk_buf_tail_ratio' nf='clk_buf_tail_fingers'
++ ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)' ps='2*int((nf+2)/2) * (W/nf + 0.18u)'
++ nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM11 neg_tail_bias_ref neg_tail_bias_ref 0 0 nfet_03v3 L='clk_buf_tail_l' W='clk_buf_neg_w * clk_buf_neg_tail_ratio' nf='ceil(clk_buf_tail_fingers * clk_buf_neg_tail_ratio)'
++ ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)' ps='2*int((nf+2)/2) * (W/nf + 0.18u)'
++ nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+E1 tail_bias 0 tail_bias_ref 0 1
+E2 neg_tail_bias 0 neg_tail_bias_ref 0 1
+**** begin user architecture code
+
+**.include /home/namibj/projects/asic/pdk/gf180mcuD/libs.tech/ngspice/design.ngspice
+**.lib /home/namibj/projects/asic/pdk/gf180mcuD/libs.tech/ngspice/sm141064.ngspice typical
+**.lib /home/namibj/projects/asic/pdk/gf180mcuD/libs.tech/ngspice/sm141064.ngspice res_typical
+
+* Xyce-only:
+.include /home/namibj/projects/asic/pdk/gf180mcuD/libs.tech/xyce/design.xyce
+.lib /home/namibj/projects/asic/pdk/gf180mcuD/libs.tech/xyce/sm141064.xyce typical
+.lib /home/namibj/projects/asic/pdk/gf180mcuD/libs.tech/xyce/sm141064.xyce res_typical
+
+
+* Xyce-only:
+* Stepping as nested loop(s):
+*%.step oct clk_buf_neg_ratio 0.02 1 5
+*.step oct clk_buf_neg_ratio 0.04 1 5
+*.step lin input_cm 1.0 3.2 0.1
+*.result {V(tail_bias)}
+*.result {V(neg_tail_bias)}
+*.result {V(tail_bias_ref)}
+*.result {V(neg_tail_bias_ref)}
+*.result {V(out_n)}
+*.result {V(out_p)}
+
+
+*.
+*.option savecurrents
+
+.param clk_buf_fwd_w=16u
+.param clk_buf_fwd_fingers=2
+.param clk_buf_in_out_ratio=0.55
+.param clk_buf_tail_fingers=4
+.param clk_buf_tail_ratio=4
+.param clk_buf_tail_l=1u
+.param clk_buf_load_w=2u
+.param clk_buf_load_r=4k
+.param clk_buf_load_l='clk_buf_load_r/1000 * clk_buf_load_w'
+*.param clk_buf_neg_ratio='0.155'
+.param clk_buf_neg_ratio='0.4'
+.param clk_buf_neg_w='clk_buf_fwd_w * clk_buf_neg_ratio'
+.param clk_buf_neg_fingers=1
+.param clk_buf_neg_tail_ratio=5
+.param clk_buf_neg_tail_adjust=1.5
+.param clk_buf_tail_current=512u
+
+.param clk_buf_tb_fan_out=1.78039
+.param clk_buf_tb_freq=2.5G
+
+* Xyce-only:
+
+.param impedance=4k
+.param input_cm=2.5
+.param vdd=3.3
+
+.ac DEC 20 3MEG 30G
+*.ac LIN 5 1G 5G
+.lin format=touchstone
+*.op
+
+*.options nonlin continuation=2 debuglevel=3 continuation=35
+
+Vvdd VDD VSS 'vdd'
+Vvss VSS 0 0
+Ineg_tail_bias VSS neg_tail_bias_ref 'clk_buf_tail_current * clk_buf_neg_ratio * clk_buf_neg_tail_adjust'
+Itail_bias VSS tail_bias_ref 'clk_buf_tail_current'
+P1 in_p 0 DC 'input_cm' port=1 Z0 = 'impedance / 2'
+P2 in_n 0 DC 'input_cm' port=2 Z0 = 'impedance / 2'
+P3 out_p out_n port=3 Z0 = 'impedance'
+
+*.control
+*save all
+*tran 5p 5n
+*plot in_p in_n out_p out_n x1.net1
+*plot in_p in_n out_p out_n x1.net1 v(out2_p) v(out2_n) ((v(out_p) + v(out_n))/2) ((v(out2_p) + v(out2_n)) / 2)
+*op
+*write clk_buf_tb.raw
+*.endc
+**** end user architecture code
+**.ends
+.end

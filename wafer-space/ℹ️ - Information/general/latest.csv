@@ -1154,3 +1154,108 @@ Like I'd assume that the 10G-LRM hardware suffers BER penalty in some applicatio
 "262706220073222144","namibj","2026-07-22T19:23:53.9680000+00:00","@azonenberg an example file; ports 1 and 2 are the single ended ""input pair"" and port 3 is the differential output; I couldn't think of a way to straight-forward let it have a single input port while still forcing a common mode operating point on it, and getting it to behave ""properly"".
 
 Can you see if that at least kinda works? Like, with not-too-hard matching; beware while I used a represenative-ish port impedance for it, it doesn't mean the circuit is on it's own expected to behave resitive.","2026-07_media/ctle_stage_v1.spice-822DA.s3p",""
+"262706220073222144","namibj","2026-07-22T20:55:01.3320000+00:00","edit: this has in the same `.s3p` in the sequence given by the `.res` a sweep of the primary design-time peaking control tunable; essentially the header and footer are only present once, and then it's the touchstone lines/frequency-sweep from the ""operating bias points"" listed in the `.res` file, just concatenated together, in the order they are called out in the `.res` file.","2026-07_media/ctle_stage_v1.spice-0D9B1.res,2026-07_media/ctle_stage_v1.spice-314D8.s3p",""
+"262706220073222144","namibj","2026-07-22T20:57:43.1090000+00:00","here's just a single one for ease of plugging in; this should be much more representative than the first preview I had shared a few hours ago.","2026-07_media/ctle_stage_v1_cm2.5_neg_0.2.spice-54602.s3p",""
+"262706220073222144","namibj","2026-07-22T21:19:47.4950000+00:00","These are the ""obvious"" tunables; though the main ones to aim for to move the response behavior would be:
+```
+clk_buf_in_out_ratio
+clk_buf_load_r
+clk_buf_neg_ratio
+clk_buf_tail_current
+input_cm
+```
+with `clk_buf_neg_tail_adjust` being a minor tunable.
+
+`clk_buf_in_out_ratio` says how much weaker the input stage is vs. the output stage
+`clk_buf_load_r` is the pull-up/load resistance at the output stage
+`clk_buf_neg_ratio` says how much weaker the negative feedback onto the output node[pair] of the input stage should be, relative to the strength of the output stage. Thus divide it by `clk_buf_in_out_ratio` to understand how strong the negative feedback is relative to the input.
+`clk_buf_tail_current` adjusts about anti-proportionally with `clk_buf_load_r` and gives the tail current reference fed to a current mirror (with infinite decoupling capacitance) for driving the actual tail current sources for the 3 diff pairs here. The input and output pair share a bias voltage and only adjust their tail current through adjusting the size of the tail transistor.
+`input_cm` is the common mode voltage of the input signal, very relevant for determining the bias conditions the input diff pair are subjected to. In hindsight I guess there should be little harm from just setting that very high as the tail current source ought to take up any necessary slack.... _I think..._ but probably it's not nearly as clear-cut as that hindsight idea hoped.
+`clk_buf_neg_tail_adjust` multiplies the tail current fed to the negative feedback diffpair's current mirror from what the naive `clk_buf_neg_ratio * clk_buf_tail_current` would otherwise give.
+
+`clk_buf_tail_current` even if adjusted anti-proportionally with `clk_buf_load_r` is relevant because the capacitances (and in that case, also the output-side voltages) remain the same, even as the resistances change, which adjusts the RC time constants.","2026-07_media/image-4C0B3.png,2026-07_media/ctle_stage_v1_cm2.5_neg_0.2-98B44.spice",""
+"812217062567051294","azonenberg","2026-07-22T21:27:43.6290000+00:00","let me look","",""
+"812217062567051294","azonenberg","2026-07-22T21:30:19.9720000+00:00","hmmm i can't read that","",""
+"812217062567051294","azonenberg","2026-07-22T21:30:48.2580000+00:00","neither sonnet nor ngscopeclient can parse it and the format looks different. is touchstone 2.0 a new thing?","",""
+"812217062567051294","azonenberg","2026-07-22T21:30:56.8810000+00:00","can you convert to a touchstone v1 file?","",""
+"262706220073222144","namibj","2026-07-22T21:31:10.0420000+00:00","If I read correctly this suggests that there's a hump between about 2.6 GHz and 8.4 GHz with this parametrization here:","2026-07_media/ctle_stage_v1_cm2.5_neg_0.4.spice-6AD5D.s3p,2026-07_media/ctle_stage_v1_cm2.5_neg_0.4-1243A.spice",""
+"262706220073222144","namibj","2026-07-22T21:31:26.7770000+00:00","sure","",""
+"262706220073222144","namibj","2026-07-22T21:31:58.9440000+00:00","the manual said it's default and didn't mention it being funky so I figured the v1 was legacy form the 90's that one didn't wanna actually use 😄","",""
+"262706220073222144","namibj","2026-07-22T21:33:06.8000000+00:00","ugh this is way different....","2026-07_media/ctle_stage_v1_cm2.5_neg_0.4.spice-AE0F3.s3p,2026-07_media/ctle_stage_v1_cm2.5_neg_0.4-229E0.spice",""
+"262706220073222144","namibj","2026-07-22T21:34:50.0300000+00:00","does this please your tooling?","",""
+"812217062567051294","azonenberg","2026-07-22T21:36:46.5160000+00:00","it's the 30 year old format that was so simple and functional that there was no reason to ever change it","",""
+"812217062567051294","azonenberg","2026-07-22T21:36:54.7950000+00:00","and became the industry standard interchange format for a reason","",""
+"812217062567051294","azonenberg","2026-07-22T21:37:16.7360000+00:00","then someone bought up the rights to the name and came out with a newer version that breaks compatibility in a bunch of ways and a lot of tooling doesnt support","",""
+"812217062567051294","azonenberg","2026-07-22T21:37:53.2920000+00:00","ok so which port number is which?","",""
+"262706220073222144","namibj","2026-07-22T21:37:59.5760000+00:00","I mean it's 17yo by now.... https://ibis.org/touchstone_ver2.0/","",""
+"812217062567051294","azonenberg","2026-07-22T21:38:24.6530000+00:00","if it's 17 years old and my commercial eda tool can't read it","",""
+"812217062567051294","azonenberg","2026-07-22T21:38:30.8220000+00:00","there's probably a reason they never implemented it :p","",""
+"262706220073222144","namibj","2026-07-22T21:39:03.2360000+00:00","1 and 2 are the wires of the supposedly balanced input; 3 is the differentially connected output","",""
+"812217062567051294","azonenberg","2026-07-22T21:39:11.1340000+00:00","every s-parameter dataset i've ever got from an rf component vendor, off a VNA, etc has been v1 format","",""
+"812217062567051294","azonenberg","2026-07-22T21:39:31.7450000+00:00","ok so... hmm. this doesn't look like much of an equalizer?","",""
+"812217062567051294","azonenberg","2026-07-22T21:39:41.1170000+00:00","looking at S31 it's flat for a while then rolls off, i'm not seeing much in the way of peaking","",""
+"262706220073222144","namibj","2026-07-22T21:40:23.7330000+00:00","> Version 1.0 and Version 2.0 files differ in three additional respects:
+> • G-, H-, Y-, and Z- parameters are normalized in Version 1.0 but are not normalized in Version 2.0.
+> • Effective noise resistance in noise parameter data is considered normalized in Version 1.0 but is
+> not normalized in Version 2.0.
+> • Mixed-mode support is added in Version 2.0, so that network parameter data in the file is
+> interpreted differently in the presence of the [Mixed-Mode Order] keyword.","",""
+"262706220073222144","namibj","2026-07-22T21:41:44.7910000+00:00","what about S13?","",""
+"262706220073222144","namibj","2026-07-22T21:43:36.9200000+00:00","wait huh","",""
+"262706220073222144","namibj","2026-07-22T21:46:01.6190000+00:00","does one of these behave better?","2026-07_media/ctle_stage_v1_cm2.5_neg_0.2.spice-D1164.s3p,2026-07_media/ctle_stage_v1_cm2.5_neg_0.6.spice-375BD.s3p",""
+"262706220073222144","namibj","2026-07-22T21:47:02.3010000+00:00","(nami is sad about having wasted so much time earlier on ILT)","",""
+"812217062567051294","azonenberg","2026-07-22T21:47:40.2630000+00:00","I see huge differences in end to end gain, is that expected?","",""
+"812217062567051294","azonenberg","2026-07-22T21:48:20.1460000+00:00","the 0.2 is like +6 dB, the 0.4 is -16, the 0.6 is -45","",""
+"812217062567051294","azonenberg","2026-07-22T21:48:27.2090000+00:00","but shows more of a peaking response like i would expect","",""
+"262706220073222144","namibj","2026-07-22T21:49:58.8030000+00:00","yeah","",""
+"262706220073222144","namibj","2026-07-22T21:50:23.5710000+00:00","it's the strength of the inter-stage active negative feedback","",""
+"262706220073222144","namibj","2026-07-22T21:50:50.6380000+00:00","","2026-07_media/image-BB984.png",""
+"262706220073222144","namibj","2026-07-22T21:50:59.5180000+00:00","forgive the upside-down center please","",""
+"262706220073222144","namibj","2026-07-22T21:52:35.9760000+00:00","peak gain or low frequency?","",""
+"812217062567051294","azonenberg","2026-07-22T21:53:10.7170000+00:00","Low frequency","",""
+"262706220073222144","namibj","2026-07-22T21:53:18.8480000+00:00","yeah that's supposed","",""
+"812217062567051294","azonenberg","2026-07-22T21:53:30.4680000+00:00","The peaking response on the v0.6 looks good as a start just from looking at the plot, if you can move it up 40 dB or so :p","",""
+"262706220073222144","namibj","2026-07-22T21:54:51.2940000+00:00","can you fix the latter through adding an inductor or attaching a different impedance at the inputs/outputs?
+
+Also keep in mind you're supposed to feed port 1 and 2 from the two wires of a balanced line....","",""
+"262706220073222144","namibj","2026-07-22T21:54:57.9240000+00:00","(that's not 40dB though)","",""
+"812217062567051294","azonenberg","2026-07-22T21:56:01.6630000+00:00","Yeah I'm just looking at 3 from 1 for the purposes of a quick look","",""
+"262706220073222144","namibj","2026-07-22T21:56:38.1720000+00:00","yeah I just guessed the impedances from the load impedance.... roughly","",""
+"812217062567051294","azonenberg","2026-07-22T21:56:41.2700000+00:00","The bigger issue I see is group delay flatness, ~150ps variation over 0-10 GHz is not ideal","",""
+"812217062567051294","azonenberg","2026-07-22T21:56:43.9490000+00:00","that's multiple UIs","",""
+"262706220073222144","namibj","2026-07-22T21:58:56.8260000+00:00","well 10GHz is kinda far frequency wise...","",""
+"262706220073222144","namibj","2026-07-22T21:59:07.6070000+00:00","but yes","",""
+"262706220073222144","namibj","2026-07-22T22:00:05.6630000+00:00","is it possible that many of the missing dB are accounted for by reflection?","",""
+"812217062567051294","azonenberg","2026-07-22T22:02:05.1410000+00:00","very possible i didnt look at return loss. flatness is what i'm more concerned about at this opint","",""
+"812217062567051294","azonenberg","2026-07-22T22:02:12.2620000+00:00","","2026-07_media/ctle3-3BE74.png",""
+"812217062567051294","azonenberg","2026-07-22T22:02:22.8530000+00:00","and i'm not too happy with what i see so far :p","",""
+"812217062567051294","azonenberg","2026-07-22T22:02:27.5350000+00:00","this is before and acter","",""
+"812217062567051294","azonenberg","2026-07-22T22:02:30.0450000+00:00","yes, the after is worse","",""
+"812217062567051294","azonenberg","2026-07-22T22:02:49.1610000+00:00","I think the group delay response is a significant part of the issue since the magnitude response doesnt look too bad","",""
+"812217062567051294","azonenberg","2026-07-22T22:03:00.4330000+00:00","phase linearity is the issue","",""
+"262706220073222144","namibj","2026-07-22T22:05:26.1870000+00:00","is that better for some of the other(s)?","",""
+"262706220073222144","namibj","2026-07-22T22:08:03.5560000+00:00","oh, also, could it be that this might only even be necessary when looking at direct-attach copper cables (the multi-meter Twinax ones), and use with optics could reasonably rely on the redriver in the optic providing an open-enough eye to the slicer?","",""
+"262706220073222144","namibj","2026-07-22T22:09:34.8480000+00:00","(...is that behavior tamed by applying series or shunt inductor at input and/or output?)","",""
+"262706220073222144","namibj","2026-07-22T22:10:22.4730000+00:00","I'd not expect the mosfet gate input to be _particularly_ resistive in impedance...","",""
+"812217062567051294","azonenberg","2026-07-22T22:13:20.6740000+00:00","This is purely a frequecny domain propagation model, not a circuit simulation","",""
+"262706220073222144","namibj","2026-07-22T22:13:23.0790000+00:00","....I'd _guess_ the takeaway can already be ""sfp+ optics are already able to provide an eye that can be sliced without any receiver equalization, provided short and quality PCB trace is used""?","",""
+"812217062567051294","azonenberg","2026-07-22T22:13:43.7200000+00:00","Yes, i think that should be the case","",""
+"812217062567051294","azonenberg","2026-07-22T22:13:58.9110000+00:00","If you have a long direct-attach cable or something you'd definitely want a retimer/redriver befroe a non-equalizing receiver","",""
+"262706220073222144","namibj","2026-07-22T22:14:28.4010000+00:00","yeah and the mentioned are just linear things with very plain piecewise-linear shaped log-log plotted complex impedances","",""
+"262706220073222144","namibj","2026-07-22T22:15:02.9170000+00:00","are such redrivers/retimers low cost COTS chips?","",""
+"812217062567051294","azonenberg","2026-07-22T22:16:35.7900000+00:00","Yes","","ferrisCatOwO (1)"
+"262706220073222144","namibj","2026-07-22T22:17:02.3190000+00:00","Yay.
+I'll share the happy news where plans about collaborative design of a ""proper"" SerDes for Tim Edward's chipalooza are under discussion.","",""
+"262706220073222144","namibj","2026-07-22T22:23:58.1460000+00:00",".....could we perhaps even rely on their existence to _hope_ for possibly reaching all the way to 25G if the mux is doubled once more (to 8:1) and we give up any hope of producing a strong good eye (gain at those frequencies is very expensive on gf180mcuD, even with inductors helping) and the base clock is overclocked/pushed to 3.2 from the 10G C4's 2.5 ?
+
+I'd expect 50~100 mV p-p (opening, through de-emphasis of low frequencies) to be readily feasible to produce, but aiming for much more would make me worry about melting the chip.","",""
+"812217062567051294","azonenberg","2026-07-22T22:24:32.2800000+00:00","I have no idea. The good retimers will have a CTLE/DFE at the input and a FFE on the output programmable over i2c","",""
+"812217062567051294","azonenberg","2026-07-22T22:25:21.8340000+00:00","Check out the DS125DF111 for example which digikey has for... wow $23 @ qty1, priecs have gone up","",""
+"262706220073222144","namibj","2026-07-22T22:25:23.7790000+00:00","....programmable.... good; that should allow skipping CTLE on the receiver by pushing that work to the transmitter's FFE, right?","",""
+"812217062567051294","azonenberg","2026-07-22T22:25:49.1620000+00:00","(you can get cheaper ones that are just a CTLE/buffer without the full CDR PLL and TX equalizer)","",""
+"262706220073222144","namibj","2026-07-22T22:25:52.3250000+00:00","ehhh, not so bad 😄","",""
+"262706220073222144","namibj","2026-07-22T22:26:02.7730000+00:00","yeah","",""
+"812217062567051294","azonenberg","2026-07-22T22:26:32.2280000+00:00","For the sake of testing, I have a commercial and a homemade FPGA based BERT that both have programmable TX FFE and drive strength","",""
+"812217062567051294","azonenberg","2026-07-22T22:26:44.3840000+00:00","so i can throw an overemphasized eye at a receiver for testing","",""
+"262706220073222144","namibj","2026-07-22T22:54:15.7250000+00:00","hmmm....
+I'm assuming there are similarly affordable 25G variants of the DS125DF111 's functionality, right?","",""

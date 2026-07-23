@@ -4357,6 +4357,373 @@ Can you see if that at least kinda works? Like, with not-too-hard matching; bewa
 2026-07_media/ctle_stage_v1.spice-822DA.s3p
 
 
+[2026-07-22 8:55 p.m.] namibj
+edit: this has in the same `.s3p` in the sequence given by the `.res` a sweep of the primary design-time peaking control tunable; essentially the header and footer are only present once, and then it's the touchstone lines/frequency-sweep from the "operating bias points" listed in the `.res` file, just concatenated together, in the order they are called out in the `.res` file.
+
+{Attachments}
+2026-07_media/ctle_stage_v1.spice-0D9B1.res
+2026-07_media/ctle_stage_v1.spice-314D8.s3p
+
+
+[2026-07-22 8:57 p.m.] namibj
+here's just a single one for ease of plugging in; this should be much more representative than the first preview I had shared a few hours ago.
+
+{Attachments}
+2026-07_media/ctle_stage_v1_cm2.5_neg_0.2.spice-54602.s3p
+
+
+[2026-07-22 9:19 p.m.] namibj
+These are the "obvious" tunables; though the main ones to aim for to move the response behavior would be:
+```
+clk_buf_in_out_ratio
+clk_buf_load_r
+clk_buf_neg_ratio
+clk_buf_tail_current
+input_cm
+```
+with `clk_buf_neg_tail_adjust` being a minor tunable.
+
+`clk_buf_in_out_ratio` says how much weaker the input stage is vs. the output stage
+`clk_buf_load_r` is the pull-up/load resistance at the output stage
+`clk_buf_neg_ratio` says how much weaker the negative feedback onto the output node[pair] of the input stage should be, relative to the strength of the output stage. Thus divide it by `clk_buf_in_out_ratio` to understand how strong the negative feedback is relative to the input.
+`clk_buf_tail_current` adjusts about anti-proportionally with `clk_buf_load_r` and gives the tail current reference fed to a current mirror (with infinite decoupling capacitance) for driving the actual tail current sources for the 3 diff pairs here. The input and output pair share a bias voltage and only adjust their tail current through adjusting the size of the tail transistor.
+`input_cm` is the common mode voltage of the input signal, very relevant for determining the bias conditions the input diff pair are subjected to. In hindsight I guess there should be little harm from just setting that very high as the tail current source ought to take up any necessary slack.... _I think..._ but probably it's not nearly as clear-cut as that hindsight idea hoped.
+`clk_buf_neg_tail_adjust` multiplies the tail current fed to the negative feedback diffpair's current mirror from what the naive `clk_buf_neg_ratio * clk_buf_tail_current` would otherwise give.
+
+`clk_buf_tail_current` even if adjusted anti-proportionally with `clk_buf_load_r` is relevant because the capacitances (and in that case, also the output-side voltages) remain the same, even as the resistances change, which adjusts the RC time constants.
+
+{Attachments}
+2026-07_media/image-4C0B3.png
+2026-07_media/ctle_stage_v1_cm2.5_neg_0.2-98B44.spice
+
+
+[2026-07-22 9:27 p.m.] azonenberg
+let me look
+
+
+[2026-07-22 9:30 p.m.] azonenberg
+hmmm i can't read that
+
+
+[2026-07-22 9:30 p.m.] azonenberg
+neither sonnet nor ngscopeclient can parse it and the format looks different. is touchstone 2.0 a new thing?
+
+
+[2026-07-22 9:30 p.m.] azonenberg
+can you convert to a touchstone v1 file?
+
+
+[2026-07-22 9:31 p.m.] namibj
+If I read correctly this suggests that there's a hump between about 2.6 GHz and 8.4 GHz with this parametrization here:
+
+{Attachments}
+2026-07_media/ctle_stage_v1_cm2.5_neg_0.4.spice-6AD5D.s3p
+2026-07_media/ctle_stage_v1_cm2.5_neg_0.4-1243A.spice
+
+
+[2026-07-22 9:31 p.m.] namibj
+sure
+
+
+[2026-07-22 9:31 p.m.] namibj
+the manual said it's default and didn't mention it being funky so I figured the v1 was legacy form the 90's that one didn't wanna actually use 😄
+
+
+[2026-07-22 9:33 p.m.] namibj
+ugh this is way different....
+
+{Attachments}
+2026-07_media/ctle_stage_v1_cm2.5_neg_0.4.spice-AE0F3.s3p
+2026-07_media/ctle_stage_v1_cm2.5_neg_0.4-229E0.spice
+
+
+[2026-07-22 9:34 p.m.] namibj
+does this please your tooling?
+
+
+[2026-07-22 9:36 p.m.] azonenberg
+it's the 30 year old format that was so simple and functional that there was no reason to ever change it
+
+
+[2026-07-22 9:36 p.m.] azonenberg
+and became the industry standard interchange format for a reason
+
+
+[2026-07-22 9:37 p.m.] azonenberg
+then someone bought up the rights to the name and came out with a newer version that breaks compatibility in a bunch of ways and a lot of tooling doesnt support
+
+
+[2026-07-22 9:37 p.m.] azonenberg
+ok so which port number is which?
+
+
+[2026-07-22 9:37 p.m.] namibj
+I mean it's 17yo by now.... https://ibis.org/touchstone_ver2.0/
+
+
+[2026-07-22 9:38 p.m.] azonenberg
+if it's 17 years old and my commercial eda tool can't read it
+
+
+[2026-07-22 9:38 p.m.] azonenberg
+there's probably a reason they never implemented it :p
+
+
+[2026-07-22 9:39 p.m.] namibj
+1 and 2 are the wires of the supposedly balanced input; 3 is the differentially connected output
+
+
+[2026-07-22 9:39 p.m.] azonenberg
+every s-parameter dataset i've ever got from an rf component vendor, off a VNA, etc has been v1 format
+
+
+[2026-07-22 9:39 p.m.] azonenberg
+ok so... hmm. this doesn't look like much of an equalizer?
+
+
+[2026-07-22 9:39 p.m.] azonenberg
+looking at S31 it's flat for a while then rolls off, i'm not seeing much in the way of peaking
+
+
+[2026-07-22 9:40 p.m.] namibj
+> Version 1.0 and Version 2.0 files differ in three additional respects:
+> • G-, H-, Y-, and Z- parameters are normalized in Version 1.0 but are not normalized in Version 2.0.
+> • Effective noise resistance in noise parameter data is considered normalized in Version 1.0 but is
+> not normalized in Version 2.0.
+> • Mixed-mode support is added in Version 2.0, so that network parameter data in the file is
+> interpreted differently in the presence of the [Mixed-Mode Order] keyword.
+
+
+[2026-07-22 9:41 p.m.] namibj
+what about S13?
+
+
+[2026-07-22 9:43 p.m.] namibj
+wait huh
+
+
+[2026-07-22 9:46 p.m.] namibj
+does one of these behave better?
+
+{Attachments}
+2026-07_media/ctle_stage_v1_cm2.5_neg_0.2.spice-D1164.s3p
+2026-07_media/ctle_stage_v1_cm2.5_neg_0.6.spice-375BD.s3p
+
+
+[2026-07-22 9:47 p.m.] namibj
+(nami is sad about having wasted so much time earlier on ILT)
+
+
+[2026-07-22 9:47 p.m.] azonenberg
+I see huge differences in end to end gain, is that expected?
+
+
+[2026-07-22 9:48 p.m.] azonenberg
+the 0.2 is like +6 dB, the 0.4 is -16, the 0.6 is -45
+
+
+[2026-07-22 9:48 p.m.] azonenberg
+but shows more of a peaking response like i would expect
+
+
+[2026-07-22 9:49 p.m.] namibj
+yeah
+
+
+[2026-07-22 9:50 p.m.] namibj
+it's the strength of the inter-stage active negative feedback
+
+
+[2026-07-22 9:50 p.m.] namibj
+
+
+{Attachments}
+2026-07_media/image-BB984.png
+
+
+[2026-07-22 9:50 p.m.] namibj
+forgive the upside-down center please
+
+
+[2026-07-22 9:52 p.m.] namibj
+peak gain or low frequency?
+
+
+[2026-07-22 9:53 p.m.] azonenberg
+Low frequency
+
+
+[2026-07-22 9:53 p.m.] namibj
+yeah that's supposed
+
+
+[2026-07-22 9:53 p.m.] azonenberg
+The peaking response on the v0.6 looks good as a start just from looking at the plot, if you can move it up 40 dB or so :p
+
+
+[2026-07-22 9:54 p.m.] namibj
+can you fix the latter through adding an inductor or attaching a different impedance at the inputs/outputs?
+
+Also keep in mind you're supposed to feed port 1 and 2 from the two wires of a balanced line....
+
+
+[2026-07-22 9:54 p.m.] namibj
+(that's not 40dB though)
+
+
+[2026-07-22 9:56 p.m.] azonenberg
+Yeah I'm just looking at 3 from 1 for the purposes of a quick look
+
+
+[2026-07-22 9:56 p.m.] namibj
+yeah I just guessed the impedances from the load impedance.... roughly
+
+
+[2026-07-22 9:56 p.m.] azonenberg
+The bigger issue I see is group delay flatness, ~150ps variation over 0-10 GHz is not ideal
+
+
+[2026-07-22 9:56 p.m.] azonenberg
+that's multiple UIs
+
+
+[2026-07-22 9:58 p.m.] namibj
+well 10GHz is kinda far frequency wise...
+
+
+[2026-07-22 9:59 p.m.] namibj
+but yes
+
+
+[2026-07-22 10:00 p.m.] namibj
+is it possible that many of the missing dB are accounted for by reflection?
+
+
+[2026-07-22 10:02 p.m.] azonenberg
+very possible i didnt look at return loss. flatness is what i'm more concerned about at this opint
+
+
+[2026-07-22 10:02 p.m.] azonenberg
+
+
+{Attachments}
+2026-07_media/ctle3-3BE74.png
+
+
+[2026-07-22 10:02 p.m.] azonenberg
+and i'm not too happy with what i see so far :p
+
+
+[2026-07-22 10:02 p.m.] azonenberg
+this is before and acter
+
+
+[2026-07-22 10:02 p.m.] azonenberg
+yes, the after is worse
+
+
+[2026-07-22 10:02 p.m.] azonenberg
+I think the group delay response is a significant part of the issue since the magnitude response doesnt look too bad
+
+
+[2026-07-22 10:03 p.m.] azonenberg
+phase linearity is the issue
+
+
+[2026-07-22 10:05 p.m.] namibj
+is that better for some of the other(s)?
+
+
+[2026-07-22 10:08 p.m.] namibj
+oh, also, could it be that this might only even be necessary when looking at direct-attach copper cables (the multi-meter Twinax ones), and use with optics could reasonably rely on the redriver in the optic providing an open-enough eye to the slicer?
+
+
+[2026-07-22 10:09 p.m.] namibj
+(...is that behavior tamed by applying series or shunt inductor at input and/or output?)
+
+
+[2026-07-22 10:10 p.m.] namibj
+I'd not expect the mosfet gate input to be _particularly_ resistive in impedance...
+
+
+[2026-07-22 10:13 p.m.] azonenberg
+This is purely a frequecny domain propagation model, not a circuit simulation
+
+
+[2026-07-22 10:13 p.m.] namibj
+....I'd _guess_ the takeaway can already be "sfp+ optics are already able to provide an eye that can be sliced without any receiver equalization, provided short and quality PCB trace is used"?
+
+
+[2026-07-22 10:13 p.m.] azonenberg
+Yes, i think that should be the case
+
+
+[2026-07-22 10:13 p.m.] azonenberg
+If you have a long direct-attach cable or something you'd definitely want a retimer/redriver befroe a non-equalizing receiver
+
+
+[2026-07-22 10:14 p.m.] namibj
+yeah and the mentioned are just linear things with very plain piecewise-linear shaped log-log plotted complex impedances
+
+
+[2026-07-22 10:15 p.m.] namibj
+are such redrivers/retimers low cost COTS chips?
+
+
+[2026-07-22 10:16 p.m.] azonenberg
+Yes
+
+{Reactions}
+ferrisCatOwO
+
+[2026-07-22 10:17 p.m.] namibj
+Yay.
+I'll share the happy news where plans about collaborative design of a "proper" SerDes for Tim Edward's chipalooza are under discussion.
+
+
+[2026-07-22 10:23 p.m.] namibj
+.....could we perhaps even rely on their existence to _hope_ for possibly reaching all the way to 25G if the mux is doubled once more (to 8:1) and we give up any hope of producing a strong good eye (gain at those frequencies is very expensive on gf180mcuD, even with inductors helping) and the base clock is overclocked/pushed to 3.2 from the 10G C4's 2.5 ?
+
+I'd expect 50~100 mV p-p (opening, through de-emphasis of low frequencies) to be readily feasible to produce, but aiming for much more would make me worry about melting the chip.
+
+
+[2026-07-22 10:24 p.m.] azonenberg
+I have no idea. The good retimers will have a CTLE/DFE at the input and a FFE on the output programmable over i2c
+
+
+[2026-07-22 10:25 p.m.] azonenberg
+Check out the DS125DF111 for example which digikey has for... wow $23 @ qty1, priecs have gone up
+
+
+[2026-07-22 10:25 p.m.] namibj
+....programmable.... good; that should allow skipping CTLE on the receiver by pushing that work to the transmitter's FFE, right?
+
+
+[2026-07-22 10:25 p.m.] azonenberg
+(you can get cheaper ones that are just a CTLE/buffer without the full CDR PLL and TX equalizer)
+
+
+[2026-07-22 10:25 p.m.] namibj
+ehhh, not so bad 😄
+
+
+[2026-07-22 10:26 p.m.] namibj
+yeah
+
+
+[2026-07-22 10:26 p.m.] azonenberg
+For the sake of testing, I have a commercial and a homemade FPGA based BERT that both have programmable TX FFE and drive strength
+
+
+[2026-07-22 10:26 p.m.] azonenberg
+so i can throw an overemphasized eye at a receiver for testing
+
+
+[2026-07-22 10:54 p.m.] namibj
+hmmm....
+I'm assuming there are similarly affordable 25G variants of the DS125DF111 's functionality, right?
+
+
 ==============================================================
-Exported 894 message(s)
+Exported 971 message(s)
 ==============================================================
