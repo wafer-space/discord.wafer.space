@@ -1332,3 +1332,44 @@ Or are we banned from taping out a die the foundry would consider/call ""flip-ch
 "812217062567051294","azonenberg","2026-07-23T14:27:59.3680000+00:00","the ngscopeclient PLL is a fully DSP based design that does fairly simple second order corrections","",""
 "812217062567051294","azonenberg","2026-07-23T14:28:21.7270000+00:00","and does not have any specific jitter transfer curve and i want to eventually replace/supplement with one that actually matches the response in various standards","",""
 "1140876793298047028","mavmaster","2026-07-23T18:02:47.9370000+00:00","Ideal comparators + verilog 2DFF PFD comes to mind. If you figure out a simple way please do post about it -- would have helped speed up my PLL transients a ton.","",""
+"262706220073222144","namibj","2026-07-23T22:57:20.3540000+00:00","Oh I'm expecting to share the SPICE deck(s) for/of it ""basically immediately"" with the next decently-clean commit after figuring it out, and if nothing sufficiently urgent keeps me from doing so, I'd have reason to blog post explain it, I guess, given how I've been stumped on it so far and that to me at least it feels like something that should be quite obvious to have access to in order to allow all the good benefits of harmonic balance SPICE analysis (it's basically the translinear operating conditions + support-for-intermodulation-products evolution of the linearized-small-signal AC analysis; or seen another way, the ensemble-of-harmonics-and-intermodulation-products analytic-time-integration-reliant evolution of the classic single-frequency-only (0 Hz) DC operating point analysis), even when once has to analyze a VCO across PVT.
+
+Because you're not gonna be able to handle the PVT variation aspect in any reasonable way without a way to let the SPICE solver also solve for whatever control voltage happens to be correct, in order to operate at the nominal frequency. You don't _want_ to model any real PLL, you just want to have the solver cough up the control voltage that makes the VCO be your clock, while it is already working on coughing up all those other operating point node voltages.
+
+Like, at least to me, there's no fundamental difference between simulating a mixer in harmonic balance fed from an ideal LO and an ideal baseband, vs. plopping down the VCO you're gonna use to synthesize the LO, wiring that realistic drive behavior source to the mixer, and attaching some magical block to the VCO's outputs and the ideal LO feed and the VCO's control node and selecting what sign the VCO's `deltaHz/V` slope has.
+It might be quite ticklish to initial conditions especially if not sufficiently frequency detector and too much phase detector based, but it's not like one couldn't ""just"" use exisitng cycle counting based frequncy measurments for the VCO in SPICE while stepping through some control voltages over a few transient runs, to figure out a reasonable approximation for at least the typical corner and nominal voltage&temperature, from where quality higher order continuation solvers ought to be able to ""pull in and lock the PLL"", and once there is a consistent set of harmonic balance phasors for all the nodes, those very same quality continuation solvers should have an easy time dragging the parameters of concern from those values of the typical corner to those values of the target corner that the solver is supposed to find a solution for.
+Because those are _specifically_ about dealing with flaky behavior and breakage-levels of ""there exist multiple solutions/bias points for this new corner, good luck not getting them confused as you transition from your exisitng solution to one for the new corner"".....
+
+(from the Xyce docs; `Figure 8-8`; attached `Figure 8-9`:)
+It initializes `Vtest` to 0 and sweeps it between 0 and 2.0 with initial step size 0.01, max step size 0.1, and minimum step size of 1e-8; it relies on a secant predictor to round the corners of where multiple currents are solutions to an individual voltage.)
+```spice
+Test for turning points using arclength continuation
+* polynomial coefficients:
+.param A=3.0
+.param B=-2.0
+.param C=1.0
+.param I=1.0
+Vtest 1 0 5.0
+Btest 1 0 V=A*(I(Vtest)-I)**3 + B*(I(Vtest)-I) + C
+.DC Vtest 1 1 1
+* natural parameter continuation options (via loca)
+.options nonlin continuation=1
+* stepper sets what order of continuation this is.
+* stepper=0 or stepper=NAT is natural continuation
+* stepper=1 or stepper=ARC is arclength continuation
+*
+* predictor must be set to secant to see turning points
+* predictor=0 tangent
+* predictor=1 secant
+* predictor=2 random
+* predictor=3 constant
+.options loca stepper=1
++ predictor=1 stepcontrol=1
++ conparam=Vtest
++ initialvalue=0.0 minvalue=0.0 maxvalue=2.0
++ initialstepsize=0.01 minstepsize=1.0e-8 maxstepsize=0.1
++ aggressiveness=0.1
+.print homotopy I(Vtest)
+```","2026-07_media/image-0DA26.png",""
+"169786952432746498","mithro_","2026-07-24T00:56:56.5150000+00:00","Well it's more if something comes up at the fab it might get ejected.","",""
+"262706220073222144","namibj","2026-07-24T00:59:02.6410000+00:00","Oh you mean, it's on the reticle but liable to getting bumped off if the fab has any complaints about it being there?","",""
