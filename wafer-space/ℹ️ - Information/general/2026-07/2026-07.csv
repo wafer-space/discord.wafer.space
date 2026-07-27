@@ -1376,7 +1376,21 @@ Btest 1 0 V=A*(I(Vtest)-I)**3 + B*(I(Vtest)-I) + C
 "169786952432746498","mithro_","2026-07-24T05:00:18.3620000+00:00","","",""
 "169786952432746498","mithro_","2026-07-26T00:15:17.7570000+00:00","Anyone played with https://brandonli.net/semisim/animations and https://brandonli.net/semisim/ ?","","🇽 (1),👍 (1)"
 "220639106915368960","tholin","2026-07-26T19:09:24.7150000+00:00","I’ve decided I need a break from taping out these big multi-project dies. Its really burning me out each time and taking away valuable space on the wafer.
-Next shuttle, my submission is going to be simple: how much current can I push? Either a quarter or half slot, entire die area filled with parallel FETs to see just how much physical current I can switch. Whole pad ring will be analog pads to spread out the current over multiple pads.","",""
+Next shuttle, my submission is going to be simple: how much current can I push? Either a quarter or half slot, entire die area filled with parallel FETs to see just how much physical current I can switch. Whole pad ring will be analog pads to spread out the current over multiple pads.","","👍 (1)"
 "596068704471482370","246tnt","2026-07-26T19:11:17.9270000+00:00","Why ? Like what would you do with that data ?","",""
 "220639106915368960","tholin","2026-07-26T19:12:35.6920000+00:00","And just so the chip is not going to be entirely useless, I am going to add a little analog stuff in the corner to turn it into a charge controller for sodium-ion cells, because I genuinely need such a thing.","",""
 "220639106915368960","tholin","2026-07-26T19:13:45.0790000+00:00","There is some cool stuff that could be made if we can push decent currents. Mostly power stuff. DC-DC converters of various kinds.","",""
+"262706220073222144","namibj","2026-07-26T21:35:17.0320000+00:00","I'm planning to drive epc-co power FETs with it for using digital predistortion to neutralize EMI from a multi-phase charge pump.
+
+Also if we're lucky we might know that we could do flip chip which would work great with integrated power stages.
+
+Also you might possibly be interested in helping me& @Essen actually do that muxed e-test with which we're planning to do full DC characterization across VT (can't do P; models have to help with that part) of whatever thin oxide SCL we hope to use productively on Run4.
+
+Are you sure you don't want your SCL to use channels longer than minimum for leakage?","","⬆️ (1)"
+"220639106915368960","tholin","2026-07-26T21:38:15.8440000+00:00","My SCL is optimized for performance","",""
+"220639106915368960","tholin","2026-07-26T21:38:23.8000000+00:00","I’m not going to do anything that lowers propagation delays","",""
+"262706220073222144","namibj","2026-07-26T21:38:29.4390000+00:00","(note that an efficient gate driver has to use some inductance in the gate drive loop, and actively pulse-form transitions as the power device will be lossy when the channel is half on)","",""
+"262706220073222144","namibj","2026-07-26T21:38:52.0670000+00:00","Oh ok","",""
+"262706220073222144","namibj","2026-07-26T22:29:48.6870000+00:00","The muxed e-test is for near-DC measuring as de-embedding parasitic capacitance would be _hard._
+If you're having suggestions on how to deal with that part it'd be appreciated, though. 
+Near-DC is just ""4""-wire kelvin connections to the ""pin""'s of the DUT, or including the via down to it.","",""

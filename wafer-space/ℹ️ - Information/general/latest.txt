@@ -100,7 +100,7 @@ https://cdn.discordapp.com/attachments/1474282211376369664/1521663851009933332/i
 
 {Embed}
 https://cdn.discordapp.com/attachments/1474282211376369664/1521663851009933332/image.png?ex=6a45a765&is=6a4455e5&hm=663daf621803cf31bb7fb3f142b0c34c1674c7b016812b34ae04ba2f3d3cb837&
-2026-07_media/image-492D0.png
+2026-07_media/image-E3056.png
 
 
 [2026-07-01 9:21 p.m.] namibj
@@ -5083,6 +5083,8 @@ Anyone played with https://brandonli.net/semisim/animations and https://brandonl
 I’ve decided I need a break from taping out these big multi-project dies. Its really burning me out each time and taking away valuable space on the wafer.
 Next shuttle, my submission is going to be simple: how much current can I push? Either a quarter or half slot, entire die area filled with parallel FETs to see just how much physical current I can switch. Whole pad ring will be analog pads to spread out the current over multiple pads.
 
+{Reactions}
+👍
 
 [2026-07-26 7:11 p.m.] 246tnt
 Why ? Like what would you do with that data ?
@@ -5096,6 +5098,40 @@ And just so the chip is not going to be entirely useless, I am going to add a li
 There is some cool stuff that could be made if we can push decent currents. Mostly power stuff. DC-DC converters of various kinds.
 
 
+[2026-07-26 9:35 p.m.] namibj
+I'm planning to drive epc-co power FETs with it for using digital predistortion to neutralize EMI from a multi-phase charge pump.
+
+Also if we're lucky we might know that we could do flip chip which would work great with integrated power stages.
+
+Also you might possibly be interested in helping me& @Essen actually do that muxed e-test with which we're planning to do full DC characterization across VT (can't do P; models have to help with that part) of whatever thin oxide SCL we hope to use productively on Run4.
+
+Are you sure you don't want your SCL to use channels longer than minimum for leakage?
+
+{Reactions}
+⬆️
+
+[2026-07-26 9:38 p.m.] tholin
+My SCL is optimized for performance
+
+
+[2026-07-26 9:38 p.m.] tholin
+I’m not going to do anything that lowers propagation delays
+
+
+[2026-07-26 9:38 p.m.] namibj
+(note that an efficient gate driver has to use some inductance in the gate drive loop, and actively pulse-form transitions as the power device will be lossy when the channel is half on)
+
+
+[2026-07-26 9:38 p.m.] namibj
+Oh ok
+
+
+[2026-07-26 10:29 p.m.] namibj
+The muxed e-test is for near-DC measuring as de-embedding parasitic capacitance would be _hard._
+If you're having suggestions on how to deal with that part it'd be appreciated, though. 
+Near-DC is just "4"-wire kelvin connections to the "pin"'s of the DUT, or including the via down to it.
+
+
 ==============================================================
-Exported 1,051 message(s)
+Exported 1,057 message(s)
 ==============================================================
