@@ -473,6 +473,126 @@ Normally I just run RGMII for everything since I have RGMII PHYs all over the pl
 i can just slap the same design down anywhere and use it
 
 
+[2026-07-29 8:50 p.m.] namibj
+We're targeting Tim Edward's IHP tapeout for now; then doing the muxed e-test for W.S. Run3; then porting the SerDes from IHP to the next one in line (I think it was aimed roughly at W.S. Run4?).
+
+
+[2026-07-29 8:55 p.m.] namibj
+~~ngl I was thinking about 33b wide to kill the gearbox but `3¹ × 11¹` is not a good vibe to target with the MUX~~
+
+
+[2026-07-29 8:58 p.m.] namibj
+Do you know if it's easier or harder to check than the scrambled idle test pattern they added as an optional one in the 25GBASE-R PCS?
+
+
+[2026-07-29 8:58 p.m.] azonenberg
+Yeah 32:1 serialization followed by 33:32 gearboxing is the way to do it IMO
+
+
+[2026-07-29 8:58 p.m.] azonenberg
+I have not looked at 25GbaseR so can't comment. I believe it is the same 64/66b line code as 10GbaseR but with FEC added on top
+
+
+[2026-07-29 8:58 p.m.] azonenberg
+PRBS7/31 are trivial LFSRs and super easy to check
+
+
+[2026-07-29 8:59 p.m.] namibj
+And any wants regarding statistics that go beyond very plain&obvious counters?
+
+
+[2026-07-29 8:59 p.m.] azonenberg
+So, *ideally* if you want something the most flexible and useful - i don't expect this for the first tapeout
+
+
+[2026-07-29 8:59 p.m.] azonenberg
+your receiver would have two slicers with controllable phase and voltage offset
+
+
+[2026-07-29 8:59 p.m.] azonenberg
+One always tries to be in the eye center, the other is adjustable
+
+
+[2026-07-29 8:59 p.m.] namibj
+Yeah the FEC is only lacking in CR-S and SR-S; it only has minor additions on 10G other than that FEC.
+
+
+[2026-07-29 8:59 p.m.] azonenberg
+And you can sweep phase/voltage shift and check how much of the time they disagree
+
+
+[2026-07-29 9:00 p.m.] azonenberg
+Which will let you do full BER eye scan
+
+
+[2026-07-29 9:00 p.m.] azonenberg
+This is how serdes eye scan works on e.g. xilinx transceivers, and IMO is a feature we very much want in a production grade open serdes IP
+
+
+[2026-07-29 9:00 p.m.] azonenberg
+it isn't a day-one requirement for a first tapeout but the more you can validate early on the better
+
+
+[2026-07-29 9:00 p.m.] azonenberg
+and it will make receiver margin testing much easier if we can eye-scan internally, post equalization
+
+
+[2026-07-29 9:01 p.m.] azonenberg
+we can then play with CTLE settings to see what gives the most open eye at the RX
+
+
+[2026-07-29 9:01 p.m.] azonenberg
+If done right, this eye scan is non-intrusive (the actual signal-out slicer doesn't change) and can work on arbitrary data not just a PRBS
+
+
+[2026-07-29 9:01 p.m.] namibj
+So, the good thing, if lucky a phase interpolator thingy falls out of the CDR design blocks; if that's easily digitally controllable I would very much attempt to give you a capture ability akin to the 10G reclocker you linked a couple days ago.
+
+
+[2026-07-29 9:02 p.m.] azonenberg
+Great. Look at e.g. the xilinx GTX/GTY datasheets for an example of how you'd use this
+
+
+[2026-07-29 9:02 p.m.] azonenberg
+I have code written for the GTX, haven't done GTY yet
+
+
+[2026-07-29 9:02 p.m.] azonenberg
+Long term, I would want an APB or similar register interface on the transceiver that we can use to access eye scan as well as various configuration settings like enabling PRBS test, controlling emphasis, etc
+
+
+[2026-07-29 9:02 p.m.] azonenberg
+It probably makes sense for this to be an external module
+
+
+[2026-07-29 9:03 p.m.] azonenberg
+i.e. the transceiver has a native interface with separate ports you can drive directly from RTL, then you supply a bus wrapper with a memory map around those ports as an optional addon
+
+
+[2026-07-29 9:04 p.m.] azonenberg
+If you have a proposed feature set and RTL interface documented anywhere yet, I can give feedback I've worked with multiple vendors' FPGA SERDES as well as one ASIC SERDES so far
+
+
+[2026-07-29 9:04 p.m.] azonenberg
+So i have a decent idea of what i do and don't like
+
+
+[2026-07-29 9:04 p.m.] namibj
+I'm not gonna attempt CTLE if I can get enough amplitude in to where I can hit the eye box with the whatever kind of clocked comparator it's gonna rely on.
+
+
+[2026-07-29 9:10 p.m.] azonenberg
+well anyway, internal eye scan is something we need long term
+
+
+[2026-07-29 9:10 p.m.] azonenberg
+if it can't make the initial tapeout, we'll survive
+
+
+[2026-07-29 9:10 p.m.] azonenberg
+but it is a must-have feature for a long term professional grade transceiver
+
+
 ==============================================================
-Exported 105 message(s)
+Exported 135 message(s)
 ==============================================================
