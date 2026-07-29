@@ -1,0 +1,458 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / general / Hi @azonenberg ,  I am currently
+After: 2026-06-30 11:59 p.m.
+Before: 2026-08-01 12:00 a.m.
+==============================================================
+
+[2026-07-28 9:08 p.m.] essen__
+
+
+
+[2026-07-28 9:08 p.m.] essen__
+As I understand it, there are 3 modes for the test pattern generation:
+- PRBS 
+- square
+- pseudo-random (scrambler)
+
+
+[2026-07-28 9:10 p.m.] azonenberg
+PRBS is pseudorandom
+
+
+[2026-07-28 9:10 p.m.] azonenberg
+but using specific standardized LFSRs in particular
+
+
+[2026-07-28 9:11 p.m.] azonenberg
+I have an FPGA-proven 10GbaseR MAC/PCS that would be straightforward to add a few resets to and get working in ASIC, the scrambler block has already been ported successfully to TS28HPC+ and used with a commercial SERDES
+
+
+[2026-07-28 9:11 p.m.] azonenberg
+I wouldn't waste time thinking about Ethernet for this stage of things though. Focus on the PHY
+
+
+[2026-07-28 9:12 p.m.] azonenberg
+the line coding and framing is a solved problem once we get the PHY working
+
+
+[2026-07-28 9:12 p.m.] azonenberg
+I could write the missing pieces in an afternoon
+
+
+[2026-07-28 9:12 p.m.] azonenberg
+if you can generate and read back PRBS7 and PRBS31 that should be sufficient
+
+{Reactions}
+👍
+
+[2026-07-28 9:13 p.m.] azonenberg
+We can worry about whatever comes downstream of the transceiver on a future chip
+
+
+[2026-07-28 9:13 p.m.] azonenberg
+or bolt on an experimental MAC/PCS but it wont be the focus of testing
+
+
+[2026-07-28 9:13 p.m.] essen__
+Alright, I also have a 10GBASE-R PCS, but it hasn't been successfully taped out, so yours is safer. 
+Is the code for it public ? Mind if I torture it ?
+
+
+[2026-07-28 9:14 p.m.] azonenberg
+It is public and on azonenberg/antikernel-ipcores on github, dont have the full link handy. again, it was written for FPGA and will need a little bit of tweaking
+
+
+[2026-07-28 9:14 p.m.] azonenberg
+but i have successfully got it running at one point or other on efinix titanium, xilinx kintex-7, and xilinx ultrascale+
+
+
+[2026-07-28 9:14 p.m.] azonenberg
+i have gearboxes and 64/66b coding blocks etc that we can add to it as needed
+
+{Reactions}
+👍
+
+[2026-07-28 9:15 p.m.] essen__
+Perfect.
+
+
+[2026-07-28 9:15 p.m.] azonenberg
+The internal-facing interface for the MAC is axi4-stream
+
+
+[2026-07-28 9:15 p.m.] essen__
+I hate you .... (Just kidding.)
+
+
+[2026-07-28 9:16 p.m.] azonenberg
+at some point i'll polish things up more and document it etc
+
+
+[2026-07-28 9:16 p.m.] essen__
+I will go though the code and see what we want to add: does it have a MDIO interface ?
+
+
+[2026-07-28 9:16 p.m.] azonenberg
+No
+
+{Reactions}
+👍
+
+[2026-07-28 9:16 p.m.] azonenberg
+just logic outputs for link up etc
+
+
+[2026-07-28 9:16 p.m.] azonenberg
+I wanted to add some performance counters and adjustments to it in the future, but it would probably just be a register interface
+
+
+[2026-07-28 9:17 p.m.] azonenberg
+
+
+{Attachments}
+2026-07_media/Screenshot_2026-07-07_13-24-18-11E80.png
+
+
+[2026-07-28 9:17 p.m.] essen__
+Mind if I bolt one on then? 
+I think we really want one. I can handle it.
+
+
+[2026-07-28 9:18 p.m.] azonenberg
+Here's a capture of it running on an Efinix platform
+
+{Reactions}
+💙
+
+[2026-07-28 9:18 p.m.] azonenberg
+Again, let's worry about the phy first
+
+
+[2026-07-28 9:18 p.m.] azonenberg
+given the transceiver, the MAC/PCS is trivial. there are no major engineering challenges and there's existing code including but not limited to mine that we can build on
+
+
+[2026-07-28 9:19 p.m.] azonenberg
+the transceiver is the part we don't have, and that is actually hard
+
+
+[2026-07-28 9:21 p.m.] essen__
+Yeah, but my analog skills are far from good enough to be able to design a transiver, so I will stick to what I know I can do.
+
+
+[2026-07-28 9:22 p.m.] azonenberg
+Well feel free to poke at my code but i suggest you not spend a lot of time on porting at this stage
+
+
+[2026-07-28 9:23 p.m.] azonenberg
+I am planning to do some improvements here to make it more portable across a wider range of transceivers, and documenting it better, in the coming weeks/months
+
+
+[2026-07-28 9:23 p.m.] azonenberg
+So you might end up with a lot of merge conflicts if you mess with the code much
+
+
+[2026-07-28 9:24 p.m.] azonenberg
+especially things around clocking and resets that will be important for asic porting are going to get revamped
+
+
+[2026-07-28 9:24 p.m.] azonenberg
+it ideally will end up being something that will run on any xilinx or efinix part, or asic, with few if any rtl changes needed to integrate
+
+
+[2026-07-28 9:40 p.m.] azonenberg
+The bigger question, honestly, is how things like the CRC are going to do timing wise
+
+
+[2026-07-28 9:40 p.m.] azonenberg
+in the MAC more than the PCS. the PCS is straightforward
+
+
+[2026-07-28 9:40 p.m.] azonenberg
+but the MAC was written for 28nm and smaller FPGAs
+
+
+[2026-07-28 9:41 p.m.] azonenberg
+I do not know how well it will perform on GF180 especially without the 1.8V transistors
+
+
+[2026-07-28 9:41 p.m.] azonenberg
+I think 1000baseX and PCIe gen1/2 are far more reasonable goals for GF180MCU, and 10G is probably something we should be targeting at a future 90/65/40nm open PDK
+
+
+[2026-07-28 9:41 p.m.] azonenberg
+I would be happy if someone proves me wrong and gets 10G working on 180 though
+
+
+[2026-07-28 9:42 p.m.] essen__
+Tapeout is november 9th, so unfortunalty it looks like I will take the risk.
+
+
+[2026-07-28 9:45 p.m.] essen__
+Do you have a top for the PCS somewhere, looking at the code I see a lot of modules but I was wondering if you had another repo where you fit them all together ?
+
+
+[2026-07-28 9:51 p.m.] azonenberg
+This is purely an IP library repo
+
+
+[2026-07-28 9:52 p.m.] azonenberg
+interface/ethernet-stream/AXIS_XGEthernetMACWrapper is the top level wrapper for the Xilinx FPGA version of the block
+
+{Reactions}
+👍
+
+[2026-07-28 9:53 p.m.] azonenberg
+It includes an UltraScale+ GTY instance, clocks from the quad PLL, the PCS, and the MAC
+
+
+[2026-07-28 9:53 p.m.] azonenberg
+goes all the way from external differential pairs to axi streams facing the FPGA internals
+
+
+[2026-07-28 9:53 p.m.] azonenberg
+There are a lot of state machines and blocks in there that rely on FPGA power-on reset so you'll have to add external reset inputs for all of that
+
+
+[2026-07-28 9:54 p.m.] azonenberg
+You may have to increase pipeline depth for some stuff
+
+
+[2026-07-28 9:54 p.m.] essen__
+( perfect I just to happen to have an UltraScale+ in the corner )
+
+
+[2026-07-28 9:54 p.m.] azonenberg
+But if you don't have a transceiver yet, how are you going to tape this out?
+
+
+[2026-07-28 9:54 p.m.] azonenberg
+i'm confused
+
+
+[2026-07-28 9:54 p.m.] essen__
+Yeah, not a fan of the 64b wide data path too ...
+
+
+[2026-07-28 9:55 p.m.] azonenberg
+10GbaseR is natively a 64b block size although my MAC is mostly running double rate at 32 bit datapath
+
+
+[2026-07-28 9:55 p.m.] azonenberg
+since that's what the GTY typically gives you
+
+
+[2026-07-28 9:55 p.m.] azonenberg
+It passes timing for a -2 kintex7 with a GTX as well, i've used it there successfully
+
+
+[2026-07-28 9:55 p.m.] azonenberg
+i did have to add an extra pipeline stage there after having originally wrote it on ultrascale+
+
+
+[2026-07-28 9:56 p.m.] essen__
+namibj is doing the transceiver, I am doing the digital side and we are targeting the chipalooza challenge
+
+
+[2026-07-28 9:56 p.m.] azonenberg
+ah ok you're working together
+
+
+[2026-07-28 9:56 p.m.] azonenberg
+If you poke around there are 64/66b gearboxes under serdes/ in the same repo
+
+{Reactions}
+👍
+
+[2026-07-28 9:57 p.m.] azonenberg
+and block alignment
+
+
+[2026-07-28 9:57 p.m.] azonenberg
+that i've used to interface with transceivers that don't include this functionality natively
+
+
+[2026-07-28 9:57 p.m.] azonenberg
+the wrapper i mentioned above assumes your transceiver has the gearbox
+
+
+[2026-07-28 9:57 p.m.] azonenberg
+but yeah, i did not try super hard to save on area etc because i targeted this at large FPGAs where e.g. block ram is cheap
+
+{Reactions}
+😅
+
+[2026-07-28 9:58 p.m.] essen__
+Right, you don't provide a gearbox. 
+I will just bring mine.
+
+
+[2026-07-28 9:58 p.m.] azonenberg
+I have a gearbox
+
+
+[2026-07-28 9:58 p.m.] azonenberg
+it's just not in the wrapper
+
+
+[2026-07-28 9:58 p.m.] azonenberg
+it's in serdes/linecode/
+
+
+[2026-07-28 9:59 p.m.] azonenberg
+Gearbox32PlusHeaderTo32 and Gearbox32To32PlusHeader are probably the ones to look at
+
+{Reactions}
+👍
+
+[2026-07-28 10:00 p.m.] azonenberg
+All the pieces are there, i just dont have any docs on how they fit together yet
+
+
+[2026-07-28 10:00 p.m.] azonenberg
+but i am using them in real designs across several FPGAs internally
+
+{Reactions}
+👍
+
+[2026-07-28 10:00 p.m.] essen__
+Perfect, at least then I can be confident that they work.
+
+
+[2026-07-28 10:01 p.m.] azonenberg
+and again they're missing the asic resets
+
+{Reactions}
+👍
+
+[2026-07-28 10:01 p.m.] azonenberg
+especially on the axi stream versions rather than the older legacy ones using the native interface
+
+
+[2026-07-28 10:01 p.m.] azonenberg
+some stuff is reset on the axi stream ARESET#
+
+
+[2026-07-28 10:01 p.m.] azonenberg
+but not everything
+
+
+[2026-07-28 10:02 p.m.] azonenberg
+note also that the datapath supports running at both 312.5 and 322.2625 MHz depending on if you are using the weird xilinx pll flow that gives you a 32b data word every clock
+
+
+[2026-07-28 10:02 p.m.] azonenberg
+or if you are just at 1/32 rate on the serdes and occasionally have gaps in the data due to gearboxing
+
+{Reactions}
+👍
+
+[2026-07-28 10:02 p.m.] azonenberg
+so there's a data-valid strobe to account for
+
+
+[2026-07-28 10:02 p.m.] azonenberg
+and the axi stream on the tx side can occasionally backpressure
+
+{Reactions}
+👍
+
+[2026-07-28 10:02 p.m.] azonenberg
+the rx side stream does not support backpressure and if you can't process the data as it comes in, any FIFOs are up to you as the integrator
+
+{Reactions}
+👍
+
+[2026-07-28 10:10 p.m.] essen__
+For now I will try to assemble a top level with your code and get an area estimate + see how much work timing needs.
+
+
+[2026-07-28 10:11 p.m.] essen__
+Thanks @azonenberg
+
+
+[2026-07-28 10:11 p.m.] azonenberg
+The older version of the MAC had FIFOs that needed block ram, the AXI version backpressures on the TX so I don't think there is any SRAM anywhere in the mac/pcs
+
+
+[2026-07-28 10:11 p.m.] azonenberg
+what you put on the far side of the MAC is up to you
+
+
+[2026-07-28 10:12 p.m.] azonenberg
+But yeah, timing was not designed for an old slow cmos process
+
+
+[2026-07-28 10:12 p.m.] azonenberg
+so i am curious just how bad it will be
+
+
+[2026-07-28 10:12 p.m.] azonenberg
+There is also a PRBS31 generator core under math/ in that same repo BTW
+
+{Reactions}
+🎉
+
+[2026-07-28 10:12 p.m.] azonenberg
+that you should be able to just mux straight into the serdes at whatever bit width it runs at
+
+
+[2026-07-28 10:13 p.m.] azonenberg
+i don't currently have a PRBS checker IP you'll have to write that yourself
+
+{Reactions}
+👍
+
+[2026-07-28 10:13 p.m.] azonenberg
+i dont think i ever wrote PRBS7 but 31 is the more important test pattern since it more closely approximates the spectral characteristics of scrambled 10GbaseR data
+
+
+[2026-07-28 10:13 p.m.] azonenberg
+PRBS7 is better to simulate 8b10b
+
+{Reactions}
+👍
+
+[2026-07-28 10:20 p.m.] essen__
+I should have the results soon, maybe by tomorrow, but I don't think it will be too bad. 
+Let's see.
+
+
+[2026-07-28 10:23 p.m.] essen__
+The first node we are targetting is the ihp cmos 5l, which is about ~8x faster than the gf180 7 track. 
+But I think I will indeed be having a lot of fun with it ... 🫠
+
+
+[2026-07-28 10:25 p.m.] azonenberg
+oh, if you're going for IHP it'll definitely be a lot faster lol
+
+
+[2026-07-28 10:25 p.m.] azonenberg
+i was thinking gf180mcu with 3.3/5v cells
+
+
+[2026-07-28 10:49 p.m.] essen__
+Apparently the 9 track cells are a lot faster, but with just the 7 track closing that timing at 3.3V sounds like hell on earth
+
+
+[2026-07-28 10:50 p.m.] essen__
+That being said ... the plan of the challenge is to port the IP to all the nodes, and gf is defiantly on that list. 
+So sooner or later I will have to walk though that hell ...
+
+
+[2026-07-28 10:54 p.m.] azonenberg
+Lol. Well let me know how it goes, I'll see if i have time to do the cleanup of the MAC/PCS on my end
+
+
+[2026-07-28 10:54 p.m.] azonenberg
+I do also have a tri-speed 10/100/1000 baseX/SGMII MAC and 8b10b block
+
+
+[2026-07-28 10:54 p.m.] azonenberg
+which i think is likely to be easier to close timing for
+
+
+==============================================================
+Exported 101 message(s)
+==============================================================
