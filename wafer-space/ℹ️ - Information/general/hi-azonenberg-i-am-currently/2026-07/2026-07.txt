@@ -593,6 +593,32 @@ if it can't make the initial tapeout, we'll survive
 but it is a must-have feature for a long term professional grade transceiver
 
 
+[2026-07-29 9:17 p.m.] namibj
+I did/do want to be able to express that spectrum for e.g. the USB-SS, DP HBR2/3 (5.4/8.1 GBaud), PCIe 1/2, SATA 3, and depending on performance possibly SAS-3 (12G NRZ 8b10b).
+
+
+[2026-07-29 9:18 p.m.] azonenberg
+Yes. Which is why i suggested you implement both
+
+
+[2026-07-29 9:18 p.m.] azonenberg
+Given my PRBS31 module it should be trivial to make a PRBS7 generator, just change the length of the LFSR and tweak the tap positions
+
+
+[2026-07-29 9:18 p.m.] azonenberg
+should be like two lines of code changed
+
+
+[2026-07-29 9:19 p.m.] azonenberg
+or i can do it and fpga verify it at some point
+
+
+[2026-07-29 9:20 p.m.] namibj
+Is loopback from an offset slicer if the clock recovery is sufficiently independent to stay locked an acceptable substitute for an internal eye scanner? 
+
+At least if e.g. area limitations stand in the way of an actual second slicer & demuxer package?
+
+
 ==============================================================
-Exported 135 message(s)
+Exported 141 message(s)
 ==============================================================
