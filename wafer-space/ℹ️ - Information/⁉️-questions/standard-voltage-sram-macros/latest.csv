@@ -1,0 +1,29 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"919250960944078938","fstolz95","2026-07-30T18:42:49.8480000+00:00","Hi, I am currently preparing a university lab course where we will hopefully target and tapeout on wafer.space. I noticed that the provided PDK seems to be both 5V or 3.3V. I do not have any real preference here, but if I download the project template and simply paste in my verilog will it generate a 5V or a 3.3V design? A bit unrelated to this: Are any of the SRAM macros silicon proven?
+
+Thanks 🙂","",""
+"509798510170865675","essen__","2026-07-30T19:05:12.6670000+00:00","The `gf180mcu_ocd_io` SRAM macro targets 3.3V and the `gf180mcu_fd_ip_sram` 5V. 
+You might be able to use them at different voltages but you will want to check that. 
+By default template assumes you are working at 5V. 
+As for if the SRAM has been silicon proven **you will want to confirm** with others but I think the answer is yes.
+
+@Tim Edwards would you be so kind as to confirm that the `gf180mcu_ocd_io` SRAMs you sent out as part of ws1 are working as intended ?","",""
+"262706220073222144","namibj","2026-07-30T20:37:06.2660000+00:00","the foundry SCL works down to 1.8V nominal at a speed penalty, to be clear.
+AFAIK there's several of the actually-dense 3v3-transistor-based SRAM configurations on the currently-in-production chips, and the timeline plans are such that they'll be silicon-proven before the deadline for the next Run.
+
+It's therefore IMO reasonable to hedge your plans with a configuration that has less memory configured and have both layouts hardened to just submit the one that's confirmed-superior right before the deadline.","",""
+"262706220073222144","namibj","2026-07-30T20:39:23.6000000+00:00","The SRAM he tested works as expected; harness limitations kept him from pushing the speed at the upper areas of the operating voltage range; tnt posted a matrix of speed vs. voltage but due to speed difficulty reasons that stops at something like 2.5V or maybe 2.8V or so, well shy of the 3.3V.","",""
+"262706220073222144","namibj","2026-07-30T20:39:52.8340000+00:00","IIRC retention is down to somewhere around 800~1000 mV.","",""
+"509798510170865675","essen__","2026-07-30T20:44:42.9070000+00:00","Nice. 
+How did I miss that, do you recall where did he post that ?","",""
+"262706220073222144","namibj","2026-07-30T20:48:36.5330000+00:00","I think TT discord","","👍 (1)"
+"1365118310701600900","rtimothyedwards_19428","2026-07-30T20:49:31.8980000+00:00","As far as I know, the Tiny Tapeout GF180MCU version still uses the 5V padframe I/O and synthesizes to the original foundry 5V 7-track library.  All of the 3.3V stuff has been done on custom chips.","","👍 (1)"
+"262706220073222144","namibj","2026-07-30T21:08:33.9500000+00:00","Yes, but there was some trial entity of the fancy thin oxide sram, or at least one of those thin oxide sram's, which was tested.... IIRC.
+Could be confused, could have been something else he had measured there.
+
+There is no thin oxide SCL proven before Run2 dies undergo testing to that extend, and AFAIK there are no structures that had been designed to allow any sort of comprehensive test coverage of the SCL itself to ""qualify"" it for future production-targeted tapeouts. (Part of why I had hoped to get the e-test design working, but oh well, next tapeout: put an ability to e-test under DC conditions all necessary cells de-embedded to the LEF pins, so that RC extraction and modeling can take it from there to figure out the appropriate content for the liberty specs. AFAIK should work on at least most non-dynamic-logic gates; might have minor complications with flip-flops I guess, unless they work down to visible clock rise times.)","","👀 (1)"
+"596068704471482370","246tnt","2026-07-30T21:18:45.2410000+00:00","No we use your IOs.","",""
+"596068704471482370","246tnt","2026-07-30T21:20:47.0980000+00:00","We run both core at 3v3 but separate domains and you can run IO at 5v if you want. Core is 3v3 only.  We use the standard foundry 7T and run it at 3v3.","",""
+"919250960944078938","fstolz95","2026-07-30T21:21:16.1450000+00:00","Thanks for the insights 🙂
+For simplicity I will probably target 5V. However I am still in the design drafting phase so I don’t know yet if SRAM is required, but as it will probably be processor related having the option of something like a on die SRAM cache sounds interesting 🙂","",""
+"596068704471482370","246tnt","2026-07-30T21:22:25.1650000+00:00","I didn't do any tests on the SRAM ... the shmoo plots I posted are for my sky130 register file , nothing to do with gf180 sram.","","👍 (1)"
