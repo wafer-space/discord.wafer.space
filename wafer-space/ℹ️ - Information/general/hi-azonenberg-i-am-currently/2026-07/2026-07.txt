@@ -655,6 +655,27 @@ OK, doesnt matter to me one way or the other. I do plan to polish it up to an AS
 {Reactions}
 👍
 
+[2026-07-31 2:45 p.m.] namibj
+
+
+{Attachments}
+2026-07_media/IMG20260730204518-DF3AB.jpg
+
+
+[2026-07-31 2:45 p.m.] namibj
+Sorry forgot to send it yesterday.
+
+
+[2026-07-31 3:00 p.m.] namibj
+Reason is in part because depending on how the clock recovery works, it might pretty much need an adjustment dial for the slicer phase and depending on how DC offsets in the input buffer/amplifier/etc. work, slicer level might also need to be adjusted vertically anyways, which together would make the main slicer already capable of the eye pattern sampling.
+
+Together with if clock recovery can run on the edges independently of the slicer-proper, I.e., without depending on the data recovery part of the whole CDR, this would allow using the phase lock of normal CDR while telling the data slicer to sample deliberately not in the center of the eye.
+
+And if that outcome could be exported by feeding the "recovered" data to a TX serializer that's slaved to the same recovered clock, this would AFAIK allow something resembling a "SAR-ADC sampling oscilloscope".
+Notably the transmitted bitstream may lack sufficient transition density for easy CDR, but as it's slaved to the RX recovered clock, I'd assume a far far smaller PLL bandwidth for the CDR (together with a lock of frequency being hard-locked to the test signal sent to the DUT) to suffice and ideally thus allow dealing with such poor patterns.
+I mean it might need to be captured with an ADC and processed in configurable or even programmable compute, but oh well...
+
+
 ==============================================================
-Exported 147 message(s)
+Exported 150 message(s)
 ==============================================================
