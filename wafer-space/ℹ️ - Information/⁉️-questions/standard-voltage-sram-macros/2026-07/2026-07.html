@@ -65,6 +65,20 @@ This will use Tim&#39;s 3.3V SRAMs.
 
 On ws-run2, we also had a few SRAMs generated using Staf&#39;s SRAM compiler (ID FS01-FS03): <a href="https://github.com/wafer-space/ws-run2">https://github.com/wafer-space/ws-run2</a>
 Of course, they still need to be verified once the chips come back :)</span></div></div></div></div></div>
+<div class=chatlog__message-group><div id=chatlog__message-container-1532694419164233878 class=chatlog__message-container data-message-id=1532694419164233878><div class=chatlog__message><div class=chatlog__message-aside><img class=chatlog__avatar src=2026-07_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png alt=Avatar loading=lazy></div><div class=chatlog__message-primary><div class=chatlog__header><span class=chatlog__author title=rebelmike data-user-id=691780627338625077>RebelMike</span> <span class=chatlog__timestamp title="Friday, July 31, 2026 10:20 a.m."><a href=#chatlog__message-container-1532694419164233878>2026-07-31 10:20 a.m.</a></span></div><div class="chatlog__content chatlog__markdown"><span class=chatlog__markdown-preserve>Maybe a bit of a table describing the capabilities and current state/risk of the different IP libraries would be useful to have somewhere.  My understanding:
+
+SCLs:
+<ul><li>gf180mcu_fd_sc_mcu7t5v0 - foundry provided, safe, works at 5V or 3V3.  Slow.</li><li>gf180mcu_fd_sc_mcu9t5v0 - foundry provided, safe, works at 5V or 3V3.  Faster than 7t but takes more area.</li><li>gf180mcu_as_sc_mcu7t3v3 - community provided, not tested, high risk, works at 3V3 only.  Fast.
+
+PADs:</li><li>gf180mcu_fd_io - foundry provided, safe, works at 5V or 3V3 but connects core and IO power domains together.</li><li>gf180mcu_ocd_io - community provided, tested on run 1, low risk, works at 5V or 3V3 but keeps core and IO power domains separate, so you could e.g. run IO at 5V and core at 3V3.
+
+SRAMs:</li><li>gf180mcu_fd_ip_sram - foundry provided, safe, works at 5V or 3V3.  128, 256 and 512 bytes.</li><li>gf180mcu_ocd_ip_sram - community provided, initial testing from run 1 looks good, medium risk, works at 3V3 only.  Smaller area.  64, 128, 256, 512 and 1024 bytes.</li></ul></span></div><div class=chatlog__reactions><div class=chatlog__reaction title=thumbsup><img class="chatlog__emoji chatlog__emoji--small" alt=👍 src=2026-07_media/1f44d-27259.svg loading=lazy> <span class=chatlog__reaction-count>1</span></div></div></div></div></div></div>
+<div class=chatlog__message-group><div id=chatlog__message-container-1532743047828345056 class=chatlog__message-container data-message-id=1532743047828345056><div class=chatlog__message><div class=chatlog__message-aside><img class=chatlog__avatar src=2026-07_media/80e086280c9caadd9c05998c3254c9a9-25B3D.png alt=Avatar loading=lazy></div><div class=chatlog__message-primary><div class=chatlog__header><span class=chatlog__author title=essen__ data-user-id=509798510170865675>Essen</span> <span class=chatlog__timestamp title="Friday, July 31, 2026 1:33 p.m."><a href=#chatlog__message-container-1532743047828345056>2026-07-31 1:33 p.m.</a></span></div><div class="chatlog__content chatlog__markdown"><span class=chatlog__markdown-preserve><span class="chatlog__markdown-mention" title="rebelmike">@RebelMike</span> great post <img
+    loading="lazy"
+    class="chatlog__emoji "
+    alt="👍"
+    title="thumbsup"
+    src="2026-07_media/1f44d-27259.svg"></span></div></div></div></div></div>
 
 </div>
-<div class=postamble><div class=postamble__entry>Exported 16 message(s)</div><div class=postamble__entry>Timezone: UTC+0</div></div>
+<div class=postamble><div class=postamble__entry>Exported 18 message(s)</div><div class=postamble__entry>Timezone: UTC+0</div></div>

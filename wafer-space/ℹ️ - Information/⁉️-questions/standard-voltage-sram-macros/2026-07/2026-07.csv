@@ -34,3 +34,18 @@ This will use Tim's 3.3V SRAMs.
 
 On ws-run2, we also had a few SRAMs generated using Staf's SRAM compiler (ID FS01-FS03): https://github.com/wafer-space/ws-run2
 Of course, they still need to be verified once the chips come back :)","",""
+"691780627338625077","rebelmike","2026-07-31T10:20:25.6140000+00:00","Maybe a bit of a table describing the capabilities and current state/risk of the different IP libraries would be useful to have somewhere.  My understanding:
+
+SCLs:
+- gf180mcu_fd_sc_mcu7t5v0 - foundry provided, safe, works at 5V or 3V3.  Slow.
+- gf180mcu_fd_sc_mcu9t5v0 - foundry provided, safe, works at 5V or 3V3.  Faster than 7t but takes more area.
+- gf180mcu_as_sc_mcu7t3v3 - community provided, not tested, high risk, works at 3V3 only.  Fast.
+
+PADs:
+- gf180mcu_fd_io - foundry provided, safe, works at 5V or 3V3 but connects core and IO power domains together.
+- gf180mcu_ocd_io - community provided, tested on run 1, low risk, works at 5V or 3V3 but keeps core and IO power domains separate, so you could e.g. run IO at 5V and core at 3V3.
+
+SRAMs:
+- gf180mcu_fd_ip_sram - foundry provided, safe, works at 5V or 3V3.  128, 256 and 512 bytes.
+- gf180mcu_ocd_ip_sram - community provided, initial testing from run 1 looks good, medium risk, works at 3V3 only.  Smaller area.  64, 128, 256, 512 and 1024 bytes.","","👍 (1)"
+"509798510170865675","essen__","2026-07-31T13:33:39.5910000+00:00","@RebelMike great post 👍","",""
