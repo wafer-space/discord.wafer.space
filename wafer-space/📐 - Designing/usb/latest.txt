@@ -8,6 +8,27 @@ After: 2026-06-30 11:59 p.m.
 Before: 2026-08-01 12:00 a.m.
 ==============================================================
 
+[2026-07-31 10:32 p.m.] rahulbhagwat
+is gf180bcd a bicmos pdk? (looks like it's proprietary, plans of open sourcing from gf?)
+
+
+[2026-07-31 10:34 p.m.] ravenslofty
+**b**ipolar-**c**mos-**d**mos
+
+{Reactions}
+👍
+
+[2026-07-31 10:41 p.m.] namibj
+Further work has since shown that 10GBASE-R probably works on gf180mcuD; TX is basically just missing drawing up the actual clock tree, sizing the output multiplexer and output PA drivers, and figuring out the correct working phasing of the datapath from the 1.25GBit/s latches through the last MUX2 into the 2.5 GBit/s latches and then the output multiplexer itself.
+
+Nothing major though. 
+I just didn't get to finish/polish/tune those parts in time for the Run2 deadline. 
+
+It's currently getting ported to IHP SG13cmos5L but will be back to gf180mcuD on, by current estimates, Run4 silicon.
+
+My Run3 contributions will be for muxed e-test and maybe a couple isolated critical blocks that'll be needed for making a great transceiver on Run4 (verifying/adjusting models/quantifying oscillator noise to correctly set PLL bandwidths/etc.).
+
+
 ==============================================================
-Exported 0 message(s)
+Exported 3 message(s)
 ==============================================================
