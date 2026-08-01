@@ -5,6 +5,100 @@ After: 2026-07-31 11:59 p.m.
 Before: 2026-09-01 12:00 a.m.
 ==============================================================
 
+[2026-08-01 6:51 p.m.] tholin
+Need to make a analog comparator for my next analog layout. Can’t I just re-use my normal opamp schematic for this? As far as I understand, the two are very similar.
+
+
+[2026-08-01 6:51 p.m.] tholin
+Opamp but the output stage is replaced with a schmitt trigger inverter/buffer = comparator
+
+
+[2026-08-01 6:51 p.m.] tholin
+?
+
+
+[2026-08-01 6:51 p.m.] tholin
+Well, maybe not a schmitt trigger depending on the application.
+
+
+[2026-08-01 6:52 p.m.] tholin
+Wait, is there even a difference between the two?
+
+
+[2026-08-01 6:56 p.m.] 246tnt
+It's the same basic concepts but you optimize for different things.
+
+
+[2026-08-01 6:57 p.m.] 246tnt
+What are the requirements for your comparator ?
+
+
+[2026-08-01 6:58 p.m.] tholin
+I’m worried about the output not being something I can safely feed into a standard cell because it might settle on a voltage between high and low.
+
+
+[2026-08-01 6:59 p.m.] tholin
+That’s my current concern
+
+
+[2026-08-01 7:00 p.m.] tholin
+I can optimize it for the input voltage ranges I’m using later, when I have some more concrete numbers.
+
+
+[2026-08-01 7:01 p.m.] tholin
+opamps have analog outputs, so can generate non-logic-level voltages
+
+
+[2026-08-01 7:01 p.m.] 246tnt
+The general idea is you need enough gain so that any voltage difference at the input will result in the output hitting the rails ...
+
+
+[2026-08-01 7:02 p.m.] 246tnt
+and then ideally some hysteresis so that noise doesn't create a mess if you have slow transitions.
+
+
+[2026-08-01 7:02 p.m.] 246tnt
+And as you said above, a schmitt trigger is not a bad way to provide both more gain as a second stage and hysteresis.
+
+
+[2026-08-01 7:02 p.m.] 246tnt
+This is what I did in the comparator for my 555 clone.
+
+
+[2026-08-01 7:04 p.m.] 246tnt
+But that's highly dependent on the application ... the "comparator" I did on sky 130 ( for high speed differential input ) works differently and just uses positive feedback and 3 stages to have enough gain to force input to a rail.
+
+
+[2026-08-01 7:05 p.m.] tholin
+Alright
+
+
+[2026-08-01 7:05 p.m.] tholin
+I think i’ll look into how to build a schmitt trigger for this
+
+
+[2026-08-01 7:05 p.m.] 246tnt
+And then the comparator I'm working on now for clocked sampling works yet another way because if you sample at regular interval you can have sample step and amplify step.
+
+
+[2026-08-01 7:06 p.m.] 246tnt
+What's the application ?
+
+
+[2026-08-01 7:08 p.m.] 246tnt
+I have a gf180 schmitt inverter there :
+https://github.com/smunaut/tt_tnt_gf_555/blob/main/xschem/inv_schmitt.sch
+https://github.com/smunaut/tt_tnt_gf_555/blob/main/mag/inv_schmitt.mag
+
+
+[2026-08-01 7:08 p.m.] tholin
+Overvoltage protection
+
+
+[2026-08-01 7:09 p.m.] tholin
+Sortof, but that’s the basic idea
+
+
 ==============================================================
-Exported 0 message(s)
+Exported 23 message(s)
 ==============================================================
