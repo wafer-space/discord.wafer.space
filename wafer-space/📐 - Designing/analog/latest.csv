@@ -24,3 +24,26 @@ https://github.com/smunaut/tt_tnt_gf_555/blob/main/xschem/inv_schmitt.sch
 https://github.com/smunaut/tt_tnt_gf_555/blob/main/mag/inv_schmitt.mag","",""
 "220639106915368960","tholin","2026-08-01T19:08:55.7010000+00:00","Overvoltage protection","",""
 "220639106915368960","tholin","2026-08-01T19:09:09.3680000+00:00","Sortof, but that’s the basic idea","",""
+"262706220073222144","namibj","2026-08-02T16:54:42.5720000+00:00","AFAIK the solution to that is to have so many inverters in sequence that noise will make it statistically improbable to end up with metastable voltages at the end.
+Clocked comparators afaik help a lot for that, btw.
+You get a deliberate regenerative gain stage, suitable for feeding to a couple stages of DFFs just like you'd have to do for digital signals that cross clock domains btw.","",""
+"262706220073222144","namibj","2026-08-02T17:06:59.6120000+00:00","Ohhh, tell what for (if you can); I'm looking mildly anxiously forward to having to do similar but probably substantially more complicated due to needing it to run at probably 16x interleaving 🙁","",""
+"596068704471482370","246tnt","2026-08-02T17:08:07.7450000+00:00","I'm slowly working toward my USB 2.0 HS PHY goal 😅","","💜 (1)"
+"810650258819252274","djsftree","2026-08-02T18:15:03.1530000+00:00","cap_mim_*_m4m5_noshield , just checking wafer space support the mim, HRES poly resistor (one additional mask?)  and Vt NMOS from s10 of pdk.","",""
+"596068704471482370","246tnt","2026-08-02T18:28:31.5170000+00:00","It supports :
+* 2 fF/um^2 MiM
+* 1k / sq HRES poly
+* Native 6.0v nmos","",""
+"262706220073222144","namibj","2026-08-02T18:46:10.9850000+00:00","🙂
+
+Do share what you get from that.","",""
+"262706220073222144","namibj","2026-08-02T18:49:36.5800000+00:00","[I'll also ask in the substantially non-overlapping chipalooza matrix, as it's more near-term relevant to there; I'll only expect to have such structure for e-test on Run3, but still..]
+
+Regarding the C_Offset capacitance digital trim banks:
+Is that what the sky130 PDK calls ""accumulation-mode varactors""? <https://skywater-pdk.readthedocs.io/en/main/rules/device-details.html#v-accumulation-mode-mos-varactors>
+
+Do we have an appropriate device on gf180mcuD and/or IHP SG13cmos5L?
+
+[edit:]... we do seem to have an `SVaricap` on IHP SG13cmos5L; not so sure yet about the situation on gf180mcuD. Which isn't helped by my somewhat poor understanding of the supposed behavior of these structures that can't be replicated (properly) by ""just"" using ""normal"" PMOS devices in their own dedicated nwell, with their guard ring and that.","2026-08_media/image-8CB9B.png",""
+"220639106915368960","tholin","2026-08-02T19:04:06.2330000+00:00","Ah, but I'd need a clock source for DFFs","",""
+"262706220073222144","namibj","2026-08-02T19:28:43.1640000+00:00","What are you trying to lift the signal into then? Or is the purpose of the S that shall consume the comparator feed secret for the time being?","",""

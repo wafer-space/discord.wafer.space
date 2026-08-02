@@ -99,6 +99,61 @@ Overvoltage protection
 Sortof, but that’s the basic idea
 
 
+[2026-08-02 4:54 p.m.] namibj
+AFAIK the solution to that is to have so many inverters in sequence that noise will make it statistically improbable to end up with metastable voltages at the end.
+Clocked comparators afaik help a lot for that, btw.
+You get a deliberate regenerative gain stage, suitable for feeding to a couple stages of DFFs just like you'd have to do for digital signals that cross clock domains btw.
+
+
+[2026-08-02 5:06 p.m.] namibj
+Ohhh, tell what for (if you can); I'm looking mildly anxiously forward to having to do similar but probably substantially more complicated due to needing it to run at probably 16x interleaving 🙁
+
+
+[2026-08-02 5:08 p.m.] 246tnt
+I'm slowly working toward my USB 2.0 HS PHY goal 😅
+
+{Reactions}
+💜
+
+[2026-08-02 6:15 p.m.] djsftree
+cap_mim_*_m4m5_noshield , just checking wafer space support the mim, HRES poly resistor (one additional mask?)  and Vt NMOS from s10 of pdk.
+
+
+[2026-08-02 6:28 p.m.] 246tnt
+It supports :
+* 2 fF/um^2 MiM
+* 1k / sq HRES poly
+* Native 6.0v nmos
+
+
+[2026-08-02 6:46 p.m.] namibj
+🙂
+
+Do share what you get from that.
+
+
+[2026-08-02 6:49 p.m.] namibj
+[I'll also ask in the substantially non-overlapping chipalooza matrix, as it's more near-term relevant to there; I'll only expect to have such structure for e-test on Run3, but still..]
+
+Regarding the C_Offset capacitance digital trim banks:
+Is that what the sky130 PDK calls "accumulation-mode varactors"? <https://skywater-pdk.readthedocs.io/en/main/rules/device-details.html#v-accumulation-mode-mos-varactors>
+
+Do we have an appropriate device on gf180mcuD and/or IHP SG13cmos5L?
+
+[edit:]... we do seem to have an `SVaricap` on IHP SG13cmos5L; not so sure yet about the situation on gf180mcuD. Which isn't helped by my somewhat poor understanding of the supposed behavior of these structures that can't be replicated (properly) by "just" using "normal" PMOS devices in their own dedicated nwell, with their guard ring and that.
+
+{Attachments}
+2026-08_media/image-8CB9B.png
+
+
+[2026-08-02 7:04 p.m.] tholin
+Ah, but I'd need a clock source for DFFs
+
+
+[2026-08-02 7:28 p.m.] namibj
+What are you trying to lift the signal into then? Or is the purpose of the S that shall consume the comparator feed secret for the time being?
+
+
 ==============================================================
-Exported 23 message(s)
+Exported 32 message(s)
 ==============================================================
