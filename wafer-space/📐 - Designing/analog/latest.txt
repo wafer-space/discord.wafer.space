@@ -154,6 +154,60 @@ Ah, but I'd need a clock source for DFFs
 What are you trying to lift the signal into then? Or is the purpose of the S that shall consume the comparator feed secret for the time being?
 
 
+[2026-08-02 8:25 p.m.] djsftree
+thanks!
+
+
+[2026-08-02 8:32 p.m.] 246tnt
+@namibj There are varactor on gf180. All named "moscap".
+
+
+[2026-08-02 8:33 p.m.] namibj
+oh.
+
+Are they built like the sky130 ones?
+
+
+[2026-08-02 8:33 p.m.] 246tnt
+Not sure never looked. magic has a pcell.
+
+
+[2026-08-02 8:34 p.m.] 246tnt
+What I'm designing ATM looks basically similar to that drawing, except the input stage is pmos because common mode is very low, so nmos don't work there.
+
+
+[2026-08-02 8:35 p.m.] namibj
+yeah that aspect in this one is handled by the CTLE preamp section drawn upper left
+
+
+[2026-08-02 8:36 p.m.] namibj
+https://people.engr.tamu.edu/spalermo/ecen689/lecture10_ee689_rx_circuits.pdf
+
+
+[2026-08-02 8:38 p.m.] namibj
+Time-interleaved or not for the USB-HS target?
+
+
+[2026-08-02 8:40 p.m.] namibj
+If you happen to have some reading material you can link on the clock recovery part of the subject matter, please do.
+
+
+[2026-08-02 8:41 p.m.] 246tnt
+Yes, my VCO is running at 240 MHz with 4 phase 0 90 180 270.
+
+{Reactions}
+ferrisCatOwO
+
+[2026-08-02 8:41 p.m.] 246tnt
+Ok, gotta go sorry ...
+
+{Reactions}
+ferristhumbsup
+
+[2026-08-02 8:44 p.m.] namibj
+I otherwise feel like I'd put like 4 extra ones next to the time-interleaved full data rate army either in a box or a cross pattern (not sure yet) and adjust to where those offset ones reach a notably-but-limited BER, comparing the information in the digital domain (slow side).
+
+
 ==============================================================
-Exported 32 message(s)
+Exported 44 message(s)
 ==============================================================

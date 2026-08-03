@@ -47,3 +47,17 @@ Do we have an appropriate device on gf180mcuD and/or IHP SG13cmos5L?
 [edit:]... we do seem to have an `SVaricap` on IHP SG13cmos5L; not so sure yet about the situation on gf180mcuD. Which isn't helped by my somewhat poor understanding of the supposed behavior of these structures that can't be replicated (properly) by ""just"" using ""normal"" PMOS devices in their own dedicated nwell, with their guard ring and that.","2026-08_media/image-8CB9B.png",""
 "220639106915368960","tholin","2026-08-02T19:04:06.2330000+00:00","Ah, but I'd need a clock source for DFFs","",""
 "262706220073222144","namibj","2026-08-02T19:28:43.1640000+00:00","What are you trying to lift the signal into then? Or is the purpose of the S that shall consume the comparator feed secret for the time being?","",""
+"810650258819252274","djsftree","2026-08-02T20:25:32.8900000+00:00","thanks!","",""
+"596068704471482370","246tnt","2026-08-02T20:32:24.6510000+00:00","@namibj There are varactor on gf180. All named ""moscap"".","",""
+"262706220073222144","namibj","2026-08-02T20:33:10.6400000+00:00","oh.
+
+Are they built like the sky130 ones?","",""
+"596068704471482370","246tnt","2026-08-02T20:33:47.3300000+00:00","Not sure never looked. magic has a pcell.","",""
+"596068704471482370","246tnt","2026-08-02T20:34:51.4320000+00:00","What I'm designing ATM looks basically similar to that drawing, except the input stage is pmos because common mode is very low, so nmos don't work there.","",""
+"262706220073222144","namibj","2026-08-02T20:35:41.4060000+00:00","yeah that aspect in this one is handled by the CTLE preamp section drawn upper left","",""
+"262706220073222144","namibj","2026-08-02T20:36:09.0330000+00:00","https://people.engr.tamu.edu/spalermo/ecen689/lecture10_ee689_rx_circuits.pdf","",""
+"262706220073222144","namibj","2026-08-02T20:38:59.2190000+00:00","Time-interleaved or not for the USB-HS target?","",""
+"262706220073222144","namibj","2026-08-02T20:40:08.6930000+00:00","If you happen to have some reading material you can link on the clock recovery part of the subject matter, please do.","",""
+"596068704471482370","246tnt","2026-08-02T20:41:07.0490000+00:00","Yes, my VCO is running at 240 MHz with 4 phase 0 90 180 270.","","ferrisCatOwO (1)"
+"596068704471482370","246tnt","2026-08-02T20:41:23.3310000+00:00","Ok, gotta go sorry ...","","ferristhumbsup (1)"
+"262706220073222144","namibj","2026-08-02T20:44:07.7350000+00:00","I otherwise feel like I'd put like 4 extra ones next to the time-interleaved full data rate army either in a box or a cross pattern (not sure yet) and adjust to where those offset ones reach a notably-but-limited BER, comparing the information in the digital domain (slow side).","",""
