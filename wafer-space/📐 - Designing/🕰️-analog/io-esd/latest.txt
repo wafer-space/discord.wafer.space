@@ -1,0 +1,41 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 📐 - Designing / 🕰️-analog / IO ESD
+After: 2026-07-31 11:59 p.m.
+Before: 2026-09-01 12:00 a.m.
+==============================================================
+
+[2026-08-05 2:23 p.m.] 246tnt
+
+
+
+[2026-08-05 2:23 p.m.] 246tnt
+Ok, there are some small diodes on the input path after the resistor. But still, the main clamp are the actual drive transistors AFAICT.
+
+
+[2026-08-05 2:36 p.m.] brunny95
+The small diodes are standard (from what I've seen). Usually the path is: ESD main protections (GT mos or similar) - resistor - "small diodes" - core of the circuit
+
+
+[2026-08-05 2:37 p.m.] chips4makers
+If properly designed output drivers can indeed also be used as ESD protection. This is using the so-called snap-back behavior. I believe [this](https://siliconvlsi.com/explain-the-snapback-phenomenon-in-nmos-devices/) should explain something. I used 0.18um TSMC when @imec and both IO NMOS and PMOS were designed to have that capability.
+
+{Embed}
+https://siliconvlsi.com/explain-the-snapback-phenomenon-in-nmos-devices/
+Explain the snapback phenomenon in NMOS devices - Siliconvlsi
+The snapback phenomenon in NMOS devices is an important aspect in understanding their behavior and reliability.
+2026-08_media/Snapback-mechanism-in-NMOS-1-5DD4E.png
+
+
+[2026-08-05 2:40 p.m.] chips4makers
+It is known to me as secondary protection and the purpose is to get some extra voltage drop over the resistance during an ESD event to protect the connected gates.
+The diode also has a capacitance so the R-C acts as a low-pass filter on the input though so high frequency stuff typically needs IO with custom ESD protection.
+
+
+[2026-08-05 2:42 p.m.] 246tnt
+Tx both, yeah I knew the secondary protection thing. But never heard of snapback.
+
+
+==============================================================
+Exported 6 message(s)
+==============================================================

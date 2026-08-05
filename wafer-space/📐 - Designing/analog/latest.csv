@@ -65,7 +65,7 @@ Are they built like the sky130 ones?","",""
 I have a question about the analog pins: would it be possible to have more using the standard pads? I see that we can have only 6 of them with the 0.5×1 (Half Width)
 Because we would like to have the chip on board packaging too","",""
 "220639106915368960","tholin","2026-08-04T21:12:08.5100000+00:00","My next submission is going to be a entire analog die. So I’m not going to need the LibreLane flow at all. I am going to do the routing to the pads myself, since I need the wires to be quite thick.
-Not sure how to accomplish this. I’ll keep everyone updated on my progress.","","👍 (2)"
+Not sure how to accomplish this. I’ll keep everyone updated on my progress.","","👍 (3)"
 "384390069412429834","polyfractal","2026-08-04T21:28:09.6170000+00:00","I'm not 100% about the power pads, but analog/bidir/input can be changed in the template to whatever you want. You just can't change the pad position/size/number if you want to use the COB packaging.
 
 Pretty sure you can change the power pads too, I don't think the COB pcb ties them together. but not 100% on that part","","👍 (1)"
@@ -73,3 +73,7 @@ Pretty sure you can change the power pads too, I don't think the COB pcb ties th
 "693526428729344040","brunny95","2026-08-04T21:47:55.1130000+00:00","My idea would be to use the flow of librelane for the generation of the pads; if the pads are ""free"" a possible ideas would be to parallelize these standards pads, like using 2 or more pads for the same signal, and avoid to manually layout them.","",""
 "596068704471482370","246tnt","2026-08-05T14:12:15.5290000+00:00","Did anyone look at the IOs drivers ?  Are the final driver transistors nmos/pmos used as ESD diodes ?   I don't see any separate ESD structures.","",""
 "596068704471482370","246tnt","2026-08-05T14:23:01.0990000+00:00","Started a thread.","",""
+"384390069412429834","polyfractal","2026-08-05T15:45:53.3450000+00:00","I can say from experience (Run1) and because I also did it for Run2: you can definitely change bidir/analog/input to whatever you want 🙂 I think that page you found on Tim's github is just the result of a script that dumps out the default configs for comparison. I wouldn't read too much into it","",""
+"509798510170865675","essen__","2026-08-05T16:46:41.5520000+00:00","Same understanding here, and as @BreakingTaps says you are free to do whatever you want and switch out they types between {analog/bidir/input} just keep the power pins in place for CoB packing.","",""
+"693526428729344040","brunny95","2026-08-05T16:49:26.0120000+00:00","Great news guys, thanks a lot to both! 
+For the power pins, I have to check their current specifications, I hope they are fine","","🫡 (1)"
