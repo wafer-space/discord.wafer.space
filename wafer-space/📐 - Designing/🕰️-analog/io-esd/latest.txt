@@ -41,6 +41,16 @@ Here are the ESD guidelines from the PDK: https://gf180mcu-pdk.readthedocs.io/en
 It seems like the snapback behavior is indeed used for ESD protection.
 
 
+[2026-08-07 6:22 p.m.] namibj
+There are ESD implants available specifically only for thick oxide area's sd-diffusion.
+
+
+[2026-08-07 6:27 p.m.] namibj
+There's also a trick were you employ something like a gate-triggered TRIAC that's constructed to bascially experience a safe and depending on details maybe or maybe-not power-cycle-requiring latchup to clamp the ESD voltage below what a passive diodes-to-PDN-rails arrangement could do, to be useful whenever thin-oxide devices are used to interact with pads.
+
+An example that comes to mind would be e.g. DDR3 which is nominally 1.5V and fairly intense on the IO power draw due to combination of frequency, receive-side-termination, and ofc sheer wire count.
+
+
 ==============================================================
-Exported 7 message(s)
+Exported 9 message(s)
 ==============================================================

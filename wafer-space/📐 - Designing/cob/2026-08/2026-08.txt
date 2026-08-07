@@ -154,6 +154,71 @@ hole = any opening though the substrate (pcb) in which could form a contact betw
 Based on this definition, do we have holes in the encapsulation region ?
 
 
+[2026-08-07 6:17 p.m.] rebelmike
+Note the versions with soldermask between the pads and the die are the newer ones I did. As far as I’m aware Andrew hasn’t looked at those yet and they haven’t been made/tested. The 1x1 and the previous rev of the 1x0p5 have no solder mask in the region between the pads and the die - that led to vias that were closed on the back side but not the top side.
+
+
+[2026-08-07 6:21 p.m.] rebelmike
+On the CoBs I designed - I don’t really have any expertise here, I just wanted to help out as best I could as wafer space had offered me space on the early runs for free and Andrew was short on time. It sounds like changing those holes to vias would be wise - I’ll do that when I get chance!
+
+{Reactions}
+🎉
+
+[2026-08-07 6:33 p.m.] namibj
+The cost complication is with the bond house setup and test-run-overhead costs of setting up and verifying the custom/new bonding does actually work.
+
+{Reactions}
+👀
+
+[2026-08-07 6:33 p.m.] namibj
+Oh, well, the epoxy to the top surface of the glob is AIUI less thickness.
+
+
+[2026-08-07 6:35 p.m.] namibj
+My understanding of the experienced bubble complication was with holes being tented on only the backside (where the mezzazine is) and being open on the front (where the die is), which had the air bubbles from inside escaping up into the epoxy.
+
+{Reactions}
+👍
+
+[2026-08-07 6:46 p.m.] essen__
+That would be great, I personally believe not having an opening is the better call.
+
+{Reactions}
+👍
+
+[2026-08-07 6:50 p.m.] essen__
+If you want some help with that kicad layout I have a cloned version of your repo opened at the moment.
+
+
+[2026-08-07 6:51 p.m.] rebelmike
+I’m away for the weekend so feel free to adjust them and make a PR!
+
+{Reactions}
+👍
+
+[2026-08-07 6:53 p.m.] rebelmike
+Thank you!
+
+{Reactions}
+🫡
+
+[2026-08-07 7:11 p.m.] namibj
+I think I'm more worried about tented vias than fully open ones at least if they're thin enough for the epoxy to not just drip down; though it already stays in a glob up top anyways, so yeah.....
+
+For reliability IMO we should at least ask if they have a generic CTE-vaguely-matched loaded version available given that I don' think they'd require actually different processing beyond dosing the epoxy from the other dispenser.
+Might be contingent on the tracability serial being included, though; in case they fall down after globbing and are all mixed up between projects somehow.
+
+Also while you're at it and worrying about those things, maybe see if the die bottom could have thermal management improved for allowing a higher TDP.
+
+
+[2026-08-07 7:34 p.m.] essen__
+Nice, what kind of electrical testing do you guys do ?
+
+
+[2026-08-07 7:47 p.m.] essen__
+( I would be curious about running a mini testing program, more specifically a subset of the IPC-SM-789 torture test mentioned in “‘Guidelines for Chip on Board Technology implementation” on my end but I don't want to create duplicates )
+
+
 ==============================================================
-Exported 28 message(s)
+Exported 40 message(s)
 ==============================================================

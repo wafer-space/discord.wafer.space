@@ -8,3 +8,7 @@ The diode also has a capacitance so the R-C acts as a low-pass filter on the inp
 "596068704471482370","246tnt","2026-08-05T14:42:59.6660000+00:00","Tx both, yeah I knew the secondary protection thing. But never heard of snapback.","",""
 "323371864074485771","mole99","2026-08-05T21:51:26.0640000+00:00","Here are the ESD guidelines from the PDK: https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_14_4.html
 It seems like the snapback behavior is indeed used for ESD protection.","",""
+"262706220073222144","namibj","2026-08-07T18:22:39.4900000+00:00","There are ESD implants available specifically only for thick oxide area's sd-diffusion.","",""
+"262706220073222144","namibj","2026-08-07T18:27:20.9270000+00:00","There's also a trick were you employ something like a gate-triggered TRIAC that's constructed to bascially experience a safe and depending on details maybe or maybe-not power-cycle-requiring latchup to clamp the ESD voltage below what a passive diodes-to-PDN-rails arrangement could do, to be useful whenever thin-oxide devices are used to interact with pads.
+
+An example that comes to mind would be e.g. DDR3 which is nominally 1.5V and fairly intense on the IO power draw due to combination of frequency, receive-side-termination, and ofc sheer wire count.","",""
