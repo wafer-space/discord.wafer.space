@@ -34,21 +34,126 @@ I don’t know if there’s a good reason why they are plated through holes inst
 [2026-08-07 7:54 a.m.] rebelmike
 I think the offer of CoB bonding is normally only available if you use the standard template, though that does make it a bit strange that the bonding is the same price for quarter slot as I thought it was ~priced per bond. Worth checking with Tim though if you want to make your own CoB.
 
+{Reactions}
+👍
 
 [2026-08-07 7:56 a.m.] anfroholic
 > I don’t know if there’s a good reason why they are plated through holes instead of vias.
 Partially an inherited artifact if I remember, and also a quirk of KiCad that you can't have vias in a footprint if I remember.
 
+{Reactions}
+👍
 
 [2026-08-07 8:00 a.m.] anfroholic
 I don't think we've gotten any of the quarter slot yet so don't have good pricing info on it yet, and am not certain prices really have to do with number of bonds directly, it's just a helpful tool to get you in the ballpark. 
 I'm also not certain we will be accepting *any* custom cob this time? Keep in mind the only custom ones last time shared the wirebonding layout, just had different traces and routing on the pcb.
 
+{Reactions}
+👍
 
 [2026-08-07 9:27 a.m.] rebelmike
 If there’s no particular reason for them then maybe it would be best to switch to vias - the extra clearance on them is a bit of a pain and it sounds like it would be safer to have no holes.
 
 
+[2026-08-07 2:07 p.m.] anfroholic
+Yeah, they can be taken out. 
+
+Keep in mind part of the large clearance was the assumption the dies would be 0.7mm thick. It's still too early to assume that wouldn't be the case moving forward.
+
+
+[2026-08-07 2:34 p.m.] essen__
+Yeah, if the 76 pin option is part of the "standard offering" is a bit unclear. Though frankly I am not opposed to paying the extra 2c per chip bond price increase if the maximum bonds budgeted for is 74 (1x1).
+
+
+[2026-08-07 2:49 p.m.] rebelmike
+As far as I’m aware the standard offering is using the project template and standard CoB pad frame only so you only get 56 pins/48 IOs on the quarter slot. But if you need something different then I’m sure it’s worth talking to Tim
+
+{Reactions}
+👍 (2)
+
+[2026-08-07 3:04 p.m.] anfroholic
+Again, any change from the standard is likely going to be a whole lot more.
+
+{Reactions}
+💦
+
+[2026-08-07 3:31 p.m.] essen__
+So sad ... I will ask Tim after Tawain to know what extra cost I would be looking at. 
+Else I guess I am doing 6 ports for the second generation switch rather than 8.
+
+
+[2026-08-07 3:37 p.m.] essen__
+In regards to adding vias it seems that there is a real concern is with wire displacements due to rapid changes in rheology during the oven-cure process ( reducing yield ).
+source: Chip on Board: Technologies for Multichip Modules. Van Nostrand Reinhold, 1994, chapter 7
+
+
+[2026-08-07 3:38 p.m.] essen__
+In regards to this issue it seems like it would be problematic for vias under the wires rather than the ones in the corner.
+
+
+[2026-08-07 3:40 p.m.] anfroholic
+We've done a lot of work to improve all the processes. 
+
+The PTH didn't seem to be a problem, rather the vias that were tented on the back side (there is no soldermask on the front)
+We have ordered a number of untented versions, but I have been absent from that process for some time.
+
+{Reactions}
+🤔
+
+[2026-08-07 5:05 p.m.] essen__
+> We've done a lot of work to improve all the processes. 
+Nice, what kind of testing was done? 
+Do by any chance have any ongoing experiments for long term corrosion behavior?
+
+
+[2026-08-07 5:11 p.m.] anfroholic
+The epoxy is clear so you can see everything. 
+Any issues I'm referring to now are likely more cosmetic than anything. 
+Again, any of the bubbles I saw at the end were the amount of air trapped inside of a 0.25mm via. And the only reason you'd ever even know they were there is because it's clear. Everything is encased.
+
+
+[2026-08-07 5:13 p.m.] essen__
+Got it, so testing by visual inspection 👍
+
+
+[2026-08-07 5:15 p.m.] essen__
+Please don't understand this wrong way, I am not looking to impose my views on anyone, but in all transparency, the more I read the more I am personally concerned about the presence of holes in the encapsulation region.
+
+
+[2026-08-07 5:16 p.m.] essen__
+Currently I am concerned about 2 failure modes, short term: mechanical failure of the bond (lower yield), long term: corrosion
+
+
+[2026-08-07 5:17 p.m.] anfroholic
+there are no holes
+
+
+[2026-08-07 5:19 p.m.] anfroholic
+We have also been doing electrical testing
+
+
+[2026-08-07 5:19 p.m.] essen__
+Seems I am confused then ? The via center ? Can you unstupid me ?
+
+{Attachments}
+2026-08_media/image-6D9B4.png
+
+
+[2026-08-07 5:24 p.m.] anfroholic
+Maybe I'm misinterpreting what you're referring to as holes. 
+The die and the wires are all encapsulated. 
+Parts of the pcb are exposed because it's the pcb. There's a large mezzanine and caps on the back
+
+
+[2026-08-07 5:25 p.m.] essen__
+I am currently using the following definition: 
+hole = any opening though the substrate (pcb) in which could form a contact between the epoxy and the air
+
+
+[2026-08-07 5:28 p.m.] essen__
+Based on this definition, do we have holes in the encapsulation region ?
+
+
 ==============================================================
-Exported 9 message(s)
+Exported 28 message(s)
 ==============================================================
