@@ -1,0 +1,179 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 📐 - Designing / 📦-cob / CoB PCB (0.5x0.5 focus) 🧵
+After: 2026-07-31 11:59 p.m.
+Before: 2026-09-01 12:00 a.m.
+==============================================================
+
+[2026-08-09 2:30 p.m.] essen__
+
+
+
+[2026-08-09 2:30 p.m.] essen__
+Change from previous PCBs: 
+- No vias or though holes in enclosed area (under the epoxy glob) 
+- Made pins on the mezzanine longer, bumped to `0.8` mm to help SMD soldering, we might want to make this even longer. The coordinates of the mezzanine footprint pins have not changed so this change should have no effect for the pick-and-pace. 
+
+No changes: 
+- part positions: mezzanine, die footprint and SMD capacitors are all at exactly the same place
+
+Things we might want to change: 
+- No fill zone in the encapsulation region 
+
+Things I want to change:
+- constant bonding wire length from die to finger
+- more gradual angle changes in bonder trajectory (seem to not handle abrusc transitions very well, see corners )
+- length match signal wire or at least attempt to have them closer in cumulative length.
+
+
+[2026-08-09 2:32 p.m.] 246tnt
+Watchout elongating pins like that because for automated assembly that means more paste and could end up bridging.
+
+
+[2026-08-09 2:37 p.m.] essen__
+Very good point. 🤔
+
+
+[2026-08-09 2:43 p.m.] essen__
+Think the extra `0.14` mm puts us at risk ? 
+Because, my thinking is we want more paste to prevent the pins disconnecting from the mezzanine, but also want to prevent shorts. 
+If the answer is yes, I will revert not questions asked.
+
+
+[2026-08-09 2:44 p.m.] 246tnt
+I have no idea, I usually just follow the vendor recommended footprint and assume they did their homework 😅
+
+
+[2026-08-09 2:44 p.m.] 246tnt
+but 0.14mm seem unlikely to make much of a difference
+
+
+[2026-08-09 2:46 p.m.] essen__
+Thanks, off to read the datasheet then 🫡
+
+
+[2026-08-09 2:51 p.m.] essen__
+I also really wondering when the mezannines disconnected. 
+Because they might have done so during the "reflow" step in the packaging house and have been perfectly fine when JLC delivered them.
+
+
+[2026-08-09 2:53 p.m.] 246tnt
+Do we have microscope shots of the failure ?
+
+
+[2026-08-09 2:54 p.m.] essen__
+Don't know, but this is what I have (was shared https://discord.com/channels/1361349522684510449/1408134567491145728/1515658100030312499 )
+
+{Attachments}
+2026-08_media/bb848a00855ac90dd8ebf644f51b8191-05797.webp
+2026-08_media/5bb1883e256ff56f73cef2c2eabb0c54-18548.webp
+
+
+[2026-08-09 2:55 p.m.] 246tnt
+The pins are still gold, they never wetted and they're bent.
+
+
+[2026-08-09 2:56 p.m.] 246tnt
+The  connectors were damaged before soldering.
+
+{Reactions}
+🔥
+
+[2026-08-09 2:56 p.m.] essen__
+Thanks, you are a badass tnt 💪
+
+
+[2026-08-09 3:19 p.m.] rebelmike
+Potentially some vias near the pads should be moved back a bit if the goal is to have none under the epoxy.
+
+That might be easier if you move to something more similar to the pad frame you posted in the TT discord.
+
+
+[2026-08-09 3:22 p.m.] rebelmike
+I suspect it will be difficult to make the larger dies work with no vias inside the pad ring, although reducing the size of the pads should give you a bit more space
+
+
+[2026-08-09 3:24 p.m.] namibj
+oh yeah, if they're assembled by JLCPCB do take the footprints they have on their easyeda for the part, at least drawing-wise
+
+
+[2026-08-09 3:26 p.m.] essen__
+It defiantly will but my current plan is to first see if I can get these changes approved before taking such a departure. For clarity of reading he is referencing to my automatic CoB footprint generator  (https://discord.com/channels/1009193568256135208/1009193776155205696/1535851539502075936).
+
+I will move the vias further out 🫡
+
+
+[2026-08-09 3:27 p.m.] namibj
+I have a feeling it might be better to have the PCB-side bond pads not be as wide in favor of them being allowed closer; after all, the machien does reliably hit the far smaller passivation openings on the dies....
+
+Unless that means the die would need to be aligned accurately enough to the die ahead of the wire bonding machine getting it's turn; AFAIK that's a premium offer of the factory (alignment by machine to be substantially more precise)
+
+{Reactions}
+👀
+
+[2026-08-09 3:29 p.m.] essen__
+Difficult for sure, but I don't think it will be impossible, they use 4 layers PCBs unlike the 2 layers here, I think I can make it work. 
+Also, I have no intention of modifying the pad sizes. The pads where just bigger on the test I posted, it was just a trial run for the algo.
+
+
+[2026-08-09 3:29 p.m.] namibj
+anyways, go have fun, best luck to ya!
+
+{Reactions}
+🫡 👋
+
+[2026-08-09 3:30 p.m.] essen__
+I think the issue there might be JLC's requirements for wire width.
+
+
+[2026-08-09 3:31 p.m.] namibj
+I'm literally basing it on the spacing between pads; and the trace width I see between the vias and the pads, on the red layer here: https://discord.com/channels/1361349522684510449/1408134567491145728/1536016323061223484
+
+{Reactions}
+👀 👍
+
+[2026-08-09 5:14 p.m.] essen__
+Mezzanine footprint: 
+Assuming connector is : https://www.lcsc.com/product-detail/C19089236.html?spm=wm.fly.bg.1.xh&lcsc_vid=QwRcU1cHRFULBFdQRFgIVVxQQQJWUVYHRAMNVlJQRAAxVlNeQVNXUlRTT1lfVTsOAxUeFF5JWBYZEEoKFBINSQcJGk4eFQsCAgIaSgADAwAHC0slRlheX11UTlNADxALGw%3D%3D
+
+{Attachments}
+2026-08_media/image-651EA.png
+
+{Embed}
+https://www.lcsc.com/product-detail/C19089236.html?spm=wm.fly.bg.1.xh&lcsc_vid=QwRcU1cHRFULBFdQRFgIVVxQQQJWUVYHRAMNVlJQRAAxVlNeQVNXUlRTT1lfVTsOAxUeFF5JWBYZEEoKFBINSQcJGk4eFQsCAgIaSgADAwAHC0slRlheX11UTlNADxALGw%3D%3D
+HC-PBB40C-70DP-0.4V-02 | Arrays, Edge Type, Mezzanine (Board to Boa...
+HC-PBB40C-70DP-0.4V-02 Arrays, Edge Type, Mezzanine (Board to Board) by HCTL. Features - and -35℃~+85℃. From $0.3354, in stock. Datasheet available.
+2026-08_media/20231206_HCTL-HC-PBB40C-70DP-0-4V-02_C1908-D8DA2.jpg
+
+{Embed}
+https://www.lcsc.com/product-detail/C19089236.html?spm=wm.fly.bg.1.xh&lcsc_vid=QwRcU1cHRFULBFdQRFgIVVxQQQJWUVYHRAMNVlJQRAAxVlNeQVNXUlRTT1lfVTsOAxUeFF5JWBYZEEoKFBINSQcJGk4eFQsCAgIaSgADAwAHC0slRlheX11UTlNADxALGw%3D%3D
+2026-08_media/20231206_HCTL-HC-PBB40C-70DP-0-4V-02_C1908-003F5.jpg
+
+{Embed}
+https://www.lcsc.com/product-detail/C19089236.html?spm=wm.fly.bg.1.xh&lcsc_vid=QwRcU1cHRFULBFdQRFgIVVxQQQJWUVYHRAMNVlJQRAAxVlNeQVNXUlRTT1lfVTsOAxUeFF5JWBYZEEoKFBINSQcJGk4eFQsCAgIaSgADAwAHC0slRlheX11UTlNADxALGw%3D%3D
+2026-08_media/20231206_HCTL-HC-PBB40C-70DP-0-4V-02_C1908-8E8E2.jpg
+
+
+[2026-08-09 5:16 p.m.] essen__
+The default mezannine is perfectly inline with the datasheet
+
+
+[2026-08-09 6:04 p.m.] essen__
+Updated layout, moved via on left side further away
+
+{Attachments}
+2026-08_media/front-A2DE2.png
+2026-08_media/back-109D4.png
+
+
+[2026-08-09 6:05 p.m.] essen__
+DRC is clear
+
+
+[2026-08-09 6:25 p.m.] rebelmike
+Looks good, though where have all the ground vias gone?
+
+
+==============================================================
+Exported 28 message(s)
+==============================================================

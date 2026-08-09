@@ -1,0 +1,53 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"509798510170865675","essen__","2026-08-09T14:30:13.3420000+00:00","","",""
+"509798510170865675","essen__","2026-08-09T14:30:14.5790000+00:00","Change from previous PCBs: 
+- No vias or though holes in enclosed area (under the epoxy glob) 
+- Made pins on the mezzanine longer, bumped to `0.8` mm to help SMD soldering, we might want to make this even longer. The coordinates of the mezzanine footprint pins have not changed so this change should have no effect for the pick-and-pace. 
+
+No changes: 
+- part positions: mezzanine, die footprint and SMD capacitors are all at exactly the same place
+
+Things we might want to change: 
+- No fill zone in the encapsulation region 
+
+Things I want to change:
+- constant bonding wire length from die to finger
+- more gradual angle changes in bonder trajectory (seem to not handle abrusc transitions very well, see corners )
+- length match signal wire or at least attempt to have them closer in cumulative length.","",""
+"596068704471482370","246tnt","2026-08-09T14:32:27.0580000+00:00","Watchout elongating pins like that because for automated assembly that means more paste and could end up bridging.","",""
+"509798510170865675","essen__","2026-08-09T14:37:14.1340000+00:00","Very good point. 🤔","",""
+"509798510170865675","essen__","2026-08-09T14:43:36.0780000+00:00","Think the extra `0.14` mm puts us at risk ? 
+Because, my thinking is we want more paste to prevent the pins disconnecting from the mezzanine, but also want to prevent shorts. 
+If the answer is yes, I will revert not questions asked.","",""
+"596068704471482370","246tnt","2026-08-09T14:44:16.5450000+00:00","I have no idea, I usually just follow the vendor recommended footprint and assume they did their homework 😅","",""
+"596068704471482370","246tnt","2026-08-09T14:44:45.7790000+00:00","but 0.14mm seem unlikely to make much of a difference","",""
+"509798510170865675","essen__","2026-08-09T14:46:36.7040000+00:00","Thanks, off to read the datasheet then 🫡","",""
+"509798510170865675","essen__","2026-08-09T14:51:04.1870000+00:00","I also really wondering when the mezannines disconnected. 
+Because they might have done so during the ""reflow"" step in the packaging house and have been perfectly fine when JLC delivered them.","",""
+"596068704471482370","246tnt","2026-08-09T14:53:09.0280000+00:00","Do we have microscope shots of the failure ?","",""
+"509798510170865675","essen__","2026-08-09T14:54:48.8850000+00:00","Don't know, but this is what I have (was shared https://discord.com/channels/1361349522684510449/1408134567491145728/1515658100030312499 )","2026-08_media/bb848a00855ac90dd8ebf644f51b8191-05797.webp,2026-08_media/5bb1883e256ff56f73cef2c2eabb0c54-18548.webp",""
+"596068704471482370","246tnt","2026-08-09T14:55:51.9150000+00:00","The pins are still gold, they never wetted and they're bent.","",""
+"596068704471482370","246tnt","2026-08-09T14:56:08.0490000+00:00","The  connectors were damaged before soldering.","","🔥 (1)"
+"509798510170865675","essen__","2026-08-09T14:56:30.8870000+00:00","Thanks, you are a badass tnt 💪","",""
+"691780627338625077","rebelmike","2026-08-09T15:19:59.9000000+00:00","Potentially some vias near the pads should be moved back a bit if the goal is to have none under the epoxy.
+
+That might be easier if you move to something more similar to the pad frame you posted in the TT discord.","",""
+"691780627338625077","rebelmike","2026-08-09T15:22:17.1110000+00:00","I suspect it will be difficult to make the larger dies work with no vias inside the pad ring, although reducing the size of the pads should give you a bit more space","",""
+"262706220073222144","namibj","2026-08-09T15:24:48.4720000+00:00","oh yeah, if they're assembled by JLCPCB do take the footprints they have on their easyeda for the part, at least drawing-wise","",""
+"509798510170865675","essen__","2026-08-09T15:26:57.6500000+00:00","It defiantly will but my current plan is to first see if I can get these changes approved before taking such a departure. For clarity of reading he is referencing to my automatic CoB footprint generator  (https://discord.com/channels/1009193568256135208/1009193776155205696/1535851539502075936).
+
+I will move the vias further out 🫡","",""
+"262706220073222144","namibj","2026-08-09T15:27:30.8880000+00:00","I have a feeling it might be better to have the PCB-side bond pads not be as wide in favor of them being allowed closer; after all, the machien does reliably hit the far smaller passivation openings on the dies....
+
+Unless that means the die would need to be aligned accurately enough to the die ahead of the wire bonding machine getting it's turn; AFAIK that's a premium offer of the factory (alignment by machine to be substantially more precise)","","👀 (1)"
+"509798510170865675","essen__","2026-08-09T15:29:00.2150000+00:00","Difficult for sure, but I don't think it will be impossible, they use 4 layers PCBs unlike the 2 layers here, I think I can make it work. 
+Also, I have no intention of modifying the pad sizes. The pads where just bigger on the test I posted, it was just a trial run for the algo.","",""
+"262706220073222144","namibj","2026-08-09T15:29:38.7690000+00:00","anyways, go have fun, best luck to ya!","","🫡 (1),👋 (1)"
+"509798510170865675","essen__","2026-08-09T15:30:00.5880000+00:00","I think the issue there might be JLC's requirements for wire width.","",""
+"262706220073222144","namibj","2026-08-09T15:31:15.5950000+00:00","I'm literally basing it on the spacing between pads; and the trace width I see between the vias and the pads, on the red layer here: https://discord.com/channels/1361349522684510449/1408134567491145728/1536016323061223484","","👀 (1),👍 (1)"
+"509798510170865675","essen__","2026-08-09T17:14:40.7880000+00:00","Mezzanine footprint: 
+Assuming connector is : https://www.lcsc.com/product-detail/C19089236.html?spm=wm.fly.bg.1.xh&lcsc_vid=QwRcU1cHRFULBFdQRFgIVVxQQQJWUVYHRAMNVlJQRAAxVlNeQVNXUlRTT1lfVTsOAxUeFF5JWBYZEEoKFBINSQcJGk4eFQsCAgIaSgADAwAHC0slRlheX11UTlNADxALGw%3D%3D","2026-08_media/image-651EA.png",""
+"509798510170865675","essen__","2026-08-09T17:16:21.5630000+00:00","The default mezannine is perfectly inline with the datasheet","",""
+"509798510170865675","essen__","2026-08-09T18:04:33.6010000+00:00","Updated layout, moved via on left side further away","2026-08_media/front-A2DE2.png,2026-08_media/back-109D4.png",""
+"509798510170865675","essen__","2026-08-09T18:05:58.0670000+00:00","DRC is clear","",""
+"691780627338625077","rebelmike","2026-08-09T18:25:59.6980000+00:00","Looks good, though where have all the ground vias gone?","",""
