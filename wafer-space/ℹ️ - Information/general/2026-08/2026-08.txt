@@ -520,6 +520,61 @@ https://agentdavo.github.io/GDS3D/index3d.html — actual pdk data now, using cu
 example https://agentdavo.github.io/GDS3D/index3d.html#c=gf180mcu_as_sc_mcu7t3v3__ao211_4&az=-0.716&el=0.633&spin=0&pin=VSS
 
 
+[2026-08-10 10:02 a.m.] tholin
+Okay, I am also intending to make more updates to my SCL for run 3. Suggestions?
+
+
+[2026-08-10 10:04 a.m.] tholin
+My personal goal is it to finish some missing oai parts and then see what’s missing to get it to work with vlsiffra
+
+
+[2026-08-10 10:38 a.m.] rebelmike
+A clock gate?
+
+{Reactions}
+💯
+
+[2026-08-10 10:38 a.m.] tholin
+How do those work? Is it like a latch?
+
+
+[2026-08-10 10:39 a.m.] rebelmike
+The sky130 cell has a schematic: https://sky130-unofficial.readthedocs.io/en/latest/contents/libraries/sky130_fd_sc_hd/cells/dlclkp/README.html
+
+
+[2026-08-10 10:41 a.m.] rebelmike
+Basically a latch plus making sure there aren't any glitches
+
+
+[2026-08-10 10:42 a.m.] tholin
+Ah, the enable signal is synched to the clock
+
+
+[2026-08-10 10:42 a.m.] tholin
+I don’t think I’ll be able to characterize that
+
+
+[2026-08-10 10:42 a.m.] tholin
+Beyond propagation delay with the gate enabled
+
+
+[2026-08-10 10:49 a.m.] mole99
+A clock gate would definitely be nice, even if it's not properly characterized yet.
+Also, I heard a new open-source characterization tool is coming out soon. I'll let you know once I know more.
+
+
+[2026-08-10 10:59 a.m.] tholin
+I’m pretty happy with lctime since it actually lets me automate it
+
+
+[2026-08-10 10:59 a.m.] tholin
+But all the characterization tools so far lack the ability to automatically determine the maximum capacitive load on a cell to keep within a max transition constraint.
+
+
+[2026-08-10 11:00 a.m.] tholin
+Its the one remaining manual step for me.
+
+
 ==============================================================
-Exported 97 message(s)
+Exported 110 message(s)
 ==============================================================
