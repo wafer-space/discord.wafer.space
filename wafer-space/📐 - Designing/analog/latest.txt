@@ -299,6 +299,12 @@ Technically, yes
 Now, "is it supposed to be an oscillator" is a different and no less interesting question entirely!
 
 
+[2026-08-09 11:44 p.m.] namibj
+I have a feeling the strong ARM latch with it's nominal/supposed output into an RS latch from which the stabilized output can then be recovered afterwards, would also work suitably for this task here, though ofc replacing the _strongly regenerative, made possible through clocked gain_ core of a strong ARM latch with a sufficciently weakly regenerative one that _just_ manages to provide the desired width of dead-band/hysteresis, and is then followed with a sufficcient quantity of differential gain stages to ensure it still correctly/properly operates the RS latch.
+
+One would probably need to rely on CMOS inverter [-pair] (weakened by channel elongation to reduce bandwidth to what the following parts can actually utilize, and to curb power waste in that place, unless a current-starved-inverter style turns out to not break the regenerative core's operating principles) inputs in place of the strong ARM latch's natural nmos-diff-pair, but I doubt you need it to resolve double-hysteresis-flip signals (i.e., twice as much input amplitude as would be required to merely meet the input hysteresis, and where one would thus have a fairly weak but reasonably-above-noise-floor input signal) in under 2 ns (let's say 3ns given the use of 5V devices).
+
+
 ==============================================================
-Exported 61 message(s)
+Exported 62 message(s)
 ==============================================================
