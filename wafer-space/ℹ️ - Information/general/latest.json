@@ -16,7 +16,7 @@
     "after": "2026-07-31T23:59:59.999+00:00",
     "before": "2026-09-01T00:00:00+00:00"
   },
-  "exportedAt": "2026-08-10T16:05:11.194819+00:00",
+  "exportedAt": "2026-08-10T19:58:53.5993644+00:00",
   "messages": [
     {
       "id": "1533208570076856502",
@@ -5469,7 +5469,656 @@
       "reactions": [],
       "mentions": [],
       "inlineEmojis": []
+    },
+    {
+      "id": "1536405198812225577",
+      "type": "Reply",
+      "timestamp": "2026-08-10T16:05:44.425+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "For ws-run 3, there will probably be 9 quarter slots again. But since they can now be purchased, they may get used up quickly. True.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-08_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "220639106915368960",
+          "name": "tholin",
+          "discriminator": "0000",
+          "nickname": "Tholin",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-08_media/edae5aadf146133e0448bfb1f0fa91c4-62B19.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1536389680193601566",
+        "channelId": "1361349523724570941",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1536416243760762972",
+      "type": "Reply",
+      "timestamp": "2026-08-10T16:49:37.746+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Buffers that are designed to maintain duty-cycle (thus preventing long paths from swallowing up short/fast pulses?\nThe TSP-DFF you had looked at?\n\nAnd, importantly, getting some proper full characterization work going including characterized static power, and maybe adding some less-conservative \"ss/sf/ff/fs\" corners that aim at something like 70~90% yield (looking only at global process variations for that figure; treatment of other process variations would still be done the normal way, and this is IMO basically about being able to plan for a less-ambitious yield of extended-temperature-and-voltage-range chips while still checking the normal ways that full yield is expected if the chips are treated as \"limited temperature range, and needs a voltage supply better than a 7805-grade\", by basically accepting that with some acceptable risk the devices built from the chips would need to employ an actual heat sink for the chip, perhaps even a fan, and would need a fancier-than-baseline power supply).\n\nI believe Xyce's intrusive-PCE and/or embedded-sampling would work effectively and affordably for this number of fingers/devices in a DUT, for getting statistically confident and reasonably-tight bounds on mismatch-induced variations in any given cell's delays, so that OpenSTA may appropriately consider the limited predictability of gate delays when figuring whether a PnR \"solution\" will work out.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-08_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "220639106915368960",
+          "name": "tholin",
+          "discriminator": "0000",
+          "nickname": "Tholin",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-08_media/edae5aadf146133e0448bfb1f0fa91c4-62B19.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1536313825391804516",
+        "channelId": "1361349523724570941",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1536417373186162769",
+      "type": "Default",
+      "timestamp": "2026-08-10T16:54:07.022+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The clock buffers are supposed to be delay-balanced",
+      "author": {
+        "id": "220639106915368960",
+        "name": "tholin",
+        "discriminator": "0000",
+        "nickname": "Tholin",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-08_media/edae5aadf146133e0448bfb1f0fa91c4-62B19.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1536451388161265725",
+      "type": "Default",
+      "timestamp": "2026-08-10T19:09:16.824+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@azonenberg can you send @Tim Edwards the information on what hardware measuring/testing equipment abilities you _do_ have for the multi-gigabit Ser[Des] we're proposing like _right now_ for IHP SG13CMOS5L? Sorry to be so sudden, I forgot it was part of what's technically the \"proposal deadline affected information-to-file\".\n\nI'm expecting your scope to suffice to do appropriate reasonably representative BER measurements with the CDR shoved into ngacopeclient such that we can cope with the TX Baudrate being set by a non-PLL-governed VCO? Like I expect that to cause substantial amounts of low-frequency FM far out of the normal +-100ppm of BASE-R, but that's not gonna be a problem, right?",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-08_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1365118310701600900",
+          "name": "rtimothyedwards_19428",
+          "discriminator": "0000",
+          "nickname": "Tim Edwards",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-08_media/6bcc8e61db497b620550682309ace5d5-D89B4.png"
+        },
+        {
+          "id": "812217062567051294",
+          "name": "azonenberg",
+          "discriminator": "0000",
+          "nickname": "azonenberg",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-08_media/fa74a52c2f0bbb97224c0fe673ec2e33-377D4.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1536452128980078602",
+      "type": "Reply",
+      "timestamp": "2026-08-10T19:12:13.449+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The vendor CDR package lets you tweak the bandwidth of the loop pretty flexibly",
+      "author": {
+        "id": "812217062567051294",
+        "name": "azonenberg",
+        "discriminator": "0000",
+        "nickname": "azonenberg",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-08_media/fa74a52c2f0bbb97224c0fe673ec2e33-377D4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "262706220073222144",
+          "name": "namibj",
+          "discriminator": "0000",
+          "nickname": "namibj",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-08_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1536451388161265725",
+        "channelId": "1361349523724570941",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1536452245548171284",
+      "type": "Default",
+      "timestamp": "2026-08-10T19:12:41.241+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "the ngscopeclient CDR is not currently tunable, but has wide bandwidth and will track low frequency jitter or spread spectrum no problem",
+      "author": {
+        "id": "812217062567051294",
+        "name": "azonenberg",
+        "discriminator": "0000",
+        "nickname": "azonenberg",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-08_media/fa74a52c2f0bbb97224c0fe673ec2e33-377D4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1536452373185298472",
+      "type": "Default",
+      "timestamp": "2026-08-10T19:13:11.672+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "i actually use it all the time to measure the stability of a clock signal",
+      "author": {
+        "id": "812217062567051294",
+        "name": "azonenberg",
+        "discriminator": "0000",
+        "nickname": "azonenberg",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-08_media/fa74a52c2f0bbb97224c0fe673ec2e33-377D4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1536452469196849233",
+      "type": "Default",
+      "timestamp": "2026-08-10T19:13:34.563+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "like, i can lock my soft PLL to the input data and recover the clock then plot frequency over time with some smoothing to measure drift in the source oscillator",
+      "author": {
+        "id": "812217062567051294",
+        "name": "azonenberg",
+        "discriminator": "0000",
+        "nickname": "azonenberg",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-08_media/fa74a52c2f0bbb97224c0fe673ec2e33-377D4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1536452713137836132",
+      "type": "Default",
+      "timestamp": "2026-08-10T19:14:32.723+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "the bigger question is, for *real* use, how much noise a real e.g. FPGA based receiver can tolerate. but if the goal is just to validate the driver, it'll work no problem",
+      "author": {
+        "id": "812217062567051294",
+        "name": "azonenberg",
+        "discriminator": "0000",
+        "nickname": "azonenberg",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-08_media/fa74a52c2f0bbb97224c0fe673ec2e33-377D4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1536452863667208293",
+      "type": "Default",
+      "timestamp": "2026-08-10T19:15:08.612+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Equipment wise I have a teledyne lecroy SDA816Zi-A with probes including but not limited to D1605, D1330, D420-A, D420",
+      "author": {
+        "id": "812217062567051294",
+        "name": "azonenberg",
+        "discriminator": "0000",
+        "nickname": "azonenberg",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-08_media/fa74a52c2f0bbb97224c0fe673ec2e33-377D4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1536452951017525331",
+      "type": "Default",
+      "timestamp": "2026-08-10T19:15:29.438+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "and a MultiLane ML4039 BERT that may or may not be able to lock to the signal depending on how stable the clock is",
+      "author": {
+        "id": "812217062567051294",
+        "name": "azonenberg",
+        "discriminator": "0000",
+        "nickname": "azonenberg",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-08_media/fa74a52c2f0bbb97224c0fe673ec2e33-377D4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1536453024288088125",
+      "type": "Default",
+      "timestamp": "2026-08-10T19:15:46.907+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "if you are able to output a 1/32, i think, rate reference clock it will help the BERT track it",
+      "author": {
+        "id": "812217062567051294",
+        "name": "azonenberg",
+        "discriminator": "0000",
+        "nickname": "azonenberg",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-08_media/fa74a52c2f0bbb97224c0fe673ec2e33-377D4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1536456212982398976",
+      "type": "Reply",
+      "timestamp": "2026-08-10T19:28:27.151+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "For real use one would add a PLL to it, that's just one more thing to go wrong and result in the IHP chips being DOA (for the high speed TX).",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-08_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "812217062567051294",
+          "name": "azonenberg",
+          "discriminator": "0000",
+          "nickname": "azonenberg",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-08_media/fa74a52c2f0bbb97224c0fe673ec2e33-377D4.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1536452713137836132",
+        "channelId": "1361349523724570941",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1536456334004977734",
+      "type": "Default",
+      "timestamp": "2026-08-10T19:28:56.005+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "yeah makes sense",
+      "author": {
+        "id": "812217062567051294",
+        "name": "azonenberg",
+        "discriminator": "0000",
+        "nickname": "azonenberg",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-08_media/fa74a52c2f0bbb97224c0fe673ec2e33-377D4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1536456469179011163",
+      "type": "Default",
+      "timestamp": "2026-08-10T19:29:28.233+00:00",
+      "timestampEdited": "2026-08-10T19:29:42.158+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Could you possibly add a divided vco clock out and expose the vco control voltage so it would be possible (but not mandatory) to close the loop externally?",
+      "author": {
+        "id": "812217062567051294",
+        "name": "azonenberg",
+        "discriminator": "0000",
+        "nickname": "azonenberg",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-08_media/fa74a52c2f0bbb97224c0fe673ec2e33-377D4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1536457847368581312",
+      "type": "Reply",
+      "timestamp": "2026-08-10T19:34:56.819+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "We expect a `Baud/512~Baud/64` divided reference feed for the hopefully-deadline-meeting RX, with an off-die CDR getting provided edge sampler information via GPIOs (if I can DDR and ofc relative to that reference clock fed in), where the on-die PLL only does simple stupid integer-PLL and the synthesizer of this reference clock has to take care of possibly even bit-slipping until the PRBS receiver accepts it (not sure if it's sensitive if it's parallelized).\n\nBecause I figured we don't actually have to do any of the hard parts of CDR on-die just to make this _testable._",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-08_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "812217062567051294",
+          "name": "azonenberg",
+          "discriminator": "0000",
+          "nickname": "azonenberg",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-08_media/fa74a52c2f0bbb97224c0fe673ec2e33-377D4.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1536453024288088125",
+        "channelId": "1361349523724570941",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1536458097055240194",
+      "type": "Reply",
+      "timestamp": "2026-08-10T19:35:56.349+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I'm fully expecting such to be included, at sufficient quality to at least make testing not-hard.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-08_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "812217062567051294",
+          "name": "azonenberg",
+          "discriminator": "0000",
+          "nickname": "azonenberg",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-08_media/fa74a52c2f0bbb97224c0fe673ec2e33-377D4.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1536456469179011163",
+        "channelId": "1361349523724570941",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1536459405430624356",
+      "type": "Default",
+      "timestamp": "2026-08-10T19:41:08.29+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I specifically say 1/32 because i believe that is what the BERT needs (I'd have to double check but i'm ~95% sure it's 1/32)",
+      "author": {
+        "id": "812217062567051294",
+        "name": "azonenberg",
+        "discriminator": "0000",
+        "nickname": "azonenberg",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-08_media/fa74a52c2f0bbb97224c0fe673ec2e33-377D4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1536459462150328412",
+      "type": "Default",
+      "timestamp": "2026-08-10T19:41:21.813+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "so if i get exactly that, the bert is in play",
+      "author": {
+        "id": "812217062567051294",
+        "name": "azonenberg",
+        "discriminator": "0000",
+        "nickname": "azonenberg",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-08_media/fa74a52c2f0bbb97224c0fe673ec2e33-377D4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1536459477270667305",
+      "type": "Default",
+      "timestamp": "2026-08-10T19:41:25.418+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "if not, i can only use the scope",
+      "author": {
+        "id": "812217062567051294",
+        "name": "azonenberg",
+        "discriminator": "0000",
+        "nickname": "azonenberg",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-08_media/fa74a52c2f0bbb97224c0fe673ec2e33-377D4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1536459512482107423",
+      "type": "Default",
+      "timestamp": "2026-08-10T19:41:33.813+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "(for the TX)",
+      "author": {
+        "id": "812217062567051294",
+        "name": "azonenberg",
+        "discriminator": "0000",
+        "nickname": "azonenberg",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-08_media/fa74a52c2f0bbb97224c0fe673ec2e33-377D4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
     }
   ],
-  "messageCount": 147
+  "messageCount": 168
 }

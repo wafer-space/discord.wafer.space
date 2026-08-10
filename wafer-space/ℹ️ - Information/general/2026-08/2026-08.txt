@@ -751,6 +751,99 @@ Well, lets try this, I suppose
 2026-08_media/pinout_plan-F4B8C.png
 
 
+[2026-08-10 4:05 p.m.] mole99
+For ws-run 3, there will probably be 9 quarter slots again. But since they can now be purchased, they may get used up quickly. True.
+
+
+[2026-08-10 4:49 p.m.] namibj
+Buffers that are designed to maintain duty-cycle (thus preventing long paths from swallowing up short/fast pulses?
+The TSP-DFF you had looked at?
+
+And, importantly, getting some proper full characterization work going including characterized static power, and maybe adding some less-conservative "ss/sf/ff/fs" corners that aim at something like 70~90% yield (looking only at global process variations for that figure; treatment of other process variations would still be done the normal way, and this is IMO basically about being able to plan for a less-ambitious yield of extended-temperature-and-voltage-range chips while still checking the normal ways that full yield is expected if the chips are treated as "limited temperature range, and needs a voltage supply better than a 7805-grade", by basically accepting that with some acceptable risk the devices built from the chips would need to employ an actual heat sink for the chip, perhaps even a fan, and would need a fancier-than-baseline power supply).
+
+I believe Xyce's intrusive-PCE and/or embedded-sampling would work effectively and affordably for this number of fingers/devices in a DUT, for getting statistically confident and reasonably-tight bounds on mismatch-induced variations in any given cell's delays, so that OpenSTA may appropriately consider the limited predictability of gate delays when figuring whether a PnR "solution" will work out.
+
+
+[2026-08-10 4:54 p.m.] tholin
+The clock buffers are supposed to be delay-balanced
+
+
+[2026-08-10 7:09 p.m.] namibj
+@azonenberg can you send @Tim Edwards the information on what hardware measuring/testing equipment abilities you _do_ have for the multi-gigabit Ser[Des] we're proposing like _right now_ for IHP SG13CMOS5L? Sorry to be so sudden, I forgot it was part of what's technically the "proposal deadline affected information-to-file".
+
+I'm expecting your scope to suffice to do appropriate reasonably representative BER measurements with the CDR shoved into ngacopeclient such that we can cope with the TX Baudrate being set by a non-PLL-governed VCO? Like I expect that to cause substantial amounts of low-frequency FM far out of the normal +-100ppm of BASE-R, but that's not gonna be a problem, right?
+
+
+[2026-08-10 7:12 p.m.] azonenberg
+The vendor CDR package lets you tweak the bandwidth of the loop pretty flexibly
+
+
+[2026-08-10 7:12 p.m.] azonenberg
+the ngscopeclient CDR is not currently tunable, but has wide bandwidth and will track low frequency jitter or spread spectrum no problem
+
+
+[2026-08-10 7:13 p.m.] azonenberg
+i actually use it all the time to measure the stability of a clock signal
+
+
+[2026-08-10 7:13 p.m.] azonenberg
+like, i can lock my soft PLL to the input data and recover the clock then plot frequency over time with some smoothing to measure drift in the source oscillator
+
+
+[2026-08-10 7:14 p.m.] azonenberg
+the bigger question is, for *real* use, how much noise a real e.g. FPGA based receiver can tolerate. but if the goal is just to validate the driver, it'll work no problem
+
+
+[2026-08-10 7:15 p.m.] azonenberg
+Equipment wise I have a teledyne lecroy SDA816Zi-A with probes including but not limited to D1605, D1330, D420-A, D420
+
+
+[2026-08-10 7:15 p.m.] azonenberg
+and a MultiLane ML4039 BERT that may or may not be able to lock to the signal depending on how stable the clock is
+
+
+[2026-08-10 7:15 p.m.] azonenberg
+if you are able to output a 1/32, i think, rate reference clock it will help the BERT track it
+
+
+[2026-08-10 7:28 p.m.] namibj
+For real use one would add a PLL to it, that's just one more thing to go wrong and result in the IHP chips being DOA (for the high speed TX).
+
+
+[2026-08-10 7:28 p.m.] azonenberg
+yeah makes sense
+
+
+[2026-08-10 7:29 p.m.] azonenberg
+Could you possibly add a divided vco clock out and expose the vco control voltage so it would be possible (but not mandatory) to close the loop externally?
+
+
+[2026-08-10 7:34 p.m.] namibj
+We expect a `Baud/512~Baud/64` divided reference feed for the hopefully-deadline-meeting RX, with an off-die CDR getting provided edge sampler information via GPIOs (if I can DDR and ofc relative to that reference clock fed in), where the on-die PLL only does simple stupid integer-PLL and the synthesizer of this reference clock has to take care of possibly even bit-slipping until the PRBS receiver accepts it (not sure if it's sensitive if it's parallelized).
+
+Because I figured we don't actually have to do any of the hard parts of CDR on-die just to make this _testable._
+
+
+[2026-08-10 7:35 p.m.] namibj
+I'm fully expecting such to be included, at sufficient quality to at least make testing not-hard.
+
+
+[2026-08-10 7:41 p.m.] azonenberg
+I specifically say 1/32 because i believe that is what the BERT needs (I'd have to double check but i'm ~95% sure it's 1/32)
+
+
+[2026-08-10 7:41 p.m.] azonenberg
+so if i get exactly that, the bert is in play
+
+
+[2026-08-10 7:41 p.m.] azonenberg
+if not, i can only use the scope
+
+
+[2026-08-10 7:41 p.m.] azonenberg
+(for the TX)
+
+
 ==============================================================
-Exported 147 message(s)
+Exported 168 message(s)
 ==============================================================
