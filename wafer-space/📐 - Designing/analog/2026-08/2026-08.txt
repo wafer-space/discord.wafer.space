@@ -423,6 +423,8 @@ Like, I see a bunch of review steps
 [2026-08-10 12:41 p.m.] rtimothyedwards_19428
 You can handle it!  Anyway, Chipalooza for GF will launch in a week and I will announce on the Wafer.Space discord.
 
+{Reactions}
+waferspace
 
 [2026-08-10 12:45 p.m.] tholin
 I’m reading the FAQ right now. So, I need to make a layout that is integrated onto a multi-project die?
@@ -432,6 +434,16 @@ I’m reading the FAQ right now. So, I need to make a layout that is integrated 
 Hmmm, not sure what I’m building now is suitable, then, but I can maybe take some of its component modules and do something with those.
 
 
+[2026-08-10 2:05 p.m.] namibj
+KLayout has them as PCells.
+Well, the sealring; you could also take a template GDS and flatten and delete everything but the top metal/pad-opening structures from inside the sealring, leaving only the literal pads themselves (I'd suggest considering to keep the existing via structure of how the pad electrical connection is escaped downwards, as there are some minor DRC aspects around the interaction between (especially upper-level) vias and pads if those pads are wedge-bonded (like all of Run1 has been)
+
+
+[2026-08-10 2:08 p.m.] namibj
+For the record, `FC01` was done entirely in KLayout using the IEEE Chipathon docker tag.
+Took me a few tries to get the coordinate origin and exact precise size of the pad ring right, but that was it.
+
+
 ==============================================================
-Exported 89 message(s)
+Exported 91 message(s)
 ==============================================================

@@ -506,7 +506,7 @@ There is a fixed cost with doing things at the moment that means it isn't really
 The eventual hope is that I can ship your parts direct to a place like NextPCB and they do what ever wire bonding you want in an even more cost effective manner.
 
 {Reactions}
-❤️
+❤️ (2)
 
 [2026-08-09 10:56 a.m.] archit3ch
 Do let me know if that service becomes available before the run 3 deadline (or I guess before the slots run out). Even as a one-off agreement with the PCBA houses before you roll out the service for everyone.
@@ -532,7 +532,7 @@ My personal goal is it to finish some missing oai parts and then see what’s mi
 A clock gate?
 
 {Reactions}
-💯
+💯 (2)
 
 [2026-08-10 10:38 a.m.] tholin
 How do those work? Is it like a latch?
@@ -562,6 +562,8 @@ Beyond propagation delay with the gate enabled
 A clock gate would definitely be nice, even if it's not properly characterized yet.
 Also, I heard a new open-source characterization tool is coming out soon. I'll let you know once I know more.
 
+{Reactions}
+👀
 
 [2026-08-10 10:59 a.m.] tholin
 I’m pretty happy with lctime since it actually lets me automate it
@@ -575,6 +577,180 @@ But all the characterization tools so far lack the ability to automatically dete
 Its the one remaining manual step for me.
 
 
+[2026-08-10 12:51 p.m.] tholin
+Can I have multiple power domains using the foundry IO pads? Like, can I insert breakers to have a single isolated VDD pad?
+
+
+[2026-08-10 12:52 p.m.] tholin
+I do not know how to do this, but its the one puzzle piece I’m missing currently to get started on my submission
+
+
+[2026-08-10 12:52 p.m.] tholin
+Fallback would be using an analog pad for that supply
+
+
+[2026-08-10 1:06 p.m.] tholin
+To clarify: I know the __brk macros exist, I just don’t know how to instantiate them
+
+
+[2026-08-10 1:18 p.m.] 246tnt
+Any reason you want to use that rather than using an analog pad ?
+The downsides is you're breaking your ring ...
+The upside is you don't have diodes to IO supply ...
+
+
+[2026-08-10 1:18 p.m.] tholin
+The two digital input pads tied related to that supply
+
+
+[2026-08-10 1:18 p.m.] tholin
+Yeah!
+
+
+[2026-08-10 1:19 p.m.] 246tnt
+Ah so it's not just a voltage input you want to actually supply some IO pads off that supply. Got it.
+
+
+[2026-08-10 1:19 p.m.] tholin
+And an output
+
+
+[2026-08-10 1:19 p.m.] tholin
+I need break -> VDD -> input -> input -> output -> break
+
+
+[2026-08-10 1:21 p.m.] 246tnt
+You might want a ground pad there too.
+
+
+[2026-08-10 1:23 p.m.] 246tnt
+Because although the brk doesn't break `VSS`, it does break `DVSS`. And yeah, those are eventually electrically connected in the foundry IO, but then your ESD path to ground (and low drive too) takes a very long path instead of the very strong `DVSS` connections.
+
+
+[2026-08-10 1:27 p.m.] 246tnt
+As so how to use them, I'd just instanciate them in the verilog and then use a custom pad placement script to get those instance and put them in the right spot. At least that's how I would try it.
+
+
+[2026-08-10 1:40 p.m.] mole99
+Yes, LibreLane's default padring generation script treats the breaker cell just like any other I/O cell and tries to space everything equidistant. So a custom padring script makes sense.
+
+
+[2026-08-10 1:47 p.m.] tholin
+I need to be careful not to break compatibility with the COB check
+
+
+[2026-08-10 1:47 p.m.] tholin
+I don’t even know what all that one checks for
+
+
+[2026-08-10 2:08 p.m.] tholin
+Huh, that was easier to figure out than I thought. I got two breakers, right where I need them.
+
+
+[2026-08-10 2:09 p.m.] tholin
+Its a bit jank, I hardcoded where it places them
+
+
+[2026-08-10 2:09 p.m.] tholin
+But I got it
+
+{Reactions}
+👍 (2)
+
+[2026-08-10 2:09 p.m.] tholin
+Okay, so, ground will *not* be broken up, effectively? That is good news, actually.
+
+
+[2026-08-10 2:12 p.m.] tholin
+If the COB check checks for the locations of ground AND power pads, I might have issues with laying things out efficiently later down the line, but I can make it work.
+If it’ll throw a fuss at me inserting *additional* power pads, that would be a problem.
+
+
+[2026-08-10 2:26 p.m.] 246tnt
+@Tholin Huh ... "not broken up" but you really want a ground pad for things to work
+
+
+[2026-08-10 2:33 p.m.] tholin
+Ground should be common between the two circuits on this die
+
+
+[2026-08-10 2:34 p.m.] mole99
+The CoB checks only verifies the passiviation openings - what they bond to doesn't matter.
+
+
+[2026-08-10 2:39 p.m.] tholin
+But isn’t ground and/or power tied to a copper plane on the breakout board?
+
+
+[2026-08-10 2:40 p.m.] tholin
+So I *practically* can’t move those without creating shorts.
+
+
+[2026-08-10 2:46 p.m.] anfroholic
+The COB as it stands, ground are tied together. 
+power are all separate, *but* they all each have a decoupling cap on the wire.
+
+
+[2026-08-10 2:49 p.m.] tholin
+Alright, so I can move the power pads
+
+
+[2026-08-10 3:04 p.m.] tholin
+I finished pinout planning and setting up the padring just as I’m informed there are barely any quarter slots and I’d have better chances with a horizontal half-width
+
+{Attachments}
+2026-08_media/image-10A29.png
+
+{Reactions}
+👀
+
+[2026-08-10 3:04 p.m.] tholin
+a!
+
+{Reactions}
+😅
+
+[2026-08-10 3:07 p.m.] tholin
+The 1 by 0.5 doesn’t have the power and ground pads placed as conveniently as the 0.5 by 0.5
+
+
+[2026-08-10 3:10 p.m.] tholin
+Oh what? It got rid of all my beautiful markings on export.
+
+{Attachments}
+2026-08_media/pinout_plan-B0F20.png
+
+{Reactions}
+👀
+
+[2026-08-10 3:11 p.m.] tholin
+You see how that works perfectly, right?
+
+
+[2026-08-10 3:16 p.m.] tholin
+On 1 by 0.5, the longest run of non-ground pads is this, which splits the die into thirds.
+
+{Attachments}
+2026-08_media/pinout_plan-90363.png
+
+
+[2026-08-10 3:17 p.m.] tholin
+Although this would be able to switch more current
+
+
+[2026-08-10 3:19 p.m.] tholin
+Probably an unhealthy amount, so that’s not really the goal
+
+{Reactions}
+😂
+
+[2026-08-10 3:45 p.m.] tholin
+Well, lets try this, I suppose
+
+{Attachments}
+2026-08_media/pinout_plan-F4B8C.png
+
+
 ==============================================================
-Exported 110 message(s)
+Exported 147 message(s)
 ==============================================================
