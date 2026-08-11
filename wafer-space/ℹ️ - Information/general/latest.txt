@@ -844,6 +844,30 @@ if not, i can only use the scope
 (for the TX)
 
 
+[2026-08-10 9:04 p.m.] namibj
+@azonenberg 
+Maybe the RX PLL can even be connected to the TX VCO/clock tree, we'll see. 
+
+First we do a simple TX and when there's a DRC clean layout for it that has at least 30% yield for "good", and 80% yield for "testable", _only then_ do we put any substantial design effort into any fancy FIR, beyond-trivial pad capacitance matching/compensation, and ESPECIALLY any RX design, at least anything beyond trying to vaguely understand sensitivity time window for a strong arm latch implementation on that very process (as that strongly guides planning of how small of an UI to aim for in the RX, and it's area requirements gonna give a substantial hint on how large/compact the analog circuity would roughly be and from that whether it may fit into the same slot as the TX or whether it would need it's own slot to reach any comfy good performance/TX-matching-speed).
+
+
+[2026-08-10 9:04 p.m.] namibj
+Could so with an external frequency synthesizer for ya 😄
+
+
+[2026-08-10 10:05 p.m.] namibj
+I'm thinking like +-5% drift in Baud rate due to hard-to-prevent temperature variations from airflow variations as you're reaching around the DUT on the bench (fiddling with the test gear stacked at the back of the workbench, or anything vaguely like it that explains some good thermal drift if a frequency is more manually adjusted through e.g. a zoomed-in spectrum analyzer on a 1:10 power divider (needs only a little bit of signal 😉 ) and a hand occasionally reaching for the know of the bench top PSU.
+Or something 😄
+
+
+[2026-08-10 10:15 p.m.] namibj
+I'm confident a reasonable PLL implemented later is not hard to analytically adjust the jitter-vs.-frequency (UI_pk-pk vs. frequency) effects of the observed free running VCO of, to know if that particular PLL option would bring the TX jitter spectrum into compliance with 802.3.
+
+
+[2026-08-10 10:25 p.m.] namibj
+You're not _mandated_ to short the pad opening's exposed metal of a COB's "ground pad" to anything particular inside.... just in case you thought otherwise.
+
+
 ==============================================================
-Exported 168 message(s)
+Exported 173 message(s)
 ==============================================================
