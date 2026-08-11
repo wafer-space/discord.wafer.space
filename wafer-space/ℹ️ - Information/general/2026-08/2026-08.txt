@@ -868,6 +868,27 @@ I'm confident a reasonable PLL implemented later is not hard to analytically adj
 You're not _mandated_ to short the pad opening's exposed metal of a COB's "ground pad" to anything particular inside.... just in case you thought otherwise.
 
 
+[2026-08-11 2:22 a.m.] azonenberg
+5% drift would be tricky if it's short term. 0.5% i could probably handle? I've never actually tested how far i can push the PLL. but also over what time horizon
+
+
+[2026-08-11 2:22 a.m.] azonenberg
+like it would be pretty easy to just grab a single waveform at a time and track whatever baud rate its running at and assume thermal drift over that 1ms window is negligible
+
+
+[2026-08-11 2:32 a.m.] namibj
+oh yeah that 5% if more over like 10s timescales or thereabouts, it's more a concern with a CDR PLL perhaps utilizing a relatively narrow-band pre-filter for the rate it's looking out for, and thus "keeping itself" from actually-following the signal, or perhaps just initially failing to find a lock in the first place.
+
+
+[2026-08-11 2:33 a.m.] azonenberg
+on a per-capture basis i can change the nominal rate in software. If we are talking to a hardware device, it's an issue
+
+
+[2026-08-11 3:07 a.m.] namibj
+At that point might as well point a thunderscope at it and spectrum-analyzer find the sub-harmonic of the baud rate where some relevant lower speed pattern content exists, like the 805.664062 megahertz of the 25GBASE-R's 64b/66b blocks that include their oh-so-important sync header.
+But yeah, I do not expect it to need to run free for testing, I think it can be used with an external PLL to be properly tested with "normal" gear.
+
+
 ==============================================================
-Exported 173 message(s)
+Exported 178 message(s)
 ==============================================================
