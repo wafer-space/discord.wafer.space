@@ -3,3 +3,15 @@ AuthorID,Author,Date,Content,Attachments,Reactions
 "323371864074485771","mole99","2026-09-01T07:22:08.4790000+00:00","You will need to design your own motherboard according to the requirements of your chip.
 
 Here is mine, which is based on an older Tiny Tapeout board: https://github.com/mole99/waferspace-main-pcb","",""
+"473469882382417924","gonsolo_","2026-09-01T07:52:44.1470000+00:00","Cool, thanks. Do you also know about a 1x0.5-specific version? Otherwise I guess I have to fork this and adapt the COB and pins.","",""
+"323371864074485771","mole99","2026-09-01T08:04:44.9820000+00:00","For reference, here you can find the CoB PCBs for run1: https://github.com/wafer-space/chip-on-board-wire-bonded-pcbs/tree/main/run-1
+
+As for the main PCB, Mike created a version for the 1x0p5 CoB: https://codeberg.org/rebelmike/ws01-tinyQV-mobo-alpha","",""
+"473469882382417924","gonsolo_","2026-09-01T10:20:07.0550000+00:00","Quick question on the 1×0p5 slot — is 3.3V DVDD available for the IO ring, or is 5V the only supported rail? I'm bridging the chip to a ULX3S (3.3V), so if 3.3V isn't available I'll put 74LVC8T245 level shifters on the interposer, which is fine. Just want to know whether the 3.3V option exists before I finalise the board.","",""
+"323371864074485771","mole99","2026-09-01T11:16:12.8340000+00:00","Afaik, only ground is shorted on the CoB PCBs. Meaning all power pins are separate and you can short them as needed.
+
+Well, you can simply run the whole chip at 3.3V (as Tiny Tapeout does it). Of course, you should use the correct liberty files for STA and your timing will be slower (with the foundry standard cell library).
+
+As for whether your chip supports separate core and I/O power domain: this depends on the pad cell library that you use. The foundry pad cell library shorts VDD/IOVDD, so there's only a single power domain that you can supply e.g. 3.3V or 5V. gf180mcu_ocd_io keeps core and I/O separate, so you can have I/O at 5V and core at 3.3V (but not the other way around).
+
+See https://github.com/wafer-space/gf180mcu-project-template#select-different-ip-libraries","",""

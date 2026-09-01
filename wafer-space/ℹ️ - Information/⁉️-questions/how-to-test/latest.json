@@ -16,7 +16,7 @@
     "after": "2026-08-31T23:59:59.999+00:00",
     "before": "2026-10-01T00:00:00+00:00"
   },
-  "exportedAt": "2026-09-01T07:46:06.3353483+00:00",
+  "exportedAt": "2026-09-01T13:33:04.5542172+00:00",
   "messages": [
     {
       "id": "1544243156583850056",
@@ -90,7 +90,121 @@
       "reactions": [],
       "mentions": [],
       "inlineEmojis": []
+    },
+    {
+      "id": "1544253663177080913",
+      "type": "Default",
+      "timestamp": "2026-09-01T07:52:44.147+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Cool, thanks. Do you also know about a 1x0.5-specific version? Otherwise I guess I have to fork this and adapt the COB and pins.",
+      "author": {
+        "id": "473469882382417924",
+        "name": "gonsolo_",
+        "discriminator": "0000",
+        "nickname": "gonsolo",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/3-FB033.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1544256686577950760",
+      "type": "Default",
+      "timestamp": "2026-09-01T08:04:44.982+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "For reference, here you can find the CoB PCBs for run1: https://github.com/wafer-space/chip-on-board-wire-bonded-pcbs/tree/main/run-1\n\nAs for the main PCB, Mike created a version for the 1x0p5 CoB: https://codeberg.org/rebelmike/ws01-tinyQV-mobo-alpha",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-09_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1544290753021480980",
+      "type": "Default",
+      "timestamp": "2026-09-01T10:20:07.055+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Quick question on the 1×0p5 slot — is 3.3V DVDD available for the IO ring, or is 5V the only supported rail? I'm bridging the chip to a ULX3S (3.3V), so if 3.3V isn't available I'll put 74LVC8T245 level shifters on the interposer, which is fine. Just want to know whether the 3.3V option exists before I finalise the board.",
+      "author": {
+        "id": "473469882382417924",
+        "name": "gonsolo_",
+        "discriminator": "0000",
+        "nickname": "gonsolo",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/3-FB033.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1544304870121803957",
+      "type": "Default",
+      "timestamp": "2026-09-01T11:16:12.834+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Afaik, only ground is shorted on the CoB PCBs. Meaning all power pins are separate and you can short them as needed.\n\nWell, you can simply run the whole chip at 3.3V (as Tiny Tapeout does it). Of course, you should use the correct liberty files for STA and your timing will be slower (with the foundry standard cell library).\n\nAs for whether your chip supports separate core and I/O power domain: this depends on the pad cell library that you use. The foundry pad cell library shorts VDD/IOVDD, so there's only a single power domain that you can supply e.g. 3.3V or 5V. gf180mcu_ocd_io keeps core and I/O separate, so you can have I/O at 5V and core at 3.3V (but not the other way around).\n\nSee https://github.com/wafer-space/gf180mcu-project-template#select-different-ip-libraries",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-09_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
     }
   ],
-  "messageCount": 2
+  "messageCount": 6
 }
