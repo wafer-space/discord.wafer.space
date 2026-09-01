@@ -1,0 +1,71 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / ⁉️-questions / Passive on-chip components? Inductor Spirals?
+After: 2026-07-31 11:59 p.m.
+Before: 2026-09-01 12:00 a.m.
+==============================================================
+
+[2026-08-27 4:12 a.m.] sypher7350
+Hey everyone!
+
+I'm currently planning a ~900 MHz 802.11ah HaLoW RF front end for the gf180mcuD process. Since the open PDK ships no RF characterization; has anyone modeled on-chip passives on this process? I'm specifically looking at on-chip inductors.
+
+
+[2026-08-27 4:20 a.m.] sypher7350
+Sadly no one has made any MIMO HaLoW basebands and the performance of a 2x2 or 3x3 MIMO radio would be undeniable
+
+
+[2026-08-27 6:17 a.m.] mole99
+Yes, we had one project with some inductor test structures on ws-run2.
+See Code RLCM: https://github.com/wafer-space/ws-run2
+
+These were  simulated using openEMS as far as I know. @Ghaith Al Sabagh may be able to tell you more.
+
+{Embed}
+https://github.com/wafer-space/ws-run2
+GitHub - wafer-space/ws-run2: wafer.space GF180MCU Run 2
+wafer.space GF180MCU Run 2. Contribute to wafer-space/ws-run2 development by creating an account on GitHub.
+2026-08_media/ws-run2-3DE80
+
+
+[2026-08-27 6:19 a.m.] ghaithalsabagh
+Hi @Sypher 
+I have modeled the stack in openEMS and Palace AWS.
+There u can simulate ur own passives.
+In RLCM I have made some test structures to validate the stack modelling of the PDK.
+
+
+[2026-08-27 9:47 a.m.] namibj
+Oh, what kind of backhaul would that need?
+Like, bandwidth-wise but also required latency performance.
+
+I'm assuming soft MAC to not need too much buffer on the gf180mcuD die?
+
+Luckily inductors should work over SRAM if the latter is configured with a deliberate tree-only PDN topology to not capture induced currents.
+
+
+[2026-08-29 2:11 a.m.] sypher7350
+Cool, thank you!
+
+
+[2026-08-29 2:12 a.m.] sypher7350
+I have more of a mesh use case in mind, so no backhaul, but if you were running it as an AP for IoT devices it could theoretically service well over 100Mbps on the BSS
+
+
+[2026-08-29 2:13 a.m.] sypher7350
+soft MAC will actually be on a sidecar crosslink-nx FPGA, only digital RF samples would be coming out of the custom ASIC
+
+
+[2026-08-29 2:14 a.m.] sypher7350
+And then the Linux device it's connected to could consume it as either a userspace device or use the kernel 802.11 module to have a standard 802.11 interface
+
+
+[2026-08-29 2:15 a.m.] sypher7350
+`Luckily inductors should work over SRAM if the latter is configured with a deliberate tree-only PDN topology to not capture induced currents.`
+
+I'll keep this in mind, thank you!
+
+
+==============================================================
+Exported 10 message(s)
+==============================================================

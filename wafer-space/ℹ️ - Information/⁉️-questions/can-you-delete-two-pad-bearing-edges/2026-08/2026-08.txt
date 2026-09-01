@@ -1,0 +1,92 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / ⁉️-questions / Can you delete two pad-bearing edges?
+After: 2026-07-31 11:59 p.m.
+Before: 2026-09-01 12:00 a.m.
+==============================================================
+
+[2026-08-25 9:53 p.m.] archit3ch
+This would save area.
+
+
+[2026-08-26 5:33 a.m.] mole99
+Yes you can. Just set `PAD_TRIM_ROWS: True` and make sure that two of your pad rows don't contain any pads.
+
+Please keep in mind that you cannot order CoB packaging in that case.
+
+{Reactions}
+👍
+
+[2026-08-26 9:27 p.m.] archit3ch
+Can I leave the default "faux" edges on 4 sides for CoB, but only use 1 actual edge to save space?
+
+
+[2026-08-26 10:12 p.m.] 246tnt
+You can as in "it would be accepted", but there is no options/config to do anything like that, you will need some custom stuff to achieve that.
+
+{Reactions}
+👍
+
+[2026-08-27 9:56 a.m.] namibj
+Should only need the actual pads there; no circuit under pad because it's wedge bonding though.
+
+I'd recommend using the power inputs though if your PDN isn't set up in a way that'd make this a poor choice.
+
+Poly resistor ESD-protected analog pads are also very small to pull off at least with an overvoltage protection diode to limit the voltage that can apply to the series resistor.
+
+IIRC it's two resistors in series with the center point connected to the diode who's breakdown voltage clamps the overvoltage, forward voltage clamps undervoltage, and which itself is protected from ESD using the resistor from it to the pad. The other resistor acts to limit the current that the protection circuit on the analog side would have to deal with in an overvoltage event to limit the voltage there below the breakdown of the ESD "zener*.
+
+It's not low-impedance but plenty good enough for using with a multimeter or such.
+
+
+[2026-08-28 6:32 a.m.] archit3ch
+I'm new to this. Does Chip-on-Board packaging mean you need to order the PCB at the same time? Or can you desolder the chips and solder them on your own board?
+
+
+[2026-08-28 6:33 a.m.] 246tnt
+You get the chip on a tiny pcb with a high density connector.
+
+
+[2026-08-28 6:35 a.m.] 246tnt
+You can't remove the chip ... it's a die directly wire bonded to the pcb under an epoxy blob. There is no solder and no package ...
+
+
+[2026-08-28 6:35 a.m.] 246tnt
+You then design your custom pcb with the mating connector.
+
+
+[2026-08-28 7:20 a.m.] archit3ch
+Thanks. And how high is the impedance of the pad? I'm reading that settling times might be a problem for switched capacitor applications.
+
+
+[2026-08-28 7:32 a.m.] namibj
+.... What are you trying to do?
+
+
+[2026-08-28 11:14 a.m.] archit3ch
+analog audio
+
+
+[2026-08-28 11:16 a.m.] archit3ch
+So you get 1000 mini PCBs instead of 1 giant PCB with 1000 chips soldered on it? Because when I searched for CoB images I found the latter.
+
+
+[2026-08-28 11:17 a.m.] 246tnt
+Yes. Although you probably get them still on the panel ... so you'll have to break them appart.
+
+{Reactions}
+👌
+
+[2026-08-28 11:17 a.m.] 246tnt
+( They are v-grooved / pre-cut, just need to twist them a bit to break them in individual small pcb )
+
+
+[2026-08-28 11:52 p.m.] mithro_
+@Archit3ch - By default you get back bare silicon die. 
+
+Getting CoB packaged parts is an extra service offered because many people don't want bare silicon die.
+
+
+==============================================================
+Exported 16 message(s)
+==============================================================

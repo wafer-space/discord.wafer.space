@@ -1,0 +1,26 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"473469882382417924","gonsolo_","2026-08-11T07:36:58.2090000+00:00","I just pushed my design through wafer.space and it took 10 hours. Almost all  of the time (8h47m) was spent in esd and sab decks in KLayout DRC. Can this be accelerated? It would be nice to have just to wait for an hour to see the final GDS.
+
+Github issue: https://github.com/wafer-space/gf180mcu-project-template/issues/76#issuecomment-5248976075
+
+Thanks,
+Andreas","",""
+"169786952432746498","mithro_","2026-08-11T07:48:01.8880000+00:00","@Leo Moser (mole99) - any ideas?","",""
+"323371864074485771","mole99","2026-08-11T07:53:18.7070000+00:00","I can't say without looking at the layout and running the check for myself.
+
+I don't recall the ESD and SAB decks taking up much time in other designs. There shouldn't be much SAB in the layout except for the ESD devices. So it may be something unique to this design.
+
+I'll get back to the issue on GitHub once I've had time to investigate further.","",""
+"738396032295108721","bailey8889","2026-08-11T18:09:12.3690000+00:00","@gonsolo If klayout is running drc, the gds is available somewhere (but not in the usual final location).","",""
+"473469882382417924","gonsolo_","2026-08-12T08:33:55.3410000+00:00","@Leo Moser (mole99) Thanks for checking (I saw the comment on Github). I am using my own flake.nix (IHP and Skywater tapeouts, lots of other stuff, all pristine Nix without binary cache) and am currently investigating. I will report back when I find out what the reason was.","","👍 (1)"
+"323371864074485771","mole99","2026-08-12T08:35:01.9780000+00:00","You will need at least KLayout 0.30.9.","",""
+"473469882382417924","gonsolo_","2026-08-12T08:38:18.6970000+00:00","Ok, time to upgrade the Nix package. 🙂 If you have the time, could you briefly tell me what changed?","","👌 (1)"
+"473469882382417924","gonsolo_","2026-08-12T08:42:17.5800000+00:00","Seems to be commit 6ffb59200.","",""
+"323371864074485771","mole99","2026-08-12T08:55:54.5720000+00:00","You can find the changelog for KLayout here: https://www.klayout.de/development.html#0.30.10
+The important point is `Bugfix: #2339 Ruby ReportDatabase merging can lead to internal error` which is required by our DRC runner.","","👍 (1)"
+"473469882382417924","gonsolo_","2026-08-12T09:05:20.8680000+00:00","Ok, I'll upgrade the klayout, librelane, openroad and yosys (new version contains a fix for an error I reported) nixpkgs and point my flake.nix to it. Thanks for helping me out.","","👌 (1)"
+"473469882382417924","gonsolo_","2026-08-12T18:50:45.2300000+00:00","klayout is merged: https://github.com/NixOS/nixpkgs/commit/3dc3cf6e45044a6d88341cc4482f485c562a67a9
+Running the precheck now.","",""
+"473469882382417924","gonsolo_","2026-08-12T18:52:39.4520000+00:00","There are also a few PR waiting for merge: https://github.com/NixOS/nixpkgs/pulls/gonsolo","",""
+"473469882382417924","gonsolo_","2026-08-12T20:04:48.6890000+00:00","Ok, it works. My run was 35 minutes now (due to heavy compilation on the same machine). But now it reports DRC violations, and if I am to believe my friend Claude, this is not due to my design but wafer.space's sealring: https://github.com/wafer-space/gf180mcu-project-template/issues/77 Maybe you  can tell me whether I'm right here, @Leo Moser (mole99) ?","",""
+"262706220073222144","namibj","2026-08-13T01:53:44.8640000+00:00","if platform.wafer.space is up, try uploading there to see if your local setup is just broken at the moment.","",""

@@ -1,0 +1,26 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"276232319826919426","sypher7350","2026-08-27T04:12:06.9840000+00:00","Hey everyone!
+
+I'm currently planning a ~900 MHz 802.11ah HaLoW RF front end for the gf180mcuD process. Since the open PDK ships no RF characterization; has anyone modeled on-chip passives on this process? I'm specifically looking at on-chip inductors.","",""
+"276232319826919426","sypher7350","2026-08-27T04:20:35.2310000+00:00","Sadly no one has made any MIMO HaLoW basebands and the performance of a 2x2 or 3x3 MIMO radio would be undeniable","",""
+"323371864074485771","mole99","2026-08-27T06:17:33.2400000+00:00","Yes, we had one project with some inductor test structures on ws-run2.
+See Code RLCM: https://github.com/wafer-space/ws-run2
+
+These were  simulated using openEMS as far as I know. @Ghaith Al Sabagh may be able to tell you more.","",""
+"768095480264917023","ghaithalsabagh","2026-08-27T06:19:26.0110000+00:00","Hi @Sypher 
+I have modeled the stack in openEMS and Palace AWS.
+There u can simulate ur own passives.
+In RLCM I have made some test structures to validate the stack modelling of the PDK.","",""
+"262706220073222144","namibj","2026-08-27T09:47:40.8060000+00:00","Oh, what kind of backhaul would that need?
+Like, bandwidth-wise but also required latency performance.
+
+I'm assuming soft MAC to not need too much buffer on the gf180mcuD die?
+
+Luckily inductors should work over SRAM if the latter is configured with a deliberate tree-only PDN topology to not capture induced currents.","",""
+"276232319826919426","sypher7350","2026-08-29T02:11:45.9440000+00:00","Cool, thank you!","",""
+"276232319826919426","sypher7350","2026-08-29T02:12:33.9730000+00:00","I have more of a mesh use case in mind, so no backhaul, but if you were running it as an AP for IoT devices it could theoretically service well over 100Mbps on the BSS","",""
+"276232319826919426","sypher7350","2026-08-29T02:13:36.1630000+00:00","soft MAC will actually be on a sidecar crosslink-nx FPGA, only digital RF samples would be coming out of the custom ASIC","",""
+"276232319826919426","sypher7350","2026-08-29T02:14:40.0260000+00:00","And then the Linux device it's connected to could consume it as either a userspace device or use the kernel 802.11 module to have a standard 802.11 interface","",""
+"276232319826919426","sypher7350","2026-08-29T02:15:15.2580000+00:00","`Luckily inductors should work over SRAM if the latter is configured with a deliberate tree-only PDN topology to not capture induced currents.`
+
+I'll keep this in mind, thank you!","",""

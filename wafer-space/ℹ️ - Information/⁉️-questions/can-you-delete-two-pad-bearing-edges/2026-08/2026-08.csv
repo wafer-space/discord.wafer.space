@@ -1,0 +1,29 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"211112896833257472","archit3ch","2026-08-25T21:53:51.9730000+00:00","This would save area.","",""
+"323371864074485771","mole99","2026-08-26T05:33:06.6840000+00:00","Yes you can. Just set `PAD_TRIM_ROWS: True` and make sure that two of your pad rows don't contain any pads.
+
+Please keep in mind that you cannot order CoB packaging in that case.","","👍 (1)"
+"211112896833257472","archit3ch","2026-08-26T21:27:29.6180000+00:00","Can I leave the default ""faux"" edges on 4 sides for CoB, but only use 1 actual edge to save space?","",""
+"596068704471482370","246tnt","2026-08-26T22:12:02.2240000+00:00","You can as in ""it would be accepted"", but there is no options/config to do anything like that, you will need some custom stuff to achieve that.","","👍 (1)"
+"262706220073222144","namibj","2026-08-27T09:56:57.8130000+00:00","Should only need the actual pads there; no circuit under pad because it's wedge bonding though.
+
+I'd recommend using the power inputs though if your PDN isn't set up in a way that'd make this a poor choice.
+
+Poly resistor ESD-protected analog pads are also very small to pull off at least with an overvoltage protection diode to limit the voltage that can apply to the series resistor.
+
+IIRC it's two resistors in series with the center point connected to the diode who's breakdown voltage clamps the overvoltage, forward voltage clamps undervoltage, and which itself is protected from ESD using the resistor from it to the pad. The other resistor acts to limit the current that the protection circuit on the analog side would have to deal with in an overvoltage event to limit the voltage there below the breakdown of the ESD ""zener*.
+
+It's not low-impedance but plenty good enough for using with a multimeter or such.","",""
+"211112896833257472","archit3ch","2026-08-28T06:32:59.1660000+00:00","I'm new to this. Does Chip-on-Board packaging mean you need to order the PCB at the same time? Or can you desolder the chips and solder them on your own board?","",""
+"596068704471482370","246tnt","2026-08-28T06:33:58.1130000+00:00","You get the chip on a tiny pcb with a high density connector.","",""
+"596068704471482370","246tnt","2026-08-28T06:35:03.0890000+00:00","You can't remove the chip ... it's a die directly wire bonded to the pcb under an epoxy blob. There is no solder and no package ...","",""
+"596068704471482370","246tnt","2026-08-28T06:35:32.5240000+00:00","You then design your custom pcb with the mating connector.","",""
+"211112896833257472","archit3ch","2026-08-28T07:20:06.5340000+00:00","Thanks. And how high is the impedance of the pad? I'm reading that settling times might be a problem for switched capacitor applications.","",""
+"262706220073222144","namibj","2026-08-28T07:32:37.7160000+00:00",".... What are you trying to do?","",""
+"211112896833257472","archit3ch","2026-08-28T11:14:03.7250000+00:00","analog audio","",""
+"211112896833257472","archit3ch","2026-08-28T11:16:24.7720000+00:00","So you get 1000 mini PCBs instead of 1 giant PCB with 1000 chips soldered on it? Because when I searched for CoB images I found the latter.","",""
+"596068704471482370","246tnt","2026-08-28T11:17:11.4360000+00:00","Yes. Although you probably get them still on the panel ... so you'll have to break them appart.","","👌 (1)"
+"596068704471482370","246tnt","2026-08-28T11:17:33.1450000+00:00","( They are v-grooved / pre-cut, just need to twist them a bit to break them in individual small pcb )","",""
+"169786952432746498","mithro_","2026-08-28T23:52:09.4220000+00:00","@Archit3ch - By default you get back bare silicon die. 
+
+Getting CoB packaged parts is an extra service offered because many people don't want bare silicon die.","",""

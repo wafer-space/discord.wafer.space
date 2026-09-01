@@ -1,0 +1,107 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / ⁉️-questions / 10 hour running time
+After: 2026-07-31 11:59 p.m.
+Before: 2026-09-01 12:00 a.m.
+==============================================================
+
+[2026-08-11 7:36 a.m.] gonsolo_
+I just pushed my design through wafer.space and it took 10 hours. Almost all  of the time (8h47m) was spent in esd and sab decks in KLayout DRC. Can this be accelerated? It would be nice to have just to wait for an hour to see the final GDS.
+
+Github issue: https://github.com/wafer-space/gf180mcu-project-template/issues/76#issuecomment-5248976075
+
+Thanks,
+Andreas
+
+{Embed}
+https://github.com/wafer-space/gf180mcu-project-template/issues/76
+KLayout DRC: esd and sab decks each take 4+ hours on a full-chip 0....
+Title: KLayout DRC: esd and sab decks each take 4+ hours on a full-chip 0.5x1 padring design Body: Ran the full LibreLane flow (make librelane) for a custom design on the 0p5x1 slot (GF180MCU, gf18...
+2026-08_media/76-2595A
+
+
+[2026-08-11 7:48 a.m.] mithro_
+@Leo Moser (mole99) - any ideas?
+
+
+[2026-08-11 7:53 a.m.] mole99
+I can't say without looking at the layout and running the check for myself.
+
+I don't recall the ESD and SAB decks taking up much time in other designs. There shouldn't be much SAB in the layout except for the ESD devices. So it may be something unique to this design.
+
+I'll get back to the issue on GitHub once I've had time to investigate further.
+
+
+[2026-08-11 6:09 p.m.] bailey8889
+@gonsolo If klayout is running drc, the gds is available somewhere (but not in the usual final location).
+
+
+[2026-08-12 8:33 a.m.] gonsolo_
+@Leo Moser (mole99) Thanks for checking (I saw the comment on Github). I am using my own flake.nix (IHP and Skywater tapeouts, lots of other stuff, all pristine Nix without binary cache) and am currently investigating. I will report back when I find out what the reason was.
+
+{Reactions}
+👍
+
+[2026-08-12 8:35 a.m.] mole99
+You will need at least KLayout 0.30.9.
+
+
+[2026-08-12 8:38 a.m.] gonsolo_
+Ok, time to upgrade the Nix package. 🙂 If you have the time, could you briefly tell me what changed?
+
+{Reactions}
+👌
+
+[2026-08-12 8:42 a.m.] gonsolo_
+Seems to be commit 6ffb59200.
+
+
+[2026-08-12 8:55 a.m.] mole99
+You can find the changelog for KLayout here: https://www.klayout.de/development.html#0.30.10
+The important point is `Bugfix: #2339 Ruby ReportDatabase merging can lead to internal error` which is required by our DRC runner.
+
+{Reactions}
+👍
+
+[2026-08-12 9:05 a.m.] gonsolo_
+Ok, I'll upgrade the klayout, librelane, openroad and yosys (new version contains a fix for an error I reported) nixpkgs and point my flake.nix to it. Thanks for helping me out.
+
+{Reactions}
+👌
+
+[2026-08-12 6:50 p.m.] gonsolo_
+klayout is merged: https://github.com/NixOS/nixpkgs/commit/3dc3cf6e45044a6d88341cc4482f485c562a67a9
+Running the precheck now.
+
+{Embed}
+https://github.com/NixOS/nixpkgs/commit/3dc3cf6e45044a6d88341cc4482f485c562a67a9
+klayout: 0.30.8 -> 0.30.10 (#551803) · NixOS/nixpkgs@3dc3cf6
+
+
+[2026-08-12 6:52 p.m.] gonsolo_
+There are also a few PR waiting for merge: https://github.com/NixOS/nixpkgs/pulls/gonsolo
+
+{Embed}
+https://github.com/NixOS/nixpkgs/pulls/gonsolo
+Pull requests · NixOS/nixpkgs
+Nix Packages collection & NixOS. Contribute to NixOS/nixpkgs development by creating an account on GitHub.
+2026-08_media/db161f80-7b49-11e9-9814-cf4d7cae408c-405AC
+
+
+[2026-08-12 8:04 p.m.] gonsolo_
+Ok, it works. My run was 35 minutes now (due to heavy compilation on the same machine). But now it reports DRC violations, and if I am to believe my friend Claude, this is not due to my design but wafer.space's sealring: https://github.com/wafer-space/gf180mcu-project-template/issues/77 Maybe you  can tell me whether I'm right here, @Leo Moser (mole99) ?
+
+{Embed}
+https://github.com/wafer-space/gf180mcu-project-template/issues/77
+gf180mcuD DRC: sealring corner geometry violates GR.2/PL.5a_MV/PL.5...
+Follow-up to #76 (thanks again for the KLayout version fix — precheck now runs in ~20min instead of 10h25m on our end too, confirmed). While re-running the full KLayout DRC on the same chip_top.gds...
+2026-08_media/77-3BA82
+
+
+[2026-08-13 1:53 a.m.] namibj
+if platform.wafer.space is up, try uploading there to see if your local setup is just broken at the moment.
+
+
+==============================================================
+Exported 14 message(s)
+==============================================================
