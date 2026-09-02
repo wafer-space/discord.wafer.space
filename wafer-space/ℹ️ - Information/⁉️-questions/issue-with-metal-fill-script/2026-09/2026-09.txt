@@ -1,0 +1,58 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / ⁉️-questions / Issue with metal fill script
+After: 2026-08-31 11:59 p.m.
+Before: 2026-10-01 12:00 a.m.
+==============================================================
+
+[2026-09-02 5:41 a.m.] luighiv
+Hi,
+
+Not sure if this is the correct channel to ask, but I have faced an issue with metal fill script that creates the patterns overlapped violating the minimum space, and consequently generating huge number of DRC violations.
+
+I've attached an screenshot of how it is being generated.
+Please, could you help us with this issue?
+TBH don't have much idea on what went wrong because I have run for other chips and it generates the fills successfully.
+PD: I've also created an issue to the PDK repository where resides the scripts  https://github.com/fossi-foundation/globalfoundries-pdk-libs-gf180mcu_fd_pr/issues/42
+
+cc: @Leo Moser (mole99)  @bailey  @Mehdi
+
+{Attachments}
+2026-09_media/644792073-7132ff2c-229d-45d7-bb62-2e3864f1-C3D6E.png
+
+{Embed}
+https://github.com/fossi-foundation/globalfoundries-pdk-libs-gf180mcu_fd_pr/issues/42
+Issue with metal fill script · Issue #42 · fossi-foundation/globa...
+Hi @mole99 I am trying to use the scripts to apply fills for our chips from Chipathon 2026. It seems that it worked fine for 3 of the 4 chips. But for one of them, the metal fill somehow was create...
+2026-09_media/42-B5BFC
+
+
+[2026-09-02 6:22 a.m.] 246tnt
+Can you provide the gds ?
+
+
+[2026-09-02 6:23 a.m.] 246tnt
+The fill pattern seems magnified 2x so it wouldn't surprise me if it's a UNITs issue. GF180mcu tech LEF has this weird 2000 units per microns
+
+
+[2026-09-02 6:24 a.m.] mole99
+Just mentioned the same in the issue :)
+
+A reproducible (GDS, PDK hash, and command) would be good to have.
+
+
+[2026-09-02 6:34 a.m.] bailey8889
+This may be due to project generated fill as opposed to fill generated on the top level. I've asked the team to remove it. We'll let you know what we find.
+
+
+[2026-09-02 6:37 a.m.] mole99
+Alright, thanks! FYI, I've updated the filler scripts to also consider pre-existing fill as blockage.
+
+
+[2026-09-02 7:37 a.m.] mole99
+The issue was indeed the fill in one of the existing projects. Rather than creating new ones, the filler script used those filler cells, which were the wrong size. I'll see if I can fix the filler script!
+
+
+==============================================================
+Exported 7 message(s)
+==============================================================

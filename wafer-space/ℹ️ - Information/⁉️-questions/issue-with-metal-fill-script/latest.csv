@@ -1,0 +1,19 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"701803458495512666","luighiv","2026-09-02T05:41:24.2180000+00:00","Hi,
+
+Not sure if this is the correct channel to ask, but I have faced an issue with metal fill script that creates the patterns overlapped violating the minimum space, and consequently generating huge number of DRC violations.
+
+I've attached an screenshot of how it is being generated.
+Please, could you help us with this issue?
+TBH don't have much idea on what went wrong because I have run for other chips and it generates the fills successfully.
+PD: I've also created an issue to the PDK repository where resides the scripts  https://github.com/fossi-foundation/globalfoundries-pdk-libs-gf180mcu_fd_pr/issues/42
+
+cc: @Leo Moser (mole99)  @bailey  @Mehdi","2026-09_media/644792073-7132ff2c-229d-45d7-bb62-2e3864f1-C3D6E.png",""
+"596068704471482370","246tnt","2026-09-02T06:22:34.0690000+00:00","Can you provide the gds ?","",""
+"596068704471482370","246tnt","2026-09-02T06:23:57.6540000+00:00","The fill pattern seems magnified 2x so it wouldn't surprise me if it's a UNITs issue. GF180mcu tech LEF has this weird 2000 units per microns","",""
+"323371864074485771","mole99","2026-09-02T06:24:02.7330000+00:00","Just mentioned the same in the issue :)
+
+A reproducible (GDS, PDK hash, and command) would be good to have.","",""
+"738396032295108721","bailey8889","2026-09-02T06:34:13.1150000+00:00","This may be due to project generated fill as opposed to fill generated on the top level. I've asked the team to remove it. We'll let you know what we find.","",""
+"323371864074485771","mole99","2026-09-02T06:37:10.0890000+00:00","Alright, thanks! FYI, I've updated the filler scripts to also consider pre-existing fill as blockage.","",""
+"323371864074485771","mole99","2026-09-02T07:37:15.1980000+00:00","The issue was indeed the fill in one of the existing projects. Rather than creating new ones, the filler script used those filler cells, which were the wrong size. I'll see if I can fix the filler script!","",""
