@@ -16,7 +16,7 @@
     "after": "2026-08-31T23:59:59.999+00:00",
     "before": "2026-10-01T00:00:00+00:00"
   },
-  "exportedAt": "2026-09-03T15:12:45.5496146+00:00",
+  "exportedAt": "2026-09-03T19:30:13.9778223+00:00",
   "messages": [
     {
       "id": "1544709660081127570",
@@ -597,6 +597,27 @@
               "avatarUrl": "2026-09_media/67bd670a335a2f955fb2ded57088a2cb-675B3.png"
             }
           ]
+        },
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC40",
+            "code": "eyes",
+            "isAnimated": false,
+            "imageUrl": "2026-09_media/1f440-6C64D.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "1184268085822238821",
+              "name": "saladchap",
+              "discriminator": "0000",
+              "nickname": "stuart",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-09_media/4938353f83780f56050d92be930226f8-BA286.png"
+            }
+          ]
         }
       ],
       "mentions": [
@@ -851,6 +872,27 @@
               "avatarUrl": "2026-09_media/8d8c1d8b8ad51d6cdb1a47512c39b297-42908.png"
             }
           ]
+        },
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDE02",
+            "code": "joy",
+            "isAnimated": false,
+            "imageUrl": "2026-09_media/1f602-168C5.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "1184268085822238821",
+              "name": "saladchap",
+              "discriminator": "0000",
+              "nickname": "stuart",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-09_media/4938353f83780f56050d92be930226f8-BA286.png"
+            }
+          ]
         }
       ],
       "mentions": [
@@ -871,7 +913,274 @@
         "guildId": "1361349522684510449"
       },
       "inlineEmojis": []
+    },
+    {
+      "id": "1545097147643461714",
+      "type": "Default",
+      "timestamp": "2026-09-03T15:44:26.515+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "**\uD83D\uDD27 Bond tester update: smarter, more die-agnostic testing**\n\nSorry for the long post.\n\n**TLDR**\n- Neighbouring-bond short check removed\n- New 10 µA and 1000 µA test currents for much clearer ESD diode detection\n- Pseudo-Kelvin (3-wire) measurement: force and sense paths separated through the MUX\n- Results simplified to OPEN / GOOD, the tester no longer judges shorts\n- Power pads now tested via capacitor charging curve monitoring\n\n\n**Design principle: the tester knows less* about die**\n\nTwo of these changes come from the same place. A generic tester shouldn't assume anything about the die under test:\n- **Neighbour short check removed.** We previously used spare MUX channels to check neighbouring bonds. But we've already seen this backfire on a real die: one of the designs we tested has DVSS on adjacent pads, so a perfectly good die looks like it has a short. A generic tester can't distinguish \"shorted by design\" from \"shorted by a bond defect,\" so the check is gone.\n- **Results are now just OPEN or GOOD.** The tester confirms a bond exists by comparing the measurement against a wide acceptance threshold; it doesn't interpret the result in detail. For example, on analog designs an IO pad may be replaced with a power pad (e.g. GND) on an otherwise standard CoB board. Measuring that pad could look like a short to a supply rail, but it's by design, not a failure. So the tester now answers one question: is it an open, or not?\n\n**Better ESD diode detection**\nAdded 10 uA and 1000 uA current sources alongside the existing one. Now have ~10uA, ~100uA, ~1000uA. They're simple resistor-based sources and not precision-calibrated, but that's fine for v1: this revision is a platform for us to learn on and improve our detection, and with the extra measurement points a diode is now much easier to detect.\n\n**Pseudo-Kelvin measurement**\nWe had a free COM output on the MUX, so might as well put it to use: the force (current injection) and sense (ADC reading) paths are now separated through the MUX, instead of the ADC probing the current-source node directly. This removes the force-path MUX on-resistance from the measurement. It's not true 4-wire Kelvin, effectively 3wire: the return path is still shared through the MUX, so the return-leg R_on still contributes, as do the connector and its contact resistance. Fully removing those would need a separate sense contact per pad, and pogo pins would be a suitable way to achieve this \uD83E\uDD23. But let's try to leave that to next year. For our simple pass/fail testing, the current setup does the job.\n\n**Power pads: capacitor charging curve**\nPower pins used to cause trouble because of the decoupling capacitors on the PCB. Instead of fighting that, the tester now measures the charging curve itself: a good bond connects the pad to the die, whose ESD diode clamps the voltage before the capacitor charges fully. An open bond has no such clamp and lets it charge to full.\n\n\n**What's next**\nI expect there are still plenty of surprises waiting once we start bonding more CoBs. So far I've only managed to test a handful of different dies, and with new upcoming CoBs I expect the tool to fail in new ways, which is a good thing: every failure shows how to make the tester better and more universal.\n\nOnce the run 1 CoBs are done, we should be in a good position for an updated PCB design. Longer term, I'd like to keep improving the tester, with upgrading the current sources and the ADC at the top of the list.\n\nIf you have any questions or suggestions, please feel free to leave a reply  \uD83D\uDE4F",
+      "author": {
+        "id": "908721221682733106",
+        "name": "lauri4332",
+        "discriminator": "0000",
+        "nickname": "Lauri",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/5-E9BDB.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC40",
+            "code": "eyes",
+            "isAnimated": false,
+            "imageUrl": "2026-09_media/1f440-6C64D.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "509798510170865675",
+              "name": "essen__",
+              "discriminator": "0000",
+              "nickname": "Essen",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-09_media/80e086280c9caadd9c05998c3254c9a9-25B3D.png"
+            }
+          ]
+        },
+        {
+          "emoji": {
+            "id": "",
+            "name": "❤️",
+            "code": "heart",
+            "isAnimated": false,
+            "imageUrl": "2026-09_media/2764-A3D25.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "1184268085822238821",
+              "name": "saladchap",
+              "discriminator": "0000",
+              "nickname": "stuart",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-09_media/4938353f83780f56050d92be930226f8-BA286.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83D\uDD27",
+          "code": "wrench",
+          "isAnimated": false,
+          "imageUrl": "2026-09_media/1f527-998CD.svg"
+        },
+        {
+          "id": "",
+          "name": "\uD83E\uDD23",
+          "code": "rofl",
+          "isAnimated": false,
+          "imageUrl": "2026-09_media/1f923-5854E.svg"
+        },
+        {
+          "id": "",
+          "name": "\uD83D\uDE4F",
+          "code": "pray",
+          "isAnimated": false,
+          "imageUrl": "2026-09_media/1f64f-22B8D.svg"
+        }
+      ]
+    },
+    {
+      "id": "1545121168267149443",
+      "type": "Default",
+      "timestamp": "2026-09-03T17:19:53.478+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I'm wondering if it'd be useful  to allow customers to provide a specific test profile for their chips.\n\nIn the failed TT samples I got, several had shorts to GND and not detecting them seems not a good idea ...",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "⬆️",
+            "code": "arrow_up",
+            "isAnimated": false,
+            "imageUrl": "2026-09_media/2b06-8CE23.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "509798510170865675",
+              "name": "essen__",
+              "discriminator": "0000",
+              "nickname": "Essen",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-09_media/80e086280c9caadd9c05998c3254c9a9-25B3D.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1545123273195659276",
+      "type": "Reply",
+      "timestamp": "2026-09-03T17:28:15.332+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Can you elaborate a bit? \nSuch as what tests would you like to see? Would this be some json blob or something?",
+      "author": {
+        "id": "756011607603019777",
+        "name": "anfroholic",
+        "discriminator": "0000",
+        "nickname": "Andrew Wingate",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-09_media/67bd670a335a2f955fb2ded57088a2cb-675B3.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "596068704471482370",
+          "name": "246tnt",
+          "discriminator": "0000",
+          "nickname": "tnt",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-09_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1545121168267149443",
+        "channelId": "1408134567491145728",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1545123551030542506",
+      "type": "Default",
+      "timestamp": "2026-09-03T17:29:21.573+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "also, are you sure those were ever tested? TT got a bunch of the first stuff, so I assume you got the rawest of the raw",
+      "author": {
+        "id": "756011607603019777",
+        "name": "anfroholic",
+        "discriminator": "0000",
+        "nickname": "Andrew Wingate",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-09_media/67bd670a335a2f955fb2ded57088a2cb-675B3.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1545124025334894602",
+      "type": "Default",
+      "timestamp": "2026-09-03T17:31:14.656+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Maybe a simple step would just be for the customer to indicate whether any changes have been made to the power pad config compared to the default padframe - i.e. whether any IO pins have been replaced with power/ground, or whether any power/grounds have been switched around?\n\nIt sounds like if the design uses the default setup then the more enhanced checks could be used safely.",
+      "author": {
+        "id": "691780627338625077",
+        "name": "rebelmike",
+        "discriminator": "0000",
+        "nickname": "RebelMike",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1545144928605052939",
+      "type": "Default",
+      "timestamp": "2026-09-03T18:54:18.384+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yeah like a json describing expected pad type for instance ( GND / PWR / IO ) or even IV curve bounds if you want to go that far.",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
     }
   ],
-  "messageCount": 14
+  "messageCount": 20
 }

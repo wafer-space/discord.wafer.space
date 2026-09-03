@@ -70,7 +70,7 @@ yeah probe cards are nuts. had a friend who helped manufacture them, crazy expen
 2026-09_media/Digital-image-shows-the-probe-card-prototy-BC4BE.png
 
 {Reactions}
-💜 (2)
+💜 (2) 👀
 
 [2026-09-02 2:33 p.m.] anfroholic
 That's so cool!!
@@ -90,8 +90,74 @@ thanks for the info, definitely got it thought through lol
 I can smell the hole in the bank account from here.
 
 {Reactions}
-💯 (2) 💸
+💯 (2) 💸 😂
+
+[2026-09-03 3:44 p.m.] lauri4332
+**🔧 Bond tester update: smarter, more die-agnostic testing**
+
+Sorry for the long post.
+
+**TLDR**
+- Neighbouring-bond short check removed
+- New 10 µA and 1000 µA test currents for much clearer ESD diode detection
+- Pseudo-Kelvin (3-wire) measurement: force and sense paths separated through the MUX
+- Results simplified to OPEN / GOOD, the tester no longer judges shorts
+- Power pads now tested via capacitor charging curve monitoring
+
+
+**Design principle: the tester knows less* about die**
+
+Two of these changes come from the same place. A generic tester shouldn't assume anything about the die under test:
+- **Neighbour short check removed.** We previously used spare MUX channels to check neighbouring bonds. But we've already seen this backfire on a real die: one of the designs we tested has DVSS on adjacent pads, so a perfectly good die looks like it has a short. A generic tester can't distinguish "shorted by design" from "shorted by a bond defect," so the check is gone.
+- **Results are now just OPEN or GOOD.** The tester confirms a bond exists by comparing the measurement against a wide acceptance threshold; it doesn't interpret the result in detail. For example, on analog designs an IO pad may be replaced with a power pad (e.g. GND) on an otherwise standard CoB board. Measuring that pad could look like a short to a supply rail, but it's by design, not a failure. So the tester now answers one question: is it an open, or not?
+
+**Better ESD diode detection**
+Added 10 uA and 1000 uA current sources alongside the existing one. Now have ~10uA, ~100uA, ~1000uA. They're simple resistor-based sources and not precision-calibrated, but that's fine for v1: this revision is a platform for us to learn on and improve our detection, and with the extra measurement points a diode is now much easier to detect.
+
+**Pseudo-Kelvin measurement**
+We had a free COM output on the MUX, so might as well put it to use: the force (current injection) and sense (ADC reading) paths are now separated through the MUX, instead of the ADC probing the current-source node directly. This removes the force-path MUX on-resistance from the measurement. It's not true 4-wire Kelvin, effectively 3wire: the return path is still shared through the MUX, so the return-leg R_on still contributes, as do the connector and its contact resistance. Fully removing those would need a separate sense contact per pad, and pogo pins would be a suitable way to achieve this 🤣. But let's try to leave that to next year. For our simple pass/fail testing, the current setup does the job.
+
+**Power pads: capacitor charging curve**
+Power pins used to cause trouble because of the decoupling capacitors on the PCB. Instead of fighting that, the tester now measures the charging curve itself: a good bond connects the pad to the die, whose ESD diode clamps the voltage before the capacitor charges fully. An open bond has no such clamp and lets it charge to full.
+
+
+**What's next**
+I expect there are still plenty of surprises waiting once we start bonding more CoBs. So far I've only managed to test a handful of different dies, and with new upcoming CoBs I expect the tool to fail in new ways, which is a good thing: every failure shows how to make the tester better and more universal.
+
+Once the run 1 CoBs are done, we should be in a good position for an updated PCB design. Longer term, I'd like to keep improving the tester, with upgrading the current sources and the ADC at the top of the list.
+
+If you have any questions or suggestions, please feel free to leave a reply  🙏
+
+{Reactions}
+👀 ❤️
+
+[2026-09-03 5:19 p.m.] 246tnt
+I'm wondering if it'd be useful  to allow customers to provide a specific test profile for their chips.
+
+In the failed TT samples I got, several had shorts to GND and not detecting them seems not a good idea ...
+
+{Reactions}
+⬆️
+
+[2026-09-03 5:28 p.m.] anfroholic
+Can you elaborate a bit? 
+Such as what tests would you like to see? Would this be some json blob or something?
+
+
+[2026-09-03 5:29 p.m.] anfroholic
+also, are you sure those were ever tested? TT got a bunch of the first stuff, so I assume you got the rawest of the raw
+
+
+[2026-09-03 5:31 p.m.] rebelmike
+Maybe a simple step would just be for the customer to indicate whether any changes have been made to the power pad config compared to the default padframe - i.e. whether any IO pins have been replaced with power/ground, or whether any power/grounds have been switched around?
+
+It sounds like if the design uses the default setup then the more enhanced checks could be used safely.
+
+
+[2026-09-03 6:54 p.m.] 246tnt
+Yeah like a json describing expected pad type for instance ( GND / PWR / IO ) or even IV curve bounds if you want to go that far.
+
 
 ==============================================================
-Exported 14 message(s)
+Exported 20 message(s)
 ==============================================================
