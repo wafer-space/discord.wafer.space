@@ -50,7 +50,7 @@ I expect there are still plenty of surprises waiting once we start bonding more 
 
 Once the run 1 CoBs are done, we should be in a good position for an updated PCB design. Longer term, I'd like to keep improving the tester, with upgrading the current sources and the ADC at the top of the list.
 
-If you have any questions or suggestions, please feel free to leave a reply  🙏","","👀 (1),❤️ (1)"
+If you have any questions or suggestions, please feel free to leave a reply  🙏","","👀 (1),❤️ (1),👍 (1)"
 "596068704471482370","246tnt","2026-09-03T17:19:53.4780000+00:00","I'm wondering if it'd be useful  to allow customers to provide a specific test profile for their chips.
 
 In the failed TT samples I got, several had shorts to GND and not detecting them seems not a good idea ...","","⬆️ (1)"
@@ -61,3 +61,44 @@ Such as what tests would you like to see? Would this be some json blob or someth
 
 It sounds like if the design uses the default setup then the more enhanced checks could be used safely.","",""
 "596068704471482370","246tnt","2026-09-03T18:54:18.3840000+00:00","Yeah like a json describing expected pad type for instance ( GND / PWR / IO ) or even IV curve bounds if you want to go that far.","",""
+"908721221682733106","lauri4332","2026-09-04T13:15:09.8990000+00:00","Thank you @tnt, @Andrew Wingate , @RebelMike for your responses.
+
+I also, at some point thought it would be very useful to know the pads and their functions before testing. But I came to the conclusion that it would be very time consuming to collect this information and then create and validate the tests, and after a run, throw them away and start over for the next one. That's why I'm trying to lean toward having less die specific knowledge. It makes more sense to measure first, then analyze the results later (re: below).
+
+re: customer pad config
+Relying on user provided config is not ideal. Perhaps the platform can figure out the pad types automatically? I'm not familiar with the inner workings of the platform, but maybe someone more familiar with it can confirm?
+
+> even IV curve bounds if you want to go that far.
+Custom IV curves raise a yield question: if a wrong curve is provided, the tester fails every CoB and the customer gets near 0% yield. A wrong customer provided spec shouldn't be able to make hard pass/fail decisions at test time.
+
+My suggestion is to add filtering capability to the results website. By applying filters to the CoB test results, it would be possible to find the CoBs that match the required curve. This kind of post-test analysis would also enable another useful feature: once all CoBs are tested and measured, the site could reveal outliers and flag potentially faulty ones.","",""
+"596068704471482370","246tnt","2026-09-04T13:16:43.8370000+00:00","Sure, I agree that the ability to save all results and analyze later is better, but this creates an inventory and data management burden since now every COB needs individual ID and tracking.","",""
+"756011607603019777","anfroholic","2026-09-04T13:17:42.1210000+00:00","Also keep in mind the PCB for all the cob must be the standard. So that limits what kind of variability there would be from the outset. 
+I was more curious what you were suggesting?","",""
+"908721221682733106","lauri4332","2026-09-04T13:19:54.0420000+00:00","Currently the panels have ID-s and CoBs in the panel have their position. Basically as long as panel is intact you can find the CoB's test results easily. For later runs I think we are exploring option to get unique id's printed on the CoB's themselves. 
+
+Overrall, data is good and afaik we have space to store data.","",""
+"596068704471482370","246tnt","2026-09-04T13:20:18.9430000+00:00","Well limits yes and no. GND pins are shorted so those need to be gnd. But a user could add more if they wanted to.  Power pins have decoupling, but are separate so user could use them for power but also for internal bias and those have different IV curves and they could also use them for very high or very low internal bias and use pads without some of the diodes for instance.","",""
+"908721221682733106","lauri4332","2026-09-04T14:06:42.8470000+00:00","Basically we have 2 directions: 
+1. [current] stay  generic, focus on basic 'is there a wire between PCB pad and die pad'. During manufacturing the testing will pass CoB's with wirebonds. Later, when analyzing the results, more die-specific conditions can be applied and the best CoBs selected.
+2. go more die specific. Platform will provide pad types and expectected characteristics. The tester needs to know exactly what is being tested and how to test it. 
+
+I think making a run or two with current generic testing will provide us valuable data and lessons on feasibility of die specific testing.","",""
+"908721221682733106","lauri4332","2026-09-04T14:12:47.0610000+00:00","Could always offer a more expensive CoB packaging option that would allow custom testing options??","",""
+"211112896833257472","archit3ch","2026-09-04T14:13:49.5970000+00:00","Does anyone have a working 1-edge pad ring template for the long edge of the quarter slot? 😇","",""
+"509798510170865675","essen__","2026-09-04T14:47:36.8970000+00:00","Thanks for the update @Lauri. 
+A few more minor questions: 
+1) I too would be very interested in getting my hands on your tester (custom configurations and false fails are no issue). Are there any plans of having the tester included with the CoB packaging option long term ? 
+2) Was the neighboring short check removed because it was wrong ? Or was it primarily done because it relied on none generic information ? 
+Comments: 
+A) I found your yield dataset very interesting and useful, I would be really appreciative it you could please keep uploading to it.","",""
+"756011607603019777","anfroholic","2026-09-04T14:50:14.8020000+00:00","1) Doubtful, but I do think we're planning on including one of the header motherboards so you can do real testing simply. 
+2) I will defer to Lauri
+A) We plan to continue sharing what we can as more info allows us all to improve. 
+
+Thanks","","👍 (1)"
+"509798510170865675","essen__","2026-09-04T14:52:03.5050000+00:00","1) Noted. Are the plans of the tester available by any change so we can build our own? Because shorted pins could damage the boards, so this might call for a separate board for testing to be safe.","",""
+"691780627338625077","rebelmike","2026-09-04T14:52:27.1210000+00:00","https://github.com/MichaelBell/ws02-minimal-tinyQV uses a single edge on a quarter slot.  Whether it works is yet to be seen 🙂  I think the pad config script that removes unused edges is all merged into the template now so it should just happen automatically if you remove all the pins from the three unwanted sides.
+
+However, as is this leaves the corners adjacent to the used edge in place, so might not be exactly what you want.","","🙌 (1)"
+"691780627338625077","rebelmike","2026-09-04T15:03:46.1810000+00:00","Ah, I guess you were thinking of a CoB board for that design.  I don't have one of those yet but I intend to make one","",""
