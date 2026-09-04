@@ -208,6 +208,52 @@ lots of retro synths like FM and SNES and C64 emulation
 {Reactions}
 ❤️‍🔥
 
+[2026-09-04 5:42 p.m.] namibj
+Why shouldn't you be able to increase the length of them?
+
+
+[2026-09-04 5:53 p.m.] namibj
+I don't think you want to go quite that long for your LDO; this has considerable minimum drop out at "full current" and not itself for thermal reasons, or viewed from the other direction:
+long channels for your main power pass FET beyond what's needed to be safe and reliable under years of sustained current would push the minimum pass resistance so high that you'd likely hit thermal limits for drop out voltage with the pass transistor gate fully-on, instead of needing to operate under gate-not-fully-on "active regulation" conditions to drop enough voltage at full sustained current for that `I × V = I² × R = Power` to hit TDP.
+
+You've got closed loop feedback control going on, the process variations of concern shouldn't matter much here, as long as all those fingers see the same usual voltage drop across them.
+
+
+[2026-09-04 5:53 p.m.] namibj
+That can be just on the source side abutted though, right?
+
+
+[2026-09-04 5:56 p.m.] tholin
+That’s not an option in the device generator
+
+
+[2026-09-04 5:56 p.m.] namibj
+Definitely make a script please for your bulk LDO pass pfet PCell!
+You want it easy to adjust afterwards!
+
+@tnt might have convenient macros for contact generation down to PCell power bars from orthogonal higher-layer aggregating metal PDN straps, as that's basically done on TinyTapeout from the PDN to the user content.
+
+
+[2026-09-04 5:57 p.m.] tholin
+Its not a PCell though
+
+
+[2026-09-04 5:58 p.m.] tholin
+I mean, I just used the `array` command in magic
+
+
+[2026-09-04 6:12 p.m.] jonahsaunders
+is there a question chat?
+
+
+[2026-09-04 6:16 p.m.] jonahsaunders
+Started a thread.
+
+
+[2026-09-04 7:09 p.m.] tholin
+So, if I try and run this simulation with the SPICE-extracted netlist of my power PFET array, it works for a while, until charging is completed. After a few us, current on V2 increases rapidly until it breaks the simulation ("timestep too small"), but the gate voltage remains at 5V and the capacitor doesn’t charge, so I don’t know where that energy is going. Is this a simulation oopsie or latchup?
+
+
 ==============================================================
-Exported 35 message(s)
+Exported 45 message(s)
 ==============================================================

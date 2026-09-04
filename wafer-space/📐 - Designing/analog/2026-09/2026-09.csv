@@ -35,3 +35,19 @@ But don't know any of their handles, or even if they are here.","",""
 "211112896833257472","archit3ch","2026-09-04T14:16:07.1430000+00:00","Wait, I know those guys. 🫡","",""
 "211112896833257472","archit3ch","2026-09-04T14:16:20.3300000+00:00","I mean I've heard of you.","",""
 "316742122751655939","mrmadbrain","2026-09-04T14:17:39.1850000+00:00","lots of retro synths like FM and SNES and C64 emulation","","❤️‍🔥 (1)"
+"262706220073222144","namibj","2026-09-04T17:42:42.2950000+00:00","Why shouldn't you be able to increase the length of them?","",""
+"262706220073222144","namibj","2026-09-04T17:53:00.8050000+00:00","I don't think you want to go quite that long for your LDO; this has considerable minimum drop out at ""full current"" and not itself for thermal reasons, or viewed from the other direction:
+long channels for your main power pass FET beyond what's needed to be safe and reliable under years of sustained current would push the minimum pass resistance so high that you'd likely hit thermal limits for drop out voltage with the pass transistor gate fully-on, instead of needing to operate under gate-not-fully-on ""active regulation"" conditions to drop enough voltage at full sustained current for that `I × V = I² × R = Power` to hit TDP.
+
+You've got closed loop feedback control going on, the process variations of concern shouldn't matter much here, as long as all those fingers see the same usual voltage drop across them.","",""
+"262706220073222144","namibj","2026-09-04T17:53:39.7130000+00:00","That can be just on the source side abutted though, right?","",""
+"220639106915368960","tholin","2026-09-04T17:56:22.1930000+00:00","That’s not an option in the device generator","",""
+"262706220073222144","namibj","2026-09-04T17:56:31.7090000+00:00","Definitely make a script please for your bulk LDO pass pfet PCell!
+You want it easy to adjust afterwards!
+
+@tnt might have convenient macros for contact generation down to PCell power bars from orthogonal higher-layer aggregating metal PDN straps, as that's basically done on TinyTapeout from the PDN to the user content.","",""
+"220639106915368960","tholin","2026-09-04T17:57:39.2260000+00:00","Its not a PCell though","",""
+"220639106915368960","tholin","2026-09-04T17:58:15.0900000+00:00","I mean, I just used the `array` command in magic","",""
+"545723870431150080","jonahsaunders","2026-09-04T18:12:49.4070000+00:00","is there a question chat?","",""
+"545723870431150080","jonahsaunders","2026-09-04T18:16:41.9800000+00:00","Started a thread.","",""
+"220639106915368960","tholin","2026-09-04T19:09:00.0530000+00:00","So, if I try and run this simulation with the SPICE-extracted netlist of my power PFET array, it works for a while, until charging is completed. After a few us, current on V2 increases rapidly until it breaks the simulation (""timestep too small""), but the gate voltage remains at 5V and the capacitor doesn’t charge, so I don’t know where that energy is going. Is this a simulation oopsie or latchup?","",""
