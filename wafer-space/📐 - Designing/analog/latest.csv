@@ -113,3 +113,22 @@ It's just that the base framework stuff is easy to keep separate from the module
 HTR-solver does supersonic and hypersonic flow for you including notably (finite rate!) chemical reactions you're gonna catch when you superheat stuff like air. I think but am not sure it can actually do a rocket nozzle (liquid bipropellant, the injector, chamber, and then the nozzle itself) but never got around to reeeealy check/confirm. Certainly should be able to model the deflagration to detonation transition of a fuel/air gas mix in a hose/tube (the tamer ones are quite an eye catcher ""fuse"" for a potato cannon or the like if done with e.g. propane in clear pvc hose).
 And ofc actual normal aerodynamics that may or may not involve supersonic flow.
 It's written in Regent, based on Terra, based on (largely, though not _exclusively_ LuaJIT 😄 (SAM is boring from the software implementation side afaik.)","",""
+"220639106915368960","tholin","2026-09-05T14:34:31.1780000+00:00","I’m still not sure why any of the opamps I’ve built so far are incapable of being used as voltage followers. Simulations when I wire them up as such always terminate with ""timestep too small""","",""
+"220639106915368960","tholin","2026-09-05T14:34:36.2510000+00:00","Oh well","",""
+"220639106915368960","tholin","2026-09-05T14:35:07.2020000+00:00","Chaining two inverting amplifiers with a gain of 1 has served me well so far","",""
+"220639106915368960","tholin","2026-09-05T14:47:03.3930000+00:00","My previous version of the PFET controller looked like this, but this is kinda problematic. The DISABLE input is digital. It fully turns off the PFETs if high, and is fed from a comparator that compares the battery voltage to the cutoff voltage. But this WILL end up oscillating as the battery nears fully charged, even with hysteresis added.","",""
+"220639106915368960","tholin","2026-09-05T14:47:24.9710000+00:00","So, new version, where DISABLE can actually be an analog signal","2026-09_media/image-E00E8.png",""
+"220639106915368960","tholin","2026-09-05T14:48:01.5790000+00:00","Now if I replace the comparator in the control circuit with an opamp, I should have something closer to an actual voltage regulator.","",""
+"220639106915368960","tholin","2026-09-05T14:48:25.0740000+00:00","This new circuit essentially just produces an analog `max` between all its inputs","",""
+"220639106915368960","tholin","2026-09-05T14:48:32.7720000+00:00","With one input being the current reference","",""
+"220639106915368960","tholin","2026-09-05T14:52:42.6040000+00:00","Three inputs:
+current reference
+analog voltage limiter
+digital disable if the thing needs to be off entirely right now (i.e. charge complete, overtemperature)","2026-09_media/image-5F9BB.png",""
+"220639106915368960","tholin","2026-09-05T15:06:40.3950000+00:00","I hate diodes I hate diodes I hate diodes I hate diodes","2026-09_media/image-8A196.png",""
+"596068704471482370","246tnt","2026-09-05T15:09:43.5410000+00:00","Why are you using them then ...","",""
+"220639106915368960","tholin","2026-09-05T15:12:31.0050000+00:00","What else am I supposed to do?","",""
+"220639106915368960","tholin","2026-09-05T15:35:47.6430000+00:00","The docs reference another two types of diodes in the PDK, but magic doesn’t have device generators for those, so I’d be on my own.","2026-09_media/image-F6700.png",""
+"220639106915368960","tholin","2026-09-05T15:44:53.4640000+00:00","I can’t think of a way to re-design this circuit to not use diodes","",""
+"220639106915368960","tholin","2026-09-05T16:02:06.8880000+00:00","Anyways. Current approach works. There is still a little bit of oscillation, but its not as bad as it looks. I’d like to get rid of it, but.... yeah, simulation crashes make debugging this hard right now.","2026-09_media/image-A92A3.png,2026-09_media/image-28A06.png",""
+"220639106915368960","tholin","2026-09-05T16:02:14.7180000+00:00","Last thing to do is to detect when charging is *actually* done","",""
