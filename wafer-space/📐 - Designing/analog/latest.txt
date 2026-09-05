@@ -495,6 +495,129 @@ Anyways. Current approach works. There is still a little bit of oscillation, but
 2026-09_media/image-28A06.png
 
 
+[2026-09-05 4:02 p.m.] tholin
+Last thing to do is to detect when charging is *actually* done
+
+
+[2026-09-05 4:03 p.m.] tholin
+For which I might actually be able to use a shunt. I just need to detect that the current through the PFETs is nearing zero.
+
+
+[2026-09-05 4:17 p.m.] namibj
+....what inputs are you feeding them?
+
+
+[2026-09-05 4:18 p.m.] namibj
+if there are piece wise linear input sources in the netlist, I suggest to use Xyce it automatically inserts breakpoints for the integrator to split cleanly at these discontinuities.
+
+
+[2026-09-05 4:20 p.m.] namibj
+iirc my LiFePO4 charger LDO chips I've put onto the radio swarm boards use a cutoff of iirc 1% of what teh current limit is set to; and 10% when starting from deep discharge regions of voltage; might have mixed the two numbers up though I'd have to look at the datassheet to confirm.
+
+
+[2026-09-05 4:21 p.m.] namibj
+both should be ok though, especially the 10% cutoff for end of charge detection
+
+
+[2026-09-05 4:22 p.m.] tholin
+I’m not sure I can use Xyce from inside xschem
+
+
+[2026-09-05 4:22 p.m.] namibj
+you can
+
+
+[2026-09-05 4:22 p.m.] namibj
+it works like the same
+
+
+[2026-09-05 4:22 p.m.] namibj
+just the `.control` section is done differently
+
+
+[2026-09-05 4:23 p.m.] namibj
+it's a menu swap
+
+
+[2026-09-05 4:23 p.m.] namibj
+like, in the simulator setup menu you select xyce
+
+
+[2026-09-05 4:25 p.m.] namibj
+show me your `.control` section real quick and I'll tell you if I can just quickly try that for you after dinner
+
+
+[2026-09-05 4:27 p.m.] tholin
+
+
+{Attachments}
+2026-09_media/image-6A69E.png
+
+
+[2026-09-05 4:32 p.m.] namibj
+good I can port that that's like just save all and rawfile and the tran itself
+
+
+[2026-09-05 4:32 p.m.] namibj
+`baser` is what?
+
+
+[2026-09-05 4:33 p.m.] tholin
+Its an old thing I no longer need. My control is actually this.
+
+{Attachments}
+2026-09_media/image-0FB1C.png
+
+
+[2026-09-05 4:33 p.m.] tholin
+I actually forgot what the method=gear is about. If I remove it, the simulation takes a lot longer to run and the current reference behaves completely differently.
+
+
+[2026-09-05 6:03 p.m.] namibj
+it's the integrator's predictor; iirc this is actually a sign your current reference is broken and an oscillator
+
+
+[2026-09-05 6:03 p.m.] namibj
+honestly
+
+
+[2026-09-05 6:05 p.m.] namibj
+try if it fixes if you just add a fat chunk of decoupling RC to it, just ideal.
+
+I'm going to have to apologize I won't get into the headspace for making this port proper before I catch some sleep, but I'll do it early tomorrow, well, around noon berlin time should be it.
+
+
+[2026-09-05 6:17 p.m.] tholin
+...oh!
+
+{Attachments}
+2026-09_media/image-C2C7C.png
+
+
+[2026-09-05 6:42 p.m.] namibj
+....did I fix it?
+
+
+[2026-09-05 6:47 p.m.] tholin
+You were right that the current reference was oscillating
+
+
+[2026-09-05 6:47 p.m.] tholin
+I fixed it by making the output stage of the opamp larger
+
+
+[2026-09-05 6:47 p.m.] tholin
+It was having trouble driving its output
+
+
+[2026-09-05 6:48 p.m.] tholin
+x1
+
+
+[2026-09-05 7:02 p.m.] namibj
+if there's a repo or something tomorrow I could update/swtich to Xyce I'd be up to try that fyi, like, after I'm done sleeping.
+
+
 ==============================================================
-Exported 85 message(s)
+Exported 113 message(s)
 ==============================================================

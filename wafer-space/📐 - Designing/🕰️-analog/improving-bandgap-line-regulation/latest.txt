@@ -112,6 +112,23 @@ And I think the paper describes in enough detail how to do an optimization loop 
 Yeah if ngspice or Xyce 's sensitivity modes can express the line regulation and PSRR (I think those would be small signal AC analysis under whichever applicable bias conditions; and IIRC at least Xyce's AC sensitivities should cover that, though it will do some numerical differentiating I think due to not yet having algebraic matrix derivatives yet), you should be able to take the parts of the circuit under inspection and apply the iterative optimization of the paper, or even just let some trust region optimizer go to town tasked with line regulation and PSRR while you enforce the zero/neutral tempco and cap the maximal tempco at extremes.
 
 
+[2026-09-05 5:14 p.m.] jonahsaunders
+Got it fixed by using 2 more cascodes
+
+
+[2026-09-05 5:15 p.m.] jonahsaunders
+
+
+{Attachments}
+2026-09_media/PSRRvsFrequency-8C148.png
+
+
+[2026-09-05 6:06 p.m.] namibj
+do consider using spare area over the bandgap on MIM decoupling capacitors btw.
+
+{Reactions}
+💯
+
 ==============================================================
-Exported 20 message(s)
+Exported 23 message(s)
 ==============================================================
