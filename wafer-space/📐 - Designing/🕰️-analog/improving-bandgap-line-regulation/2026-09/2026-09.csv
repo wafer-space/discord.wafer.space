@@ -10,3 +10,19 @@ Also at least just zoom in as much as your screen can handle onto each isolated 
 "545723870431150080","jonahsaunders","2026-09-04T22:25:49.9340000+00:00","I just want to clean everything up. Doing this for Chipalooza #3","",""
 "545723870431150080","jonahsaunders","2026-09-04T22:26:45.3760000+00:00","I mainly wanted to see if there was anything topologically that I could improve; I get good performance at 3v3 but not at 5V. I initially designed everything for 3v3 but then shifted to 5V","",""
 "262706220073222144","namibj","2026-09-04T22:59:05.0360000+00:00","throw an LDO in front? Doesn't need to be very regulated I guess, just compress the range between ""minimum operating voltage"" and ""maximum operating voltage"" to a small fraction of what it would be without that LDO.","",""
+"262706220073222144","namibj","2026-09-04T23:18:18.3710000+00:00","As for figuring out what's becoming more sensitive/infuential as voltage goes up, ..... WHY is your `vref` pnp branch lacking the `XM4`/`XM3` equivalent?
+Also beware that you're doing.... well, I mean, it's obviously substantially different, but why is yours ""better""?: https://en.wikipedia.org/wiki/Brokaw_bandgap_reference
+At least regarding that you have base collector shorted on your pnp's and the linked has all 3 terminals of each one of the two npn's it has at different voltages.","",""
+"545723870431150080","jonahsaunders","2026-09-04T23:21:01.9540000+00:00","I followed this paper.","2026-09_media/Systematic_Design_of_Bandgap_Voltage_Refer-725D0.pdf",""
+"262706220073222144","namibj","2026-09-04T23:28:06.7710000+00:00","you can use the sensitivity analysis of your SPICE to apply the tuning some more btw....","",""
+"262706220073222144","namibj","2026-09-04T23:28:18.8020000+00:00","like, without deference to those LUTs","",""
+"545723870431150080","jonahsaunders","2026-09-04T23:30:51.5080000+00:00","I used gm/id for the entire project","",""
+"262706220073222144","namibj","2026-09-04T23:33:11.3270000+00:00","but yeah, for improving PSRR, active filter in front to limit the input voltage to more limited range should help a lot.>
+if you make that one start up transparent/pass-active it should do great.
+Consider using the native NMOS for that actually, like, with a pull-up resistor from gate to drain, and once the vref is active, you can compare a resistor division of the LDO output against vref and pull the gate down if the resistor division is too high (relatively).","",""
+"262706220073222144","namibj","2026-09-04T23:33:37.1690000+00:00","oh yeah ..... yeahhhhhhh...... those devices are only first order gm/id.
+Especially not across PVT.","",""
+"262706220073222144","namibj","2026-09-04T23:33:53.5110000+00:00","But: it's already looking decent.","",""
+"545723870431150080","jonahsaunders","2026-09-04T23:34:51.5570000+00:00","Yeah with resistor trimming performance is quite good. The line regulation and PSRR just isn't amazing","",""
+"262706220073222144","namibj","2026-09-04T23:34:52.7650000+00:00","And I think the paper describes in enough detail how to do an optimization loop based on the circuit simulation/model to iteratively hunt for the perfect device sizing.","",""
+"262706220073222144","namibj","2026-09-04T23:39:47.5800000+00:00","Yeah if ngspice or Xyce 's sensitivity modes can express the line regulation and PSRR (I think those would be small signal AC analysis under whichever applicable bias conditions; and IIRC at least Xyce's AC sensitivities should cover that, though it will do some numerical differentiating I think due to not yet having algebraic matrix derivatives yet), you should be able to take the parts of the circuit under inspection and apply the iterative optimization of the paper, or even just let some trust region optimizer go to town tasked with line regulation and PSRR while you enforce the zero/neutral tempco and cap the maximal tempco at extremes.","",""

@@ -351,6 +351,71 @@ I'm not _sure_ but I'd definitely throw the idea of using polyfuses to "remember
 In any case, I'd assume there's easy-to-port temperature sensor IP you could readily harness and easily add some such factory calibration/zeroing block to. If it's some kind of digital temperature sensor mechanism, and the temperature sense core itself doesn't depend on a clock, it's probably quite easy to figure out how to plonk it down next to a simple DAC in front of a comparator so that this very DAC could be set to whatever code (+nominal offset that only assumes the scale isn't far off in temp co) trips it under factory conditions. This doesn't _have to_ be done by external hardware, it could be done on-die at first power-up from just feeding good power and then strapping into factory-cal mode, shouldn't even need a separate clock could just use a fairly trashy ring osc with heavy divider.
 
 
+[2026-09-04 11:16 p.m.] tholin
+It doesn’t do the current increase anymore, but still crashes. Considering the SPICE-extracted netlist has no parasitics and is just several thousand PFETs in parallel between the same two pins, I do believe this to be a simulation problem.
+
+
+[2026-09-04 11:40 p.m.] namibj
+Try Xyce if you don't do anything too fancy in ngspice
+
+
+[2026-09-04 11:41 p.m.] namibj
+(it's supposedly rather suited to large extracted circuits)
+
+
+[2026-09-04 11:42 p.m.] namibj
+if they're literally identical you can optimize by replacing a bunch with just the `m` multiple parameter instead of physical duplicates.
+I'm surprised your extraction doesn't do that already for you.
+
+
+[2026-09-04 11:43 p.m.] namibj
+(I'm sorry it's been one and a half weeks since I had my desktop with working browser/internet, just phone in the meantime, I miss-estimates how much I'm "busy" catching up with various things..... won't get to too much spice reading today 🙁 )
+
+
+[2026-09-05 12:00 a.m.] tholin
+I wonder what the chances are of Xyce being able to simulate the whole chip for a few us...
+
+
+[2026-09-05 1:32 a.m.] namibj
+do you have any oscillators on there?
+
+
+[2026-09-05 1:35 a.m.] namibj
+if not, then I'm highly confident it can, in part because it can readily adjust step size as appropriate. Thus it'd actually be pretty "free" to just go to several seconds worth of "steady state" solution from a transient start.
+
+
+[2026-09-05 1:37 a.m.] namibj
+well, not fully free, it'd still be like a hundred or a couple hundred time steps to go from transistor fT limited waveform fidelity needs up to multi-second scale, without just fast-forwarding over anything notable, but otherwise....
+
+
+[2026-09-05 1:40 a.m.] namibj
+Xyce is half made for that, and the other half to do non-public rad hard model sim for US nuclear and space stuffs.
+It's just that the base framework stuff is easy to keep separate from the modules that contain the spicy stuff that has export restrictions on it, and the us gov labs are generally quite happy to share code/software if it's science stuff that's like base frameworks/tooling.
+
+
+[2026-09-05 1:45 a.m.] namibj
+in vaguely related spirits, https://sam.nlr.gov/ and https://github.com/stanfordhpccenter/HTR-solver
+
+{Embed}
+https://sam.nlr.gov/
+Welcome - System Advisor Model - SAM
+The System Advisor Model (SAM) is a performance and financial model designed to estimate the cost of energy for grid-connected power projects.
+
+{Embed}
+https://github.com/stanfordhpccenter/HTR-solver
+GitHub - stanfordhpccenter/HTR-solver: Hypersonic Task-based Resear...
+Hypersonic Task-based Research (HTR) solver for the Navier-Stokes equations at hypersonic Mach numbers including finite-rate chemistry for dissociating air and multicomponent transport. - stanfordh...
+2026-09_media/HTR-solver-AC059
+
+
+[2026-09-05 1:53 a.m.] namibj
+SAM does history-mapped simulation of PV and PV+battery systems under most grid-tie models including financial aspects relevant in the US; also other energy sources but primarily solar and obviously focused (these days) on PV.
+
+HTR-solver does supersonic and hypersonic flow for you including notably (finite rate!) chemical reactions you're gonna catch when you superheat stuff like air. I think but am not sure it can actually do a rocket nozzle (liquid bipropellant, the injector, chamber, and then the nozzle itself) but never got around to reeeealy check/confirm. Certainly should be able to model the deflagration to detonation transition of a fuel/air gas mix in a hose/tube (the tamer ones are quite an eye catcher "fuse" for a potato cannon or the like if done with e.g. propane in clear pvc hose).
+And ofc actual normal aerodynamics that may or may not involve supersonic flow.
+It's written in Regent, based on Terra, based on (largely, though not _exclusively_ LuaJIT 😄 (SAM is boring from the software implementation side afaik.)
+
+
 ==============================================================
-Exported 58 message(s)
+Exported 70 message(s)
 ==============================================================
