@@ -1,0 +1,394 @@
+** sch_path: /run/media/veracrypt1/gf180mcu-project-template/analog/xschem/control_bench.sch
+**.subckt control_bench
+x1 net1 GND net2 DONEb net3 GND net8 net6 BAT CHRGb net4 GATE PU PD control
+V1 net1 GND 5
+R1 net4 GND 6k
+R2 net7 net6 1k
+V2 net5 GND 5
+R3 net2 net1 1k
+R4 net3 net1 1k
+V3 net7 GND PULSE(0 5 2u 2n 2n 100u 200u 0)
+C1 BAT GND 9u
+x2 net5 GATE BAT power_fet_approx
+**** begin user architecture code
+
+
+.option method=gear
+.param baser=2e-6
+.control
+save all
+tran 1n 50u
+remzerovec
+write control_bench.raw
+.endc
+
+
+
+.include /run/media/veracrypt1/gf180mcu-project-template/analog/xschem/extracted/power_fet_f.spice
+.include /run/media/veracrypt1/gf180mcu-project-template/gf180mcu/gf180mcuD/libs.tech/ngspice/design.ngspice
+.lib /run/media/veracrypt1/gf180mcu-project-template/gf180mcu/gf180mcuD/libs.tech/ngspice/sm141064.ngspice typical
+.lib /run/media/veracrypt1/gf180mcu-project-template/gf180mcu/gf180mcuD/libs.tech/ngspice/sm141064.ngspice res_typical
+.lib /run/media/veracrypt1/gf180mcu-project-template/gf180mcu/gf180mcuD/libs.tech/ngspice/sm141064.ngspice diode_typical
+.lib /run/media/veracrypt1/gf180mcu-project-template/gf180mcu/gf180mcuD/libs.tech/ngspice/sm141064.ngspice mimcap_typical
+.lib /run/media/veracrypt1/gf180mcu-project-template/gf180mcu/gf180mcuD/libs.tech/ngspice/sm141064.ngspice cap_mim
+
+**** end user architecture code
+**.ends
+
+* expanding   symbol:  control.sym # of pins=14
+** sym_path: /run/media/veracrypt1/gf180mcu-project-template/analog/xschem/control.sym
+** sch_path: /run/media/veracrypt1/gf180mcu-project-template/analog/xschem/control.sch
+.subckt control VDD VSS S0 DONEb S1 LENb PWRENb CE BAT CHRGb PROG GATE PU PD
+*.iopin VDD
+*.iopin VSS
+*.ipin S0
+*.ipin S1
+*.ipin LENb
+*.ipin CE
+*.opin CHRGb
+*.opin DONEb
+*.iopin PROG
+*.opin PWRENb
+*.opin GATE
+*.ipin BAT
+*.opin PU
+*.opin PD
+x1 VSS VDD net7 S0 S1 refgens
+x2 VDD VSS GATE PROG CHRGb current_ref
+XM1 CHRGb net4 VSS VSS nfet_06v0 L=0.70u W=8u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM2 CHRGb net4 VDD VDD pfet_06v0 L=0.55u W=8u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM3 net4 COMP net1 VDD pfet_06v0 L=0.55u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM4 net1 net3 net2 VDD pfet_06v0 L=0.55u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM5 net4 COMP VSS VSS nfet_06v0 L=0.70u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM6 net4 net3 VSS VSS nfet_06v0 L=0.70u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+x3 VDD COMP HALFBAT REFOUT VSS comparator
+XR1 VSS HALFBAT VSS ppolyf_u_1k_6p0 r_width=1e-6 r_length=8e-5
+XR2 HALFBAT BAT VSS ppolyf_u_1k_6p0 r_width=1e-6 r_length=8e-5
+XM7 REFOUT DONEb VSS VDD pfet_06v0 L=1u W=2u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM8 DONEb COMP VSS VSS nfet_06v0 L=0.70u W=8u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM9 DONEb COMP VDD VDD pfet_06v0 L=0.55u W=8u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+D1 net8 GATE diode_pd2nw_06v0 area='2u * 1u ' pj='2*2u + 2*1u '
+XR3 net8 net9 VSS ppolyf_u_1k_6p0 r_width=1e-6 r_length=5e-5
+XR4 net9 net10 VSS ppolyf_u_1k_6p0 r_width=1e-6 r_length=5e-5
+XR5 net10 BAT VSS ppolyf_u_1k_6p0 r_width=1e-6 r_length=5e-5
+XM12 net5 net5 VSS VSS nfet_06v0 L=0.70u W=16u nf=2 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM13 PWRENb net5 VDD VDD pfet_06v0 L=0.55u W=16u nf=2 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM14 net6 net6 VDD VDD pfet_06v0 L=0.55u W=16u nf=2 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM15 PD net6 VSS VSS nfet_06v0 L=0.70u W=16u nf=2 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM16 net3 CE VSS VSS nfet_06v0 L=0.70u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM17 net3 CE VDD VDD pfet_06v0 L=0.55u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM18 net2 LENb VDD VDD pfet_06v0 L=0.55u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM19 net4 LENb VSS VSS nfet_06v0 L=0.70u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XR6 REFOUT net7 rm2 r_width=0.6e-6 r_length=5e-6
+.ends
+
+
+* expanding   symbol:  power_fet_approx.sym # of pins=3
+** sym_path: /run/media/veracrypt1/gf180mcu-project-template/analog/xschem/power_fet_approx.sym
+** sch_path: /run/media/veracrypt1/gf180mcu-project-template/analog/xschem/power_fet_approx.sch
+.subckt power_fet_approx DVDD GATE BAT
+*.iopin DVDD
+*.iopin BAT
+*.ipin GATE
+XM1 BAT GATE DVDD DVDD pfet_06v0 L=2u W=467.2u nf=10 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=792
+XM2 BAT GATE DVDD DVDD pfet_06v0 L=2u W=764.65u nf=10 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=726
+.ends
+
+
+* expanding   symbol:  refgens.sym # of pins=5
+** sym_path: /run/media/veracrypt1/gf180mcu-project-template/analog/xschem/refgens.sym
+** sch_path: /run/media/veracrypt1/gf180mcu-project-template/analog/xschem/refgens.sch
+.subckt refgens VSS VDD OUT S0 S1
+*.iopin VSS
+*.iopin VDD
+*.opin OUT
+*.ipin S0
+*.ipin S1
+x1 VDD LIP net1 VSS adjref
+XR6 net1 net12 VSS ppolyf_u_1k r_width=1e-6 r_length=2.01e-5
+XR1 net2 net1 VSS ppolyf_u_1k r_width=1e-6 r_length=1e-5
+XR2 LIP net13 VSS ppolyf_u_1k r_width=1e-6 r_length=2e-6
+x2 VDD LFP net9 VSS adjref
+XR3 net8 net9 VSS ppolyf_u_1k r_width=1e-6 r_length=1.6e-5
+XR4 net7 net9 VSS ppolyf_u_1k r_width=1e-6 r_length=1e-5
+XR5 LFP net14 VSS ppolyf_u_1k r_width=1e-6 r_length=2e-6
+x3 VDD LTO net3 VSS adjref
+XR7 net3 net10 VSS ppolyf_u_1k r_width=1e-6 r_length=9.98e-6
+XR8 net4 net3 VSS ppolyf_u_1k r_width=1e-6 r_length=1e-5
+XR9 LTO net15 VSS ppolyf_u_1k r_width=1e-6 r_length=2e-6
+x4 VDD NAP net5 VSS adjref
+XR10 net5 net11 VSS ppolyf_u_1k r_width=1e-6 r_length=1.84e-5
+XR11 net6 net5 VSS ppolyf_u_1k r_width=1e-6 r_length=1e-5
+XR12 NAP net16 VSS ppolyf_u_1k r_width=1e-6 r_length=2e-6
+x5 VSS VDD LIPEN LIP OUT trans
+x6 VSS VDD LFPEN LFP OUT trans
+x7 VSS VDD LTOEN LTO OUT trans
+x8 VSS VDD NAPEN NAP OUT trans
+XM1 S0N S0 VDD VDD pfet_06v0 L=0.55u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM2 S0N S0 VSS VSS nfet_06v0 L=0.70u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM3 S1N S1 VDD VDD pfet_06v0 L=0.55u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM4 S1N S1 VSS VSS nfet_06v0 L=0.70u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+x9 VSS VDD S0N S1N LIPEN nand
+x10 VSS VDD S0 S1N LFPEN nand
+x11 VSS VDD S0N S1 LTOEN nand
+x12 VSS VDD S0 S1 NAPEN nand
+XC1 OUT VSS cap_mim_2f0fF c_width=1e-5 c_length=1e-5
+XR13 net13 VDD VSS ppolyf_u_1k r_width=1e-6 r_length=2e-6
+XR14 net14 VDD VSS ppolyf_u_1k r_width=1e-6 r_length=2e-6
+XR15 net15 VDD VSS ppolyf_u_1k r_width=1e-6 r_length=2e-6
+XR16 net16 VDD VSS ppolyf_u_1k r_width=1e-6 r_length=2e-6
+XR17 net7 VSS VSS ppolyf_u_1k r_width=1e-6 r_length=1e-5
+XR18 net8 LFP VSS ppolyf_u_1k r_width=1e-6 r_length=1.621e-5
+XR19 VSS net4 VSS ppolyf_u_1k r_width=1e-6 r_length=1e-5
+XR20 net10 LTO VSS ppolyf_u_1k r_width=1e-6 r_length=9.98e-6
+XR21 VSS net6 VSS ppolyf_u_1k r_width=1e-6 r_length=1e-5
+XR22 net11 NAP VSS ppolyf_u_1k r_width=1e-6 r_length=1.84e-5
+XR23 VSS net2 VSS ppolyf_u_1k r_width=1e-6 r_length=1e-5
+XR24 net12 LIP VSS ppolyf_u_1k r_width=1e-6 r_length=2.01e-5
+.ends
+
+
+* expanding   symbol:  current_ref.sym # of pins=5
+** sym_path: /run/media/veracrypt1/gf180mcu-project-template/analog/xschem/current_ref.sym
+** sch_path: /run/media/veracrypt1/gf180mcu-project-template/analog/xschem/current_ref.sch
+.subckt current_ref VDD VSS CONTROL PROG DISABLE
+*.iopin VSS
+*.iopin VDD
+*.iopin CONTROL
+*.iopin PROG
+*.ipin DISABLE
+XM1 PROG net1 VDD VDD pfet_06v0 L=1u W=46u nf=23 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+x2 VDD MINUS VSS voltage_ref
+XM2 CONTROL net2 VDD VDD pfet_06v0 L=1u W=64u nf=4 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM3 net2 DISABLE VSS VSS nfet_06v0 L=0.70u W=4u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM4 net2 DISABLE VDD VDD pfet_06v0 L=0.55u W=4u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM5 net1 DISABLE CONTROL VDD pfet_06v0 L=0.55u W=64u nf=4 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM6 net1 net2 CONTROL VSS nfet_06v0 L=0.70u W=64u nf=4 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+x1 VDD net1 PROG MINUS VSS opamp_medium
+.ends
+
+
+* expanding   symbol:  comparator.sym # of pins=5
+** sym_path: /run/media/veracrypt1/gf180mcu-project-template/analog/xschem/comparator.sym
+** sch_path: /run/media/veracrypt1/gf180mcu-project-template/analog/xschem/comparator.sch
+.subckt comparator VDD OUT PLUS MINUS VSS
+*.ipin VDD
+*.ipin PLUS
+*.ipin VSS
+*.opin OUT
+*.ipin MINUS
+XM3 i1 net1 VDD VDD pfet_06v0 L=1.1u W=3u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM4 net2 MINUS VDD VDD pfet_06v0 L=1.1u W=3u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM5 net1 PLUS VDD VDD pfet_06v0 L=1.1u W=3u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM6 net2 net2 VSS VSS nfet_06v0 L=1.4u W=3u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM7 net1 net2 VSS VSS nfet_06v0 L=1.4u W=3u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM8 i1 net1 VSS VSS nfet_06v0 L=1.4u W=3u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+x1 VDD i1 net3 VSS schmitt
+XM9 OUT net3 VDD VDD pfet_06v0 L=0.55u W=24u nf=3 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM10 OUT net3 VSS VSS nfet_06v0 L=0.70u W=24u nf=3 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+.ends
+
+
+* expanding   symbol:  adjref.sym # of pins=4
+** sym_path: /run/media/veracrypt1/gf180mcu-project-template/analog/xschem/adjref.sym
+** sch_path: /run/media/veracrypt1/gf180mcu-project-template/analog/xschem/adjref.sch
+.subckt adjref VDD K R VSS
+*.ipin VDD
+*.ipin VSS
+*.ipin R
+*.iopin K
+x2 VDD VREF VSS voltage_ref
+XM1 K COMPO VSS VSS nfet_06v0 L=0.70u W=8u nf=2 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+D2 R K diode_pd2nw_06v0 area='2u * 2u ' pj='2*2u + 2*2u '
+x1 VDD COMPO R VREF VSS opamp_smol
+D1 VSS K diode_nd2ps_06v0 area='2u * 2u ' pj='2*2u + 2*2u '
+.ends
+
+
+* expanding   symbol:  trans.sym # of pins=5
+** sym_path: /run/media/veracrypt1/gf180mcu-project-template/analog/xschem/trans.sym
+** sch_path: /run/media/veracrypt1/gf180mcu-project-template/analog/xschem/trans.sch
+.subckt trans VSS VDD EN A B
+*.iopin VSS
+*.iopin VDD
+*.ipin EN
+*.iopin B
+*.iopin A
+XM1 A EN B VDD pfet_06v0 L=0.55u W=4u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM2 A net1 B VSS nfet_06v0 L=0.70u W=4u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM3 net1 EN VDD VDD pfet_06v0 L=0.55u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM4 net1 EN VSS VSS nfet_06v0 L=0.70u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+.ends
+
+
+* expanding   symbol:  nand.sym # of pins=5
+** sym_path: /run/media/veracrypt1/gf180mcu-project-template/analog/xschem/nand.sym
+** sch_path: /run/media/veracrypt1/gf180mcu-project-template/analog/xschem/nand.sch
+.subckt nand VSS VDD A B Y
+*.iopin VSS
+*.iopin VDD
+*.ipin A
+*.ipin B
+*.opin Y
+XM1 Y A VDD VDD pfet_06v0 L=0.55u W=2u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM2 Y A net1 VSS nfet_06v0 L=0.70u W=2u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM3 Y B VDD VDD pfet_06v0 L=0.55u W=2u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM4 net1 B VSS VSS nfet_06v0 L=0.70u W=2u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+.ends
+
+
+* expanding   symbol:  voltage_ref.sym # of pins=3
+** sym_path: /run/media/veracrypt1/gf180mcu-project-template/analog/xschem/voltage_ref.sym
+** sch_path: /run/media/veracrypt1/gf180mcu-project-template/analog/xschem/voltage_ref.sch
+.subckt voltage_ref VDD VREF VSS
+*.ipin VDD
+*.ipin VSS
+*.opin VREF
+XM1 net1 net1 VDD VDD pfet_06v0 L=5u W=10u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM2 net2 net1 VDD VDD pfet_06v0 L=5u W=10u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM3 VREF net1 VDD VDD pfet_06v0 L=5u W=10u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM4 net1 net2 net3 VSS nfet_06v0 L=2.5u W=10u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM5 net2 net2 net5 VSS nfet_06v0 L=2.5u W=10u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XR1 net4 net3 VSS ppolyf_u_1k_6p0 r_width=1e-6 r_length=5e-6
+XR2 net6 VREF VSS ppolyf_u_1k_6p0 r_width=1e-6 r_length=5e-6
+D3 net6 VSS diode_pd2nw_06v0 area='5u * 1u ' pj='2*5u + 2*1u '
+D1 net5 VSS diode_pd2nw_06v0 area='5u * 1u ' pj='2*5u + 2*1u '
+D2 net4 VSS diode_pd2nw_06v0 area='5u * 1u ' pj='2*5u + 2*1u '
+.ends
+
+
+* expanding   symbol:  opamp_medium.sym # of pins=5
+** sym_path: /run/media/veracrypt1/gf180mcu-project-template/analog/xschem/opamp_medium.sym
+** sch_path: /run/media/veracrypt1/gf180mcu-project-template/analog/xschem/opamp_medium.sch
+.subckt opamp_medium VDD OUT PLUS MINUS VSS
+*.ipin VDD
+*.ipin PLUS
+*.ipin VSS
+*.opin OUT
+*.ipin MINUS
+XM1 net1 net1 VDD VDD pfet_06v0 L=1.1u W=4u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM3 OUT net1 VDD VDD pfet_06v0 L=1.1u W=64u nf=4 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM4 net4 MINUS net2 VDD pfet_06v0 L=1.1u W=4u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM5 net3 PLUS net2 VDD pfet_06v0 L=1.1u W=4u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM6 net4 net4 VSS VSS nfet_06v0 L=1.4u W=3u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM7 net3 net4 VSS VSS nfet_06v0 L=1.4u W=3u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM8 OUT net3 VSS VSS nfet_06v0 L=1.4u W=64u nf=4 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM2 net2 net1 VDD VDD pfet_06v0 L=1.1u W=8u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XC1 OUT net3 cap_mim_2f0fF c_width=5e-6 c_length=5e-6
+XR1 VSS net1 VSS ppolyf_u_1k_6p0 r_width=1e-6 r_length=1.1e-5
+.ends
+
+
+* expanding   symbol:  schmitt.sym # of pins=4
+** sym_path: /run/media/veracrypt1/gf180mcu-project-template/analog/xschem/schmitt.sym
+** sch_path: /run/media/veracrypt1/gf180mcu-project-template/analog/xschem/schmitt.sch
+.subckt schmitt VDD A Y VSS
+*.ipin VDD
+*.ipin VSS
+*.ipin A
+*.opin Y
+XM1 net1 A VDD VDD pfet_06v0 L=0.55u W=4u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM2 Y A net1 VDD pfet_06v0 L=0.55u W=4u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM3 Y A net2 VSS nfet_06v0 L=0.70u W=4u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM4 net2 A VSS VSS nfet_06v0 L=0.70u W=4u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM5 VSS Y net1 VDD pfet_06v0 L=0.55u W=2u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM6 VDD Y net2 VSS nfet_06v0 L=0.70u W=2u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+.ends
+
+
+* expanding   symbol:  opamp_smol.sym # of pins=5
+** sym_path: /run/media/veracrypt1/gf180mcu-project-template/analog/xschem/opamp_smol.sym
+** sch_path: /run/media/veracrypt1/gf180mcu-project-template/analog/xschem/opamp_smol.sch
+.subckt opamp_smol VDD OUT PLUS MINUS VSS
+*.ipin VDD
+*.ipin PLUS
+*.ipin VSS
+*.opin OUT
+*.ipin MINUS
+XM1 net1 net1 VDD VDD pfet_06v0 L=1.1u W=4u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM3 OUT net1 VDD VDD pfet_06v0 L=1.1u W=8u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM4 net4 MINUS net2 VDD pfet_06v0 L=1.1u W=4u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM5 net3 PLUS net2 VDD pfet_06v0 L=1.1u W=4u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM6 net4 net4 VSS VSS nfet_06v0 L=1.4u W=3u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM7 net3 net4 VSS VSS nfet_06v0 L=1.4u W=3u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XM8 OUT net3 VSS VSS nfet_06v0 L=1.4u W=8u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XR1 VSS net1 VSS ppolyf_u_1k_6p0 r_width=1e-6 r_length=1.1e-5
+XM2 net2 net1 VDD VDD pfet_06v0 L=1.1u W=8u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0
+XC1 OUT net3 cap_mim_2f0fF c_width=5e-6 c_length=5e-6
+.ends
+
+.GLOBAL GND
+.end

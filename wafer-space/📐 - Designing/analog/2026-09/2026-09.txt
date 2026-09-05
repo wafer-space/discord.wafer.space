@@ -254,6 +254,103 @@ Started a thread.
 So, if I try and run this simulation with the SPICE-extracted netlist of my power PFET array, it works for a while, until charging is completed. After a few us, current on V2 increases rapidly until it breaks the simulation ("timestep too small"), but the gate voltage remains at 5V and the capacitor doesn’t charge, so I don’t know where that energy is going. Is this a simulation oopsie or latchup?
 
 
+[2026-09-04 7:29 p.m.] tholin
+By "rapidly" I mean a straight horizontal line on the graph
+
+
+[2026-09-04 7:39 p.m.] namibj
+As long as mismatch modeling statistics say that all your fingers are under similar enough behavior under all the load-spreading-critical "[(supposed) safe (at full packaged IC level)] operating areas" such as to give good enough control (e.g. sense fingers bypassing into current sense resistors) and good enough thermal balancing, you're good.
+
+You can do fairly analytical handling of the mismatch modeling equations for the FETs.
+
+Sadly for economic numerical modeling we'd need the tricks that use sensitivity calculations to massively boost sample efficiency for the monte carlo sampling, by essentially asking the simulator how meaningless any given random variable that's monte-carlo'd is for the output measure under investigation (e.g. some quantified thermal balancing).
+
+Also do keep in mind that _if_ you do conform your pad ring to the limitations/restrictions of the ACF flip chip bonding we're testing with `FC01` (which btw. are not incompatible with performing the classic COB wedge bonding that was done to your accidentally-self-melting-DAC chip):
+you could use dual-sided heat sink attachment through thin polyimide and ACF on top and the thinned silicon substrate on the back, and further exploit the current handling capability of the much larger attachment opportunity if you use some extra/bonus high-current pads formed from top metal over the power FET ("circuit under pad").
+
+https://acffilm.com/acf-film.html#acf-cof
+
+E.g. "TCF7040/41 Series" (<https://3tfrontiers.com/anisotropic-conductive-film-acf-cof/>) seems to be specified for minimum pad area of 1500 μm² and min pad space is 15μm and from what I understand claims <1Ω contact resistance (I'm assuming for a minimum nominal contact; at a 50A/mm² max current density claimed in the datasheet of `AC-7206U-18`, that'd be <75 mV and <3.75 W/mm² (from contact ohmic heating alone, at such upper-limit levels of current density))...
+
+Don't worry our bond pads are not too small for ACF to work with decent reliability (like, IIRC in practice over 2 nines of yield per foundry pad ring sized bond pad if a small pillar/bump/column is formed; the tape is 10~30~50 μm thick and the bumps need to be a large fraction but less than the thickness of the tape), just the classic chip on flex formulations aren't targeting pad sizes that are closer to face-to-face chip-to-chip bonding (e.g. non-silicon photodiode array or even silicon based avalanche photo diode array, directly bonded to a small-process-node readout ASIC in a "normal [Bi]CMOS process") than purpose designed top metal pads for commodity flex-PCB-DesignForManufacturability.
+
+{Embed}
+https://acffilm.com/acf-film.html
+Telephus ACF Anisotropic Conductive Film | Tape
+Telephus ACF Product overview - FPC, PCB, LCD, ITO Glass, FR4, COG, COF, COB, FOF, COP
+
+
+[2026-09-04 7:59 p.m.] namibj
+...... Hmmm......
+I have an idea, if you can have one precision (I think 1% should suffice) resistor (e.g. off-chip) to set the over temp threshold, a simple<https://en.wikipedia.org/wiki/Brokaw_bandgap_reference> or if you already have a voltage reference, just a plain diode wired almost-parallel with the off-chip resistor (they share _separate_ precision poly resistor array resistors; threshold is when the voltage across the diode drops below the voltage across the resistor; the poly resistor array gives you two pretty-identical resistors to provide practically-identical biasing conditions)).
+
+Let me draw that up real quick if I can get my computer's internet back to "properly working"; or upon request with pen & paper if I'm failing/too slow to fix computer.
+
+Principle is that an off-die resistor can easily provide a decent tolerance if compared to a "proportional to absolute temperature" diode/bandgap thermal sense that nicely fits right besides a thermal hotspot on the die.
+
+
+[2026-09-04 8:05 p.m.] namibj
+Might be xschem rounding error not actually joining them despite it looking joined to the eye.
+
+You can use the hotkey for snap-to-connection-point to focus on the two symbol's pins, then drag out to the middle of nowhere to a grid aligned spot, taking care to draw both parts starting from the symbol's pin and ending at the shared location in the middle of nowhere. 
+
+Use the "highlight connected net" (iirc `k`) action on both parts to verify they're now connected. 
+If it then works without complaint you know it was the error and can try to snap all associated drawings in the schematic to grid, and clean the "wire excursion to the middle of nowhere" up.
+
+
+[2026-09-04 8:09 p.m.] tholin
+It seems to have just kinda fixed itself?
+
+
+[2026-09-04 8:10 p.m.] namibj
+AFAIK latchup isn't modeled in the extraction/SPICE, at least for the MOSFETs; can you share me the two SPICE situations (normal vs. PEX) so I can look?
+
+
+[2026-09-04 8:15 p.m.] namibj
+One major thing to consider is what absolute and relative tolerances are set for the solver; the power FET might be a bit out of typical scale and thus could reasonably trip convergence warning thresholds like that from attempting to go for whatever time steps make it's time discretisation originating approximation error small enough to meet the target tolerance.... despite handling currents FAR larger than what the config defaults of the PDK are actually good for.
+
+
+[2026-09-04 8:32 p.m.] tholin
+
+
+{Attachments}
+2026-09_media/control_bench-095E0.spice
+
+
+[2026-09-04 8:34 p.m.] tholin
+
+
+{Attachments}
+2026-09_media/control_bench-F19B0.spice
+
+
+[2026-09-04 8:35 p.m.] tholin
+I think you can tell which is which by the filesize
+
+
+[2026-09-04 8:35 p.m.] tholin
+Delete the include referencing a "power_fet_f" on the first file
+
+
+[2026-09-04 9:16 p.m.] namibj
+https://www.falstad.com/s.php?s=JDLNxt
+
+{Attachments}
+2026-09_media/circuit-20260904-2116-0F27C.png
+
+
+[2026-09-04 9:37 p.m.] namibj
+At least I think that's the way described above.
+
+Basically that. Or approximately that.
+Diode has as far as I understand it about `-2 mV/K` temperature dependence under vaguely constant current conditions.
+So a +- 5 K tolerance for the trip point would only need +-10 mV performance from the comparator and the reference used by said comparator.
+
+I'm not _sure_ but I'd definitely throw the idea of using polyfuses to "remember" a reference "room temperature" and set it up to trip at "room temperature +100C" or maybe "room temperature +75C" for 150/125 degrees Celsius Tj_max self-limiting. E.g. crank the external set resistor from nominal until it trips the mechanism at room temp, then calculate the fuse code for it; or set it up as a shift register to first just feed dynamically to do binary search for what code makes it trip at room temp, and write that; or perhaps literally use a hot box kept at like 115C with a fan force-cooling the chip to near ambient, and do the binary search under those conditions.
+
+In any case, I'd assume there's easy-to-port temperature sensor IP you could readily harness and easily add some such factory calibration/zeroing block to. If it's some kind of digital temperature sensor mechanism, and the temperature sense core itself doesn't depend on a clock, it's probably quite easy to figure out how to plonk it down next to a simple DAC in front of a comparator so that this very DAC could be set to whatever code (+nominal offset that only assumes the scale isn't far off in temp co) trips it under factory conditions. This doesn't _have to_ be done by external hardware, it could be done on-die at first power-up from just feeding good power and then strapping into factory-cal mode, shouldn't even need a separate clock could just use a fairly trashy ring osc with heavy divider.
+
+
 ==============================================================
-Exported 45 message(s)
+Exported 58 message(s)
 ==============================================================
