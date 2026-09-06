@@ -618,6 +618,108 @@ x1
 if there's a repo or something tomorrow I could update/swtich to Xyce I'd be up to try that fyi, like, after I'm done sleeping.
 
 
+[2026-09-05 8:16 p.m.] tholin
+I think I finally perfected this circuit. Here you see it start with constant current charging, then switch to constant voltage, then turn off once the charge current drops to near zero.
+
+{Attachments}
+2026-09_media/image-DE901.png
+
+
+[2026-09-05 8:16 p.m.] tholin
+The green line is the actual voltage of the capacitor being charged
+
+
+[2026-09-05 8:17 p.m.] tholin
+Yellow is what it sees on the BAT output of the chip
+
+
+[2026-09-05 8:17 p.m.] tholin
+It is oscillating, but this actually behaves better in every way than when I actively try to dampen the oscillations, which always just makes it oscillate MORE or crash the simulation.
+
+
+[2026-09-05 8:18 p.m.] tholin
+The resulting circuit is a mess, but its *my* mess and I love it
+
+{Attachments}
+2026-09_media/image-C3D7A.png
+
+
+[2026-09-05 8:19 p.m.] tholin
+The circuit to sense the charge current being low is... interesting, but it works
+
+
+[2026-09-05 8:21 p.m.] tholin
+There is an S/R latch that is reset whenever the voltage at BAT is roughly 10% below the charge cutoff reference and set when the charge current is detected to be low.
+
+
+[2026-09-05 8:23 p.m.] tholin
+I’m not sure how well the low current detection is going to work, so a digital input pin "LENb" can be used to disable the feature. In that case, the voltage regulator just keeps running and holds BAT at the cutoff voltage continuously.
+
+
+[2026-09-05 8:24 p.m.] tholin
+The "CE" input pin allow charging to be disabled whenever
+
+
+[2026-09-05 8:25 p.m.] tholin
+The three resistors and diode you see at the top right just serve to pull the power PFETs gates high if the battery is inserted but power to the charger is disconnected.
+
+
+[2026-09-05 8:27 p.m.] tholin
+I got a pull-up and pull-down generator because the digital IO pads require all the settings inputs to be set to something.
+
+
+[2026-09-05 8:28 p.m.] tholin
+I got an unused output
+
+
+[2026-09-05 8:52 p.m.] tholin
+And then this is the overdischarge protection circuit, also with a programmable cutoff. This one’s real simple.
+
+{Attachments}
+2026-09_media/image-520EC.png
+
+
+[2026-09-05 8:53 p.m.] tholin
+
+
+{Attachments}
+2026-09_media/image-A4DB9.png
+
+
+[2026-09-05 9:38 p.m.] namibj
+way too much oscillation tho
+
+
+[2026-09-05 9:39 p.m.] namibj
+have you ever found out how to chase I and V plots to hunt down where oscillation loops happen?
+
+
+[2026-09-05 9:41 p.m.] namibj
+I see purple and `PU` are the same net here; that's gonna extract horribly to spice, just to be aware
+
+
+[2026-09-05 9:41 p.m.] namibj
+though your hierarchical digital experiences should have taught you that already
+
+
+[2026-09-05 10:33 p.m.] tholin
+Not much I can do about that. Would love to get rid of it, but the simulation crashes when I try.
+
+
+[2026-09-05 10:35 p.m.] tholin
+Here we are: https://github.com/AvalonSemiconductors/ws-charge-controller
+
+{Embed}
+https://github.com/AvalonSemiconductors/ws-charge-controller
+GitHub - AvalonSemiconductors/ws-charge-controller: AIO charge cont...
+AIO charge controller and overdischarge protection IC for Li+, LiFePo, LTO and Na+ cells on wafer.space gf180mcu - AvalonSemiconductors/ws-charge-controller
+2026-09_media/ws-charge-controller-6F0E3
+
+
+[2026-09-05 10:35 p.m.] tholin
+All the action is happening in analog/ right now
+
+
 ==============================================================
-Exported 113 message(s)
+Exported 134 message(s)
 ==============================================================
