@@ -16,7 +16,7 @@
     "after": "2026-08-31T23:59:59.999+00:00",
     "before": "2026-10-01T00:00:00+00:00"
   },
-  "exportedAt": "2026-09-06T12:35:14.3430272+00:00",
+  "exportedAt": "2026-09-06T16:16:30.4085327+00:00",
   "messages": [
     {
       "id": "1545497856985669642",
@@ -764,7 +764,73 @@
         "guildId": "1361349522684510449"
       },
       "inlineEmojis": []
+    },
+    {
+      "id": "1546169453094510702",
+      "type": "Reply",
+      "timestamp": "2026-09-06T14:45:24.057+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Remember you ideally want to apply several MHz of VDD with negated polarity to vref with strength adjusted to cancel capacitive divider action. \n\nI'm presuming this would look like a few poly resistors and a few thin oxide NMOS that are wired like a current mirror to give simple high bandwidth compensation that the poly resistors can tune to approximate the amount of STATISTICALLY EXPECTED stray capacitance coupling of non-negated VDD into vref.\nBtw, make sure to use drain-side-salicyde-block (`DSS`) transistors for that; use very short channels to minimize their own capacitance so that this on it's own works up to frequencies high enough that the iirc thermal white noise dominates over the power supply noise, remember the eventual no longer inverted cancellation feed gets dominated by the MIM caps if you do it at high enough frequency.\n\nBtw; I haven't read the gf180mcuD Chipalooza details but if it's close enough to the IHP in harness architecture I suggest you use a comfortably large thick oxide NMOS pass-transistor driven by a tiny transistors digital inverter (if you have digital stuff should be fine to just force instantiate a plain single-strength inverter; else I'd suggest to manually assemble one flanked by a full tap cell on one side and row end cells at the outside of this inverter w/ tap cell \"row\"; if you'd need help I could probably whip it up in Klayout real quick some time soon; though thinking now you could probably just stick to consuming the harness pin directly and not have your own CMOS inverter at all) with a small poly resistor between the digital inverter and the sizable thick oxide NMOS to \"RC filter\" digital VDD&VSS a bit.\n\nThen using the sizable thick oxide NMOS to select if the \"bonus\" big MIM cap filling spare area of your slot is made use of or if it's disconnected, as I think your bandgap won't be nearly as huge as the entire slot you're allocated, so being able to easily prove measured performance both for the small self-contained variant and for the larger full slot approach should be quite useful IMO.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "545723870431150080",
+          "name": "jonahsaunders",
+          "discriminator": "0000",
+          "nickname": "Jonah Saunders",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-09_media/ffd2ab1475a996f1509bcbceb715b6f9-4DA23.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1545950939402215436",
+        "channelId": "1545497852426457109",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1546170053375041626",
+      "type": "Default",
+      "timestamp": "2026-09-06T14:47:47.175+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Mhm that is really good advice. Currently cleaning up the entire repo and testbenches to make it less of a mess.",
+      "author": {
+        "id": "545723870431150080",
+        "name": "jonahsaunders",
+        "discriminator": "0000",
+        "nickname": "Jonah Saunders",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/ffd2ab1475a996f1509bcbceb715b6f9-4DA23.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
     }
   ],
-  "messageCount": 24
+  "messageCount": 26
 }
