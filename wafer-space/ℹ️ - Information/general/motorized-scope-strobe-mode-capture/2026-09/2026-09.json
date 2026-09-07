@@ -1,0 +1,97 @@
+{
+  "guild": {
+    "id": "1361349522684510449",
+    "name": "wafer.space Community",
+    "iconUrl": "2026-09_media/fb143eaa45770cbb40493d09b625e98b-09FD1.png"
+  },
+  "channel": {
+    "id": "1546457578286882886",
+    "type": "GuildPublicThread",
+    "categoryId": "1361349523724570941",
+    "category": "general",
+    "name": "motorized scope strobe mode capture",
+    "topic": null
+  },
+  "dateRange": {
+    "after": "2026-08-31T23:59:59.999+00:00",
+    "before": "2026-10-01T00:00:00+00:00"
+  },
+  "exportedAt": "2026-09-07T18:46:11.4091891+00:00",
+  "messages": [
+    {
+      "id": "1546534013857038347",
+      "type": "21",
+      "timestamp": "2026-09-07T14:54:02.116+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "424865332075954196",
+          "name": "infosecdj",
+          "discriminator": "0000",
+          "nickname": "InfoSecDJ",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-09_media/7b42ed38737b5cc35a03514495f26ca8-AA6F6.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1546457578286882886",
+        "channelId": "1361349523724570941",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1546534030202380321",
+      "type": "Default",
+      "timestamp": "2026-09-07T14:54:06.013+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I'm actually surprised you haven't yet tried pulsed illumination to combat the severe slow-down of pausing at each position....\nIf you have a PI5 on the camera it should manage over 20 fps.... (at full resolution) <https://forums.raspberrypi.com/viewtopic.php?p=2227660#p2227660>.\n\nThe trick would require rather effective strobe-centric illumination though; for continuos motion along the 3040px direction you'd be looking at flashing for about 13 microseconds duration with a full frame worth of photons.\n\n\"Just\" needs pulse-shaped excitation or an active reverse current pulse on end-of-pulse to rapidly stop the glow.\n\nOh, also, that's math with 0% overlap between images; I'm assuming you're doing substantial overlap for post-processing alignment and such purposes.\n\nThe harder part I guess is that 99.9% to 99.99% of light need to happen within that short single-line-duration of the frame.\nSo dark surroundings and driving the strobe to be very much dark at the other times.\nThankfully I think a simple series resistor (current limiting) drive with a simple half-bridge would do. The active-low drive discharges the stray capacitance in the LEDs and the rest of the circuit to prevent them from emitting light.\n\nAlso probably annoying to look at with this meager frame rate the only-half-the-lanes setup causes \uD83D\uDE41",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83D\uDE41",
+          "code": "slight_frown",
+          "isAnimated": false,
+          "imageUrl": "2026-09_media/1f641-E1429.svg"
+        }
+      ]
+    }
+  ],
+  "messageCount": 2
+}

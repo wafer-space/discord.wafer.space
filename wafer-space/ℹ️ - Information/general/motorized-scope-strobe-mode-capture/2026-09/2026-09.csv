@@ -1,0 +1,16 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"262706220073222144","namibj","2026-09-07T14:54:02.1160000+00:00","","",""
+"262706220073222144","namibj","2026-09-07T14:54:06.0130000+00:00","I'm actually surprised you haven't yet tried pulsed illumination to combat the severe slow-down of pausing at each position....
+If you have a PI5 on the camera it should manage over 20 fps.... (at full resolution) <https://forums.raspberrypi.com/viewtopic.php?p=2227660#p2227660>.
+
+The trick would require rather effective strobe-centric illumination though; for continuos motion along the 3040px direction you'd be looking at flashing for about 13 microseconds duration with a full frame worth of photons.
+
+""Just"" needs pulse-shaped excitation or an active reverse current pulse on end-of-pulse to rapidly stop the glow.
+
+Oh, also, that's math with 0% overlap between images; I'm assuming you're doing substantial overlap for post-processing alignment and such purposes.
+
+The harder part I guess is that 99.9% to 99.99% of light need to happen within that short single-line-duration of the frame.
+So dark surroundings and driving the strobe to be very much dark at the other times.
+Thankfully I think a simple series resistor (current limiting) drive with a simple half-bridge would do. The active-low drive discharges the stray capacitance in the LEDs and the rest of the circuit to prevent them from emitting light.
+
+Also probably annoying to look at with this meager frame rate the only-half-the-lanes setup causes 🙁","",""
