@@ -923,6 +923,394 @@ err, the pulse's length and period, that got the breakpoints and such more funct
 i'll see sooon
 
 
+[2026-09-08 5:57 p.m.] namibj
+yeah looks very robust now
+
+
+[2026-09-08 5:58 p.m.] namibj
+adjusted some of them time integration and nonlinearsolver-tran options to be more _robust_
+
+
+[2026-09-08 5:58 p.m.] namibj
+at expense of happy-case speed
+
+
+[2026-09-08 5:59 p.m.] namibj
+let's see
+
+{Attachments}
+2026-09_media/image-A9CCB.png
+
+
+[2026-09-08 5:59 p.m.] namibj
+a full second with 1u max timestep enforcement, back to the enable pattern you had before
+
+
+[2026-09-08 5:59 p.m.] namibj
+(500 Hz, 50% duty cycle)
+
+
+[2026-09-08 6:02 p.m.] namibj
+I'll run it in the background and probably get back to trying to fix the oscillation behavior later after seeing about how to make it use the extracted power FET in place of this... well, not _quite_ but rather first figuring out how to aggregate them into `m` as far as they happen to be identical fingers
+
+
+[2026-09-08 6:04 p.m.] namibj
+```
+    264 X1 BAT GATE DVDD DVDD pfet_06v0 ad=12.1472p pd=47.24u as=12.1472p ps=47.24u w=46.72u l=2u
+     66 X1 BAT GATE DVDD DVDD pfet_06v0 ad=12.1472p pd=47.24u as=20.5568p ps=94.32u w=46.72u l=2u
+   2376 X1 BAT GATE DVDD DVDD pfet_06v0 ad=12.1485p pd=47.245u as=12.1485p ps=47.245u w=46.725u l=2u
+    594 X1 BAT GATE DVDD DVDD pfet_06v0 ad=12.1485p pd=47.245u as=20.559p ps=94.32999u w=46.725u l=2u
+    264 X1 BAT GATE DVDD DVDD pfet_06v0 ad=16.3137p pd=63.265u as=16.3137p ps=63.265u w=62.745u l=2u
+     66 X1 BAT GATE DVDD DVDD pfet_06v0 ad=16.3137p pd=63.265u as=27.6078p ps=0.12637m w=62.745u l=2u
+    264 X1 BAT GATE DVDD DVDD pfet_06v0 ad=16.8948p pd=65.5u as=16.8948p ps=65.5u w=64.98u l=2u
+     66 X1 BAT GATE DVDD DVDD pfet_06v0 ad=16.8948p pd=65.5u as=28.5912p ps=0.13084m w=64.98u l=2u
+    264 X1 BAT GATE DVDD DVDD pfet_06v0 ad=19.8679p pd=76.935u as=19.8679p ps=76.935u w=76.41499u l=2u
+     66 X1 BAT GATE DVDD DVDD pfet_06v0 ad=19.8679p pd=76.935u as=33.6226p ps=0.15371m w=76.41499u l=2u
+    264 X1 BAT GATE DVDD DVDD pfet_06v0 ad=19.8796p pd=76.98u as=19.8796p ps=76.98u w=76.46u l=2u
+     66 X1 BAT GATE DVDD DVDD pfet_06v0 ad=19.8796p pd=76.98u as=33.6424p ps=0.1538m w=76.46u l=2u
+   1848 X1 BAT GATE DVDD DVDD pfet_06v0 ad=19.8809p pd=76.985u as=19.8809p ps=76.985u w=76.465u l=2u
+    462 X1 BAT GATE DVDD DVDD pfet_06v0 ad=19.8809p pd=76.985u as=33.6446p ps=0.15381m w=76.465u l=2u
+    264 X1 BAT GATE DVDD DVDD pfet_06v0 ad=19.8822p pd=76.99u as=19.8822p ps=76.99u w=76.47u l=2u
+     66 X1 BAT GATE DVDD DVDD pfet_06v0 ad=19.8822p pd=76.99u as=33.6468p ps=0.15382m w=76.47u l=2u
+    264 X1 BAT GATE DVDD DVDD pfet_06v0 ad=19.8952p pd=77.04u as=19.8952p ps=77.04u w=76.52u l=2u
+     66 X1 BAT GATE DVDD DVDD pfet_06v0 ad=19.8952p pd=77.04u as=33.6688p ps=0.15392m w=76.52u l=2u
+    264 X1 DVDD GATE BAT DVDD pfet_06v0 ad=12.1472p pd=47.24u as=12.1472p ps=47.24u w=46.72u l=2u
+   2376 X1 DVDD GATE BAT DVDD pfet_06v0 ad=12.1485p pd=47.245u as=12.1485p ps=47.245u w=46.725u l=2u
+    264 X1 DVDD GATE BAT DVDD pfet_06v0 ad=16.3137p pd=63.265u as=16.3137p ps=63.265u w=62.745u l=2u
+    264 X1 DVDD GATE BAT DVDD pfet_06v0 ad=16.8948p pd=65.5u as=16.8948p ps=65.5u w=64.98u l=2u
+    264 X1 DVDD GATE BAT DVDD pfet_06v0 ad=19.8679p pd=76.935u as=19.8679p ps=76.935u w=76.41499u l=2u
+    264 X1 DVDD GATE BAT DVDD pfet_06v0 ad=19.8796p pd=76.98u as=19.8796p ps=76.98u w=76.46u l=2u
+   1848 X1 DVDD GATE BAT DVDD pfet_06v0 ad=19.8809p pd=76.985u as=19.8809p ps=76.985u w=76.465u l=2u
+    264 X1 DVDD GATE BAT DVDD pfet_06v0 ad=19.8822p pd=76.99u as=19.8822p ps=76.99u w=76.47u l=2u
+    264 X1 DVDD GATE BAT DVDD pfet_06v0 ad=19.8952p pd=77.04u as=19.8952p ps=77.04u w=76.52u l=2u
+     66 X1 DVDD GATE BAT DVDD pfet_06v0 ad=20.5568p pd=94.32u as=12.1472p ps=47.24u w=46.72u l=2u
+    594 X1 DVDD GATE BAT DVDD pfet_06v0 ad=20.559p pd=94.32999u as=12.1485p ps=47.245u w=46.725u l=2u
+     66 X1 DVDD GATE BAT DVDD pfet_06v0 ad=27.6078p pd=0.12637m as=16.3137p ps=63.265u w=62.745u l=2u
+     66 X1 DVDD GATE BAT DVDD pfet_06v0 ad=28.5912p pd=0.13084m as=16.8948p ps=65.5u w=64.98u l=2u
+     66 X1 DVDD GATE BAT DVDD pfet_06v0 ad=33.6226p pd=0.15371m as=19.8679p ps=76.935u w=76.41499u l=2u
+     66 X1 DVDD GATE BAT DVDD pfet_06v0 ad=33.6424p pd=0.1538m as=19.8796p ps=76.98u w=76.46u l=2u
+    462 X1 DVDD GATE BAT DVDD pfet_06v0 ad=33.6446p pd=0.15381m as=19.8809p ps=76.985u w=76.465u l=2u
+     66 X1 DVDD GATE BAT DVDD pfet_06v0 ad=33.6468p pd=0.15382m as=19.8822p ps=76.99u w=76.47u l=2u
+     66 X1 DVDD GATE BAT DVDD pfet_06v0 ad=33.6688p pd=0.15392m as=19.8952p ps=77.04u w=76.52u l=2u
+```
+
+
+[2026-09-08 6:05 p.m.] namibj
+number of instances of that exact finger is up front, haven't yet scripted that into `m` as I might wanna also deduplicate across the `BAT GATE DVDD` vs. `DVDD GATE BAT`.
+
+
+[2026-09-08 6:06 p.m.] namibj
+which isn't the most trivial due to `ad`/`pd` and `as`/`ps` being specific to drain and source respectively. Still not hard to bulk edit though.
+
+
+[2026-09-08 6:07 p.m.] namibj
+`rg -e '^X[0-9]+ ' -r 'X1 ' extracted/power_fet_f.spice | sort | uniq -c`
+
+
+[2026-09-08 6:34 p.m.] tholin
+I don’t think it likes me
+
+{Attachments}
+2026-09_media/image-FBC4C.png
+
+
+[2026-09-08 6:55 p.m.] tholin
+But this works
+
+
+[2026-09-08 6:55 p.m.] tholin
+I get an identical view as this screenshot
+
+
+[2026-09-08 6:59 p.m.] tholin
+Oh, the power_fet_approx was not updated correctly, it seems?
+
+
+[2026-09-08 6:59 p.m.] tholin
+I applied the changes manually
+
+
+[2026-09-08 6:59 p.m.] tholin
+I think its doing something
+
+
+[2026-09-08 6:59 p.m.] tholin
+I’m pinned at 100% CPU usage
+
+
+[2026-09-08 7:00 p.m.] tholin
+But those changes also break the simulation
+
+
+[2026-09-08 7:00 p.m.] tholin
+I’m not sure why you changed m on one of them either
+
+
+[2026-09-08 7:01 p.m.] tholin
+Those values were based off of what I have in the magic layout
+
+
+[2026-09-08 7:01 p.m.] tholin
+As you saw, the magic SPICE extraction has thousands of individual pfet devices. I just compressed that into two symbols with a high `m`
+
+
+[2026-09-08 7:01 p.m.] tholin
+Because of how I broke the transistors up horizontally, those values were all correct
+
+
+[2026-09-08 7:07 p.m.] tholin
+I can pretend to Xyce that the FETs are smaller by dividing their widths by 10 and multiplying `m` by 10
+
+{Attachments}
+2026-09_media/image-93ACE.png
+
+
+[2026-09-08 7:07 p.m.] tholin
+Its effectively the same thing
+
+
+[2026-09-08 7:08 p.m.] tholin
+What is happening there at the end?
+
+{Attachments}
+2026-09_media/image-474FB.png
+
+
+[2026-09-08 7:09 p.m.] tholin
+Nothing should be happening anymore after charging completes
+
+
+[2026-09-08 7:09 p.m.] tholin
+CHRGb is a digital output too
+
+
+[2026-09-08 7:09 p.m.] tholin
+Btw, that point is where ngspice used to crash
+
+
+[2026-09-08 7:19 p.m.] tholin
+Okay, what happens is that the capacitor starts discharging again, causing x1.x3 to turn off. Now, this is expected and should have no side effects since the charge disable is latched.
+
+
+[2026-09-08 7:20 p.m.] tholin
+Yeah, nothing should happen as a result of this. No idea why CHRGb dips.
+
+
+[2026-09-08 7:22 p.m.] tholin
+If the diodes are leaky, this might be happening, actually
+
+{Attachments}
+2026-09_media/image-619B8.png
+
+
+[2026-09-08 7:23 p.m.] namibj
+yeah trying this with 100m time now instead.... should I perhaps change the `CE` pulse source to have substantially less transients going on and thus allow larger time steps for covering long time spans with no high frequency activity?
+
+{Attachments}
+2026-09_media/image-301FC.png
+
+
+[2026-09-08 7:24 p.m.] tholin
+CE should go high after a short delay and stay there for the entire simulation, unless you’re specifically testing it
+
+
+[2026-09-08 7:24 p.m.] tholin
+How are you getting a progress display? I just get xschem freezing until its done.
+
+
+[2026-09-08 7:26 p.m.] namibj
+IMO better do the extraction style with aggregation of identical fingers into `m`; much clearer overall and actually should be representative of physical reality because it _does_ cover true length (there are endcap effects going on, that's why it even matters what length they are set to for the sim).
+Maybe something something LVS-adjacent can get you such convenient aggregation even across the source/drain ambiguity?
+
+
+[2026-09-08 7:26 p.m.] namibj
+ahhhh ok I'll do that
+
+
+[2026-09-08 7:27 p.m.] namibj
+stopped; now gonna change the PULSE to stay on
+
+{Attachments}
+2026-09_media/image-78A94.png
+
+
+[2026-09-08 7:27 p.m.] tholin
+Okay, diodes are definitely leaking current in the reverse
+
+
+[2026-09-08 7:27 p.m.] tholin
+Not sure how much or how to reduce it
+
+
+[2026-09-08 7:28 p.m.] tholin
+Going to put resistors in series with the diodes
+
+
+[2026-09-08 7:31 p.m.] tholin
+Redesigned the circuit a lil to have resistors in series with the diodes.
+
+
+[2026-09-08 7:42 p.m.] namibj
+trying 5.1ms long only now it started to get bogged down in time step size briefly after 5.01 ish
+
+
+[2026-09-08 7:42 p.m.] namibj
+don't have them
+
+
+[2026-09-08 7:42 p.m.] namibj
+......ehhhh, what diodes, where do they come from/why are they even existing at all?
+
+
+[2026-09-08 7:43 p.m.] namibj
+call Xyce in terminal
+
+
+[2026-09-08 7:43 p.m.] namibj
+also what kind of machine setup do you have? I'll whip you up a reasonable match to my `mpirun` config to let it run on more than one core
+
+
+[2026-09-08 7:44 p.m.] namibj
+```
+(nice nice mpirun -np 2 --map-by package:hwtcpus:pe=15 Xyce -a control_bench.spice   < /dev/null | tee ../Xyce_log_`date -Is | tr : _`.cat) &
+```
+this is what _I_ run
+
+
+[2026-09-08 7:45 p.m.] tholin
+In current_ref
+
+
+[2026-09-08 7:47 p.m.] namibj
+
+
+{Attachments}
+2026-09_media/image-B80F8.png
+
+
+[2026-09-08 7:48 p.m.] namibj
+accidentally didn't have time correctly set tho 🙁
+
+
+[2026-09-08 7:48 p.m.] namibj
+here ya go tho
+
+{Attachments}
+2026-09_media/control_bench.raw-30A61.zst
+
+
+[2026-09-08 8:02 p.m.] namibj
+why are they so large?
+have you tried using shotkey ones instead perhaps?
+
+
+[2026-09-08 8:05 p.m.] tholin
+There is no device generator for shotkey diodes in magic
+
+
+[2026-09-08 8:05 p.m.] tholin
+So I’d be on my own
+
+
+[2026-09-08 8:09 p.m.] namibj
+Also, consider using current-sourcing-only (only pfet outputs, skipping the nfet's) for the drives of `current_ref`'s `CURREF`/`CTRL`/`DISABLE`. If you don't pull them low they don't leak (nearly as) much.
+
+
+[2026-09-08 8:10 p.m.] namibj
+well, not _sure_ about `CURREF` but the others probably don't need to be capable of sinking current given one of them is a comparator and the other literally just a CMOS buffer
+
+
+[2026-09-08 8:10 p.m.] namibj
+There is in Klayout
+
+
+[2026-09-08 8:15 p.m.] namibj
+but until junctions stop being acceptable, just use those
+
+
+[2026-09-08 8:16 p.m.] tholin
+`
+
+
+[2026-09-08 8:16 p.m.] tholin
+`CTRL` is also intended to be analog
+
+
+[2026-09-08 8:16 p.m.] tholin
+Its just being driven by a comparator because that is generating less oscillations for some reason
+
+
+[2026-09-08 8:19 p.m.] namibj
+I'd go for diffusion-to-well diodes (nwell or lvpwell-in-dnwell, whichever is the one that gives the diodes the correct oreintation/polarity) with tiny fingers that are depending on reliability and how much current actually needs to be coped with either one or a small handful (up to like 6 or so I'd go without going for mathing the currents against the limits in the PDK docs for contacts, by feeling, trying to be fewer if vibes allow) of contacts to a single diffusion "finger" and multiple such fingers in the same well; with well taps on the outside and between these min-size diffusion fingers.
+
+
+[2026-09-08 8:22 p.m.] tholin
+They are p diffusion to nwell diodes
+
+
+[2026-09-08 8:22 p.m.] tholin
+I cannot generate the deep n-well ones because no magic device generators
+
+
+[2026-09-08 8:23 p.m.] namibj
+yeah just that 😄
+
+
+[2026-09-08 8:23 p.m.] namibj
+the anode is which one again? p or n?
+
+
+[2026-09-08 8:25 p.m.] namibj
+right p is anode
+
+
+[2026-09-08 8:25 p.m.] namibj
+good
+
+
+[2026-09-08 8:25 p.m.] namibj
+literally then just p diffusion to nwell
+
+
+[2026-09-08 8:25 p.m.] namibj
+but like, make them share a single nwell
+
+
+[2026-09-08 8:26 p.m.] namibj
+well, if it matters that is, shouldn't change the leakage out of the anode but will affect the leakage from the cathode to the substrate
+
+
+[2026-09-08 8:32 p.m.] namibj
+ok I want you to try and reduce the power output control bandwidth _substantially_ by increasing the output impedance from the gate drive towards the large capacitance of the many gate fingers by a factor of 10 and if that still shows substantial oscillation another 10.
+I guess put a long enough poly resistor there
+
+
+[2026-09-08 8:33 p.m.] namibj
+I think the internals should be sufficciently more bandwidth than the power output in order to let the internals settle nicely prior to the output getting a chance to oscillate.
+
+
+[2026-09-08 8:37 p.m.] tholin
+The klayout sc diode has 686 DRC violations in magic
+
+{Attachments}
+2026-09_media/image-8A401.png
+
+
+[2026-09-08 8:37 p.m.] tholin
+I think I just need to figure out how to draw one by hand
+
+
+[2026-09-08 8:41 p.m.] namibj
+There is a _chance_ that step-recovery and/or the directly related reverse recovery charge of those diodes are largely to blame for some interacting oscillation behavior between the 3 anodes; shottkey diode would not exhibit this; drawing it in magic will be the lesser issue the....
+
+{Attachments}
+2026-09_media/image-1B26A.png
+
+
+[2026-09-08 8:41 p.m.] namibj
+This is a 3-finger min-size-the-device-generator-in-klayout-accepts schottky; the upper m1 bar joins the anodes and from all I can tell the cathodes are just well taps for the dnwell
+
+
 ==============================================================
-Exported 179 message(s)
+Exported 257 message(s)
 ==============================================================

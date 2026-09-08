@@ -228,3 +228,124 @@ If you have `m=2` and `W=10u`  then the effective width is `20u`.","",""
 "262706220073222144","namibj","2026-09-08T14:49:12.4730000+00:00","I admit I slightly changed the setting for the time thingy","",""
 "262706220073222144","namibj","2026-09-08T14:50:19.8040000+00:00","err, the pulse's length and period, that got the breakpoints and such more functional for xyce shomehow but that's not necessary other dials can do what this did to unlcok convergence, so that sim with the ""correct/desired"" time would work.","",""
 "262706220073222144","namibj","2026-09-08T14:50:29.6700000+00:00","i'll see sooon","",""
+"262706220073222144","namibj","2026-09-08T17:57:39.4520000+00:00","yeah looks very robust now","",""
+"262706220073222144","namibj","2026-09-08T17:58:11.3500000+00:00","adjusted some of them time integration and nonlinearsolver-tran options to be more _robust_","",""
+"262706220073222144","namibj","2026-09-08T17:58:26.4790000+00:00","at expense of happy-case speed","",""
+"262706220073222144","namibj","2026-09-08T17:59:01.4300000+00:00","let's see","2026-09_media/image-A9CCB.png",""
+"262706220073222144","namibj","2026-09-08T17:59:37.4610000+00:00","a full second with 1u max timestep enforcement, back to the enable pattern you had before","",""
+"262706220073222144","namibj","2026-09-08T17:59:54.7260000+00:00","(500 Hz, 50% duty cycle)","",""
+"262706220073222144","namibj","2026-09-08T18:02:02.9820000+00:00","I'll run it in the background and probably get back to trying to fix the oscillation behavior later after seeing about how to make it use the extracted power FET in place of this... well, not _quite_ but rather first figuring out how to aggregate them into `m` as far as they happen to be identical fingers","",""
+"262706220073222144","namibj","2026-09-08T18:04:34.8220000+00:00","```
+    264 X1 BAT GATE DVDD DVDD pfet_06v0 ad=12.1472p pd=47.24u as=12.1472p ps=47.24u w=46.72u l=2u
+     66 X1 BAT GATE DVDD DVDD pfet_06v0 ad=12.1472p pd=47.24u as=20.5568p ps=94.32u w=46.72u l=2u
+   2376 X1 BAT GATE DVDD DVDD pfet_06v0 ad=12.1485p pd=47.245u as=12.1485p ps=47.245u w=46.725u l=2u
+    594 X1 BAT GATE DVDD DVDD pfet_06v0 ad=12.1485p pd=47.245u as=20.559p ps=94.32999u w=46.725u l=2u
+    264 X1 BAT GATE DVDD DVDD pfet_06v0 ad=16.3137p pd=63.265u as=16.3137p ps=63.265u w=62.745u l=2u
+     66 X1 BAT GATE DVDD DVDD pfet_06v0 ad=16.3137p pd=63.265u as=27.6078p ps=0.12637m w=62.745u l=2u
+    264 X1 BAT GATE DVDD DVDD pfet_06v0 ad=16.8948p pd=65.5u as=16.8948p ps=65.5u w=64.98u l=2u
+     66 X1 BAT GATE DVDD DVDD pfet_06v0 ad=16.8948p pd=65.5u as=28.5912p ps=0.13084m w=64.98u l=2u
+    264 X1 BAT GATE DVDD DVDD pfet_06v0 ad=19.8679p pd=76.935u as=19.8679p ps=76.935u w=76.41499u l=2u
+     66 X1 BAT GATE DVDD DVDD pfet_06v0 ad=19.8679p pd=76.935u as=33.6226p ps=0.15371m w=76.41499u l=2u
+    264 X1 BAT GATE DVDD DVDD pfet_06v0 ad=19.8796p pd=76.98u as=19.8796p ps=76.98u w=76.46u l=2u
+     66 X1 BAT GATE DVDD DVDD pfet_06v0 ad=19.8796p pd=76.98u as=33.6424p ps=0.1538m w=76.46u l=2u
+   1848 X1 BAT GATE DVDD DVDD pfet_06v0 ad=19.8809p pd=76.985u as=19.8809p ps=76.985u w=76.465u l=2u
+    462 X1 BAT GATE DVDD DVDD pfet_06v0 ad=19.8809p pd=76.985u as=33.6446p ps=0.15381m w=76.465u l=2u
+    264 X1 BAT GATE DVDD DVDD pfet_06v0 ad=19.8822p pd=76.99u as=19.8822p ps=76.99u w=76.47u l=2u
+     66 X1 BAT GATE DVDD DVDD pfet_06v0 ad=19.8822p pd=76.99u as=33.6468p ps=0.15382m w=76.47u l=2u
+    264 X1 BAT GATE DVDD DVDD pfet_06v0 ad=19.8952p pd=77.04u as=19.8952p ps=77.04u w=76.52u l=2u
+     66 X1 BAT GATE DVDD DVDD pfet_06v0 ad=19.8952p pd=77.04u as=33.6688p ps=0.15392m w=76.52u l=2u
+    264 X1 DVDD GATE BAT DVDD pfet_06v0 ad=12.1472p pd=47.24u as=12.1472p ps=47.24u w=46.72u l=2u
+   2376 X1 DVDD GATE BAT DVDD pfet_06v0 ad=12.1485p pd=47.245u as=12.1485p ps=47.245u w=46.725u l=2u
+    264 X1 DVDD GATE BAT DVDD pfet_06v0 ad=16.3137p pd=63.265u as=16.3137p ps=63.265u w=62.745u l=2u
+    264 X1 DVDD GATE BAT DVDD pfet_06v0 ad=16.8948p pd=65.5u as=16.8948p ps=65.5u w=64.98u l=2u
+    264 X1 DVDD GATE BAT DVDD pfet_06v0 ad=19.8679p pd=76.935u as=19.8679p ps=76.935u w=76.41499u l=2u
+    264 X1 DVDD GATE BAT DVDD pfet_06v0 ad=19.8796p pd=76.98u as=19.8796p ps=76.98u w=76.46u l=2u
+   1848 X1 DVDD GATE BAT DVDD pfet_06v0 ad=19.8809p pd=76.985u as=19.8809p ps=76.985u w=76.465u l=2u
+    264 X1 DVDD GATE BAT DVDD pfet_06v0 ad=19.8822p pd=76.99u as=19.8822p ps=76.99u w=76.47u l=2u
+    264 X1 DVDD GATE BAT DVDD pfet_06v0 ad=19.8952p pd=77.04u as=19.8952p ps=77.04u w=76.52u l=2u
+     66 X1 DVDD GATE BAT DVDD pfet_06v0 ad=20.5568p pd=94.32u as=12.1472p ps=47.24u w=46.72u l=2u
+    594 X1 DVDD GATE BAT DVDD pfet_06v0 ad=20.559p pd=94.32999u as=12.1485p ps=47.245u w=46.725u l=2u
+     66 X1 DVDD GATE BAT DVDD pfet_06v0 ad=27.6078p pd=0.12637m as=16.3137p ps=63.265u w=62.745u l=2u
+     66 X1 DVDD GATE BAT DVDD pfet_06v0 ad=28.5912p pd=0.13084m as=16.8948p ps=65.5u w=64.98u l=2u
+     66 X1 DVDD GATE BAT DVDD pfet_06v0 ad=33.6226p pd=0.15371m as=19.8679p ps=76.935u w=76.41499u l=2u
+     66 X1 DVDD GATE BAT DVDD pfet_06v0 ad=33.6424p pd=0.1538m as=19.8796p ps=76.98u w=76.46u l=2u
+    462 X1 DVDD GATE BAT DVDD pfet_06v0 ad=33.6446p pd=0.15381m as=19.8809p ps=76.985u w=76.465u l=2u
+     66 X1 DVDD GATE BAT DVDD pfet_06v0 ad=33.6468p pd=0.15382m as=19.8822p ps=76.99u w=76.47u l=2u
+     66 X1 DVDD GATE BAT DVDD pfet_06v0 ad=33.6688p pd=0.15392m as=19.8952p ps=77.04u w=76.52u l=2u
+```","",""
+"262706220073222144","namibj","2026-09-08T18:05:18.6150000+00:00","number of instances of that exact finger is up front, haven't yet scripted that into `m` as I might wanna also deduplicate across the `BAT GATE DVDD` vs. `DVDD GATE BAT`.","",""
+"262706220073222144","namibj","2026-09-08T18:06:43.9160000+00:00","which isn't the most trivial due to `ad`/`pd` and `as`/`ps` being specific to drain and source respectively. Still not hard to bulk edit though.","",""
+"262706220073222144","namibj","2026-09-08T18:07:12.1690000+00:00","`rg -e '^X[0-9]+ ' -r 'X1 ' extracted/power_fet_f.spice | sort | uniq -c`","",""
+"220639106915368960","tholin","2026-09-08T18:34:41.0170000+00:00","I don’t think it likes me","2026-09_media/image-FBC4C.png",""
+"220639106915368960","tholin","2026-09-08T18:55:01.9870000+00:00","But this works","",""
+"220639106915368960","tholin","2026-09-08T18:55:35.0490000+00:00","I get an identical view as this screenshot","",""
+"220639106915368960","tholin","2026-09-08T18:59:07.0700000+00:00","Oh, the power_fet_approx was not updated correctly, it seems?","",""
+"220639106915368960","tholin","2026-09-08T18:59:12.1490000+00:00","I applied the changes manually","",""
+"220639106915368960","tholin","2026-09-08T18:59:15.1370000+00:00","I think its doing something","",""
+"220639106915368960","tholin","2026-09-08T18:59:27.3810000+00:00","I’m pinned at 100% CPU usage","",""
+"220639106915368960","tholin","2026-09-08T19:00:31.4720000+00:00","But those changes also break the simulation","",""
+"220639106915368960","tholin","2026-09-08T19:00:57.4800000+00:00","I’m not sure why you changed m on one of them either","",""
+"220639106915368960","tholin","2026-09-08T19:01:10.2720000+00:00","Those values were based off of what I have in the magic layout","",""
+"220639106915368960","tholin","2026-09-08T19:01:44.0090000+00:00","As you saw, the magic SPICE extraction has thousands of individual pfet devices. I just compressed that into two symbols with a high `m`","",""
+"220639106915368960","tholin","2026-09-08T19:01:59.1300000+00:00","Because of how I broke the transistors up horizontally, those values were all correct","",""
+"220639106915368960","tholin","2026-09-08T19:07:19.1240000+00:00","I can pretend to Xyce that the FETs are smaller by dividing their widths by 10 and multiplying `m` by 10","2026-09_media/image-93ACE.png",""
+"220639106915368960","tholin","2026-09-08T19:07:31.2500000+00:00","Its effectively the same thing","",""
+"220639106915368960","tholin","2026-09-08T19:08:18.0250000+00:00","What is happening there at the end?","2026-09_media/image-474FB.png",""
+"220639106915368960","tholin","2026-09-08T19:09:00.2780000+00:00","Nothing should be happening anymore after charging completes","",""
+"220639106915368960","tholin","2026-09-08T19:09:16.8640000+00:00","CHRGb is a digital output too","",""
+"220639106915368960","tholin","2026-09-08T19:09:24.7450000+00:00","Btw, that point is where ngspice used to crash","",""
+"220639106915368960","tholin","2026-09-08T19:19:58.7800000+00:00","Okay, what happens is that the capacitor starts discharging again, causing x1.x3 to turn off. Now, this is expected and should have no side effects since the charge disable is latched.","",""
+"220639106915368960","tholin","2026-09-08T19:20:43.3350000+00:00","Yeah, nothing should happen as a result of this. No idea why CHRGb dips.","",""
+"220639106915368960","tholin","2026-09-08T19:22:23.7700000+00:00","If the diodes are leaky, this might be happening, actually","2026-09_media/image-619B8.png",""
+"262706220073222144","namibj","2026-09-08T19:23:02.9610000+00:00","yeah trying this with 100m time now instead.... should I perhaps change the `CE` pulse source to have substantially less transients going on and thus allow larger time steps for covering long time spans with no high frequency activity?","2026-09_media/image-301FC.png",""
+"220639106915368960","tholin","2026-09-08T19:24:18.6000000+00:00","CE should go high after a short delay and stay there for the entire simulation, unless you’re specifically testing it","",""
+"220639106915368960","tholin","2026-09-08T19:24:33.7980000+00:00","How are you getting a progress display? I just get xschem freezing until its done.","",""
+"262706220073222144","namibj","2026-09-08T19:26:28.2400000+00:00","IMO better do the extraction style with aggregation of identical fingers into `m`; much clearer overall and actually should be representative of physical reality because it _does_ cover true length (there are endcap effects going on, that's why it even matters what length they are set to for the sim).
+Maybe something something LVS-adjacent can get you such convenient aggregation even across the source/drain ambiguity?","",""
+"262706220073222144","namibj","2026-09-08T19:26:37.4030000+00:00","ahhhh ok I'll do that","",""
+"262706220073222144","namibj","2026-09-08T19:27:15.5420000+00:00","stopped; now gonna change the PULSE to stay on","2026-09_media/image-78A94.png",""
+"220639106915368960","tholin","2026-09-08T19:27:22.3180000+00:00","Okay, diodes are definitely leaking current in the reverse","",""
+"220639106915368960","tholin","2026-09-08T19:27:48.2020000+00:00","Not sure how much or how to reduce it","",""
+"220639106915368960","tholin","2026-09-08T19:28:59.5240000+00:00","Going to put resistors in series with the diodes","",""
+"220639106915368960","tholin","2026-09-08T19:31:39.1690000+00:00","Redesigned the circuit a lil to have resistors in series with the diodes.","",""
+"262706220073222144","namibj","2026-09-08T19:42:00.1580000+00:00","trying 5.1ms long only now it started to get bogged down in time step size briefly after 5.01 ish","",""
+"262706220073222144","namibj","2026-09-08T19:42:24.9140000+00:00","don't have them","",""
+"262706220073222144","namibj","2026-09-08T19:42:57.9020000+00:00","......ehhhh, what diodes, where do they come from/why are they even existing at all?","",""
+"262706220073222144","namibj","2026-09-08T19:43:13.0790000+00:00","call Xyce in terminal","",""
+"262706220073222144","namibj","2026-09-08T19:43:53.2240000+00:00","also what kind of machine setup do you have? I'll whip you up a reasonable match to my `mpirun` config to let it run on more than one core","",""
+"262706220073222144","namibj","2026-09-08T19:44:43.9700000+00:00","```
+(nice nice mpirun -np 2 --map-by package:hwtcpus:pe=15 Xyce -a control_bench.spice   < /dev/null | tee ../Xyce_log_`date -Is | tr : _`.cat) &
+```
+this is what _I_ run","",""
+"220639106915368960","tholin","2026-09-08T19:45:17.2510000+00:00","In current_ref","",""
+"262706220073222144","namibj","2026-09-08T19:47:54.6800000+00:00","","2026-09_media/image-B80F8.png",""
+"262706220073222144","namibj","2026-09-08T19:48:10.4220000+00:00","accidentally didn't have time correctly set tho 🙁","",""
+"262706220073222144","namibj","2026-09-08T19:48:55.1490000+00:00","here ya go tho","2026-09_media/control_bench.raw-30A61.zst",""
+"262706220073222144","namibj","2026-09-08T20:02:29.2430000+00:00","why are they so large?
+have you tried using shotkey ones instead perhaps?","",""
+"220639106915368960","tholin","2026-09-08T20:05:40.4710000+00:00","There is no device generator for shotkey diodes in magic","",""
+"220639106915368960","tholin","2026-09-08T20:05:43.1820000+00:00","So I’d be on my own","",""
+"262706220073222144","namibj","2026-09-08T20:09:03.2610000+00:00","Also, consider using current-sourcing-only (only pfet outputs, skipping the nfet's) for the drives of `current_ref`'s `CURREF`/`CTRL`/`DISABLE`. If you don't pull them low they don't leak (nearly as) much.","",""
+"262706220073222144","namibj","2026-09-08T20:10:22.0190000+00:00","well, not _sure_ about `CURREF` but the others probably don't need to be capable of sinking current given one of them is a comparator and the other literally just a CMOS buffer","",""
+"262706220073222144","namibj","2026-09-08T20:10:32.6270000+00:00","There is in Klayout","",""
+"262706220073222144","namibj","2026-09-08T20:15:40.9600000+00:00","but until junctions stop being acceptable, just use those","",""
+"220639106915368960","tholin","2026-09-08T20:16:06.0210000+00:00","`","",""
+"220639106915368960","tholin","2026-09-08T20:16:15.8820000+00:00","`CTRL` is also intended to be analog","",""
+"220639106915368960","tholin","2026-09-08T20:16:50.0740000+00:00","Its just being driven by a comparator because that is generating less oscillations for some reason","",""
+"262706220073222144","namibj","2026-09-08T20:19:49.0500000+00:00","I'd go for diffusion-to-well diodes (nwell or lvpwell-in-dnwell, whichever is the one that gives the diodes the correct oreintation/polarity) with tiny fingers that are depending on reliability and how much current actually needs to be coped with either one or a small handful (up to like 6 or so I'd go without going for mathing the currents against the limits in the PDK docs for contacts, by feeling, trying to be fewer if vibes allow) of contacts to a single diffusion ""finger"" and multiple such fingers in the same well; with well taps on the outside and between these min-size diffusion fingers.","",""
+"220639106915368960","tholin","2026-09-08T20:22:20.0930000+00:00","They are p diffusion to nwell diodes","",""
+"220639106915368960","tholin","2026-09-08T20:22:40.8180000+00:00","I cannot generate the deep n-well ones because no magic device generators","",""
+"262706220073222144","namibj","2026-09-08T20:23:02.6690000+00:00","yeah just that 😄","",""
+"262706220073222144","namibj","2026-09-08T20:23:45.1530000+00:00","the anode is which one again? p or n?","",""
+"262706220073222144","namibj","2026-09-08T20:25:03.3660000+00:00","right p is anode","",""
+"262706220073222144","namibj","2026-09-08T20:25:19.7090000+00:00","good","",""
+"262706220073222144","namibj","2026-09-08T20:25:29.2160000+00:00","literally then just p diffusion to nwell","",""
+"262706220073222144","namibj","2026-09-08T20:25:38.2300000+00:00","but like, make them share a single nwell","",""
+"262706220073222144","namibj","2026-09-08T20:26:19.7170000+00:00","well, if it matters that is, shouldn't change the leakage out of the anode but will affect the leakage from the cathode to the substrate","",""
+"262706220073222144","namibj","2026-09-08T20:32:34.2520000+00:00","ok I want you to try and reduce the power output control bandwidth _substantially_ by increasing the output impedance from the gate drive towards the large capacitance of the many gate fingers by a factor of 10 and if that still shows substantial oscillation another 10.
+I guess put a long enough poly resistor there","",""
+"262706220073222144","namibj","2026-09-08T20:33:55.6640000+00:00","I think the internals should be sufficciently more bandwidth than the power output in order to let the internals settle nicely prior to the output getting a chance to oscillate.","",""
+"220639106915368960","tholin","2026-09-08T20:37:30.5230000+00:00","The klayout sc diode has 686 DRC violations in magic","2026-09_media/image-8A401.png",""
+"220639106915368960","tholin","2026-09-08T20:37:41.2330000+00:00","I think I just need to figure out how to draw one by hand","",""
+"262706220073222144","namibj","2026-09-08T20:41:04.6890000+00:00","There is a _chance_ that step-recovery and/or the directly related reverse recovery charge of those diodes are largely to blame for some interacting oscillation behavior between the 3 anodes; shottkey diode would not exhibit this; drawing it in magic will be the lesser issue the....","2026-09_media/image-1B26A.png",""
+"262706220073222144","namibj","2026-09-08T20:41:59.3800000+00:00","This is a 3-finger min-size-the-device-generator-in-klayout-accepts schottky; the upper m1 bar joins the anodes and from all I can tell the cathodes are just well taps for the dnwell","",""
