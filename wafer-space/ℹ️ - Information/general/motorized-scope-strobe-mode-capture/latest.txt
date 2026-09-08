@@ -26,6 +26,93 @@ Thankfully I think a simple series resistor (current limiting) drive with a simp
 Also probably annoying to look at with this meager frame rate the only-half-the-lanes setup causes 🙁
 
 
+[2026-09-08 12:33 a.m.] mithro_
+@namibj - I have the random idea of treating the microscope / camera more like a satellite continuously moving over the earth and using a lot of the signal processing those guys use to generate images.
+
+
+[2026-09-08 12:34 a.m.] namibj
+I mean you can do some of that
+
+
+[2026-09-08 12:34 a.m.] namibj
+but there are some issues about noise scaling with signal amplitude of a pixel that discourage shoving the deblurring to software
+
+
+[2026-09-08 12:35 a.m.] namibj
+but like you can move it continuosly
+
+
+[2026-09-08 12:36 a.m.] namibj
+this kind of strobe isn't hard for the tiny spot size of a microscope
+
+
+[2026-09-08 12:36 a.m.] namibj
+(I don't think it exceeds what LEDs can be reasonably convinced to output, even with fairly poor illumination optical economy.)
+
+
+[2026-09-08 12:37 a.m.] namibj
+the ultra mode of strobe light are diode-pumped Q-switched Nd:YAG
+
+
+[2026-09-08 12:38 a.m.] namibj
+they do from 10 to 1000 Hz and 5~50 ns pulse duration at pretty high efficiency
+
+
+[2026-09-08 12:38 a.m.] namibj
+but that's not needed for these lower frame rates 🙂
+
+
+[2026-09-08 12:39 a.m.] mithro_
+There is a bunch of fancy maths that lets you take the continuous stream of the pixel data, the information about the rough velocity, and the relative pixel position to do super resolution / reverse convolution reconstruction of what things must look to produce the pixel data.
+
+
+[2026-09-08 12:39 a.m.] namibj
+Like I'm talking about fitting about 500x more LED die in there as would normally be needed, but with overall less harsh thermal management solution.
+
+
+[2026-09-08 12:40 a.m.] mithro_
+
+
+{Attachments}
+2026-09_media/image-0750C.png
+
+
+[2026-09-08 12:40 a.m.] namibj
+Yeah you can do, it's just that some of the sample noise of the image sensor with a photodiode well that integrates during sampling interval is increased at increased count
+
+
+[2026-09-08 12:40 a.m.] namibj
+which blurs over
+
+
+[2026-09-08 12:41 a.m.] mithro_
+@namibj - Yeah, you are talking about a different thing to what I'm talking about. I'm just rambling 🙂
+
+
+[2026-09-08 12:41 a.m.] namibj
+yeah doesn't need to be 1:1, can do 1:10 easily
+
+
+[2026-09-08 12:41 a.m.] mithro_
+Microscope objectives are expensive 😉
+
+
+[2026-09-08 12:42 a.m.] namibj
+I've done a bunch of research years back in multiframe blind deconvolution
+
+
+[2026-09-08 12:42 a.m.] namibj
+well this doesn't need one to be free of distortion
+
+
+[2026-09-08 12:43 a.m.] namibj
+just flat field and low enough chromatic abberation
+
+
+[2026-09-08 12:43 a.m.] namibj
+if you use 3 pulses of colored LED and a monochrome sensor you don't need the low chromatic abberation but your color repdouction will be wonky
+
+
 ==============================================================
-Exported 2 message(s)
+Exported 23 message(s)
 ==============================================================
