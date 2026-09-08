@@ -1,0 +1,173 @@
+diff --git a/analog/xschem/control_bench.sch b/analog/xschem/control_bench.sch
+index 497ede7..b3b1cc0 100644
+--- a/analog/xschem/control_bench.sch
++++ b/analog/xschem/control_bench.sch
+@@ -16,12 +16,12 @@ subdivx=1
+ 
+ unitx=1
+ dataset=-1
+-y1=-1.5
++y1=-0.3
+ color=4
+ node=i(v2)
+-y2=0
+-x1=0
+-x2=8e-05}
++y2=1.2
++x1=-8e-06
++x2=7.2e-05}
+ B 2 830 -40 1420 420 {flags=graph
+ ypos1=0
+ ypos2=2
+@@ -33,15 +33,15 @@ subdivx=1
+ 
+ unitx=1
+ dataset=-1
+-y1=0
+-y2=5
++y1=4
++y2=9
+ color="12 8 8 4"
+ node="CHRGb
+ DONEB
+ BAT
+ CAP"
+-x1=0
+-x2=8e-05}
++x1=-8e-06
++x2=7.2e-05}
+ B 2 -20 -660 570 -200 {flags=graph
+ ypos1=0
+ ypos2=2
+@@ -55,12 +55,15 @@ unitx=1
+ dataset=-1
+ y1=0
+ y2=5
+-color="6 8 7"
+-node="GATE
+-x1.HALFBAT
++color="6 8 6"
++node="gate
++x1.halfbat
+ x1.refout"
+-x1=0
+-x2=8e-05}
++x1=-3.2927847e-06
++x2=2.053588e-05
++autoload=1
++rawfile=$netlist_dir/control_bench.raw
++sim_type=tran}
+ B 2 -20 -1120 570 -660 {flags=graph
+ ypos1=0
+ ypos2=2
+@@ -76,8 +79,8 @@ y1=-0.02
+ color=4
+ node=i(v1)
+ y2=0
+-x1=0
+-x2=8e-05}
++x1=-8e-06
++x2=7.2e-05}
+ N 190 160 190 180 {lab=GND}
+ N 170 -60 210 -60 {lab=GND}
+ N 190 -80 190 100 {lab=#net1}
+@@ -144,23 +147,52 @@ C {gnd.sym} 500 250 0 0 {name=l4 lab=GND}
+ C {lab_pin.sym} 370 100 2 0 {name=p8 sig_type=std_logic lab=BAT}
+ C {devices/code_shown.sym} -940 -170 0 0 {name=NGSPICE only_toplevel=true
+ value="
+-.control
+-save all
+-tran 1n 100u
+-remzerovec
+-write control_bench.raw
+-.endc
++**Xyce-only:
++.TRAN 1n 100u 0 10n
++.PRINT TRAN FORMAT=raw file=control_bench.raw v(*) i(*)
++.PREPROCESS REPLACEGROUND TRUE
++
++
++**Ngspice-only:
++*.control
++*save all
++*tran 1n 100u
++*remzerovec
++*write control_bench.raw
++*.endc
+ "}
+ C {devices/code_shown.sym} -1260 60 0 0 {name=MODELS only_toplevel=true
+ format="tcleval( @value )"
+ value="
+-.include /run/media/veracrypt1/ws-charge-controller/analog/xschem/extracted/power_fet_f.spice
+-.include $::180MCU_MODELS/design.ngspice
+-.lib $::180MCU_MODELS/sm141064.ngspice typical
+-.lib $::180MCU_MODELS/sm141064.ngspice res_typical
+-.lib $::180MCU_MODELS/sm141064.ngspice diode_typical
+-.lib $::180MCU_MODELS/sm141064.ngspice mimcap_typical
+-.lib $::180MCU_MODELS/sm141064.ngspice cap_mim
++**Ngspice-only:
++*.include /run/media/veracrypt1/ws-charge-controller/analog/xschem/extracted/power_fet_f.spice
++*.include $::180MCU_MODELS/design.ngspice
++*.lib $::180MCU_MODELS/sm141064.ngspice typical
++*.lib $::180MCU_MODELS/sm141064.ngspice res_typical
++*.lib $::180MCU_MODELS/sm141064.ngspice diode_typical
++*.lib $::180MCU_MODELS/sm141064.ngspice mimcap_typical
++*.lib $::180MCU_MODELS/sm141064.ngspice cap_mim
++
++
++
++**.include $::180MCU_MODELS/design.ngspice
++**.lib $::180MCU_MODELS/sm141064.ngspice typical
++**.lib $::180MCU_MODELS/sm141064.ngspice res_typical
++
++**Xyce-only:
++*.include $::PDK_ROOT/gf180mcuD/libs.tech/xyce/design.xyce
++*.lib $::PDK_ROOT/gf180mcuD/libs.tech/xyce/sm141064.xyce typical
++*.lib $::PDK_ROOT/gf180mcuD/libs.tech/xyce/sm141064.xyce res_typical
++
++
++.include $::PDK_ROOT/gf180mcuD/libs.tech/xyce/design.xyce
++.lib $::PDK_ROOT/gf180mcuD/libs.tech/xyce/sm141064.xyce typical
++.lib $::PDK_ROOT/gf180mcuD/libs.tech/xyce/sm141064.xyce res_typical
++.lib $::PDK_ROOT/gf180mcuD/libs.tech/xyce/sm141064.xyce diode_typical
++.lib $::PDK_ROOT/gf180mcuD/libs.tech/xyce/sm141064.xyce mimcap_typical
++.lib $::PDK_ROOT/gf180mcuD/libs.tech/xyce/sm141064.xyce cap_mim
++.include ../extracted/power_fet_f.spice
++*.include ../extracted/power_fet_f_40u_regex_stupid.spice
+ "}
+ C {devices/launcher.sym} -355 265 0 0 {name=h1
+ descr="Click left mouse button here with control key
+@@ -179,7 +211,7 @@ value=1k
+ footprint=1206
+ device=resistor
+ m=1}
+-C {vsource.sym} -120 -140 3 0 {name=V3 value="PULSE(0 5 2u 2n 2n 1000u 2000u 0)" savecurrent=false}
++C {vsource.sym} -120 -140 3 0 {name=V3 value="PULSE(0 5 2u 2n 2n 50u 100u)" savecurrent=false}
+ C {gnd.sym} -80 -140 3 0 {name=l6 lab=GND}
+ C {capa.sym} 500 210 0 0 {name=C1
+ m=1
+diff --git a/analog/xschem/power_fet_approx.sch b/analog/xschem/power_fet_approx.sch
+index 888895d..9776ee1 100644
+--- a/analog/xschem/power_fet_approx.sch
++++ b/analog/xschem/power_fet_approx.sch
+@@ -22,7 +22,7 @@ N 240 -20 250 -20 {lab=DVDD}
+ N 80 40 240 40 {lab=BAT}
+ C {symbols/pfet_06v0.sym} 60 0 0 0 {name=M1
+ L=2u
+-W=467.2u
++W="'467.2u/m'"
+ nf=10
+ m=792
+ ad="'int((nf+1)/2) * W/nf * 0.18u'"
+@@ -39,9 +39,9 @@ C {iopin.sym} 80 50 1 0 {name=p2 lab=BAT}
+ C {ipin.sym} 20 0 0 0 {name=p3 lab=GATE}
+ C {symbols/pfet_06v0.sym} 220 10 0 0 {name=M2
+ L=2u
+-W=764.65u
++W="'764.65u/m'"
+ nf=10
+-m=726
++m=792
+ ad="'int((nf+1)/2) * W/nf * 0.18u'"
+ pd="'2*int((nf+1)/2) * (W/nf + 0.18u)'"
+ as="'int((nf+2)/2) * W/nf * 0.18u'"

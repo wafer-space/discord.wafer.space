@@ -754,6 +754,175 @@ good news: I've got the container running and PDK set to gf180mcuD
 The container? You mean the nix shell?
 
 
+[2026-09-08 12:59 p.m.] namibj
+commit `3abac8518a4b802946efbb499cee2e6e946eb017` in my `tt_gf-0p3_mcml` repo (I'll fetch a link) , folder `xschem`, file `c4_type_8_to_1_tb.sch`, is set up to use Xyce to generat e arawfile.
+
+
+[2026-09-08 1:00 p.m.] namibj
+I'll take that as refereence right after I fetch a link to the commit (or if there's none yet, ensure it's on github and then get that link) and do a corresponding patch to your `control_bench.sch`, if that's ok, @Tholin ?
+
+
+[2026-09-08 1:01 p.m.] namibj
+The Xyce probably isn't (properly) in that 🙁
+
+
+[2026-09-08 1:01 p.m.] namibj
+I have the IIC-OSIC container set up for the IHP Chipalooza related works of the high speed serdes
+
+
+[2026-09-08 1:01 p.m.] tholin
+It isn’t, but I got it installed on my machine through AUR
+
+
+[2026-09-08 1:02 p.m.] namibj
+that we'll port to sky130A and then backport to gf180mcuD
+
+
+[2026-09-08 1:02 p.m.] tholin
+Yep, go ahead
+
+
+[2026-09-08 1:03 p.m.] namibj
+yeah good I have it through arch mechanisms as well I can test with that in your shell once I have xschem doing things that work in the container at least
+
+
+[2026-09-08 1:03 p.m.] namibj
+like, as mentioned, I have it _working right now_ on my project's testbench
+
+
+[2026-09-08 1:03 p.m.] namibj
+
+
+{Attachments}
+2026-09_media/image-E1F55.png
+
+
+[2026-09-08 1:03 p.m.] namibj
+note the ngspice parts being commented-out and the waveforms loaded
+
+
+[2026-09-08 1:03 p.m.] namibj
+I manually deleted the rawfile and reran sim to check btw
+
+
+[2026-09-08 1:04 p.m.] namibj
+(and between those two, manually cleared the waves in xschem)
+
+
+[2026-09-08 1:08 p.m.] namibj
+https://github.com/namibj/tt_gf-0p3_mcml/commit/91583ac881daf6744508e5ba43aca38b421dd477
+
+{Embed}
+https://github.com/namibj/tt_gf-0p3_mcml/commit/91583ac881daf6744508e5ba43aca38b421dd477
+Bypassed clk_buf in the DIV2's latch-loop-closure. Testing imminent...
+2026-09_media/91583ac881daf6744508e5ba43aca38b421dd477-1514F
+
+
+[2026-09-08 1:11 p.m.] namibj
+@Tholin Can you take that, `cd` into the xschem directory or just copy that folder over to your nix shell's influence, open the above mentioned testbench, and then in the xschem menu "simulation"->"configure simulators and tools"->{check "Xyce batch" in "spice", it should read `Xyce "$N"`} ?
+
+
+[2026-09-08 1:23 p.m.] tholin
+Not until I’m home
+
+
+[2026-09-08 1:35 p.m.] namibj
+put this in `analog/xschem/simulation/`, then cd there, then run `Xyce control_bench.spice`.
+
+{Attachments}
+2026-09_media/control_bench-1A650.spice
+
+
+[2026-09-08 1:35 p.m.] namibj
+@Tholin Something is whining about no model card for a pfet_06v0 device
+
+
+[2026-09-08 1:35 p.m.] namibj
+oh ok
+
+
+[2026-09-08 1:47 p.m.] namibj
+I made `XM2` in approx also m=792 instead of it's m=726 as you had; I also set to divide the written `w` through `m`.
+
+
+[2026-09-08 1:51 p.m.] tholin
+m is supposed to be how many parallel transistors there are
+
+
+[2026-09-08 1:51 p.m.] tholin
+Do not divide w by m
+
+
+[2026-09-08 1:52 p.m.] 246tnt
+Wait wait ... `m` is the multiplier.  `n` is the number of finger.
+If you have `m=2` and `W=10u`  then the effective width is `20u`.
+
+
+[2026-09-08 1:53 p.m.] 246tnt
+If you have `n=2` and `W=10u` then it's a single 2 finger transistor and the effective width is `10u` because `W` is the W of all the fingers.
+
+
+[2026-09-08 2:41 p.m.] namibj
+@Tholin here ya go
+
+{Attachments}
+2026-09_media/Xyce-patch-v1-05C8C.patch
+
+
+[2026-09-08 2:42 p.m.] namibj
+
+
+{Attachments}
+2026-09_media/image-56986.png
+
+
+[2026-09-08 2:42 p.m.] namibj
+
+
+{Attachments}
+2026-09_media/power_fet_approx-1E140.png
+
+
+[2026-09-08 2:43 p.m.] namibj
+it did not like an `nf=10 l=2u w=467.2u` `pfet_06v0`.
+
+
+[2026-09-08 2:44 p.m.] namibj
+Also I was primarily requested to enable Xyce for it as Xyce has _substantial_ amounts of tuning knobs and fancy fallbacks to use when convergence issues are encountered in more traditional Spice flows like you'd have with ngspice.
+
+
+[2026-09-08 2:46 p.m.] namibj
+Yeah I know that's what I assumed the spec kinda asked for.... though given the power pass fet case of battery charger and it occupying a good chunk of a half slot I have a feeling it legit meant to be 800um by 500um
+
+
+[2026-09-08 2:46 p.m.] namibj
+(of a gigantic finger array)
+
+
+[2026-09-08 2:47 p.m.] namibj
+I'll have to jump and fetch my preordered bread before they close so be back in a bit, and only on phone in the meantime.
+
+
+[2026-09-08 2:48 p.m.] namibj
+you should be able to just run `git apply` on the repo btw to apply the patch.
+
+
+[2026-09-08 2:48 p.m.] namibj
+well, `git apply Xyce-patch-v1.patch`. Make sure it's on the correct clean git commit!
+
+
+[2026-09-08 2:49 p.m.] namibj
+I admit I slightly changed the setting for the time thingy
+
+
+[2026-09-08 2:50 p.m.] namibj
+err, the pulse's length and period, that got the breakpoints and such more functional for xyce shomehow but that's not necessary other dials can do what this did to unlcok convergence, so that sim with the "correct/desired" time would work.
+
+
+[2026-09-08 2:50 p.m.] namibj
+i'll see sooon
+
+
 ==============================================================
-Exported 142 message(s)
+Exported 179 message(s)
 ==============================================================
