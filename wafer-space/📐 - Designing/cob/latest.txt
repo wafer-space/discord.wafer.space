@@ -389,6 +389,173 @@ Yet another barcode scanner for Android. Contribute to markusfisch/BinaryEye dev
 2026-09_media/BinaryEye-84D0E
 
 
+[2026-09-09 1:39 a.m.] lauri4332
+We're adding JLC's serials to top silk but so far the results have not been reliable. Our designated area for serial number is kind of small and the printed surface is not flat (re traces and vias underneath), making these difficult to read.
+
+I've attached couple of pictures I could quickly find to show what results we've seen recently:
+- sometimes they ignore their own requirement  (re: rectangle area)
+- our PCB design had untented vias making the serial unreadable
+- iirc we even received 2 panels with same serial numbers. 
+
+I think we'll continue to add these serials to the PCBs and if results improve or become more consistent then it would be great to actually use these serials one day 😊
+
+{Attachments}
+2026-09_media/image-BA938.png
+2026-09_media/image-2B2EA.png
+2026-09_media/image-A14F5.png
+2026-09_media/image-3DAB5.png
+
+
+[2026-09-09 1:41 a.m.] namibj
+don't use human readable ones, given the space nature I'd suggest a rectangular datamatrix
+
+
+[2026-09-09 1:41 a.m.] namibj
+do you have an image of the backside of the COB on hand by chance?
+
+
+[2026-09-09 1:42 a.m.] namibj
+....they don't offer rectangular datamatrix codes 🙁
+
+so yeah 5x5mm it is
+
+
+[2026-09-09 1:43 a.m.] namibj
+you shouldn't get repeat numbers unless you order such; they should be at most wasting IDs by panels that get scrapped before they're delivered
+
+
+[2026-09-09 1:43 a.m.] lauri4332
+Not much space here either
+
+{Attachments}
+2026-09_media/image-47AB0.png
+
+
+[2026-09-09 1:43 a.m.] namibj
+oh yeah there's space for a 5x5mm I'd feel?
+
+
+[2026-09-09 1:43 a.m.] namibj
+or not enough again?
+
+
+[2026-09-09 1:44 a.m.] namibj
+ofc needs to be tented then
+
+
+[2026-09-09 1:45 a.m.] namibj
+to depend on it I'd always do the approve production files thing and get them to confirm the code target area was registered as such.
+
+
+[2026-09-09 1:50 a.m.] namibj
+yeah best idea then I guess would be an extra large font size alphanum rectangle with a minimal serial number on one side of the plug (backside) and a panel/board version encoding identifier on the other side of that connector; think like 1 or 2 rows of text in as big of a font as fits between the capacitors and the mezzazine solder pads with just enough gap to each of those two to be not too sensitive to the angle it's photographed from regarding those obscuring the text from the camera's view.
+
+
+[2026-09-09 1:51 a.m.] namibj
+didn't quite realize how limited the space is on these quite minimal size boards.....
+
+
+[2026-09-09 1:52 a.m.] namibj
+also giant benefit of back side is that it's not gonna suffer lensing/refraction distortion from the cover goop spreading over the ID text
+
+
+[2026-09-09 1:54 a.m.] namibj
+if anyone wants a front side ID it could be a sticker on the front side in a corner
+
+
+[2026-09-09 1:54 a.m.] namibj
+(the adhesive of which could be selected in thickness to take care of the underlying height differences that come from the traces/vias)
+
+
+[2026-09-09 1:59 a.m.] namibj
+so yeah best of luck it does seem substantially harder here than I had hoped.
+
+You may consider putting a perhaps DIY-rendered datamatrix code like their ID would be in a place where it could fit to trial scannability of it
+
+
+[2026-09-09 2:00 a.m.] namibj
+(on one strip on the back side)
+
+
+[2026-09-09 2:01 a.m.] anfroholic
+Anything DIY won't index. All the ones JLC do, index even within the panel
+
+
+[2026-09-09 2:03 a.m.] namibj
+one of the corners top side might sacrifice it's ground-plane-ness to use it's copper resolution and superior printing-reliability to manufacture a version ID code, especially if ENIG with solder mask exclusion zone.
+
+
+[2026-09-09 2:04 a.m.] lauri4332
+Having serials or barcodes on bottom side will make it difficult to scan. Factory testing tool has camera that's looking at the globtop. It would be difficult to add a camera on bottom side
+
+{Reactions}
+💯
+
+[2026-09-09 2:04 a.m.] namibj
+I'm aware but you can still trial printing reliability this way to a substantial extend. OFC finer pixel-interacts-with-background-structure effects won't be caught, but you'd retain the use of printing large font alphanumeric serial during it
+
+
+[2026-09-09 2:05 a.m.] namibj
+mirror
+
+
+[2026-09-09 2:05 a.m.] lauri4332
+need to consider the mating height
+
+
+[2026-09-09 2:05 a.m.] namibj
+and I wouldn't suggest if I'd see a place where it could reasonably fit with large enough font to not be itself a substantial yield impact
+
+
+[2026-09-09 2:06 a.m.] namibj
+can't the factory tester use a tall one and/or have the interposer board that's a consumable be laid out to let the COB overhang enugh that the mirror could extend below the interposer board?
+
+
+[2026-09-09 2:08 a.m.] namibj
+(I'm not saying _trivial_ but unless you can get them to do a big fat 2-row 10-column hamming coded binary ID on the front with their serializing uniquness I don't see how you're gonna get much beyond 2 nines of yield from the front side serial ID print....)
+
+
+[2026-09-09 2:09 a.m.] namibj
+the blue board approach _might_ kinda lacking enough samples to really tell
+
+
+[2026-09-09 2:10 a.m.] namibj
+might require plated over vias to be reliably readable print; I'm not sure if that's COB compatible pricing at the COB run quantities to be offered at Run2.
+
+
+[2026-09-09 2:57 a.m.] mithro_
+@namibj / @Lauri / @stuart - I was wondering if NextPCB's rev0 service where everything is supposedly automated / computer controlled rather than human might make the IDs more reliable or something? I don't think we know what the cost difference between them and JLC PCB would be at the moment?
+
+
+[2026-09-09 2:58 a.m.] namibj
+oh AFAIK the questionable step at JLC is at the up front engineering human treatment/review
+
+
+[2026-09-09 2:58 a.m.] namibj
+I would not rule them out unless they tell you they can't promise that/work out a way that allows it to be promised.
+
+
+[2026-09-09 2:59 a.m.] namibj
+there should be pretty much no reason they can't promise to re-make a board they already did just with fresh IDs for e.g. the next customer code on your side and appropriate non-overlapping serials unique on each COB.
+
+
+[2026-09-09 3:00 a.m.] namibj
+the rest of JLC is very much automated
+
+
+[2026-09-09 3:02 a.m.] namibj
+I'd suggest to do a single board (not a full panel) through their process to see how it prints, assuming they have decent pricing for that workload?
+
+
+[2026-09-09 3:07 a.m.] mithro_
+Generally to see how this stuff works you need to do X number of panels - otherwise you don't see the issues we are seeing from JLC PCB...
+
+
+[2026-09-09 3:09 a.m.] namibj
+oh well sure for overall organizational reliability sure; but I mean whether they even manage to get the serials printed in good enough print quality to make that even be useful.
+Good organization doesn't help if the print quality is unreadable 🙁
+
+
 ==============================================================
-Exported 53 message(s)
+Exported 89 message(s)
 ==============================================================

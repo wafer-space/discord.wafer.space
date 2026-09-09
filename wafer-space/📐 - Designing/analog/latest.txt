@@ -1764,6 +1764,38 @@ I’m going to bed, my brain can’t handle more weirdness today
 Charge complete detection is broken, I’ll get to it later.
 
 
+[2026-09-09 12:58 a.m.] namibj
+for the disable action you can then further (if the current limit machinery may stay on during the disable event) put a digital pass gate/transmission gate between the output of this and the gate power driver, and hard-clamp-pull-up the gate to turn it as off as can be.
+
+
+[2026-09-09 1:00 a.m.] namibj
+Look at the gate capacitance of the power FET and see what RC time constant you're getting there with the drive strength to it. Might have to look at what voltage gain you're expecting out of it too as that'll bump the gain bandwidth product up by that gain
+
+
+[2026-09-09 1:00 a.m.] namibj
+or down if you have sub-unity voltage gain as I'd expect it to do under LDO operating conditions!!!
+
+
+[2026-09-09 1:01 a.m.] namibj
+you should be able to set up for the adder to operate in only the say center third of the rail-to-rail range and just simple voltage divider inputs and output-feedback to that very range
+
+
+[2026-09-09 1:03 a.m.] namibj
+you don't need rail to rail output at any place, you only need the final drive to have enough range to cover the desired operating conditions of your power FET; use appropriate resistor-divider-scaled feedback to map it to the control signals inside.
+
+
+[2026-09-09 1:06 a.m.] namibj
+silicon p[i]n diodes have a lil weird behavior due to their reverse recovery charge; though not too unliklely the mere rectifying could have already done it.
+
+
+[2026-09-09 1:07 a.m.] namibj
+remember the feedback to the `COMPOUT` is blocked off as far as DC flow goes when the diode is biased blocking.... and AC impedance is gonna be much different between forward biased and reverse biased conditions.
+
+
+[2026-09-09 1:08 a.m.] namibj
+oh great I'll try to check it out and look at where specifically the oscillation originates from there.
+
+
 ==============================================================
-Exported 354 message(s)
+Exported 362 message(s)
 ==============================================================
