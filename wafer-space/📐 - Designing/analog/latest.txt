@@ -1311,6 +1311,459 @@ There is a _chance_ that step-recovery and/or the directly related reverse recov
 This is a 3-finger min-size-the-device-generator-in-klayout-accepts schottky; the upper m1 bar joins the anodes and from all I can tell the cathodes are just well taps for the dnwell
 
 
+[2026-09-08 8:47 p.m.] namibj
+
+
+{Attachments}
+2026-09_media/sc_diodex241-27C9E.mag
+2026-09_media/sc_diode1-F175B.mag
+
+
+[2026-09-08 9:09 p.m.] namibj
+I think I've hit oscillation behavior; capped it at what's only a couple minutes of simulation time, and re-running now to get  a valid formatted rawfile out for xschem to look at
+
+
+[2026-09-08 9:41 p.m.] tholin
+Magic is NOT enjoying this
+
+{Attachments}
+2026-09_media/image-62C77.png
+
+
+[2026-09-08 9:41 p.m.] tholin
+Weird DRC errors
+
+
+[2026-09-08 9:55 p.m.] tholin
+What? What is this?
+
+{Attachments}
+2026-09_media/image-989F2.png
+
+
+[2026-09-08 9:55 p.m.] tholin
+This seems broken
+
+
+[2026-09-08 9:57 p.m.] tholin
+Yeah, magic... did not parse that one correctly, I think
+
+
+[2026-09-08 10:07 p.m.] tholin
+After all this, it turns out that schottkys are not available as medium voltage devices
+
+
+[2026-09-08 10:07 p.m.] tholin
+3.3V only
+
+
+[2026-09-08 10:09 p.m.] tholin
+I think, ideally, I need a way for this to not use diodes
+
+{Attachments}
+2026-09_media/image-D8E42.png
+
+
+[2026-09-08 10:09 p.m.] tholin
+DISABLE is a digital input. I can find another way to implement it.
+
+
+[2026-09-08 10:09 p.m.] tholin
+But CTRL has to be analog
+
+
+[2026-09-08 10:09 p.m.] tholin
+Essentially, the circuit is supposed to do a `max(CURREF, CTRL)`
+
+
+[2026-09-08 10:09 p.m.] tholin
+CURREF limits current, CTRL limits voltage
+
+
+[2026-09-08 10:11 p.m.] tholin
+On an empty cell, CURREF is going to be the thing limiting the PFETs as the cell is sinking so much power, the voltage regulator would have to turn the PFETs up way too much to raise the voltage. But eventually, the cell fills up, and the current is enough to raise the voltage, and now the voltage regulator has to kick in.
+
+
+[2026-09-08 10:12 p.m.] tholin
+Wait a second
+
+
+[2026-09-08 10:13 p.m.] tholin
+Instead of having a single block of power PFETs like this
+
+{Attachments}
+2026-09_media/image-0D0E3.png
+
+
+[2026-09-08 10:13 p.m.] tholin
+What if I just put two power PFETs in series?
+
+{Attachments}
+2026-09_media/image-554DC.png
+
+
+[2026-09-08 10:13 p.m.] tholin
+One under control of the current limiter and the other under control of the voltage regulator?
+
+
+[2026-09-08 10:14 p.m.] tholin
+Both can limit the flow of electricity. The current that ends up making it all the way through is determined by the lesser of the two.
+
+
+[2026-09-08 10:15 p.m.] tholin
+That would require me to edit my power PFET layout to be set up this way, and each stage would half in size
+
+
+[2026-09-08 10:15 p.m.] tholin
+But I think it’d still be capable of putting through 1A
+
+
+[2026-09-08 10:16 p.m.] tholin
+@namibj Would this work? The only thing I can imagine messing this up is oscillations right at the boundary where the current limiter and voltage regulator fight with each other.
+
+
+[2026-09-08 10:16 p.m.] namibj
+don't
+
+
+[2026-09-08 10:19 p.m.] namibj
+> Schottky_diode layer can exist both in LV or MV area.
+https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_10_14.html
+
+>  Model vs EP Nominal Target
+> sc_diode (W/L/m)
+> 
+> =(0.62u/20u/4)
+> Model
+> 
+> BV (V) I_leak (nA/um^2) Von (V) BV I_leak (V) (nA/um^2) Von (V)
+> Min -10 - 0.22 - - -
+> Typ -17 35 0.32 -17.6 31 0.32
+> Max - 200 0.42 - - -
+
+
+[2026-09-08 10:20 p.m.] namibj
+ok fine
+
+
+[2026-09-08 10:20 p.m.] namibj
+ideally do some sort of softmax action; not sure how that's best implemented in asic here tho
+
+
+[2026-09-08 10:20 p.m.] tholin
+?
+
+
+[2026-09-08 10:21 p.m.] tholin
+Ok, then, magic is refusing to extract them
+
+
+[2026-09-08 10:21 p.m.] namibj
+like should just ideally smoothly blend at the transition instead of overshooting either controller's op-amps to beyond their linear range
+
+
+[2026-09-08 10:21 p.m.] namibj
+@Tim Edwards
+
+
+[2026-09-08 10:22 p.m.] namibj
+Pretty sure the shottky_diode behavior doesn't care about thin vs. thick oxide zone though
+
+
+[2026-09-08 10:22 p.m.] namibj
+doesn't involve poly after all
+
+
+[2026-09-08 10:24 p.m.] namibj
+maybe put large enough capacitors on the anode side of those diodes so they don't get as much opportunity to start ringing between which one of them is winning the control at the moment where the blending action is going on
+
+
+[2026-09-08 10:26 p.m.] namibj
+XR8, XR6, XC1, FILT, TRIG.... what's that for?
+
+{Attachments}
+2026-09_media/control-43BC4.png
+
+
+[2026-09-08 10:27 p.m.] namibj
+end-of-charge?
+
+
+[2026-09-08 10:29 p.m.] tholin
+
+
+{Attachments}
+2026-09_media/image-8EB30.png
+
+
+[2026-09-08 10:30 p.m.] tholin
+Yes
+
+
+[2026-09-08 10:30 p.m.] tholin
+It has a low-pass filter on it so transients from the oscillations don’t trigger it
+
+
+[2026-09-08 10:33 p.m.] namibj
+huh
+
+
+[2026-09-08 10:33 p.m.] tholin
+I mean, the diodes are a hassle in general. They break ngspice, they have some strange reverse leakage and they have a voltage drop because they’re diodes, making it even harder for both the voltage reg or the current limiter to do their jobs.
+
+
+[2026-09-08 10:33 p.m.] namibj
+can you show me `lol.gds`?
+
+
+[2026-09-08 10:33 p.m.] tholin
+
+
+{Attachments}
+2026-09_media/lol-2BB87.mag
+
+
+[2026-09-08 10:33 p.m.] tholin
+Its a mag file
+
+
+[2026-09-08 10:34 p.m.] tholin
+I’m pretty sure I messed it up, though, because it claims A and K are electrically shorted
+
+
+[2026-09-08 10:34 p.m.] namibj
+yeah please mint a gds for me if you can
+
+
+[2026-09-08 10:34 p.m.] namibj
+oh it opened it looks non-terrible at least
+
+
+[2026-09-08 10:35 p.m.] namibj
+ok the shottkey zone should be larger
+
+
+[2026-09-08 10:36 p.m.] namibj
+it should be contained in the dnwell but the shottkey zone should fully cover all the diffusions and contacts other than the guardring
+
+
+[2026-09-08 10:36 p.m.] tholin
+
+
+{Attachments}
+2026-09_media/sc_diode.klay-C8DEB.gds
+
+
+[2026-09-08 10:38 p.m.] tholin
+One thing I don’t understand is how this doesn’t short both anode and cathode to ground? Because, the deep n-well is contacting the n-well, so its also grounded.
+
+
+[2026-09-08 10:38 p.m.] tholin
+I’m not sure what’s going on here
+
+
+[2026-09-08 10:39 p.m.] namibj
+also the diffusions for anode that are not the outer ones because those can't be anode are comp but NOT nplus
+
+
+[2026-09-08 10:39 p.m.] namibj
+there is no pplus other than the guard ring at all
+
+
+[2026-09-08 10:39 p.m.] namibj
+yeah it's a contact on comp without plus diffusion, and that's why it's a shottkey junction that's formed
+
+
+[2026-09-08 10:40 p.m.] tholin
+Oh, I see
+
+
+[2026-09-08 10:40 p.m.] tholin
+I think I know what I need to do to fix this
+
+
+[2026-09-08 10:41 p.m.] namibj
+this looks good
+
+
+[2026-09-08 10:41 p.m.] tholin
+Yeah, but the way magic parses it is messed up
+
+
+[2026-09-08 10:41 p.m.] tholin
+
+
+{Attachments}
+2026-09_media/image-7B370.png
+2026-09_media/image-F1728.png
+
+
+[2026-09-08 10:41 p.m.] namibj
+there's no nwell, only the dnwell. substrate is psub.
+
+
+[2026-09-08 10:42 p.m.] namibj
+yikes, welp
+
+
+[2026-09-08 10:42 p.m.] tholin
+Oh my god. I... swapped nwell and pwell/substrate in my head again, as usual.
+
+
+[2026-09-08 10:42 p.m.] namibj
+I mean drawing a finger that's legal shouldn't be too hard
+
+
+[2026-09-08 10:42 p.m.] tholin
+Yeah, I understand now
+
+
+[2026-09-08 10:42 p.m.] namibj
+the anode in the middle of the two cathodes need to not extend beyond the cathode
+
+
+[2026-09-08 10:42 p.m.] tholin
+I’m not sure how its SUPPOSED to be, is the problem
+
+
+[2026-09-08 10:42 p.m.] namibj
+gaps can be larger than what the klayout example has
+
+
+[2026-09-08 10:43 p.m.] namibj
+can't you draw comp without pplus nplus or gate?
+
+
+[2026-09-08 10:44 p.m.] tholin
+No
+
+
+[2026-09-08 10:45 p.m.] tholin
+According to opening the .mag file in a text editor, this in the box here is "schottkyc". A special contact layer. Maybe that’s it?
+
+{Attachments}
+2026-09_media/image-8CF6D.png
+
+
+[2026-09-08 10:47 p.m.] tholin
+Nope
+
+
+[2026-09-08 10:48 p.m.] namibj
+ok I can't find any structure that has that... huh, weird indeed.
+
+
+[2026-09-08 10:48 p.m.] namibj
+yeah let's wait with the drawing of it in magic for tim to respond
+
+
+[2026-09-08 10:51 p.m.] tholin
+I would still like to see if I can re-design this circuit to not require diodes
+
+
+[2026-09-08 10:52 p.m.] namibj
+
+
+{Attachments}
+2026-09_media/image-61EA4.png
+
+
+[2026-09-08 10:54 p.m.] namibj
+
+
+{Attachments}
+2026-09_media/control_bench.raw-E3088.zst
+
+
+[2026-09-08 10:55 p.m.] namibj
+is that from the discharge resistor on the battery simulating capacitor vs. the lack of sufficcient input hysteresis action on the voltage limit / end-of-charge comparators?
+
+
+[2026-09-08 10:57 p.m.] tholin
+I think that should be the discharge resistor
+
+
+[2026-09-08 10:58 p.m.] namibj
+I mean you can have, ignoring the comparatively trivial matter of dealing with the digital disable function, it such that the current limit providing op-amp does the needed pull-down action to turn the gate as much on as that aspect would like, and then you take a series transistor to limit this drive strength if the voltage limit is reached
+
+
+[2026-09-08 10:59 p.m.] namibj
+all against a static pull-up or something that looks like a depletion-load.... like, I mean, it can be a resistor or a constant current pull-up
+
+
+[2026-09-08 11:04 p.m.] namibj
+Great network fail again 🙁
+
+
+[2026-09-08 11:06 p.m.] namibj
+Welp, mpv still works even if my desk keyboard choked and I can't easily fix that now....
+
+
+[2026-09-08 11:25 p.m.] tholin
+This almost works
+
+{Attachments}
+2026-09_media/image-874CB.png
+
+
+[2026-09-08 11:25 p.m.] tholin
+Its just an analog adder
+
+
+[2026-09-08 11:26 p.m.] tholin
+The hope is that the voltage reg can add additional voltage to the control signal to restrict it further
+
+
+[2026-09-08 11:26 p.m.] tholin
+But in order to do that, I have to replace a comparator in `control` with an opamp
+
+{Attachments}
+2026-09_media/image-DBC03.png
+
+
+[2026-09-08 11:26 p.m.] tholin
+And these are not rail-to-rail
+
+
+[2026-09-08 11:26 p.m.] tholin
+So the less than 1V it outputs breaks the adder.
+
+
+[2026-09-08 11:27 p.m.] tholin
+I just can not escape the diodes
+
+
+[2026-09-08 11:44 p.m.] tholin
+Wait, I just did it
+
+
+[2026-09-08 11:45 p.m.] tholin
+This is working with way more minimal oscillations (the compout oscillations were rail-to-rail before)
+
+{Attachments}
+2026-09_media/image-8B748.png
+
+
+[2026-09-08 11:45 p.m.] tholin
+I... how?
+
+
+[2026-09-08 11:46 p.m.] tholin
+My ~~code~~ schematic works, and I don’t know why
+
+
+[2026-09-08 11:46 p.m.] tholin
+Pushed to my repo
+
+
+[2026-09-08 11:47 p.m.] tholin
+I’m going to bed, my brain can’t handle more weirdness today
+
+
+[2026-09-08 11:52 p.m.] tholin
+Charge complete detection is broken, I’ll get to it later.
+
+
 ==============================================================
-Exported 257 message(s)
+Exported 354 message(s)
 ==============================================================
