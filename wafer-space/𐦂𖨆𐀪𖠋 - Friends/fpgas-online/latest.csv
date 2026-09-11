@@ -15,3 +15,21 @@ https://cad.onshape.com/documents/6f9e5a77e8ba5c1cd288800d/w/471fd4c5d9442ef9f28
 "756011607603019777","anfroholic","2026-09-10T03:52:25.6560000+00:00","I mean, there are other words you can use, but it's unnecessary. 
 If you're designing for something else to fit in/on/around you can apply GD&T stuff that basically outlines some tolerances on the part they may not have. 
 Other stuff like form/fit/function, but again, a lot of this is just embedded into a mechanical drawing if you desire.","",""
+"422557460092551178","storborg","2026-09-11T04:59:48.6870000+00:00","@Tim 'mithro' Ansell are there any online-fpgas with radios attached to them?","",""
+"169786952432746498","mithro_","2026-09-11T05:04:35.3220000+00:00","Not at the moment -- but I separately have set up a bunch of RPi hardware which have SDR systems connected to them -- some which have FPGAs. I think it was/is a Pluto, Kraden SDR, RTL-SDR and soon a xsdr","",""
+"422557460092551178","storborg","2026-09-11T05:05:50.3270000+00:00","Ah, hence the adapter to put the xsdr on a Pi HAT.","",""
+"422557460092551178","storborg","2026-09-11T05:06:42.2380000+00:00","Does your Pluto setup intend for the bitstream to be overwritten or is it just IQ receive via Pluto IIO APIs?","",""
+"169786952432746498","mithro_","2026-09-11T05:09:01.1570000+00:00","I have no idea!","",""
+"169786952432746498","mithro_","2026-09-11T05:09:29.0340000+00:00","I think I broke the pluto while working on trying to get my 433mhz to wifi bridges working","",""
+"422557460092551178","storborg","2026-09-11T05:11:27.5820000+00:00","Ok I will stay tuned!","",""
+"169786952432746498","mithro_","2026-09-11T05:16:06.3250000+00:00","@storborg - I'd most certainly appreciate any help with improving fpgas.online","",""
+"422557460092551178","storborg","2026-09-11T05:41:52.1640000+00:00","I think there is some basic infrastructure stuff that's broken at the moment?
+
+I tried, as advised by the docs (https://github.com/CarlFK/pici/wiki/Getting-Started) to pick an FPGA, e.g. this one:
+https://welland.fpgas.online/fpgas/pi38.html
+
+I built an Arty A7-35T bitstream locally and tried to upload it with the form in the top right. I get a 413 Request Entity Too Large served by nginx, on a 2.1MB .bit file.
+
+So then I tried to connect via ssh using the `ssh -p 23822 pi@welland.fpgas.online` instruction. No dice, doesn't look like anything is listening on that port.
+
+Then I tried clicking the ""Reset"" button, which I presume is supposed to power cycle the PoE port. It did update the websocket messages to indicate the control socket was cycled, but it didn't affect the state of the LEDs in the video feed at all, and ssh login isn't any more successful.","",""

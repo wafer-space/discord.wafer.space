@@ -63,6 +63,57 @@ If you're designing for something else to fit in/on/around you can apply GD&T st
 Other stuff like form/fit/function, but again, a lot of this is just embedded into a mechanical drawing if you desire.
 
 
+[2026-09-11 4:59 a.m.] storborg
+@Tim 'mithro' Ansell are there any online-fpgas with radios attached to them?
+
+
+[2026-09-11 5:04 a.m.] mithro_
+Not at the moment -- but I separately have set up a bunch of RPi hardware which have SDR systems connected to them -- some which have FPGAs. I think it was/is a Pluto, Kraden SDR, RTL-SDR and soon a xsdr
+
+
+[2026-09-11 5:05 a.m.] storborg
+Ah, hence the adapter to put the xsdr on a Pi HAT.
+
+
+[2026-09-11 5:06 a.m.] storborg
+Does your Pluto setup intend for the bitstream to be overwritten or is it just IQ receive via Pluto IIO APIs?
+
+
+[2026-09-11 5:09 a.m.] mithro_
+I have no idea!
+
+
+[2026-09-11 5:09 a.m.] mithro_
+I think I broke the pluto while working on trying to get my 433mhz to wifi bridges working
+
+
+[2026-09-11 5:11 a.m.] storborg
+Ok I will stay tuned!
+
+
+[2026-09-11 5:16 a.m.] mithro_
+@storborg - I'd most certainly appreciate any help with improving fpgas.online
+
+
+[2026-09-11 5:41 a.m.] storborg
+I think there is some basic infrastructure stuff that's broken at the moment?
+
+I tried, as advised by the docs (https://github.com/CarlFK/pici/wiki/Getting-Started) to pick an FPGA, e.g. this one:
+https://welland.fpgas.online/fpgas/pi38.html
+
+I built an Arty A7-35T bitstream locally and tried to upload it with the form in the top right. I get a 413 Request Entity Too Large served by nginx, on a 2.1MB .bit file.
+
+So then I tried to connect via ssh using the `ssh -p 23822 pi@welland.fpgas.online` instruction. No dice, doesn't look like anything is listening on that port.
+
+Then I tried clicking the "Reset" button, which I presume is supposed to power cycle the PoE port. It did update the websocket messages to indicate the control socket was cycled, but it didn't affect the state of the LEDs in the video feed at all, and ssh login isn't any more successful.
+
+{Embed}
+https://github.com/CarlFK/pici/wiki/Getting-Started
+Getting Started
+Contribute to CarlFK/pici development by creating an account on GitHub.
+2026-09_media/0084b929-8b65-464b-b79a-9e5266256fcb-CE1FE
+
+
 ==============================================================
-Exported 10 message(s)
+Exported 19 message(s)
 ==============================================================
