@@ -130,7 +130,7 @@ digital disable if the thing needs to be off entirely right now (i.e. charge com
 "220639106915368960","tholin","2026-09-05T15:12:31.0050000+00:00","What else am I supposed to do?","",""
 "220639106915368960","tholin","2026-09-05T15:35:47.6430000+00:00","The docs reference another two types of diodes in the PDK, but magic doesn’t have device generators for those, so I’d be on my own.","2026-09_media/image-F6700.png",""
 "220639106915368960","tholin","2026-09-05T15:44:53.4640000+00:00","I can’t think of a way to re-design this circuit to not use diodes","",""
-"220639106915368960","tholin","2026-09-05T16:02:06.8880000+00:00","Anyways. Current approach works. There is still a little bit of oscillation, but its not as bad as it looks. I’d like to get rid of it, but.... yeah, simulation crashes make debugging this hard right now.","2026-09_media/image-A92A3.png,2026-09_media/image-28A06.png",""
+"220639106915368960","tholin","2026-09-05T16:02:06.8880000+00:00","Anyways. Current approach works. There is still a little bit of oscillation, but its not as bad as it looks. I’d like to get rid of it, but.... yeah, simulation crashes make debugging this hard right now.","2026-09_media/image-A92A3.png,2026-09_media/image-28A06.png","❤️ (1)"
 "220639106915368960","tholin","2026-09-05T16:02:14.7180000+00:00","Last thing to do is to detect when charging is *actually* done","",""
 "220639106915368960","tholin","2026-09-05T16:03:57.7160000+00:00","For which I might actually be able to use a shunt. I just need to detect that the current through the PFETs is nearing zero.","",""
 "262706220073222144","namibj","2026-09-05T16:17:24.6450000+00:00","....what inputs are you feeding them?","",""
@@ -182,7 +182,7 @@ I'm going to have to apologize I won't get into the headspace for making this po
 "220639106915368960","tholin","2026-09-05T22:33:31.0000000+00:00","Not much I can do about that. Would love to get rid of it, but the simulation crashes when I try.","",""
 "220639106915368960","tholin","2026-09-05T22:35:08.2860000+00:00","Here we are: https://github.com/AvalonSemiconductors/ws-charge-controller","","❤️ (2)"
 "220639106915368960","tholin","2026-09-05T22:35:23.1590000+00:00","All the action is happening in analog/ right now","",""
-"169786952432746498","mithro_","2026-09-07T09:11:11.7160000+00:00","@namibj - The Julia people had some type of alternative engine for spice solving that they open sourced at some point.","",""
+"169786952432746498","mithro_","2026-09-07T09:11:11.7160000+00:00","@namibj - The Julia people had some type of alternative engine for spice solving that they open sourced at some point.","","💯 (1)"
 "262706220073222144","namibj","2026-09-07T09:42:36.0980000+00:00","Yeah I've seen","",""
 "220639106915368960","tholin","2026-09-07T21:47:57.6610000+00:00","Any luck yet with getting my control circuit to simulate in Xyce?","",""
 "220639106915368960","tholin","2026-09-07T21:48:10.5640000+00:00","Its still crashes in ngspice, making it impossible for me to try and get rid of the oscillation.","",""
@@ -471,3 +471,7 @@ https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manua
 "320548674184675328","dubicube","2026-09-14T06:25:01.0910000+00:00","Hello there
 I am just discovering this amazing community, and I am maybe asking too much, but is there any list somewhere of analog blocks that could be ready to use on the target technology ? (like, POR, bandgap, regulator, oscillator, ADC, DAC... if such cell exists...)
 The PDK documentation mentions 10V high voltage MOS: is it available with the chosen options for the runs proposed by wafer.space ? Thx","",""
+"1401841055975870476","scafir","2026-09-14T08:16:14.5920000+00:00","Hey, here is the repo: https://github.com/Scafir/liplib
+It needs some more work. Right now it only contains Gf180 pads, as the IHP ones I did where cobbled together just before tapeout, but you can find them in this design if you are interested: https://github.com/Scafir/TO_Sep2025
+Characterization for IHP will not be soon, but I should have some data for the GF180 ones by the end of the year","","👌 (1)"
+"211112896833257472","archit3ch","2026-09-14T08:24:42.6030000+00:00","I would recommend driving the Julia DiffEq solvers directly instead of those options. We need to port the usual SPICE models to ModelingToolkit.jl, but they are procedural C code instead of equation-based.","",""
