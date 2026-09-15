@@ -52,3 +52,12 @@ Then I tried clicking the ""Reset"" button, which I presume is supposed to power
 "422557460092551178","storborg","2026-09-15T03:10:41.6970000+00:00","ssh to the individual pis doesn't seem to be listening, or maybe the ports are wrong. Uploading a bitstream directly with the web form sometimes throws a 500 and sometimes succeeds, but never seems to actually do anything.","",""
 "169786952432746498","mithro_","2026-09-15T09:12:36.9630000+00:00","Got a test bitstream?","",""
 "169786952432746498","mithro_","2026-09-15T09:13:26.4490000+00:00","I haven't fixed the direct ssh connection yet -- does the webssh terminal work for you?","",""
+"422557460092551178","storborg","2026-09-15T19:48:53.9340000+00:00","Here's an Arty 35 bitstream that should make the LEDs do something noticeable and distinct on the video stream","2026-09_media/blinky-F6024.bit",""
+"422557460092551178","storborg","2026-09-15T19:54:35.4930000+00:00","The webssh terminal sort of works, although it seems to sometimes not load. I guess I can curl from somewhere else via webssh.","",""
+"422557460092551178","storborg","2026-09-15T19:55:06.7010000+00:00","If I do that and flash the board manually via openFPGALoader, it completes successfully, but I don't see anything on the video feed.","",""
+"422557460092551178","storborg","2026-09-15T19:57:05.8960000+00:00","I tried on a different board (https://welland.fpgas.online/fpgas/pi37.html) and it seems to be working, although the view of the LEDs is really blurry.","",""
+"422557460092551178","storborg","2026-09-15T19:58:15.1900000+00:00","It would be kind of cool if the Pi could just read LED or Pmod state directly and show it on the web interface. I presume there is some wiring between the Pmods on the boards and the Pis that I could use to do that.","",""
+"422557460092551178","storborg","2026-09-15T19:59:50.3440000+00:00","I assume the reason this is more reliable on ps1 and less reliable on welland is that ps1 doesn't use the per-port VLAN configuration?","",""
+"422557460092551178","storborg","2026-09-15T20:08:19.4690000+00:00","Honestly, I kinda feel like you could forego the camera feed entirely and just show a bunch of outputs of different types that could be driven directly from the FPGA.
+
+I could imagine the 'thumbnail' of the board instance showing whether or not it's running a bitstream / has a user interacting with the pi, the filename of the bitstream that's running, and a country flag to indicate the remote user that loaded the bitstream.","",""
