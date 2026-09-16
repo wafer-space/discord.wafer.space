@@ -250,3 +250,23 @@ Ran into a problem with some of the newly assembled adapter boards. Pin 1 on the
 
 My current workaround for this is to insert a tiny piece of foam inside the connector, pushing the pin into contact.","",""
 "908721221682733106","lauri4332","2026-09-16T13:18:39.1350000+00:00","The 3 missing bonds.... and some bubbles","2026-09_media/7dded97e4843018eef28ca6cbf2918bf-A952A.png,2026-09_media/550adaba499ad2c33b7a4633c7ed69a1-25572.png,2026-09_media/24a6a09c9fccb1f141472a4ae8f6c3bf-5C097.png",""
+"262706220073222144","namibj","2026-09-16T20:58:34.4530000+00:00","Can you share a picture of how the testing bench looks with the light setup/situation at hand?","",""
+"262706220073222144","namibj","2026-09-16T21:33:35.1970000+00:00","Oh thanks for reminding of that (again); we definitely should see to get a decent variety of photodiodes as test structures onto Run3.
+
+I'll see if I can find some COTS lasers that are more suited to fiber coupling than this <https://ams-osram.com/products/lasers/ir-lasers-vcsel/osram-bidos-e1005-l-plpvyl1-940a-e> (the cuboid is 500x500x1000 μm; the triangle of green circles are the three VCSEL diodes; this part is notable for being low cost and vaguely-decently couple-able into a cheap multimode fiber. ""Should"" just need a coupling lens on the end of the multimode fiber; it's `(1/e²)` beam divergence is given at 18° typ 25° max and reading the intensity plot in the datasheet the full width half maximum is about 8.5°), so I could try to approximately target having an on-die photodiode good for fiber data communications with a suitable low cost VCSEL diode transmitter. Notably vague ideas of brightness and less vague ideas of beam size and spectrum matter.","2026-09_media/PLPVYL1-940A-E-picture-85DD9.png",""
+"262706220073222144","namibj","2026-09-16T22:05:36.3330000+00:00","In case you weren't quite aware how photovoltaic mode works/acts: the PN diode when subjected to individual photons in it's absorption spectrum (AFAIK mostly this means ""of energy exceeding the band gap but not far excessively so""; for silicon we're talking UV (A, probably B, maybe even C and somewhat exceeding that) to about 1000 nm. IIRC Nd:YAG's 1064nm is just a little too far.):
+There is an inversion zone where charge carriers aren't nearly as free as in the notably doped p and n zones.
+A photon hitting there knocks an electron out and spawns an electron/hole pair. Due to this very inversion zone those two charges drift off to the p and n zones, respectively. Electrons drift to the N side. 
+
+This pair creation itself is essentially proportional to the incoming photons and mostly just cares about how likely it is for the photon to hit in this reception zone. One photon only creates one pair. 
+
+If left open-circuit, these electrons on the N doped side accumulate until they discharge the very same way they would under regular forward bias conditions.
+This is why solar cells have more output voltage in winter (diode forward voltage temp co) and why the external current at a fixed forward bias voltage drops when you apply more light: you're substituting the current with photocurrent.
+
+If you want to see current go up as light goes bright, you'll have to reverse-bias the PN junction.
+Note: the photocurrent from the light still flows the same direction through the ""simplified small signal silicon PN diode model"", but due to the forced inverted bias the bias current is now flipped in sign at the internal diode and thus the external view seems to be one of ""current go up as light goes bright"".
+For response speed you btw. want to stay in reverse bias due to the inversion layer between the P and N widening and this reducing the capacitance (simple plate capacitor approximation).
+
+Ideally you'd have been able to measure current flow proportional to brightness (as far as thermal conditions can be approximated as constant) _with the diode shorted into the current meter, i.e. 0V applied._
+
+Could you just for clarity tell me what you meant exactly with the ""measure with a multimeter at a fixed 1mA current""? Measure what? Current from where?","",""

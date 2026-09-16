@@ -16,7 +16,7 @@
     "after": "2026-08-31T23:59:59.999+00:00",
     "before": "2026-10-01T00:00:00+00:00"
   },
-  "exportedAt": "2026-09-16T18:19:56.5532819+00:00",
+  "exportedAt": "2026-09-16T22:10:03.7474857+00:00",
   "messages": [
     {
       "id": "1544709660081127570",
@@ -5267,7 +5267,137 @@
       "reactions": [],
       "mentions": [],
       "inlineEmojis": []
+    },
+    {
+      "id": "1549887243878137947",
+      "type": "Reply",
+      "timestamp": "2026-09-16T20:58:34.453+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Can you share a picture of how the testing bench looks with the light setup/situation at hand?",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "908721221682733106",
+          "name": "lauri4332",
+          "discriminator": "0000",
+          "nickname": "Lauri",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-09_media/5-E9BDB.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1547547585269731438",
+        "channelId": "1408134567491145728",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1549896055036977192",
+      "type": "Reply",
+      "timestamp": "2026-09-16T21:33:35.197+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Oh thanks for reminding of that (again); we definitely should see to get a decent variety of photodiodes as test structures onto Run3.\n\nI'll see if I can find some COTS lasers that are more suited to fiber coupling than this <https://ams-osram.com/products/lasers/ir-lasers-vcsel/osram-bidos-e1005-l-plpvyl1-940a-e> (the cuboid is 500x500x1000 μm; the triangle of green circles are the three VCSEL diodes; this part is notable for being low cost and vaguely-decently couple-able into a cheap multimode fiber. \"Should\" just need a coupling lens on the end of the multimode fiber; it's `(1/e²)` beam divergence is given at 18° typ 25° max and reading the intensity plot in the datasheet the full width half maximum is about 8.5°), so I could try to approximately target having an on-die photodiode good for fiber data communications with a suitable low cost VCSEL diode transmitter. Notably vague ideas of brightness and less vague ideas of beam size and spectrum matter.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [
+        {
+          "id": "1549896054655426610",
+          "url": "2026-09_media/PLPVYL1-940A-E-picture-85DD9.png",
+          "fileName": "PLPVYL1-940A-E-picture.png",
+          "fileSizeBytes": 218802
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "169786952432746498",
+          "name": "mithro_",
+          "discriminator": "0000",
+          "nickname": "Tim 'mithro' Ansell",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-09_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1547835697153712211",
+        "channelId": "1408134567491145728",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1549904112865386559",
+      "type": "Reply",
+      "timestamp": "2026-09-16T22:05:36.333+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "In case you weren't quite aware how photovoltaic mode works/acts: the PN diode when subjected to individual photons in it's absorption spectrum (AFAIK mostly this means \"of energy exceeding the band gap but not far excessively so\"; for silicon we're talking UV (A, probably B, maybe even C and somewhat exceeding that) to about 1000 nm. IIRC Nd:YAG's 1064nm is just a little too far.):\nThere is an inversion zone where charge carriers aren't nearly as free as in the notably doped p and n zones.\nA photon hitting there knocks an electron out and spawns an electron/hole pair. Due to this very inversion zone those two charges drift off to the p and n zones, respectively. Electrons drift to the N side. \n\nThis pair creation itself is essentially proportional to the incoming photons and mostly just cares about how likely it is for the photon to hit in this reception zone. One photon only creates one pair. \n\nIf left open-circuit, these electrons on the N doped side accumulate until they discharge the very same way they would under regular forward bias conditions.\nThis is why solar cells have more output voltage in winter (diode forward voltage temp co) and why the external current at a fixed forward bias voltage drops when you apply more light: you're substituting the current with photocurrent.\n\nIf you want to see current go up as light goes bright, you'll have to reverse-bias the PN junction.\nNote: the photocurrent from the light still flows the same direction through the \"simplified small signal silicon PN diode model\", but due to the forced inverted bias the bias current is now flipped in sign at the internal diode and thus the external view seems to be one of \"current go up as light goes bright\".\nFor response speed you btw. want to stay in reverse bias due to the inversion layer between the P and N widening and this reducing the capacitance (simple plate capacitor approximation).\n\nIdeally you'd have been able to measure current flow proportional to brightness (as far as thermal conditions can be approximated as constant) _with the diode shorted into the current meter, i.e. 0V applied._\n\nCould you just for clarity tell me what you meant exactly with the \"measure with a multimeter at a fixed 1mA current\"? Measure what? Current from where?",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "596068704471482370",
+          "name": "246tnt",
+          "discriminator": "0000",
+          "nickname": "tnt",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-09_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1547591557664739459",
+        "channelId": "1408134567491145728",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
     }
   ],
-  "messageCount": 118
+  "messageCount": 121
 }
