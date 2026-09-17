@@ -127,6 +127,62 @@ I’m a software engineer in the SF Bay Area
 I was working on that a bit before I left Google
 
 
+[2026-09-17 5:35 a.m.] glaxus_
+Ah I was under the impression it would just work out of the box, do you know what’s missing right now?
+
+
+[2026-09-17 5:38 a.m.] mithro_
+I think it didn't have full characterization of standard cells -- but they might have fixed that since I left.
+
+
+[2026-09-17 5:41 a.m.] glaxus_
+Oh I see, is there a way to check which PDKs have full support? I noticed a few in the tutorials but didn’t see a list anywhere
+
+
+[2026-09-17 5:45 a.m.] mithro_
+@glaxus - Afraid I don't know, I've been out of the loop for too long there.
+
+{Reactions}
+👍
+
+[2026-09-17 6:57 a.m.] proppysh
+It works but you don't get accurate schedule information, because we don't have a delay model for gf180
+
+
+[2026-09-17 6:57 a.m.] proppysh
+There is a script to characterize one though
+
+
+[2026-09-17 6:58 a.m.] proppysh
+https://github.com/google/xls/blob/main/xls/estimators/run_op_characterization.py
+
+{Embed}
+https://github.com/google/xls/blob/main/xls/estimators/run_op_characterization.py
+xls/xls/estimators/run_op_characterization.py at main · google/xls
+XLS: Accelerated HW Synthesis. Contribute to google/xls development by creating an account on GitHub.
+2026-09_media/xls-40EEC
+
+
+[2026-09-17 6:58 a.m.] proppysh
+It run a bunch of yosys/openroad jobs to measure the area and delay of each IR op
+
+
+[2026-09-17 6:59 a.m.] glaxus_
+How well does this work compared to the officially supported PDKs?
+
+
+[2026-09-17 7:28 a.m.] proppysh
+Not sure I don't think anybody tried to generate one for gf180
+
+
+[2026-09-17 7:29 a.m.] proppysh
+but the designs I did with XLS, I did with the unit model, because timing wasn't critical for this design
+
+
+[2026-09-17 7:30 a.m.] proppysh
+The delay model matters to improve how the scheduler balance the logic across the pipeline stages
+
+
 ==============================================================
-Exported 20 message(s)
+Exported 32 message(s)
 ==============================================================

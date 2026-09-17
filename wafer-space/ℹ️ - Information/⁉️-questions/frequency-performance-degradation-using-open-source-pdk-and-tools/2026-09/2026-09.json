@@ -1,0 +1,224 @@
+{
+  "guild": {
+    "id": "1361349522684510449",
+    "name": "wafer.space Community",
+    "iconUrl": "2026-09_media/fb143eaa45770cbb40493d09b625e98b-09FD1.png"
+  },
+  "channel": {
+    "id": "1550038804063191160",
+    "type": "GuildPublicThread",
+    "categoryId": "1409660288822673408",
+    "category": "⁉️-questions",
+    "name": "Frequency performance degradation using open-source PDK and tools",
+    "topic": null
+  },
+  "dateRange": {
+    "after": "2026-08-31T23:59:59.999+00:00",
+    "before": "2026-10-01T00:00:00+00:00"
+  },
+  "exportedAt": "2026-09-17T08:01:54.1453796+00:00",
+  "messages": [
+    {
+      "id": "1550038804063191160",
+      "type": "Default",
+      "timestamp": "2026-09-17T07:00:49.217+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hello all,\nI am an RTL designer with some knowledge on RTL GDSII flow. I am createding a chip with GP180 using LibreLane  flow. Chip seems ready for manufacturing because LibreLane flow ended without errors. However, an ASIC created using this RTL is already in production, but it was created by an external company using my RTL with proprietary PDK and commercial EDA tools. I successfully run my proven in use test cases  on the netlist with SDF coming from my open source flow, so I double-checked the outcome of the open source flow is correct. What concerned me s lot Is the speed degradation. Commercial ASIC is running at 75 MHz, my open source version is instead only 10 MHz capable at High temperature. So 7.5x degradation. I could expect something less performant  but not likes this. I have seen part of the gap is due to primitives, open-source libraries is offering less primitives and the ones equivalent are up to 2x slower, but where is coming from the other part of the gap? Can be explained by less optimized tools? Do you have any similar experience where you can compare the same device realized with proprietary ASIC flow and open source flow? Thanks for any hint.",
+      "author": {
+        "id": "1550031311388020736",
+        "name": "sim6572",
+        "discriminator": "0000",
+        "nickname": "Simo6572",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/79ee349b6511e2000af8a32fb8a6974e-7A6C5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1550040727931723847",
+      "type": "Default",
+      "timestamp": "2026-09-17T07:08:27.903+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi @Simo6572,\n\nWas your previous chip created using the same GF180MCU process and a proprietary PDK, or did you use a different process?\n\nNote that the foundry-provided standard cell library in the open-source PDK uses the high-voltage transistors, which are slow. Tholin made a community-created standard cell library using the low-voltage transistors, which is much faster running at 3.3V. However, it hasn't been tested yet (the wafers are coming out of the fab this week).",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-09_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1550031311388020736",
+          "name": "sim6572",
+          "discriminator": "0000",
+          "nickname": "Simo6572",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-09_media/79ee349b6511e2000af8a32fb8a6974e-7A6C5.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1550044944297758791",
+      "type": "Default",
+      "timestamp": "2026-09-17T07:25:13.163+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Simo6572 - I'm guessing you are likely using something like GF180IC or GF180BCDLite with something like 1v8 standard cells in the proprietary case while using 5v standard cells and the much cheaper GF180MCU in the open source case.",
+      "author": {
+        "id": "169786952432746498",
+        "name": "mithro_",
+        "discriminator": "0000",
+        "nickname": "Tim 'mithro' Ansell",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1550031311388020736",
+          "name": "sim6572",
+          "discriminator": "0000",
+          "nickname": "Simo6572",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-09_media/79ee349b6511e2000af8a32fb8a6974e-7A6C5.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1550045450999046215",
+      "type": "Default",
+      "timestamp": "2026-09-17T07:27:13.97+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Simo6572 - You should also confirm what type of area / performance you have set things up at.",
+      "author": {
+        "id": "169786952432746498",
+        "name": "mithro_",
+        "discriminator": "0000",
+        "nickname": "Tim 'mithro' Ansell",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1550031311388020736",
+          "name": "sim6572",
+          "discriminator": "0000",
+          "nickname": "Simo6572",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-09_media/79ee349b6511e2000af8a32fb8a6974e-7A6C5.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1550047113218490448",
+      "type": "Default",
+      "timestamp": "2026-09-17T07:33:50.274+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Simo6572 - There is some information about the various 180nm process technologies that GF has and where GF180MCU fits in regard to that @ https://wafer.space/gf180",
+      "author": {
+        "id": "169786952432746498",
+        "name": "mithro_",
+        "discriminator": "0000",
+        "nickname": "Tim 'mithro' Ansell",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1550031311388020736",
+          "name": "sim6572",
+          "discriminator": "0000",
+          "nickname": "Simo6572",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-09_media/79ee349b6511e2000af8a32fb8a6974e-7A6C5.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1550047194998902795",
+      "type": "Default",
+      "timestamp": "2026-09-17T07:34:09.772+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "You could also easily give it a go on SKY130 and see how that compares.",
+      "author": {
+        "id": "169786952432746498",
+        "name": "mithro_",
+        "discriminator": "0000",
+        "nickname": "Tim 'mithro' Ansell",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    }
+  ],
+  "messageCount": 6
+}

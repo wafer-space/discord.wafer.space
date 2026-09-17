@@ -1,0 +1,39 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / ⁉️-questions / Frequency performance degradation using open-source PDK and tools
+After: 2026-08-31 11:59 p.m.
+Before: 2026-10-01 12:00 a.m.
+==============================================================
+
+[2026-09-17 7:00 a.m.] sim6572
+Hello all,
+I am an RTL designer with some knowledge on RTL GDSII flow. I am createding a chip with GP180 using LibreLane  flow. Chip seems ready for manufacturing because LibreLane flow ended without errors. However, an ASIC created using this RTL is already in production, but it was created by an external company using my RTL with proprietary PDK and commercial EDA tools. I successfully run my proven in use test cases  on the netlist with SDF coming from my open source flow, so I double-checked the outcome of the open source flow is correct. What concerned me s lot Is the speed degradation. Commercial ASIC is running at 75 MHz, my open source version is instead only 10 MHz capable at High temperature. So 7.5x degradation. I could expect something less performant  but not likes this. I have seen part of the gap is due to primitives, open-source libraries is offering less primitives and the ones equivalent are up to 2x slower, but where is coming from the other part of the gap? Can be explained by less optimized tools? Do you have any similar experience where you can compare the same device realized with proprietary ASIC flow and open source flow? Thanks for any hint.
+
+
+[2026-09-17 7:08 a.m.] mole99
+Hi @Simo6572,
+
+Was your previous chip created using the same GF180MCU process and a proprietary PDK, or did you use a different process?
+
+Note that the foundry-provided standard cell library in the open-source PDK uses the high-voltage transistors, which are slow. Tholin made a community-created standard cell library using the low-voltage transistors, which is much faster running at 3.3V. However, it hasn't been tested yet (the wafers are coming out of the fab this week).
+
+
+[2026-09-17 7:25 a.m.] mithro_
+@Simo6572 - I'm guessing you are likely using something like GF180IC or GF180BCDLite with something like 1v8 standard cells in the proprietary case while using 5v standard cells and the much cheaper GF180MCU in the open source case.
+
+
+[2026-09-17 7:27 a.m.] mithro_
+@Simo6572 - You should also confirm what type of area / performance you have set things up at.
+
+
+[2026-09-17 7:33 a.m.] mithro_
+@Simo6572 - There is some information about the various 180nm process technologies that GF has and where GF180MCU fits in regard to that @ https://wafer.space/gf180
+
+
+[2026-09-17 7:34 a.m.] mithro_
+You could also easily give it a go on SKY130 and see how that compares.
+
+
+==============================================================
+Exported 6 message(s)
+==============================================================
