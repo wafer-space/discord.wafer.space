@@ -34,6 +34,90 @@ Note that the foundry-provided standard cell library in the open-source PDK uses
 You could also easily give it a go on SKY130 and see how that compares.
 
 
+[2026-09-17 8:03 a.m.] mithro_
+It is also probably worth inspecting the output from Yosys of your RTL to see if it is doing something silly with your design.
+
+
+[2026-09-17 8:07 a.m.] namibj
+also you need to tell librelane what you need in terms of performance and it'll try to get there. If you ask for 10 MHz it's not gonna try to pass timing in the slow corner at 75.
+
+
+[2026-09-17 8:07 a.m.] sim6572
+Chip in production is using different process ( anyway is 180nm process) with 3.3v IO and 1.8v Digital core. First GF180MCU flow completed was all 5V. I have just seen right now I can have 3.3v IO and 1.8V     with GF180MCU so I am going to update and re run my flow to compare apples with apples 🙂 Moreover, switching to 1.8v core I found additional  RAM sizes available that are fitting much better my needs
+
+
+[2026-09-17 8:10 a.m.] 246tnt
+GF180mcu doesn't have any 1.8V device.
+
+
+[2026-09-17 8:11 a.m.] 246tnt
+You can run the standard cells at 1.8V but if you concern is speed, you won't like the resul.t
+
+{Reactions}
+ferristhumbsup
+
+[2026-09-17 8:17 a.m.] sim6572
+So the lib files I can see in the PDK are only about 3.3V standard cells supplied using 1.8V? In this case of course no sense doing that to improve speed and I will select 3.3V for both IO and Core
+
+
+[2026-09-17 8:23 a.m.] 246tnt
+They are about 5.0V standard cells supplied using 1.8V.
+
+
+[2026-09-17 8:25 a.m.] namibj
+there are 3v3 SCL but not from global foundries
+
+
+[2026-09-17 8:25 a.m.] namibj
+(on gf180mcuD, and as far as you don't have to sign an NDA to get them)
+
+
+[2026-09-17 8:25 a.m.] sim6572
+Yes sure, I just relaxed step by step the constrains until I found a value not generating violations in the flow. Later on I will increase again step by step, but when I am sure nothing can be improved in the flow increasing frequency target means RTL changes, adding pipelines and so on
+
+
+[2026-09-17 8:26 a.m.] namibj
+ok just checking
+
+
+[2026-09-17 8:26 a.m.] sim6572
+Thanks very useful info
+
+
+[2026-09-17 9:45 a.m.] sim6572
+Assumption is almost correct. Commercial version is 1.8v core and 3.3v IO but a different 180nm proprietary process  while open source version I prepared was 5v. I am preparing now a 3.3v version using gf180mcuD.  Area of commercial version is about 4 mm2 while the first open source version was about 12 mm2 ( but part of the gap was surely due to the size of the ram module available in 5v rams, because to have the needed 1024x10 I used 4 modules). Anyway area is not the major concern until chip can stay in the largest die available for the shuttle. Moreover, 3.3 library provider different macro size for RAM that are better fitting my needs. Frequency is a different story, 10MHz is not enough, may be I can accept same relaxation and not exactly 75MHz, but I must be close to that or this open source chip will be never built because useless
+
+
+[2026-09-17 9:50 a.m.] mithro_
+If your design is open source, then other people can probably also look into it.
+
+
+[2026-09-17 9:58 a.m.] sim6572
+My RTL is not open-source at all 😅  as well as there are a lot of info I cannot share here about process and companies involved in the commercial version. At the moment this is an investigation to understand the feasibility to build in-house the first prototype of future ASICs as prove of concept ( that is currently done with FPGA based boards)
+
+
+[2026-09-17 10:40 a.m.] namibj
+You'll have to use the Avalon Semiconductors 3v3 SCL to have a good chance; there's an SRAM compiler giving much better density than the foundry open PDK macros offer by @Chips4Makers aka Staf Verhaegen .
+
+Note that the Avalon 3v3 SCL isn't currently too production-ready but that's mostly because there may be bugs left that haven't yet been caught through extracted SPICE behavioral sanity checking.
+For purposes of determining if you can do an RTL on a wafer.space slot at least near a target speed, it should suffice.
+
+
+[2026-09-17 10:53 a.m.] mole99
+Note that you can also use Tim Edwards' SRAM macros, which are shrinked versions of the foundry ones.
+
+
+[2026-09-17 10:53 a.m.] mole99
+The project template allows you to choose the 3.3V SCL and SRAMs: https://github.com/wafer-space/gf180mcu-project-template#select-different-ip-libraries
+
+
+[2026-09-17 11:07 a.m.] namibj
+I'm not saying the shrunk foundry SRAM are wrong 😉
+
+But Staf's periphery is far better at least at these sizes.
+And should be much more amenable to learning how to be 10bit wide.
+
+
 ==============================================================
-Exported 6 message(s)
+Exported 25 message(s)
 ==============================================================
