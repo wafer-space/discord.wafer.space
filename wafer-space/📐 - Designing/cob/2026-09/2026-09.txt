@@ -761,6 +761,50 @@ Ideally you'd have been able to measure current flow proportional to brightness 
 Could you just for clarity tell me what you meant exactly with the "measure with a multimeter at a fixed 1mA current"? Measure what? Current from where?
 
 
+[2026-09-16 11:09 p.m.] lauri4332
+Couldn't find any recent photos, just this one from June testing run at the cob factory. Current setup is same except ring light is back on the lens.
+
+{Attachments}
+2026-09_media/mmexport1789599739478-0A32B.jpg
+
+
+[2026-09-16 11:10 p.m.] namibj
+Hmm, yeah, pretty bright then.
+
+
+[2026-09-17 12:06 a.m.] maxclerkwell
+Hey there!
+So @stuart asked me how I prepare my PCBs for my chips. Over the past years, I gathered some ideas and today I took the time to piece them together and finally put them into a public repository. The toolset is centered around a file I called `.cob.json`.  Maybe this is interesting or helpful for some of you. Please let me know what you think. You should be able to try it with your own GDSII files, place PCB pads and export it to a kicad schematic + footprint. You can also use the exporter from KiCad to use the sym and fp in Altium. 
+
+Here is a writedown: https://maxclerkwell.tech/posts/open-cob-json-september-2026/
+Here is the repo: https://github.com/MaxClerkwell/open.cob.json
+
+I will add a wire-editor into my cobedit tool soonish, but so far I have figured out the wire-geometry as well as the bonding-parameters along the way.
+
+{Embed}
+https://maxclerkwell.tech/posts/open-cob-json-september-2026/
+open.cob.json: One File Between the Chip Designer and the PCB Designer
+For years I kept my chip-on-board bonding notes in private JSON files. A conversation with wafer.space made me publish them as a format. This is the story of the decisions that were hardest to make: none versus unspecified, why pad shapes are their own files, and what a real padframe taught the p...
+2026-09_media/bond-wires-on-pads-6E3F1.jpg
+
+{Embed}
+https://github.com/MaxClerkwell/open.cob.json
+GitHub - MaxClerkwell/open.cob.json: Open, machine-readable exchang...
+Open, machine-readable exchange format for chip-on-board wire bonding: die pads, PCB pads, wires. Generates KiCad symbols and footprints. - MaxClerkwell/open.cob.json
+2026-09_media/open.cob-CFA14.json
+
+
+[2026-09-17 1:11 a.m.] namibj
+@BreakingTaps I'm not sure if you had planned such already; I have been reminded by gemini about the omnipresent (by default, on COMP; gate poly does self-aligned stuff to it turning it into salicide) silicide layer at the surface....
+Basically: if you don't want the Si surface to be kinda excessively shiny/metallic, might be a good idea to use SAB drawings over the desired photosensitive areas of the pixels.
+
+also let me know nwell to psub/dnwell to psub would probably most relevant for visual light and p+ to nwell for UV.
+
+Technically if you're willing to put it "on ice" there's a bandgap from the shottkey junction that's excitable by 1550 nm.... but terrible quantum efficciency and shottkey typical levels of inherent "dark" current, so comfortably usable SNR only with very aggressive time gating/lock-in-amplifier tactics or byhalving the operating temperature.
+As I'm not planning to use a magnifying glass or such to adapt the resulting resolution/pixel size to the subject at hand, to then look at 1550 nm EDFA-amplifier-class optical fibers or their light transmission for some sort of inspection/auto-adjust processes, at least not with a custom ASIC, I'm not gonna really further that at all.
+Might put some structure on if convenient on a test die to measure and fill the e-test datasheets of mildly-abused things, but that'd be it....
+
+
 ==============================================================
-Exported 121 message(s)
+Exported 125 message(s)
 ==============================================================

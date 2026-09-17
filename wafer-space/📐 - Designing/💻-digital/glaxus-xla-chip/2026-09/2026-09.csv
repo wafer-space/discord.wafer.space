@@ -1,0 +1,33 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"262706220073222144","namibj","2026-09-16T20:54:52.3390000+00:00","","",""
+"262706220073222144","namibj","2026-09-16T20:55:11.1220000+00:00","@glaxus  let's take it into thread.","",""
+"442884160105742336","glaxus_","2026-09-16T21:03:37.7220000+00:00","The most memory bound ops I’m planning to run are probably simple unary ops operating on each element","",""
+"442884160105742336","glaxus_","2026-09-16T21:04:27.0280000+00:00","I’ve done some back of the envelope calculations that show that I need at least 1-2 GBps of memory bandwidth to saturate those calculations","",""
+"262706220073222144","namibj","2026-09-16T22:11:44.9440000+00:00","You mean like, sign flip? (Unary maths stuff like `for (i .....) { x[i] = (1/(x[i]); }` (""element wise inversion"") are somewhat more compute intensive that's why I'm not too deliberately pointing at them; ofc they're technically included as far as the instruction set is planned to cover such.)","",""
+"442884160105742336","glaxus_","2026-09-16T22:49:00.4690000+00:00","Yes, something like sign flip or big inversion","",""
+"442884160105742336","glaxus_","2026-09-16T22:49:06.3500000+00:00","*bit","",""
+"262706220073222144","namibj","2026-09-16T22:52:04.4800000+00:00","Ohhhhh... Yeah that's quite a lot.
+
+It'll depend heavily on how flexible your memory accesses need to be for what your chip is trying to be good at.
+
+I'd suggest to potentially wait until our multi-gigabit transceiver works have progressed some; at least as far as the parts of the compute with such low compute intensity go; there should be some lower speed variants.
+For example, if 8 Gbit/s raw data rate (PCIe 3.0) works out decently for duplex communications, literally state of the art CXL memory would work with it (at, for it, reduced speed; apparently it also doesn't like less than 4 lanes without treating it as a degraded state) as they degrade down from 32 GT/s to 16 and 8 GT/s (but not to the older PCIe 1.0/2.0 2.5GT/s / 5 GT/s).
+
+You could also of course use an FPGA as a memory controller / translator from DDR2/3/4 to a suitable custom protocol over a SerDes interconnect to the custom chip.
+Honestly, if you're creative enough you could take charge of the IO pad cell/use one of the lower voltage 3rd party ones, and probably manage a full gigabit unidirectional (or half duplex) per data pin, with DDR2/DDR3 signaling.
+You just won't get by with the regular SCL synthesis for the faster parts and might not want to aim at slow corner PVT chips doing particularly high speeds. If the application allows do consider aiming for the typical process corner under non-bad voltage and not too high temperature to slightly exceed the speeds the rest of the circuit would realistically support...","",""
+"262706220073222144","namibj","2026-09-16T22:52:18.3790000+00:00","Yeah you're not gonna afford.","",""
+"262706220073222144","namibj","2026-09-16T22:54:20.3030000+00:00","Use substantially more intense compute as the ""bandwidth needed"" measure.
+Nothing cheaper than fp32 inversion.","",""
+"262706220073222144","namibj","2026-09-16T23:08:47.5800000+00:00","Also remember DDR2 (e.g.) RAM is a bus thing; you're not prevented from addressing an IO controller over the bus if that IO controller plays by the rules; you're also allowed to hand over responsibility of refresh management and segment off drive of the command/address bus of such memory to a different chip temporarily.
+Though I'd probably not suggest splitting off in a way that forces you to use some external MUX crossbar chip to dynamically route memory bus data wires between different ""memory hosts"".
+
+Memory ""mapped"" IO is probably the most realistic way, though if you own the memory controller logic you'll be VERY free to do things differently for the protocol as long as it fits with the actual memory access pattern structure and the normal memory chips don't get confused from what you're doing to them.","",""
+"442884160105742336","glaxus_","2026-09-16T23:37:53.0260000+00:00","Thanks! Yes for sure. I’m using an FPGA to handle other parts that I don’t want to handle like PCIe/Ethernet PHY and protocol","",""
+"442884160105742336","glaxus_","2026-09-16T23:38:23.4490000+00:00","What is the transceiver project you’re talking about?","",""
+"262706220073222144","namibj","2026-09-17T00:45:12.0390000+00:00","We're working on an open source high speed SerDes for the open PDKs not worse than the gf180mcu family; due to sponsoring reasons we're targeting IHP's SG13CMOS5L first with a planned 25GBASE-R performance (likely restricting how far the next redriver can be from the ASIC) and then hoping to port with that same speed but concessions on the PCB side to the somewhat slower sky130A process. 
+
+A ""back"" port to gf180mcuD will happen as well, it's order w.r.t. the sky130A one is uncertain.
+On that process we're not planning to (substantially) exceed 10Gbit/s though, and as long as it works with a commodity 10GBASE-SR SFP+ optic on a decent but non-expensive PCB with good respect paid to not incurring substantial loss or problematic reflections between the signal conditioning chip in the transceiver and the custom ASIC, I'm happy. 
+I want fairly lax burden for data export from the custom ASIC even if import is allowed to need a signal conditioning retimer COTS chip within less than 10cm of the custom ASIC.
+At least the 2.5 Gbit/s of PCIe Gen1 should probably work natively from the ASIC though, even if perhaps under reasonable restrictions to PCB signal loss/connector quality, so long as it'd at least work with normal M.2 NVMe drives. It's still like 800~900 million byte per second through the usual 4-lane connection, so e.g. a camera with an ""either"" M.2 local recording ""or"" SFP+ 10G Ethernet with extra 15$ chip needed for receiving at more than 1Gbit/s (could let the same SFP+ optic do both directions asymmetrically just with two single fiber cables instead of LC-duplex that go to separate switch ports) like if one doesn't feel like configuring the switch to handle the asymmetric link topology.","",""
