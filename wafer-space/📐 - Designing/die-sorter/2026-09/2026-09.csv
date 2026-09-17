@@ -11,3 +11,33 @@ Yep, those are uv leds. 365nm. There isn't any extra space so 2 were needed and 
 "262706220073222144","namibj","2026-09-16T23:28:23.6850000+00:00","Steppers driving what?
 
 FYI, something like https://odriverobotics.com/ can upgrade from the 2-phase NEMA steppers to 3-phase BLDCs w/ encoders doing closed loop field oriented control. Though it _probably_ shouldn't be an issue anyways.","",""
+"756011607603019777","anfroholic","2026-09-17T01:43:44.1740000+00:00","The stepper drives a screw that pushes up the pins. The pusher part is just an insert that slides down inside. 
+Given the timeframe, I have to choose what is most likely to work, even though you can see it still took a number of revisions (I don't even think that was all)
+In the end, the number of pins had to be reduced (kept getting 'bed of nails' effect) and the vacuum needed to be embedded in the tip with some internal chambers as I was having a hard time getting seals any other way. 
+As I've understood the design requirements more, I think I would try for some voice coil/solenoid options for the pins and that would allow for smaller space and fidelity on the for pin selection? That's the idea, but need to move to other areas now. 
+
+*re: *odrive, I don't think it's not really necessary for what we have at the moment as simplicity is desired.","2026-09_media/20260909_145045-CCFCB.jpg,2026-09_media/20260909_145049-67C14.jpg,2026-09_media/20260915_050710-C2D24.jpg",""
+"262706220073222144","namibj","2026-09-17T02:33:27.5220000+00:00","If you think there's practical potential to modify this very design a little and add load cells into the structural backing of those pins (ideally individually) wired out to something that could eventually record and collate to what the machine was tasked with to mostly-passively gather information about the forces actually involved in the pushing work.....
+
+While ofc not matching individual linear motor actuation of any particular variety (there's a reason ""limited slip"" differentials are a thing for 4WD cars....), it'd still give understanding of the forces involved and thus what nuanced actuation in the future would need force-wise/power-wise.","",""
+"262706220073222144","namibj","2026-09-17T02:35:14.9650000+00:00","Re: odrive, I thought you may have referred to the motion platform of the die sorter when you eschewed steppers 😄
+That's where I'd see such a change to be something to consider if the motorization performance isn't making you happy enough.","",""
+"756011607603019777","anfroholic","2026-09-17T02:36:17.8400000+00:00","speed, accuracy, or power
+Pick 2 or pull out your wallet 😜","",""
+"262706220073222144","namibj","2026-09-17T02:37:05.0650000+00:00","For the vacuum seal I'd suggest to consider a simple cut to outline soft silicone sheet/gasket stuck to this, just saying","",""
+"756011607603019777","anfroholic","2026-09-17T02:37:12.3050000+00:00","I think you may be able to do something similar with voice coils yes? In the end, I'm not sure how valuable this data would be tho","",""
+"756011607603019777","anfroholic","2026-09-17T02:37:58.7460000+00:00","Is has to be very flat though. You can't suck a die down into it's neighbors","",""
+"756011607603019777","anfroholic","2026-09-17T02:38:45.0250000+00:00","and the seal issue was all 'behind' the head, not on the tape side","",""
+"262706220073222144","namibj","2026-09-17T02:39:58.1280000+00:00","well, the operating principle of odrive can give you a lot of speed for the seek while letting you control the deceleration good enough to keep the mechanics from ringing (much) and then still using the encoder resolution to do the fine positioning.
+
+If you buy from them it's somewhat more expensive than steppers but you do get more speed offered and substantially higher efficciency.
+Though ofc regenerative braking doesn't matter as much for this as it does for a battery powered robot.","",""
+"262706220073222144","namibj","2026-09-17T02:40:26.2450000+00:00","yeah.","",""
+"262706220073222144","namibj","2026-09-17T02:40:37.5340000+00:00","oh yeah then don't keep it nice hard","",""
+"262706220073222144","namibj","2026-09-17T02:40:55.3720000+00:00","voice coils themselves dont' really give you position feedback","",""
+"262706220073222144","namibj","2026-09-17T02:44:15.4900000+00:00","for these pins I'd probably have aimed at solenoid style with a non-ferromagnetic ideally not aluminium levels of electrically conductive front (maybe non-magnetic stainless steel should work great?), and a solid soft iron or at most ferrosilicon (transformer sheet alloy) active chunk; then a coil in similar encasing that sucks the pin forwards and if needed a separate one to pull them back town again.","",""
+"262706220073222144","namibj","2026-09-17T02:46:04.0040000+00:00","a non-magnetic tube should give easy winding mandrel and later inner solid holder for the windings that would be done.
+
+But without knowing forces it's not at all easy to check if it'll reasonably behave if made a particular way.","",""
+"262706220073222144","namibj","2026-09-17T02:49:19.0250000+00:00","(I think there'd ideally be a magnetic tube of similar cross section or slightly above compared to the inner rod's magnetic iron part, around the outside of the windings, acting as shielding and to channel the magnetic field where it's wanted.
+But switched reluctance motors like those technically would be are vulnerable to kinda-non-intuitive design-effects/behaviors, hence kinda preferring to sim. Thankfully the almost trivial geometry involved would make this part of the design almost trivial to pull off.)","",""

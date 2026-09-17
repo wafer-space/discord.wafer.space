@@ -260,6 +260,279 @@ Just receivers is ok too! That's still an interaction with the real world.
 @Tim 'mithro' Ansell I will be re-building the ps1 fpga box in an hour ish.  do you have anything to PR into my ansible?
 
 
+[2026-09-17 4:10 a.m.] carlfk
+bah. [ERROR]: Task failed: Module failed: non-zero return code
+
+
+[2026-09-17 4:10 a.m.] carlfk
+Upgrading: 0, Installing: 0, Removing: 0, Not Upgrading: 9", "  1 not fully installed or removed.", "  Space needed: 0 B / 103 GB available", "", "Setting up initramfs-tools (0.148.4+rpt2) ...", "update-initramfs: deferring update (trigger activated)", "Processing triggers for initramfs-tools (0.148.4+rpt2) ...", "update-initramfs: Generating /boot/initrd.img-6.18.34+rpt-rpi-v8"]}
+
+
+[2026-09-17 4:18 a.m.] carlfk
+hmm.. the date...  9932 -rw-r--r-- 1 root root 10168774 Jun  9 14:55 /boot/vmlinuz-6.18.34+rpt-rpi-v8
+
+
+[2026-09-17 4:24 a.m.] mithro_
+@carlfk - At some point I would like to rebuild your gateway box at ps1 onto the stuff under https://github.com/fpgas-online/
+
+{Embed}
+https://github.com/fpgas-online/
+fpgas.online
+fpgas.online has 22 repositories available. Follow their code on GitHub.
+2026-09_media/267154957-2FFF6
+
+
+[2026-09-17 4:24 a.m.] mithro_
+@carlfk - But I'm not in a super hurry to do that because it hasn't quite been working as reliable as I would like yet.
+
+
+[2026-09-17 4:25 a.m.] carlfk
+I know that feeling
+
+
+[2026-09-17 4:26 a.m.] mithro_
+@carlfk - Did you see the new mechanical diagrams and the Tiny Tapeout adapter plate?
+
+
+[2026-09-17 4:26 a.m.] carlfk
+yes, is it the collection of all the TT moutning holes?
+
+
+[2026-09-17 4:27 a.m.] mithro_
+@carlfk - I would also like to get the compute blade devices at ps1 wiring finished.
+
+
+[2026-09-17 4:27 a.m.] mithro_
+@carlfk - It's a plate which has all the different TT mounting holes and a set of other holes
+
+
+[2026-09-17 4:28 a.m.] mithro_
+@carlfk - And it makes sure that the pmod connectors are all in identical locations
+
+
+[2026-09-17 4:28 a.m.] mithro_
+@carlfk - https://github.com/fpgas-online/fpgas.online-mechanical/blob/main/tinytapeout/mounting_plate/README.md
+
+{Embed}
+https://github.com/fpgas-online/fpgas.online-mechanical/blob/main/tinytapeout/mounting_plate/README.md
+fpgas.online-mechanical/tinytapeout/mounting_plate/README.md at mai...
+2D orthographic mechanical drawings of the hardware fpgas.online is built from: boards, adapters, accessories, and the plates and drill templates to mount them - fpgas-online/fpgas.online-mechanical
+2026-09_media/fpgas-9F56C.online-mechanical
+
+
+[2026-09-17 4:31 a.m.] carlfk
+in your fpga.online deployment - are you able to "apt install nfs-common" into the pi's fs from the x86 cpu?  know what I am talking about?
+
+
+[2026-09-17 4:31 a.m.] carlfk
+this worked before, but now I need an apt upgrade which is failing
+
+
+[2026-09-17 4:37 a.m.] mithro_
+@carlfk - Yes, I have / had both qemu userspace chroots and full qemu virtual RPi
+
+
+[2026-09-17 4:38 a.m.] mithro_
+@carlfk - Now I've kind of moved to having the RPi nfsroot just built on github using the native ARM github action runners -- it takes between 5 to 20 minutes to build the complete image.
+
+
+[2026-09-17 4:39 a.m.] carlfk
+@Tim 'mithro' Ansell that is compelling
+
+
+[2026-09-17 4:40 a.m.] mithro_
+@carlfk - It is basically building an "ARM docker container" (not actually docker - podman or something) that it just then extracts the contents from.
+
+
+[2026-09-17 4:41 a.m.] mithro_
+The ARM github action runners are some type of big beefy server ARM systems too, they run a lot faster than a real RPi
+
+
+[2026-09-17 4:41 a.m.] carlfk
+for your qemu, do you have a script like  https://github.com/CarlFK/pici/blob/main/ansible/roles/fixpi/files/scripts/chroot-mount-pi-fs.bash
+
+{Embed}
+https://github.com/CarlFK/pici/blob/main/ansible/roles/fixpi/files/scripts/chroot-mount-pi-fs.bash
+pici/ansible/roles/fixpi/files/scripts/chroot-mount-pi-fs.bash at m...
+Contribute to CarlFK/pici development by creating an account on GitHub.
+2026-09_media/0084b929-8b65-464b-b79a-9e5266256fcb-CE1FE
+
+
+[2026-09-17 4:42 a.m.] carlfk
+the apt update errord with Error: Can not write log (Is /dev/pts mounted?) - posix_openpt (19: No such device)
+
+
+[2026-09-17 4:42 a.m.] carlfk
+which makes me think I need: (very much guessing) mount -t devpts pts "${target}/dev/pts"
+
+
+[2026-09-17 4:48 a.m.] carlfk
+nope. mount: /tmp/pi/dev/pts: mount point does not exist.
+
+
+[2026-09-17 4:51 a.m.] mithro_
+I think you need something like `mount -o bind /dev/pts "${target}/dev/pts"`
+
+
+[2026-09-17 4:53 a.m.] carlfk
++ mount -o bind /dev/pts /tmp/pi/dev/pts
+mount: /tmp/pi/dev/pts: mount point does not exist.
+
+
+[2026-09-17 4:54 a.m.] carlfk
+I was hoping you fixed the script before you moved to the arm github thing
+
+
+[2026-09-17 4:54 a.m.] mithro_
+I may have a whole back, but its moved quite a bit further
+
+
+[2026-09-17 4:56 a.m.] carlfk
+Error: Can not write log (Is /dev/pts mounted?) - posix_openpt (19: No such device)
+
+
+[2026-09-17 4:56 a.m.] carlfk
+woppsp, wrong window
+
+
+[2026-09-17 5:00 a.m.] carlfk
+can you grep your files for "dev/pts"
+
+
+[2026-09-17 5:00 a.m.] mithro_
+@carlfk - https://github.com/fpgas-online/fpgas.online-netboot-pi/blob/main/qemu/chroot-mount-devices.bash.sh maybe?
+
+{Embed}
+https://github.com/fpgas-online/fpgas.online-netboot-pi/blob/main/qemu/chroot-mount-devices.bash.sh
+fpgas.online-netboot-pi/qemu/chroot-mount-devices.bash.sh at main ...
+Netboot filesystem preparation tools for fpgas.online Raspberry Pi boards - fpgas-online/fpgas.online-netboot-pi
+2026-09_media/fpgas-6BFCF.online-netboot-pi
+
+
+[2026-09-17 5:01 a.m.] mithro_
+@carlfk - Or maybe - https://github.com/fpgas-online/fpgas.online-netboot-pi/blob/main/scripts/chroot-mount-pi-fs.bash ?
+
+{Embed}
+https://github.com/fpgas-online/fpgas.online-netboot-pi/blob/main/scripts/chroot-mount-pi-fs.bash
+fpgas.online-netboot-pi/scripts/chroot-mount-pi-fs.bash at main · ...
+Netboot filesystem preparation tools for fpgas.online Raspberry Pi boards - fpgas-online/fpgas.online-netboot-pi
+2026-09_media/fpgas-6BFCF.online-netboot-pi
+
+
+[2026-09-17 5:03 a.m.] carlfk
+@Tim 'mithro' Ansell neither of those have pts
+
+
+[2026-09-17 5:04 a.m.] carlfk
+it is possible I can ignore the lack of pts error, but it is the only line that stands out as a problem that needs fixing, and something needs fixing
+
+
+[2026-09-17 5:08 a.m.] mithro_
+Do you have a proper log?
+
+
+[2026-09-17 5:11 a.m.] carlfk
+https://paste.debian.net/hidden/6dbe9275
+
+
+[2026-09-17 5:12 a.m.] mithro_
+@carlfk - It still needs a *lot* of work, but I'm trying to put together https://docs.fpgas.online/
+
+
+[2026-09-17 5:22 a.m.] mithro_
+@carlfk - https://github.com/CarlFK/pici/pull/56
+
+{Embed}
+https://github.com/CarlFK/pici/pull/56
+chroot-mount-pi-fs: mount a private devpts in the chroot by mithro ...
+Fixes this error when running apt inside chroot-mount-pi-fs.bash (from https://paste.debian.net/hidden/6dbe9275):
+Error: Can not write log (Is /dev/pts mounted?) - posix_openpt (19: No such device)...
+2026-09_media/56-E15D9
+
+
+[2026-09-17 5:28 a.m.] carlfk
+Pull request successfully merged and closed
+
+
+[2026-09-17 5:29 a.m.] carlfk
+it got rid of the error, but there is still soemthing wrong...
+
+
+[2026-09-17 5:30 a.m.] carlfk
+@Tim 'mithro' Ansell https://paste.debian.net/hidden/2bb89792
+
+
+[2026-09-17 5:32 a.m.] carlfk
+root@base:/# grep -r MODULES /etc/initramfs-tools
+/etc/initramfs-tools/initramfs.conf:# MODULES: [ most | netboot | dep | list ]
+/etc/initramfs-tools/initramfs.conf:MODULES=dep
+
+
+[2026-09-17 5:36 a.m.] mithro_
+@carlfk - Claude sent you a few more.
+
+
+[2026-09-17 5:37 a.m.] mithro_
+@carlfk - Any of those fix your problems above?
+
+
+[2026-09-17 5:38 a.m.] carlfk
+mount pts  fixed Error: Can not write log (Is /dev/pts mounted?) - posix_openpt (19: No such device)
+
+
+[2026-09-17 5:43 a.m.] mithro_
+@carlfk See 57, 58, & 59
+
+
+[2026-09-17 5:44 a.m.] carlfk
+MODULES=most seems to fixed something as the update-initramfs is working instead of erroring
+
+
+[2026-09-17 5:44 a.m.] carlfk
+the fixes seem  elegant - I'm amazed.
+
+
+[2026-09-17 5:54 a.m.] carlfk
+ah - 56 and 59 fix both copies of the same script.  guesisng the tools one was from before I put it in ansible
+
+
+[2026-09-17 5:54 a.m.] carlfk
+im ignoring the cmd one for now - my pi stuff seems to be working
+
+
+[2026-09-17 6:01 a.m.] carlfk
+phooy.  cant' do lets-encrypt certbot when the server isn't live on a public IP
+
+
+[2026-09-17 6:04 a.m.] carlfk
+also I am installing unicorn, gunicorn, asgi and who knows what.  pretty sure I only need one of those.
+
+
+[2026-09-17 6:05 a.m.] carlfk
+and I need to rename some things to have a 2nd set so veyepar.nextdayvideo.com can live on the same box
+
+
+[2026-09-17 6:06 a.m.] carlfk
+on the pluss side, ansible ran to the end, no errors
+
+
+[2026-09-17 6:07 a.m.] carlfk
+01:00 - good stooping point.
+
+
+[2026-09-17 6:07 a.m.] carlfk
+carl@notp:~/src/tv/pib/pici$ git status |grep modified | wc
+     24      48    1311
+
+
+[2026-09-17 6:09 a.m.] carlfk
+huh.  I thought I was better at committing things
+
+
+[2026-09-17 6:09 a.m.] carlfk
+tomorrow problem
+
+
 ==============================================================
-Exported 49 message(s)
+Exported 107 message(s)
 ==============================================================

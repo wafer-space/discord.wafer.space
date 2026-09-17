@@ -278,7 +278,7 @@ So @stuart asked me how I prepare my PCBs for my chips. Over the past years, I g
 Here is a writedown: https://maxclerkwell.tech/posts/open-cob-json-september-2026/
 Here is the repo: https://github.com/MaxClerkwell/open.cob.json
 
-I will add a wire-editor into my cobedit tool soonish, but so far I have figured out the wire-geometry as well as the bonding-parameters along the way.","",""
+I will add a wire-editor into my cobedit tool soonish, but so far I have figured out the wire-geometry as well as the bonding-parameters along the way.","","❤️ (1)"
 "262706220073222144","namibj","2026-09-17T01:11:30.8830000+00:00","@BreakingTaps I'm not sure if you had planned such already; I have been reminded by gemini about the omnipresent (by default, on COMP; gate poly does self-aligned stuff to it turning it into salicide) silicide layer at the surface....
 Basically: if you don't want the Si surface to be kinda excessively shiny/metallic, might be a good idea to use SAB drawings over the desired photosensitive areas of the pixels.
 
@@ -287,3 +287,40 @@ also let me know nwell to psub/dnwell to psub would probably most relevant for v
 Technically if you're willing to put it ""on ice"" there's a bandgap from the shottkey junction that's excitable by 1550 nm.... but terrible quantum efficciency and shottkey typical levels of inherent ""dark"" current, so comfortably usable SNR only with very aggressive time gating/lock-in-amplifier tactics or byhalving the operating temperature.
 As I'm not planning to use a magnifying glass or such to adapt the resulting resolution/pixel size to the subject at hand, to then look at 1550 nm EDFA-amplifier-class optical fibers or their light transmission for some sort of inspection/auto-adjust processes, at least not with a custom ASIC, I'm not gonna really further that at all.
 Might put some structure on if convenient on a test die to measure and fill the e-test datasheets of mildly-abused things, but that'd be it....","",""
+"169786952432746498","mithro_","2026-09-17T04:23:22.4600000+00:00","@namibj - Any idea how / if you could build a simulator for this?","",""
+"262706220073222144","namibj","2026-09-17T04:23:50.6800000+00:00","""this"" referring to ""what""?","",""
+"262706220073222144","namibj","2026-09-17T04:25:25.1940000+00:00","the photodiode stuff (all I should have mentioned in the past day in here at least) should be readily covered by even decade old TCAD","",""
+"169786952432746498","mithro_","2026-09-17T04:25:47.6940000+00:00","@namibj - How the silicon responds to light given a GDS? IE Could we show the resistance change effect is expected?","",""
+"262706220073222144","namibj","2026-09-17T04:27:31.9110000+00:00","(the kind of tooling that is actually used for actual semiconductor process R&D and actually designing something like a process or process-option tuned to, for example, such a schottkey based 1550nm active CMOS camera even if it has to be refrigerated for practical usage it's easily cheaper than face2face bonding of InGaAs dies of literal just plain photo diodes to Si CMOS readout electronics)","",""
+"262706220073222144","namibj","2026-09-17T04:27:55.7370000+00:00","The PDK as we have been given doesn't tell us enough sadly.","",""
+"262706220073222144","namibj","2026-09-17T04:28:06.8330000+00:00","It's also not resistance it's literally current that spawns.","",""
+"169786952432746498","mithro_","2026-09-17T04:28:48.1650000+00:00","@namibj - I mean can we guess at the details and compare against what we see?","",""
+"169786952432746498","mithro_","2026-09-17T04:29:08.9750000+00:00","@namibj - And someone in the future can build test structures to figure out more?","",""
+"262706220073222144","namibj","2026-09-17T04:29:20.5420000+00:00","I assume something that works with Xyce can model a decent Si CMOS monolithic image sensor/camera, and thus model all the bits that matter for us here.","",""
+"169786952432746498","mithro_","2026-09-17T04:30:18.1320000+00:00","@namibj - Guess it's just a matter of someone being interested enough and having enough time to work out all the details?","",""
+"262706220073222144","namibj","2026-09-17T04:30:44.4330000+00:00","oh yeah if we have photodiode pinned out structures of all reelvant devices subjected to e-test along with sufficient modeling/measuring of how upper layer structures block light from getting down, yeah.
+
+There are affordability limits to computational optics for the upper layer structures though, especially if you involve broad-spectrum light.","",""
+"169786952432746498","mithro_","2026-09-17T04:30:53.5880000+00:00","https://docs.google.com/spreadsheets/d/1dK1GxGl1C7v3rhWKw3RcbeZsRre66HPAOPFbgYni74A/edit?gid=0#gid=0","",""
+"262706220073222144","namibj","2026-09-17T04:31:15.2410000+00:00","Well, phtodiodes aren't sooooo exotic....","",""
+"169786952432746498","mithro_","2026-09-17T04:31:53.5650000+00:00","Maybe we can nerd snipe one of the GDS Factory people into doing it 😛","",""
+"262706220073222144","namibj","2026-09-17T04:32:31.5880000+00:00","maybe","",""
+"262706220073222144","namibj","2026-09-17T04:33:45.8760000+00:00","I do highly suggest to plan for getting e-test coverage for all reasonable layer configurations of photodiodes and photodiode-active structures (gate poly! thick oxide vs. thin oxide! threshold voltage options!) into Run3, though.","",""
+"262706220073222144","namibj","2026-09-17T04:34:52.9520000+00:00","I can't do the muxed e-test alone, or if I could, I shouldn't.","",""
+"169786952432746498","mithro_","2026-09-17T04:35:03.6220000+00:00","If you mean what the foundry does -- then we don't control the e-test structures or data.","",""
+"262706220073222144","namibj","2026-09-17T04:35:26.8750000+00:00","Aside from the optical access difficulties/specialties I'd see no reason it shouldn't be suitable for the task, though.","",""
+"169786952432746498","mithro_","2026-09-17T04:35:45.8300000+00:00","@namibj - If there is a choice, I would prefer you working on high speed SERDES and then packaging before random optical stuff 🙂","",""
+"262706220073222144","namibj","2026-09-17T04:41:44.9430000+00:00","No, muxed E-test, a concept I hoped to get into delayed Run2; didn't manage; basically imagine roughly how the tiny tapeout analog tiles work.
+Now re-size the cells to where the chip core area is 50% covered by VERY dense mux bus.
+Two wires to each DUT via/""pin"" to be able to use one as drive and the other as sense and also to further calibrate out variations in the mux itself.
+Imagine just placing a lone SCL member there, except that it's flanked by fillcap's and then taps and then obligatory row end cells.
+To be measured under DC/near-DC conditions and used with heavy spice modeling to find a statistical fit of things like extraction parameters and for SCL at least some fudge factors in how nearby structures interact, to represent how it all acts in practice.
+
+Because they are way too high frequency for us to at all afford to do true dynamic tests of finer structures, so we might as well focus on doing good static/DC-op-point tests. Or at least static enough to see interesting behavior in something like a dynamic DFF.","",""
+"262706220073222144","namibj","2026-09-17T04:47:45.7890000+00:00","Yeah; I've got the serdes 25G on SG13CMOS5L first and then in no implied order (I literally don't know ordering or amount of overlap) backport to gf180mcuD trying to get at least 10G out of that, and cross-port to sky130A trying to retain full 25G function even if it means fancier PCBs and a local retimer IC which is configured to mitigate limitations on the sky130A's analog high speed frontend performance.
+
+Packaging is more limited by access and iteration count.
+
+I'm not looking forward to doing optical stuffs for fun other than seeing towards appropriate test dies including something that vaguely looks suited to work for receiving a few hundred Mbit/s of data from a simple fiber directly into a gf180mcuD die.","",""
+"169786952432746498","mithro_","2026-09-17T04:52:39.4570000+00:00","You'll be my hero if you get anything which can do USB 5Gbit/s speed.","",""
+"1184268085822238821","saladchap","2026-09-17T05:28:58.8470000+00:00","Started a thread.","",""

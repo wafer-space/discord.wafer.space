@@ -793,6 +793,8 @@ GitHub - MaxClerkwell/open.cob.json: Open, machine-readable exchang...
 Open, machine-readable exchange format for chip-on-board wire bonding: die pads, PCB pads, wires. Generates KiCad symbols and footprints. - MaxClerkwell/open.cob.json
 2026-09_media/open.cob-CFA14.json
 
+{Reactions}
+❤️
 
 [2026-09-17 1:11 a.m.] namibj
 @BreakingTaps I'm not sure if you had planned such already; I have been reminded by gemini about the omnipresent (by default, on COMP; gate poly does self-aligned stuff to it turning it into salicide) silicide layer at the surface....
@@ -805,6 +807,123 @@ As I'm not planning to use a magnifying glass or such to adapt the resulting res
 Might put some structure on if convenient on a test die to measure and fill the e-test datasheets of mildly-abused things, but that'd be it....
 
 
+[2026-09-17 4:23 a.m.] mithro_
+@namibj - Any idea how / if you could build a simulator for this?
+
+
+[2026-09-17 4:23 a.m.] namibj
+"this" referring to "what"?
+
+
+[2026-09-17 4:25 a.m.] namibj
+the photodiode stuff (all I should have mentioned in the past day in here at least) should be readily covered by even decade old TCAD
+
+
+[2026-09-17 4:25 a.m.] mithro_
+@namibj - How the silicon responds to light given a GDS? IE Could we show the resistance change effect is expected?
+
+
+[2026-09-17 4:27 a.m.] namibj
+(the kind of tooling that is actually used for actual semiconductor process R&D and actually designing something like a process or process-option tuned to, for example, such a schottkey based 1550nm active CMOS camera even if it has to be refrigerated for practical usage it's easily cheaper than face2face bonding of InGaAs dies of literal just plain photo diodes to Si CMOS readout electronics)
+
+
+[2026-09-17 4:27 a.m.] namibj
+The PDK as we have been given doesn't tell us enough sadly.
+
+
+[2026-09-17 4:28 a.m.] namibj
+It's also not resistance it's literally current that spawns.
+
+
+[2026-09-17 4:28 a.m.] mithro_
+@namibj - I mean can we guess at the details and compare against what we see?
+
+
+[2026-09-17 4:29 a.m.] mithro_
+@namibj - And someone in the future can build test structures to figure out more?
+
+
+[2026-09-17 4:29 a.m.] namibj
+I assume something that works with Xyce can model a decent Si CMOS monolithic image sensor/camera, and thus model all the bits that matter for us here.
+
+
+[2026-09-17 4:30 a.m.] mithro_
+@namibj - Guess it's just a matter of someone being interested enough and having enough time to work out all the details?
+
+
+[2026-09-17 4:30 a.m.] namibj
+oh yeah if we have photodiode pinned out structures of all reelvant devices subjected to e-test along with sufficient modeling/measuring of how upper layer structures block light from getting down, yeah.
+
+There are affordability limits to computational optics for the upper layer structures though, especially if you involve broad-spectrum light.
+
+
+[2026-09-17 4:30 a.m.] mithro_
+https://docs.google.com/spreadsheets/d/1dK1GxGl1C7v3rhWKw3RcbeZsRre66HPAOPFbgYni74A/edit?gid=0#gid=0
+
+{Embed}
+https://docs.google.com/spreadsheets/d/1dK1GxGl1C7v3rhWKw3RcbeZsRre66HPAOPFbgYni74A/edit?gid=0
+Open source TCAD Market Overview - bit.ly/pg-tcad
+2026-09_media/AHkbwyI-18oLmdFQyWereanrAhk-xmYl7k_5zjlheh-18516
+
+
+[2026-09-17 4:31 a.m.] namibj
+Well, phtodiodes aren't sooooo exotic....
+
+
+[2026-09-17 4:31 a.m.] mithro_
+Maybe we can nerd snipe one of the GDS Factory people into doing it 😛
+
+
+[2026-09-17 4:32 a.m.] namibj
+maybe
+
+
+[2026-09-17 4:33 a.m.] namibj
+I do highly suggest to plan for getting e-test coverage for all reasonable layer configurations of photodiodes and photodiode-active structures (gate poly! thick oxide vs. thin oxide! threshold voltage options!) into Run3, though.
+
+
+[2026-09-17 4:34 a.m.] namibj
+I can't do the muxed e-test alone, or if I could, I shouldn't.
+
+
+[2026-09-17 4:35 a.m.] mithro_
+If you mean what the foundry does -- then we don't control the e-test structures or data.
+
+
+[2026-09-17 4:35 a.m.] namibj
+Aside from the optical access difficulties/specialties I'd see no reason it shouldn't be suitable for the task, though.
+
+
+[2026-09-17 4:35 a.m.] mithro_
+@namibj - If there is a choice, I would prefer you working on high speed SERDES and then packaging before random optical stuff 🙂
+
+
+[2026-09-17 4:41 a.m.] namibj
+No, muxed E-test, a concept I hoped to get into delayed Run2; didn't manage; basically imagine roughly how the tiny tapeout analog tiles work.
+Now re-size the cells to where the chip core area is 50% covered by VERY dense mux bus.
+Two wires to each DUT via/"pin" to be able to use one as drive and the other as sense and also to further calibrate out variations in the mux itself.
+Imagine just placing a lone SCL member there, except that it's flanked by fillcap's and then taps and then obligatory row end cells.
+To be measured under DC/near-DC conditions and used with heavy spice modeling to find a statistical fit of things like extraction parameters and for SCL at least some fudge factors in how nearby structures interact, to represent how it all acts in practice.
+
+Because they are way too high frequency for us to at all afford to do true dynamic tests of finer structures, so we might as well focus on doing good static/DC-op-point tests. Or at least static enough to see interesting behavior in something like a dynamic DFF.
+
+
+[2026-09-17 4:47 a.m.] namibj
+Yeah; I've got the serdes 25G on SG13CMOS5L first and then in no implied order (I literally don't know ordering or amount of overlap) backport to gf180mcuD trying to get at least 10G out of that, and cross-port to sky130A trying to retain full 25G function even if it means fancier PCBs and a local retimer IC which is configured to mitigate limitations on the sky130A's analog high speed frontend performance.
+
+Packaging is more limited by access and iteration count.
+
+I'm not looking forward to doing optical stuffs for fun other than seeing towards appropriate test dies including something that vaguely looks suited to work for receiving a few hundred Mbit/s of data from a simple fiber directly into a gf180mcuD die.
+
+
+[2026-09-17 4:52 a.m.] mithro_
+You'll be my hero if you get anything which can do USB 5Gbit/s speed.
+
+
+[2026-09-17 5:28 a.m.] saladchap
+Started a thread.
+
+
 ==============================================================
-Exported 125 message(s)
+Exported 150 message(s)
 ==============================================================
