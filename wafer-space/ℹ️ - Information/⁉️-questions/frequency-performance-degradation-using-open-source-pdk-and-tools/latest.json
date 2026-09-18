@@ -16,7 +16,7 @@
     "after": "2026-08-31T23:59:59.999+00:00",
     "before": "2026-10-01T00:00:00+00:00"
   },
-  "exportedAt": "2026-09-18T09:45:14.7484802+00:00",
+  "exportedAt": "2026-09-18T14:29:18.4043376+00:00",
   "messages": [
     {
       "id": "1550038804063191160",
@@ -1107,7 +1107,339 @@
         "guildId": "1361349522684510449"
       },
       "inlineEmojis": []
+    },
+    {
+      "id": "1550446720595263499",
+      "type": "Default",
+      "timestamp": "2026-09-18T10:01:44.097+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Maybe interesting to know I did some comparisons between gf180mcu_as_sc_mcu7t3v3 standard cell library and the 1.8v library used by my chip in production at high temperature corner. On the same cells (for example 2nand 2nor inverter etc) GF is 50% - 80% slower. But more interesting , the commercial netlist include a lot of cells ( 4 6 8 input combinational gates and mux + inverter ) where I cannot find and equivalent in the netlist created by Yosys. This is probably generating part of the frequency gap because I can see on same netlist paths 1 cell of the commercial version replaced by 2-3-4 GF cells",
+      "author": {
+        "id": "1550031311388020736",
+        "name": "sim6572",
+        "discriminator": "0000",
+        "nickname": "Simo6572",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/79ee349b6511e2000af8a32fb8a6974e-7A6C5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1550448756280004643",
+      "type": "Default",
+      "timestamp": "2026-09-18T10:09:49.442+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Simo6572 If you could compile a list of missing standard cells (sorted by usefulness), @Tholin might take a look at adding them to the SCL.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-09_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "220639106915368960",
+          "name": "tholin",
+          "discriminator": "0000",
+          "nickname": "Tholin",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-09_media/edae5aadf146133e0448bfb1f0fa91c4-62B19.png"
+        },
+        {
+          "id": "1550031311388020736",
+          "name": "sim6572",
+          "discriminator": "0000",
+          "nickname": "Simo6572",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-09_media/79ee349b6511e2000af8a32fb8a6974e-7A6C5.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1550449852083609643",
+      "type": "Default",
+      "timestamp": "2026-09-18T10:14:10.702+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I’m just one person. I had to limit the scope of the project by taking a RISC approach. I synth’d a RISC-V SoC with the fab SCL and then only added cells that occured more than 20 or 30 times in the synth report to my to do list.",
+      "author": {
+        "id": "220639106915368960",
+        "name": "tholin",
+        "discriminator": "0000",
+        "nickname": "Tholin",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/edae5aadf146133e0448bfb1f0fa91c4-62B19.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1550450577278767175",
+      "type": "Default",
+      "timestamp": "2026-09-18T10:17:03.602+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I can add more cells to the SCL, but you’d be taping out with untested cells.",
+      "author": {
+        "id": "220639106915368960",
+        "name": "tholin",
+        "discriminator": "0000",
+        "nickname": "Tholin",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/edae5aadf146133e0448bfb1f0fa91c4-62B19.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1550450927318859788",
+      "type": "Default",
+      "timestamp": "2026-09-18T10:18:27.058+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yes sure I understand, I just posted what I think could be useful to know. I will create the list  but again just for knowledge. Moreover, unfortunately I cannot share details of my project but it is not a RISC-V and not a processor at all",
+      "author": {
+        "id": "1550031311388020736",
+        "name": "sim6572",
+        "discriminator": "0000",
+        "nickname": "Simo6572",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/79ee349b6511e2000af8a32fb8a6974e-7A6C5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1550451005014147124",
+      "type": "Default",
+      "timestamp": "2026-09-18T10:18:45.582+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Tim has been very generous in giving me free shuttle slots to test my stuff, but if I add new cells now, those additions would be untested.",
+      "author": {
+        "id": "220639106915368960",
+        "name": "tholin",
+        "discriminator": "0000",
+        "nickname": "Tholin",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/edae5aadf146133e0448bfb1f0fa91c4-62B19.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1550451304042729543",
+      "type": "Default",
+      "timestamp": "2026-09-18T10:19:56.876+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "And I will not be able to test SCL changes personally in this run. I intend to submit a fully analog layout to the free slot lottery. Expand the analog IP we have here.",
+      "author": {
+        "id": "220639106915368960",
+        "name": "tholin",
+        "discriminator": "0000",
+        "nickname": "Tholin",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/edae5aadf146133e0448bfb1f0fa91c4-62B19.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1550451643588546621",
+      "type": "Default",
+      "timestamp": "2026-09-18T10:21:17.83+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I could throw together something with my SCL in a half slot, but I believe submitting to the free lottery twice in one run is a bit rude, so I won’t do that.",
+      "author": {
+        "id": "220639106915368960",
+        "name": "tholin",
+        "discriminator": "0000",
+        "nickname": "Tholin",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/edae5aadf146133e0448bfb1f0fa91c4-62B19.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1550451756989685792",
+      "type": "Default",
+      "timestamp": "2026-09-18T10:21:44.867+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "We will very likely find some slot to test your new SCL additions in case you add new cells.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-09_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1550452159395397715",
+      "type": "Default",
+      "timestamp": "2026-09-18T10:23:20.808+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "But I was thinking of going nuts with adding a bunch of combinatorial cells",
+      "author": {
+        "id": "220639106915368960",
+        "name": "tholin",
+        "discriminator": "0000",
+        "nickname": "Tholin",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/edae5aadf146133e0448bfb1f0fa91c4-62B19.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1550452338161098869",
+      "type": "Default",
+      "timestamp": "2026-09-18T10:24:03.429+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "And then somebody can try taping out a SoC with it or something",
+      "author": {
+        "id": "220639106915368960",
+        "name": "tholin",
+        "discriminator": "0000",
+        "nickname": "Tholin",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/edae5aadf146133e0448bfb1f0fa91c4-62B19.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4C",
+            "code": "ok_hand",
+            "isAnimated": false,
+            "imageUrl": "2026-09_media/1f44c-59547.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "323371864074485771",
+              "name": "mole99",
+              "discriminator": "0000",
+              "nickname": "Leo Moser (mole99)",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-09_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
     }
   ],
-  "messageCount": 31
+  "messageCount": 42
 }

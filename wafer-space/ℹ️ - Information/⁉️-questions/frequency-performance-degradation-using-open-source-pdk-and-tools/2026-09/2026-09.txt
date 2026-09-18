@@ -161,6 +161,52 @@ Contribute to VLSIDA/HighTide development by creating an account on GitHub.
 2026-09_media/HighTide-F9036
 
 
+[2026-09-18 10:01 a.m.] sim6572
+Maybe interesting to know I did some comparisons between gf180mcu_as_sc_mcu7t3v3 standard cell library and the 1.8v library used by my chip in production at high temperature corner. On the same cells (for example 2nand 2nor inverter etc) GF is 50% - 80% slower. But more interesting , the commercial netlist include a lot of cells ( 4 6 8 input combinational gates and mux + inverter ) where I cannot find and equivalent in the netlist created by Yosys. This is probably generating part of the frequency gap because I can see on same netlist paths 1 cell of the commercial version replaced by 2-3-4 GF cells
+
+
+[2026-09-18 10:09 a.m.] mole99
+@Simo6572 If you could compile a list of missing standard cells (sorted by usefulness), @Tholin might take a look at adding them to the SCL.
+
+
+[2026-09-18 10:14 a.m.] tholin
+I’m just one person. I had to limit the scope of the project by taking a RISC approach. I synth’d a RISC-V SoC with the fab SCL and then only added cells that occured more than 20 or 30 times in the synth report to my to do list.
+
+
+[2026-09-18 10:17 a.m.] tholin
+I can add more cells to the SCL, but you’d be taping out with untested cells.
+
+
+[2026-09-18 10:18 a.m.] sim6572
+Yes sure I understand, I just posted what I think could be useful to know. I will create the list  but again just for knowledge. Moreover, unfortunately I cannot share details of my project but it is not a RISC-V and not a processor at all
+
+
+[2026-09-18 10:18 a.m.] tholin
+Tim has been very generous in giving me free shuttle slots to test my stuff, but if I add new cells now, those additions would be untested.
+
+
+[2026-09-18 10:19 a.m.] tholin
+And I will not be able to test SCL changes personally in this run. I intend to submit a fully analog layout to the free slot lottery. Expand the analog IP we have here.
+
+
+[2026-09-18 10:21 a.m.] tholin
+I could throw together something with my SCL in a half slot, but I believe submitting to the free lottery twice in one run is a bit rude, so I won’t do that.
+
+
+[2026-09-18 10:21 a.m.] mole99
+We will very likely find some slot to test your new SCL additions in case you add new cells.
+
+
+[2026-09-18 10:23 a.m.] tholin
+But I was thinking of going nuts with adding a bunch of combinatorial cells
+
+
+[2026-09-18 10:24 a.m.] tholin
+And then somebody can try taping out a SoC with it or something
+
+{Reactions}
+👌
+
 ==============================================================
-Exported 31 message(s)
+Exported 42 message(s)
 ==============================================================
