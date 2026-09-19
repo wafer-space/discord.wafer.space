@@ -110,6 +110,8 @@ I mean could that be an option for a future die?
 [2026-09-18 1:13 a.m.] mithro_
 No - Linux needs megabytes of memory -- which is not possible on a 180nm process node.
 
+{Reactions}
+🔥
 
 [2026-09-18 1:16 a.m.] carlfk
 ah shucks.   was wondering how low we could drive the price.
@@ -119,6 +121,76 @@ ah shucks.   was wondering how low we could drive the price.
 @carlfk - I'm pretty sure that the final cost for any wafer.space Linux capable device is going to be around $100 USD based on a roughly $30 USD BOM.
 
 
+[2026-09-18 11:02 p.m.] logic_destroyer
+@carlfk
+
+{Attachments}
+2026-09_media/1784742528287-38F68.png
+
+
+[2026-09-18 11:03 p.m.] logic_destroyer
+@carlfk, that is why I implemented the SDRAM controller for GF180MCU. I need memory. The only memory I need on the chip is for the caches. I implemented those in GF180 as well. You can see all the SRAM cells around my design.
+
+
+[2026-09-18 11:04 p.m.] carlfk
+how much cache did you create?
+
+
+[2026-09-18 11:06 p.m.] logic_destroyer
+
+
+{Attachments}
+2026-09_media/content-28F38.png
+
+
+[2026-09-18 11:08 p.m.] logic_destroyer
+I$: 4Kib, D$: 2 Kib
+
+
+[2026-09-18 11:09 p.m.] logic_destroyer
+21 SRAM-Tiles
+
+
+[2026-09-18 11:20 p.m.] logic_destroyer
+I used them here
+
+https://gf180mcu-pdk.readthedocs.io/en/latest/IPs/SRAM/gf180mcu_fd_ip_sram/cells/gf180mcu_fd_ip_sram__sram512x8m8wm1/gf180mcu_fd_ip_sram__sram512x8m8wm1.html
+
+
+[2026-09-18 11:30 p.m.] logic_destroyer
+Crazy Caches
+
+{Attachments}
+2026-09_media/image-A2C97.png
+
+
+[2026-09-18 11:33 p.m.] logic_destroyer
+@carlfk  FYI, my new quad-core RISC-V SoC uses 224 KiB of cache memory for L1 and L2.
+
+
+[2026-09-18 11:34 p.m.] carlfk
+at the show last weekend people were asking me stuff like "how much can you fit?"  so 224k is now an answer I can give them :p
+
+{Reactions}
+😭
+
+[2026-09-18 11:37 p.m.] logic_destroyer
+Currently, my 325T Kintex-7 SoC is packed with stuff
+
+{Attachments}
+2026-09_media/image-DAD4D.png
+
+
+[2026-09-18 11:45 p.m.] logic_destroyer
+@carlfk Just to give you an idea: if you built a Kintex 7 325T as a GF180 FPGA, the die would be something like 55 × 55 to 90 × 90 mm. That is a rough estimate based on scaling the 28 nm FPGA fabric to the 180 nm GF180MCU process.
+
+
+[2026-09-18 11:53 p.m.] carlfk
+thats a big die :p
+
+{Reactions}
+🔥
+
 ==============================================================
-Exported 21 message(s)
+Exported 34 message(s)
 ==============================================================

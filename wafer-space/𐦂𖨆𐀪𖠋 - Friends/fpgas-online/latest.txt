@@ -547,6 +547,28 @@ Using a decommissioned Alibaba cloud accelerator card as an FPGA dev board
 That would be cool. If you do one of those you put a loopback cable between the SFP28 cages, or better yet give them a fast switch port on the same VLAN.
 
 
+[2026-09-18 10:39 p.m.] carlfk
+@Tim 'mithro' Ansell how do you mange what hardware is plugged into what port?  like what file or spreadsheeto or db or where does this info live?
+
+
+[2026-09-18 10:44 p.m.] carlfk
+like I edit https://github.com/CarlFK/pici/blob/main/ansible/inventory/host_vars/ps1.fpgas.online.yml#L64     - { port:  2, mac: "b8:27:eb:2f:5d:08", sn: 042f5d08,          model: "Raspberry_Pi_3_Model_B_Rev_1",
+
+{Embed}
+https://github.com/CarlFK/pici/blob/main/ansible/inventory/host_vars/ps1.fpgas.online.yml
+pici/ansible/inventory/host_vars/ps1.fpgas.online.yml at main · Ca...
+Contribute to CarlFK/pici development by creating an account on GitHub.
+2026-09_media/0084b929-8b65-464b-b79a-9e5266256fcb-CE1FE
+
+
+[2026-09-18 11:49 p.m.] mithro_
+I've moved to a scheme where the Pi & FPGA details are autodetected by scripts in the nfsroot and then each port is on it's own isolated vlan and thus gets a specific IP address & name automagically. IE 10.X.1.2 is "switch 1, port 2" and 10.X.1.55 is "switch 1, port 55" -- also stops each of the RPi traffic from interfering with each other and makes the RPi3b netbooting a lot more reliable.
+
+
+[2026-09-18 11:49 p.m.] mithro_
+100g switches are surpisingly affordable.
+
+
 ==============================================================
-Exported 109 message(s)
+Exported 113 message(s)
 ==============================================================
