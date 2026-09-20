@@ -5,7 +5,7 @@ I am an RTL designer with some knowledge on RTL GDSII flow. I am createding a ch
 
 Was your previous chip created using the same GF180MCU process and a proprietary PDK, or did you use a different process?
 
-Note that the foundry-provided standard cell library in the open-source PDK uses the high-voltage transistors, which are slow. Tholin made a community-created standard cell library using the low-voltage transistors, which is much faster running at 3.3V. However, it hasn't been tested yet (the wafers are coming out of the fab this week).","",""
+Note that the foundry-provided standard cell library in the open-source PDK uses the high-voltage transistors, which are slow. Tholin made a community-created standard cell library using the low-voltage transistors, which is much faster running at 3.3V. However, it hasn't been tested yet (the wafers are coming out of the fab this week).","","👀 (1)"
 "169786952432746498","mithro_","2026-09-17T07:25:13.1630000+00:00","@Simo6572 - I'm guessing you are likely using something like GF180IC or GF180BCDLite with something like 1v8 standard cells in the proprietary case while using 5v standard cells and the much cheaper GF180MCU in the open source case.","",""
 "169786952432746498","mithro_","2026-09-17T07:27:13.9700000+00:00","@Simo6572 - You should also confirm what type of area / performance you have set things up at.","",""
 "169786952432746498","mithro_","2026-09-17T07:33:50.2740000+00:00","@Simo6572 - There is some information about the various 180nm process technologies that GF has and where GF180MCU fits in regard to that @ https://wafer.space/gf180","",""
@@ -29,8 +29,8 @@ Note that the foundry-provided standard cell library in the open-source PDK uses
 
 Note that the Avalon 3v3 SCL isn't currently too production-ready but that's mostly because there may be bugs left that haven't yet been caught through extracted SPICE behavioral sanity checking.
 For purposes of determining if you can do an RTL on a wafer.space slot at least near a target speed, it should suffice.","",""
-"323371864074485771","mole99","2026-09-17T10:53:26.4570000+00:00","Note that you can also use Tim Edwards' SRAM macros, which are shrinked versions of the foundry ones.","",""
-"323371864074485771","mole99","2026-09-17T10:53:46.5170000+00:00","The project template allows you to choose the 3.3V SCL and SRAMs: https://github.com/wafer-space/gf180mcu-project-template#select-different-ip-libraries","",""
+"323371864074485771","mole99","2026-09-17T10:53:26.4570000+00:00","Note that you can also use Tim Edwards' SRAM macros, which are shrinked versions of the foundry ones.","","👍 (1)"
+"323371864074485771","mole99","2026-09-17T10:53:46.5170000+00:00","The project template allows you to choose the 3.3V SCL and SRAMs: https://github.com/wafer-space/gf180mcu-project-template#select-different-ip-libraries","","👍 (1)"
 "262706220073222144","namibj","2026-09-17T11:07:21.7820000+00:00","I'm not saying the shrunk foundry SRAM are wrong 😉
 
 But Staf's periphery is far better at least at these sizes.
@@ -58,7 +58,7 @@ Similar to that, the default 20% of the period for input and output delays may n
 "220639106915368960","tholin","2026-09-18T10:18:45.5820000+00:00","Tim has been very generous in giving me free shuttle slots to test my stuff, but if I add new cells now, those additions would be untested.","",""
 "220639106915368960","tholin","2026-09-18T10:19:56.8760000+00:00","And I will not be able to test SCL changes personally in this run. I intend to submit a fully analog layout to the free slot lottery. Expand the analog IP we have here.","",""
 "220639106915368960","tholin","2026-09-18T10:21:17.8300000+00:00","I could throw together something with my SCL in a half slot, but I believe submitting to the free lottery twice in one run is a bit rude, so I won’t do that.","",""
-"323371864074485771","mole99","2026-09-18T10:21:44.8670000+00:00","We will very likely find some slot to test your new SCL additions in case you add new cells.","",""
+"323371864074485771","mole99","2026-09-18T10:21:44.8670000+00:00","We will very likely find some slot to test your new SCL additions in case you add new cells.","","👍 (1)"
 "220639106915368960","tholin","2026-09-18T10:23:20.8080000+00:00","But I was thinking of going nuts with adding a bunch of combinatorial cells","",""
-"220639106915368960","tholin","2026-09-18T10:24:03.4290000+00:00","And then somebody can try taping out a SoC with it or something","","👌 (1)"
-"262706220073222144","namibj","2026-09-19T02:39:43.6920000+00:00","I do hope to get (not alone) the muxed e-test in; it would have plans to incorporate coverage for as many SCL cells are are of questionable reliability or which have more than average need for e-test proof; it looks like there'd be between 50 and 200 DUTs of space by preliminary estimates.","",""
+"220639106915368960","tholin","2026-09-18T10:24:03.4290000+00:00","And then somebody can try taping out a SoC with it or something","","👌 (2)"
+"262706220073222144","namibj","2026-09-19T02:39:43.6920000+00:00","I do hope to get (not alone) the muxed e-test in; it would have plans to incorporate coverage for as many SCL cells are are of questionable reliability or which have more than average need for e-test proof; it looks like there'd be between 50 and 200 DUTs of space by preliminary estimates.","","👍 (1)"
