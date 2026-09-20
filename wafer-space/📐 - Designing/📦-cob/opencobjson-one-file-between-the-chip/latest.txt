@@ -54,11 +54,180 @@ Also keyboard emulation (especially with some state feedback to keep it from vee
 [2026-09-20 2:21 a.m.] essen__
 Very nice @Stephan Bökelmann, looking forwards to giving this a spin in the coming days. 🙂
 
+{Reactions}
+🫶
 
 [2026-09-20 5:17 a.m.] mithro_
 @Tim Edwards - As "owner" of Magic, it probably makes sense for you to be involved / offer opinions here.
 
 
+[2026-09-20 1:31 p.m.] maxclerkwell
+One thing that I tried was letting claude figuring out the configuration for my FK delvotek bonder. Wasn't the best I've seen so far. I guess one of the problems with bonders is, that they don't just take G-code. 
+Hopefully some day in the near future there will be an open-wirebonder project that just accepts g-code like every printer does. In that case, coming from the open.cob to g-code is maybe a week of work with python. 
+
+In the open.cob, there is a section for wire definitions. I have also played around with a python tool to generate these for me from my specifications, but that hasn't worked out completely yet. especially if you want to support all sorts of different loop-forms. I attached a picture of my bonder and ONE of its 3 menues to manage the loop shapes. Unfortunately every bonder that I've worked with so far handles loop-forms differently.
+
+{Attachments}
+2026-09_media/image-08AF2.png
+
+
+[2026-09-20 2:19 p.m.] namibj
+I mean, yeah, they may not take G-code, but they do take something.
+
+
+[2026-09-20 2:20 p.m.] namibj
+Note that loop shape isn't so much the most important here
+
+
+[2026-09-20 2:20 p.m.] namibj
+different tool heads will change what that should be
+
+
+[2026-09-20 2:20 p.m.] maxclerkwell
+agree
+
+
+[2026-09-20 2:20 p.m.] maxclerkwell
+disagree
+
+
+[2026-09-20 2:20 p.m.] namibj
+IMO the giant part is being able to support diffferent pinouts to different COB layouts with negligible extra engineering time need
+
+
+[2026-09-20 2:20 p.m.] namibj
+(for wafer.space)
+
+
+[2026-09-20 2:22 p.m.] maxclerkwell
+yeah. I mean, if it's okay to have pins in all directions and they have enough pitch, chip has the same top metallization, wire is always the same and so forth. you can set up the loop form once and it will work. Maybe I focus too much on my own use-case
+
+
+[2026-09-20 2:22 p.m.] namibj
+I'd assume a resin printed or laser sintered COB panel carrier to hold and align the bundles of COBs to be fairly straight forward especially if given to the PCB designer as a template it has to conform to while taking care to properly hug the PCB; then the big part of specifying where the bonding shall go.
+
+{Reactions}
+👍
+
+[2026-09-20 2:23 p.m.] namibj
+can you show when you have a chance what S-Wire is?
+By chance?
+
+
+[2026-09-20 2:26 p.m.] maxclerkwell
+Generally speaking, an S-loop is a wire-bond loop profile with a longer, relatively flat mid-section between the rise after the first bond and the descent to the second bond. It is used when the span is long, when loop height must stay controlled, when the wire needs extra stiffness against mold sweep, or when clearance over neighboring structures is required.
+
+I just left the lab, but I can take a picture of the menu in the next couple of days and post it.
+
+
+[2026-09-20 2:27 p.m.] namibj
+ohhh I see I think
+
+
+[2026-09-20 2:27 p.m.] maxclerkwell
+sometimes I use that setup when I want to get down as soon as possible and put other wires above it
+
+
+[2026-09-20 2:27 p.m.] maxclerkwell
+let me search a picture
+
+
+[2026-09-20 2:27 p.m.] namibj
+I thought it might be about more free-form specification like splines or so
+
+
+[2026-09-20 2:28 p.m.] maxclerkwell
+I think here I used S-form for the first row.
+
+{Attachments}
+2026-09_media/image-227F4.png
+
+
+[2026-09-20 2:28 p.m.] maxclerkwell
+my glueing looks really messy 😄
+
+
+[2026-09-20 2:29 p.m.] maxclerkwell
+
+
+{Attachments}
+2026-09_media/image-3590A.png
+
+
+[2026-09-20 2:29 p.m.] namibj
+I'm hoping we might figure out a way to at least precision align dies to the board so that doesn't meaningfully widen the bond pads....
+
+
+[2026-09-20 2:29 p.m.] maxclerkwell
+innermost row is s-shape IIRC
+
+
+[2026-09-20 2:30 p.m.] namibj
+I think I can tell the S shape form
+
+
+[2026-09-20 2:30 p.m.] maxclerkwell
+hmm I don't think I understand. can you elaborate?
+
+
+[2026-09-20 2:31 p.m.] namibj
+so one major reason for the large fan out currently is that we don't know the alignment of the die to the PCB traces with enough precision
+
+
+[2026-09-20 2:31 p.m.] namibj
+therefore, we need fairly large PCB side landing pads for the bonds
+
+
+[2026-09-20 2:31 p.m.] namibj
+(much larger than the PCB litho feature size it would reliably offer)
+
+
+[2026-09-20 2:32 p.m.] namibj
+this causes much longer bonds than would be needed otuwise due to limited bond density on the PCB side
+
+
+[2026-09-20 2:32 p.m.] namibj
+
+
+
+[2026-09-20 2:33 p.m.] namibj
+
+
+
+[2026-09-20 2:33 p.m.] namibj
+Notably, compare the bond pad landing site size to how narrow the escape tracks at the bottom are
+
+
+[2026-09-20 2:34 p.m.] namibj
+The PCB litho could do almost double the density if the alignment would be better
+
+
+[2026-09-20 2:34 p.m.] namibj
+So that the bonds hit both the PCB and the die pads without much widening needed to account for the psoitioning error of the bond movement vs. the pad itself
+
+
+[2026-09-20 2:35 p.m.] namibj
+(this happens from the bonding being referenced optically to the die AFAIK, not to the PCB)
+
+
+[2026-09-20 2:37 p.m.] maxclerkwell
+okay, i see. 
+Who places the die and how?
+Which type of glue is used and how much?
+Is that specified or does the bonding-company just do whatever they think is correct?
+
+
+[2026-09-20 2:41 p.m.] maxclerkwell
+I have placed a lot of dies by hand (which is super annoying) or with this tool: https://elas.hu/en/product/manual-and-semi-automatic-pick-and-place/
+I think placing it with +/- 25µm accuracy is possible. what happend to me a couple of times is, that if I added too much glue on the bottom, the chip would drift while the glue hardens
+
+{Embed}
+https://elas.hu/en/product/manual-and-semi-automatic-pick-and-place/
+FRITSCH Manual & semi-automatic placers
+FRITSCH manual and semi-automatic pick-and-place systems enable the complete assembly process—from component feeding to the placement of various chips, SO, and FP components.
+2026-09_media/crop_fritsch_sm902-72723.jpg
+
+
 ==============================================================
-Exported 10 message(s)
+Exported 45 message(s)
 ==============================================================
