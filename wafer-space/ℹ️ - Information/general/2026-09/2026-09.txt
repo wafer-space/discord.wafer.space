@@ -865,6 +865,119 @@ I want to add more combinatorial cells to my SCL, I just need to know which ones
 @Simo6572 Do you by any chance already have a list of useful cells handy?
 
 
+[2026-09-21 12:38 p.m.] sim6572
+Looking to my netlist ( ! Means NOT):
+
+!((A+B)*C)
+!((A+B)*(C+D))
+!(!A + B)
+!(!A*!B*C)
+!(!A*!B*C*D)
+!(!A*!B*!C*D)
+(A+B)*C*D
+(A*B)+(C*D)+(E*F)
+Inverting 2x1 MUX
+Inverting 4x1 MUX
+
+Instead, if you are interesting to know the gap VS the entire commercial library, I can ask AI to do the analysis but it is surely much bigger
+
+
+[2026-09-21 1:00 p.m.] mole99
+Thank you! No need to ask AI, we already have SCLs from other open-source PDKs to compare to.
+I'm sure this list is already useful to Tholin.
+
+
+[2026-09-21 1:11 p.m.] vaticori
+You are an extremely fast learner, and very inspiring
+
+
+[2026-09-21 2:57 p.m.] tholin
+I’m actually struggling to add more cells to my SCL currently. I’ve got layouts done for oa21_2 and oa21_4 fully done and characterized, but yosys is not using them correctly and synthesizing bad logic unless I remove them from the liberty file. I’ve checked those files a million times, line by line, and all is fine, but yosys is refusing to use them correctly and I have no idea why.
+
+
+[2026-09-21 3:01 p.m.] namibj
+I propose including a fixed (non-shorted-out) version of what I submitted to ttgf0p3 ; it's a 2~3 GHz quadrature VCO, inductorless. A minor addition of some PMOS I can grab sizing for later this week if requested would allow it to clock down and sustain oscillation to on the order of 100 MHz (and less though that'll be a little less trivial to pull off).
+If pins/space is available, not that it's large at all, but having it in would validate the VCO for a multi-gigabit SerDes.
+
+
+[2026-09-21 3:03 p.m.] namibj
+Share them with @Simo6572 maybe they actually have some insight as to what's weird about them to cause them to not be picked for reasons other than Yosys being stupid/abc not doing passes that'd really spur them on?
+
+
+[2026-09-21 3:03 p.m.] tholin
+They are picked
+
+
+[2026-09-21 3:03 p.m.] tholin
+And used incorrectly
+
+
+[2026-09-21 3:03 p.m.] tholin
+The resulting netlist is broken
+
+
+[2026-09-21 3:04 p.m.] tholin
+I don’t know yosys thinks they are
+
+
+[2026-09-21 3:04 p.m.] namibj
+oh
+
+
+[2026-09-21 3:04 p.m.] namibj
+delete the timing info from the liberty entries and visually diff them against their brethen from one of the open SCLs that has one of them and has yosys not choke on it?
+
+
+[2026-09-21 3:05 p.m.] tholin
+The fab SCL doesn’t have oa21 cells
+
+
+[2026-09-21 3:07 p.m.] tholin
+Actually, it doesn’t have any oa or ao cells
+
+
+[2026-09-21 3:07 p.m.] tholin
+Huh
+
+
+[2026-09-21 3:21 p.m.] namibj
+I have a pretty concrete concept/approach proposal for a "muxed e-test" that'd work with a slightly fancier multimeter than the COB bond test jig already in use, and would utilize a dense analog switch (transmission gate) based bus to connect a variety (think 200 on a full slot) of DUTs in 4-wire like "kelvin" connectivity to external pins to have separate sense and drive wires for all the contact/via/"pin" zones of the DUTs; to be used with e.g. Xyce predictor based selection of what operating points to measure under DC or near-DC conditions, in order to fine-tune the SPICE model of e.g. an SCL and use the 1000 such dies via their cheap COB bonding and a simple test jig (just needs decent volt/current meters behind for good measurements) to get statistically significant data on mismatch across similar structures right besides one another, across reticles on a wafer, and across wafers of a lot.
+
+I'd think it could be scripted with librelane I just don't have the time to do that myself; in lieau of that it could be scripted with klayout (or magic) as it's essentially just a bus with switches underneath DUTs on one side and a digital decoder logic on the other side that just allows for externally selecting which DUT to mux to the bus. Just a decoder into one-hot select bits across the DUT slots should suffice.
+
+DUTs would be SCL cells of sufficient notability, and a bunch of primitives that are lacking foundry open-source e-test coverage (e.g. there's no data on vias/contacts, there's no coverage for thin oxide native nmos at all, there's no coverage for (admittedly kinda DRC-breaking though IMO that's ERC domain and should be waived for at least test structures if modeling is good enough) short channel native NMOS, a LOT of devices lack mismatch characterization (e.g. shottkey diodes are just a start)).
+No dynamic behavior intended.
+I would like some latchup-type structures if they can be wired to be provoked into latchup with that analog mux, to get at least a hint of e-test coverage for such behavior as it ma not be catastrophic if the chip is prevented from melting itself via teh ensuing power dissipation.
+
+
+[2026-09-21 3:21 p.m.] namibj
+Doesn't have to be _that_ fab SCL.
+
+
+[2026-09-21 3:21 p.m.] namibj
+Can literally be an OSU IHP library for all it matters
+
+
+[2026-09-21 3:26 p.m.] namibj
+For clarification I can guide someone who can write code well enough to read the docs and figure out how to do that scripting; they don't have to understand how the structures work but they should understand enough of ASIC design to grasp how the routing decisions for such matrix/bus structures can be drawn for density and still having reasonably decent signal quality. Don't want the modeling of the matrix to dominate the measurement uncertainty and 1/f noise modeling....
+
+
+[2026-09-21 4:54 p.m.] tholin
+Okay, got it. I can add cells to my SCL again!
+
+
+[2026-09-21 4:55 p.m.] tholin
+Something about either cocotb or iverilog changed AGAIN and AGAIN broke my gate-level verification setup to test sample flow outputs on my SCL
+
+
+[2026-09-21 4:55 p.m.] tholin
+Cells were good the whole time
+
+
+[2026-09-21 4:55 p.m.] tholin
+Unrelated: @namibj you suggested I should shrink the FETs in my charger IC’s power FET macro, right? They’re 2um in length right now, but its not too late for me to bring that down to 1um.
+
+
 ==============================================================
-Exported 156 message(s)
+Exported 179 message(s)
 ==============================================================

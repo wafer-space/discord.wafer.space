@@ -1027,12 +1027,40 @@ Those are the types of numbers I expected to see when we started! Great that see
 Now I'm just *slightly* paranoid that we have broken the testing and it is just saying 100% success.
 
 {Reactions}
-😂
+😂 (2)
 
 [2026-09-20 8:20 a.m.] mithro_
 Started a thread.
 
 
+[2026-09-21 1:54 p.m.] lauri4332
+Updated tester schematic and PCB. Repo: https://github.com/szfate/BondTest72
+@Tim 'mithro' Ansell @Andrew Wingate @stuart 
+
+r2 (2026-09-21) changes:
+
+Schematic:
+- Neighbour testing removed, replaced with 10 µA / 100 µA / 1 mA current sources; pullup resistors (280 kΩ / 27.4 kΩ / 2.49 kΩ) sized from the expected diode voltage drop at each current
+- ICL7660 (or alternative) added for the negative VEE supply
+- 100 kΩ pulldown on Pico pad 22 (CON6, EEPROM SIO)
+- 10 kΩ pullup on Pico pad 1 (START) per the RP2350 A2 errata
+- 120 pF capacitor added to the ADC sensing net
+- Status LEDs reduced from three to two SK6812
+- Push button changed to EVP-BT3C4A000; r1's alternate second switch footprint removed
+
+PCB:
+- Board size reduced from 80 × 100 mm to 80 × 90 mm
+- LEDs and button moved to the right side of the board so the panel no longer covers the LEDs
+- Space left for button caps
+- Feet marks on the bottom silk enlarged from 8 mm to 10 mm
+
+{Reactions}
+👍
+
+[2026-09-21 2:32 p.m.] saladchap
+Thanks @Lauri - I'll wait to see if there's any feedback / comments before ordering
+
+
 ==============================================================
-Exported 162 message(s)
+Exported 164 message(s)
 ==============================================================

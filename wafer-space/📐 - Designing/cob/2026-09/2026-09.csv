@@ -342,5 +342,25 @@ Tested:
  * @PhilippGuehring (who did a bunch of LibreSilicon related stuff) put together this spreadsheet back in like 2020ish when I asked him about this after releasing the PDK - https://bit.ly/pg-tcad -- Don't know if it is still correct or relevant. 
  * I also spent a lot of time pushing - https://bit.ly/test-open-pdk which resulted in https://github.com/google/skywater-pdk-sky130-raw-data and a bunch of stuff that @Mehdi did in collaboration with NIST - https://data.nist.gov/pdr/lps/ark:/88434/mds2-2997 -- which found a bunch of issues in the skywater spice models but we never had the bandwidth to get the problems resolved.","",""
 "169786952432746498","mithro_","2026-09-20T08:18:21.0410000+00:00","Those are the types of numbers I expected to see when we started! Great that seems to have worked well!","",""
-"169786952432746498","mithro_","2026-09-20T08:20:01.1210000+00:00","Now I'm just *slightly* paranoid that we have broken the testing and it is just saying 100% success.","","😂 (1)"
+"169786952432746498","mithro_","2026-09-20T08:20:01.1210000+00:00","Now I'm just *slightly* paranoid that we have broken the testing and it is just saying 100% success.","","😂 (2)"
 "169786952432746498","mithro_","2026-09-20T08:20:48.4570000+00:00","Started a thread.","",""
+"908721221682733106","lauri4332","2026-09-21T13:54:28.7830000+00:00","Updated tester schematic and PCB. Repo: https://github.com/szfate/BondTest72
+@Tim 'mithro' Ansell @Andrew Wingate @stuart 
+
+r2 (2026-09-21) changes:
+
+Schematic:
+- Neighbour testing removed, replaced with 10 µA / 100 µA / 1 mA current sources; pullup resistors (280 kΩ / 27.4 kΩ / 2.49 kΩ) sized from the expected diode voltage drop at each current
+- ICL7660 (or alternative) added for the negative VEE supply
+- 100 kΩ pulldown on Pico pad 22 (CON6, EEPROM SIO)
+- 10 kΩ pullup on Pico pad 1 (START) per the RP2350 A2 errata
+- 120 pF capacitor added to the ADC sensing net
+- Status LEDs reduced from three to two SK6812
+- Push button changed to EVP-BT3C4A000; r1's alternate second switch footprint removed
+
+PCB:
+- Board size reduced from 80 × 100 mm to 80 × 90 mm
+- LEDs and button moved to the right side of the board so the panel no longer covers the LEDs
+- Space left for button caps
+- Feet marks on the bottom silk enlarged from 8 mm to 10 mm","","👍 (1)"
+"1184268085822238821","saladchap","2026-09-21T14:32:11.2120000+00:00","Thanks @Lauri - I'll wait to see if there's any feedback / comments before ordering","",""

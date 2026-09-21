@@ -204,3 +204,47 @@ https://tholin.dev/custom_silicon_two_electric_boogaloo/","","👀 (1)"
 "691780627338625077","rebelmike","2026-09-21T10:51:47.7370000+00:00","I don't think there is, but there's no restriction on running multiple jobs in parallel","",""
 "220639106915368960","tholin","2026-09-21T10:52:49.7270000+00:00","I want to add more combinatorial cells to my SCL, I just need to know which ones","",""
 "323371864074485771","mole99","2026-09-21T11:18:23.2530000+00:00","@Simo6572 Do you by any chance already have a list of useful cells handy?","",""
+"1550031311388020736","sim6572","2026-09-21T12:38:19.3920000+00:00","Looking to my netlist ( ! Means NOT):
+
+!((A+B)*C)
+!((A+B)*(C+D))
+!(!A + B)
+!(!A*!B*C)
+!(!A*!B*C*D)
+!(!A*!B*!C*D)
+(A+B)*C*D
+(A*B)+(C*D)+(E*F)
+Inverting 2x1 MUX
+Inverting 4x1 MUX
+
+Instead, if you are interesting to know the gap VS the entire commercial library, I can ask AI to do the analysis but it is surely much bigger","",""
+"323371864074485771","mole99","2026-09-21T13:00:34.0410000+00:00","Thank you! No need to ask AI, we already have SCLs from other open-source PDKs to compare to.
+I'm sure this list is already useful to Tholin.","",""
+"222533500941631489","vaticori","2026-09-21T13:11:38.7240000+00:00","You are an extremely fast learner, and very inspiring","",""
+"220639106915368960","tholin","2026-09-21T14:57:43.5310000+00:00","I’m actually struggling to add more cells to my SCL currently. I’ve got layouts done for oa21_2 and oa21_4 fully done and characterized, but yosys is not using them correctly and synthesizing bad logic unless I remove them from the liberty file. I’ve checked those files a million times, line by line, and all is fine, but yosys is refusing to use them correctly and I have no idea why.","",""
+"262706220073222144","namibj","2026-09-21T15:01:28.9460000+00:00","I propose including a fixed (non-shorted-out) version of what I submitted to ttgf0p3 ; it's a 2~3 GHz quadrature VCO, inductorless. A minor addition of some PMOS I can grab sizing for later this week if requested would allow it to clock down and sustain oscillation to on the order of 100 MHz (and less though that'll be a little less trivial to pull off).
+If pins/space is available, not that it's large at all, but having it in would validate the VCO for a multi-gigabit SerDes.","",""
+"262706220073222144","namibj","2026-09-21T15:03:36.9550000+00:00","Share them with @Simo6572 maybe they actually have some insight as to what's weird about them to cause them to not be picked for reasons other than Yosys being stupid/abc not doing passes that'd really spur them on?","",""
+"220639106915368960","tholin","2026-09-21T15:03:47.6050000+00:00","They are picked","",""
+"220639106915368960","tholin","2026-09-21T15:03:50.6680000+00:00","And used incorrectly","",""
+"220639106915368960","tholin","2026-09-21T15:03:54.7030000+00:00","The resulting netlist is broken","",""
+"220639106915368960","tholin","2026-09-21T15:04:00.2890000+00:00","I don’t know yosys thinks they are","",""
+"262706220073222144","namibj","2026-09-21T15:04:01.8380000+00:00","oh","",""
+"262706220073222144","namibj","2026-09-21T15:04:37.8380000+00:00","delete the timing info from the liberty entries and visually diff them against their brethen from one of the open SCLs that has one of them and has yosys not choke on it?","",""
+"220639106915368960","tholin","2026-09-21T15:05:55.5350000+00:00","The fab SCL doesn’t have oa21 cells","",""
+"220639106915368960","tholin","2026-09-21T15:07:12.4580000+00:00","Actually, it doesn’t have any oa or ao cells","",""
+"220639106915368960","tholin","2026-09-21T15:07:14.9860000+00:00","Huh","",""
+"262706220073222144","namibj","2026-09-21T15:21:27.6130000+00:00","I have a pretty concrete concept/approach proposal for a ""muxed e-test"" that'd work with a slightly fancier multimeter than the COB bond test jig already in use, and would utilize a dense analog switch (transmission gate) based bus to connect a variety (think 200 on a full slot) of DUTs in 4-wire like ""kelvin"" connectivity to external pins to have separate sense and drive wires for all the contact/via/""pin"" zones of the DUTs; to be used with e.g. Xyce predictor based selection of what operating points to measure under DC or near-DC conditions, in order to fine-tune the SPICE model of e.g. an SCL and use the 1000 such dies via their cheap COB bonding and a simple test jig (just needs decent volt/current meters behind for good measurements) to get statistically significant data on mismatch across similar structures right besides one another, across reticles on a wafer, and across wafers of a lot.
+
+I'd think it could be scripted with librelane I just don't have the time to do that myself; in lieau of that it could be scripted with klayout (or magic) as it's essentially just a bus with switches underneath DUTs on one side and a digital decoder logic on the other side that just allows for externally selecting which DUT to mux to the bus. Just a decoder into one-hot select bits across the DUT slots should suffice.
+
+DUTs would be SCL cells of sufficient notability, and a bunch of primitives that are lacking foundry open-source e-test coverage (e.g. there's no data on vias/contacts, there's no coverage for thin oxide native nmos at all, there's no coverage for (admittedly kinda DRC-breaking though IMO that's ERC domain and should be waived for at least test structures if modeling is good enough) short channel native NMOS, a LOT of devices lack mismatch characterization (e.g. shottkey diodes are just a start)).
+No dynamic behavior intended.
+I would like some latchup-type structures if they can be wired to be provoked into latchup with that analog mux, to get at least a hint of e-test coverage for such behavior as it ma not be catastrophic if the chip is prevented from melting itself via teh ensuing power dissipation.","",""
+"262706220073222144","namibj","2026-09-21T15:21:41.4690000+00:00","Doesn't have to be _that_ fab SCL.","",""
+"262706220073222144","namibj","2026-09-21T15:21:55.8650000+00:00","Can literally be an OSU IHP library for all it matters","",""
+"262706220073222144","namibj","2026-09-21T15:26:43.1410000+00:00","For clarification I can guide someone who can write code well enough to read the docs and figure out how to do that scripting; they don't have to understand how the structures work but they should understand enough of ASIC design to grasp how the routing decisions for such matrix/bus structures can be drawn for density and still having reasonably decent signal quality. Don't want the modeling of the matrix to dominate the measurement uncertainty and 1/f noise modeling....","",""
+"220639106915368960","tholin","2026-09-21T16:54:33.5520000+00:00","Okay, got it. I can add cells to my SCL again!","",""
+"220639106915368960","tholin","2026-09-21T16:55:15.7990000+00:00","Something about either cocotb or iverilog changed AGAIN and AGAIN broke my gate-level verification setup to test sample flow outputs on my SCL","",""
+"220639106915368960","tholin","2026-09-21T16:55:19.9500000+00:00","Cells were good the whole time","",""
+"220639106915368960","tholin","2026-09-21T16:55:55.5550000+00:00","Unrelated: @namibj you suggested I should shrink the FETs in my charger IC’s power FET macro, right? They’re 2um in length right now, but its not too late for me to bring that down to 1um.","",""
