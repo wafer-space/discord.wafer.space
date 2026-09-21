@@ -76,3 +76,38 @@ Like, with that knowledge, I'm confident there's sticky tape or even just using 
 Or, say, one of the heat activated epoxy types for a few seconds. Or even just having something that can just lay over the area and keep both from sliding away from another, like e.g. just a strip of very soft silicone mat placed across the die being rubbery non-slip against the PCB and the die.
 
 Of course if only we had more free automation of the bonder it could pick up optical alignment from the die and the PCB and just use die coordinates for die bond sites and PCB coordinates for PCB bond sites.","",""
+"169786952432746498","mithro_","2026-09-21T01:33:12.6470000+00:00","@stuart / @Lauri / @Andrew Wingate - Lots of things from @namibj & @Stephan Bökelmann that might be worth commenting on or discussing?","",""
+"169786952432746498","mithro_","2026-09-21T01:33:48.5160000+00:00","@psychogenic - Just wanted to make sure you saw this thread. As mentioned in the past, I would love to figure out a way to have you do a YouTube video tutorial once KiCAD support is landed.","",""
+"937144360284348487","psychogenictech","2026-09-21T02:10:00.2570000+00:00","I hadn't, thanks for the ping.  I might be able to assist with the plugin side--been meaning to update <https://github.com/psychogenic/kicad-skip> and think it could be of use here.  In any case, just did a design using the GF CoB and could certainly give this all a go to see how things stand.","",""
+"756011607603019777","anfroholic","2026-09-21T03:01:59.0230000+00:00","I have been watching, but haven't had the time to internalize it all yet. 
+
+Please someone correct me if I'm wrong, but here's how I'm reading this so far. 
+
+We have:
+- die [pad locations]
+- CoB [pad locations]
+- stretch goal [define wire shape?]
+
+We want: `Description Language` *json, yaml, w/e*
+
+Generated from: 
+- `.kicad_pcb`
+- `GDS` Is there even enough info there?
+- Not sure about wire shape
+- Placement and Orientation inferred from GDS/KiCad
+
+
+Current pad definitions are located in `slot_size.yaml` in the template, defined by N/S/W/E
+I used that truth to sync kicad and gds from my original wirebonding drawing maker. 
+
+Sorry, I don't think I have too much to add other than saying 'start at first principles' and whatever comes from this should be an exchange format others can parse for their needs, ie. pnp, wirebonder, etc. 
+
+Does that sound right?","",""
+"169786952432746498","mithro_","2026-09-21T03:32:29.7340000+00:00","Only somewhat connected to what Andrew said above -- I was thinking about it from what type of software might need / use the stuff found in the file and came up with the following items:
+ * (a) Python script which generates a nice looking PDF (designed for a human) which can be given to a bond house technician to do the bonding in a manual fashion.
+ * (b) Some type of ""rules based"" DRC checking software which tries to validate if a plan is manufacturable.
+ * (c) Some type of ""simulation based"" DRC checking software which runs a 3d simulation of the bonding head flying over a virtual model of the design and checks for things like clearance between the bond head and other objects.
+ * (d) Some type of ""bond machine programming"" software which loads the data into a wire bonding machine in some way (probably initually using nasty emulated keyboard and screen capture type stuff)
+ * (e) Some type of ""bond testing / validation"" software / board like what @Lauri has developed for wafer.space
+
+I was also thinking there probably needs to be renders of the GDS included so that visual alignment / correction can be done? Ideally this could all work without needing special alignment marks on the part?","",""

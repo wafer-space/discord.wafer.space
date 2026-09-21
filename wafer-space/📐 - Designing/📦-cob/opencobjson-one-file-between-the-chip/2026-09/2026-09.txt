@@ -246,6 +246,56 @@ Or, say, one of the heat activated epoxy types for a few seconds. Or even just h
 Of course if only we had more free automation of the bonder it could pick up optical alignment from the die and the PCB and just use die coordinates for die bond sites and PCB coordinates for PCB bond sites.
 
 
+[2026-09-21 1:33 a.m.] mithro_
+@stuart / @Lauri / @Andrew Wingate - Lots of things from @namibj & @Stephan Bökelmann that might be worth commenting on or discussing?
+
+
+[2026-09-21 1:33 a.m.] mithro_
+@psychogenic - Just wanted to make sure you saw this thread. As mentioned in the past, I would love to figure out a way to have you do a YouTube video tutorial once KiCAD support is landed.
+
+
+[2026-09-21 2:10 a.m.] psychogenictech
+I hadn't, thanks for the ping.  I might be able to assist with the plugin side--been meaning to update <https://github.com/psychogenic/kicad-skip> and think it could be of use here.  In any case, just did a design using the GF CoB and could certainly give this all a go to see how things stand.
+
+
+[2026-09-21 3:01 a.m.] anfroholic
+I have been watching, but haven't had the time to internalize it all yet. 
+
+Please someone correct me if I'm wrong, but here's how I'm reading this so far. 
+
+We have:
+- die [pad locations]
+- CoB [pad locations]
+- stretch goal [define wire shape?]
+
+We want: `Description Language` *json, yaml, w/e*
+
+Generated from: 
+- `.kicad_pcb`
+- `GDS` Is there even enough info there?
+- Not sure about wire shape
+- Placement and Orientation inferred from GDS/KiCad
+
+
+Current pad definitions are located in `slot_size.yaml` in the template, defined by N/S/W/E
+I used that truth to sync kicad and gds from my original wirebonding drawing maker. 
+
+Sorry, I don't think I have too much to add other than saying 'start at first principles' and whatever comes from this should be an exchange format others can parse for their needs, ie. pnp, wirebonder, etc. 
+
+Does that sound right?
+
+
+[2026-09-21 3:32 a.m.] mithro_
+Only somewhat connected to what Andrew said above -- I was thinking about it from what type of software might need / use the stuff found in the file and came up with the following items:
+ * (a) Python script which generates a nice looking PDF (designed for a human) which can be given to a bond house technician to do the bonding in a manual fashion.
+ * (b) Some type of "rules based" DRC checking software which tries to validate if a plan is manufacturable.
+ * (c) Some type of "simulation based" DRC checking software which runs a 3d simulation of the bonding head flying over a virtual model of the design and checks for things like clearance between the bond head and other objects.
+ * (d) Some type of "bond machine programming" software which loads the data into a wire bonding machine in some way (probably initually using nasty emulated keyboard and screen capture type stuff)
+ * (e) Some type of "bond testing / validation" software / board like what @Lauri has developed for wafer.space
+
+I was also thinking there probably needs to be renders of the GDS included so that visual alignment / correction can be done? Ideally this could all work without needing special alignment marks on the part?
+
+
 ==============================================================
-Exported 47 message(s)
+Exported 52 message(s)
 ==============================================================
