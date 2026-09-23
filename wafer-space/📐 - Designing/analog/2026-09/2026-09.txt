@@ -1888,6 +1888,38 @@ AFAIK it needs the `snapshot` or `snapshots` option activated to do a true `save
 Found a better way to do charge termination on my IC. I found that the voltage coming out the output of the voltage regulating opamp approaches somewhere around 0.46V as the current through the power FET reaches 0, no matter the target voltage. No idea why. But, its a good way of telling when to stop.
 
 
+[2026-09-23 1:30 p.m.] namibj
+Great; try to lock in to that operating condition as a DC operating point and get sensitivity printout of that voltage there w.r.t. pretty much all the tuning variables like resistor ratios printed.
+
+
+[2026-09-23 1:32 p.m.] namibj
+See if this may be very susceptible to certain divider ratios, or if it's something that comes from mos threshold voltage, or wherever so you can understand how it's going to be vulnerable to PVT.
+
+If you need help getting the sensitivity analysis, I can probably help you.
+
+
+[2026-09-23 1:46 p.m.] tholin
+I’m wondering if it’d be possible to simulate the whole chip with padring and all. If magic can handle extracting that. If xyce can handle simulating that.
+
+
+[2026-09-23 1:50 p.m.] namibj
+yes.
+
+
+[2026-09-23 1:52 p.m.] namibj
+Extract with magic settings such that it'll merge replicated transistors as reasonably feasible for not taking forever. Like, there's some option to extract multi-finger devices into `m` with parasitic capacitance of SD diffusions spread evenly.
+
+
+[2026-09-23 1:54 p.m.] namibj
+That said, I believe I had a script for that around.
+You should prepare a gds with all hierarchy flattened and the only labels remaining being those that label the actual bond pads themselves.
+I think it'd be best to delete fill metal spam that could spam magic extraction efforts.
+
+
+[2026-09-23 1:57 p.m.] namibj
+Xyce is btw literally created for simulating entire chips, it even has a 2-level newton solver facility to economically handle packaging parasitics without just blowing up the highly efficiency-improving absence of parasitics between transistor source diffusions and independent voltage sources, which allows it to do some singleton optimization to the matrix solving step that supposedly severely improves parallelization ability.
+
+
 ==============================================================
-Exported 378 message(s)
+Exported 385 message(s)
 ==============================================================

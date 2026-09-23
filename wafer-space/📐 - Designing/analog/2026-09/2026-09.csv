@@ -494,3 +494,14 @@ Also read the Xyce user manual with the reference guide on hand on the subject o
 AFAIK it needs the `snapshot` or `snapshots` option activated to do a true `save all` in preparation for full flexibility there.","",""
 "262706220073222144","namibj","2026-09-17T01:12:25.0330000+00:00","","",""
 "220639106915368960","tholin","2026-09-22T20:08:42.5050000+00:00","Found a better way to do charge termination on my IC. I found that the voltage coming out the output of the voltage regulating opamp approaches somewhere around 0.46V as the current through the power FET reaches 0, no matter the target voltage. No idea why. But, its a good way of telling when to stop.","",""
+"262706220073222144","namibj","2026-09-23T13:30:43.4210000+00:00","Great; try to lock in to that operating condition as a DC operating point and get sensitivity printout of that voltage there w.r.t. pretty much all the tuning variables like resistor ratios printed.","",""
+"262706220073222144","namibj","2026-09-23T13:32:01.4250000+00:00","See if this may be very susceptible to certain divider ratios, or if it's something that comes from mos threshold voltage, or wherever so you can understand how it's going to be vulnerable to PVT.
+
+If you need help getting the sensitivity analysis, I can probably help you.","",""
+"220639106915368960","tholin","2026-09-23T13:46:13.5420000+00:00","I’m wondering if it’d be possible to simulate the whole chip with padring and all. If magic can handle extracting that. If xyce can handle simulating that.","",""
+"262706220073222144","namibj","2026-09-23T13:50:59.0560000+00:00","yes.","",""
+"262706220073222144","namibj","2026-09-23T13:52:14.6860000+00:00","Extract with magic settings such that it'll merge replicated transistors as reasonably feasible for not taking forever. Like, there's some option to extract multi-finger devices into `m` with parasitic capacitance of SD diffusions spread evenly.","",""
+"262706220073222144","namibj","2026-09-23T13:54:31.0490000+00:00","That said, I believe I had a script for that around.
+You should prepare a gds with all hierarchy flattened and the only labels remaining being those that label the actual bond pads themselves.
+I think it'd be best to delete fill metal spam that could spam magic extraction efforts.","",""
+"262706220073222144","namibj","2026-09-23T13:57:43.5220000+00:00","Xyce is btw literally created for simulating entire chips, it even has a 2-level newton solver facility to economically handle packaging parasitics without just blowing up the highly efficiency-improving absence of parasitics between transistor source diffusions and independent voltage sources, which allows it to do some singleton optimization to the matrix solving step that supposedly severely improves parallelization ability.","",""

@@ -661,7 +661,7 @@ Hi all, I have some extra 1x1 slots on the upcoming run due December.  We are lo
 Please feel free to reach out if you are interested in making something that might be a fit for those, you can also message @Paul  too
 
 {Reactions}
-💜 👀
+💜 (2) 👀
 
 [2026-09-19 4:53 p.m.] wafer.space Community #announcements
 # Run #3: 1x1 Slots Running Low
@@ -1066,7 +1066,128 @@ SPRIND | AI-Native Chip Design
 We need pioneering teams for whom speed is everything. Teams that make tomorrow’s chip development as effortless as today’s software engineering. Apply by November 30, 2026.
 2026-09_media/SPR_260914_Keyvisual_dc7607ec40-834BD.png
 
+{Reactions}
+👀 (2)
+
+[2026-09-23 1:24 p.m.] namibj
+I'd aim for a more modern model than bsim4...... notably it's source-relative which makes it really ugly when you try to model multi-finger structures without pronounced diffusiion regions between the fingers (such as approximation models for octagonal annular transistors as an example: gotta model the significant width difference between the inner border and the outer border of gate poly).
+
+But yeah, I had planned similar approach just with either a more modern bsim or with PSP 107.
+
+Timeline for that was looking forward to summer next year.
+
+
+[2026-09-23 1:25 p.m.] namibj
+>Bundesagentur
+
+
+[2026-09-23 3:05 p.m.] wafer.space Community #announcements
+# Run #3: Early Bird Deadline + 1x1 Slots Gone!
+
+All of our full-sized slots are gone! Thank you @everyone for supporting us :waferspace: ❤️ 
+
+Plenty of half and quarter-sized slots are still up for grabs, so there is still a chance to join Run #3 if you haven't already. Speaking of which...
+
+**Early bird pricing ends in a week!** You have until **30 September 2026 23:59 AoE** to lock in the discounted price ($2/die for the quarter slot and $4/die for the half slots) and save money on your next tape out. Don't wait until the very last minute - they might be gone by then!
+
+Get your slot here: [crowdsupply.com/wafer-space/gf180mcu-run-3](<https://www.crowdsupply.com/wafer-space/gf180mcu-run-3/#products>)
+
+
+[2026-09-23 3:40 p.m.] martinschoeberl5796
+Starter question: I am installing the template and librelane on an Ubuntu 24.04.4 LTS VM. I am wondering why so many Nix packages are compiled from source. The `nix-shell` runs now for probably an hour or more.
+
+
+[2026-09-23 3:44 p.m.] 246tnt
+Do you have the fossi foundation nix cache enabled ?
+
+
+[2026-09-23 3:44 p.m.] martinschoeberl5796
+not explicitly, just did as described in the README.
+
+
+[2026-09-23 3:45 p.m.] martinschoeberl5796
+Or maybe I had from a former librelane installation on the same machine.
+
+
+[2026-09-23 4:00 p.m.] 246tnt
+Which README ?
+
+
+[2026-09-23 4:01 p.m.] martinschoeberl5796
+I think I did install according to the nix setup as described in the LibreLane docu. Never mind, I will give it a new try from scratch.
+
+
+[2026-09-23 4:22 p.m.] martinschoeberl5796
+Gave it a try on Ubuntu on ARM64 (as I have a Mac) and got the following error: `error: Package ‘ghdl-bin-5.1.1’ in /nix/store/amc3kqk26hj1rkcpkv2b9rqpv17wf8j6-source/nix/ghdl-bin.nix:114 is not available on the requested hostPlatform:
+         hostPlatform.system = "aarch64-linux"`
+
+
+[2026-09-23 4:30 p.m.] namibj
+Ohhh, yeah, that's much less surprising.
+
+Go compile or set the VM to be x86_64.
+
+
+[2026-09-23 4:31 p.m.] martinschoeberl5796
+But I am running on an ARM? How can I force nix to compile?
+
+
+[2026-09-23 4:33 p.m.] namibj
+Don't use the `-bin` of ghdl?
+
+Or set your Mac's Linux VM runtime to give you an x86 VM, the MAC processors have extra modes to allow very efficient emulation.
+
+
+[2026-09-23 4:33 p.m.] namibj
+https://github.com/librelane/librelane/issues/859
+
+{Embed}
+https://github.com/librelane/librelane/issues/859
+GHDL Build Fails on aarch64-linux · Issue #859 · librelane/librelane
+Description Hi Everyone! Today, I tried to run the nix-shell for the ihp-sg13g2 template repo: https://github.com/IHP-GmbH/ihp-sg13g2-librelane-template Unfortunately, during the build process, GHD...
+2026-09_media/859-22B71
+
+
+[2026-09-23 4:35 p.m.] martinschoeberl5796
+I did not use the bin, I am just installing with nix and it should compile from source if it does not find the package. Going for a x86 on top of ARM. This is brutally slow (I have done it with Windows 11 for Vivado).
+
+
+[2026-09-23 4:36 p.m.] namibj
+See what that 3.X is they mention in the response to that issue.
+
+
+[2026-09-23 4:40 p.m.] martinschoeberl5796
+Is there a way to skip GHDL in the LibreLane installation? I don't plan to use VHDL.
+
+
+[2026-09-23 4:41 p.m.] namibj
+Should be.
+
+Have you considered running librelane directly on macos?
+
+
+[2026-09-23 4:44 p.m.] martinschoeberl5796
+What do you mean? Yes, I have a setup to run plain LibreLane on my Mac (also chipIgnite Sky130 work), but the version that is pinned for the wave.space template gives me trouble.
+
+
+[2026-09-23 4:49 p.m.] namibj
+https://github.com/librelane/librelane/issues/674 ?
+
+{Embed}
+https://github.com/librelane/librelane/issues/674
+GHDL not available on aarch64 platforms · Issue #674 · librelane/...
+Issue originally created by fred-corp on 2025-02-19T22:58:39Z Description When trying to use a VHDL source with the --flow VHDLClassic argument, I get the following Yosys error : ERROR: Can't l...
+2026-09_media/674-9E90C
+
+
+[2026-09-23 4:50 p.m.] namibj
+You can run it on Darwin or on Linux; but it seems Linux with arm64 isn't available.
+
+
+[2026-09-23 4:54 p.m.] archit3ch
+Are the sponsored 1x1 slots also gone or... 🤔
+
 
 ==============================================================
-Exported 191 message(s)
+Exported 213 message(s)
 ==============================================================
