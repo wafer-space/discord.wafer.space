@@ -1920,6 +1920,177 @@ I think it'd be best to delete fill metal spam that could spam magic extraction 
 Xyce is btw literally created for simulating entire chips, it even has a 2-level newton solver facility to economically handle packaging parasitics without just blowing up the highly efficiency-improving absence of parasitics between transistor source diffusions and independent voltage sources, which allows it to do some singleton optimization to the matrix solving step that supposedly severely improves parallelization ability.
 
 
+[2026-09-24 10:33 a.m.] tholin
+Is there no easy way to instantiate a cell from another gds file in klayout?
+
+
+[2026-09-24 11:11 a.m.] tholin
+Ended up writing a short python script
+
+
+[2026-09-24 11:45 a.m.] tholin
+Oh yeah, its all coming together!
+
+{Attachments}
+2026-09_media/image-F448A.png
+
+
+[2026-09-24 11:45 a.m.] tholin
+(literally)
+
+
+[2026-09-24 11:47 a.m.] tholin
+Now I need to see how to invoke the filler generation script locally and its done!
+
+
+[2026-09-24 11:47 a.m.] tholin
+In the meantime, its time for me to ring up my artist friends and get that unused space filled.
+
+
+[2026-09-24 12:42 p.m.] tholin
+Gonna just run the whole precheck locally and see what happens.
+
+
+[2026-09-24 12:44 p.m.] tholin
+@Leo Moser (mole99) Failing this step. Could this be because I inserted the breaks into the padring? That shouldn’t have moved the pad locations, though.
+
+{Attachments}
+2026-09_media/image-BE6AC.png
+
+
+[2026-09-24 12:47 p.m.] tholin
+Ah crap
+
+{Attachments}
+2026-09_media/image-619EC.png
+
+
+[2026-09-24 12:47 p.m.] tholin
+0.5um difference
+
+
+[2026-09-24 12:47 p.m.] tholin
+I’m sure that wouldn’t mess up the wire bonding process, but I think I can fix this by hand
+
+
+[2026-09-24 12:52 p.m.] tholin
+Its not just the pads I isolated with the breaks. All vertical pads have been shifted down 0.5u
+
+
+[2026-09-24 12:55 p.m.] mole99
+@Tholin  The default LibreLane pad script handles breaker cells in the same way as normal pads. Therefore, all of the cells get shifted to ensure the same spacing between them.
+
+You could create a custom pad script which inserts the breaker at fixed coordinates cells after the pads have been placed.
+
+
+[2026-09-24 12:55 p.m.] tholin
+I did
+
+
+[2026-09-24 12:57 p.m.] tholin
+The breakers are also 5um high each, not 0.5
+
+
+[2026-09-24 12:59 p.m.] mole99
+Just to make sure we're on the same page, did you create a custom `pad_cfg.tcl` similar to the one I made here?
+https://github.com/mole99/sky130-fabulous-testchip/blob/main/librelane/pad_cfg.tcl
+
+
+[2026-09-24 12:59 p.m.] tholin
+Here. I’ve hidden the breakers so you can see where they are
+
+{Attachments}
+2026-09_media/image-EE4C5.png
+
+
+[2026-09-24 1:00 p.m.] tholin
+I added some lines to the default pad_cfg.tcl
+Its an ugly hack, but it works
+
+{Attachments}
+2026-09_media/image-248CC.png
+
+{Reactions}
+👍
+
+[2026-09-24 1:01 p.m.] tholin
+I don’t think there is a 0.5u filler, so if this *somehow* ended up creating a gap of 0.5u, it would not be able to fill it.
+
+
+[2026-09-24 1:04 p.m.] mole99
+There actually is `gf180mcu_fd_io__fillnc` which is a 0.1um filler cell. It is also part of the LibreLane pad config.
+
+
+[2026-09-24 1:05 p.m.] tholin
+I don’t see it being used in my layout
+
+
+[2026-09-24 1:05 p.m.] tholin
+So not sure where that 0.5u discrepancy is coming from. I don’t see any gaps in the padring either, from missing cells
+
+
+[2026-09-24 1:11 p.m.] mole99
+Just to be sure, your breaker cells are not part of the `PAD_SOUTH/EAST/WEST/NORTH` lists? Because that would shift all of the pads.
+
+
+[2026-09-24 1:16 p.m.] tholin
+Nope
+
+
+[2026-09-24 1:16 p.m.] tholin
+And again, the shift is by just 0.5u and fillnc is not used anywhere
+
+
+[2026-09-24 1:16 p.m.] tholin
+So where that even comes from, I have no idea
+
+
+[2026-09-24 1:16 p.m.] tholin
+I’m investigating rn
+
+
+[2026-09-24 1:17 p.m.] tholin
+I’ll let you know once I know anything
+
+{Reactions}
+👌
+
+[2026-09-24 1:27 p.m.] tholin
+If I use the default pad_cfg.tcl it actually inserts fillnc amounting to the missing 0.5u. So it is an issue with my script. Its somehow not including fillnc, I believe.
+
+
+[2026-09-24 1:34 p.m.] tholin
+I think I might’ve used the wrong pad cfg script as my base to modify
+
+
+[2026-09-24 1:55 p.m.] mole99
+This is the upstream one (in dev): https://github.com/librelane/librelane/blob/dev/librelane/scripts/openroad/common/pad_cfg.tcl
+
+
+[2026-09-24 2:10 p.m.] tholin
+I already fixed my script with more hacks, but I’m not gonna be using it again.
+
+
+[2026-09-24 2:11 p.m.] tholin
+I already put too much effort into my layout, so I’m just gonna fix it by hand
+
+
+[2026-09-24 2:11 p.m.] tholin
+Its gonna take an hour probably, but I can shift all the IO cells into their proper positions and insert the fillncs
+
+
+[2026-09-24 2:35 p.m.] tholin
+If I used some of the free space and unused pads on this chip to just expose a MiM cap directly to the outside world, would that be of use for some characterization?
+
+
+[2026-09-24 2:35 p.m.] tholin
+That’d be a pretty low-effort thing I could do real quick.
+
+
+[2026-09-24 3:19 p.m.] mole99
+ws-run 2 had a design (`RLCM`) with some test passives to validate against openEMS.
+
+
 ==============================================================
-Exported 385 message(s)
+Exported 422 message(s)
 ==============================================================

@@ -23,3 +23,11 @@ As far as I can see, the KLayout connectivity setup for LVS does not consider bu
 Which seems to be an oversight. Do you think it makes sense to add the simple case of a butted tap, without considering SAB for now?
 
 By the way, are you planning to use KLayout for LVS?","",""
+"738396032295108721","bailey8889","2026-09-24T08:15:25.1790000+00:00","In magic `vss` and `I_in` are shorted, but in klayout they are not.　(old post stuck in queue).","",""
+"596068704471482370","246tnt","2026-09-24T08:46:43.8020000+00:00","Whether butted taps extract as shorter is a bit inconsistent between magic/klayout and across PDKs.
+
+For IHP I think they are now made to be shorted because IHP actually uses that in their standard cells ( i.e. they only connect the butted tap to power/gnd and rely on the salicide to conduct to the source ).
+
+On sky130 I think they are not extracted as shorts ( although they actually are ) because the salicide is not great and you should never rely on it for anything.
+
+On GF180 I'm pretty sure I've also seen them recommend to always contact both source & tap even for butted taps (although here the salicide is pretty good).","","👍 (1)"
