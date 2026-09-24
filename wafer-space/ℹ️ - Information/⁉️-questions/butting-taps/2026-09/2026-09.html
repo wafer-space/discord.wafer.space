@@ -18,6 +18,17 @@ In the pdk used for chipathon 2026, the magic tech file extracts abutting tap an
 Does wafer.space use a modified klayout rule that shorts the abutting diffusions?
 
 <span class="chatlog__markdown-mention" title="mole99">@Leo Moser (mole99)</span></span> <span class=chatlog__edited-timestamp title="Wednesday, September 23, 2026 11:21 p.m.">(edited)</span></div><div class=chatlog__attachment><div class=chatlog__attachment-generic><svg class=chatlog__attachment-generic-icon><use href=#attachment-icon /></svg><div class=chatlog__attachment-generic-name><a href=2026-09_media/cg_amp_tia-A37AC.gds> cg_amp_tia.gds </a></div><div class=chatlog__attachment-generic-size>5.18 KB</div></div></div><div class=chatlog__attachment><a href=2026-09_media/image-5A796.png> <img class=chatlog__attachment-media src=2026-09_media/image-5A796.png alt="Image attachment" title="Image: image.png (362.57 KB)" loading=lazy> </a></div></div></div></div></div>
+<div class=chatlog__message-group><div id=chatlog__message-container-1552581253557915698 class=chatlog__message-container data-message-id=1552581253557915698><div class=chatlog__message><div class=chatlog__message-aside><img class=chatlog__avatar src=2026-09_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png alt=Avatar loading=lazy></div><div class=chatlog__message-primary><div class=chatlog__header><span class=chatlog__author title=mole99 data-user-id=323371864074485771>Leo Moser (mole99)</span> <span class=chatlog__timestamp title="Thursday, September 24, 2026 7:23 a.m."><a href=#chatlog__message-container-1552581253557915698>2026-09-24 7:23 a.m.</a></span></div><div class="chatlog__content chatlog__markdown"><span class=chatlog__markdown-preserve>Thanks <span class="chatlog__markdown-mention" title="bailey8889">@bailey</span> for bringing this up.
+
+I assume this is the same situation as on ihp, correct?
+There is definitely salicide being used in the gf180mcu process. There is also a salicide block (SAB) layer.
+
+You&#39;re refering to this line in the magic tech file regarding butted taps: <a href="https://github.com/fossi-foundation/open-pdks/blob/aa3fc215a80d32437b8cca1cb3fdee819d18c4c9/gf180mcu/magic/gf180mcu.tech#L711">https://github.com/fossi-foundation/open-pdks/blob/aa3fc215a80d32437b8cca1cb3fdee819d18c4c9/gf180mcu/magic/gf180mcu.tech#L711</a>
+
+As far as I can see, the KLayout connectivity setup for LVS does not consider butted taps: <a href="https://github.com/fossi-foundation/globalfoundries-pdk-libs-gf180mcu_fd_pv/blob/035e6d1f4bf0acfb60606b056e7d2159cba30fef/klayout/lvs/rule_decks/general_connections.lvs#L25">https://github.com/fossi-foundation/globalfoundries-pdk-libs-gf180mcu_fd_pv/blob/035e6d1f4bf0acfb60606b056e7d2159cba30fef/klayout/lvs/rule_decks/general_connections.lvs#L25</a>
+Which seems to be an oversight. Do you think it makes sense to add the simple case of a butted tap, without considering SAB for now?
+
+By the way, are you planning to use KLayout for LVS?</span></div></div></div></div></div>
 
 </div>
-<div class=postamble><div class=postamble__entry>Exported 1 message(s)</div><div class=postamble__entry>Timezone: UTC+0</div></div>
+<div class=postamble><div class=postamble__entry>Exported 2 message(s)</div><div class=postamble__entry>Timezone: UTC+0</div></div>

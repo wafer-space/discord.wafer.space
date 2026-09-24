@@ -16,7 +16,7 @@
     "after": "2026-08-31T23:59:59.999+00:00",
     "before": "2026-10-01T00:00:00+00:00"
   },
-  "exportedAt": "2026-09-24T04:34:52.3501898+00:00",
+  "exportedAt": "2026-09-24T08:25:57.2303905+00:00",
   "messages": [
     {
       "id": "1544710225465053264",
@@ -10000,7 +10000,81 @@
         }
       ],
       "inlineEmojis": []
+    },
+    {
+      "id": "1552575021371883590",
+      "type": "Default",
+      "timestamp": "2026-09-24T06:58:50.544+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@Martin Schoeberl Let me address your two issues.\n\n1. Nix is recompiling the binaries\n\nThis should not happen if you have the FOSSi Nix cache set up. Please follow the installation instructions at https://librelane.readthedocs.io/en/stable/installation/nix_installation/index.html, making sure you set up https://nix-cache.fossi-foundation.org as an additional Nix cache.\n\nYou can verify that the Nix cache has been set up correctly by starting a Nix shell with LibreLane (nothing should recompile):\n\n```\n$ nix shell github:librelane/librelane\n$ librelane --smoke-test\n```\n\n2. ghdl-bin is not available for aarch64-linux\n\nThe ghdl-bin package (the VHDL simulator) is only available for x86_64-linux and aarch64-darwin. That is unfortunately a limitation of GHDL as it only targets these platforms afaik: https://github.com/ghdl/ghdl/releases/tag/v6.0.0\n\nghdl-bin is required by wafer.space because the Nix flake in the gf180mcu-project-template includes cocotb, and cocotb requires ghdl-bin during the check phase.\n\nWe can try to workaround this problem: You can simply remove the cocotb package from the Nix flake: https://github.com/wafer-space/gf180mcu-project-template/blob/0de7e394337a1f7f5303ac7a3681bf2481b58176/flake.nix#L71\n\nThis should allow you to enable the Nix shell and run LibreLane. However, you won't be able to run any simulations with cocotb.\n\nAnother workaround would be to disable the check phase in cocotb and remove ghdl-bin when the platform is aarch64-linux. Of course, then we can't be sure that cocotb will work as expected, but it will probably be fine. Let me know if you would like to give this a try.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-09_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "Release v6.0.0 · ghdl/ghdl",
+          "url": "https://github.com/ghdl/ghdl/releases/tag/v6.0.0",
+          "timestamp": null,
+          "description": "GHDL 6.0.0\n\nGHDL offers the simulator and synthesis tool for VHDL. GHDL can be built for various backends:\n\ngcc - using the GCC compiler framework\nmcode - in memory code generation\nllvm - using the...",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "2026-09_media/v6.0-CB263.0",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": [],
+          "inlineEmojis": []
+        },
+        {
+          "title": "gf180mcu-project-template/flake.nix at 0de7e394337a1f7f5303ac7a3681...",
+          "url": "https://github.com/wafer-space/gf180mcu-project-template/blob/0de7e394337a1f7f5303ac7a3681bf2481b58176/flake.nix",
+          "timestamp": null,
+          "description": "Project template for wafer.space MPW runs using the gf180mcu PDK - wafer-space/gf180mcu-project-template",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "2026-09_media/gf180mcu-project-template-6FF39",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": [],
+          "inlineEmojis": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "861590732279775242",
+          "name": "martinschoeberl5796",
+          "discriminator": "0000",
+          "nickname": "Martin Schoeberl",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-09_media/690e9352ca7cc1acc4dfe04691a310a7-2010F.png"
+        }
+      ],
+      "inlineEmojis": []
     }
   ],
-  "messageCount": 221
+  "messageCount": 222
 }

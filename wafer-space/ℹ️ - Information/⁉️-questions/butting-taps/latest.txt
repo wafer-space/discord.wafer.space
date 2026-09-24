@@ -25,6 +25,20 @@ Does wafer.space use a modified klayout rule that shorts the abutting diffusions
 2026-09_media/image-5A796.png
 
 
+[2026-09-24 7:23 a.m.] mole99
+Thanks @bailey for bringing this up.
+
+I assume this is the same situation as on ihp, correct?
+There is definitely salicide being used in the gf180mcu process. There is also a salicide block (SAB) layer.
+
+You're refering to this line in the magic tech file regarding butted taps: https://github.com/fossi-foundation/open-pdks/blob/aa3fc215a80d32437b8cca1cb3fdee819d18c4c9/gf180mcu/magic/gf180mcu.tech#L711
+
+As far as I can see, the KLayout connectivity setup for LVS does not consider butted taps: https://github.com/fossi-foundation/globalfoundries-pdk-libs-gf180mcu_fd_pv/blob/035e6d1f4bf0acfb60606b056e7d2159cba30fef/klayout/lvs/rule_decks/general_connections.lvs#L25
+Which seems to be an oversight. Do you think it makes sense to add the simple case of a butted tap, without considering SAB for now?
+
+By the way, are you planning to use KLayout for LVS?
+
+
 ==============================================================
-Exported 1 message(s)
+Exported 2 message(s)
 ==============================================================

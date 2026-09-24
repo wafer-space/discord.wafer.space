@@ -327,3 +327,27 @@ Which version of librelane did you have running previously ? Was it a +3.0 versi
 "509798510170865675","essen__","2026-09-23T19:23:12.4700000+00:00","Also @Martin Schoeberl which OSX version are you using, and which mac generation ?","",""
 "861590732279775242","martinschoeberl5796","2026-09-23T19:25:22.6020000+00:00","26.6.2, M1","","👍 (1)"
 "169786952432746498","mithro_","2026-09-24T00:28:25.3620000+00:00","@Egor Lukyanchenko - Do you have any details about the efuse designs on the latest tape outs?","",""
+"323371864074485771","mole99","2026-09-24T06:58:50.5440000+00:00","@Martin Schoeberl Let me address your two issues.
+
+1. Nix is recompiling the binaries
+
+This should not happen if you have the FOSSi Nix cache set up. Please follow the installation instructions at https://librelane.readthedocs.io/en/stable/installation/nix_installation/index.html, making sure you set up https://nix-cache.fossi-foundation.org as an additional Nix cache.
+
+You can verify that the Nix cache has been set up correctly by starting a Nix shell with LibreLane (nothing should recompile):
+
+```
+$ nix shell github:librelane/librelane
+$ librelane --smoke-test
+```
+
+2. ghdl-bin is not available for aarch64-linux
+
+The ghdl-bin package (the VHDL simulator) is only available for x86_64-linux and aarch64-darwin. That is unfortunately a limitation of GHDL as it only targets these platforms afaik: https://github.com/ghdl/ghdl/releases/tag/v6.0.0
+
+ghdl-bin is required by wafer.space because the Nix flake in the gf180mcu-project-template includes cocotb, and cocotb requires ghdl-bin during the check phase.
+
+We can try to workaround this problem: You can simply remove the cocotb package from the Nix flake: https://github.com/wafer-space/gf180mcu-project-template/blob/0de7e394337a1f7f5303ac7a3681bf2481b58176/flake.nix#L71
+
+This should allow you to enable the Nix shell and run LibreLane. However, you won't be able to run any simulations with cocotb.
+
+Another workaround would be to disable the check phase in cocotb and remove ghdl-bin when the platform is aarch64-linux. Of course, then we can't be sure that cocotb will work as expected, but it will probably be fine. Let me know if you would like to give this a try.","",""
