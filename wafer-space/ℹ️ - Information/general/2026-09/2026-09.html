@@ -602,6 +602,28 @@ We can try to workaround this problem: You can simply remove the cocotb package 
 This should allow you to enable the Nix shell and run LibreLane. However, you won&#39;t be able to run any simulations with cocotb.
 
 Another workaround would be to disable the check phase in cocotb and remove ghdl-bin when the platform is aarch64-linux. Of course, then we can&#39;t be sure that cocotb will work as expected, but it will probably be fine. Let me know if you would like to give this a try.</span></div></div></div></div></div>
+<div class=chatlog__message-group><div id=chatlog__message-container-1552706600140148799 class=chatlog__message-container data-message-id=1552706600140148799><div class=chatlog__message><div class=chatlog__message-aside><div class=chatlog__reply-symbol></div><img class=chatlog__avatar src=2026-09_media/690e9352ca7cc1acc4dfe04691a310a7-2010F.png alt=Avatar loading=lazy></div><div class=chatlog__message-primary><div class=chatlog__reply><img class=chatlog__reply-avatar src=2026-09_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png alt=Avatar loading=lazy><div class=chatlog__reply-author title=mole99>Leo Moser (mole99)</div><div class=chatlog__reply-content><span class=chatlog__reply-link onclick="scrollToMessage(event,'1552575021371883590')"> <span class="chatlog__markdown-mention" title="martinschoeberl5796">@Martin Schoeberl</span> Let me address your two issues.
+
+1. Nix is recompiling the binaries
+
+This should not happen if you have the FOSSi Nix cache set up. Please follow the installation instructions at <a href="https://librelane.readthedocs.io/en/stable/installation/nix_installation/index.html">https://librelane.readthedocs.io/en/stable/installation/nix_installation/index.html</a>, making sure you set up <a href="https://nix-cache.fossi-foundation.org">https://nix-cache.fossi-foundation.org</a> as an additional Nix cache.
+
+You can verify that the Nix cache has been set up correctly by starting a Nix shell with LibreLane (nothing should recompile):
+
+<code class="chatlog__markdown-pre chatlog__markdown-pre--multiline nohighlight">$ nix shell github:librelane/librelane
+$ librelane --smoke-test</code>
+
+2. ghdl-bin is not available for aarch64-linux
+
+The ghdl-bin package (the VHDL simulator) is only available for x86_64-linux and aarch64-darwin. That is unfortunately a limitation of GHDL as it only targets these platforms afaik: <a href="https://github.com/ghdl/ghdl/releases/tag/v6.0.0">https://github.com/ghdl/ghdl/releases/tag/v6.0.0</a>
+
+ghdl-bin is required by wafer.space because the Nix flake in the gf180mcu-project-template includes cocotb, and cocotb requires ghdl-bin during the check phase.
+
+We can try to workaround this problem: You can simply remove the cocotb package from the Nix flake: <a href="https://github.com/wafer-space/gf180mcu-project-template/blob/0de7e394337a1f7f5303ac7a3681bf2481b58176/flake.nix#L71">https://github.com/wafer-space/gf180mcu-project-template/blob/0de7e394337a1f7f5303ac7a3681bf2481b58176/flake.nix#L71</a>
+
+This should allow you to enable the Nix shell and run LibreLane. However, you won&#39;t be able to run any simulations with cocotb.
+
+Another workaround would be to disable the check phase in cocotb and remove ghdl-bin when the platform is aarch64-linux. Of course, then we can&#39;t be sure that cocotb will work as expected, but it will probably be fine. Let me know if you would like to give this a try. </span></div></div><div class=chatlog__header><span class=chatlog__author title=martinschoeberl5796 data-user-id=861590732279775242>Martin Schoeberl</span> <span class=chatlog__timestamp title="Thursday, September 24, 2026 3:41 p.m."><a href=#chatlog__message-container-1552706600140148799>2026-09-24 3:41 p.m.</a></span></div><div class="chatlog__content chatlog__markdown"><span class=chatlog__markdown-preserve>Hi <span class="chatlog__markdown-mention" title="mole99">@Leo Moser (mole99)</span> thank you for your detailed reply. As Tjark found a workaround for the Mac issue (Qt in KLayout has concurrency problems on MacOS) to set workers to 1, I am back being able to run native LibreLane for wafer.space on my Mac. I can drop my ARM Linux experiment. All set and looking forward to our first tapeout at wafer.space.</span></div><div class=chatlog__reactions><div class=chatlog__reaction title=clap><img class="chatlog__emoji chatlog__emoji--small" alt=👏 src=2026-09_media/1f44f-3D381.svg loading=lazy> <span class=chatlog__reaction-count>1</span></div></div></div></div></div></div>
 
 </div>
-<div class=postamble><div class=postamble__entry>Exported 222 message(s)</div><div class=postamble__entry>Timezone: UTC+0</div></div>
+<div class=postamble><div class=postamble__entry>Exported 223 message(s)</div><div class=postamble__entry>Timezone: UTC+0</div></div>
