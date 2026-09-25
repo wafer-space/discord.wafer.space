@@ -1182,6 +1182,8 @@ https://kicanvas.org/?repo=https%3A%2F%2Fgithub.com%2FEssenceia%2Fchip-on-board-
 Merged! 
 It is quite beautiful! Thank you!!
 
+{Reactions}
+💪 💙
 
 [2026-09-24 11:31 p.m.] rebelmike
 Cool!  I'll admit I had interpreted the lack of enthusiasm for that PR as a worry about the ground integrity, rather than you just hadn't spotted it.  Going to 4 layer would probably help a fair bit, and I reckon some of the ground vias can be pushed a bit closer in too.
@@ -1193,6 +1195,111 @@ Cool!  I'll admit I had interpreted the lack of enthusiasm for that PR as a worr
 My thought had been to keep the through holes (which are positioned to give short paths to the ground pins on the mezzanine connector), but see how many of the other vias could be eliminated.
 
 
+[2026-09-25 10:54 a.m.] saladchap
+where's the best place to add issues / things to take into account for the board redesigns?
+
+
+[2026-09-25 10:55 a.m.] saladchap
+here?
+
+https://github.com/wafer-space/chip-on-board-wire-bonded-pcbs/issues
+
+{Embed}
+https://github.com/wafer-space/chip-on-board-wire-bonded-pcbs/issues
+Issues · wafer-space/chip-on-board-wire-bonded-pcbs
+Wire bonded chip on board PCB designs. Contribute to wafer-space/chip-on-board-wire-bonded-pcbs development by creating an account on GitHub.
+2026-09_media/chip-on-board-wire-bonded-pcbs-5A145
+
+
+[2026-09-25 11:03 a.m.] rebelmike
+Maybe add to https://github.com/wafer-space/chip-on-board-wire-bonded-pcbs/issues/11 - ah I see you already are 🙂
+
+{Embed}
+https://github.com/wafer-space/chip-on-board-wire-bonded-pcbs/issues/11
+RUN-2 Change Requests · Issue #11 · wafer-space/chip-on-board-wir...
+There are a number of changes we may or may not be making for the run-2 versions. Current List: All boards 4 layers Location of the pin1 fiducial Globtop bubble fixes No vias/holes/etc. under globt...
+2026-09_media/11-86D39
+
+{Reactions}
+👍
+
+[2026-09-25 11:03 a.m.] saladchap
+Looked right enough that I decided to just get on with it
+
+{Reactions}
+👍
+
+[2026-09-25 11:03 a.m.] saladchap
+Thanks!
+
+
+[2026-09-25 1:12 p.m.] lauri4332
+@RebelMike @stuart I took photos of 4 different panels we've done recently to check the bubble situation. Pictures are showing worst samples i found.
+
+My preference list from best to worst:
+1. 0p5x1
+2. Green 1x0.5
+1. TQVA 0.5x0.5
+2. Blue 1x1
+
+{Attachments}
+2026-09_media/2026_0924_130732_0242-9D9AC.jpeg
+2026-09_media/2026_0924_130225_0232-62831.jpeg
+2026-09_media/2026_0924_125638_0212-93ADD.jpeg
+2026-09_media/2026_0924_124940_0192-E3157.jpeg
+
+
+[2026-09-25 1:59 p.m.] saladchap
+Interesting that it look like the 'better' ones actually have open vias under the glue, whereas afaik it's recommended to not have open vias under the glob top area. @Stephan Bökelmann any opinion or thoughts re this?
+
+
+[2026-09-25 2:00 p.m.] rebelmike
+Interesting - the through holes on TQVA have been filled, whereas on 0p5x1 they are left as holes.  Those are copy/paste from ech other so I'm not sure how they ended up interpreted differently.  But that does suggest that capped vias **not** covered by soldermask will cause problems
+
+
+[2026-09-25 2:01 p.m.] saladchap
+@Lauri do you know if the glue type is the same for each of the above samples? Afaik the trials we have done did have different types of glue (silicone, AB epoxy, UV cured)
+
+
+[2026-09-25 2:01 p.m.] rebelmike
+Which is consistent with seeing lots of issues on the 1x1 where there are lots of uncovered capped vias
+
+
+[2026-09-25 2:03 p.m.] rebelmike
+And the green 1x0p5 is setup the "original" way that we thought caused issues - open vias on the front, tented on the back - I'm struggling to see any bubbles in that
+
+
+[2026-09-25 2:04 p.m.] lauri4332
+> @Lauri do you know if the glue type is the same for each of the above samples? Afaik the trials we have done did have different types of glue (silicone, AB epoxy, UV cured)
+These are all from same supplier, and no don't know what exact type they use. I believe you have the docs about this?
+
+Also, one more important aspect is that we don't know the process. Was vacuum used or not. If yes, at what setting? Seems for the TQVA, there's bubble coming out of the capped via.
+
+{Reactions}
+👍
+
+[2026-09-25 2:05 p.m.] lauri4332
+We only had 20pcs of these made.
+
+
+[2026-09-25 2:21 p.m.] rebelmike
+So on the basis of this my suggested approach is: No vias in the glob region, but use 6 through holes to provide a good ground connection to each mezzanine ground pin, as it looks like the through holes don't tend to cause issues.  Then go back to normal (cheaper) tented vias on the outside of the pad ring for everything else.
+
+
+[2026-09-25 2:41 p.m.] anfroholic
+That seems like a good plan if you like that.
+
+
+[2026-09-25 2:56 p.m.] rebelmike
+Not sure how easy it will be to achieve, but I can give it a go if that's the consensus.  Something else has come up this weekend so I'm not sure how much time I'll have, but I'll post my progress as and when I make some!  If @Essen is up for helping out too that would be great - the new 0p5x0p5 looks very neat!
+
+{Reactions}
+💜
+
+[2026-09-25 3:21 p.m.] essen__
+Started a thread.
+
+
 ==============================================================
-Exported 184 message(s)
+Exported 201 message(s)
 ==============================================================
