@@ -15,3 +15,11 @@ I've also emailed info@wafer.space with the board-voltage part of this, and aske
 1. The precheck should pass without problems I think.
 2. I hope that will be kept as it makes sense.
 3. We had a discussion with Leo about that. Experiments with the Run 1 testchip have shown that 3.3V is not enough to blow the fuses, so he decided to drop it.","",""
+"691780627338625077","rebelmike","2026-09-27T07:52:12.5160000+00:00","For 2, the intention is to keep each power supply separate on the CoB board, only the grounds are connected together.","",""
+"323371864074485771","mole99","2026-09-27T08:22:33.4630000+00:00","Hi @heathcliff,
+
+1. Yes, the precheck should pass. The `Pad` layer (pad opening) is checked against a golden reference (first AND and then XOR) to ensure that the bonding machine has something to bond to. Which circuit is connected to the bond pad is entirely up to you.
+
+2. We didn't plan on any functional changes to the CoB, but Andrew can confirm that for sure. As Mike mentioned, only the grounds are shorted together.
+
+3. Yes, the reason is as Egor mentioned: 3.3V is not enough to blow the fuses, so I dropped the eFuses for this FPGA version, as I wanted to target 3.3V-only. In a future version, I would also like to have multiple power domains in the core and add the eFuses back.","",""
