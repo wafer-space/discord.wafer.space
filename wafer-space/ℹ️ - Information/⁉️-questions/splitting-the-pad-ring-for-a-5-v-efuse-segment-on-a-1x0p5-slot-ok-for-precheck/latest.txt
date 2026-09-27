@@ -46,6 +46,35 @@ Hi @heathcliff,
 3. Yes, the reason is as Egor mentioned: 3.3V is not enough to blow the fuses, so I dropped the eFuses for this FPGA version, as I wanted to target 3.3V-only. In a future version, I would also like to have multiple power domains in the core and add the eFuses back.
 
 
+[2026-09-27 11:22 a.m.] egorxe
+@heathcliff  I've answered your questions in the GH issue. @Leo Moser (mole99) As a side note, it would be very useful for the analog and mixed designs to have two separate voltages. Maybe something like the approach took by heathcliff could be optionally introduced into the template? The other option is probably modifying the IO library to separate VDD & DVDD and adding pad variants for both, but that looks like much more work.
+
+
+[2026-09-27 11:57 a.m.] 246tnt
+I'm planning on making an analog pad that allows analog voltage input higher than VIO, exactly so you can feed voltage inside without needing to have the VIO be 5V or break the ring.
+
+
+[2026-09-27 11:58 a.m.] 246tnt
+We have an io library with separate VDD and DVDD already btw.
+
+
+[2026-09-27 12:50 p.m.] egorxe
+> I'm planning on making an analog pad that allows analog voltage input higher than VIO, exactly so you can feed voltage inside without needing to have the VIO be 5V or break the ring.
+
+@tnt Cool, thanks! Will it be something like the current analog pad but without the ESD clamps or something more complex?
+
+> We have an io library with separate VDD and DVDD already btw.
+
+You mean the ocd_io where core & IO voltage are separated, right? I've actually meant not this, but having two independent core voltage rails within the pad ring and for example clamping the digital pads to one of them and analog to another. That would allow using different supplies for the digital and analog domain if needed without breaking the ring, but requires a lot of work obviously.
+
+
+[2026-09-27 12:59 p.m.] 246tnt
+Well, with ESD clamp, but only referenced to GND.
+So a diode for negative events and a GGNMOS for positive events ( should be ok up to 8V or so ).
+
+{Reactions}
+👍
+
 ==============================================================
-Exported 5 message(s)
+Exported 10 message(s)
 ==============================================================

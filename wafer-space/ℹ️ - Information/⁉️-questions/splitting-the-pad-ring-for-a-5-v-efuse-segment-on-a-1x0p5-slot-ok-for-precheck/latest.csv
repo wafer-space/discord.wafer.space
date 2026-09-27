@@ -23,3 +23,15 @@ I've also emailed info@wafer.space with the board-voltage part of this, and aske
 2. We didn't plan on any functional changes to the CoB, but Andrew can confirm that for sure. As Mike mentioned, only the grounds are shorted together.
 
 3. Yes, the reason is as Egor mentioned: 3.3V is not enough to blow the fuses, so I dropped the eFuses for this FPGA version, as I wanted to target 3.3V-only. In a future version, I would also like to have multiple power domains in the core and add the eFuses back.","",""
+"709384666909507634","egorxe","2026-09-27T11:22:42.3770000+00:00","@heathcliff  I've answered your questions in the GH issue. @Leo Moser (mole99) As a side note, it would be very useful for the analog and mixed designs to have two separate voltages. Maybe something like the approach took by heathcliff could be optionally introduced into the template? The other option is probably modifying the IO library to separate VDD & DVDD and adding pad variants for both, but that looks like much more work.","",""
+"596068704471482370","246tnt","2026-09-27T11:57:06.9010000+00:00","I'm planning on making an analog pad that allows analog voltage input higher than VIO, exactly so you can feed voltage inside without needing to have the VIO be 5V or break the ring.","",""
+"596068704471482370","246tnt","2026-09-27T11:58:10.3470000+00:00","We have an io library with separate VDD and DVDD already btw.","",""
+"709384666909507634","egorxe","2026-09-27T12:50:43.9220000+00:00","> I'm planning on making an analog pad that allows analog voltage input higher than VIO, exactly so you can feed voltage inside without needing to have the VIO be 5V or break the ring.
+
+@tnt Cool, thanks! Will it be something like the current analog pad but without the ESD clamps or something more complex?
+
+> We have an io library with separate VDD and DVDD already btw.
+
+You mean the ocd_io where core & IO voltage are separated, right? I've actually meant not this, but having two independent core voltage rails within the pad ring and for example clamping the digital pads to one of them and analog to another. That would allow using different supplies for the digital and analog domain if needed without breaking the ring, but requires a lot of work obviously.","",""
+"596068704471482370","246tnt","2026-09-27T12:59:10.4630000+00:00","Well, with ESD clamp, but only referenced to GND.
+So a diode for negative events and a GGNMOS for positive events ( should be ok up to 8V or so ).","","👍 (1)"
