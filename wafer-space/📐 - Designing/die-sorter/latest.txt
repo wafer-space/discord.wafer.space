@@ -128,6 +128,30 @@ But without knowing forces it's not at all easy to check if it'll reasonably beh
 But switched reluctance motors like those technically would be are vulnerable to kinda-non-intuitive design-effects/behaviors, hence kinda preferring to sim. Thankfully the almost trivial geometry involved would make this part of the design almost trivial to pull off.)
 
 
+[2026-09-27 2:52 a.m.] anfroholic
+I will have a bunch to share in the coming days, for now I'll just share a snippet of code that basically runs the whole show. 
+
+I thought this bit was kinda beautiful. 
+```py
+def sort(self, todo):
+    """Do the sort
+    Machine consists of 3 major components. pusher, tobor, feeders
+    Certain components can be working on the next die while waiting on others 
+    run_together() allows for this by blocking until both are completed
+    """
+    for placed, die, upcoming in pipeline(todo, size=3):
+        yield from self.run_together(
+            self.pick(die),                   # tobor: down onto die N, pins up, lift
+            self.feeder_ready(placed, die))   # feeder: past N-1's pocket, right tape, pocket found
+        yield from self.run_together(
+            self.carry(die),                  # tobor: up camera, align, into the pocket
+            self.pusher_under(upcoming))      # pusher: already off under die N+1
+        yield from self.checkpoint(die)
+```
+
+-# yes, it's generators all the way down
+
+
 ==============================================================
-Exported 19 message(s)
+Exported 20 message(s)
 ==============================================================

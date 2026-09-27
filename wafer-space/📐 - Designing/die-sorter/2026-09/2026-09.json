@@ -16,7 +16,7 @@
     "after": "2026-08-31T23:59:59.999+00:00",
     "before": "2026-10-01T00:00:00+00:00"
   },
-  "exportedAt": "2026-09-27T02:04:12.111741+00:00",
+  "exportedAt": "2026-09-27T05:46:08.2094964+00:00",
   "messages": [
     {
       "id": "1549365171666030634",
@@ -898,7 +898,39 @@
       "reactions": [],
       "mentions": [],
       "inlineEmojis": []
+    },
+    {
+      "id": "1553600121655009333",
+      "type": "Default",
+      "timestamp": "2026-09-27T02:52:13.497+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I will have a bunch to share in the coming days, for now I'll just share a snippet of code that basically runs the whole show. \n\nI thought this bit was kinda beautiful. \n```py\ndef sort(self, todo):\n    \"\"\"Do the sort\n    Machine consists of 3 major components. pusher, tobor, feeders\n    Certain components can be working on the next die while waiting on others \n    run_together() allows for this by blocking until both are completed\n    \"\"\"\n    for placed, die, upcoming in pipeline(todo, size=3):\n        yield from self.run_together(\n            self.pick(die),                   # tobor: down onto die N, pins up, lift\n            self.feeder_ready(placed, die))   # feeder: past N-1's pocket, right tape, pocket found\n        yield from self.run_together(\n            self.carry(die),                  # tobor: up camera, align, into the pocket\n            self.pusher_under(upcoming))      # pusher: already off under die N+1\n        yield from self.checkpoint(die)\n```\n\n-# yes, it's generators all the way down",
+      "author": {
+        "id": "756011607603019777",
+        "name": "anfroholic",
+        "discriminator": "0000",
+        "nickname": "Andrew Wingate",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-09_media/67bd670a335a2f955fb2ded57088a2cb-675B3.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
     }
   ],
-  "messageCount": 19
+  "messageCount": 20
 }

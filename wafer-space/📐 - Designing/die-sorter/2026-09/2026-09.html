@@ -73,6 +73,25 @@ Though ofc regenerative braking doesn&#39;t matter as much for this as it does f
 
 But without knowing forces it&#39;s not at all easy to check if it&#39;ll reasonably behave if made a particular way.</span></div></div></div></div><div id=chatlog__message-container-1549975511210533037 class=chatlog__message-container data-message-id=1549975511210533037><div class=chatlog__message><div class=chatlog__message-aside><div class=chatlog__short-timestamp title="Thursday, September 17, 2026 2:49 a.m.">2:49 a.m.</div></div><div class=chatlog__message-primary><div class="chatlog__content chatlog__markdown"><span class=chatlog__markdown-preserve>(I think there&#39;d ideally be a magnetic tube of similar cross section or slightly above compared to the inner rod&#39;s magnetic iron part, around the outside of the windings, acting as shielding and to channel the magnetic field where it&#39;s wanted.
 But switched reluctance motors like those technically would be are vulnerable to kinda-non-intuitive design-effects/behaviors, hence kinda preferring to sim. Thankfully the almost trivial geometry involved would make this part of the design almost trivial to pull off.)</span></div></div></div></div></div>
+<div class=chatlog__message-group><div id=chatlog__message-container-1553600121655009333 class=chatlog__message-container data-message-id=1553600121655009333><div class=chatlog__message><div class=chatlog__message-aside><img class=chatlog__avatar src=2026-09_media/67bd670a335a2f955fb2ded57088a2cb-675B3.png alt=Avatar loading=lazy></div><div class=chatlog__message-primary><div class=chatlog__header><span class=chatlog__author title=anfroholic data-user-id=756011607603019777>Andrew Wingate</span> <span class=chatlog__timestamp title="Sunday, September 27, 2026 2:52 a.m."><a href=#chatlog__message-container-1553600121655009333>2026-09-27 2:52 a.m.</a></span></div><div class="chatlog__content chatlog__markdown"><span class=chatlog__markdown-preserve>I will have a bunch to share in the coming days, for now I&#39;ll just share a snippet of code that basically runs the whole show. 
+
+I thought this bit was kinda beautiful. 
+<code class="chatlog__markdown-pre chatlog__markdown-pre--multiline language-py">def sort(self, todo):
+    &quot;&quot;&quot;Do the sort
+    Machine consists of 3 major components. pusher, tobor, feeders
+    Certain components can be working on the next die while waiting on others 
+    run_together() allows for this by blocking until both are completed
+    &quot;&quot;&quot;
+    for placed, die, upcoming in pipeline(todo, size=3):
+        yield from self.run_together(
+            self.pick(die),                   # tobor: down onto die N, pins up, lift
+            self.feeder_ready(placed, die))   # feeder: past N-1&#39;s pocket, right tape, pocket found
+        yield from self.run_together(
+            self.carry(die),                  # tobor: up camera, align, into the pocket
+            self.pusher_under(upcoming))      # pusher: already off under die N+1
+        yield from self.checkpoint(die)</code>
+
+-# yes, it&#39;s generators all the way down</span></div></div></div></div></div>
 
 </div>
-<div class=postamble><div class=postamble__entry>Exported 19 message(s)</div><div class=postamble__entry>Timezone: UTC+0</div></div>
+<div class=postamble><div class=postamble__entry>Exported 20 message(s)</div><div class=postamble__entry>Timezone: UTC+0</div></div>
