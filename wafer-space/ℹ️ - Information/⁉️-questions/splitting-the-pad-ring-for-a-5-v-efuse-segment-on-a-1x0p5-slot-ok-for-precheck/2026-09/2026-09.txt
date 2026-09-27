@@ -1,0 +1,24 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / ⁉️-questions / Splitting the pad ring for a 5 V eFuse segment on a 1x0p5 slot. OK for precheck?
+After: 2026-08-31 11:59 p.m.
+Before: 2026-10-01 12:00 a.m.
+==============================================================
+
+[2026-09-26 7:26 p.m.] sriharshapy
+Hi all. I'm designing a half-height (1x0p5) chip for Run 3 with the 3.3 V core (as_sc_mcu7t3v3 + ocd_io). It uses two eFuse macros from Egor's compiler. Egor's Run 1 report says writes are only reliable at 5 V (~15 mA/bit), while reads work at 3.3 V. So I'd like to give the eFuses their own supply segment:
+- Two `gf180mcu_ocd_io__brk5` cells on the west side isolate the last six pads: analog 3..0, DVSS 6 and DVDD 6.
+- DVDD 6 goes to the eFuse voltage (<= 5.0 V while programming), and analog 0 carries VDD_EFUSE into the core.
+- No template power/ground pad is removed or moved. Only DVDD 6's voltage and the two break cells change. VSS stays continuous, since brk5 only carries VSS.
+
+Questions:
+1. Will precheck accept a pad ring modified this way (break cells, one DVDD pad at a different voltage)? Is there any rule on a minimum number of DVDD/DVSS pads per segment?
+2. On the Run 1 1x0p5 CoB board, DVDD 6 (bond pad 61) is on its own net `PWR_AUX_1`, and analog 0 (pad 63) is separate too. Will the Run 3 half-slot carrier keep that arrangement?
+3. Leo, I noticed you added eFuses to one of your 3.3 V designs and then took them out about two weeks later. Was that for a supply, DRC/precheck or area reason? Anything I should watch out for?
+
+I've also emailed info@wafer.space with the board-voltage part of this, and asked Egor about 3.3 V operation on the compiler's GitHub (egorxe/gf180_efuse_compiler#1). Posting here too in case the answers help others. Thanks!
+
+
+==============================================================
+Exported 1 message(s)
+==============================================================

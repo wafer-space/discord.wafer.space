@@ -1,0 +1,48 @@
+{
+  "guild": {
+    "id": "1361349522684510449",
+    "name": "wafer.space Community",
+    "iconUrl": "2026-09_media/fb143eaa45770cbb40493d09b625e98b-09FD1.png"
+  },
+  "channel": {
+    "id": "1553488070605537442",
+    "type": "GuildPublicThread",
+    "categoryId": "1409660288822673408",
+    "category": "⁉️-questions",
+    "name": "Splitting the pad ring for a 5 V eFuse segment on a 1x0p5 slot. OK for precheck?",
+    "topic": null
+  },
+  "dateRange": {
+    "after": "2026-08-31T23:59:59.999+00:00",
+    "before": "2026-10-01T00:00:00+00:00"
+  },
+  "exportedAt": "2026-09-26T21:25:08.8604385+00:00",
+  "messages": [
+    {
+      "id": "1553488070605537442",
+      "type": "Default",
+      "timestamp": "2026-09-26T19:26:58.445+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi all. I'm designing a half-height (1x0p5) chip for Run 3 with the 3.3 V core (as_sc_mcu7t3v3 + ocd_io). It uses two eFuse macros from Egor's compiler. Egor's Run 1 report says writes are only reliable at 5 V (~15 mA/bit), while reads work at 3.3 V. So I'd like to give the eFuses their own supply segment:\n- Two `gf180mcu_ocd_io__brk5` cells on the west side isolate the last six pads: analog 3..0, DVSS 6 and DVDD 6.\n- DVDD 6 goes to the eFuse voltage (<= 5.0 V while programming), and analog 0 carries VDD_EFUSE into the core.\n- No template power/ground pad is removed or moved. Only DVDD 6's voltage and the two break cells change. VSS stays continuous, since brk5 only carries VSS.\n\nQuestions:\n1. Will precheck accept a pad ring modified this way (break cells, one DVDD pad at a different voltage)? Is there any rule on a minimum number of DVDD/DVSS pads per segment?\n2. On the Run 1 1x0p5 CoB board, DVDD 6 (bond pad 61) is on its own net `PWR_AUX_1`, and analog 0 (pad 63) is separate too. Will the Run 3 half-slot carrier keep that arrangement?\n3. Leo, I noticed you added eFuses to one of your 3.3 V designs and then took them out about two weeks later. Was that for a supply, DRC/precheck or area reason? Anything I should watch out for?\n\nI've also emailed info@wafer.space with the board-voltage part of this, and asked Egor about 3.3 V operation on the compiler's GitHub (egorxe/gf180_efuse_compiler#1). Posting here too in case the answers help others. Thanks!",
+      "author": {
+        "id": "693749740961267742",
+        "name": "sriharshapy",
+        "discriminator": "0000",
+        "nickname": "heathcliff",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/398a21ec2ed17bdf36139254eb084319-395EE.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    }
+  ],
+  "messageCount": 1
+}
