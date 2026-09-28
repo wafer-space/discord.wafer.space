@@ -1,0 +1,48 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / ⁉️-questions / Requirements for COB
+After: 2026-08-31 11:59 p.m.
+Before: 2026-10-01 12:00 a.m.
+==============================================================
+
+[2026-09-28 7:54 a.m.] romaindolbeau
+Hello,
+
+What are the exact requirements for COB support? The website mentions "Core area: 5.02 mm² (default pad ring, required for COB)" for the 1.0x5 slot, but I'm not sure if it means "the default 72 pads" only, or if it also includes the purpose of the pads (16 power pads, bidir vs. inout vs. analog as described in the Slots page).
+
+I have a tentative design but it requires 60 digital I/Os and both 3V3 and 5V rails (5V only doesn't quite reach the desired frequency), so I have 3 VCC, 3 IOVCC, 6 GND and almost everything else is Output or Input/Output (and most of them tri-statable as well), and I wonder if COB is still an option (the intent being to have a COB-to-DIP64 homegrown adapter supplying the 5V => 3V3 circuitry to be pin-compatible with the original DIP64 chip).
+
+Thanks in advance & cordially,
+
+
+[2026-09-28 8:08 a.m.] 246tnt
+* GND pads must be identical to the defaults ( They are all shorted together and to the chip backside )
+
+
+[2026-09-28 8:09 a.m.] 246tnt
+* Power pads are routed independently but they have decoupling caps, so you can pretty much only use them for power, or bias signals.
+
+
+[2026-09-28 8:09 a.m.] 246tnt
+* Signal pads can be anything, doesn't matter if you use them as input/output/bidir or analog.
+
+
+[2026-09-28 8:40 a.m.] romaindolbeau
+OK, thanks! So COB is not an option for this project, at least not for now. I guess now I need to monitor the "Non-standard layout wirebonding" thread 🙂
+
+
+[2026-09-28 10:33 a.m.] mithro_
+@Melkhior - Do you know what "flip pins" are?
+
+
+[2026-09-28 10:35 a.m.] mithro_
+@Melkhior - I am interested in figuring out how we can get a "standard" DIP package form, but its not something we can really offer yet because we haven't figured it out.
+
+
+[2026-09-28 12:09 p.m.] romaindolbeau
+Sorry, I don't know "flip pins" - disclaimer: I'm not a hardware guy by trade, just as a hobby. I'm wondering if a design that works in a FPGA could be moved to an ASIC (it's a sort-of-clone of the MC68010).
+
+
+==============================================================
+Exported 8 message(s)
+==============================================================
