@@ -627,3 +627,42 @@ shit what happened 🙁","",""
 "220639106915368960","tholin","2026-09-28T00:15:36.7040000+00:00","I think I will have to make unique VDD ports for each of the four areas the breakers are splitting the padring into","",""
 "220639106915368960","tholin","2026-09-28T00:15:42.3260000+00:00","I can’t do that until tomorrow","",""
 "262706220073222144","namibj","2026-09-28T00:16:02.9860000+00:00","oh those should be external VDD pads I guess.","",""
+"262706220073222144","namibj","2026-09-28T00:19:09.4220000+00:00","OHHHH, I see.
+Actually, knowing that, this implies it should be safe to have redundant labels deeper inside with this setup at least....
+They just shouldn't collide with actual top level pad names to make the pad names apply to the bond pad and not to something deeper inside that has a matching residual label.","",""
+"262706220073222144","namibj","2026-09-28T00:20:36.8280000+00:00","just give me the names and where abouts on the pad frame they respectively are, and I manually assign them when I'm doing the re-extraction with the inner hierarchical labels left intact.","",""
+"262706220073222144","namibj","2026-09-28T00:23:47.7140000+00:00","And it'd be great to have at least a rough provision of what voltages to impose onto which pads and/or how to scaffold the circuity around the chip itself to at least get an initial DC operating point solve done on it.","",""
+"262706220073222144","namibj","2026-09-28T01:20:42.2510000+00:00","11 minutes, 21 GB (each; two ""processes"" one per NUMA node) in, still not done building topology....","",""
+"262706220073222144","namibj","2026-09-28T01:30:19.9790000+00:00","oh, just done...after 21 minutes of compute. (single threaded, each)....
+```
+***** Device Count Summary ...
+       C level 1 (Capacitor)                   2820983
+       D level 1,2 (Diode)                        1129
+       M level 14 (BSIM4)                        59183
+       R level 1 (Resistor)                    9833547
+       V level 1 (Independent Voltage Source)        5
+       -----------------------------------------------
+       Total Devices                          12714847
+```","",""
+"262706220073222144","namibj","2026-09-28T01:31:13.2380000+00:00","I'm just feeding 5V to the VDD's and tied VSS to be 0V off from net `0`.","",""
+"262706220073222144","namibj","2026-09-28T01:32:25.5960000+00:00","```
+***** Number of Unknowns = 5549315
+***** Initializing...
+
+
+Analyzed Singleton Problem:
+---------------------------
+Singletons Detected!
+Num Singletons:      2
+---------------------------
+
+
+ConstructedSingleton Problem:
+---------------------------
+RatioOfDimensions:   1
+RatioOfNonzeros:     0.843404
+---------------------------
+
+ZOLTAN Load balancing method = 10 (HYPERGRAPH)
+```","",""
+"262706220073222144","namibj","2026-09-28T01:45:25.5320000+00:00","after a total of around 30 minutes it started using multiple cores","",""
