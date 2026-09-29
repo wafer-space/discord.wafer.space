@@ -1,0 +1,211 @@
+{
+  "guild": {
+    "id": "1361349522684510449",
+    "name": "wafer.space Community",
+    "iconUrl": "2026-09_media/fb143eaa45770cbb40493d09b625e98b-09FD1.png"
+  },
+  "channel": {
+    "id": "1554294587420319839",
+    "type": "GuildPublicThread",
+    "categoryId": "1408135265427394661",
+    "category": "\uD83D\uDD70️-analog",
+    "name": "Magic is confusing to me, like, _very._",
+    "topic": null
+  },
+  "dateRange": {
+    "after": "2026-08-31T23:59:59.999+00:00",
+    "before": "2026-10-01T00:00:00+00:00"
+  },
+  "exportedAt": "2026-09-29T04:00:33.766391+00:00",
+  "messages": [
+    {
+      "id": "1554295800429940880",
+      "type": "21",
+      "timestamp": "2026-09-29T00:56:36.242+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "",
+      "author": {
+        "id": "738396032295108721",
+        "name": "bailey8889",
+        "discriminator": "0000",
+        "nickname": "bailey",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/0-EB806.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "262706220073222144",
+          "name": "namibj",
+          "discriminator": "0000",
+          "nickname": "namibj",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-09_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1554294587420319839",
+        "channelId": "1408135265427394661",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1554295803881726043",
+      "type": "Default",
+      "timestamp": "2026-09-29T00:56:37.065+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Definitely aware of the confusion around magic. It's based on many different paradigms. \n\nSo are you using kpex or some other flow? Are you required to flatten the layout in klayout before running the extraction?",
+      "author": {
+        "id": "738396032295108721",
+        "name": "bailey8889",
+        "discriminator": "0000",
+        "nickname": "bailey",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/0-EB806.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1554295899537146017",
+      "type": "Default",
+      "timestamp": "2026-09-29T00:56:59.871+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "No, see the script above",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1554295995238453349",
+      "type": "Default",
+      "timestamp": "2026-09-29T00:57:22.688+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I notably don't want to wait further HOURS for magic to extract at multiple hierarchy levels",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1554304676999200893",
+      "type": "Default",
+      "timestamp": "2026-09-29T01:31:52.581+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Ok, the `extract_spice_simplified.py` file, right?\n\nI think these commands will yield a flattened parasitic extracted netlist with a hierarchical layout as input.\nIt also turns off some of the backup processing that may speed things up. The `short resistor` directives adds a 0Ω resistor between shorted ports instead of dropping them. And the `feedback save` will save any extraction anomalies (text problems, etc.).\n\n```\n        magic_commands = [\n            \"drc off\",\n            \"gds drccheck off\",\n            \"undo disable\",\n            \"locking disable\",\n            \"crashbackups stop\",\n            f\"gds read {tcl_brace(temp_gds)}\",\n            f\"load {tcl_brace(top_cell)}\",\n            \"select top cell\",\n            \"port makeall\",\n            \"expand\",\n            f\"flatten {tcl_brace(top_cell)}_flat\",\n            f\"load {tcl_brace(top_cell)}_flat\",\n            f\"cellname delete {tcl_brace(top_cell)}\",\n            f\"cellname rename {tcl_brace(top_cell)}_flat {tcl_brace(top_cell)}\",\n            \"select top cell\",\n            \"ext2spice lvs\",\n            \"ext2spice rthresh 0\",\n            \"ext2spice merge conservative\"\n            \"ext2spice short resistor\"\n            \"extresist simplify on\",\n            \"extresist minres 100\",\n            \"extresist threshold 1000\",\n            \"extract do resistance\",\n            \"extract all\",\n            \"ext2spice extresist on\",\n            \"ext2spice resistor tee on\",\n            \"feedback save {tcl_brace(top_cell)}.pex.feedback.txt\",\n        ]\n```\n\nHaven't tested, just added some of the commands from my scripts and Tim's comments.",
+      "author": {
+        "id": "738396032295108721",
+        "name": "bailey8889",
+        "discriminator": "0000",
+        "nickname": "bailey",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/0-EB806.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1554319955284201473",
+      "type": "Default",
+      "timestamp": "2026-09-29T02:32:35.208+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "hmmmm will try later, it's a hot day I need to get to sleep sooner than later",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "2026-09_media/1f44d-27259.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "738396032295108721",
+              "name": "bailey8889",
+              "discriminator": "0000",
+              "nickname": "bailey",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-09_media/0-EB806.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    }
+  ],
+  "messageCount": 6
+}

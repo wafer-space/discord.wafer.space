@@ -1,0 +1,46 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"738396032295108721","bailey8889","2026-09-29T00:56:36.2420000+00:00","","",""
+"738396032295108721","bailey8889","2026-09-29T00:56:37.0650000+00:00","Definitely aware of the confusion around magic. It's based on many different paradigms. 
+
+So are you using kpex or some other flow? Are you required to flatten the layout in klayout before running the extraction?","",""
+"262706220073222144","namibj","2026-09-29T00:56:59.8710000+00:00","No, see the script above","",""
+"262706220073222144","namibj","2026-09-29T00:57:22.6880000+00:00","I notably don't want to wait further HOURS for magic to extract at multiple hierarchy levels","",""
+"738396032295108721","bailey8889","2026-09-29T01:31:52.5810000+00:00","Ok, the `extract_spice_simplified.py` file, right?
+
+I think these commands will yield a flattened parasitic extracted netlist with a hierarchical layout as input.
+It also turns off some of the backup processing that may speed things up. The `short resistor` directives adds a 0Ω resistor between shorted ports instead of dropping them. And the `feedback save` will save any extraction anomalies (text problems, etc.).
+
+```
+        magic_commands = [
+            ""drc off"",
+            ""gds drccheck off"",
+            ""undo disable"",
+            ""locking disable"",
+            ""crashbackups stop"",
+            f""gds read {tcl_brace(temp_gds)}"",
+            f""load {tcl_brace(top_cell)}"",
+            ""select top cell"",
+            ""port makeall"",
+            ""expand"",
+            f""flatten {tcl_brace(top_cell)}_flat"",
+            f""load {tcl_brace(top_cell)}_flat"",
+            f""cellname delete {tcl_brace(top_cell)}"",
+            f""cellname rename {tcl_brace(top_cell)}_flat {tcl_brace(top_cell)}"",
+            ""select top cell"",
+            ""ext2spice lvs"",
+            ""ext2spice rthresh 0"",
+            ""ext2spice merge conservative""
+            ""ext2spice short resistor""
+            ""extresist simplify on"",
+            ""extresist minres 100"",
+            ""extresist threshold 1000"",
+            ""extract do resistance"",
+            ""extract all"",
+            ""ext2spice extresist on"",
+            ""ext2spice resistor tee on"",
+            ""feedback save {tcl_brace(top_cell)}.pex.feedback.txt"",
+        ]
+```
+
+Haven't tested, just added some of the commands from my scripts and Tim's comments.","",""
+"262706220073222144","namibj","2026-09-29T02:32:35.2080000+00:00","hmmmm will try later, it's a hot day I need to get to sleep sooner than later","","👍 (1)"
