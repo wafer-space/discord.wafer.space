@@ -46,6 +46,43 @@ It also turns off some of the backup processing that may speed things up. The <c
 
 Haven&#39;t tested, just added some of the commands from my scripts and Tim&#39;s comments.</span></div></div></div></div></div>
 <div class=chatlog__message-group><div id=chatlog__message-container-1554319955284201473 class=chatlog__message-container data-message-id=1554319955284201473><div class=chatlog__message><div class=chatlog__message-aside><img class=chatlog__avatar src=2026-09_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png alt=Avatar loading=lazy></div><div class=chatlog__message-primary><div class=chatlog__header><span class=chatlog__author title=namibj data-user-id=262706220073222144>namibj</span> <span class=chatlog__timestamp title="Tuesday, September 29, 2026 2:32 a.m."><a href=#chatlog__message-container-1554319955284201473>2026-09-29 2:32 a.m.</a></span></div><div class="chatlog__content chatlog__markdown"><span class=chatlog__markdown-preserve>hmmmm will try later, it&#39;s a hot day I need to get to sleep sooner than later</span></div><div class=chatlog__reactions><div class=chatlog__reaction title=thumbsup><img class="chatlog__emoji chatlog__emoji--small" alt=👍 src=2026-09_media/1f44d-27259.svg loading=lazy> <span class=chatlog__reaction-count>1</span></div></div></div></div></div></div>
+<div class=chatlog__message-group><div id=chatlog__message-container-1554668233250832437 class=chatlog__message-container data-message-id=1554668233250832437><div class=chatlog__message><div class=chatlog__message-aside><div class=chatlog__reply-symbol></div><img class=chatlog__avatar src=2026-09_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png alt=Avatar loading=lazy></div><div class=chatlog__message-primary><div class=chatlog__reply><img class=chatlog__reply-avatar src=2026-09_media/0-EB806.png alt=Avatar loading=lazy><div class=chatlog__reply-author title=bailey8889>bailey</div><div class=chatlog__reply-content><span class=chatlog__reply-link onclick="scrollToMessage(event,'1554304676999200893')"> Ok, the <code class="chatlog__markdown-pre chatlog__markdown-pre--inline">extract_spice_simplified.py</code> file, right?
+
+I think these commands will yield a flattened parasitic extracted netlist with a hierarchical layout as input.
+It also turns off some of the backup processing that may speed things up. The <code class="chatlog__markdown-pre chatlog__markdown-pre--inline">short resistor</code> directives adds a 0Ω resistor between shorted ports instead of dropping them. And the <code class="chatlog__markdown-pre chatlog__markdown-pre--inline">feedback save</code> will save any extraction anomalies (text problems, etc.).
+
+<code class="chatlog__markdown-pre chatlog__markdown-pre--multiline nohighlight">        magic_commands = [
+            &quot;drc off&quot;,
+            &quot;gds drccheck off&quot;,
+            &quot;undo disable&quot;,
+            &quot;locking disable&quot;,
+            &quot;crashbackups stop&quot;,
+            f&quot;gds read {tcl_brace(temp_gds)}&quot;,
+            f&quot;load {tcl_brace(top_cell)}&quot;,
+            &quot;select top cell&quot;,
+            &quot;port makeall&quot;,
+            &quot;expand&quot;,
+            f&quot;flatten {tcl_brace(top_cell)}_flat&quot;,
+            f&quot;load {tcl_brace(top_cell)}_flat&quot;,
+            f&quot;cellname delete {tcl_brace(top_cell)}&quot;,
+            f&quot;cellname rename {tcl_brace(top_cell)}_flat {tcl_brace(top_cell)}&quot;,
+            &quot;select top cell&quot;,
+            &quot;ext2spice lvs&quot;,
+            &quot;ext2spice rthresh 0&quot;,
+            &quot;ext2spice merge conservative&quot;
+            &quot;ext2spice short resistor&quot;
+            &quot;extresist simplify on&quot;,
+            &quot;extresist minres 100&quot;,
+            &quot;extresist threshold 1000&quot;,
+            &quot;extract do resistance&quot;,
+            &quot;extract all&quot;,
+            &quot;ext2spice extresist on&quot;,
+            &quot;ext2spice resistor tee on&quot;,
+            &quot;feedback save {tcl_brace(top_cell)}.pex.feedback.txt&quot;,
+        ]</code>
+
+Haven&#39;t tested, just added some of the commands from my scripts and Tim&#39;s comments. </span></div></div><div class=chatlog__header><span class=chatlog__author title=namibj data-user-id=262706220073222144>namibj</span> <span class=chatlog__timestamp title="Wednesday, September 30, 2026 1:36 a.m."><a href=#chatlog__message-container-1554668233250832437>2026-09-30 1:36 a.m.</a></span></div><div class="chatlog__content chatlog__markdown"><span class=chatlog__markdown-preserve>OK, so, what I would enjoy is hierachical LVS but global/flattened PEX.
+Yes, including as needed 0-ohm&#39;s to maintain appropriate local naming of nets. And eliding those 0-ohm&#39;s where that&#39;ll not create conflicts, i.e., just propagating such a name beyond to what would have been auto-named instead.</span></div></div></div></div></div>
 
 </div>
-<div class=postamble><div class=postamble__entry>Exported 6 message(s)</div><div class=postamble__entry>Timezone: UTC+0</div></div>
+<div class=postamble><div class=postamble__entry>Exported 7 message(s)</div><div class=postamble__entry>Timezone: UTC+0</div></div>
