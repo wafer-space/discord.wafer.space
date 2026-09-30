@@ -1,0 +1,6 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"262706220073222144","namibj","2026-09-30T02:36:07.2250000+00:00","WOW was it bad....
+I _thought_ it was actually doing stuff in some parallel manner, but it's literally spending a majority of time at least wall-time and possibly even core-time with one of the two MPI processes doing `Xyce::Linear::IfpackPrecond::compute()` and the other one MPI waiting in basically busy loop polling.... yikes.
+Gonna try `.options LINSOL USE_IFPACK_FACTORY=1` whcih should use a sparse direct solver on each subdomain, but relies on no singular matrix issues on each subdomain because KLU would fail with that... hmmm.
+I guess I should also edit the `.spice` to specifically make it use the `0` net on the substrate which our extraction doesn't model resistance for in hopes of doing so resulting in at least a stronger absence of global coupling entries in the matrices it's trying to use the parallel iterative linear solver(s) on.","",""
+"262706220073222144","namibj","2026-09-30T03:03:59.2330000+00:00","gonna re-extract and see then I guess. Like, see how it does with notably relaxed extraction fidelity of the PEX and then ofc setting up Xyce to be more amenable to the situation.","",""

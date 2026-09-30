@@ -83,6 +83,77 @@ It also turns off some of the backup processing that may speed things up. The <c
 
 Haven&#39;t tested, just added some of the commands from my scripts and Tim&#39;s comments. </span></div></div><div class=chatlog__header><span class=chatlog__author title=namibj data-user-id=262706220073222144>namibj</span> <span class=chatlog__timestamp title="Wednesday, September 30, 2026 1:36 a.m."><a href=#chatlog__message-container-1554668233250832437>2026-09-30 1:36 a.m.</a></span></div><div class="chatlog__content chatlog__markdown"><span class=chatlog__markdown-preserve>OK, so, what I would enjoy is hierachical LVS but global/flattened PEX.
 Yes, including as needed 0-ohm&#39;s to maintain appropriate local naming of nets. And eliding those 0-ohm&#39;s where that&#39;ll not create conflicts, i.e., just propagating such a name beyond to what would have been auto-named instead.</span></div></div></div></div></div>
+<div class=chatlog__message-group><div id=chatlog__message-container-1554754303107797074 class=chatlog__message-container data-message-id=1554754303107797074><div class=chatlog__message><div class=chatlog__message-aside><img class=chatlog__avatar src=2026-09_media/0-EB806.png alt=Avatar loading=lazy></div><div class=chatlog__message-primary><div class=chatlog__header><span class=chatlog__author title=bailey8889 data-user-id=738396032295108721>bailey</span> <span class=chatlog__timestamp title="Wednesday, September 30, 2026 7:18 a.m."><a href=#chatlog__message-container-1554754303107797074>2026-09-30 7:18 a.m.</a></span></div><div class="chatlog__content chatlog__markdown"><span class=chatlog__markdown-preserve>Oh, are you using the same script for LVS extraction and PEX extraction? Maybe you want to divide those, or at least use different magic scripts.
+
+BTW, I think the flattening above does NOT propagate lower hierarchy text to the top, so there&#39;s no problem with local naming of nets (if I understand your comment).
+
+These are the commands that I use for hierarchical extraction for LVS.
+<code class="chatlog__markdown-pre chatlog__markdown-pre--multiline nohighlight">drc off
+crashbackups stop
+gds drccheck off
+undo disable
+locking disable
+gds flatten yes # flattens cells with less than 10 shapes
+gds flatglob &lt;cellname&gt; # repeated for other larger cells to be flattened before extracting. Note: All subcells must be explicitly flattened too.
+gds read &lt;gdsfile&gt;
+load &lt;cellname&gt;
+select top cell
+expand
+extract no all ;# clear all flags
+extract do aliases
+extract do local
+extract unique
+ext2spice lvs
+ext2spice merge conservative ;# reduce parallel devices
+ext2spice short resistor ;# keep both ports but connect them with a 0 ohm resistor
+ext2spice -o &lt;cellname&gt;.gds.spice &lt;cellname&gt;.ext
+feedback save &lt;cellname&gt;.feedback.txt</code>
+
+Fun fact: magic&#39;s default extraction connects virtual nets by name - disjoint nets with the same label are extracted as connected. 
+Use <code class="chatlog__markdown-pre chatlog__markdown-pre--inline">extract unique</code> to automatically add a <code class="chatlog__markdown-pre chatlog__markdown-pre--inline">_uq*</code> suffix to unconnected duplicate labels.</span></div></div></div></div></div>
+<div class=chatlog__message-group><div id=chatlog__message-container-1554762938353586217 class=chatlog__message-container data-message-id=1554762938353586217><div class=chatlog__message><div class=chatlog__message-aside><div class=chatlog__reply-symbol></div><img class=chatlog__avatar src=2026-09_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png alt=Avatar loading=lazy></div><div class=chatlog__message-primary><div class=chatlog__reply><img class=chatlog__reply-avatar src=2026-09_media/0-EB806.png alt=Avatar loading=lazy><div class=chatlog__reply-author title=bailey8889>bailey</div><div class=chatlog__reply-content><span class=chatlog__reply-link onclick="scrollToMessage(event,'1554754303107797074')"> Oh, are you using the same script for LVS extraction and PEX extraction? Maybe you want to divide those, or at least use different magic scripts.
+
+BTW, I think the flattening above does NOT propagate lower hierarchy text to the top, so there&#39;s no problem with local naming of nets (if I understand your comment).
+
+These are the commands that I use for hierarchical extraction for LVS.
+<code class="chatlog__markdown-pre chatlog__markdown-pre--multiline nohighlight">drc off
+crashbackups stop
+gds drccheck off
+undo disable
+locking disable
+gds flatten yes # flattens cells with less than 10 shapes
+gds flatglob &lt;cellname&gt; # repeated for other larger cells to be flattened before extracting. Note: All subcells must be explicitly flattened too.
+gds read &lt;gdsfile&gt;
+load &lt;cellname&gt;
+select top cell
+expand
+extract no all ;# clear all flags
+extract do aliases
+extract do local
+extract unique
+ext2spice lvs
+ext2spice merge conservative ;# reduce parallel devices
+ext2spice short resistor ;# keep both ports but connect them with a 0 ohm resistor
+ext2spice -o &lt;cellname&gt;.gds.spice &lt;cellname&gt;.ext
+feedback save &lt;cellname&gt;.feedback.txt</code>
+
+Fun fact: magic&#39;s default extraction connects virtual nets by name - disjoint nets with the same label are extracted as connected. 
+Use <code class="chatlog__markdown-pre chatlog__markdown-pre--inline">extract unique</code> to automatically add a <code class="chatlog__markdown-pre chatlog__markdown-pre--inline">_uq*</code> suffix to unconnected duplicate labels. </span></div></div><div class=chatlog__header><span class=chatlog__author title=namibj data-user-id=262706220073222144>namibj</span> <span class=chatlog__timestamp title="Wednesday, September 30, 2026 7:52 a.m."><a href=#chatlog__message-container-1554762938353586217>2026-09-30 7:52 a.m.</a></span></div><div class="chatlog__content chatlog__markdown"><span class=chatlog__markdown-preserve>Oh I&#39;m not doing LVS with this; this is for extraction of largs hard macros and entire dies into Xyce.</span></div></div></div></div><div id=chatlog__message-container-1554763282085187645 class=chatlog__message-container data-message-id=1554763282085187645><div class=chatlog__message><div class=chatlog__message-aside><div class=chatlog__short-timestamp title="Wednesday, September 30, 2026 7:54 a.m.">7:54 a.m.</div></div><div class=chatlog__message-primary><div class="chatlog__content chatlog__markdown"><span class=chatlog__markdown-preserve>I.... did some stuff in KLayout macro/scripting to lift labels up to top level shapes while attaching path prefixes reflecting instance IDs.....</span></div></div></div></div><div id=chatlog__message-container-1554764018626076733 class=chatlog__message-container data-message-id=1554764018626076733><div class=chatlog__message><div class=chatlog__message-aside><div class=chatlog__short-timestamp title="Wednesday, September 30, 2026 7:57 a.m.">7:57 a.m.</div></div><div class=chatlog__message-primary><div class="chatlog__content chatlog__markdown"><span class=chatlog__markdown-preserve>I wonder if I maybe should do something to reduce shapes after the flattening on the KLayout side and before feeding it to magic?</span></div></div></div></div></div>
+<div class=chatlog__message-group><div id=chatlog__message-container-1554767590340042905 class=chatlog__message-container data-message-id=1554767590340042905><div class=chatlog__message><div class=chatlog__message-aside><img class=chatlog__avatar src=2026-09_media/0-EB806.png alt=Avatar loading=lazy></div><div class=chatlog__message-primary><div class=chatlog__header><span class=chatlog__author title=bailey8889 data-user-id=738396032295108721>bailey</span> <span class=chatlog__timestamp title="Wednesday, September 30, 2026 8:11 a.m."><a href=#chatlog__message-container-1554767590340042905>2026-09-30 8:11 a.m.</a></span></div><div class="chatlog__content chatlog__markdown"><span class=chatlog__markdown-preserve>Still not understanding the need to flatten in Klayout (unless you need those internal net names).
+Came across this command in magic that fractures layers into simple polygons. For example
+<code class="chatlog__markdown-pre chatlog__markdown-pre--multiline nohighlight">M1   = input(13, 0)
+M1.data = M1.data.merged(true, 0).decompose_convex_to_region
+M1.output(13,  0)</code></span></div></div></div></div></div>
+<div class=chatlog__message-group><div id=chatlog__message-container-1554770948232712224 class=chatlog__message-container data-message-id=1554770948232712224><div class=chatlog__message><div class=chatlog__message-aside><div class=chatlog__reply-symbol></div><img class=chatlog__avatar src=2026-09_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png alt=Avatar loading=lazy></div><div class=chatlog__message-primary><div class=chatlog__reply><img class=chatlog__reply-avatar src=2026-09_media/0-EB806.png alt=Avatar loading=lazy><div class=chatlog__reply-author title=bailey8889>bailey</div><div class=chatlog__reply-content><span class=chatlog__reply-link onclick="scrollToMessage(event,'1554767590340042905')"> Still not understanding the need to flatten in Klayout (unless you need those internal net names).
+Came across this command in magic that fractures layers into simple polygons. For example
+<code class="chatlog__markdown-pre chatlog__markdown-pre--multiline nohighlight">M1   = input(13, 0)
+M1.data = M1.data.merged(true, 0).decompose_convex_to_region
+M1.output(13,  0)</code> </span></div></div><div class=chatlog__header><span class=chatlog__author title=namibj data-user-id=262706220073222144>namibj</span> <span class=chatlog__timestamp title="Wednesday, September 30, 2026 8:24 a.m."><a href=#chatlog__message-container-1554770948232712224>2026-09-30 8:24 a.m.</a></span></div><div class="chatlog__content chatlog__markdown"><span class=chatlog__markdown-preserve>those net names were requested by Tholin.</span></div><div class=chatlog__reactions><div class=chatlog__reaction title=thumbsup><img class="chatlog__emoji chatlog__emoji--small" alt=👍 src=2026-09_media/1f44d-27259.svg loading=lazy> <span class=chatlog__reaction-count>1</span></div></div></div></div></div><div id=chatlog__message-container-1554770987721949197 class=chatlog__message-container data-message-id=1554770987721949197><div class=chatlog__message><div class=chatlog__message-aside><div class=chatlog__short-timestamp title="Wednesday, September 30, 2026 8:24 a.m.">8:24 a.m.</div></div><div class=chatlog__message-primary><div class="chatlog__content chatlog__markdown"><span class=chatlog__markdown-preserve>(for debugging purposes)</span></div></div></div></div><div id=chatlog__message-container-1554771879217074287 class=chatlog__message-container data-message-id=1554771879217074287><div class=chatlog__message><div class=chatlog__message-aside><div class=chatlog__short-timestamp title="Wednesday, September 30, 2026 8:28 a.m.">8:28 a.m.</div></div><div class=chatlog__message-primary><div class="chatlog__content chatlog__markdown"><span class=chatlog__markdown-preserve>I&#39;d wish the PEX would manage to pick a fragment of RC-fractured net actually covered by the drawn label if it&#39;s an area label or where a mere point label happens to hit, when extracting; as I don&#39;t particularly care for the nuanced names of intermediate chunks of the RC lumped transmission/delay line &quot;model&quot; that&#39;ll extract, but we&#39;ll have to see I guess.....</span></div></div></div></div><div id=chatlog__message-container-1554772004853518439 class=chatlog__message-container data-message-id=1554772004853518439><div class=chatlog__message><div class=chatlog__message-aside><div class=chatlog__short-timestamp title="Wednesday, September 30, 2026 8:28 a.m.">8:28 a.m.</div></div><div class=chatlog__message-primary><div class="chatlog__content chatlog__markdown"><span class=chatlog__markdown-preserve>not like LVS connectivity rules actually apply at PEX time <img
+    loading="lazy"
+    class="chatlog__emoji "
+    alt="🙁"
+    title="slight_frown"
+    src="2026-09_media/1f641-E1429.svg"></span></div></div></div></div></div>
 
 </div>
-<div class=postamble><div class=postamble__entry>Exported 7 message(s)</div><div class=postamble__entry>Timezone: UTC+0</div></div>
+<div class=postamble><div class=postamble__entry>Exported 16 message(s)</div><div class=postamble__entry>Timezone: UTC+0</div></div>

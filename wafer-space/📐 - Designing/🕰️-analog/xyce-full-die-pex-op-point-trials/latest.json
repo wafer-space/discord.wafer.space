@@ -1,0 +1,73 @@
+{
+  "guild": {
+    "id": "1361349522684510449",
+    "name": "wafer.space Community",
+    "iconUrl": "2026-09_media/fb143eaa45770cbb40493d09b625e98b-09FD1.png"
+  },
+  "channel": {
+    "id": "1554683220157669437",
+    "type": "GuildPublicThread",
+    "categoryId": "1408135265427394661",
+    "category": "\uD83D\uDD70️-analog",
+    "name": "Xyce full-die PEX op-point trials",
+    "topic": null
+  },
+  "dateRange": {
+    "after": "2026-08-31T23:59:59.999+00:00",
+    "before": "2026-10-01T00:00:00+00:00"
+  },
+  "exportedAt": "2026-09-30T08:48:31.5074818+00:00",
+  "messages": [
+    {
+      "id": "1554683232413290557",
+      "type": "Default",
+      "timestamp": "2026-09-30T02:36:07.225+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "WOW was it bad....\nI _thought_ it was actually doing stuff in some parallel manner, but it's literally spending a majority of time at least wall-time and possibly even core-time with one of the two MPI processes doing `Xyce::Linear::IfpackPrecond::compute()` and the other one MPI waiting in basically busy loop polling.... yikes.\nGonna try `.options LINSOL USE_IFPACK_FACTORY=1` whcih should use a sparse direct solver on each subdomain, but relies on no singular matrix issues on each subdomain because KLU would fail with that... hmmm.\nI guess I should also edit the `.spice` to specifically make it use the `0` net on the substrate which our extraction doesn't model resistance for in hopes of doing so resulting in at least a stronger absence of global coupling entries in the matrices it's trying to use the parallel iterative linear solver(s) on.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1554690245323260006",
+      "type": "Default",
+      "timestamp": "2026-09-30T03:03:59.233+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "gonna re-extract and see then I guess. Like, see how it does with notably relaxed extraction fidelity of the PEX and then ofc setting up Xyce to be more amenable to the situation.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    }
+  ],
+  "messageCount": 2
+}

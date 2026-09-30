@@ -46,3 +46,47 @@ Haven't tested, just added some of the commands from my scripts and Tim's commen
 "262706220073222144","namibj","2026-09-29T02:32:35.2080000+00:00","hmmmm will try later, it's a hot day I need to get to sleep sooner than later","","👍 (1)"
 "262706220073222144","namibj","2026-09-30T01:36:31.1460000+00:00","OK, so, what I would enjoy is hierachical LVS but global/flattened PEX.
 Yes, including as needed 0-ohm's to maintain appropriate local naming of nets. And eliding those 0-ohm's where that'll not create conflicts, i.e., just propagating such a name beyond to what would have been auto-named instead.","",""
+"738396032295108721","bailey8889","2026-09-30T07:18:31.7990000+00:00","Oh, are you using the same script for LVS extraction and PEX extraction? Maybe you want to divide those, or at least use different magic scripts.
+
+BTW, I think the flattening above does NOT propagate lower hierarchy text to the top, so there's no problem with local naming of nets (if I understand your comment).
+
+These are the commands that I use for hierarchical extraction for LVS.
+```
+drc off
+crashbackups stop
+gds drccheck off
+undo disable
+locking disable
+gds flatten yes # flattens cells with less than 10 shapes
+gds flatglob <cellname> # repeated for other larger cells to be flattened before extracting. Note: All subcells must be explicitly flattened too.
+gds read <gdsfile>
+load <cellname>
+select top cell
+expand
+extract no all ;# clear all flags
+extract do aliases
+extract do local
+extract unique
+ext2spice lvs
+ext2spice merge conservative ;# reduce parallel devices
+ext2spice short resistor ;# keep both ports but connect them with a 0 ohm resistor
+ext2spice -o <cellname>.gds.spice <cellname>.ext
+feedback save <cellname>.feedback.txt
+```
+
+Fun fact: magic's default extraction connects virtual nets by name - disjoint nets with the same label are extracted as connected. 
+Use `extract unique` to automatically add a `_uq*` suffix to unconnected duplicate labels.","",""
+"262706220073222144","namibj","2026-09-30T07:52:50.6020000+00:00","Oh I'm not doing LVS with this; this is for extraction of largs hard macros and entire dies into Xyce.","",""
+"262706220073222144","namibj","2026-09-30T07:54:12.5540000+00:00","I.... did some stuff in KLayout macro/scripting to lift labels up to top level shapes while attaching path prefixes reflecting instance IDs.....","",""
+"262706220073222144","namibj","2026-09-30T07:57:08.1590000+00:00","I wonder if I maybe should do something to reduce shapes after the flattening on the KLayout side and before feeding it to magic?","",""
+"738396032295108721","bailey8889","2026-09-30T08:11:19.7220000+00:00","Still not understanding the need to flatten in Klayout (unless you need those internal net names).
+Came across this command in magic that fractures layers into simple polygons. For example
+```
+M1   = input(13, 0)
+M1.data = M1.data.merged(true, 0).decompose_convex_to_region
+M1.output(13,  0)
+```","",""
+"262706220073222144","namibj","2026-09-30T08:24:40.3060000+00:00","those net names were requested by Tholin.","","👍 (1)"
+"262706220073222144","namibj","2026-09-30T08:24:49.7210000+00:00","(for debugging purposes)","",""
+"262706220073222144","namibj","2026-09-30T08:28:22.2700000+00:00","I'd wish the PEX would manage to pick a fragment of RC-fractured net actually covered by the drawn label if it's an area label or where a mere point label happens to hit, when extracting; as I don't particularly care for the nuanced names of intermediate chunks of the RC lumped transmission/delay line ""model"" that'll extract, but we'll have to see I guess.....","",""
+"262706220073222144","namibj","2026-09-30T08:28:52.2240000+00:00","not like LVS connectivity rules actually apply at PEX time 🙁","",""

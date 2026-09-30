@@ -16,7 +16,7 @@
     "after": "2026-08-31T23:59:59.999+00:00",
     "before": "2026-10-01T00:00:00+00:00"
   },
-  "exportedAt": "2026-09-30T02:44:30.3276403+00:00",
+  "exportedAt": "2026-09-30T08:46:23.4505244+00:00",
   "messages": [
     {
       "id": "1554295800429940880",
@@ -246,7 +246,294 @@
         "guildId": "1361349522684510449"
       },
       "inlineEmojis": []
+    },
+    {
+      "id": "1554754303107797074",
+      "type": "Default",
+      "timestamp": "2026-09-30T07:18:31.799+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Oh, are you using the same script for LVS extraction and PEX extraction? Maybe you want to divide those, or at least use different magic scripts.\n\nBTW, I think the flattening above does NOT propagate lower hierarchy text to the top, so there's no problem with local naming of nets (if I understand your comment).\n\nThese are the commands that I use for hierarchical extraction for LVS.\n```\ndrc off\ncrashbackups stop\ngds drccheck off\nundo disable\nlocking disable\ngds flatten yes # flattens cells with less than 10 shapes\ngds flatglob <cellname> # repeated for other larger cells to be flattened before extracting. Note: All subcells must be explicitly flattened too.\ngds read <gdsfile>\nload <cellname>\nselect top cell\nexpand\nextract no all ;# clear all flags\nextract do aliases\nextract do local\nextract unique\next2spice lvs\next2spice merge conservative ;# reduce parallel devices\next2spice short resistor ;# keep both ports but connect them with a 0 ohm resistor\next2spice -o <cellname>.gds.spice <cellname>.ext\nfeedback save <cellname>.feedback.txt\n```\n\nFun fact: magic's default extraction connects virtual nets by name - disjoint nets with the same label are extracted as connected. \nUse `extract unique` to automatically add a `_uq*` suffix to unconnected duplicate labels.",
+      "author": {
+        "id": "738396032295108721",
+        "name": "bailey8889",
+        "discriminator": "0000",
+        "nickname": "bailey",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/0-EB806.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1554762938353586217",
+      "type": "Reply",
+      "timestamp": "2026-09-30T07:52:50.602+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Oh I'm not doing LVS with this; this is for extraction of largs hard macros and entire dies into Xyce.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "738396032295108721",
+          "name": "bailey8889",
+          "discriminator": "0000",
+          "nickname": "bailey",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-09_media/0-EB806.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1554754303107797074",
+        "channelId": "1554294587420319839",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1554763282085187645",
+      "type": "Default",
+      "timestamp": "2026-09-30T07:54:12.554+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I.... did some stuff in KLayout macro/scripting to lift labels up to top level shapes while attaching path prefixes reflecting instance IDs.....",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1554764018626076733",
+      "type": "Default",
+      "timestamp": "2026-09-30T07:57:08.159+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I wonder if I maybe should do something to reduce shapes after the flattening on the KLayout side and before feeding it to magic?",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1554767590340042905",
+      "type": "Default",
+      "timestamp": "2026-09-30T08:11:19.722+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Still not understanding the need to flatten in Klayout (unless you need those internal net names).\nCame across this command in magic that fractures layers into simple polygons. For example\n```\nM1   = input(13, 0)\nM1.data = M1.data.merged(true, 0).decompose_convex_to_region\nM1.output(13,  0)\n```",
+      "author": {
+        "id": "738396032295108721",
+        "name": "bailey8889",
+        "discriminator": "0000",
+        "nickname": "bailey",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/0-EB806.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1554770948232712224",
+      "type": "Reply",
+      "timestamp": "2026-09-30T08:24:40.306+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "those net names were requested by Tholin.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "2026-09_media/1f44d-27259.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "738396032295108721",
+              "name": "bailey8889",
+              "discriminator": "0000",
+              "nickname": "bailey",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-09_media/0-EB806.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "738396032295108721",
+          "name": "bailey8889",
+          "discriminator": "0000",
+          "nickname": "bailey",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-09_media/0-EB806.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1554767590340042905",
+        "channelId": "1554294587420319839",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1554770987721949197",
+      "type": "Default",
+      "timestamp": "2026-09-30T08:24:49.721+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "(for debugging purposes)",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1554771879217074287",
+      "type": "Default",
+      "timestamp": "2026-09-30T08:28:22.27+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I'd wish the PEX would manage to pick a fragment of RC-fractured net actually covered by the drawn label if it's an area label or where a mere point label happens to hit, when extracting; as I don't particularly care for the nuanced names of intermediate chunks of the RC lumped transmission/delay line \"model\" that'll extract, but we'll have to see I guess.....",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1554772004853518439",
+      "type": "Default",
+      "timestamp": "2026-09-30T08:28:52.224+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "not like LVS connectivity rules actually apply at PEX time \uD83D\uDE41",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-09_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83D\uDE41",
+          "code": "slight_frown",
+          "isAnimated": false,
+          "imageUrl": "2026-09_media/1f641-E1429.svg"
+        }
+      ]
     }
   ],
-  "messageCount": 7
+  "messageCount": 16
 }
