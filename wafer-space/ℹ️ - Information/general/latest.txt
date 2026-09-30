@@ -1472,6 +1472,125 @@ If anyone wants to tape out a SoC or something with this now to try it, you may
 Highly doubtful I will add any more cells now
 
 
+[2026-09-30 2:28 p.m.] namibj
+TSPC-DFF?
+
+
+[2026-09-30 2:28 p.m.] tholin
+A what?
+
+
+[2026-09-30 3:14 p.m.] namibj
+True single phase clock data flip flop.
+
+
+[2026-09-30 3:16 p.m.] namibj
+
+
+{Attachments}
+2026-09_media/image0-1DFDD.png
+
+
+[2026-09-30 3:18 p.m.] namibj
+It.... _does_ get _more_ intense:
+
+{Attachments}
+2026-09_media/image0-76BD8.png
+
+
+[2026-09-30 3:28 p.m.] namibj
+Those are iiuc a major point of blame for microprocessors broadly gaining "minimum clock speed" requirements some 20~30 years ago.
+
+
+[2026-09-30 3:52 p.m.] tholin
+This is just a improved dynamic DFF
+
+
+[2026-09-30 3:52 p.m.] tholin
+I’ve taped out some of those on run 2
+
+
+[2026-09-30 3:52 p.m.] tholin
+The fab SPICE models are not advanced enough to truly simulate them
+
+
+[2026-09-30 3:53 p.m.] tholin
+I have no idea if they work or what the minimum clock speed will be
+
+
+[2026-09-30 6:11 p.m.] wafer.space Community #announcements
+# A Need for Speed: @tholin's Own Standard Cell Library
+
+One person and 102 commits is what it takes to push the performance of open source silicon to the edge.
+
+Learn how @tholin crafted her own custom cell library, and how it's enabling the future of fast silicon in our latest update.
+
+[crowdsupply.com/wafer-space/gf180mcu-run-3/updates/a-need-for-speed-tholins-own-standard-cell-library](https://www.crowdsupply.com/wafer-space/gf180mcu-run-3/updates/a-need-for-speed-tholins-own-standard-cell-library)
+
+{Embed}
+https://www.crowdsupply.com/wafer-space/gf180mcu-run-3/updates/a-need-for-speed-tholins-own-standard-cell-library
+A Need for Speed: Tholin's Own Standard Cell Library
+Performance -- an elusive metric that is influenced by everything the chip consists of, and more. The HDL that defines it, the way it is logically laid out, to the tiniest splattering of a chemical on the wafer, and the environment the chip lives in. How far can you go to chase speed?
+2026-09_media/3349b427-90b2-46df-8d8f-d6a07cefa245_proje-3F02A.jpg
+
+
+[2026-09-30 6:32 p.m.] namibj
+huh????
+
+
+[2026-09-30 6:33 p.m.] tholin
+Yeah. They don’t accurately model the gate capacitance and relevant leakage currents.
+
+
+[2026-09-30 6:33 p.m.] tholin
+Whenever I try to sim a dynamic DFF, the gates hold a charge indefinitely
+
+
+[2026-09-30 6:33 p.m.] namibj
+pretty sure with that wirng there most of the leakage isn't through the gate oxide, at least on these relatively thick oxide devices
+
+
+[2026-09-30 6:34 p.m.] namibj
+you need to set the tolerances of the spice solving to reflect the finesse of the situation.
+
+
+[2026-09-30 6:35 p.m.] namibj
+(Also if you run it through Xyce you can go for fast-forward through like a literal second of try-and-hold-it with the accuracy cranked really sensitive.)
+
+
+[2026-09-30 6:36 p.m.] namibj
+Due to the way it handles the timestemps for you; though I guess for that situation with just a start and then developing towards a cutoff end-time, the flexible dynamic breakpoint insertion of Xyce doesn't actually trigger so ngspice should be just fine.
+
+
+[2026-09-30 6:36 p.m.] 246tnt
+Where exactly do you get that they don't model gate capacitance ???
+
+
+[2026-09-30 6:37 p.m.] namibj
+_accurately_
+But yeah, the plots I've seen for gf180mcuD aren't bad for the mainstream nmos and pmos transistors.
+
+
+[2026-09-30 6:39 p.m.] namibj
+They're not _perfect_ throughout but it doesn't feel like it'd give wrongful understanding regarding the viability or lack thereof for a particular TSPC-DFF cell design to fit into the SCL.
+
+
+[2026-09-30 6:39 p.m.] 246tnt
+Leakage also usually has a very very wide variance, several orders of magnitude between min and max ... so to estimate the min frequency you need to do the math yourself rather than rely on sim.
+
+
+[2026-09-30 6:41 p.m.] namibj
+PCE exists for a reason; something as contained as a singular 5T/6T/9T TSPC-DFF should actually manage to _not_ hit any of the curse-of-dimensionality complications involved here.
+
+
+[2026-09-30 6:41 p.m.] namibj
+(OFC assuming that _is_ covered by the statistical process variation equations coded into the SPICE model deck.)
+
+
+[2026-09-30 6:46 p.m.] namibj
+(Now I want to figure out how exactly to effectively realize a chopper functionality to use in place of the default passive kelvin-connection-to-via-to-DUT, for allowing measurements of leakage current of a DUT at least a few orders of magnitude below the leakage of the analog MUX between the meter and the entire array of DUTs on the die... there gotta be _some_ way to pull it off, I guess.... I hope.... but that sounds like a task for after a good night of sleep.)
+
+
 ==============================================================
-Exported 260 message(s)
+Exported 285 message(s)
 ==============================================================

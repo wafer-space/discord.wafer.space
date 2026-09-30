@@ -16,6 +16,14 @@ I guess I should also edit the `.spice` to specifically make it use the `0` net 
 gonna re-extract and see then I guess. Like, see how it does with notably relaxed extraction fidelity of the PEX and then ofc setting up Xyce to be more amenable to the situation.
 
 
+[2026-09-30 6:31 p.m.] namibj
+So, shylu_basker works great.
+However: I haven't yet figured out how to set it up that specifically only the beret process gets access to one thread on almost all cores (the machine does do other stuff; this soaks up spare CPU cycles!) while the remaining processes get literally just one thread each.
+
+Oh, also `opal` something about openmpi AFAIK somehow manages to do highly wasteful spinlock-seeming activity 🙁
+Would have preferred it to manage to use futex like a good linux citizen.....
+
+
 ==============================================================
-Exported 2 message(s)
+Exported 3 message(s)
 ==============================================================

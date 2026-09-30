@@ -708,3 +708,35 @@ But maybe look at doing a dc op point testbench first at least; I'm btw. expecti
 "262706220073222144","namibj","2026-09-30T13:16:56.5130000+00:00","yeah that's easy for me as well and not a problem to do; I'm trying to retain the inner names","",""
 "262706220073222144","namibj","2026-09-30T13:35:31.7630000+00:00","running with a simplified one now where I elided the big net's alternate names (`power_fet/*`, `*VDD`, `*VSS`). I think that should suffice then.","",""
 "262706220073222144","namibj","2026-09-30T15:10:49.3760000+00:00","I think I'll actually try to run Xyce with fairly high verbosity (to get decent progress information while the solver is gnawing on literally just one single initial DC op point) with the apparently 2 orders of magnitude faster (vs. the currently running general purpose fallback AztecOO-GMRES w/ ifpack through some graph algorithm thingy) ShyLU-Basker on that same netlist that's done for days now, just to check settings and how fast/slow it's gonna go. With luck I can tell you in an hour ""pls testbench; U got approximately _this_ many timesteps (or equivalent) for us to get results when I'm off work tomorrow evening"".","",""
+"262706220073222144","namibj","2026-09-30T17:48:08.1850000+00:00","@Tholin took 2hours 30 minutes to extract btw.","https://media.githubusercontent.com/media/wafer-space/discord.wafer.space/master/large_media/wafer-space/%F0%9F%93%90%20-%20Designing/analog/2026-09/2026-09_media/chip_top_lifted_and_disambiguated_texts_fl-D2662.zst",""
+"262706220073222144","namibj","2026-09-30T17:48:18.3620000+00:00","Pls testbench.","",""
+"262706220073222144","namibj","2026-09-30T17:56:49.3680000+00:00","```
+***** Device Type Counts ...
+
+       C                 19699
+       D                  1129
+       M                 22706
+       R               8400891
+       V                     5
+       -----------------------
+       Total Devices   8444430
+```","",""
+"262706220073222144","namibj","2026-09-30T17:58:43.1210000+00:00","hmmmm,. I think I like that severe reduction in capacitor spam.","",""
+"220639106915368960","tholin","2026-09-30T19:35:40.4120000+00:00","That’s a lot of resistors!","",""
+"220639106915368960","tholin","2026-09-30T19:46:50.5980000+00:00","I can’t type out a whole testbench right now, but here is the gist:
+VDDP to 0V
+VSS to 0V
+VDDE to 0V
+VDDU to 0V
+VDD to 5V
+All bat_pad shorted together and going into the battery model from that one control_bench.sch file. Same thing.
+lenb_pad to 0V
+s0_pad, s1_pad, s0p_pad, s1p_pad all to 0V
+ce_pad to a `PULSE(0 5 2u 2n 2n 1000u 2000u 0)`
+prog_pad to 0V through a 15K resistor
+pwrenb_pad, chrg_pad and done_pad are outputs that should be kept track of
+All others floating or to 0V through weak pull-downs
+Simulate for 150u","",""
+"220639106915368960","tholin","2026-09-30T19:47:10.1370000+00:00","","2026-09_media/image-0C355.png",""
+"155452674286813194","brookieoz","2026-09-30T20:56:44.6550000+00:00","Did you do R-only extract while breaking parasitic resistors into a bunch of really small resistors?","",""
+"155452674286813194","brookieoz","2026-09-30T20:59:46.7480000+00:00","Actually nevermind there's a lot more stuff going on than what I'm seeing at surface level","",""

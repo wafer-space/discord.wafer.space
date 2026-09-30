@@ -4,3 +4,8 @@ I _thought_ it was actually doing stuff in some parallel manner, but it's litera
 Gonna try `.options LINSOL USE_IFPACK_FACTORY=1` whcih should use a sparse direct solver on each subdomain, but relies on no singular matrix issues on each subdomain because KLU would fail with that... hmmm.
 I guess I should also edit the `.spice` to specifically make it use the `0` net on the substrate which our extraction doesn't model resistance for in hopes of doing so resulting in at least a stronger absence of global coupling entries in the matrices it's trying to use the parallel iterative linear solver(s) on.","",""
 "262706220073222144","namibj","2026-09-30T03:03:59.2330000+00:00","gonna re-extract and see then I guess. Like, see how it does with notably relaxed extraction fidelity of the PEX and then ofc setting up Xyce to be more amenable to the situation.","",""
+"262706220073222144","namibj","2026-09-30T18:31:27.7950000+00:00","So, shylu_basker works great.
+However: I haven't yet figured out how to set it up that specifically only the beret process gets access to one thread on almost all cores (the machine does do other stuff; this soaks up spare CPU cycles!) while the remaining processes get literally just one thread each.
+
+Oh, also `opal` something about openmpi AFAIK somehow manages to do highly wasteful spinlock-seeming activity 🙁
+Would have preferred it to manage to use futex like a good linux citizen.....","",""

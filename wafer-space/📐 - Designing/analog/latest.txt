@@ -2615,6 +2615,71 @@ running with a simplified one now where I elided the big net's alternate names (
 I think I'll actually try to run Xyce with fairly high verbosity (to get decent progress information while the solver is gnawing on literally just one single initial DC op point) with the apparently 2 orders of magnitude faster (vs. the currently running general purpose fallback AztecOO-GMRES w/ ifpack through some graph algorithm thingy) ShyLU-Basker on that same netlist that's done for days now, just to check settings and how fast/slow it's gonna go. With luck I can tell you in an hour "pls testbench; U got approximately _this_ many timesteps (or equivalent) for us to get results when I'm off work tomorrow evening".
 
 
+[2026-09-30 5:48 p.m.] namibj
+@Tholin took 2hours 30 minutes to extract btw.
+
+{Attachments}
+https://media.githubusercontent.com/media/wafer-space/discord.wafer.space/master/large_media/wafer-space/%F0%9F%93%90%20-%20Designing/analog/2026-09/2026-09_media/chip_top_lifted_and_disambiguated_texts_fl-D2662.zst
+
+
+[2026-09-30 5:48 p.m.] namibj
+Pls testbench.
+
+
+[2026-09-30 5:56 p.m.] namibj
+```
+***** Device Type Counts ...
+
+       C                 19699
+       D                  1129
+       M                 22706
+       R               8400891
+       V                     5
+       -----------------------
+       Total Devices   8444430
+```
+
+
+[2026-09-30 5:58 p.m.] namibj
+hmmmm,. I think I like that severe reduction in capacitor spam.
+
+
+[2026-09-30 7:35 p.m.] tholin
+That’s a lot of resistors!
+
+
+[2026-09-30 7:46 p.m.] tholin
+I can’t type out a whole testbench right now, but here is the gist:
+VDDP to 0V
+VSS to 0V
+VDDE to 0V
+VDDU to 0V
+VDD to 5V
+All bat_pad shorted together and going into the battery model from that one control_bench.sch file. Same thing.
+lenb_pad to 0V
+s0_pad, s1_pad, s0p_pad, s1p_pad all to 0V
+ce_pad to a `PULSE(0 5 2u 2n 2n 1000u 2000u 0)`
+prog_pad to 0V through a 15K resistor
+pwrenb_pad, chrg_pad and done_pad are outputs that should be kept track of
+All others floating or to 0V through weak pull-downs
+Simulate for 150u
+
+
+[2026-09-30 7:47 p.m.] tholin
+
+
+{Attachments}
+2026-09_media/image-0C355.png
+
+
+[2026-09-30 8:56 p.m.] brookieoz
+Did you do R-only extract while breaking parasitic resistors into a bunch of really small resistors?
+
+
+[2026-09-30 8:59 p.m.] brookieoz
+Actually nevermind there's a lot more stuff going on than what I'm seeing at surface level
+
+
 ==============================================================
-Exported 521 message(s)
+Exported 530 message(s)
 ==============================================================
