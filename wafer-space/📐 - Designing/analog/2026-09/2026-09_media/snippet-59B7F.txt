@@ -1,0 +1,24 @@
+* NGSPICE file created from chip_top.ext - technology: gf180mcuD
+.OP
+.OPTIONS OUTPUT SNAPSHOTS=1
+.OPTIONS DIST STRATEGY=2
+*.print dc format=raw vdd
+V1 VDD VSS 4
+V2 VDD_uq0 VSS 4
+V3 VDD_uq1 VSS 4
+V4 VDD_uq2 VSS 4
+V5 VSS 0 0
+.include /foss/pdks/gf180mcuD/libs.tech/xyce/design.xyce
+
+.lib /foss/pdks/gf180mcuD/libs.tech/xyce/sm141064.xyce typical
+.lib /foss/pdks/gf180mcuD/libs.tech/xyce/sm141064.xyce diode_typical
+.lib /foss/pdks/gf180mcuD/libs.tech/xyce/sm141064.xyce res_typical
+.lib /foss/pdks/gf180mcuD/libs.tech/xyce/sm141064.xyce bjt_typical
+.lib /foss/pdks/gf180mcuD/libs.tech/xyce/sm141064.xyce mimcap_typical
+.lib /foss/pdks/gf180mcuD/libs.tech/xyce/sm141064.xyce moscap_typical
+*subckt chip_top VDD VSS bat_pad[0] bat_pad[10] bat_pad[11] bat_pad[1] bat_pad[2]
+* bat_pad[3] bat_pad[4] bat_pad[5] bat_pad[6] bat_pad[7] bat_pad[8] bat_pad[9] ce_pad
+* chrg_pad done_pad dummy_0p dummy_10p dummy_11p dummy_12p dummy_13p dummy_14p dummy_15p
+* dummy_16p dummy_17p dummy_18p dummy_19p dummy_1p dummy_20p dummy_2p dummy_3p dummy_4p
+* dummy_5p dummy_6p dummy_7p dummy_8p dummy_9p lenb_pad prog_pad pwrenb_pad s0_pad
+* s0p_pad s1_pad s1p_pad safe_pad VDD_uq0 VDD_uq1 VDD_uq2

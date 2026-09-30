@@ -2526,6 +2526,95 @@ Also I think I found how I at least avoided and apparently low key _have to_ avo
 It Might rely on the app not trying to render while it's processing the stuff.
 
 
+[2026-09-30 9:40 a.m.] tholin
+Tried that, no luck
+
+
+[2026-09-30 9:40 a.m.] tholin
+I still need to provide you with a testbench for the chip, right?
+
+
+[2026-09-30 10:41 a.m.] namibj
+if you don't want me to just do this:
+
+{Attachments}
+2026-09_media/snippet-59B7F.txt
+
+
+[2026-09-30 10:43 a.m.] namibj
+I'd not at all be surprised if the difference between "works for me" and "doesn't fix it for you" there is that I'd be surprised if you're not running a compositor.
+
+
+[2026-09-30 10:44 a.m.] namibj
+Also I hope you're gonna be ok with me aggressively cutting down the accuracy targets for the SPICE.
+
+
+[2026-09-30 10:45 a.m.] namibj
+(numerical solver precision targets, that is)
+
+
+[2026-09-30 10:48 a.m.] namibj
+Beware that the slightly changed extraction to hopefully handle the largely-retained hierarchical net labels is expected to cough up a different signature vs. the above; also due to your pad label changes though those are probably less impactful.
+
+
+[2026-09-30 10:48 a.m.] tholin
+Hmmm... I wonder if it’d work if I put together a klayout script to do the flatten and invoke it from the command line
+
+
+[2026-09-30 11:01 a.m.] namibj
+I'd have substantial hope for that.
+But maybe look at doing a dc op point testbench first at least; I'm btw. expecting this to come up with about this list:
+
+{Attachments}
+2026-09_media/snippet-EFA7B.txt
+
+
+[2026-09-30 11:03 a.m.] tholin
+Oh hey, that worked
+
+
+[2026-09-30 11:03 a.m.] tholin
+Oh that is a MASSIVE gds file!
+
+
+[2026-09-30 11:03 a.m.] tholin
+`klayout -b -r flatten.rb -rd input=chip_top.gds -rd output=flattened.gds`
+
+{Attachments}
+2026-09_media/flatten-AC5B5.rb
+
+
+[2026-09-30 11:43 a.m.] namibj
+Hmmm, so, looks like `Basker` _is_ available....
+
+{Attachments}
+2026-09_media/snippet-6166F.txt
+
+
+[2026-09-30 12:40 p.m.] namibj
+chopped out inner VDD and VSS names; and probably more importantly got rid of the SCL cell originating label spam from the blinker section that may have been trying to horribly bloat processing of the global `VSS` node. That attempt at extracting in less than 4 hours is running now.
+
+
+[2026-09-30 12:56 p.m.] tholin
+I have a GDSII file that has no labels except on the pads
+
+
+[2026-09-30 1:16 p.m.] namibj
+"documentation".... <https://github.com/Xyce/Xyce/blob/6243c628a36dbf6431424722d7f5265e22752c4a/src/LinearAlgebraServicesPKG/N_LAS_IRSolver.C#L331>
+
+
+[2026-09-30 1:16 p.m.] namibj
+yeah that's easy for me as well and not a problem to do; I'm trying to retain the inner names
+
+
+[2026-09-30 1:35 p.m.] namibj
+running with a simplified one now where I elided the big net's alternate names (`power_fet/*`, `*VDD`, `*VSS`). I think that should suffice then.
+
+
+[2026-09-30 3:10 p.m.] namibj
+I think I'll actually try to run Xyce with fairly high verbosity (to get decent progress information while the solver is gnawing on literally just one single initial DC op point) with the apparently 2 orders of magnitude faster (vs. the currently running general purpose fallback AztecOO-GMRES w/ ifpack through some graph algorithm thingy) ShyLU-Basker on that same netlist that's done for days now, just to check settings and how fast/slow it's gonna go. With luck I can tell you in an hour "pls testbench; U got approximately _this_ many timesteps (or equivalent) for us to get results when I'm off work tomorrow evening".
+
+
 ==============================================================
-Exported 502 message(s)
+Exported 521 message(s)
 ==============================================================
