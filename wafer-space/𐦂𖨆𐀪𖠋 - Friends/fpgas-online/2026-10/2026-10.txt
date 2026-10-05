@@ -40,6 +40,151 @@ same pi with an sd card, brings up a gui desktop, no reboot
 I have trouble believing te arty is drawing so much power the pi reboots
 
 
+[2026-10-04 11:28 p.m.] mithro_
+@carlfk - Could you check on the Acorns in the Compute Blade?
+
+
+[2026-10-04 11:30 p.m.] carlfk
+They are still there 🙂
+
+
+[2026-10-04 11:31 p.m.] carlfk
+they are wired to the switch, I could probably figure out which ports by turning them all on
+
+
+[2026-10-04 11:32 p.m.] carlfk
+I'll be at ps1 in.. 18 hours ish.
+
+
+[2026-10-04 11:32 p.m.] carlfk
+what sort of checking were you looking for?
+
+
+[2026-10-04 11:34 p.m.] mithro_
+```
+  From outside, at 10:01 today
+  - The index lists nine boards: pi2, pi3, pi5, pi7, pi9, pi11, pi13, pi21 and pi23. None is an Acorn host.
+  - The Compute Blade hosts have no page: pi14.html, pi16.html, pi18.html and pi20.html all answer 404.
+  - ps1 has no fleet registry page (/fleet/ answers 404), so no boot-check result is visible from outside.
+
+  Last direct look, 31 August (from my notes, not re-checked)
+  ┌──────┬──────────┬────────────────────────────────────────────────┐
+  │ Host │  Module  │                  On PCIe then                  │
+  ├──────┼──────────┼────────────────────────────────────────────────┤
+  │ pi14 │ CM4      │ Acorn CLE-101, PCI ID 1e24:0101                │
+  ├──────┼──────────┼────────────────────────────────────────────────┤
+  │ pi16 │ CM5 Lite │ Acorn CLE-101, PCI ID 1e24:0101                │
+  ├──────┼──────────┼────────────────────────────────────────────────┤
+  │ pi18 │ CM4      │ nothing, M.2 slot empty                        │
+  ├──────┼──────────┼────────────────────────────────────────────────┤
+  │ pi20 │ CM5 Lite │ a Xilinx card showing the generic ID 10ee:7011 │
+  └──────┴──────────┴────────────────────────────────────────────────┘
+
+  All four blades were up that day.
+
+  Not known
+  - Whether those blades are powered today, what design is on the cards, or whether our boot check has ever run there.
+```
+
+
+[2026-10-04 11:36 p.m.] carlfk
+nice - I can power on those 4 ports
+
+
+[2026-10-04 11:38 p.m.] carlfk
+@Tim 'mithro' Ansell all 4 were off.  I just powered them all on.
+
+
+[2026-10-04 11:39 p.m.] mithro_
+@carlfk - I'll have some follow up instructions on how to "verify" they are wired up correctly.
+
+
+[2026-10-04 11:43 p.m.] carlfk
+@Tim 'mithro' Ansell well.. I see 2 of them booting linux:
+
+
+[2026-10-04 11:43 p.m.] carlfk
+('10.21.0.116', 6665) [    9.991035] audit: type=1130 audit(1791157300.039:11): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=modprobe@fuse comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+
+
+[2026-10-04 11:44 p.m.] carlfk
+that same IP seems to have just rebooted
+
+
+[2026-10-04 11:44 p.m.] carlfk
+i am wondering if some startup script is causing the reboot
+
+
+[2026-10-04 11:45 p.m.] carlfk
+for sure I had a hack because something (camera process I think) didn't have a hostname (needed to tell nginx where video data was coming from )
+
+
+[2026-10-04 11:46 p.m.] carlfk
+managing hostname has been ... tricky.
+
+
+[2026-10-05 12:00 a.m.] carlfk
+sigh.  somehow 16 has become stable
+
+
+[2026-10-05 12:00 a.m.] carlfk
+pi@pi16:~ $ uptime 
+ 00:59:28 up 6 min,  1 user,  load average: 1.42, 1.10, 0.53
+
+
+[2026-10-05 12:00 a.m.] carlfk
+120 is still rebooting
+
+
+[2026-10-05 12:01 a.m.] carlfk
+120 = 10.21.0.120 = port 20
+
+
+[2026-10-05 12:16 a.m.] mithro_
+@carlfk - https://docs.fpgas.online/en/latest/verify/fpgas-verify.html#installing
+
+
+[2026-10-05 12:48 a.m.] carlfk
+systemctl cat fpgas-verify
+
+
+[2026-10-05 12:48 a.m.] carlfk
+EnvironmentFile=-/etc/default/fpgas-verify
+
+
+[2026-10-05 12:48 a.m.] carlfk
+cat: /etc/default/fpgas-verify: No such file or directory
+
+
+[2026-10-05 12:48 a.m.] carlfk
+that seems wrong
+
+
+[2026-10-05 12:49 a.m.] carlfk
+but it might not matter
+
+
+[2026-10-05 12:49 a.m.] carlfk
+ExecStart=/usr/bin/fpgas-verify $FPGAS_VERIFY_ARGS
+
+
+[2026-10-05 12:54 a.m.] carlfk
+@Tim 'mithro' Ansell other than 'fail' I'm not sure how to read this
+
+
+[2026-10-05 12:55 a.m.] carlfk
+ssh -p 11622 pi@ps1.fpgas.online
+
+
+[2026-10-05 2:28 a.m.] carlfk
+welp, I took the reboot out whenever this happened https://github.com/CarlFK/pici/commit/383b11a43ad8f6ff5c3dde772c69eacdec9a486c
+
+{Embed}
+https://github.com/CarlFK/pici/commit/383b11a43ad8f6ff5c3dde772c69eacdec9a486c
+re-run dhclient instead of rebooting.  might be better? · CarlFK/p...
+2026-10_media/383b11a43ad8f6ff5c3dde772c69eacdec9a486c-1B4A3
+
+
 ==============================================================
-Exported 7 message(s)
+Exported 36 message(s)
 ==============================================================

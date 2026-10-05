@@ -6,3 +6,56 @@ AuthorID,Author,Date,Content,Attachments,Reactions
 "443147704126668801","carlfk","2026-10-04T09:32:57.2330000+00:00","something is going on.  net/nfs boot, pi4 sends the bitstream to the arty then reboots a minute later","",""
 "443147704126668801","carlfk","2026-10-04T09:33:27.1530000+00:00","same pi with an sd card, brings up a gui desktop, no reboot","",""
 "443147704126668801","carlfk","2026-10-04T09:34:13.9060000+00:00","I have trouble believing te arty is drawing so much power the pi reboots","",""
+"169786952432746498","mithro_","2026-10-04T23:28:54.9380000+00:00","@carlfk - Could you check on the Acorns in the Compute Blade?","",""
+"443147704126668801","carlfk","2026-10-04T23:30:41.5800000+00:00","They are still there 🙂","",""
+"443147704126668801","carlfk","2026-10-04T23:31:33.4320000+00:00","they are wired to the switch, I could probably figure out which ports by turning them all on","",""
+"443147704126668801","carlfk","2026-10-04T23:32:11.1640000+00:00","I'll be at ps1 in.. 18 hours ish.","",""
+"443147704126668801","carlfk","2026-10-04T23:32:37.0180000+00:00","what sort of checking were you looking for?","",""
+"169786952432746498","mithro_","2026-10-04T23:34:49.3690000+00:00","```
+  From outside, at 10:01 today
+  - The index lists nine boards: pi2, pi3, pi5, pi7, pi9, pi11, pi13, pi21 and pi23. None is an Acorn host.
+  - The Compute Blade hosts have no page: pi14.html, pi16.html, pi18.html and pi20.html all answer 404.
+  - ps1 has no fleet registry page (/fleet/ answers 404), so no boot-check result is visible from outside.
+
+  Last direct look, 31 August (from my notes, not re-checked)
+  ┌──────┬──────────┬────────────────────────────────────────────────┐
+  │ Host │  Module  │                  On PCIe then                  │
+  ├──────┼──────────┼────────────────────────────────────────────────┤
+  │ pi14 │ CM4      │ Acorn CLE-101, PCI ID 1e24:0101                │
+  ├──────┼──────────┼────────────────────────────────────────────────┤
+  │ pi16 │ CM5 Lite │ Acorn CLE-101, PCI ID 1e24:0101                │
+  ├──────┼──────────┼────────────────────────────────────────────────┤
+  │ pi18 │ CM4      │ nothing, M.2 slot empty                        │
+  ├──────┼──────────┼────────────────────────────────────────────────┤
+  │ pi20 │ CM5 Lite │ a Xilinx card showing the generic ID 10ee:7011 │
+  └──────┴──────────┴────────────────────────────────────────────────┘
+
+  All four blades were up that day.
+
+  Not known
+  - Whether those blades are powered today, what design is on the cards, or whether our boot check has ever run there.
+```","",""
+"443147704126668801","carlfk","2026-10-04T23:36:04.7070000+00:00","nice - I can power on those 4 ports","",""
+"443147704126668801","carlfk","2026-10-04T23:38:23.8340000+00:00","@Tim 'mithro' Ansell all 4 were off.  I just powered them all on.","",""
+"169786952432746498","mithro_","2026-10-04T23:39:46.3330000+00:00","@carlfk - I'll have some follow up instructions on how to ""verify"" they are wired up correctly.","",""
+"443147704126668801","carlfk","2026-10-04T23:43:36.0170000+00:00","@Tim 'mithro' Ansell well.. I see 2 of them booting linux:","",""
+"443147704126668801","carlfk","2026-10-04T23:43:38.1770000+00:00","('10.21.0.116', 6665) [    9.991035] audit: type=1130 audit(1791157300.039:11): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=modprobe@fuse comm=""systemd"" exe=""/usr/lib/systemd/systemd"" hostname=? addr=? terminal=? res=success'","",""
+"443147704126668801","carlfk","2026-10-04T23:44:00.3040000+00:00","that same IP seems to have just rebooted","",""
+"443147704126668801","carlfk","2026-10-04T23:44:22.0050000+00:00","i am wondering if some startup script is causing the reboot","",""
+"443147704126668801","carlfk","2026-10-04T23:45:13.4900000+00:00","for sure I had a hack because something (camera process I think) didn't have a hostname (needed to tell nginx where video data was coming from )","",""
+"443147704126668801","carlfk","2026-10-04T23:46:11.8790000+00:00","managing hostname has been ... tricky.","",""
+"443147704126668801","carlfk","2026-10-05T00:00:13.7250000+00:00","sigh.  somehow 16 has become stable","",""
+"443147704126668801","carlfk","2026-10-05T00:00:16.6840000+00:00","pi@pi16:~ $ uptime 
+ 00:59:28 up 6 min,  1 user,  load average: 1.42, 1.10, 0.53","",""
+"443147704126668801","carlfk","2026-10-05T00:00:48.1160000+00:00","120 is still rebooting","",""
+"443147704126668801","carlfk","2026-10-05T00:01:17.9040000+00:00","120 = 10.21.0.120 = port 20","",""
+"169786952432746498","mithro_","2026-10-05T00:16:59.6330000+00:00","@carlfk - https://docs.fpgas.online/en/latest/verify/fpgas-verify.html#installing","",""
+"443147704126668801","carlfk","2026-10-05T00:48:37.8670000+00:00","systemctl cat fpgas-verify","",""
+"443147704126668801","carlfk","2026-10-05T00:48:44.7220000+00:00","EnvironmentFile=-/etc/default/fpgas-verify","",""
+"443147704126668801","carlfk","2026-10-05T00:48:51.3540000+00:00","cat: /etc/default/fpgas-verify: No such file or directory","",""
+"443147704126668801","carlfk","2026-10-05T00:48:59.0200000+00:00","that seems wrong","",""
+"443147704126668801","carlfk","2026-10-05T00:49:15.2340000+00:00","but it might not matter","",""
+"443147704126668801","carlfk","2026-10-05T00:49:17.8550000+00:00","ExecStart=/usr/bin/fpgas-verify $FPGAS_VERIFY_ARGS","",""
+"443147704126668801","carlfk","2026-10-05T00:54:18.7020000+00:00","@Tim 'mithro' Ansell other than 'fail' I'm not sure how to read this","",""
+"443147704126668801","carlfk","2026-10-05T00:55:46.6230000+00:00","ssh -p 11622 pi@ps1.fpgas.online","",""
+"443147704126668801","carlfk","2026-10-05T02:28:39.5090000+00:00","welp, I took the reboot out whenever this happened https://github.com/CarlFK/pici/commit/383b11a43ad8f6ff5c3dde772c69eacdec9a486c","",""
