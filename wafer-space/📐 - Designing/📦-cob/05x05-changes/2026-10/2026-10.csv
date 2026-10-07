@@ -16,3 +16,21 @@ https://github.com/wafer-space/chip-on-board-wire-bonded-pcbs/pull/20","",""
 "691780627338625077","rebelmike","2026-10-06T21:20:35.6480000+00:00","I've not used this setting before.  I notice that on the 1x1 where Andrew made the change, the ground vias have kept their annular rings on the inner layers (and in the pcb file there's `(zone_layer_connections ""In1.Cu"" ""In2.Cu"")`), but in your change to the quarter slot they are gone and no vias have those zone layer connections listed.  Similarly if I set annular rings to start, end and connected then I lose the inner layer rings.
 
 I don't think this is actually important because the ground flood on the inner layers goes right through the vias, but I'm not 100% sure and it is weird.","",""
+"509798510170865675","essen__","2026-10-06T23:11:10.0510000+00:00","( If I understand your comment correctly ) 
+I believe losing the annular ring on via unconnected to the inner layers is normal.","",""
+"509798510170865675","essen__","2026-10-06T23:16:33.0980000+00:00","> but in your change to the quarter slot they are gone and no vias have those zone layer connections listed
+I am less familiar with the kicad file structure, but I expect the gnd vias to still all still be connected to the inner GND fill zones just as in Andrew's changes.","",""
+"509798510170865675","essen__","2026-10-06T23:18:41.5270000+00:00","I did forget to re-fill the zones so I just pushed a new commit, not sure if that wasn't the cause.","",""
+"509798510170865675","essen__","2026-10-06T23:19:14.5340000+00:00","Inner layer GND connection:","2026-10_media/pcb-F0039.png",""
+"691780627338625077","rebelmike","2026-10-06T23:22:10.0590000+00:00","Ah hah, looks like that’s fixed it. Thanks!","","🫡 (1)"
+"509798510170865675","essen__","2026-10-06T23:33:25.7630000+00:00","Cool, nice catch","",""
+"169786952432746498","mithro_","2026-10-07T01:27:51.5820000+00:00","We really should set up GitHub actions to run DRC/ERC checks on pull requests (and also do a reflood of regions and verify no diffs).
+
+Potentially it could even do preview renders or visual diffs type thing?
+
+I know I have seen actions which do that type of thing but do not know what the current best practices are.","",""
+"756011607603019777","anfroholic","2026-10-07T01:28:58.0570000+00:00","So we cannot have anything reflood as the panels would get all screwed up unfortunately","","👀 (1)"
+"509798510170865675","essen__","2026-10-07T02:26:11.6760000+00:00","That would be very useful indeed.","",""
+"509798510170865675","essen__","2026-10-07T02:28:09.7870000+00:00","Is this because the panels would be bent by the heat of the reflow process or is there something else ? 
+Also, when you mean anything, do you mean **anything** ? 
+Does this mean cms are a no go and we need to rethink how we do the connector ?","",""

@@ -96,6 +96,55 @@ I've not used this setting before.  I notice that on the 1x1 where Andrew made t
 I don't think this is actually important because the ground flood on the inner layers goes right through the vias, but I'm not 100% sure and it is weird.
 
 
+[2026-10-06 11:11 p.m.] essen__
+( If I understand your comment correctly ) 
+I believe losing the annular ring on via unconnected to the inner layers is normal.
+
+
+[2026-10-06 11:16 p.m.] essen__
+> but in your change to the quarter slot they are gone and no vias have those zone layer connections listed
+I am less familiar with the kicad file structure, but I expect the gnd vias to still all still be connected to the inner GND fill zones just as in Andrew's changes.
+
+
+[2026-10-06 11:18 p.m.] essen__
+I did forget to re-fill the zones so I just pushed a new commit, not sure if that wasn't the cause.
+
+
+[2026-10-06 11:19 p.m.] essen__
+Inner layer GND connection:
+
+{Attachments}
+2026-10_media/pcb-F0039.png
+
+
+[2026-10-06 11:22 p.m.] rebelmike
+Ah hah, looks like that’s fixed it. Thanks!
+
+{Reactions}
+🫡
+
+[2026-10-06 11:33 p.m.] essen__
+Cool, nice catch
+
+
+[2026-10-07 1:27 a.m.] mithro_
+We really should set up GitHub actions to run DRC/ERC checks on pull requests (and also do a reflood of regions and verify no diffs).
+
+Potentially it could even do preview renders or visual diffs type thing?
+
+I know I have seen actions which do that type of thing but do not know what the current best practices are.
+
+
+[2026-10-07 1:28 a.m.] anfroholic
+So we cannot have anything reflood as the panels would get all screwed up unfortunately
+
+{Reactions}
+👀
+
+[2026-10-07 2:26 a.m.] essen__
+That would be very useful indeed.
+
+
 ==============================================================
-Exported 10 message(s)
+Exported 19 message(s)
 ==============================================================
