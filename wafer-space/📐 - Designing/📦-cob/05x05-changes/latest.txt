@@ -145,6 +145,117 @@ So we cannot have anything reflood as the panels would get all screwed up unfort
 That would be very useful indeed.
 
 
+[2026-10-07 2:28 a.m.] essen__
+Is this because the panels would be bent by the heat of the reflow process or is there something else ? 
+Also, when you mean anything, do you mean **anything** ? 
+Does this mean cms are a no go and we need to rethink how we do the connector ?
+
+
+[2026-10-07 2:29 a.m.] anfroholic
+it's because the reflood would not honor the board edges (because edge.cuts is not board outline anymore) so all individual boards would flood together and not honor clearances demanded by jlc and others for flood to v-cut
+
+
+[2026-10-07 2:37 a.m.] essen__
+I have to admit I might not quite follow what the link between reflow (maybe reflood != reflow, in which case I don't know what reflood is) and the v-cut clearance, but if I get what you are saying is that there isn't enough clearance between each board edge ? 
+Is the connector footprint the one that is to close to the edge and causing the DFM violation ?
+
+
+[2026-10-07 2:38 a.m.] essen__
+What should the new clearance be ?
+
+
+[2026-10-07 2:38 a.m.] anfroholic
+reflood == pouring the ground plane in KiCad
+
+
+[2026-10-07 2:39 a.m.] essen__
+Ah got it, my bad.
+
+{Reactions}
+💜
+
+[2026-10-07 2:44 a.m.] essen__
+Hum, I allways assumed that the flood zone (calling it that to be inline with the conversation flow) are defined per there own coordinate set and not inherited from the board cut 🤔 
+So how are you creating the gnd planes during penalization ? Do you have to re-draw them all by hand ?
+
+
+[2026-10-07 2:46 a.m.] anfroholic
+append the board and  do not re-pour
+
+
+[2026-10-07 2:52 a.m.] essen__
+So the pannelized boards have no filled gnd plane ?
+
+
+[2026-10-07 2:53 a.m.] essen__
+To confirm, because if that is the case I will want to add a lot more gnd connections on the pcb.
+
+
+[2026-10-07 2:53 a.m.] anfroholic
+take the board you made as example. You have poured planes. 
+They persist, but when you add (many) to a panel (and remove the edge.cuts shape *this may be where you're getting lost*) you cannot re-pour
+Does that make sense>
+
+
+[2026-10-07 2:54 a.m.] mithro_
+I'm pretty sure you can mark the flood regions edges and proper keep outs?
+
+
+[2026-10-07 2:55 a.m.] anfroholic
+I think there's ways around this, I'm not certain how much you gain in all this anyways, because any change to the child can't just be pushed and must be redone.
+
+
+[2026-10-07 3:00 a.m.] essen__
+I am sorry, but I am still very confused. 
+To my understanding edge cuts and fill zones are different things. I can remove edge cuts and keep fill zones. So I guess you have another problem I am not seeing.
+
+Example of what I mean with the edge cut very far from the fill zone limits :
+
+{Attachments}
+2026-10_media/png-DD3E5.png
+
+
+[2026-10-07 3:01 a.m.] anfroholic
+*clearances
+
+
+[2026-10-07 3:02 a.m.] anfroholic
+if you put edge.cuts on there you will see the pour change
+
+
+[2026-10-07 3:02 a.m.] anfroholic
+see the zone here
+
+{Attachments}
+2026-10_media/image-45677.png
+
+
+[2026-10-07 3:04 a.m.] essen__
+Ah yes, I see it, see leftmost. 
+Example with the worlds most ugly pannelization work (proof that you should never count on me to do the pannelization) 
+So you just want us to un-pour all zones ?
+
+
+[2026-10-07 3:04 a.m.] essen__
+
+
+{Attachments}
+2026-10_media/png2-45BC7.png
+
+
+[2026-10-07 3:06 a.m.] essen__
+Interesting tid bit, I had not thought about it.
+
+
+[2026-10-07 6:22 a.m.] rebelmike
+I think @Essen got the wrong end of the stick here and has cleared the floods on the CoB.
+The point is that *after panelization* you can’t re-flood. We **do** want the zones built on the individual CoBs before they are panelized.
+
+So don’t take the last commit on PR20.
+
+{Reactions}
+💜
+
 ==============================================================
-Exported 19 message(s)
+Exported 40 message(s)
 ==============================================================
