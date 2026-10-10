@@ -334,6 +334,80 @@ leaving ps1 heading home. probably back in 18 hours.
 the 4 blade pis are up, and one pi:  Raspberry Pi 3 Model B Plus Rev 1.3pi@pi7
 
 
+[2026-10-09 9:51 p.m.] mithro_
+What does the RPi 3b+ have?
+
+
+[2026-10-09 9:52 p.m.] carlfk
+hjave?  like it hse the cheep POE dongle?
+
+
+[2026-10-09 9:56 p.m.] mithro_
+@carlfk - No FPGA wise - an arty?
+
+
+[2026-10-09 9:57 p.m.] carlfk
+yes arty
+
+
+[2026-10-09 9:58 p.m.] carlfk
+I swapped x86 server, rebuild the os/stuff.  didn't really touch the switch/cables/pi setup -
+
+
+[2026-10-09 9:59 p.m.] mithro_
+@carlfk - I'm still not happy with the instructions the AI has written for you - https://ten64.welland.mithis.com/~tim/ps1-compute-blades-copy24-Letter.pdf
+
+
+[2026-10-09 9:59 p.m.] carlfk
+and regardless I don't understand how what is happening is possible
+
+
+[2026-10-09 10:00 p.m.] carlfk
+I skimmed that - I dont think that will help wiht the current reboot almost forever problem
+
+
+[2026-10-09 10:01 p.m.] mithro_
+@carlfk - I have not been looking at the reboot almost forever problem. Did you want me to look into that?
+
+
+[2026-10-09 10:04 p.m.] carlfk
+yes
+
+
+[2026-10-09 10:05 p.m.] carlfk
+I am about to faf around with https://github.com/systemd/python-systemd#usage to try and get a clue from journalctl --file=/var/log/journal/remote/remote-10.21.0.103.journal
+
+{Embed}
+https://github.com/systemd/python-systemd
+GitHub - systemd/python-systemd: Python wrappers for systemd functi...
+Python wrappers for systemd functionality. Contribute to systemd/python-systemd development by creating an account on GitHub.
+2026-10_media/python-systemd-29C0E
+
+
+[2026-10-09 10:06 p.m.] carlfk
+which is the system logs from 10.21.0.103
+
+
+[2026-10-09 10:07 p.m.] carlfk
+all the pi have power.  I have no idea why onlye some of them dont log
+
+
+[2026-10-09 10:43 p.m.] carlfk
+> j = journal.Reader(files=["/var/log/journal/remote/remote-10.21.0.103.journal"])
+
+
+[2026-10-09 10:43 p.m.] carlfk
+print(entry['MESSAGE'])
+
+
+[2026-10-09 10:43 p.m.] carlfk
+unit_file_build_name_map: normal unit file: /usr/lib/systemd/system/poweroff.target
+
+
+[2026-10-09 10:44 p.m.] carlfk
+poweroff is specious :p
+
+
 ==============================================================
-Exported 73 message(s)
+Exported 90 message(s)
 ==============================================================
