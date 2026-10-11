@@ -12,3 +12,36 @@ https://docs.google.com/document/d/1Cyeh-kpbmeF-G5Fq_sljsc890BRfw81f0aPwP-twvVE/
 would be desirable (so we'd have at least preliminary information on bitcell performance/margins and an idea of actual production yield with a long time to spare until the slot buy deadline of Run3)?
 
 I'm understanding that some form of serial is recorded during this testing, and I don't think there'd be good reason to flag them based on results more nuanced than (at most) sorting between ""no errors as long as voltage is kept reasonable"" and ""memtest caught at least one error"" without discarding but rather to make it easier to look at ""interesting"" individual dies later.","",""
+"169786952432746498","mithro_","2026-10-11T04:07:31.2480000+00:00","@namibj - I would probably happily send you a free CoB testing tool if you wanted to try developing that. I doubt it would be something that we would run as part of actual CoB testing.","",""
+"169786952432746498","mithro_","2026-10-11T04:08:18.6160000+00:00","@namibj - wafer.space will (hopefully) have the CoB tester available for purchase from Crowd Supply sometime soon.","",""
+"169786952432746498","mithro_","2026-10-11T04:08:57.2040000+00:00","@Lauri / @stuart / @storborg - Where did we get with that?","",""
+"262706220073222144","namibj","2026-10-11T04:17:19.1620000+00:00","If the developer of the current firmware could make a guess how long they'd expect to take to implement such if they would do it themselves, in a way that doesn't rely heavy on AI (at least not really on agentic AI), I'd be able to give you an understanding/guess/judgement of whether I expect to fit implementation and the necessary debugging of such functionality into the next couple weeks (I'm expecting it to take a week or two from now to reach me at the fastest reasonable).
+
+Do you happen to know if the FlexMem (Chips4Makers) test dies on Run2 are owned by them or by you? In any case depending on the timing impact from it I would request getting a pair of COBs that pass bond testing of each of the 3 FlexMem dies on loan to test/debug with.","",""
+"422557460092551178","storborg","2026-10-11T04:18:22.2410000+00:00","For distribution: we’re close but we need content and probably a little bit of compliance paperwork.","",""
+"262706220073222144","namibj","2026-10-11T04:24:24.2090000+00:00","For the record, I'm in Germany; you could mail it to the office preferrably not via specifically FedEx in specifically a way that requires me to settle import duty bills with FedEx (DHL and UPS are zero issue, DDP through FedEx is also zero issue). (FedEx charges painful billing fees that's why.)
+Insured USPS depending on the timing is also zero issue (it's delivered by DHL here, they take like 5 bucks flat fee for the courtesy of dispersing the duty to customs ahead of you even knowing the exact shipment if you're a consumer and thus couldn't have filed it with customs without causing customs delays.), but uninsured I don't trust with goods worth more than 20 bucks.","",""
+"169786952432746498","mithro_","2026-10-11T06:33:22.9770000+00:00","Any idea who created that Google Doc?
+
+I had Claude pull the data into a spreadsheet @ https://docs.google.com/spreadsheets/d/1O2FOcM8blrrgphjqfaYhFVnZL5zYIxU0w4GsqV4uyRc/edit?gid=406#gid=406","",""
+"262706220073222144","namibj","2026-10-11T06:34:37.4410000+00:00","diugging the comments suggests Tamas Hubai","",""
+"908721221682733106","lauri4332","2026-10-11T06:35:12.0960000+00:00","In my view the CoB tester current goal is to catch any CoB's that have a bad or missing bond. Any testing that's beyond this is not wafer.space responsibility. Design verification should rest with the chip designer. 
+However, it is possible to set up more die specific tests as part of CoB testing, but this should be discussed separately.
+
+Re: tester, as @Tim 'mithro' Ansell said, happy to arrange a tester for you.","",""
+"262706220073222144","namibj","2026-10-11T06:49:37.4340000+00:00","I'm aware it's not wafer.space's responsibility; the main reason I'm even suggesting it caught in the CoB testing would be that the tests in particular would be designed to provide statistical yield information of the afaik by far densest single-port SRAM available without NDA on gf180mcuD.
+
+That said, I would still be interested in this; whether it's practical for me to complete on an appropriate schedule I would try to judge if you could perhaps attempt to judge the effort involved in implementing some relatively simple SRAM retention testing and a couple simple pattern tests aimed at catching misbehaving addressing decoders.
+
+If it's within my predicted capabilities, I would like measurements to be published in about 4~6 (8 at most) weeks from now.
+
+(On such note: if there is known minimum and maximum operating temperature for the tester, I'd like to hear; if I can find an empty chest freezer to use and (easier) a temporarily spare electric baking oven, I'd try to rig up a ""we have a glove box at home"" with some thick gloves to test up to about 90~95C and down to about -15C (or as far as the tester can handle. Provided I've managed to get some room temperature data first, and likely any thermal chamber testing won't be in November, though I'd try at least with some days to spare to the Run3 GDS deadline.)....)","",""
+"908721221682733106","lauri4332","2026-10-11T07:15:16.9000000+00:00","I think the CoB tester without hardware modifications can't be used for function testing:
+1. Maximum current you can supply to chip is 1mA.
+2. Out of 5 mux channels, 2 are for power, and you're left with 3. if the CoB needs clk from rp2350, then you're left with 2 IOs. (i didn't have time to read the whole thread, so I'm assuming you need more IO's to do the test?)
+
+This makes me wonder if we could have a single IO interface for on-chip testing. Instead of developing custom test harnesses for each chip, wafer.space could provide a standard test interface, and chip designers implement their own on-chip test logic.
+
+re: temps - I haven't tested it outside 25-35 range. I can do some simple testing in coming weeks. Have a freezer and hot plate available.","",""
+"169786952432746498","mithro_","2026-10-11T07:55:09.5150000+00:00","@namibj - I would also chat with @Essen and @Tim Edwards and @Chips4Makers aka Staf Verhaegen about what testing of SRAMs makes the most sense.","",""
+"169786952432746498","mithro_","2026-10-11T07:55:34.9020000+00:00","I think there was some other discussions around that.","",""
