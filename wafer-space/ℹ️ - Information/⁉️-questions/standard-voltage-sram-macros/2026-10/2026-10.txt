@@ -32,6 +32,16 @@ SRAM options for sky130 / ihp-sg13* / gf180mcu  Most of this information is comp
 That document looks like something I would create but it wasn't created by me! 😛
 
 
+[2026-10-11 12:11 a.m.] namibj
+Do you think teaching the COB e-tester to do basic all-ones/all-zeros/"random-ish" pattern testing for rough function checking of the FlexMem dies on Run2,
+
+[if sufficiently supported by the tester schematic also a brief (100~1000 ms span) retention test each with all-zeros and all-ones pattern (this one actually done on every die; the functional behavioral test could be done to just a single die  though one random-looking pattern might be good too just to rule out most wiring/via defects and broken address decoders) with the access voltage notably higher as we'd be stressing the internally-differential bitcells)],
+
+would be desirable (so we'd have at least preliminary information on bitcell performance/margins and an idea of actual production yield with a long time to spare until the slot buy deadline of Run3)?
+
+I'm understanding that some form of serial is recorded during this testing, and I don't think there'd be good reason to flag them based on results more nuanced than (at most) sorting between "no errors as long as voltage is kept reasonable" and "memtest caught at least one error" without discarding but rather to make it easier to look at "interesting" individual dies later.
+
+
 ==============================================================
-Exported 5 message(s)
+Exported 6 message(s)
 ==============================================================
