@@ -1,3 +1,41 @@
 AuthorID,Author,Date,Content,Attachments,Reactions
 "1232935707782152264","velvetundergroundandy","2026-10-05T14:08:24.9380000+00:00","We’re looking for partners looking to develop cutting edge open source silicon with us, we’d like to do some codevelopment on our 10 purchased wafer.space slots","",""
 "220639106915368960","tholin","2026-10-05T14:18:52.5440000+00:00","What is the definition of ""cutting edge"" here? What exactly do you need?","",""
+"1232935707782152264","velvetundergroundandy","2026-10-12T07:37:28.6300000+00:00","Analog characterization chip 
+gigabit ethernet 
+PCIE (any gen)
+Voltage regulators
+
+are top line items","",""
+"220639106915368960","tholin","2026-10-12T11:00:12.7710000+00:00","I can make you a linear regulator, but I don’t think the rest of those are possible","",""
+"220639106915368960","tholin","2026-10-12T11:00:30.6520000+00:00","Well, analog characterization depends on *what* you want to characterize","",""
+"1161210755169919007","sudonet","2026-10-12T11:45:48.7200000+00:00","All on a mature node of the late 1990s? You could have landed that money on a full GF180 MPW shuttle, if considering the minimum price you could have paid (~$20000, for 10x 0p5x0p5 bare die at early bird, which isn't even possible as there are just 9 of those), but you instead chose to buy 10 wafer.space slots where, even if you purchased at least a full slot, that 12.92mm^2 of silicon wouldn't handle most of the stuff mentioned. Other than potentially the linear voltage regulator Tholin mentioned.","",""
+"1232935707782152264","velvetundergroundandy","2026-10-12T11:47:57.0300000+00:00","we’ve already invested the funds, and we have enough conviction to bet on something risky like this","",""
+"1232935707782152264","velvetundergroundandy","2026-10-12T11:48:21.7420000+00:00","if it works, new possibilities on a mature 1990s node become possible","",""
+"1232935707782152264","velvetundergroundandy","2026-10-12T11:49:08.2190000+00:00","we aren’t paying for engineering time, but we’re giving people a free shot at trying something risky, and if even 2/10 chips work, it’ll be a great success","",""
+"1161210755169919007","sudonet","2026-10-12T11:50:31.3780000+00:00","The physics may disagree, sadly. Specifically transistor gate delays, and use of aluminium wire interconnects for the 5 metal layers.","",""
+"1161210755169919007","sudonet","2026-10-12T11:55:04.9270000+00:00","It might be ""giving people a free shot"" in your perspective, but judging the ""cutting edge tech"" expected, it's still focus on a limited talent pool.","",""
+"1232935707782152264","velvetundergroundandy","2026-10-12T11:55:56.4890000+00:00","100Mbit ethernet is in the spirit of the mission","",""
+"1232935707782152264","velvetundergroundandy","2026-10-12T11:56:29.7490000+00:00","if you think these limits are too far out, then what do you think is possible? you of course have seen the 8086 demo scene","",""
+"1232935707782152264","velvetundergroundandy","2026-10-12T11:57:00.6470000+00:00","the difference is that compiling code is free. well, we are making compiling silicon free","",""
+"1161210755169919007","sudonet","2026-10-12T12:00:27.5090000+00:00","The 8086 demo scene was amazing because developers accepted the unforgiving hardware limits and optimised within them. They didn't try to force an 8086 MPU to render Crysis.","",""
+"1232935707782152264","velvetundergroundandy","2026-10-12T12:06:08.2540000+00:00","Great, let's do that with GF180 then! DeepAI is looking for collaborators, chip designers, we're giving away 3 Run 3 slots in hope of pushing the boundaries of open source!","",""
+"1161210755169919007","sudonet","2026-10-12T12:06:34.9390000+00:00","I see! You donated one to Hack Club, right?","",""
+"1161210755169919007","sudonet","2026-10-12T12:06:58.6760000+00:00","I appreciate that gesture!","","waferspace (2)"
+"1232935707782152264","velvetundergroundandy","2026-10-12T12:22:46.9030000+00:00","That's us!","",""
+"220639106915368960","tholin","2026-10-12T12:25:31.3230000+00:00","Even if you got those high speed interfaces on a gf180 chip, there is nothing you can put on that chip to generate or process data at those speeds.","",""
+"220639106915368960","tholin","2026-10-12T12:26:27.3030000+00:00","WCH makes a chip that is a PCIe to RS232 adapter (just a PCIe version of their popular USBTTL chips). If you put that on a board with a gf180mcu SoC and set it to one of the higher supported UART rates, i.e. 500000bps, you’d have all the throughput you need.","",""
+"220639106915368960","tholin","2026-10-12T12:27:54.5390000+00:00","To share my personal experience: I taped out a RISC-V core on GFMPW-1, about as performant as a non-pipelined core could get, and wired it up to a SPI <-> 10/100mbps ethernet bridge (enc28j60) and the system kept dropping packets because the RISC-V CPU struggled to process them faster than they were coming in.","",""
+"220639106915368960","tholin","2026-10-12T12:29:23.9420000+00:00","Like, it’d frequently die during IPv6 SLAAC or IPv4 DHCP because the broadcast responses combined with background broadcast traffic on my home network overflowed the buffer.","",""
+"220639106915368960","tholin","2026-10-12T12:33:29.0920000+00:00","So, 10/100mbps ethernet on gf180mcu would make sense, but then you’re hitting data processing speed limits anyways.","","💜 (1)"
+"756011607603019777","anfroholic","2026-10-12T12:36:09.8100000+00:00","@Paul would you share any more specific or generalized goals you have in mind so we may better understand the landscape of what you may hope to achieve?","",""
+"220639106915368960","tholin","2026-10-12T12:38:04.9510000+00:00","I think aiming to increase the analog IP we have is your best bet here for producing something novel.","",""
+"220639106915368960","tholin","2026-10-12T12:38:39.1040000+00:00","Analog on gf180mcu is still largely unexplored compared to the crazy things people are doing in sky130 TT analog slots now","",""
+"220639106915368960","tholin","2026-10-12T12:39:30.3820000+00:00","I believe there are also a lot of ways you can still make competitive products with analog, even on such an old process.","","💜 (1),💯 (1)"
+"756011607603019777","anfroholic","2026-10-12T12:43:31.7840000+00:00","Wholeheartedly agree. 
+This thought also aligns somewhat with GF's general stance when deciding to stop pushing <12nm
+@Tholin can you share some ideas that are more specific? 
+-# sorry my ignorance is showing","",""
+"220639106915368960","tholin","2026-10-12T12:47:18.7490000+00:00","My world view when it comes to analog is pretty narrow. I know people who do anything with music production equipment (i.e. synthesizer builders) would appreciate chips implementing the highly specific filter or VCO designs they need, with some mixed-signal processing sprinkled in for good measure. I know that a lot of analog oscillator and filter integrated circuitry operating on audio frequencies is very old designs from decades ago that may not even be in production anymore.","",""
+"220639106915368960","tholin","2026-10-12T12:47:53.0880000+00:00","Retro computing has a lot of mixed-signal sound and video generators that aren’t just VGA or a DSP + DAC.","","💜 (1)"
+"220639106915368960","tholin","2026-10-12T12:49:29.6650000+00:00","I swear I had one more example on my mind, but I forgot while typing up the rest.","",""

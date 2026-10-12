@@ -299,6 +299,41 @@ I'm very unclear what type of timeline things like electromigration happen and i
 Well, I agree that it's of less risk mostly because the stakes are a lot lower, but if you're not careful it can still bite you as EM is accelerated exponentially with increasing temperature, and poor power FET layout can encourage hotspots that make this failure more likely to happen
 
 
+[2026-10-12 12:42 p.m.] tholin
+I think I’ll make my prototype voltage regulator without worrying too much about hotspots. As long as it survives a few hours on the bench testing it, we can decide if its worth putting more time into developing further.
+
+{Reactions}
+💜
+
+[2026-10-12 1:41 p.m.] tholin
+My voltage regulator isn’t perfect and the output voltage is slightly dependent on the input voltage. I think this is because my voltage reference is not the best, but I don’t know how to improve it.
+
+{Attachments}
+2026-10_media/image-03E08.png
+
+
+[2026-10-12 1:50 p.m.] tholin
+I think this is a good enough compromise. The output voltage stays within 3.3V +/-10% as long as the input voltage stays within 5V +/-15%
+
+{Attachments}
+2026-10_media/image-860C3.png
+
+
+[2026-10-12 1:50 p.m.] tholin
+If this voltage regulator is intended to drive my 3.3V SCL, this is acceptable, as it is characterized over a 3.3V +/-10% range
+
+
+[2026-10-12 1:51 p.m.] tholin
+Like, I do hope nobody expected a perfect LDO with tight margins on this process node with this little dev time.
+
+
+[2026-10-12 1:52 p.m.] tholin
+@Tim 'mithro' Ansell I added the requested enable input. When low, the output completely floats. I hope this is what you meant.
+
+{Attachments}
+2026-10_media/image-6B40D.png
+
+
 ==============================================================
-Exported 64 message(s)
+Exported 70 message(s)
 ==============================================================

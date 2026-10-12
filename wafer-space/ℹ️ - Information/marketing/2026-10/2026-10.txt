@@ -18,6 +18,142 @@ We’re looking for partners looking to develop cutting edge open source silicon
 What is the definition of "cutting edge" here? What exactly do you need?
 
 
+[2026-10-12 7:37 a.m.] velvetundergroundandy
+Analog characterization chip 
+gigabit ethernet 
+PCIE (any gen)
+Voltage regulators
+
+are top line items
+
+
+[2026-10-12 11:00 a.m.] tholin
+I can make you a linear regulator, but I don’t think the rest of those are possible
+
+
+[2026-10-12 11:00 a.m.] tholin
+Well, analog characterization depends on *what* you want to characterize
+
+
+[2026-10-12 11:45 a.m.] sudonet
+All on a mature node of the late 1990s? You could have landed that money on a full GF180 MPW shuttle, if considering the minimum price you could have paid (~$20000, for 10x 0p5x0p5 bare die at early bird, which isn't even possible as there are just 9 of those), but you instead chose to buy 10 wafer.space slots where, even if you purchased at least a full slot, that 12.92mm^2 of silicon wouldn't handle most of the stuff mentioned. Other than potentially the linear voltage regulator Tholin mentioned.
+
+
+[2026-10-12 11:47 a.m.] velvetundergroundandy
+we’ve already invested the funds, and we have enough conviction to bet on something risky like this
+
+
+[2026-10-12 11:48 a.m.] velvetundergroundandy
+if it works, new possibilities on a mature 1990s node become possible
+
+
+[2026-10-12 11:49 a.m.] velvetundergroundandy
+we aren’t paying for engineering time, but we’re giving people a free shot at trying something risky, and if even 2/10 chips work, it’ll be a great success
+
+
+[2026-10-12 11:50 a.m.] sudonet
+The physics may disagree, sadly. Specifically transistor gate delays, and use of aluminium wire interconnects for the 5 metal layers.
+
+
+[2026-10-12 11:55 a.m.] sudonet
+It might be "giving people a free shot" in your perspective, but judging the "cutting edge tech" expected, it's still focus on a limited talent pool.
+
+
+[2026-10-12 11:55 a.m.] velvetundergroundandy
+100Mbit ethernet is in the spirit of the mission
+
+
+[2026-10-12 11:56 a.m.] velvetundergroundandy
+if you think these limits are too far out, then what do you think is possible? you of course have seen the 8086 demo scene
+
+
+[2026-10-12 11:57 a.m.] velvetundergroundandy
+the difference is that compiling code is free. well, we are making compiling silicon free
+
+
+[2026-10-12 12:00 p.m.] sudonet
+The 8086 demo scene was amazing because developers accepted the unforgiving hardware limits and optimised within them. They didn't try to force an 8086 MPU to render Crysis.
+
+
+[2026-10-12 12:06 p.m.] velvetundergroundandy
+Great, let's do that with GF180 then! DeepAI is looking for collaborators, chip designers, we're giving away 3 Run 3 slots in hope of pushing the boundaries of open source!
+
+
+[2026-10-12 12:06 p.m.] sudonet
+I see! You donated one to Hack Club, right?
+
+
+[2026-10-12 12:06 p.m.] sudonet
+I appreciate that gesture!
+
+{Reactions}
+waferspace (2)
+
+[2026-10-12 12:22 p.m.] velvetundergroundandy
+That's us!
+
+
+[2026-10-12 12:25 p.m.] tholin
+Even if you got those high speed interfaces on a gf180 chip, there is nothing you can put on that chip to generate or process data at those speeds.
+
+
+[2026-10-12 12:26 p.m.] tholin
+WCH makes a chip that is a PCIe to RS232 adapter (just a PCIe version of their popular USBTTL chips). If you put that on a board with a gf180mcu SoC and set it to one of the higher supported UART rates, i.e. 500000bps, you’d have all the throughput you need.
+
+
+[2026-10-12 12:27 p.m.] tholin
+To share my personal experience: I taped out a RISC-V core on GFMPW-1, about as performant as a non-pipelined core could get, and wired it up to a SPI <-> 10/100mbps ethernet bridge (enc28j60) and the system kept dropping packets because the RISC-V CPU struggled to process them faster than they were coming in.
+
+
+[2026-10-12 12:29 p.m.] tholin
+Like, it’d frequently die during IPv6 SLAAC or IPv4 DHCP because the broadcast responses combined with background broadcast traffic on my home network overflowed the buffer.
+
+
+[2026-10-12 12:33 p.m.] tholin
+So, 10/100mbps ethernet on gf180mcu would make sense, but then you’re hitting data processing speed limits anyways.
+
+{Reactions}
+💜
+
+[2026-10-12 12:36 p.m.] anfroholic
+@Paul would you share any more specific or generalized goals you have in mind so we may better understand the landscape of what you may hope to achieve?
+
+
+[2026-10-12 12:38 p.m.] tholin
+I think aiming to increase the analog IP we have is your best bet here for producing something novel.
+
+
+[2026-10-12 12:38 p.m.] tholin
+Analog on gf180mcu is still largely unexplored compared to the crazy things people are doing in sky130 TT analog slots now
+
+
+[2026-10-12 12:39 p.m.] tholin
+I believe there are also a lot of ways you can still make competitive products with analog, even on such an old process.
+
+{Reactions}
+💜 💯
+
+[2026-10-12 12:43 p.m.] anfroholic
+Wholeheartedly agree. 
+This thought also aligns somewhat with GF's general stance when deciding to stop pushing <12nm
+@Tholin can you share some ideas that are more specific? 
+-# sorry my ignorance is showing
+
+
+[2026-10-12 12:47 p.m.] tholin
+My world view when it comes to analog is pretty narrow. I know people who do anything with music production equipment (i.e. synthesizer builders) would appreciate chips implementing the highly specific filter or VCO designs they need, with some mixed-signal processing sprinkled in for good measure. I know that a lot of analog oscillator and filter integrated circuitry operating on audio frequencies is very old designs from decades ago that may not even be in production anymore.
+
+
+[2026-10-12 12:47 p.m.] tholin
+Retro computing has a lot of mixed-signal sound and video generators that aren’t just VGA or a DSP + DAC.
+
+{Reactions}
+💜
+
+[2026-10-12 12:49 p.m.] tholin
+I swear I had one more example on my mind, but I forgot while typing up the rest.
+
+
 ==============================================================
-Exported 2 message(s)
+Exported 32 message(s)
 ==============================================================
