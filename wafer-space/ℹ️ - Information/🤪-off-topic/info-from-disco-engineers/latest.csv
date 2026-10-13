@@ -124,3 +124,66 @@ Loaded wheels create more heat and pressure. Causing some of the blowout backsid
 The way it sounded (I couldn't ask every question and had to read between the lines) wheel dressing (scraping off the loaded bits and truing the wheel) happen at programmed intervals they can change. 
 So dicing through them loads up the wheel more. 
 That part is out of our control, and everything I've seen you produce since has had such wide margins in the areas they cared about most, I will say they won't mind dealing with it.","",""
+"323371864074485771","mole99","2026-10-13T07:57:07.0750000+00:00","Alright, I took the time to give this a try with the reticle stitcher. Here are the results:","",""
+"323371864074485771","mole99","2026-10-13T07:57:14.7250000+00:00","### Reticle layout (90deg rotated)
+
+Reticle sizes for different saw street widths (60/100/150/200um):
+
+-  60um: 24.012 x 28.561 mm
+- 100um: 24.292 x 28.821 mm
+- 150um: 24.642 x 29.146 mm
+- 200um: 24.992 x 29.471 mm
+
+The maximum reticle size is 25 x 30 mm.","",""
+"323371864074485771","mole99","2026-10-13T07:57:28.4500000+00:00","### Reduction in die area of the half- and quarter-slots
+
+0p5x1:
+
+-  60um: 1936 x 5122 um = 9916192 um² -> baseline
+- 100um: 1916 x 5122 um = 9813752 um² -> -1.03 %
+- 150um: 1891 x 5122 um = 9685702 um² -> -2.32 %
+- 200um: 1866 x 5122 um = 9557652 um² -> -3.61 %
+
+1x0p5:
+
+-  60um: 3932 x 2531 um = 9951892 um² -> baseline
+- 100um: 3932 x 2511 um = 9873252 um² -> -0.79 %
+- 150um: 3932 x 2486 um = 9774952 um² -> -1.78 %
+- 200um: 3932 x 2461 um = 9676652 um² -> -2.77 %
+
+0p5x0p5:
+
+-  60um: 1936 x 2531 um = 4900016 um² -> baseline
+- 100um: 1916 x 2511 um = 4811076 um² -> -1.82 %
+- 150um: 1891 x 2486 um = 4701026 um² -> -4.06 %
+- 200um: 1866 x 2461 um = 4592226 um² -> -6.28 %
+
+The quarter slot sees the largest reductions, due to the decrease in both width and height.","",""
+"323371864074485771","mole99","2026-10-13T07:57:54.0210000+00:00","@Tim 'mithro' Ansell If you'd like to go for a saw street width larger than 100um, I would suggest 150um. While 200um would still fit inside the maximum reticle size, there would be no space left to add anything else. Andrew mentioned that the dicing house wasn't too happy about the sliver of silicon with the test structures on it - we can't remove that, since the foundry adds it. However, we can add some dead silicon to all four borders of our reticle to make that sliver larger and thus less problematic. If we chose a 200um saw street width, there would be no area left to do that.","",""
+"323371864074485771","mole99","2026-10-13T07:58:29.7040000+00:00","The question now is whether we want to change the saw street width already for **Run 3**? I suppose there is still enough time until the tapeout in December. People will need to reimplement their designs anyway after the PDK update that I am going to release soon.","",""
+"756011607603019777","anfroholic","2026-10-13T08:00:32.4340000+00:00","","2026-10_media/20261013_025941-F9252.jpg",""
+"756011607603019777","anfroholic","2026-10-13T08:00:45.0000000+00:00","To be clear there are 2 slivers. 
+One has the test structures and that one is fine. 
+The other was that very very small one. That was the one that was a real problem.","",""
+"323371864074485771","mole99","2026-10-13T08:10:20.8660000+00:00","Is this Run 1? Both slivers have test structures on them. The very small one is also added by GF.
+The large sliver is 99% dead silicon - added by us.","",""
+"323371864074485771","mole99","2026-10-13T08:10:36.4780000+00:00","This is Run 1 with metal fill visible. You can see that sliver here at the top:","2026-10_media/Bildschirmfoto_vom_2026-10-13_10-03-57-FFA2D.png",""
+"323371864074485771","mole99","2026-10-13T08:10:44.0140000+00:00","In Run 2, we removed the dead silicon, so you should only see very small slivers there.","",""
+"323371864074485771","mole99","2026-10-13T08:12:00.1930000+00:00","Since we now know that small slivers are problematic for dicing, we could *again* add some dead silicon at the top, and also at the right side of our reticle layout.","",""
+"596068704471482370","246tnt","2026-10-13T08:13:24.8690000+00:00","Maybe dumb, but how wide are the test structures ? Is it a problem to leave them attached to the dies on the side ?","",""
+"756011607603019777","anfroholic","2026-10-13T08:13:28.7890000+00:00","That would be good. 
+I was asked if we *had to have* a sliver if we could keep it >= 1mm that should be fine. 
+Let me try to take a pic, it'll take a moment.","",""
+"756011607603019777","anfroholic","2026-10-13T08:14:15.1560000+00:00","I'll try to get a pic of that too. Hang tight","",""
+"323371864074485771","mole99","2026-10-13T08:19:13.7990000+00:00","We cannot keep it >= 1mm. That big sliver you showed above is only 600um in width.
+Edit: the 600um are our contribution. If you take a look at the big sliver, you will notice it has two colors: the golden part is from our reticle layout, the silver one is what GF added.
+
+If we choose a 150um scribe line width for our new reticle layout, then we have 358um remaining at the top and 854um on the right.","",""
+"756011607603019777","anfroholic","2026-10-13T08:22:09.5390000+00:00","There's nothing from GF side that would stop us from having no sliver, correct? 
+Can we just split it between all the sawstreets and leave all die ~45um larger?","",""
+"323371864074485771","mole99","2026-10-13T08:23:25.4250000+00:00","No, GF adds the slivers on all four sides. That's where the test structures are placed.","",""
+"756011607603019777","anfroholic","2026-10-13T09:23:46.3390000+00:00","@tnt @Leo Moser (mole99) I have added a bunch of pics, tried to get the test features as well, towards the bottom. 
+Leo you are correct there are test features on all sides..","",""
+"323371864074485771","mole99","2026-10-13T10:06:44.5600000+00:00","FYI The test features are usually placed inside the scribe line and are destroyed during dicing. However, we can't do that because we create our own reticle and don't have access to the test features. This is why GF adds the test features around our reticle you can think of our reticle as one large die).","",""
+"756011607603019777","anfroholic","2026-10-13T10:10:51.2610000+00:00","I always understood that bit, but thought (hoped) it was localized to a single edge.","",""
+"323371864074485771","mole99","2026-10-13T10:15:48.2960000+00:00","I see. Normally, you want to cover as much area as possible with test structures due to local mismatch of the wafer.","","💜 (1)"

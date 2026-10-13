@@ -246,6 +246,140 @@ So dicing through them loads up the wheel more.
 That part is out of our control, and everything I've seen you produce since has had such wide margins in the areas they cared about most, I will say they won't mind dealing with it.
 
 
+[2026-10-13 7:57 a.m.] mole99
+Alright, I took the time to give this a try with the reticle stitcher. Here are the results:
+
+
+[2026-10-13 7:57 a.m.] mole99
+### Reticle layout (90deg rotated)
+
+Reticle sizes for different saw street widths (60/100/150/200um):
+
+-  60um: 24.012 x 28.561 mm
+- 100um: 24.292 x 28.821 mm
+- 150um: 24.642 x 29.146 mm
+- 200um: 24.992 x 29.471 mm
+
+The maximum reticle size is 25 x 30 mm.
+
+
+[2026-10-13 7:57 a.m.] mole99
+### Reduction in die area of the half- and quarter-slots
+
+0p5x1:
+
+-  60um: 1936 x 5122 um = 9916192 um² -> baseline
+- 100um: 1916 x 5122 um = 9813752 um² -> -1.03 %
+- 150um: 1891 x 5122 um = 9685702 um² -> -2.32 %
+- 200um: 1866 x 5122 um = 9557652 um² -> -3.61 %
+
+1x0p5:
+
+-  60um: 3932 x 2531 um = 9951892 um² -> baseline
+- 100um: 3932 x 2511 um = 9873252 um² -> -0.79 %
+- 150um: 3932 x 2486 um = 9774952 um² -> -1.78 %
+- 200um: 3932 x 2461 um = 9676652 um² -> -2.77 %
+
+0p5x0p5:
+
+-  60um: 1936 x 2531 um = 4900016 um² -> baseline
+- 100um: 1916 x 2511 um = 4811076 um² -> -1.82 %
+- 150um: 1891 x 2486 um = 4701026 um² -> -4.06 %
+- 200um: 1866 x 2461 um = 4592226 um² -> -6.28 %
+
+The quarter slot sees the largest reductions, due to the decrease in both width and height.
+
+
+[2026-10-13 7:57 a.m.] mole99
+@Tim 'mithro' Ansell If you'd like to go for a saw street width larger than 100um, I would suggest 150um. While 200um would still fit inside the maximum reticle size, there would be no space left to add anything else. Andrew mentioned that the dicing house wasn't too happy about the sliver of silicon with the test structures on it - we can't remove that, since the foundry adds it. However, we can add some dead silicon to all four borders of our reticle to make that sliver larger and thus less problematic. If we chose a 200um saw street width, there would be no area left to do that.
+
+
+[2026-10-13 7:58 a.m.] mole99
+The question now is whether we want to change the saw street width already for **Run 3**? I suppose there is still enough time until the tapeout in December. People will need to reimplement their designs anyway after the PDK update that I am going to release soon.
+
+
+[2026-10-13 8:00 a.m.] anfroholic
+
+
+{Attachments}
+2026-10_media/20261013_025941-F9252.jpg
+
+
+[2026-10-13 8:00 a.m.] anfroholic
+To be clear there are 2 slivers. 
+One has the test structures and that one is fine. 
+The other was that very very small one. That was the one that was a real problem.
+
+
+[2026-10-13 8:10 a.m.] mole99
+Is this Run 1? Both slivers have test structures on them. The very small one is also added by GF.
+The large sliver is 99% dead silicon - added by us.
+
+
+[2026-10-13 8:10 a.m.] mole99
+This is Run 1 with metal fill visible. You can see that sliver here at the top:
+
+{Attachments}
+2026-10_media/Bildschirmfoto_vom_2026-10-13_10-03-57-FFA2D.png
+
+
+[2026-10-13 8:10 a.m.] mole99
+In Run 2, we removed the dead silicon, so you should only see very small slivers there.
+
+
+[2026-10-13 8:12 a.m.] mole99
+Since we now know that small slivers are problematic for dicing, we could *again* add some dead silicon at the top, and also at the right side of our reticle layout.
+
+
+[2026-10-13 8:13 a.m.] 246tnt
+Maybe dumb, but how wide are the test structures ? Is it a problem to leave them attached to the dies on the side ?
+
+
+[2026-10-13 8:13 a.m.] anfroholic
+That would be good. 
+I was asked if we *had to have* a sliver if we could keep it >= 1mm that should be fine. 
+Let me try to take a pic, it'll take a moment.
+
+
+[2026-10-13 8:14 a.m.] anfroholic
+I'll try to get a pic of that too. Hang tight
+
+
+[2026-10-13 8:19 a.m.] mole99
+We cannot keep it >= 1mm. That big sliver you showed above is only 600um in width.
+Edit: the 600um are our contribution. If you take a look at the big sliver, you will notice it has two colors: the golden part is from our reticle layout, the silver one is what GF added.
+
+If we choose a 150um scribe line width for our new reticle layout, then we have 358um remaining at the top and 854um on the right.
+
+
+[2026-10-13 8:22 a.m.] anfroholic
+There's nothing from GF side that would stop us from having no sliver, correct? 
+Can we just split it between all the sawstreets and leave all die ~45um larger?
+
+
+[2026-10-13 8:23 a.m.] mole99
+No, GF adds the slivers on all four sides. That's where the test structures are placed.
+
+
+[2026-10-13 9:23 a.m.] anfroholic
+@tnt @Leo Moser (mole99) I have added a bunch of pics, tried to get the test features as well, towards the bottom. 
+Leo you are correct there are test features on all sides..
+
+
+[2026-10-13 10:06 a.m.] mole99
+FYI The test features are usually placed inside the scribe line and are destroyed during dicing. However, we can't do that because we create our own reticle and don't have access to the test features. This is why GF adds the test features around our reticle you can think of our reticle as one large die).
+
+
+[2026-10-13 10:10 a.m.] anfroholic
+I always understood that bit, but thought (hoped) it was localized to a single edge.
+
+
+[2026-10-13 10:15 a.m.] mole99
+I see. Normally, you want to cover as much area as possible with test structures due to local mismatch of the wafer.
+
+{Reactions}
+💜
+
 ==============================================================
-Exported 33 message(s)
+Exported 54 message(s)
 ==============================================================

@@ -1,0 +1,27 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / ⁉️-questions / clock input for the chip
+After: 2026-09-30 11:59 p.m.
+Before: 2026-11-01 12:00 a.m.
+==============================================================
+
+[2026-10-13 11:07 a.m.] ihsan_28
+Hi, i still have a doubt about the clock input. so far, what i understand, that we should provide the clock from outside directly with frequency input what we want, is that right?
+
+I mean, we don't use PLL to get clock from crystal, or something like that.
+
+So, how normally people feed the clock for their tapeout chip? and what is reasonable frequency to achieve? 
+
+Thank you.
+
+
+[2026-10-13 11:31 a.m.] mole99
+Hi! You tell LibreLane what clock period should be achieved using the `CLOCK_PERIOD` variable.
+If that clock period cannot be achieved for your design, the flow will error out.
+
+Once you have your chip, you can supply an external clock signal up to that frequency. Of course, you can always supply a lower clock frequency (if you don't use dynamic flip-flops, which is the case for the default SCL).
+
+
+==============================================================
+Exported 2 message(s)
+==============================================================

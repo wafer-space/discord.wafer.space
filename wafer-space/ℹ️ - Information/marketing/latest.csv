@@ -47,9 +47,42 @@ I've recently been working on an improved version of BIO - with more predictable
 "691780627338625077","rebelmike","2026-10-12T19:31:48.7310000+00:00","Fair enough - I was just trying to get closer to the brief of a SoC that you can run with minimal external components.  Maybe a SoC with the new cell library and SRAM is sufficiently interesting","",""
 "756011607603019777","anfroholic","2026-10-12T19:35:03.1380000+00:00","I think the BIO is already on run2 
 This is it correct? https://github.com/dpks2003/bio-core","",""
-"691780627338625077","rebelmike","2026-10-12T19:43:10.2050000+00:00","Yeah, that's basically a straight port of the Baochip version, and it doesn't have a host CPU.  My aim is an improved version of BIO + either TinyQV or a more fully featured RISC-V core as the host.","","💜 (1)"
+"691780627338625077","rebelmike","2026-10-12T19:43:10.2050000+00:00","Yeah, that's basically a straight port of the Baochip version, and it doesn't have a host CPU.  My aim is an improved version of BIO + either TinyQV or a more fully featured RISC-V core as the host.","","💜 (2)"
 "1232935707782152264","velvetundergroundandy","2026-10-13T00:37:04.1220000+00:00","@Andrew Wingate DeepAI is making it easier to gamble on open source silicon by giving out free silicon compilation to people pushing the boundaries. That's why we got the 10 slots. Our own project is developing a new ai agentic cpu architecture, and we're starting small. We just think custom silicon should be as plentiful and as easy to make as opens source code","",""
 "1232935707782152264","velvetundergroundandy","2026-10-13T00:38:24.2230000+00:00","High speed interfaces are an interest of @baragonaru, who's the lead designer of Chippy, the ai agent CPU. We're also following the guidance of @Tim 'mithro' Ansell on what projects would help open source silicon the most, along with a few advisors and friends, like in this thread","",""
 "1232935707782152264","velvetundergroundandy","2026-10-13T00:39:18.8000000+00:00","Like what was said earlier, analog work is something that is feasible and is lacking on the open source end. Projects like the voltage regulator or the calibration chip are along this line","",""
 "1232935707782152264","velvetundergroundandy","2026-10-13T00:40:02.9670000+00:00","@Tholin yes, let's do the regulator. Do you want to fit it inside the analog calibration chip? Could be interesting way of testing and getting some instrumental value out of it","",""
 "1232935707782152264","velvetundergroundandy","2026-10-13T00:41:02.1640000+00:00","@RebelMike sure, we want to do something with RISC-V this run, could you DM me with your 1 pager on the chip?","",""
+"756011607603019777","anfroholic","2026-10-13T07:10:41.1000000+00:00","@RebelMike, @bunnie has seen you were working on BIO improvements https://discord.com/channels/1361349522684510449/1413281558407942236/1559267339713642547 and is interested in reading/seeing more if you have anything.","",""
+"691780627338625077","rebelmike","2026-10-13T07:11:22.5540000+00:00","I should write something up 😄","","😂 (1)"
+"691780627338625077","rebelmike","2026-10-13T07:19:23.3820000+00:00","I don’t think I’ve even pushed the repo to GitHub yet. But the main things I’ve done:
+Use FemtoRV as the core.
+2 clocks per instruction for all instructions except memory access and branches. Predictable performance in general to allow cycle counting. No C extension.
+Add some B extension instructions. In particular I found rotates being missing a problem when writing for BIO as it meant you couldn’t easily shift bits out to an arbitrary pin. Bit and byte reverse. And the logical ops with one inverted operand.","","👍 (1)"
+"691780627338625077","rebelmike","2026-10-13T07:37:51.7790000+00:00","One note, so far this is a rewrite. I haven’t been referencing the original BIO implementation, just the spec. But also I haven’t got as far as doing the FIFOs yet - I’ve just got GPIO working on a single core. So possibly this would be a good point to try and transplant what I have into the original BIO implementation, especially if this project might be gaining a deadline.","","💜 (1)"
+"756011607603019777","anfroholic","2026-10-13T07:55:25.8040000+00:00","I guess @bunnie is somewhere that blocks discord
+
+> Ah that's pretty nice to have the B extensions. Are these specifiable as a standard compiler option or will this require hand coded assembly?
+> 
+> Lol I had the theory that you would not want to cycle count because you can rtl simulate, but it's not a bad idea to shorten the pipeline regardless
+> 
+> The C instructions are sort of important actually for both fetch bandwidth and instruction density. 4k is very small
+> 
+> I was contemplating a next gen for bio, so this is useful. Actually a test bench is really valuable, I would like to copy any test code he has and add it to the tests, and maybe start a CI if there is actually interest in developing the BIO","",""
+"756011607603019777","anfroholic","2026-10-13T07:57:44.3200000+00:00","> Not sure if he is interested in collaborative work tho or if he would prefer just to dev on a branch and then I cherry pick whatever I want for a next tape out
+> 
+> I would like to roughly double the performance of bio by the next gen
+~ bunnie","",""
+"758346146204090390","bunnievorpal","2026-10-13T09:38:00.6110000+00:00","I'm finally out of that region. For whatever reason, Turkey hates Discord. Thanks for tunneling the messages @Andrew Wingate !","","💜 (1)"
+"1161210755169919007","sudonet","2026-10-13T09:38:58.2940000+00:00","yeah, heard some crazy stuff happened there that caused it","","😱 (1)"
+"758346146204090390","bunnievorpal","2026-10-13T09:39:39.2860000+00:00","I would love to talk more about the BIO stuff - not sure if wafer.space would like us taking over the marketing channel for a deeper technical discussion, how would you feel about continuing the discussion over on the Baochip discord in the #bao1x-chip channel?","",""
+"758346146204090390","bunnievorpal","2026-10-13T09:41:13.7600000+00:00","oh...wow...ok yah I just googled it. I won't repeat here because O/T but dang. I couldn't tell if it was the hotel I was in or Turkey as a whole this confirms Turkey-wide ban.","",""
+"1232935707782152264","velvetundergroundandy","2026-10-13T10:33:48.5860000+00:00","DM’d you guys both @RebelMike @Tholin","","👍 (1)"
+"1232935707782152264","velvetundergroundandy","2026-10-13T10:34:03.1080000+00:00","and @судонет","","👍 (1)"
+"1232935707782152264","velvetundergroundandy","2026-10-13T10:34:09.9390000+00:00","Calling all brave souls!","",""
+"691780627338625077","rebelmike","2026-10-13T10:54:43.0340000+00:00","Sure - I'm busy today but will do this evening!  And yeah, this got quite off topic for this channel 😆","","❤️ (1)"
+"220639106915368960","tholin","2026-10-13T11:26:49.3060000+00:00","I characterized my voltage regulator a little more. The maximum current it can handle while supplying a usable voltage is between 100 and 150mA, so you’d be on a tight power budget.","",""
+"220639106915368960","tholin","2026-10-13T11:34:52.8670000+00:00","I can make a version that can push 450mA if the supply voltage is at least 5V, but you’re on your own for integrating it into LibreLane","",""
+"756011607603019777","anfroholic","2026-10-13T11:36:03.3360000+00:00","Out of curiosity, what about that version would LibreLane not like? Are the features too large or something?","",""
+"220639106915368960","tholin","2026-10-13T11:37:42.0380000+00:00","I mean, how you’d get it to interface with the PDN correctly?","",""
+"220639106915368960","tholin","2026-10-13T11:37:56.0920000+00:00","Its a macro that both takes in a supply voltage and outputs another supply voltage","","💜 (1)"

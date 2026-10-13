@@ -303,7 +303,7 @@ Well, I agree that it's of less risk mostly because the stakes are a lot lower, 
 I think I’ll make my prototype voltage regulator without worrying too much about hotspots. As long as it survives a few hours on the bench testing it, we can decide if its worth putting more time into developing further.
 
 {Reactions}
-💜
+💜 👍
 
 [2026-10-12 1:41 p.m.] tholin
 My voltage regulator isn’t perfect and the output voltage is slightly dependent on the input voltage. I think this is because my voltage reference is not the best, but I don’t know how to improve it.
@@ -347,6 +347,128 @@ What's the PSRR on your voltage reference and what's the gain & PSRR on your amp
 also, how much does this voltage droop when you actually start driving a load? from both a DC point of view and transient point of view?
 
 
+[2026-10-13 8:30 a.m.] tholin
+My voltage reference has bad PSRR
+
+{Attachments}
+2026-10_media/image-4E7B0.png
+
+
+[2026-10-13 8:42 a.m.] tholin
+Oh hey, this is better!
+
+{Attachments}
+2026-10_media/image-4748A.png
+
+{Reactions}
+💜 (2)
+
+[2026-10-13 8:42 a.m.] tholin
+I think THAT I can call good enough. Well within spec.
+
+
+[2026-10-13 11:37 a.m.] 246tnt
+Do you have a reference to a paper or design for your voltage reference ?
+
+
+[2026-10-13 11:38 a.m.] 246tnt
+I'm looking at it and although it looks like a classic basic cmos bandgap, that circuit relies on the ratio of resistor and diode to make it work ... but your resistors are the same sizes and your diodes are the same size.
+
+
+[2026-10-13 12:10 p.m.] tholin
+I tried playing with their values, but it doesn’t change how it behaves
+
+
+[2026-10-13 12:17 p.m.] brookieoz
+a widlar bandgap?
+
+
+[2026-10-13 12:17 p.m.] brookieoz
+classic CMOS bandgaps should have a magic voltage around 1.2V
+
+
+[2026-10-13 12:19 p.m.] brookieoz
+actually yeah wait a second that's really odd, the reference is 0.7V?
+
+
+[2026-10-13 12:27 p.m.] tholin
+Look at this. Maximum output is 0.698V, minimum is 0.685V. The difference is just 0.013V, or less than 2% drift. Probably not an ideal PSSR, but I think my opamp is the bigger culprit here.
+
+{Attachments}
+2026-10_media/image-63F7F.png
+
+
+[2026-10-13 12:28 p.m.] tholin
+Like, having designed these circuits, I am way more suspicious of that jank opamp than the voltage reference.
+
+
+[2026-10-13 12:29 p.m.] tholin
+How do I set up a temperature sweep with ngspice? I can try that too.
+
+
+[2026-10-13 12:30 p.m.] 246tnt
+`dc temp -20 125 5`
+
+
+[2026-10-13 12:31 p.m.] 246tnt
+Did you change your vref compared to what's in `https://github.com/AvalonSemiconductors/ws-charge-controller/tree/main/analog/xschem` ?
+
+
+[2026-10-13 12:33 p.m.] tholin
+I don’t think so
+
+
+[2026-10-13 12:33 p.m.] tholin
+Let me check
+
+
+[2026-10-13 12:34 p.m.] 246tnt
+Ah no nm, I was sweeping from 3.0v to 5.5V not 4.5V to 5.5v
+
+
+[2026-10-13 12:35 p.m.] tholin
+Ah. For the application I’m using this in, the supported supply voltage range is only 4.5V to 5.5V
+
+
+[2026-10-13 12:41 p.m.] brookieoz
+Your output PSRR should be boosted by the gain of your amplifier provided it's within the bandwidth of the amplifier
+
+But if it's shifting by about 4% per volt that's uhhh, a PSRR of about 30dB? (0.2V output drift is about 6%, subtract the 2% from your reference drift)
+
+
+[2026-10-13 12:42 p.m.] tholin
+Decreasing the width of D1 from 5u to 2.5u makes the output a few percentage points more stable with changing temperatures. First thing I’ve found so far that has helped.
+
+
+[2026-10-13 12:43 p.m.] tholin
+The upsetting part is that any change to the reference voltage means I need to go back and edit resistor ratios all over the chip.
+
+
+[2026-10-13 12:56 p.m.] tholin
+I can not get it to look better than this :/
+
+{Attachments}
+2026-10_media/image-3FF1D.png
+
+
+[2026-10-13 12:56 p.m.] tholin
+I think I’m just gonna have to do the one diode change, trim all my resistors and accept it as it is
+
+
+[2026-10-13 12:56 p.m.] tholin
+I just do not have the time
+
+
+[2026-10-13 12:57 p.m.] tholin
+On November 20th - 22nd, I host an event and there is so much prep work I still gotta do until then, and if you eye your calendar, you may notice how little time there is between then and submission deadline as well. So, yeah, I’m finishing this today.
+
+
+[2026-10-13 1:22 p.m.] brookieoz
+You need a lot more PTAT resistor 
+
+also I looked at the circuit, uh, I don't see how the core is generating a PTAT current at all
+
+
 ==============================================================
-Exported 73 message(s)
+Exported 99 message(s)
 ==============================================================
