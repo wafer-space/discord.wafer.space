@@ -122,6 +122,8 @@ So, 10/100mbps ethernet on gf180mcu would make sense, but then you’re hitting 
 [2026-10-12 12:38 p.m.] tholin
 I think aiming to increase the analog IP we have is your best bet here for producing something novel.
 
+{Reactions}
+💯
 
 [2026-10-12 12:38 p.m.] tholin
 Analog on gf180mcu is still largely unexplored compared to the crazy things people are doing in sky130 TT analog slots now
@@ -131,7 +133,7 @@ Analog on gf180mcu is still largely unexplored compared to the crazy things peop
 I believe there are also a lot of ways you can still make competitive products with analog, even on such an old process.
 
 {Reactions}
-💜 💯
+💜 💯 (3)
 
 [2026-10-12 12:43 p.m.] anfroholic
 Wholeheartedly agree. 
@@ -154,6 +156,49 @@ Retro computing has a lot of mixed-signal sound and video generators that aren�
 I swear I had one more example on my mind, but I forgot while typing up the rest.
 
 
+[2026-10-12 6:01 p.m.] rebelmike
+It seems like this project's goals may be similar to Chipalooza, just intended to be on a grander scale.  But the fact Chipalooza is also targeting this shuttle might mean some of the people with the required skills and free time to tackle these kind of problems are already busy.  And some of the building blocks that will hopefully come out of Chipalooza would probably be useful for some of these more advanced goals (if gigabit ethernet/PCIE is even possible - high speed USB might be a more achievable goal?)
+
+{Reactions}
+👍
+
+[2026-10-12 6:11 p.m.] rebelmike
+@Paul if you are interested and @Tholin is willing, I would be happy to help out integrating a SoC with Tholin's voltage regulator for one of the slots if that would be of interest.  I wouldn't be able to do a self trimming oscillator as Tim suggested (though if anyone else here is available to do that I'd be happy to integrate it), but we could have something that was either driven from a ring oscillator or an external clock, with the ability to do USB CDC (traditional Full Speed only) if an external clock is supplied.  We'd use the latest version of Tholin's standard cell library to prove that works as expected in a complex project.  I haven't looked into Staf's SRAMs, but potentially we could use them as well, providing initial results from run 2 are positive.
+
+I've recently been working on an improved version of BIO - with more predictable instruction timing and improved instruction set over Baochip's BIO (https://www.crowdsupply.com/baochip/dabao/updates/bio-the-bao-i-o-co-processor), I don't know how usable that will be by the run 3 deadline but it would be cool to have the opportunity to tape it out even if it was a bit WIP.
+
+{Embed}
+https://www.crowdsupply.com/baochip/dabao/updates/bio-the-bao-i-o-co-processor
+BIO - The Bao I/O Co-Processor
+BIO is the I/O co-processor in the Baochip-1x. In this update, I’ll talk about the origins of the BIO, starting by working through a detailed study of the Raspberry Pi PIO as a reference before diving into the architecture of the BIO.
+2026-10_media/5148f773-7784-4467-bcb9-bddecab01155_proje-D4CE3.jpg
+
+
+[2026-10-12 6:22 p.m.] tholin
+Considering my poor track record of first-trying analog design, please do not use my voltage regulator.
+
+
+[2026-10-12 7:31 p.m.] rebelmike
+Fair enough - I was just trying to get closer to the brief of a SoC that you can run with minimal external components.  Maybe a SoC with the new cell library and SRAM is sufficiently interesting
+
+
+[2026-10-12 7:35 p.m.] anfroholic
+I think the BIO is already on run2 
+This is it correct? https://github.com/dpks2003/bio-core
+
+{Embed}
+https://github.com/dpks2003/bio-core
+GitHub - dpks2003/bio-core: BIO Coprocessor on GF 180
+BIO Coprocessor on GF 180. Contribute to dpks2003/bio-core development by creating an account on GitHub.
+2026-10_media/bio-core-D46CD
+
+
+[2026-10-12 7:43 p.m.] rebelmike
+Yeah, that's basically a straight port of the Baochip version, and it doesn't have a host CPU.  My aim is an improved version of BIO + either TinyQV or a more fully featured RISC-V core as the host.
+
+{Reactions}
+💜
+
 ==============================================================
-Exported 32 message(s)
+Exported 38 message(s)
 ==============================================================
