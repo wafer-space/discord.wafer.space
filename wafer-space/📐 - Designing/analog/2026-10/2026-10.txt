@@ -484,6 +484,8 @@ Imagine it living in the spare area of a VDD pad cell...
 [2026-10-15 3:32 a.m.] namibj
 I think the half volt of AFAIK expected channel drop (under typical operating conditions during the charging while current limit is dominating over voltage limit) to be more an issue thermally than electromigration effects there. The metal traces are also fairly supple, iirc I did a lil math on them and determined their resistance to be tiny even at rather local (single-finger) scale.
 
+{Reactions}
+👍
 
 [2026-10-15 3:35 a.m.] namibj
 We'd need to make flip chip bond pads work and teach it how not to commit self-melting (limit current as it begins to attempts to commit self-melting) to unlock enough amps to where I'd begin to worry about electromigration.
@@ -497,6 +499,455 @@ If you can design a schematic that does _much_ better in not more than like 5x t
 I'm not sure about the demands regarding low power/efficiency though.
 
 
+[2026-10-15 7:14 a.m.] brookieoz
+
+
+{Attachments}
+2026-10_media/image-47B55.png
+
+
+[2026-10-15 7:15 a.m.] brookieoz
+the startup might leak a little at high temps
+
+
+[2026-10-15 7:15 a.m.] brookieoz
+but it's the simplest way to do it that I can think of
+
+
+[2026-10-15 7:16 a.m.] namibj
+fyi native VT devices are nowt allowed to be particularly narrow due to DRC (technically that'd be ERC but they call it DRC and they treat it as if it is)
+
+
+[2026-10-15 7:16 a.m.] brookieoz
+oh and there should be an enable switch on the tail current too
+
+
+[2026-10-15 7:17 a.m.] namibj
+the tail resistor?
+
+
+[2026-10-15 7:17 a.m.] brookieoz
+1MOhm resistor connecting sources of the native vt input pair to GND
+
+
+[2026-10-15 7:17 a.m.] brookieoz
+yeah
+
+
+[2026-10-15 7:18 a.m.] namibj
+https://github.com/AvalonSemiconductors/ws-charge-controller/blob/main/analog/xschem/voltage_ref_bench.sch
+
+{Embed}
+https://github.com/AvalonSemiconductors/ws-charge-controller/blob/main/analog/xschem/voltage_ref_bench.sch
+ws-charge-controller/analog/xschem/voltage_ref_bench.sch at main ·...
+AIO charge controller and overdischarge protection IC for Li+, LiFePo, LTO and Na+ cells on wafer.space gf180mcu - AvalonSemiconductors/ws-charge-controller
+2026-10_media/ws-charge-controller-F4E2E
+
+
+[2026-10-15 7:19 a.m.] namibj
+this should bench in a compatible way if you'd swap out the contents of the schematic for this circuit instead.
+I could look at it in maybe a day if I pace myself well, gotta sleep and do some bookkeeping first.
+
+
+[2026-10-15 7:20 a.m.] namibj
+can you reason the choice of native VT nmos, please?
+
+
+[2026-10-15 7:21 a.m.] brookieoz
+at the moment I don't have any toolflow set up, it'll probably take me quite some time to get that working
+
+
+[2026-10-15 7:21 a.m.] namibj
+oh sorry
+
+
+[2026-10-15 7:21 a.m.] namibj
+(I just use the IIC-OSIC container tbf....)
+
+
+[2026-10-15 7:22 a.m.] namibj
+I think the nix flake in the repo should also work
+
+
+[2026-10-15 7:24 a.m.] namibj
+hmmm I guess even with like -250 mV threshold voltage corner on it it should be fairly off once the source node of it gets to around 650 mV.....
+
+
+[2026-10-15 7:25 a.m.] namibj
+(I misread it also, it says min _width_ so yeah that's not a problem, and 5 length is fine under the DRC and such)
+
+
+[2026-10-15 7:26 a.m.] brookieoz
+It's important for a couple reasons:
+
+1 - startup native vt device creates a current that shuts itself off once the bandgap starts up, causes the right side VBE to go up first. That creates a voltage delta in the amplifier
+
+2 - the amplifier needs current otherwise it doesn't do anything, tail resistor with negative VTH means I don't need some kind of NMOS turnaround mirror. And the current is pretty stable because it's roughly always 0.5-0.6V
+
+3 - amplifier input common mode voltage is quite low and to keep things simple I want NMOS input with PMOS mirror with PMOS CS output to reduce systematic mismatch from different Vds on input pair
+
+4 - native VT devices typically match a lot better than full VT devices, important when it directly impacts bandgap voltage
+
+
+[2026-10-15 7:26 a.m.] namibj
+also just fyi there's no degrees Kelvin....
+
+
+[2026-10-15 7:28 a.m.] brookieoz
+at high temps the VBE goes down and the VTH goes down as well, the leakage will get pretty bad eventually
+
+
+[2026-10-15 7:28 a.m.] namibj
+note that the threshold voltage by process is fairly wide and kinda symmetric around 0V for nvt-nmos on gf180mcuD
+
+
+[2026-10-15 7:28 a.m.] brookieoz
+that should be fine, you get a decent amount of sub threshold current at -0.1vgst
+
+
+[2026-10-15 7:29 a.m.] brookieoz
+?
+
+
+[2026-10-15 7:30 a.m.] namibj
+could you use the output voltage to trip some turn-off/gate in the startup current path?
+
+
+[2026-10-15 7:30 a.m.] namibj
+unlike celsius and fahrenheit, there's no degrees for Kelvin, just like there's no degree volts.
+
+
+[2026-10-15 7:30 a.m.] brookieoz
+the easier way to fix it is to connect the source to partway up the RPTAT link
+
+
+[2026-10-15 7:31 a.m.] brookieoz
+that way you get more negative VGS to shut the device off
+
+
+[2026-10-15 7:31 a.m.] 246tnt
+1.53M resistor is ... large. Best we have is 1k/sq
+
+
+[2026-10-15 7:31 a.m.] namibj
+and 1u wide; but the space isn't quite as harsh thankfully at least
+
+
+[2026-10-15 7:31 a.m.] 246tnt
+With 1um min width. So that's 1530 um length.
+
+
+[2026-10-15 7:32 a.m.] brookieoz
+Oof.
+
+
+[2026-10-15 7:32 a.m.] brookieoz
+I'm surprised 1um is min W on the resistor, that's gigantic for a 180nm process
+
+
+[2026-10-15 7:32 a.m.] namibj
+ehhhh it's not _thaaaat_ huge, like a 50um square should cover it
+
+
+[2026-10-15 7:33 a.m.] brookieoz
+If you're ok with spending current you can cut all the R's proportionally
+
+
+[2026-10-15 7:33 a.m.] namibj
+only for the high sheet R; normal poly resistors are less than 400
+
+
+[2026-10-15 7:33 a.m.] 246tnt
+Yeah, I think multiplying the current by 10 is fine.
+
+
+[2026-10-15 7:33 a.m.] 246tnt
+This is 2000's tech, not latest ultra low power 😅
+
+
+[2026-10-15 7:33 a.m.] brookieoz
+I wish I could do that at work 🤣 🤣 🤣
+
+
+[2026-10-15 7:33 a.m.] namibj
+I mean it's a battery charger doing some sort of deep discharge cutoff action as part of it's job.... I'm not too up to date on the other sources of passive draw in "idle" but yeah.
+
+
+[2026-10-15 7:35 a.m.] namibj
+when intel used this class of process they didn't sell more than one core per socket to anything vaguely consumer
+
+
+[2026-10-15 7:35 a.m.] brookieoz
+Sidenote I might've hooked up the polarity of the amplifier wrong, I didn't pay too close attention to it
+
+
+[2026-10-15 7:35 a.m.] namibj
+they might not have been doing any multi core at all
+
+
+[2026-10-15 7:35 a.m.] brookieoz
+The startup needs to be on the side that tries to pull the output device on
+
+
+[2026-10-15 7:36 a.m.] namibj
+but the drains and gates as such are going the correct polarity?
+
+
+[2026-10-15 7:38 a.m.] namibj
+@brookieoz btw, do you happen to have any "easy" way we could put a temperature sense into the middle of the power pass FET to implement a temperature limiting behavior that just turns the output current down with more authority than the voltage target can turn it up, if the area gets toasty?
+
+
+[2026-10-15 7:39 a.m.] brookieoz
+hm
+
+
+[2026-10-15 7:40 a.m.] brookieoz
+Give me a sec
+
+
+[2026-10-15 7:41 a.m.] brookieoz
+Well
+
+
+[2026-10-15 7:41 a.m.] brookieoz
+man, that's a bit of a cursed idea
+
+
+[2026-10-15 7:42 a.m.] namibj
+IMO I'd be aiming for a junction temperature actuation range of 100 to 120C, if accuracy reasonably requires notable margin I'd be willing to go down to about 5C wide actuation band with upper and lower margins allocated as best; I am pretty sure I'd be up for doing e-fuses to trip the trip point in if it's easy to set up some way of measuring on some kind of test pin what the natural trim condition is and thus what fuse pattern to blow
+
+
+[2026-10-15 7:43 a.m.] brookieoz
+Oof
+
+
+[2026-10-15 7:43 a.m.] namibj
+though all I really care about is that the chip can be used as a charge controller for this with the current limit set as open as the connected battery will be happy with and the power current bonding solution allows
+
+
+[2026-10-15 7:43 a.m.] brookieoz
+How much area are you willing to spend on it, and how much accuracy do you absolutely need
+
+
+[2026-10-15 7:44 a.m.] namibj
+if that means to need to use a few efuse bits so be it, we do now know they work and they're not large and not particularly hard to use either, and I think they are actually usable for analog purposes even though I'd have to check and confirm. Worst case they could only drive a DAC, I guess.
+
+
+[2026-10-15 7:45 a.m.] namibj
+enough accuracy to not waste tons of thermal headroom just to keep the unlucky corner from melting itself if someone throws a wool sweater over the charger on say a nightstand or something
+
+
+[2026-10-15 7:46 a.m.] namibj
+areas wise there's a decent bit to spare, 100x100um are a no brainer, 10x that is probably argu-able especially if it would somehow also unlock extra voltage set point accuracy
+
+
+[2026-10-15 7:47 a.m.] namibj
+current set point is AFAIK no need to be that tight given the kind of charging task this kind of charge controller reasonably performs
+
+
+[2026-10-15 7:48 a.m.] brookieoz
+so basically you have two approaches:
+1: buffer the bandgap voltage and compare a scaled version of it to the VBE of a diode temp sensor
+2: make a PTAT current loop at the center of the power FET and compare that with the CTAT VBE of a diode sensor at the same location
+
+
+[2026-10-15 7:48 a.m.] namibj
+the only cheap way to get real good voltage control though I've seen so far in LDOs is to have a factory trimmer DAC inside and use the set resistor just to feed an ADC that then tells the trimmed DAC which of a dozen or so of tabulated charge end voltages to aim for.
+
+
+[2026-10-15 7:49 a.m.] brookieoz
+1 is usually easier to do because you typically have that already on the chip, but it's less accurate
+2 is more accurate but it has its own complications
+
+
+[2026-10-15 7:50 a.m.] namibj
+as long as the large-ish resistors don't need to be in the middle of the power FET structure some bipolar's for PTAT/CTAT shouldn't be a problem, I _think_
+
+
+[2026-10-15 7:50 a.m.] namibj
+but like, I dunno that well
+
+
+[2026-10-15 7:51 a.m.] brookieoz
+one complication with approach 2 is that you can't really guarantee you have 0 temperature gradient, and that can cause your PTAT to do all sorts of weird things
+
+
+[2026-10-15 7:51 a.m.] namibj
+also we don't need to truly measure we just need to start throttling down over a wide enough temperature range to not cause any too high frequency thermally-coupled oscillations in charging power, and throttle to close enough to zero current before the power fet gets so hot that the chip burns out in like less than 5 years of being "plugged in", usually
+
+
+[2026-10-15 7:52 a.m.] brookieoz
+it's of particular concern if you have a fault condition that causes sudden power draw where you definitely will have a temperature gradient
+
+
+[2026-10-15 7:52 a.m.] namibj
+oh yeah the only think I can reasonably promise is that the center is gonna have approximately average temperature, and under reasonable conditions not too much delta to the hottest
+
+
+[2026-10-15 7:53 a.m.] namibj
+IMO tbh bonus points if the measurement solution somehow allows having a few smol sensors spread about in a grid pattern and perform some osrt of soft-max by way of how it works
+
+
+[2026-10-15 7:54 a.m.] brookieoz
+Hmmm if you want to really do like granular temp sensing you basically just need an ADC
+
+
+[2026-10-15 7:54 a.m.] namibj
+I think the diode approach would do that but not so sure about how strong the soft-max effect would turn out to be
+
+
+[2026-10-15 7:54 a.m.] brookieoz
+Just shove a IZTC into a diode and measure the voltage using an ADC
+
+
+[2026-10-15 7:55 a.m.] namibj
+oh no not granular as such, just soft enough action to not form a relaxation oscillation through a temperature reservior
+
+
+[2026-10-15 7:55 a.m.] brookieoz
+oh
+
+
+[2026-10-15 7:56 a.m.] brookieoz
+I mean if you really think about it you basically need to just guarantee that the system is stable, where your dominant pole is the low pass filter created by the thermal mass and self-heating
+
+
+[2026-10-15 7:57 a.m.] brookieoz
+modelling that isn't easy tho
+
+
+[2026-10-15 7:58 a.m.] namibj
+_might_ have to set the trip point through some fuses I guess?
+Just because e.g. 10% of absolute temperature is already about as wide of a range as we'd probably like to concede to the entire scheme; +-2% would probably be desired and if that already needs efuse bits going to +-1% would probably be taken.... like, the latter is still a 6 degree C wide band
+
+
+[2026-10-15 8:00 a.m.] namibj
+hence me hoping to get by with sufficciently little gain from delta-T to delta-current and thus delta-power
+
+
+[2026-10-15 8:01 a.m.] namibj
+figured you _might_ know of some reasonable ways thermal self protection that is allowed to be relied on/hit in regular sustained operation is practically done for LDOs these days; thus figured I might ask
+
+
+[2026-10-15 8:02 a.m.] namibj
+(I have to go catch some sleep though in a couple minutes so will read what you thought of later, other than maybe a few more words in a few minutes.)
+
+
+[2026-10-15 8:04 a.m.] brookieoz
+my initial thoughts are if you,re looking for like a smooth control you could consider something like make an amplifier that compares a temp sensor diode compared to a scaled bandgap voltage, and output some kind of control voltage that limits the current
+
+
+[2026-10-15 8:05 a.m.] brookieoz
+but it's pretty hard to really go through it all without intimate knowledge of the control loop of the charge controller
+
+
+[2026-10-15 8:06 a.m.] brookieoz
+If it's just an LDO with a current limit, then yeah you could probably tune it in a way to reduce the current limit with the result of the amplifier
+
+
+[2026-10-15 8:07 a.m.] brookieoz
+but it really should be designed in tandem with the LDO, you don't want to end up introducing unintended stability issues (since you are introducing a new feedback pathway at the end of the day)
+
+
+[2026-10-15 8:08 a.m.] namibj
+@brookieoz for up-to-date you'd have to open the repo with xschem pointed at the PDK's symbols
+
+
+[2026-10-15 8:09 a.m.] namibj
+though I mean you'd see the hirarchical blocks without the PDK
+
+
+[2026-10-15 8:10 a.m.] brookieoz
+I'll be entirely honest I'm not sure how much direct contribution i can do considering I do work in analog IC design
+
+
+[2026-10-15 8:10 a.m.] namibj
+it's not _my_ design. I'm just trying to help make it be good enough to where I'd actually wanna use any of the dies for even hobbyist "production"
+
+
+[2026-10-15 8:11 a.m.] namibj
+primarily in terms of wisdom 😄
+
+
+[2026-10-15 8:11 a.m.] brookieoz
+and idk how my employer may feel about it, and I'd rather err on the side of caution and be more of a consultant than a direct contributor
+
+
+[2026-10-15 8:11 a.m.] namibj
+I mostly refer the xschem/repo because it's much nicer to look at if "highlight net" works than if it's just a deck of PNG's
+
+{Reactions}
+😂
+
+[2026-10-15 8:15 a.m.] namibj
+prior to realizing your level of skill I felt a little bit towards "if you can demonstrate that it actually as a schematic massively beats the existing in temp co (well, lack thereof!), I'll offer to see to get layout/routing done for it if tholin doesn't get to it first", but given your level of wisdom in the matters, that's not really something to ask for anymore. Can just let you communicate in the most convenient way for you if it's not actively severely inconvenient for me to follow.
+
+{Reactions}
+🩵
+
+[2026-10-15 8:20 a.m.] brookieoz
+I should also be headed to bed too, the only reason why I'm awake is because I woke up feverish in the middle of the night and I can't fall back asleep hahaha
+
+
+[2026-10-15 8:31 a.m.] namibj
+nini
+
+
+[2026-10-15 8:52 a.m.] tholin
+No. I’m done updating this chip. Its done.
+
+
+[2026-10-15 8:57 a.m.] tholin
+All BJT PCELLs in gf180mcu appear to be low-voltage devices only. Not sure this will work at +5V supply voltage. The densest resistors you can get are 1K/um, so 1.53M would be a long boi. 1.53mm. Not impossible, mind you, just taking up an uncomfortable amount of space.
+
+
+[2026-10-15 8:59 a.m.] brookieoz
+...?
+The BJTs never see more than VBE across them (like max ~0.8V in cold corner)
+You don't need to make a single resistor 1W/1530L, you break it up to like say 85L and put 18 links in series
+
+
+[2026-10-15 9:02 a.m.] tholin
+I’m aware, but that’s still a lot of area
+
+
+[2026-10-15 9:03 a.m.] brookieoz
+and buried in the discussion up there is that you can definitely cut down significantly on resistor area if you're willing to burn more power
+
+
+[2026-10-15 9:04 a.m.] brookieoz
+The bias currents are pretty low at approx 0.3uA per branch, if you 4x that to 1.2uA you can cut all resistors by 4x
+
+
+[2026-10-15 9:05 a.m.] brookieoz
+so the unit resistor ends up around 1/21, and 18 links of that is roughly 400 um^2
+
+
+[2026-10-15 9:08 a.m.] 246tnt
+@brookieoz BTW, shouldn't that `ln(4)` be `ln(2)` if you're using only 2x size ratio ?
+
+
+[2026-10-15 9:09 a.m.] brookieoz
+It's 4
+The resistors are also ratioed 1:2 so it splits the current unevenly
+
+
+[2026-10-15 9:09 a.m.] 246tnt
+Oh I see.
+
+
+[2026-10-15 9:10 a.m.] brookieoz
+You could also try a 1:3 resistor ratio to get ln(6)
+
+
+[2026-10-15 9:11 a.m.] brookieoz
+and adjust everything accordingly to get the correct amount of PTAT to CTAT
+
+
+[2026-10-15 9:11 a.m.] brookieoz
+But it's easier to match a 1:2 ratio
+
+
 ==============================================================
-Exported 105 message(s)
+Exported 210 message(s)
 ==============================================================

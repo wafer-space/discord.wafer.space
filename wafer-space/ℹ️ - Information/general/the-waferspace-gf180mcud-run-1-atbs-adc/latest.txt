@@ -111,6 +111,21 @@ However, the huge "problem" of this ADC is now that the data samples are non-equ
 Ehhh, it's not _that_ bad....
 
 
+[2026-10-15 6:01 a.m.] simi150500
+If you write a paper and want to compare it to state-of-the-art this is bad. Everyone is using different signals. 😆
+
+
+[2026-10-15 6:03 a.m.] simi150500
+And comparing to Nyquist ADCs is even worse since a sine wave input is not a good reference signal for event-based ADCs to show its performance.
+And then you cannot really say an ENOB etc.
+
+
+[2026-10-15 6:25 a.m.] namibj
+ehhh while you're limited by patterns fitting your buffers (unless your architecture is somehow still able to sustain maximum front end sample rate continuosly on signals demanding just that), ENOB is on it's own quite a local measure. You do basically still just take an ideal expected waveform and compare with the ADC's output bitstream, and just look at how much entropy there is.
+From looking at your block diagram it seems you're built like a hybrid between SAR and discrete-time-delta-sigma, leaning towards the SAR, and focusing on what looks like getting more samples if the signal changes too fast for the LSBs to settle.
+Like, a SAR who's sample-and-hold input block was taken away, kinda.
+
+
 ==============================================================
-Exported 19 message(s)
+Exported 22 message(s)
 ==============================================================

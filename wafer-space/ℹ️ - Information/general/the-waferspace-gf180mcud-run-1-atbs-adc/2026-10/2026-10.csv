@@ -27,3 +27,9 @@ Is that correct?","",""
 "210834917125390336","simi150500","2026-10-12T08:06:07.0950000+00:00","However, the huge ""problem"" of this ADC is now that the data samples are non-equidistant. So things like FFTs are not possible, and therefore showing the frequency domain of the reconstructed signal is not directly possible without interpolation. Meaning, metrics like ENOB and SNDR are, strictly speaking, not really possible. This is also the topic of my paper above.","",""
 "169786952432746498","mithro_","2026-10-12T22:18:23.0370000+00:00","@Simi - Very cool! Great to hear that it is working.","","🙌 (1)"
 "262706220073222144","namibj","2026-10-15T02:54:14.1700000+00:00","Ehhh, it's not _that_ bad....","",""
+"210834917125390336","simi150500","2026-10-15T06:01:06.5640000+00:00","If you write a paper and want to compare it to state-of-the-art this is bad. Everyone is using different signals. 😆","",""
+"210834917125390336","simi150500","2026-10-15T06:03:04.8180000+00:00","And comparing to Nyquist ADCs is even worse since a sine wave input is not a good reference signal for event-based ADCs to show its performance.
+And then you cannot really say an ENOB etc.","",""
+"262706220073222144","namibj","2026-10-15T06:25:56.9810000+00:00","ehhh while you're limited by patterns fitting your buffers (unless your architecture is somehow still able to sustain maximum front end sample rate continuosly on signals demanding just that), ENOB is on it's own quite a local measure. You do basically still just take an ideal expected waveform and compare with the ADC's output bitstream, and just look at how much entropy there is.
+From looking at your block diagram it seems you're built like a hybrid between SAR and discrete-time-delta-sigma, leaning towards the SAR, and focusing on what looks like getting more samples if the signal changes too fast for the LSBs to settle.
+Like, a SAR who's sample-and-hold input block was taken away, kinda.","",""
