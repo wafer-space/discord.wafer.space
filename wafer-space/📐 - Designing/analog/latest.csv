@@ -170,7 +170,7 @@ I could look at it in maybe a day if I pace myself well, gotta sleep and do some
 "262706220073222144","namibj","2026-10-15T07:32:36.0790000+00:00","ehhhh it's not _thaaaat_ huge, like a 50um square should cover it","",""
 "155452674286813194","brookieoz","2026-10-15T07:33:00.0010000+00:00","If you're ok with spending current you can cut all the R's proportionally","",""
 "262706220073222144","namibj","2026-10-15T07:33:07.4260000+00:00","only for the high sheet R; normal poly resistors are less than 400","",""
-"596068704471482370","246tnt","2026-10-15T07:33:14.4740000+00:00","Yeah, I think multiplying the current by 10 is fine.","",""
+"596068704471482370","246tnt","2026-10-15T07:33:14.4740000+00:00","Yeah, I think multiplying the current by 10 is fine.","","⛈️ (1)"
 "596068704471482370","246tnt","2026-10-15T07:33:40.5220000+00:00","This is 2000's tech, not latest ultra low power 😅","",""
 "155452674286813194","brookieoz","2026-10-15T07:33:41.4320000+00:00","I wish I could do that at work 🤣 🤣 🤣","",""
 "262706220073222144","namibj","2026-10-15T07:33:59.1560000+00:00","I mean it's a battery charger doing some sort of deep discharge cutoff action as part of it's job.... I'm not too up to date on the other sources of passive draw in ""idle"" but yeah.","",""
@@ -195,7 +195,7 @@ I could look at it in maybe a day if I pace myself well, gotta sleep and do some
 "155452674286813194","brookieoz","2026-10-15T07:48:28.5580000+00:00","so basically you have two approaches:
 1: buffer the bandgap voltage and compare a scaled version of it to the VBE of a diode temp sensor
 2: make a PTAT current loop at the center of the power FET and compare that with the CTAT VBE of a diode sensor at the same location","",""
-"262706220073222144","namibj","2026-10-15T07:48:52.9990000+00:00","the only cheap way to get real good voltage control though I've seen so far in LDOs is to have a factory trimmer DAC inside and use the set resistor just to feed an ADC that then tells the trimmed DAC which of a dozen or so of tabulated charge end voltages to aim for.","",""
+"262706220073222144","namibj","2026-10-15T07:48:52.9990000+00:00","the only cheap way to get real good voltage control though I've seen so far in LDOs is to have a factory trimmer DAC inside and use the set resistor just to feed an ADC that then tells the trimmed DAC which of a dozen or so of tabulated charge end voltages to aim for.","","👀 (1)"
 "155452674286813194","brookieoz","2026-10-15T07:49:31.1720000+00:00","1 is usually easier to do because you typically have that already on the chip, but it's less accurate
 2 is more accurate but it has its own complications","",""
 "262706220073222144","namibj","2026-10-15T07:50:07.2440000+00:00","as long as the large-ish resistors don't need to be in the middle of the power FET structure some bipolar's for PTAT/CTAT shouldn't be a problem, I _think_","",""
@@ -247,3 +247,55 @@ The resistors are also ratioed 1:2 so it splits the current unevenly","",""
 "155452674286813194","brookieoz","2026-10-15T09:10:36.8900000+00:00","You could also try a 1:3 resistor ratio to get ln(6)","",""
 "155452674286813194","brookieoz","2026-10-15T09:11:01.2170000+00:00","and adjust everything accordingly to get the correct amount of PTAT to CTAT","",""
 "155452674286813194","brookieoz","2026-10-15T09:11:55.0660000+00:00","But it's easier to match a 1:2 ratio","",""
+"262706220073222144","namibj","2026-10-15T17:55:59.2570000+00:00","yeah don't worry I have zero worry about lifetime for the design you proposed, we don't even have SPICE for the thin oxide nvt anyways and a bunch of that chip uses structures that I'd not reach for thin oxide structures for anyways.","",""
+"262706220073222144","namibj","2026-10-15T17:57:07.6390000+00:00","why would I want the ln(6) unlocked from a 1:3 ratio?","",""
+"155452674286813194","brookieoz","2026-10-15T18:11:41.2280000+00:00","6V natural device should be fine tbh. If you do 3V you'd need to protect the input pair with a cascode which... Actually that's pretty convenient, 6V natural device cascode from the bandgap / output voltage","",""
+"155452674286813194","brookieoz","2026-10-15T18:12:55.6380000+00:00","You get more PTAT so you can have smaller ratio between the dVbe/R resistor and the PTAT resistor, so you should be able to use a smaller PTAT resistor size","",""
+"262706220073222144","namibj","2026-10-15T18:13:22.4620000+00:00","Hmmm....","",""
+"155452674286813194","brookieoz","2026-10-15T18:14:03.0720000+00:00","It's not uncommon to get ln(8), usually done by having an 
+
+```
+AAA
+ABA
+AAA```
+pattern for your diodes/bjt's","",""
+"262706220073222144","namibj","2026-10-15T18:15:02.2900000+00:00","Ohh nice, I guess the substantially smaller resistors would help here due to the poor high sheet poly density we got?","",""
+"155452674286813194","brookieoz","2026-10-15T18:15:18.5420000+00:00","But BJTs tend to be pretty big in size and I wasn't sure how much area I had","",""
+"262706220073222144","namibj","2026-10-15T18:15:47.8240000+00:00","Yeah fair","",""
+"155452674286813194","brookieoz","2026-10-15T18:16:01.0090000+00:00","yeah probably
+
+Heck, the normal poly / unsalicided resistors might be better for density","",""
+"262706220073222144","namibj","2026-10-15T18:16:31.8490000+00:00","Sadly not really at the end","","😢 (1)"
+"262706220073222144","namibj","2026-10-15T18:16:52.2220000+00:00","Not by much though","",""
+"262706220073222144","namibj","2026-10-15T18:17:32.4660000+00:00","This looks like it might work better inside a power FET as a temperature sensor?","",""
+"155452674286813194","brookieoz","2026-10-15T18:17:58.2250000+00:00","The risk is temperature gradients","",""
+"262706220073222144","namibj","2026-10-15T18:18:29.9980000+00:00","But they'd balance across it, wouldn't they?","",""
+"262706220073222144","namibj","2026-10-15T18:19:04.7300000+00:00","I mean with very good top side cooling you could have the center notably colder than the outside, I guess....","",""
+"155452674286813194","brookieoz","2026-10-15T18:21:52.8810000+00:00","It's mostly that like, say if you suddenly draw a lot more power through your power FET, that'll create a sudden temperature transient that takes time to propagate to your temp sensor, and if you're trying to protect the device from damage you want to catch that as quickly as you can","",""
+"155452674286813194","brookieoz","2026-10-15T18:22:16.8260000+00:00","Fault conditions and such","",""
+"155452674286813194","brookieoz","2026-10-15T18:25:14.8390000+00:00","It's especially problematic if you're operating the power FET in the negative tempco region where the drop in local Vth due to localized heating ends up increasing the local current instead of reducing the current from reduced carrier mobility, because in that region it's unstable and forms localized hotspots that can reach a far higher temperature than what you see at the sensor location","",""
+"211112896833257472","archit3ch","2026-10-15T18:34:05.3640000+00:00","TIL native Vt","",""
+"262706220073222144","namibj","2026-10-15T18:39:17.0620000+00:00","Hmmm, speed limiter for upwards delta-power....","",""
+"155452674286813194","brookieoz","2026-10-15T18:42:42.8200000+00:00","I personally really like native Vt devices. But you do have to be careful with them lest you create massive leakage issues","",""
+"211112896833257472","archit3ch","2026-10-15T19:04:54.6180000+00:00","and you said they're not available in Wafer Space?","",""
+"155452674286813194","brookieoz","2026-10-15T19:05:34.9850000+00:00","The 6V natural devices are documented in the open source pdk, I didn't see any 3.3V ones","",""
+"211112896833257472","archit3ch","2026-10-15T19:08:40.9020000+00:00","yeah, but no noise profile, so it's a bit of qualification risk... i'll drop this conversation thread here and let you both design","",""
+"262706220073222144","namibj","2026-10-15T19:09:09.7990000+00:00","....a longer term project of mine I thought would use SiC JFETs who's gate source junction under forward bias is a really good temperature sensor about a channel thickness away from the channel itself was planned to use that to contain faults with coordinated emergency SCRAM's (it's a 10~30 kV to about 2~3 kV bidirectional converter aiming towards about a MW but a PoC would be built smaller power if just for parts costs; the dies are only rated 1200 or 1700 V!),
+
+but they are all really high ohmic losses in the gate wiring presumably for avalanche proof behavior under cascode operation (if the drain leaks enough into the gate to turn the channel on before breakdown leakage through the reverse junction itself causes local damage, it's safe until the channel melts which takes literally several microseconds and thus easily several PWM cycles, so plenty of time to react and a brief transient is harmless),
+
+ so I've pivoted to (ideally GaN V-JFETs if there are any smaller than 50$ a die with purchase limits of like one tray a month) likely epc-co GaN e-mode lateral MOSFET-substitutes which happily work at 50 MHz if you regeneratively/resonantly charge the gate and don't turn the channel on while there's drain voltage (output stored energy limits reasonable hard switch frequency to around 3 MHz typically for them) which sadly lack a thermal sense at the channel are not avalanche proof and who's gate is about 3x more finnicky than the SiC JFET (from formerly UnitedSiC).
+
+After my SerDes efforts I hope to get to mod a microwave oven to use such a topology of likely 200/300 V epc-co devices to feed the magnetron with regulated DC of about 2kV from probably around 250~300 V nominal LiFePO4 battery backed ""DC microgrid"" that is also easily digestible by most computer PSUs and I think many induction stove tops and such.
+
+I'm actually planning to use wafer.space to make an active digital pre-distortion driver for these power transistors that can talk with a central controller via (very short) fiber optics as it operates floating with severe switching transients (well, I expect around 20V/ns as ""regular"") and still has to coordinate for possible SCRAM.
+It's switched capacitor technology using just enough inductance to not need to turn channels on with notable drain voltage remaining.
+Oh, and poly-phase architecture allows it to neutralize ripple at the DC inputs and outputs greatly reducing the blocking demands put onto the EMI filters because if you have 1kW of e.g. 27 MHz ""RF"" power in the switched capacitors going down to micro watt levels of radiated leakage externally is... Hard.... If you try to maintain appliance-level 99% efficiency (if it was just a DC/DC transformer not a microwave with it's horrible magnetron).","",""
+"262706220073222144","namibj","2026-10-15T19:09:54.7210000+00:00","They are legal. 
+They haven't been measured yet. 
+I'm getting some onto Run3 to get measured.","","👀 (2)"
+"155452674286813194","brookieoz","2026-10-15T19:10:59.7790000+00:00","oh, god yeah high power + high voltage stuff is terrifying","",""
+"262706220073222144","namibj","2026-10-15T19:11:15.4640000+00:00","Well, then I would appreciate learning how this could be measured within the limits you'd have on TinyTapeout.","",""
+"262706220073222144","namibj","2026-10-15T19:17:06.9040000+00:00","Well it lives in a can (the stuff higher power than a microwave), likely by expectations in basically a larger BBQ propane tank with a plate heat exchanger attached that condenses the propane back to liquid and with the liquid pumped through very dense coolant manifolds to the dies (the upper half of the power range doesn't need to be that efficient, so that's what suddenly asks for a 10x TDP headroom; but even from like 500 kW (half power of 1 MW) 1% loss is already 5 kW, and 5% of 1 MW is, well, 50 kW...
+GaN-on-silicon is a little vulnerable there.
+And density is quite desired to mitigate parasitics through shorter switching loops....","",""

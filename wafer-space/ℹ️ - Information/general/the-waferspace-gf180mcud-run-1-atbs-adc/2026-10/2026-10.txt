@@ -130,6 +130,12 @@ Like, a SAR who's sample-and-hold input block was taken away, kinda.
 "hybrid between SAR and discrete-time-delta-sigma" but this would deliver equidistant samples, right?
 
 
+[2026-10-15 6:02 p.m.] namibj
+I mean, you're kind of doing a dual-sided SAR that "compresses" no-change/no-trip time quanta away....
+You have the lack of input sample and hold from a discrete time delta sigma, and the comparator second input fed from a DAC of a SAR.
+By having two comparators, one for lower and one for upper bound, you can drive the system such that you can keep high responsivity to transients that blow outside the band between upper and lower threshold, without tripping the digital machinery and DACs and whatever resolving/positive-feedback cascade the comparator needs, if the signal stays within the band that you keep as narrow as you _want_ it to be per the requests put onto your digital control logic that decides what DAC values to feed which comparator at what time.
+
+
 ==============================================================
-Exported 23 message(s)
+Exported 24 message(s)
 ==============================================================

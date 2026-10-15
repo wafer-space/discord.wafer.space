@@ -660,6 +660,8 @@ only for the high sheet R; normal poly resistors are less than 400
 [2026-10-15 7:33 a.m.] 246tnt
 Yeah, I think multiplying the current by 10 is fine.
 
+{Reactions}
+⛈️
 
 [2026-10-15 7:33 a.m.] 246tnt
 This is 2000's tech, not latest ultra low power 😅
@@ -754,6 +756,8 @@ so basically you have two approaches:
 [2026-10-15 7:48 a.m.] namibj
 the only cheap way to get real good voltage control though I've seen so far in LDOs is to have a factory trimmer DAC inside and use the set resistor just to feed an ADC that then tells the trimmed DAC which of a dozen or so of tabulated charge end voltages to aim for.
 
+{Reactions}
+👀
 
 [2026-10-15 7:49 a.m.] brookieoz
 1 is usually easier to do because you typically have that already on the chip, but it's less accurate
@@ -948,6 +952,152 @@ and adjust everything accordingly to get the correct amount of PTAT to CTAT
 But it's easier to match a 1:2 ratio
 
 
+[2026-10-15 5:55 p.m.] namibj
+yeah don't worry I have zero worry about lifetime for the design you proposed, we don't even have SPICE for the thin oxide nvt anyways and a bunch of that chip uses structures that I'd not reach for thin oxide structures for anyways.
+
+
+[2026-10-15 5:57 p.m.] namibj
+why would I want the ln(6) unlocked from a 1:3 ratio?
+
+
+[2026-10-15 6:11 p.m.] brookieoz
+6V natural device should be fine tbh. If you do 3V you'd need to protect the input pair with a cascode which... Actually that's pretty convenient, 6V natural device cascode from the bandgap / output voltage
+
+
+[2026-10-15 6:12 p.m.] brookieoz
+You get more PTAT so you can have smaller ratio between the dVbe/R resistor and the PTAT resistor, so you should be able to use a smaller PTAT resistor size
+
+
+[2026-10-15 6:13 p.m.] namibj
+Hmmm....
+
+
+[2026-10-15 6:14 p.m.] brookieoz
+It's not uncommon to get ln(8), usually done by having an 
+
+```
+AAA
+ABA
+AAA```
+pattern for your diodes/bjt's
+
+
+[2026-10-15 6:15 p.m.] namibj
+Ohh nice, I guess the substantially smaller resistors would help here due to the poor high sheet poly density we got?
+
+
+[2026-10-15 6:15 p.m.] brookieoz
+But BJTs tend to be pretty big in size and I wasn't sure how much area I had
+
+
+[2026-10-15 6:15 p.m.] namibj
+Yeah fair
+
+
+[2026-10-15 6:16 p.m.] brookieoz
+yeah probably
+
+Heck, the normal poly / unsalicided resistors might be better for density
+
+
+[2026-10-15 6:16 p.m.] namibj
+Sadly not really at the end
+
+{Reactions}
+😢
+
+[2026-10-15 6:16 p.m.] namibj
+Not by much though
+
+
+[2026-10-15 6:17 p.m.] namibj
+This looks like it might work better inside a power FET as a temperature sensor?
+
+
+[2026-10-15 6:17 p.m.] brookieoz
+The risk is temperature gradients
+
+
+[2026-10-15 6:18 p.m.] namibj
+But they'd balance across it, wouldn't they?
+
+
+[2026-10-15 6:19 p.m.] namibj
+I mean with very good top side cooling you could have the center notably colder than the outside, I guess....
+
+
+[2026-10-15 6:21 p.m.] brookieoz
+It's mostly that like, say if you suddenly draw a lot more power through your power FET, that'll create a sudden temperature transient that takes time to propagate to your temp sensor, and if you're trying to protect the device from damage you want to catch that as quickly as you can
+
+
+[2026-10-15 6:22 p.m.] brookieoz
+Fault conditions and such
+
+
+[2026-10-15 6:25 p.m.] brookieoz
+It's especially problematic if you're operating the power FET in the negative tempco region where the drop in local Vth due to localized heating ends up increasing the local current instead of reducing the current from reduced carrier mobility, because in that region it's unstable and forms localized hotspots that can reach a far higher temperature than what you see at the sensor location
+
+
+[2026-10-15 6:34 p.m.] archit3ch
+TIL native Vt
+
+
+[2026-10-15 6:39 p.m.] namibj
+Hmmm, speed limiter for upwards delta-power....
+
+
+[2026-10-15 6:42 p.m.] brookieoz
+I personally really like native Vt devices. But you do have to be careful with them lest you create massive leakage issues
+
+
+[2026-10-15 7:04 p.m.] archit3ch
+and you said they're not available in Wafer Space?
+
+
+[2026-10-15 7:05 p.m.] brookieoz
+The 6V natural devices are documented in the open source pdk, I didn't see any 3.3V ones
+
+
+[2026-10-15 7:08 p.m.] archit3ch
+yeah, but no noise profile, so it's a bit of qualification risk... i'll drop this conversation thread here and let you both design
+
+
+[2026-10-15 7:09 p.m.] namibj
+....a longer term project of mine I thought would use SiC JFETs who's gate source junction under forward bias is a really good temperature sensor about a channel thickness away from the channel itself was planned to use that to contain faults with coordinated emergency SCRAM's (it's a 10~30 kV to about 2~3 kV bidirectional converter aiming towards about a MW but a PoC would be built smaller power if just for parts costs; the dies are only rated 1200 or 1700 V!),
+
+but they are all really high ohmic losses in the gate wiring presumably for avalanche proof behavior under cascode operation (if the drain leaks enough into the gate to turn the channel on before breakdown leakage through the reverse junction itself causes local damage, it's safe until the channel melts which takes literally several microseconds and thus easily several PWM cycles, so plenty of time to react and a brief transient is harmless),
+
+ so I've pivoted to (ideally GaN V-JFETs if there are any smaller than 50$ a die with purchase limits of like one tray a month) likely epc-co GaN e-mode lateral MOSFET-substitutes which happily work at 50 MHz if you regeneratively/resonantly charge the gate and don't turn the channel on while there's drain voltage (output stored energy limits reasonable hard switch frequency to around 3 MHz typically for them) which sadly lack a thermal sense at the channel are not avalanche proof and who's gate is about 3x more finnicky than the SiC JFET (from formerly UnitedSiC).
+
+After my SerDes efforts I hope to get to mod a microwave oven to use such a topology of likely 200/300 V epc-co devices to feed the magnetron with regulated DC of about 2kV from probably around 250~300 V nominal LiFePO4 battery backed "DC microgrid" that is also easily digestible by most computer PSUs and I think many induction stove tops and such.
+
+I'm actually planning to use wafer.space to make an active digital pre-distortion driver for these power transistors that can talk with a central controller via (very short) fiber optics as it operates floating with severe switching transients (well, I expect around 20V/ns as "regular") and still has to coordinate for possible SCRAM.
+It's switched capacitor technology using just enough inductance to not need to turn channels on with notable drain voltage remaining.
+Oh, and poly-phase architecture allows it to neutralize ripple at the DC inputs and outputs greatly reducing the blocking demands put onto the EMI filters because if you have 1kW of e.g. 27 MHz "RF" power in the switched capacitors going down to micro watt levels of radiated leakage externally is... Hard.... If you try to maintain appliance-level 99% efficiency (if it was just a DC/DC transformer not a microwave with it's horrible magnetron).
+
+
+[2026-10-15 7:09 p.m.] namibj
+They are legal. 
+They haven't been measured yet. 
+I'm getting some onto Run3 to get measured.
+
+{Reactions}
+👀 (2)
+
+[2026-10-15 7:10 p.m.] brookieoz
+oh, god yeah high power + high voltage stuff is terrifying
+
+
+[2026-10-15 7:11 p.m.] namibj
+Well, then I would appreciate learning how this could be measured within the limits you'd have on TinyTapeout.
+
+
+[2026-10-15 7:17 p.m.] namibj
+Well it lives in a can (the stuff higher power than a microwave), likely by expectations in basically a larger BBQ propane tank with a plate heat exchanger attached that condenses the propane back to liquid and with the liquid pumped through very dense coolant manifolds to the dies (the upper half of the power range doesn't need to be that efficient, so that's what suddenly asks for a 10x TDP headroom; but even from like 500 kW (half power of 1 MW) 1% loss is already 5 kW, and 5% of 1 MW is, well, 50 kW...
+GaN-on-silicon is a little vulnerable there.
+And density is quite desired to mitigate parasitics through shorter switching loops....
+
+
 ==============================================================
-Exported 210 message(s)
+Exported 240 message(s)
 ==============================================================
