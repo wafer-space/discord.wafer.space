@@ -16,7 +16,7 @@
     "after": "2026-09-30T23:59:59.999+00:00",
     "before": "2026-11-01T00:00:00+00:00"
   },
-  "exportedAt": "2026-10-14T23:49:30.6729965+00:00",
+  "exportedAt": "2026-10-15T04:33:42.6013334+00:00",
   "messages": [
     {
       "id": "1558231929101226127",
@@ -1152,7 +1152,105 @@
         "guildId": "1361349522684510449"
       },
       "inlineEmojis": []
+    },
+    {
+      "id": "1560098204836429877",
+      "type": "Reply",
+      "timestamp": "2026-10-15T01:13:17.256+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Mux chip is WCH CH446X",
+      "author": {
+        "id": "908721221682733106",
+        "name": "lauri4332",
+        "discriminator": "0000",
+        "nickname": "Lauri",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-10_media/5-E9BDB.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "262706220073222144",
+          "name": "namibj",
+          "discriminator": "0000",
+          "nickname": "namibj",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-10_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1560000300910383256",
+        "channelId": "1532458465379750028",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1560120600733679726",
+      "type": "Reply",
+      "timestamp": "2026-10-15T02:42:16.854+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hmmm, looking at the numbers and the revision `r2` schematic at https://github.com/szfate/BondTest72 , it should almost be practical to pull off with this.\nBasically, what's missing would be a precision programmable voltage source packaged/combined together with a bias load resistor (from `COME`) to `GND` (||that soaks up the directly connected 1000μA current source as well as the  leakage through `COMC` and `COMD` performing parallel read/scan access of to-be-read die/DUT CMOS outputs (like those IOs are driven so it's through the channel not the VDD ESD clamp)||), which would work as a convenient pluggable module on J1.\n\nGiven that these FlexRam dies on Run2 don't actually contain that much memory, a full SRAM memtest pattern access (to see if the previous milliseconds of reduced supply voltage caused any of the bits to loose their pattern-value due to a natural bias to the negation) should only take single digit milliseconds anyways...\n\nWith that schematic, the approximate 5 MHz minimum/worst-case read/probe (per bit) access speed (||under conditions that only involve well-driven CMOS logic signals (thus only requiring a brief moment to propagate until the still-selected switch can be returned to a resting state of high-Z)||) (and at least half that speed for write bits (turn off drive in one direction, turn on drive in the other direction)) aren't that bad.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-10_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "GitHub - szfate/BondTest72: BondTest72 mainboard design files",
+          "url": "https://github.com/szfate/BondTest72",
+          "timestamp": null,
+          "description": "BondTest72 mainboard design files. Contribute to szfate/BondTest72 development by creating an account on GitHub.",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "2026-10_media/BondTest72-B806E",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": [],
+          "inlineEmojis": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "908721221682733106",
+          "name": "lauri4332",
+          "discriminator": "0000",
+          "nickname": "Lauri",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-10_media/5-E9BDB.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1560098204836429877",
+        "channelId": "1532458465379750028",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
     }
   ],
-  "messageCount": 27
+  "messageCount": 29
 }

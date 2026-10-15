@@ -62,3 +62,10 @@ I want to test for bad bits, especially also under harsh voltage and as practica
 So it'd involve testing data retention down to around 500 mV, then re-increasing VDD to whatever is reasonable to access, and checking data bits.
 
 It would be great if this works with the existing tester so we don't need special hardware to possibly cover many dies for statistically significant results.","",""
+"908721221682733106","lauri4332","2026-10-15T01:13:17.2560000+00:00","Mux chip is WCH CH446X","",""
+"262706220073222144","namibj","2026-10-15T02:42:16.8540000+00:00","Hmmm, looking at the numbers and the revision `r2` schematic at https://github.com/szfate/BondTest72 , it should almost be practical to pull off with this.
+Basically, what's missing would be a precision programmable voltage source packaged/combined together with a bias load resistor (from `COME`) to `GND` (||that soaks up the directly connected 1000μA current source as well as the  leakage through `COMC` and `COMD` performing parallel read/scan access of to-be-read die/DUT CMOS outputs (like those IOs are driven so it's through the channel not the VDD ESD clamp)||), which would work as a convenient pluggable module on J1.
+
+Given that these FlexRam dies on Run2 don't actually contain that much memory, a full SRAM memtest pattern access (to see if the previous milliseconds of reduced supply voltage caused any of the bits to loose their pattern-value due to a natural bias to the negation) should only take single digit milliseconds anyways...
+
+With that schematic, the approximate 5 MHz minimum/worst-case read/probe (per bit) access speed (||under conditions that only involve well-driven CMOS logic signals (thus only requiring a brief moment to propagate until the still-selected switch can be returned to a resting state of high-Z)||) (and at least half that speed for write bits (turn off drive in one direction, turn on drive in the other direction)) aren't that bad.","",""
