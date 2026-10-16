@@ -16,7 +16,7 @@
     "after": "2026-09-30T23:59:59.999+00:00",
     "before": "2026-11-01T00:00:00+00:00"
   },
-  "exportedAt": "2026-10-16T13:11:15.3587258+00:00",
+  "exportedAt": "2026-10-16T18:14:11.9184863+00:00",
   "messages": [
     {
       "id": "1555237417441697815",
@@ -4140,7 +4140,150 @@
           "imageUrl": "2026-10_media/1f44d-27259.svg"
         }
       ]
+    },
+    {
+      "id": "1560681658020007996",
+      "type": "Default",
+      "timestamp": "2026-10-16T15:51:43.335+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I have a sad update. My attempt to build the first self-compiling integrated circuit has most likely failed.\nThe goal was it to make a custom RTL-to-GDSII flow tool (FeatherLane) with a focus on being lightweight, use it on RTL for a RISC-V core, tape it out, and have the chip run FeatherLane on its own RTL, re-producing its own layout.\nHowever, today I found a one-line bug in FeatherLane’s router that accesses a single byte out of the bounds of a malloc’d array. It only uses it to decide on a continue, and if it accidentally continues when its not supposed to, the only effect is a slightly uglier looking route. Its still DRC correct and electrically correct (LVS passes), but means the resulting layout is not exactly 1:1 with what I taped out. Unless I can reproduce the exact state my whole computer was in on the day I ran FeatherLane on the RTL for tapeout. The read is non-deterministic, so whether it continues or not is random. This loop is executed thousands of times.",
+      "author": {
+        "id": "220639106915368960",
+        "name": "tholin",
+        "discriminator": "0000",
+        "nickname": "Tholin",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-10_media/edae5aadf146133e0448bfb1f0fa91c4-62B19.png"
+      },
+      "attachments": [
+        {
+          "id": "1560681656552263720",
+          "url": "2026-10_media/image-857E0.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 6314
+        },
+        {
+          "id": "1560681657202376805",
+          "url": "2026-10_media/image-A9E0E.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 250
+        },
+        {
+          "id": "1560681657667952650",
+          "url": "2026-10_media/image-330B4.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 308
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDE22",
+            "code": "cry",
+            "isAnimated": false,
+            "imageUrl": "2026-10_media/1f622-BDD22.svg"
+          },
+          "count": 4,
+          "users": [
+            {
+              "id": "211112896833257472",
+              "name": "archit3ch",
+              "discriminator": "0000",
+              "nickname": "Archit3ch (George)",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-10_media/3-FB033.png"
+            },
+            {
+              "id": "442884160105742336",
+              "name": "glaxus_",
+              "discriminator": "0000",
+              "nickname": "glaxus",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-10_media/5-E9BDB.png"
+            },
+            {
+              "id": "691780627338625077",
+              "name": "rebelmike",
+              "discriminator": "0000",
+              "nickname": "RebelMike",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-10_media/49aaff687e56f04e7bbdedf0077bab75-7DDB4.png"
+            },
+            {
+              "id": "732347216412278825",
+              "name": "urish",
+              "discriminator": "0000",
+              "nickname": "urish",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-10_media/2b6c3aac0ae09fc8a72a4b2e17d7f9c9-39032.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1560682090494693578",
+      "type": "Default",
+      "timestamp": "2026-10-16T15:53:26.445+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "So unless I get to tape out a chip just dedicated to FeatherLane generated layouts (unlikely, considering my finances and the fact that such a chip would not be useful outside of making this accomplishment), I’ll have to accept second-best.",
+      "author": {
+        "id": "220639106915368960",
+        "name": "tholin",
+        "discriminator": "0000",
+        "nickname": "Tholin",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-10_media/edae5aadf146133e0448bfb1f0fa91c4-62B19.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1560682663088627773",
+      "type": "Default",
+      "timestamp": "2026-10-16T15:55:42.962+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "This took over half a year to pull off, and now its ruined by a single bad line of code.",
+      "author": {
+        "id": "220639106915368960",
+        "name": "tholin",
+        "discriminator": "0000",
+        "nickname": "Tholin",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-10_media/edae5aadf146133e0448bfb1f0fa91c4-62B19.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
     }
   ],
-  "messageCount": 83
+  "messageCount": 86
 }
