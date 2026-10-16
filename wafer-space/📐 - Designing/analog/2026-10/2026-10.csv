@@ -322,3 +322,164 @@ In particular I doubt that the thin oxide (3.3V) nvt suffer catastrophic DIBL ef
 "155452674286813194","brookieoz","2026-10-15T23:36:35.1740000+00:00","That also reminds me I wonder if there's special spacing concerns related to isolation tanks / deep n-wells for the natural Vt devices","",""
 "155452674286813194","brookieoz","2026-10-15T23:41:05.4080000+00:00","Oh yeah, rule NAT.10, no nwell, sounds like they're non-isolateable aka they must be on bare substrate","",""
 "155452674286813194","brookieoz","2026-10-15T23:42:01.1750000+00:00","(maybe? Unless deep n-well is a different layer or something)","",""
+"262706220073222144","namibj","2026-10-16T03:14:09.0520000+00:00","I'm thinking of planning to include temperature sensors if they can be made compact enough and their wiring can be made small-enough-area-overhead, onto the ""muxed e-test""; I'm thinking like having one above and one below each DUT with the analog MUX's bus being horizontal, and setting up to allow measuring the closest as well as the next one over each, so that gradient effects can be at least somewhat interpolated. non-selected DUTs are power gated as power is literally just another signal (only GND/substrate is special because there's no accessible substrate isolation) with it's drive and it's sense line (kelvin/4-wire measurement setup, just with more DUT pins than just the 2 where the 4-wire naming came from).
+
+I think there are some DUTs that are due to their nature interesting under fairly power dense biasing conditions, which would probably make pulsed/low-duty-cycle measuring (to measure under conditions that are not sustainable thermally at least not with any easy setup that tries to allow measuring near the -40C corner) practically-mandatory, despite that the analog MUX itself is otherwise (by my current plans at least) primarily focused on density and sufficiently low leakage (instead of RC time constant), to approximately measure DC operating points.
+
+Having temperature sensors should probably allow using true ""DC"" measurements even for power-dense DUTs, by adjusting for the increased temperature in the SPICE `.DC` sweep that has _plenty_ tunables statistically calibrated to the measurement results.
+
+(E.g., my plan is to measure _many dozens_ of dies wire bonded to regular COB-with-mezzanine-on-the-back at a cost of 1500$ (incl. @Tim 'mithro' Ansell 's profit margin) for all 1000 dies, take the existing SPICE models and (just using purely synthetic bias conditions and device sizing and at least a bit of manually copying-over the physical structure parameters) initially port/convert them from the current legacy BSIM4 models to numerically far far less crusty PSP103 (probably actually PSP104 these days...), and then do a huge model fit (""parameter estimation"") compute run that tries to dial in the PSP103 model cards and some extraction tunables to explain the multimeter logs (it obviously has to estimate the local mismatch ""random variable"" values for each measured die; because I'd get statistically supported estimates on just how much this local mismatch really is for all the devices that suffer enough to make mismatch modeling relevant, I'm actually interested in favoring measuring more individual dies instead of just spamming more bias condition samples onto each measured die, after like some thousands (probably less than a million!) of samples per DUT and die).","",""
+"262706220073222144","namibj","2026-10-16T03:16:40.6270000+00:00","> DF.2a
+> 
+> Min Channel Width
+> 
+> 0.22 [thin oxide]
+> 
+> 0.3 [thick oxide]
+<https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_07_06.html> navigation via unfolding menu without navigating pages on the left, or previous/next links in the footer. The layout/menu is sadly kinda shitty for DRM section 7","",""
+"262706220073222144","namibj","2026-10-16T03:17:06.5350000+00:00","technically that is a different layer","",""
+"155452674286813194","brookieoz","2026-10-16T03:20:04.0440000+00:00","oh interesting, if so that means you could have isolated native vt devices. that's pretty cool
+(I also learned that GF180 is a dual poly process which is also really cool, that allows you to do some pretty neat things regarding floating gate devices)","",""
+"262706220073222144","namibj","2026-10-16T03:21:19.2100000+00:00","yeah doesn't look like it bans dnwell (with then needed lvpwell to form nmos channels!) under NAT.... huh..... if actually really DRC clean and not just looking like it is, this would definitely be something that needs to get covered by the upcoming e-test die.","",""
+"262706220073222144","namibj","2026-10-16T03:21:45.3850000+00:00","wdym, dual poly process?","",""
+"262706220073222144","namibj","2026-10-16T03:22:44.2180000+00:00","gf180 as-such is a HUGE family of processes that AFAIK primarily share BEOL and litho, but pretty much the entire rest is up for flexibility in some configuration","",""
+"155452674286813194","brookieoz","2026-10-16T03:22:51.1910000+00:00","basically, there's two poly layers. poly1 and poly2. Poly1 is used for the majority of transistor gates, poly2 is used for other stuff (poly resistors, poly-poly caps, specialized transistors)","",""
+"262706220073222144","namibj","2026-10-16T03:23:12.2080000+00:00","ofc BEOL stackup is also flexible, in case you forgot/overlooked","",""
+"262706220073222144","namibj","2026-10-16T03:23:23.5960000+00:00","we don't have poly1","",""
+"155452674286813194","brookieoz","2026-10-16T03:23:32.5180000+00:00","ah","",""
+"155452674286813194","brookieoz","2026-10-16T03:23:48.4240000+00:00","oh well, lol","",""
+"262706220073222144","namibj","2026-10-16T03:24:05.1500000+00:00","does this mean that it would have poly2 as a routing layer that could cross poly1 gates?","",""
+"155452674286813194","brookieoz","2026-10-16T03:24:33.4210000+00:00","well.... you probably don't want to do that","",""
+"262706220073222144","namibj","2026-10-16T03:24:51.0520000+00:00","kinda? I guess it's still too high influence to really do that willingly most of the time at least....","",""
+"155452674286813194","brookieoz","2026-10-16T03:25:23.2640000+00:00","if you did have both poly1 and poly2, physically poly1 is very close to the silicon substrate, and poly2 is not that far away from poly1. Both of them should be much closer to the silicon substrate than metal1","",""
+"262706220073222144","namibj","2026-10-16T03:25:36.6700000+00:00","guess there's a reaason sky130's local interconnect layer is high up where gf180's metal1 is","",""
+"155452674286813194","brookieoz","2026-10-16T03:26:20.8490000+00:00","It's neat for floating gate devices because you can have some quite strong capacitive coupling to the floating gate instead of relying on an active-poly cap","",""
+"262706220073222144","namibj","2026-10-16T03:26:57.9310000+00:00","welp if only gf180 allowed us to have poly1 as well as the rest of gf180mcuD, but alas.... (the truly thin oxide devices are not covered by any open PDK to my knowledge, i.e., the 1.8-ish-V ""core"" devices)","",""
+"155452674286813194","brookieoz","2026-10-16T03:27:08.5060000+00:00","also you should be able to get some pretty dense caps by doing substrate-poly1-poly2","",""
+"262706220073222144","namibj","2026-10-16T03:27:24.4100000+00:00","hmmmm","",""
+"155452674286813194","brookieoz","2026-10-16T03:27:42.0810000+00:00","but oh well","",""
+"155452674286813194","brookieoz","2026-10-16T03:28:55.8840000+00:00","anyway the reason why you wouldn't want to do that is mostly that poly resistance is pretty bad (aka much worse than metal even when salicided) and you're going to introduce a lot more capacitive coupling between the two poly's","",""
+"155452674286813194","brookieoz","2026-10-16T03:29:31.7080000+00:00","and if you do it for an analog transistor you'll mess up the matching of the devices (if you care about matching)","",""
+"262706220073222144","namibj","2026-10-16T03:30:05.5330000+00:00","damn it's late why am I still not at the office..... accidental distraction IIRC. damn.
+Guess I'm better getting some food ready and hydrate and then get on my way to at least have entered ""flow"" before the first coworker shows up","",""
+"262706220073222144","namibj","2026-10-16T03:32:36.8740000+00:00","do you have any idea how impactful stress effects are for structures like differential pairs that are more tuned for speed and compactness than for analog DC performance? E.g. think SRAM sense amplifier, or SerDes clocked comparator/sampler.
+The stuff that out-runs SCL logic if you don't optimize the logic hard enough....","",""
+"155452674286813194","brookieoz","2026-10-16T03:33:02.8030000+00:00","oh","",""
+"262706220073222144","namibj","2026-10-16T03:34:11.5790000+00:00","Like of course symmetry good but most of the time symmetry conflicts with density and excessive analog performance is just wasted on things like that 😄","",""
+"155452674286813194","brookieoz","2026-10-16T03:35:20.5230000+00:00","The rule of thumb in industry is:
+1 - keep your critical matched devices away from the die edge
+2 - for a WCSP package or other package with metal balls on it, put it either directly underneath / at the very center of the ball, or as far away / in the middle of the space between balls as possible","",""
+"262706220073222144","namibj","2026-10-16T03:35:54.4940000+00:00","(I do hope to cover such nuances with extraction and the model fitting if it's meaningful enough and conceptually practical enough to pull off, but short of a handful DUT structures taped out to specifically excercise stress mismatch aspects, it's quite a daunting question... 🙁 )","",""
+"155452674286813194","brookieoz","2026-10-16T03:36:03.0400000+00:00","you also need to do metal dummy fill block all the way up and avoid mettop routing if you can","",""
+"262706220073222144","namibj","2026-10-16T03:36:50.4650000+00:00","hmmmm, good to know; I'm more eyeing STI asymmetry tho 😄","",""
+"155452674286813194","brookieoz","2026-10-16T03:36:55.0980000+00:00","Honestly? this is one of those cursed problems that doesn't really have a solution because when you solder the part down and it cools, it'll put stress on the silicon in an unpredictable fashion and all your parameters will shift all over the place","",""
+"155452674286813194","brookieoz","2026-10-16T03:37:17.3910000+00:00","it's actually one of the biggest limiting factors to bandgap accuracy","",""
+"155452674286813194","brookieoz","2026-10-16T03:40:03.2090000+00:00","I believe there are some academic papers that have literally proposed putting strain sensors near the bandgap to find the stress on the silicon and adding a correction factor to correct for the impact of the stress on silicon properties","",""
+"262706220073222144","namibj","2026-10-16T03:42:27.8480000+00:00","I mean of course, but the model developers cared enough about STI effects to provision for them, and I've caught mention of STI induced strain in bulk CMOS in a couple of papers I had dug through for almost certainly other reasons (don't know exact details sadly, can't readily link one of them papers, I should really start archiving and at least preparing for indexing all the non-fiction digital reading material I go through for questions like this...... also a brief reference in like a quarter of a packed slide of a deck that mentioned actually model fitting using a full CMOS die and Xyce and $$$ (probably ROL or Dakota, wish I could FIND that page, but I've spent hours already trying to recover it to no avail))....","",""
+"262706220073222144","namibj","2026-10-16T03:43:16.0760000+00:00","I'm visualizing LBE-based pseudo-MEMS tactics 😄","",""
+"155452674286813194","brookieoz","2026-10-16T03:44:23.2360000+00:00","Hmmm, what do you mean by this?","",""
+"262706220073222144","namibj","2026-10-16T03:44:26.8480000+00:00","(does one do strain sensing via some kind of X/Y orientation-0differentiating wheatstone bridge and precision poly resistors?)","",""
+"262706220073222144","namibj","2026-10-16T03:45:49.1590000+00:00","AFAIK all die that is `not (COMP or DUMMYCOMP)` is filled with STI (modulo setback/slope effects of the STI sidewalls)","",""
+"155452674286813194","brookieoz","2026-10-16T03:45:52.6790000+00:00","something like that. It's been 4-5 years since i took a class on MEMS devices and I recall there were some really specific impacts of silicon unit cell orientation on the change in resistance vs stress, it's very direction dependent. I think you use n-diff or p-diff resistors instead","",""
+"262706220073222144","namibj","2026-10-16T03:46:30.6930000+00:00","STI IIUC is grown in a  way that causes it to exert compressive stress horizontally on the surrounding `COMP`.","",""
+"155452674286813194","brookieoz","2026-10-16T03:47:34.4100000+00:00","all? that seems a little bit odd, I'd expect there to be density rules regarding this kinda thing","",""
+"262706220073222144","namibj","2026-10-16T03:48:33.5960000+00:00","if this has _any_ lack of symmetry vaguely nearby, you'll have asymmetric local strain on your circuity. Question then is _just how much does this actually change, and if the answer is ""enough to care"", how could we afford to extract it from the layout to feed to the model and at least replicate the effect in SPICE._","",""
+"262706220073222144","namibj","2026-10-16T03:49:14.7550000+00:00","_that's why there's a density rule that says how much minimum and maximum coverage `(COMP OR DUMMYCOMP)` is allowed to have_","","👍 (1)"
+"262706220073222144","namibj","2026-10-16T03:50:54.1810000+00:00","`DCF.1b` min 25%; `DCF.1d` max 70%.","",""
+"262706220073222144","namibj","2026-10-16T03:51:44.6810000+00:00","because of planarization you want to keep that actually deently balanced","",""
+"155452674286813194","brookieoz","2026-10-16T03:51:48.4210000+00:00","ah I see now, you mean the impacts of that specifically
+
+It really depends on how much stress gets created by the STI layer and that's kinda hard to estimate; symmetric layout is honestly just the easiest way to de-risk and not have to worry about it, putting dummy devices all around your critical devices to remove effects of asymmetry","",""
+"262706220073222144","namibj","2026-10-16T03:52:22.7230000+00:00","(at millimeter scale at least; not so important at very fine scale though you probably want some dummy comp around a lonely active device regardless)","",""
+"262706220073222144","namibj","2026-10-16T03:52:42.0210000+00:00","yeah but I prefer my SRAM dense","",""
+"155452674286813194","brookieoz","2026-10-16T03:53:02.6560000+00:00","....does SRAM need to be that precise?","",""
+"262706220073222144","namibj","2026-10-16T03:54:37.5290000+00:00","and my delay locked loop low power (small devices, no excessive parasitics either) and also ideally so small I have to get strategic with routability of it's signals. Can't get there with traditional low frequency (1 MHz GBW class) analog matched pair layout guidelines, sadly.","",""
+"262706220073222144","namibj","2026-10-16T03:56:44.1010000+00:00","notable offenders are things like nearby control signal decoders/inverters/buffers, as well as non-spammed-for-symmetry well/substrate taps.","",""
+"262706220073222144","namibj","2026-10-16T03:57:41.7460000+00:00","sense amplifier offset is high-impact on how long you can make a bitline before you get issues with reading in any timely manner","","🤔 (1)"
+"262706220073222144","namibj","2026-10-16T04:02:57.4610000+00:00","(if the RC arrangement is suitable and the operating voltage plentiful enough, accidentally loosing internal latched state isn't so much a worry as the long bitline taking ""forever"" to get differentially charged enough to be safe for the sense amplifier to start resolving; basically just need to make sure the access transistors are sufficciently weakening vs. the quality of imperfect pre-charge (residual delta voltage on a differential bitline pair prior to activating the wordline for a read; c.f. writing on such a simple classic 6T single-port SRAM cell is done by fully charging the bitline pair to VDD and VSS respectively before activating the wordline and letting the abundance of potential and charge overthrow the cross-coupled inverters inside))","",""
+"155452674286813194","brookieoz","2026-10-16T04:03:49.2100000+00:00","yeah I can't say I've designed an SRAM sense amp before, it's interesting to hear the requirements...","",""
+"155452674286813194","brookieoz","2026-10-16T04:05:39.7710000+00:00","I'd assume that something like an SRAM sense amp ends up being more like a clocked comparator","",""
+"262706220073222144","namibj","2026-10-16T04:06:02.2670000+00:00","for DRAM it's actually not a speed impact anymore, because eventually you fail to resolve the miniscule differential voltage that came up after activation; for SRAM like this at least you get the _option_ of just waiting until the weak latch has driven the bitline pair to however high a fraction of full-throw as even a rancid sense amplifier could demand to promise ""no bit errors from input swing not reliably exceeding amplifier input offset""","",""
+"262706220073222144","namibj","2026-10-16T04:06:24.5320000+00:00","still, they have input offset.","",""
+"155452674286813194","brookieoz","2026-10-16T04:08:36.4070000+00:00","yes, that's true; I'd assume that you have an extremely limited amount of space for an SRAM sense amp since any large area would be detrimental to SRAM density, in which case I feel like your mismatch contributions will end up being dominated by how large you can make your input pairs and still have them have low capacitance enough to not kill your speed... in which case I suspect that the impact of asymmetric STI stress will be a second order factor","",""
+"262706220073222144","namibj","2026-10-16T04:12:14.0420000+00:00","but take for comparison a 1:2 current mirror where you want to keep the 2-side drain capacitance small with little regard to anything else except matching.
+That'd dictate 3 fingers in total, and two of those to share a drain contact diffusion area.
+`D1 G S G D2 G S` would be the most direct compact layout. In theory it's balanced/symmetric, except for junction capacitance (we already know that's something to minimize and you can't really minimize that when you're trying to keep _that_ matched) and STI stress because left of D1 and right of S there's a chunk of STI and the outer gates feel more strain than the inner gate.","",""
+"155452674286813194","brookieoz","2026-10-16T04:16:50.3480000+00:00","there's another source of asymmetry that isn't junction capacitance; current flow direction. to be honest I've only really be taught about this and I've never seen any data to see the matching degradation regarding it, so it could just be holdover paranoia from earlier processes","",""
+"262706220073222144","namibj","2026-10-16T04:16:59.5650000+00:00","I guess a possibly less overshadowed situation might be a differential clock buffer's differential balance-ness.","",""
+"262706220073222144","namibj","2026-10-16T04:17:50.0910000+00:00","maybe if there's non-negligible magnetic fields around?","",""
+"262706220073222144","namibj","2026-10-16T04:18:35.4570000+00:00","(iirc hall effect isn't _thaaaat_ hard to trip enough to visually see correlation if you plot measurements under strong magnet conditions)","",""
+"155452674286813194","brookieoz","2026-10-16T04:19:24.4380000+00:00","I don't think it's a magnetic effect, my hypothesis is that it's more of a dopant implant direction sort of thing","",""
+"262706220073222144","namibj","2026-10-16T04:20:14.4140000+00:00","I guess the angle might be adjusted with notable lack of symmetric precison","",""
+"262706220073222144","namibj","2026-10-16T04:20:25.0590000+00:00","IIUC ""use nvt to skip""","",""
+"155452674286813194","brookieoz","2026-10-16T04:20:40.3980000+00:00","like if the dopants are being implanted at a slight angle instead of perfectly straight on into the silicon, maybe you get slightly different dopant concentrations at all the north edges compared to all the south edges","",""
+"155452674286813194","brookieoz","2026-10-16T04:21:20.3250000+00:00","which could cause the transistors to behave slightly differently if the source is on the north side vs south side","",""
+"262706220073222144","namibj","2026-10-16T04:22:05.2470000+00:00","there are actually implants that get shot 4 times to lurk under the mask edges/""undercut"" the mask, tho may not be a thing yet in gf180mcuD; is a thing in sky130A and IHP SG13CMOS5L/SG13G2.","",""
+"155452674286813194","brookieoz","2026-10-16T04:23:16.7570000+00:00","oh yeah, pocket implants. devices with those kinda break the rules for scaling W and L","",""
+"262706220073222144","namibj","2026-10-16T04:25:15.9740000+00:00","but yeah I understand that lack of excessive symmetry will give avoidable amounts of mismatch.
+Just would be good to actually know/understand/predict the actual amounts of such layout-dependent mismatch vs. already fairly well understood (tho not too sure how good of a handle we have on the standard deviation magnitude that actually applies for the mistmatch local variation) ""local mismatch"" that scales the regular way of based-on-active-area.","",""
+"155452674286813194","brookieoz","2026-10-16T04:25:28.2430000+00:00","(oh and FYI some of those devices can have *very* strong Vt dependence on W and L)","",""
+"262706220073222144","namibj","2026-10-16T04:25:47.7960000+00:00","yeah","",""
+"262706220073222144","namibj","2026-10-16T04:27:44.9600000+00:00","though AFAIK at the sizes where those implants are standard features used by default in a PDK, mere plain short channel effects like DIBL are already so intense that this kind of scaling to W and L so close to DRC minimums is already futile if you expect analog scaling ""rules"".....","",""
+"155452674286813194","brookieoz","2026-10-16T04:28:47.1810000+00:00","hahaha yeah I've just had very unintuitive experiences dealing with them like drive strength at constant VGS going down with increasing W because it increased my Vt by so much","",""
+"155452674286813194","brookieoz","2026-10-16T04:30:22.3120000+00:00","(conversely, my leakage current also goes down with increasing W 😂 )","",""
+"262706220073222144","namibj","2026-10-16T04:31:31.4690000+00:00","would a 4-wire-measured (from a benchtop multimeter capable of doing that) be ""good"" for a mere vBE temperature diode sensor to put on-die if there are packaging pads to spare?
+Might a ""even simpler"" plain lvpwell-to-dnwell buried junction do ""just as"" fine?","",""
+"262706220073222144","namibj","2026-10-16T04:32:50.4330000+00:00","I'm not too sure but that might actually be STI sidewall compression stress you've seen if that's minimum width devices, not ""just"" doping.","",""
+"262706220073222144","namibj","2026-10-16T04:33:15.2080000+00:00","if the STI is much bulkier than the narrow channel between......","",""
+"155452674286813194","brookieoz","2026-10-16T04:33:22.8750000+00:00","I don't think so, the process I've seen that didn't have STI all over the place","",""
+"155452674286813194","brookieoz","2026-10-16T04:33:40.1910000+00:00","at least, I don't think it did","",""
+"262706220073222144","namibj","2026-10-16T04:33:58.2560000+00:00","huh..... u sure? how else did it define where the channel ended width-wise?","",""
+"155452674286813194","brookieoz","2026-10-16T04:34:19.6640000+00:00","that's a good question, I'm not sure","",""
+"262706220073222144","namibj","2026-10-16T04:34:37.7070000+00:00","(I'm not referrign to dummy STI here.... just natural minimum spacing chunks surrounding the channel's `COMP`)","",""
+"155452674286813194","brookieoz","2026-10-16T04:35:15.9420000+00:00","yeah maybe I'm misremembering, I can't picture the specific proprietary PDK + design rules file in my mind right now hahaha","",""
+"155452674286813194","brookieoz","2026-10-16T04:36:55.1760000+00:00","let me answer the second question first - i'd be quite careful about using just a simple p-well to deep n-well ""diode"" because that's not really a diode, it's a parasitic vertical bjt with a p-substrate collector","",""
+"155452674286813194","brookieoz","2026-10-16T04:37:21.4800000+00:00","and any time you actually pass a current into that specific diode you're going to be injecting carriers into the substrate and creating substrate current","",""
+"155452674286813194","brookieoz","2026-10-16T04:40:08.2970000+00:00","additionally, that deep n-well can also collect substrate currents and that can be very scary if you put it in the middle of a power FET and the body diode of that power fet turns on","",""
+"262706220073222144","namibj","2026-10-16T04:40:10.1520000+00:00","huh? shouldn't that under forward bias of the lvpwell-to-dnwell junction have the dnwell at a lower voltage, and as long as that voltage remains at or above the substrate itself, not have substrate current?","",""
+"155452674286813194","brookieoz","2026-10-16T04:41:44.4060000+00:00","","2026-10_media/image-21970.png",""
+"155452674286813194","brookieoz","2026-10-16T04:42:27.7460000+00:00","The deep n-well isn't thick enough to assume that all the carriers recombine in it","",""
+"262706220073222144","namibj","2026-10-16T04:43:07.7220000+00:00","hmmmm","",""
+"155452674286813194","brookieoz","2026-10-16T04:43:13.4300000+00:00","so you can't assume that it's purely two diodes all the time","",""
+"155452674286813194","brookieoz","2026-10-16T04:43:47.9630000+00:00","if you're purposefully turning on the p-well to deep n-well junction, you're flooding holes into the deep n-well. some will recombine but the rest will be collected by the p-sub","",""
+"155452674286813194","brookieoz","2026-10-16T04:44:09.5480000+00:00","that's kind of the beta of the parasitic BJT there","",""
+"155452674286813194","brookieoz","2026-10-16T04:44:24.6340000+00:00","which I believe the PDK mentions is somewhere around 1?","",""
+"262706220073222144","namibj","2026-10-16T04:44:31.0750000+00:00","I thought it'd have been better than just surrounding a speck of ncomp with a ring-shaped substrate tie 😄","","😄 (1)"
+"262706220073222144","namibj","2026-10-16T04:45:03.0850000+00:00","not alone because that'd require driving the ncomp below GND","",""
+"262706220073222144","namibj","2026-10-16T04:46:59.0210000+00:00","> VPNP HFE
+> 
+> (3.3V LV)
+> 
+> W/L= 0.42/10 (Emitter Size)
+> 
+> 0.8 min
+> 
+> 1.6 typ
+> 
+> 2.4 max","",""
+"155452674286813194","brookieoz","2026-10-16T04:47:00.5640000+00:00","oh, the pdk says typ beta of 1.6","",""
+"155452674286813194","brookieoz","2026-10-16T04:47:03.6710000+00:00","yeah","",""
+"155452674286813194","brookieoz","2026-10-16T04:47:19.9460000+00:00","so you actually have more current going into the sub (in most cases)","",""
+"262706220073222144","namibj","2026-10-16T04:47:56.4720000+00:00","so it'd have to have dnwell tied to psub to block this current?","",""
+"155452674286813194","brookieoz","2026-10-16T04:48:04.7310000+00:00","Eehhhhhhhhhh","",""
+"155452674286813194","brookieoz","2026-10-16T04:48:50.8190000+00:00","You'd have to be careful about any potential large PMOS's nearby in case you introduce latchup risk","",""
+"262706220073222144","namibj","2026-10-16T04:49:05.6380000+00:00","I mean I'm ears for other suggests of how to draw a decent thermometer that can be read with a 4-wire benchtop multimeter","",""
+"155452674286813194","brookieoz","2026-10-16T04:53:23.0550000+00:00","you could use the P->N body diode of an isolated PMOS like so","2026-10_media/image-50DF7.png",""
+"262706220073222144","namibj","2026-10-16T04:53:35.8190000+00:00","I'd expect a guard ring of psub-tap around this diode and if nearby pmos-nwell's well-tap guard-fence to suffice against latchup if the DRC guides about how not to catch latchup are followed?
+I mean, I'm not fixated on that kind of diode for the thermometer task..... if you have a suggestion for how effectively a diode-connected nvt nmos channel would thermometer, or other such majority-carrier-only structure, I'm open.","",""
+"155452674286813194","brookieoz","2026-10-16T04:55:08.7200000+00:00","by connecting the shallow n-well and epitaxial p-well together you can kinda collect any carriers of either type before things get wacky","",""
+"262706220073222144","namibj","2026-10-16T04:55:37.8220000+00:00","there is no p-epi as you've drawn or other isolating P-doped layer to stack between dnwell and shallow nwell","",""
+"155452674286813194","brookieoz","2026-10-16T04:56:00.3160000+00:00","oh no, the isolated PMOS's have connected shallow n-well to deep n-well?","","ferristhumbsup (1)"
+"262706220073222144","namibj","2026-10-16T04:56:02.9080000+00:00","the only shallow thing that exists is ncomp on lvpwell on dnwell (on psub)","",""
+"155452674286813194","brookieoz","2026-10-16T04:56:35.6480000+00:00","maaaaan i've seen that in the process I'm working in right now 😂","",""
+"155452674286813194","brookieoz","2026-10-16T04:56:37.7630000+00:00","it sucks","",""
+"262706220073222144","namibj","2026-10-16T04:56:58.4480000+00:00","ehhhh","",""
+"262706220073222144","namibj","2026-10-16T04:57:02.8030000+00:00","hey I got shottkey!","",""
+"155452674286813194","brookieoz","2026-10-16T04:57:28.7220000+00:00","I haven't used a shottky in anything so far, i have no clue how well controlled their vf's are","",""
+"262706220073222144","namibj","2026-10-16T04:58:26.6590000+00:00","and at least I got dnwell.
+IHP's bargain-variant CMOS5L of their SG13 family doesn't have that. _no isolated nmos at all_","",""
+"155452674286813194","brookieoz","2026-10-16T04:58:40.7070000+00:00","oh yeesh","",""
+"262706220073222144","namibj","2026-10-16T04:59:34.5940000+00:00","(SG13G2 is also offered on an open source gated MPW with resulting discount pricing/AFAIK-federal-sponsoring, but I blame the HBT's for the area cost being like 2.5x as high)","",""
+"262706220073222144","namibj","2026-10-16T05:00:25.9100000+00:00","If you've not seen them HBT yet..... well, you might spontaneously develop yearning for them once you do learn.","",""
+"262706220073222144","namibj","2026-10-16T05:01:09.5810000+00:00","fT/fmax = 350/450 GHz","","👀 (1)"
+"262706220073222144","namibj","2026-10-16T05:01:35.9040000+00:00","note: this is on 130nm-CMOS-class litho","",""
