@@ -298,4 +298,27 @@ I'm getting some onto Run3 to get measured.","","👀 (2)"
 "262706220073222144","namibj","2026-10-15T19:11:15.4640000+00:00","Well, then I would appreciate learning how this could be measured within the limits you'd have on TinyTapeout.","",""
 "262706220073222144","namibj","2026-10-15T19:17:06.9040000+00:00","Well it lives in a can (the stuff higher power than a microwave), likely by expectations in basically a larger BBQ propane tank with a plate heat exchanger attached that condenses the propane back to liquid and with the liquid pumped through very dense coolant manifolds to the dies (the upper half of the power range doesn't need to be that efficient, so that's what suddenly asks for a 10x TDP headroom; but even from like 500 kW (half power of 1 MW) 1% loss is already 5 kW, and 5% of 1 MW is, well, 50 kW...
 GaN-on-silicon is a little vulnerable there.
-And density is quite desired to mitigate parasitics through shorter switching loops....","",""
+And density is quite desired to mitigate parasitics through shorter switching loops....","","😬 (1)"
+"262706220073222144","namibj","2026-10-15T23:24:24.3160000+00:00","> This section describes Native NMOS rules. This process supports 3.3V and 5V/6V native Vt NMOS. The difference between 3.3V and 5V/6V native Vt transistor is that the 5V/6V native Vt NMOS need Dualgate layer.
+<https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_10_05.html>
+> NAT.4
+> 
+> Minimum channel length for 3.3V Native Vt NMOS (For smaller L Ioff will be higher than Spec)
+> 
+> 1.8
+
+> NAT.5
+> 
+> Minimum channel length for 6.0V Native Vt NMOS (For smaller L Ioff will be higher than Spec)
+> 
+> 1.8
+
+That's btw. also my complaint about them muddying the waters by coding ERC as DRC (while plenty applications would not want shorter channels and many designs shouldn't dabble to avoid nasty surprised in the shape of _severe_ drain-induced-barrier-lowering, there are IMO applications where the biasing conditions allow this DIBL to be of either no concern or at least sufficciently mitigated, while the reduced saturation current of these fairly-long-channel devices as well as the severely excessive (vs. minimum size) capacitance (relative to what can be considered reasonable operating current) is actually very harmful....).... ERC are fine and coding a pitfall like this into _a_ DRC ddeck is also fine, but then do provide a user-accessible fully-automated-applied waiver so e.g. I can include test structures with shorter channels onto an e-test die to calibrate SPICE models/bins for shorter nvt channels because modeling accuracy/matching-physical-behavior is a prerequisite to designing anything ""production"" that would utilize such shorter-channel nvt devices.
+
+In particular I doubt that the thin oxide (3.3V) nvt suffer catastrophic DIBL effects ""starting at"" the same channel length as thick oxide (5/6V) nvt. ""But what do I know....""","",""
+"155452674286813194","brookieoz","2026-10-15T23:25:02.1320000+00:00","What's the min W on them?","",""
+"155452674286813194","brookieoz","2026-10-15T23:26:27.9470000+00:00","because like, in the bandgap schematic I drew up the input pair is sized 2*(5/5) and the startup is ""min W"" / 5L","",""
+"155452674286813194","brookieoz","2026-10-15T23:26:48.8430000+00:00","so like, I'm not worried about the min L of 1.8 / DIBL effect","",""
+"155452674286813194","brookieoz","2026-10-15T23:36:35.1740000+00:00","That also reminds me I wonder if there's special spacing concerns related to isolation tanks / deep n-wells for the natural Vt devices","",""
+"155452674286813194","brookieoz","2026-10-15T23:41:05.4080000+00:00","Oh yeah, rule NAT.10, no nwell, sounds like they're non-isolateable aka they must be on bare substrate","",""
+"155452674286813194","brookieoz","2026-10-15T23:42:01.1750000+00:00","(maybe? Unless deep n-well is a different layer or something)","",""
