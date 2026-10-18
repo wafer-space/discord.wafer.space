@@ -500,6 +500,26 @@ definitely interested!
 I can dedicate half the die to re-tapeout of the FeatherLane layouts and the other half to regular LibreLane macros using my SCL to test the new cells.
 
 
+[2026-10-18 5:37 p.m.] tholin
+My run2 chips, using the ocd_io, may or may not have both PU and PD set on the design select inputs due to a RTL typo. What effect does that have?
+
+
+[2026-10-18 5:43 p.m.] 246tnt
+At first glance there seem to be a safe guard in place.
+
+
+[2026-10-18 5:45 p.m.] 246tnt
+Seems neither is active then.
+
+
+[2026-10-18 5:50 p.m.] tholin
+That’s a little annoying since one of my PCBs relies on the design selects having pull-ups, but I can work with that.
+
+
+[2026-10-18 5:55 p.m.] 246tnt
+It's less annoying than the alternative 🙂  The resistor part is shared between the pull up and pull down so without it, it would have been a direct path from VDD to GND through a nmos and a pmos.
+
+
 ==============================================================
-Exported 89 message(s)
+Exported 94 message(s)
 ==============================================================
