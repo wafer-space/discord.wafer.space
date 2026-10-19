@@ -1,0 +1,46 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"169786952432746498","mithro_","2026-10-19T02:13:41.2310000+00:00","@Tim 'mithro' Ansell 's high level thoughts can be found at https://bit.ly/test-open-pdk","2026-10_media/image-29C1D.png",""
+"169786952432746498","mithro_","2026-10-19T02:13:51.3460000+00:00","Pinned a message.","",""
+"169786952432746498","mithro_","2026-10-19T02:14:21.8750000+00:00","@namibj / @Andrew Wingate / @lromor / @baragonaru / @digshadow - Channel created!","",""
+"169786952432746498","mithro_","2026-10-19T02:14:42.9020000+00:00","@Leo Moser (mole99) - Who was the person at CERN who did the TRID chip on Run #1?","",""
+"169786952432746498","mithro_","2026-10-19T02:17:22.8230000+00:00","Other random / shower thoughts from me.
+
+* I believe we have a bunch of designs on Run #1 and Run #2 that could already be used for some type of initial characterization.
+ * There might be a lot to learn from the random SKY130 efforts @ https://github.com/google/skywater-pdk-sky130-raw-data
+ * I have some initial (AI driven) experiments around trying to do open source TCAD @ https://github.com/mithro/gf180-tcad and https://gf180-tcad.readthedocs.io/en/latest/ (I have not reviewed the results yet).","",""
+"262706220073222144","namibj","2026-10-19T02:17:53.5460000+00:00","","",""
+"262706220073222144","namibj","2026-10-19T02:18:02.1090000+00:00","","",""
+"169786952432746498","mithro_","2026-10-19T02:20:57.8890000+00:00","@Joaquin Matres - I think there was a bunch of people from the GDS Factory team that were also interested in this topic.","",""
+"169786952432746498","mithro_","2026-10-19T02:22:23.9920000+00:00","We also has thousands (like >20k) ""tiny slivers"" of the PCM structures that GF uses to test their wafers are being manufactured correctly. These slivers are left over after we pick people's project die. We don't actually know what the various pads do but we do get etest data from GF which means we do kind of know ""what"" functionality they might offer. It is also unclear if the pads are actually accessible as they might be used only during manufacturing and then get polyimide over the top of them.
+
+@Andrew Wingate can post some pictures of them here.","",""
+"756011607603019777","anfroholic","2026-10-19T02:23:06.8740000+00:00","","",""
+"756011607603019777","anfroholic","2026-10-19T02:23:07.7570000+00:00","Not sure run3 is an option unless it's run through @Paul as the reticle is (over)full as it is.","",""
+"756011607603019777","anfroholic","2026-10-19T02:24:05.6460000+00:00","The photos are all actually here https://discord.com/channels/1361349522684510449/1419841819138854993/1559496205648658432","",""
+"756011607603019777","anfroholic","2026-10-19T02:24:27.4560000+00:00","","",""
+"756011607603019777","anfroholic","2026-10-19T02:24:53.8010000+00:00","","",""
+"262706220073222144","namibj","2026-10-19T02:35:49.1470000+00:00","I want to propose to port/convert the gf180mcuD 3.3V and 5/6V FETs to PSP 103 (though that seems to be kinda EOL recently, and evolved/major-version-switched to PSP 104 that's just a bit incompatible but would be more capable and _I think_ could be used to code the (iirc heavily in geometry restricted by the DRCs we're subjected to, thus making it much easier to bend the PSP model card to represent that LDMOS structure, even if it's not made to be used for modeling flexibile-geometry LDMOS structures) 10V LDNMOS and 10V LDPMOS we get).
+
+It's numerically far nicer than BSIM4, which should help with nonlinear convergence especially if arc length continuation is used or for things like harmonic balance:
+
+...and adjoint-sensitivity-based ""efficient"" monte-carlo/bayesian-style polynomial chaos expansion:
+  - basically if you compute through backpropagation the sensitivity to meaningful output measurement numbers as a function of all the monte carlo affected input random variables,
+  - you can use that with knowledge of the input variation distributions (which you sample from for monte carlo anyways),
+  - to pick far more efficient samples than random monte carlo
+  - for the goal of providing a good stochastic estimate of some measure of the distribution of those output measurement numbers: example is expected chip yield for a target +-5% cutoff.
+
+Also the numerical cleanliness should aid in numerically model-fitting based on statistically significant DUT samples, through clean and thus optimizer-friendly backpropagation gradients.","",""
+"262706220073222144","namibj","2026-10-19T02:39:03.2610000+00:00","Do you have masks for those regions?
+It'd be great to at least do some looking to maybe figure out what's going on there.
+Is that e-test data in some form that's ""interpretable"" without needing to look at some NDA'd docs? Like, from a file format POV?","",""
+"262706220073222144","namibj","2026-10-19T02:41:18.3030000+00:00","I don't think polyimide top coating over the PCM structures should prevent probing. A sharp probe should have no issues penetrating that soft material.
+If there's oxide that'd be less harmless","",""
+"169786952432746498","mithro_","2026-10-19T02:41:23.4990000+00:00","What is PSP?","",""
+"169786952432746498","mithro_","2026-10-19T02:41:43.7620000+00:00","@namibj - BTW Have you seen the previous work by SemiMod?","",""
+"262706220073222144","namibj","2026-10-19T02:43:18.2610000+00:00","Looking at this suggests the PCM pads to be the same surface as the COB-targeted bond pads on the wafer.","2026-10_media/image-98B77.png",""
+"262706220073222144","namibj","2026-10-19T02:43:29.0680000+00:00","not particularly","",""
+"262706220073222144","namibj","2026-10-19T02:44:56.3980000+00:00","https://www.cea.fr/cea-tech/leti/pspsupport/Documentation","",""
+"262706220073222144","namibj","2026-10-19T02:46:29.8610000+00:00","For reference, the IHP SG13 core transistors in openPDK are coded in PSP 103.","",""
+"262706220073222144","namibj","2026-10-19T02:54:42.6050000+00:00","and given that IHP SG13 is an RF-focused process family with it mostly existing/being created for supporting their Si:Ge HBT application research efforts, I'd tend to trust their usefulness for analog and RF circuits more than the legacy BSIM stuff that's source-referenced (meaning the math gets unfortunately fairly gnarly inside if you accidentally extract a source as a drain because their model doesn't feel like computing in a way that numerically doesn't care if source is source and drain is drain (or they are swapped)) and also this should allow more effective coding of bent gates as a result from the math being cleaner.
+Also offers self-heating, as an aside. And might not need (nearly as) aggressive binning to work well.","",""
+"262706220073222144","namibj","2026-10-19T05:10:52.6400000+00:00","","",""

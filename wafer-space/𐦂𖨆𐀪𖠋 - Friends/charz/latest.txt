@@ -1,0 +1,155 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 𐦂𖨆𐀪𖠋 - Friends / charz
+Topic: Channel for the discussion around development of better characterization of open source process technologies such as GF180MCU.
+
+This includes development around;
+ * Physical layout of test structure designs
+ * Simulation and TCAD of test structures
+ * Collection of real world results from test structures
+ * Understanding the PCM (process control monitoring) structures that already exist
+
+Example details can be found @ https://bit.ly/test-open-pdk
+After: 2026-09-30 11:59 p.m.
+Before: 2026-11-01 12:00 a.m.
+==============================================================
+
+[2026-10-19 2:13 a.m.] mithro_ (pinned)
+@Tim 'mithro' Ansell 's high level thoughts can be found at https://bit.ly/test-open-pdk
+
+{Attachments}
+2026-10_media/image-29C1D.png
+
+{Embed}
+https://bit.ly/test-open-pdk
+Building out (automated) test generation and (automated) measuremen...
+Test structure generation and measurement  For improving open source PDKs bit.ly/test-open-pdk  Owner: Tim ‘mithro’ Ansell <me@mith.ro> Contributors: XXX Last Updated: 2023 Q1  Goal The goal of this document is to provide a central point for the (automated) development of test structures and...
+2026-10_media/AHkbwyKCNLEfKogC67DuAxQMfEPLcU2a9GvJ1puDVK-48665
+
+
+[2026-10-19 2:13 a.m.] mithro_
+Pinned a message.
+
+
+[2026-10-19 2:14 a.m.] mithro_
+@namibj / @Andrew Wingate / @lromor / @baragonaru / @digshadow - Channel created!
+
+
+[2026-10-19 2:14 a.m.] mithro_
+@Leo Moser (mole99) - Who was the person at CERN who did the TRID chip on Run #1?
+
+
+[2026-10-19 2:17 a.m.] mithro_
+Other random / shower thoughts from me.
+
+* I believe we have a bunch of designs on Run #1 and Run #2 that could already be used for some type of initial characterization.
+ * There might be a lot to learn from the random SKY130 efforts @ https://github.com/google/skywater-pdk-sky130-raw-data
+ * I have some initial (AI driven) experiments around trying to do open source TCAD @ https://github.com/mithro/gf180-tcad and https://gf180-tcad.readthedocs.io/en/latest/ (I have not reviewed the results yet).
+
+
+[2026-10-19 2:17 a.m.] namibj
+
+
+
+[2026-10-19 2:18 a.m.] namibj
+
+
+
+[2026-10-19 2:20 a.m.] mithro_
+@Joaquin Matres - I think there was a bunch of people from the GDS Factory team that were also interested in this topic.
+
+
+[2026-10-19 2:22 a.m.] mithro_
+We also has thousands (like >20k) "tiny slivers" of the PCM structures that GF uses to test their wafers are being manufactured correctly. These slivers are left over after we pick people's project die. We don't actually know what the various pads do but we do get etest data from GF which means we do kind of know "what" functionality they might offer. It is also unclear if the pads are actually accessible as they might be used only during manufacturing and then get polyimide over the top of them.
+
+@Andrew Wingate can post some pictures of them here.
+
+
+[2026-10-19 2:23 a.m.] anfroholic
+
+
+
+[2026-10-19 2:23 a.m.] anfroholic
+Not sure run3 is an option unless it's run through @Paul as the reticle is (over)full as it is.
+
+
+[2026-10-19 2:24 a.m.] anfroholic
+The photos are all actually here https://discord.com/channels/1361349522684510449/1419841819138854993/1559496205648658432
+
+
+[2026-10-19 2:24 a.m.] anfroholic
+
+
+
+[2026-10-19 2:24 a.m.] anfroholic
+
+
+
+[2026-10-19 2:35 a.m.] namibj
+I want to propose to port/convert the gf180mcuD 3.3V and 5/6V FETs to PSP 103 (though that seems to be kinda EOL recently, and evolved/major-version-switched to PSP 104 that's just a bit incompatible but would be more capable and _I think_ could be used to code the (iirc heavily in geometry restricted by the DRCs we're subjected to, thus making it much easier to bend the PSP model card to represent that LDMOS structure, even if it's not made to be used for modeling flexibile-geometry LDMOS structures) 10V LDNMOS and 10V LDPMOS we get).
+
+It's numerically far nicer than BSIM4, which should help with nonlinear convergence especially if arc length continuation is used or for things like harmonic balance:
+
+...and adjoint-sensitivity-based "efficient" monte-carlo/bayesian-style polynomial chaos expansion:
+  - basically if you compute through backpropagation the sensitivity to meaningful output measurement numbers as a function of all the monte carlo affected input random variables,
+  - you can use that with knowledge of the input variation distributions (which you sample from for monte carlo anyways),
+  - to pick far more efficient samples than random monte carlo
+  - for the goal of providing a good stochastic estimate of some measure of the distribution of those output measurement numbers: example is expected chip yield for a target +-5% cutoff.
+
+Also the numerical cleanliness should aid in numerically model-fitting based on statistically significant DUT samples, through clean and thus optimizer-friendly backpropagation gradients.
+
+
+[2026-10-19 2:39 a.m.] namibj
+Do you have masks for those regions?
+It'd be great to at least do some looking to maybe figure out what's going on there.
+Is that e-test data in some form that's "interpretable" without needing to look at some NDA'd docs? Like, from a file format POV?
+
+
+[2026-10-19 2:41 a.m.] namibj
+I don't think polyimide top coating over the PCM structures should prevent probing. A sharp probe should have no issues penetrating that soft material.
+If there's oxide that'd be less harmless
+
+
+[2026-10-19 2:41 a.m.] mithro_
+What is PSP?
+
+
+[2026-10-19 2:41 a.m.] mithro_
+@namibj - BTW Have you seen the previous work by SemiMod?
+
+
+[2026-10-19 2:43 a.m.] namibj
+Looking at this suggests the PCM pads to be the same surface as the COB-targeted bond pads on the wafer.
+
+{Attachments}
+2026-10_media/image-98B77.png
+
+
+[2026-10-19 2:43 a.m.] namibj
+not particularly
+
+
+[2026-10-19 2:44 a.m.] namibj
+https://www.cea.fr/cea-tech/leti/pspsupport/Documentation
+
+{Embed}
+https://www.cea.fr/cea-tech/leti/pspsupport/Documentation
+Documentation & Implementation
+
+
+[2026-10-19 2:46 a.m.] namibj
+For reference, the IHP SG13 core transistors in openPDK are coded in PSP 103.
+
+
+[2026-10-19 2:54 a.m.] namibj
+and given that IHP SG13 is an RF-focused process family with it mostly existing/being created for supporting their Si:Ge HBT application research efforts, I'd tend to trust their usefulness for analog and RF circuits more than the legacy BSIM stuff that's source-referenced (meaning the math gets unfortunately fairly gnarly inside if you accidentally extract a source as a drain because their model doesn't feel like computing in a way that numerically doesn't care if source is source and drain is drain (or they are swapped)) and also this should allow more effective coding of bent gates as a result from the math being cleaner.
+Also offers self-heating, as an aside. And might not need (nearly as) aggressive binning to work well.
+
+
+[2026-10-19 5:10 a.m.] namibj
+
+
+
+==============================================================
+Exported 25 message(s)
+==============================================================

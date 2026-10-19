@@ -16,7 +16,7 @@
     "after": "2026-09-30T23:59:59.999+00:00",
     "before": "2026-11-01T00:00:00+00:00"
   },
-  "exportedAt": "2026-10-19T00:14:03.0646459+00:00",
+  "exportedAt": "2026-10-19T04:04:36.5287633+00:00",
   "messages": [
     {
       "id": "1555237417441697815",
@@ -4563,7 +4563,438 @@
           "imageUrl": "2026-10_media/1f642-83E8A.svg"
         }
       ]
+    },
+    {
+      "id": "1561545687823417405",
+      "type": "Reply",
+      "timestamp": "2026-10-19T01:05:04.093+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "> My run2 chips, using the ocd_io, may or may not have both PU and PD set on the design select inputs due to a RTL typo. What effect does that have?\n\nYou might be able to setup CVC-RV to check that the pads are pull-up/pull-down without having to simulate the whole chip in spice. Let me know if you'd like to investigate.",
+      "author": {
+        "id": "738396032295108721",
+        "name": "bailey8889",
+        "discriminator": "0000",
+        "nickname": "bailey",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-10_media/0-EB806.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "220639106915368960",
+          "name": "tholin",
+          "discriminator": "0000",
+          "nickname": "Tholin",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-10_media/edae5aadf146133e0448bfb1f0fa91c4-62B19.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1561433133105287180",
+        "channelId": "1361349523724570941",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1561548604307677256",
+      "type": "Reply",
+      "timestamp": "2026-10-19T01:16:39.437+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "If a SPICE sim with no parasitics should suffice to surface/reproduce this behavior/bug, I'd be interested in trying that to at least see full chip extraction to simulate in an at least somewhat useful way; it seems there would be a bunch of simplifications that'd spring up both at extraction/unification time (aggregating fingers like for LVS is trivial without parasitics) and for the solver (many MOS devices having a terminal hard-connected to a fixed voltage terminates current-induced voltage offsets at those nodes, which the nonlinear solver will appreciate as it (unfortunately for parasitics sim) always calculates all node voltages to a global reference).",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-10_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "738396032295108721",
+          "name": "bailey8889",
+          "discriminator": "0000",
+          "nickname": "bailey",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-10_media/0-EB806.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1561545687823417405",
+        "channelId": "1361349523724570941",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1561558507696816189",
+      "type": "Reply",
+      "timestamp": "2026-10-19T01:56:00.589+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Are you/@baragonaru perhaps interested in the muxed e-test efforts?\nI want(ed) that to allow us to measure hundreds of dies with (analog mux, basically like on TinyTapeout, but with each DUT area much smaller relative to the amount of analog wires fed to it, and no digital MUX to each DUT) somewhat around a hundred DUTs, using a 100%-coverage-testing setup similar to the bond tester, i.e. utilizing the cheap COB packaging.\n\n(Though unlike the bond tester with a much nicer stack of benchtop multimeters than just a few bias resistors, 3 discrete analog MUX chips, and a Raspberry Pi Pico2.)\n\nThe idea was to set up for having 4-wire/kelvin style access to all DUT \"LEF pins\" (including VDD; substrate-tied VSS is special because the substrate itself isn't isolated, so it'd only need a sense wire MUXed to not include ground bounce in the measurements) through just a pair of analog switches with routing kept separated right up to each DUT \"LEF pin\", enough such to handle at least most of the SCL (4 in, 1 out, VSS, GND? 13 MUX wires).\n\nThough an idea of making them a bit larger to accomodate two smaller DUTs or one big DUT, or having two MUX bus spines with the DUT area in the middle and allowing with the control logic to have slots that spread from one mux spine to the other getting both's wires, is also being considered.\n\nXyce with likely Dakota would be used to dream up on the order of 10k to 1M sample points to measure a DUT at, using an approximation algorithm for (getting quite usefully close to) optimal experiment design with the goal being to end up with a set of bias conditions under which to test the DUT _on each of the dies_ that approximate maximum information gain as far as all the extraction uncertainties/imprecision-compensation-factors (shapes don't print like they're drawn due to resolution limitations; we should at least cough up correction tweak factors to allow the simulation with them applied to be a VERY close match to physical reality), and SPICE model card parameters are concerned.\n\nI should probably take some care to specifically not attempt to accurately measure the \"random variables\" that codify local mismatch, as we're trying to create a precise model that helps us on future dies that contain these DUTs instead of our product being a model that's precisely fit to an individual test die and could thus accurately predict the measurements at random new test points/biasing conditions applied to the very die. Though the parametric statistical distributions that express this local mismatch are very much part of what we'd be trying to extract statistically significant measurements of. Because those can be used to then compute Liberty timing uncertainties (I'm not sure to what extend Liberty let alone our open tooling supports modeling statistical variations of propagation latency, nor how large those even are and whether we'd realistically even account for them or just slightly widen the timing margins), which should have some notable effect in sufficiently deep clock trees under PVT conditions that emphasize local mismatch more than global PVT (vs. usual), due to resulting clock skew between branches.\n\nThe measurements would be collected at near-DC conditions (I don't really know how to realistically do it for relevantly higher ones without loosing most of the benefits of such a dense-analog-MUX-bus architecture; also such multimeters are far simpler/commodity than ones that can handle AC with anywhere near as much accuracy) and Xyce with Dakota (and/or ROL) would be used to model-fit our extraction tweakables, questionable spice model card parameters, and the \"random variables\" of global & local \"monte carlo\" mismatch modeling.\nWhile there are some effects that only \"really\" affect capacitance without really affecting resistance, I'd _think_ those could be measured with more targeted-to-that test structures; gate&junction capacitance should mostly come even from the near-DC model fitting anyways.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-10_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "1232935707782152264",
+          "name": "velvetundergroundandy",
+          "discriminator": "0000",
+          "nickname": "Paul",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-10_media/af7941bca04910bc145e64e81bef0c16-B19E1.png"
+        },
+        {
+          "id": "656862288099409940",
+          "name": "baragonaru",
+          "discriminator": "0000",
+          "nickname": "baragonaru",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-10_media/c6bdd965ea6645bd4df4c6a309f3d843-C2042.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1560762990423314533",
+        "channelId": "1361349523724570941",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1561559283789725778",
+      "type": "Reply",
+      "timestamp": "2026-10-19T01:59:05.624+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "> I want(ed) that to allow us to measure hundreds of dies with (analog mux, basically like on TinyTapeout, but with each DUT area much smaller relative to the amount of analog wires fed to it, and no digital MUX to each DUT) somewhat around a hundred DUTs, using a 100%-coverage-testing setup similar to the bond tester, i.e. utilizing the cheap COB packaging.\n\nAwesome! I was recently having a similar idea (although about .0005% as thought out as your version \uD83D\uDE02",
+      "author": {
+        "id": "756011607603019777",
+        "name": "anfroholic",
+        "discriminator": "0000",
+        "nickname": "Andrew Wingate",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-10_media/67bd670a335a2f955fb2ded57088a2cb-675B3.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "262706220073222144",
+          "name": "namibj",
+          "discriminator": "0000",
+          "nickname": "namibj",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-10_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1561558507696816189",
+        "channelId": "1361349523724570941",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": [
+        {
+          "id": "",
+          "name": "\uD83D\uDE02",
+          "code": "joy",
+          "isAnimated": false,
+          "imageUrl": "2026-10_media/1f602-168C5.svg"
+        }
+      ]
+    },
+    {
+      "id": "1561559452996337667",
+      "type": "Default",
+      "timestamp": "2026-10-19T01:59:45.966+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "^^ @Tim 'mithro' Ansell",
+      "author": {
+        "id": "756011607603019777",
+        "name": "anfroholic",
+        "discriminator": "0000",
+        "nickname": "Andrew Wingate",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-10_media/67bd670a335a2f955fb2ded57088a2cb-675B3.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "169786952432746498",
+          "name": "mithro_",
+          "discriminator": "0000",
+          "nickname": "Tim 'mithro' Ansell",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-10_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1561560571709493339",
+      "type": "Default",
+      "timestamp": "2026-10-19T02:04:12.688+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "@namibj - Maybe we need a channel for this type of effort? It seems like there is also a story around @Andrew Wingate and @digshadow doing some type of automated probe card type thing based on @Andrew Wingate's die sorter and @digshadow's Labsmore Microscope stuff.",
+      "author": {
+        "id": "169786952432746498",
+        "name": "mithro_",
+        "discriminator": "0000",
+        "nickname": "Tim 'mithro' Ansell",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-10_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC9C",
+            "code": "purple_heart",
+            "isAnimated": false,
+            "imageUrl": "2026-10_media/1f49c-71A75.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "756011607603019777",
+              "name": "anfroholic",
+              "discriminator": "0000",
+              "nickname": "Andrew Wingate",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-10_media/67bd670a335a2f955fb2ded57088a2cb-675B3.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [
+        {
+          "id": "262706220073222144",
+          "name": "namibj",
+          "discriminator": "0000",
+          "nickname": "namibj",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-10_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+        },
+        {
+          "id": "643551115920670720",
+          "name": "digshadow",
+          "discriminator": "0000",
+          "nickname": "digshadow",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-10_media/38ad149bfaf01f9bfd8fd61426532426-34CB5.png"
+        },
+        {
+          "id": "756011607603019777",
+          "name": "anfroholic",
+          "discriminator": "0000",
+          "nickname": "Andrew Wingate",
+          "color": null,
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1423020172595298314",
+              "name": "Mod",
+              "color": null,
+              "position": 4
+            }
+          ],
+          "avatarUrl": "2026-10_media/67bd670a335a2f955fb2ded57088a2cb-675B3.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1561560749644451852",
+      "type": "Default",
+      "timestamp": "2026-10-19T02:04:55.111+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Yeah please set something up to focus such discussions.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-10_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1561563317078724810",
+      "type": "Reply",
+      "timestamp": "2026-10-19T02:15:07.235+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "#charz channel created.",
+      "author": {
+        "id": "169786952432746498",
+        "name": "mithro_",
+        "discriminator": "0000",
+        "nickname": "Tim 'mithro' Ansell",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-10_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "262706220073222144",
+          "name": "namibj",
+          "discriminator": "0000",
+          "nickname": "namibj",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-10_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1561560749644451852",
+        "channelId": "1361349523724570941",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1561563936480821279",
+      "type": "Reply",
+      "timestamp": "2026-10-19T02:17:34.912+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I _think_ LibreLane could be convinced to do the PnR for such in a scripted fashion; the control would only really need to be a simple digital decoder anyways that takes as input a DUT ID from some digital pads and activates the corresponding MUX.\n\nThere's some ideas of adding support for on-die temperature sensors to at least attempt to map thermal gradients from local heating and get decent understanding of DUT temperature notably without having to do anything fancy in terms of thermal chamber for the testing.\nE.g. a simple glove box style should work easily for -20 to +120 C, the cold tests using a standard freezer who's door has been replaced with a custom one that gives access for the operator glove and the measurement pass through wires and has a fan set up inside and probably some effective thermal mass (a bunch of small water bottles probably work great/easily-well-enough) that can smooth out the temperature as the compressor cycles (at least for tests that aren't at \"lowest temperature the system can get to\"), and probably something to dehumidify so the electronics don't catch frost (you'd rather want the electronics to be freeze-dried than to be coated in freezing condensation) but I think calcium chloride based \"disposable pack\" dehumidifiers should work at those temperatures.\nAlso, a slightly modified (thermostat only, pretty much; and taking the door off and swapping it for something with the glove access and the wire feed-throughs and suitable visual access as well) convection oven should easily work for the warm testing.\n\nI can't do it myself but if we have someone who could write the librelane scripting even e.g. with me as mentor on the task, we could probably do it in time for Run3.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-10_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "756011607603019777",
+          "name": "anfroholic",
+          "discriminator": "0000",
+          "nickname": "Andrew Wingate",
+          "color": null,
+          "isBot": false,
+          "roles": [
+            {
+              "id": "1423020172595298314",
+              "name": "Mod",
+              "color": null,
+              "position": 4
+            }
+          ],
+          "avatarUrl": "2026-10_media/67bd670a335a2f955fb2ded57088a2cb-675B3.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1561559283789725778",
+        "channelId": "1361349523724570941",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
     }
   ],
-  "messageCount": 94
+  "messageCount": 103
 }
