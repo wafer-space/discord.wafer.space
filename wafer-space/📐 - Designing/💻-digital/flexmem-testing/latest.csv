@@ -1,0 +1,32 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"442884160105742336","glaxus_","2026-10-19T03:11:24.5110000+00:00","","",""
+"442884160105742336","glaxus_","2026-10-19T03:11:25.8300000+00:00","Any idea on a timeline when you might be able to do this? Keen to use the 32 bit macros","",""
+"262706220073222144","namibj","2026-10-19T04:12:31.9740000+00:00","If we're lucky I can draw up a suitable voltage supply (probably also acting as more-accurate-than-current ADC reference) add-on board for the bond tester's expansion header within about 100 hours from now; I'd then suggest we'd pack two of the 5 (if ordered min cheap quantity) along with a confirmed working bond tester and the suggested 2 bond-check-passed COBs of each of the 3 FlexMem dies together into a parcel and ship to Germany; I'm _assuming_ the bond tester I'm offered is in China currently? Feel free to ask where it is/if it's there; I'd then try to get the programmable voltage supply for the low voltage testing that thus checks data resilience at ""power save"" sleep-supply-voltages (and indirectly confirms the array itself to be robust even if not directly qualifying a particular access speed) prepped at JLCPCB to conveniently get where the other bond testers are.
+
+Then the idea would be that I'd try to program it later next week/weekend-after-next, and once it's working for me someone who can be trusted enough to not break the gear or steal the parts could use one of the other bond testers with the add-on board and test a statistically significant quantity of those 150 FlexMem dies.
+
+To be clear, I'm not against doing that myself, but I don't currently have the resources to do much fancy beyond maybe putting a few DUTs with the board into a filament dryer offering concern at up to about 65C.","",""
+"262706220073222144","namibj","2026-10-19T04:18:42.9300000+00:00","If you'd want to help, a non-expensive 1% (ish) LDO that can do like 50 mA at outputs programmable from two digital RPiPico2 pins and voltages from at least like 3~3.4 ish Volts down to at LEAST 500 mV, ideally I'd want it down to about 300 mV. 
+Ideally one that's stocked at JLCPCB, but worst case their ability to order from mouser/digikey at a unit price premium and handle the logistics for you would give that as an escape but I'd prefer not to, due to it being prone to delays.
+
+[Mostly I'm not sure if the SRAM control can behave itself enough at the very low voltage end; I'd probably expect most cells to retain even at very very low supply.]","",""
+"262706220073222144","namibj","2026-10-19T04:19:04.9290000+00:00","If you could find one, that'd accelerate things.","",""
+"262706220073222144","namibj","2026-10-19T04:58:00.8540000+00:00","@Lauri  you wrote this in `src/hal/mux.cpp`; does this mean it's currently suffering the slow behavior but could do the fast if one edits in a mythical (doesn't seem particularly specified here, but I'd guess it's imported/included from platformio?) header file?
+
+Because looking at the timing diagram in the datasheet we could let the falling clock coincide with the data transition.
+
+I know you don't need it to be very fast, due to your fairly high-Z measurements, but for the FlexMem testing I'd like to be at least somewhat near the MUX chip's potential speed.
+
+```
+// Speed note: replace digitalWrite with gpio_set_mask/gpio_clr_mask (hardware/gpio.h)
+// for ~50x speedup (~200 ns/transaction vs ~10 µs). All CH446X setup/hold
+// requirements (3–10 ns) are met by back-to-back SIO writes without added delays.
+```","",""
+"908721221682733106","lauri4332","2026-10-19T06:22:55.2820000+00:00","v1.1 tester you should be able to go faster. There's even PIO code for the sibling chip (CH446Q) https://discord.com/channels/1361349522684510449/1408134567491145728/1516311011437838427","",""
+"262706220073222144","namibj","2026-10-19T06:53:42.8470000+00:00","Ohh ok good thx.
+Do you happen to know if the bond tester that's said to be tentatively scheduled to be sent to me (once I commit to teaching it FlexMem bitcell stress-testing) is in China?
+
+Would you consider the expansion header to be reasonable to put a programmable LDO on to support as here some testing at less than the 3.3V?
+
+Ofc it's inherently a limited architecture with the MUX but it could be so much worse 😄 .
+And letting such simple checking be done by it should enable us to do much better testing for a bunch of chips even if it's somewhat awkward to pull off.","",""
