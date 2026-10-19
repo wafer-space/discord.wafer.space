@@ -37,6 +37,52 @@ Ofc it&#39;s inherently a limited architecture with the MUX but it could be so m
     title="smile"
     src="2026-10_media/1f604-BF863.svg"> .
 And letting such simple checking be done by it should enable us to do much better testing for a bunch of chips even if it&#39;s somewhat awkward to pull off.</span></div></div></div></div></div>
+<div class=chatlog__message-group><div id=chatlog__message-container-1561665295557460011 class=chatlog__message-container data-message-id=1561665295557460011><div class=chatlog__message><div class=chatlog__message-aside><div class=chatlog__reply-symbol></div><img class=chatlog__avatar src=2026-10_media/5-E9BDB.png alt=Avatar loading=lazy></div><div class=chatlog__message-primary><div class=chatlog__reply><img class=chatlog__reply-avatar src=2026-10_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png alt=Avatar loading=lazy><div class=chatlog__reply-author title=namibj>namibj</div><div class=chatlog__reply-content><span class=chatlog__reply-link onclick="scrollToMessage(event,'1561633427436998668')"> Ohh ok good thx.
+Do you happen to know if the bond tester that&#39;s said to be tentatively scheduled to be sent to me (once I commit to teaching it FlexMem bitcell stress-testing) is in China?
+
+Would you consider the expansion header to be reasonable to put a programmable LDO on to support as here some testing at less than the 3.3V?
+
+Ofc it&#39;s inherently a limited architecture with the MUX but it could be so much worse <img
+    loading="lazy"
+    class="chatlog__emoji "
+    alt="😄"
+    title="smile"
+    src="2026-10_media/1f604-BF863.svg"> .
+And letting such simple checking be done by it should enable us to do much better testing for a bunch of chips even if it&#39;s somewhat awkward to pull off. </span></div></div><div class=chatlog__header><span class=chatlog__author title=lauri4332 data-user-id=908721221682733106>Lauri</span> <span class=chatlog__timestamp title="Monday, October 19, 2026 9:00 a.m."><a href=#chatlog__message-container-1561665295557460011>2026-10-19 9:00 a.m.</a></span></div><div class="chatlog__content chatlog__markdown"><span class=chatlog__markdown-preserve><div class="chatlog__markdown-quote"><div class="chatlog__markdown-quote-border"></div><div class="chatlog__markdown-quote-content">Do you happen to know if the bond tester that&#39;s said to be tentatively scheduled to be sent to me (once I commit to teaching it FlexMem bitcell stress-testing) is in China?
+</div></div>yes.
+
+<div class="chatlog__markdown-quote"><div class="chatlog__markdown-quote-border"></div><div class="chatlog__markdown-quote-content">Would you consider the expansion header to be reasonable to put a programmable LDO on to support as here some testing at less than the 3.3V?
+</div></div>Are you referring to the 7 pin J1 header? It has the signals you&#39;d require, a power source, gpio&#39;s and one mux channel. You do need to remove the R12 pullup on this channel though. (I&#39;m also assuming the mux Ron is not a problem for you?)</span></div></div></div></div></div>
+<div class=chatlog__message-group><div id=chatlog__message-container-1561678328006578337 class=chatlog__message-container data-message-id=1561678328006578337><div class=chatlog__message><div class=chatlog__message-aside><div class=chatlog__reply-symbol></div><img class=chatlog__avatar src=2026-10_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png alt=Avatar loading=lazy></div><div class=chatlog__message-primary><div class=chatlog__reply><img class=chatlog__reply-avatar src=2026-10_media/5-E9BDB.png alt=Avatar loading=lazy><div class=chatlog__reply-author title=lauri4332>Lauri</div><div class=chatlog__reply-content><span class=chatlog__reply-link onclick="scrollToMessage(event,'1561665295557460011')"> <div class="chatlog__markdown-quote"><div class="chatlog__markdown-quote-border"></div><div class="chatlog__markdown-quote-content">Do you happen to know if the bond tester that&#39;s said to be tentatively scheduled to be sent to me (once I commit to teaching it FlexMem bitcell stress-testing) is in China?
+</div></div>yes.
+
+<div class="chatlog__markdown-quote"><div class="chatlog__markdown-quote-border"></div><div class="chatlog__markdown-quote-content">Would you consider the expansion header to be reasonable to put a programmable LDO on to support as here some testing at less than the 3.3V?
+</div></div>Are you referring to the 7 pin J1 header? It has the signals you&#39;d require, a power source, gpio&#39;s and one mux channel. You do need to remove the R12 pullup on this channel though. (I&#39;m also assuming the mux Ron is not a problem for you?) </span></div></div><div class=chatlog__header><span class=chatlog__author title=namibj data-user-id=262706220073222144>namibj</span> <span class=chatlog__timestamp title="Monday, October 19, 2026 9:52 a.m."><a href=#chatlog__message-container-1561678328006578337>2026-10-19 9:52 a.m.</a></span></div><div class="chatlog__content chatlog__markdown"><span class=chatlog__markdown-preserve>Really shouldn&#39;t be a problem; I primarily care about voltage at static holding below 1.5V VDDD.</span></div></div></div></div></div>
+<div class=chatlog__message-group><div id=chatlog__message-container-1561682145075011708 class=chatlog__message-container data-message-id=1561682145075011708><div class=chatlog__message><div class=chatlog__message-aside><img class=chatlog__avatar src=2026-10_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png alt=Avatar loading=lazy></div><div class=chatlog__message-primary><div class=chatlog__header><span class=chatlog__author title=namibj data-user-id=262706220073222144>namibj</span> <span class=chatlog__timestamp title="Monday, October 19, 2026 10:07 a.m."><a href=#chatlog__message-container-1561682145075011708>2026-10-19 10:07 a.m.</a></span></div><div class="chatlog__content chatlog__markdown"><span class=chatlog__markdown-preserve>I&#39;ve figured out a way to do programmable LDO with commodity parts: a 12 bit I2C DAC and an &quot;adjustable&quot;-style LDO, and a 3-resistor weighted summer mixing Vout/GND/Vdac at the LDO&#39;s FB node.
+Should easily give about 1mV steps from around 50 mV to around 3.2-ish V.
+
+Well, technically Gemini did the looking for me but I&#39;m pretty sure those parts are actually commodity (or very similar ones at least).
+
+I wasn&#39;t planning on deleting the pull-up but rather adding a preload to GND to overpower R12 and give the LDO some nicer operating conditions.
+
+I&#39;ll try to get a layout on Wednesday; if there&#39;s no plan yet regarding what kind of header that is, may I request that to be decreed by then to allow including a matching connector and board orientation to go with it?
+
+Any preference about I2C assignment to the two GPIOs on the header? I&#39;d put one of them simple EEPROMs on it I guess...
+
+Should I provide precise 3.3V on it as well or would that be counter-productive due to how invasive the changes to the tester board would be for custom 3v3 supply? I could probably go for just calibrating the ADC by muxing COMA and COME together, I&#39;d hope the existing 3v3 reference doesn&#39;t drift wildly within a minute or so at least...</span></div></div></div></div></div>
+<div class=chatlog__message-group><div id=chatlog__message-container-1561692338647072779 class=chatlog__message-container data-message-id=1561692338647072779><div class=chatlog__message><div class=chatlog__message-aside><div class=chatlog__reply-symbol></div><img class=chatlog__avatar src=2026-10_media/5-E9BDB.png alt=Avatar loading=lazy></div><div class=chatlog__message-primary><div class=chatlog__reply><img class=chatlog__reply-avatar src=2026-10_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png alt=Avatar loading=lazy><div class=chatlog__reply-author title=namibj>namibj</div><div class=chatlog__reply-content><span class=chatlog__reply-link onclick="scrollToMessage(event,'1561682145075011708')"> I&#39;ve figured out a way to do programmable LDO with commodity parts: a 12 bit I2C DAC and an &quot;adjustable&quot;-style LDO, and a 3-resistor weighted summer mixing Vout/GND/Vdac at the LDO&#39;s FB node.
+Should easily give about 1mV steps from around 50 mV to around 3.2-ish V.
+
+Well, technically Gemini did the looking for me but I&#39;m pretty sure those parts are actually commodity (or very similar ones at least).
+
+I wasn&#39;t planning on deleting the pull-up but rather adding a preload to GND to overpower R12 and give the LDO some nicer operating conditions.
+
+I&#39;ll try to get a layout on Wednesday; if there&#39;s no plan yet regarding what kind of header that is, may I request that to be decreed by then to allow including a matching connector and board orientation to go with it?
+
+Any preference about I2C assignment to the two GPIOs on the header? I&#39;d put one of them simple EEPROMs on it I guess...
+
+Should I provide precise 3.3V on it as well or would that be counter-productive due to how invasive the changes to the tester board would be for custom 3v3 supply? I could probably go for just calibrating the ADC by muxing COMA and COME together, I&#39;d hope the existing 3v3 reference doesn&#39;t drift wildly within a minute or so at least... </span></div></div><div class=chatlog__header><span class=chatlog__author title=lauri4332 data-user-id=908721221682733106>Lauri</span> <span class=chatlog__timestamp title="Monday, October 19, 2026 10:47 a.m."><a href=#chatlog__message-container-1561692338647072779>2026-10-19 10:47 a.m.</a></span></div><div class="chatlog__content chatlog__markdown"><span class=chatlog__markdown-preserve><div class="chatlog__markdown-quote"><div class="chatlog__markdown-quote-border"></div><div class="chatlog__markdown-quote-content">I&#39;ll try to get a layout on Wednesday; if there&#39;s no plan yet regarding what kind of header that is, may I request that to be decreed by then to allow including a matching connector and board orientation to go with it?
+</div></div>Tester boards have the J1 part unpopulated. You can choose the connector you like.</span></div></div></div></div></div>
 
 </div>
-<div class=postamble><div class=postamble__entry>Exported 8 message(s)</div><div class=postamble__entry>Timezone: UTC+0</div></div>
+<div class=postamble><div class=postamble__entry>Exported 12 message(s)</div><div class=postamble__entry>Timezone: UTC+0</div></div>

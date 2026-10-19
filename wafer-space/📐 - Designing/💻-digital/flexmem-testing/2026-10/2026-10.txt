@@ -60,6 +60,38 @@ Ofc it's inherently a limited architecture with the MUX but it could be so much 
 And letting such simple checking be done by it should enable us to do much better testing for a bunch of chips even if it's somewhat awkward to pull off.
 
 
+[2026-10-19 9:00 a.m.] lauri4332
+> Do you happen to know if the bond tester that's said to be tentatively scheduled to be sent to me (once I commit to teaching it FlexMem bitcell stress-testing) is in China?
+yes.
+
+> Would you consider the expansion header to be reasonable to put a programmable LDO on to support as here some testing at less than the 3.3V?
+Are you referring to the 7 pin J1 header? It has the signals you'd require, a power source, gpio's and one mux channel. You do need to remove the R12 pullup on this channel though. (I'm also assuming the mux Ron is not a problem for you?)
+
+
+[2026-10-19 9:52 a.m.] namibj
+Really shouldn't be a problem; I primarily care about voltage at static holding below 1.5V VDDD.
+
+
+[2026-10-19 10:07 a.m.] namibj
+I've figured out a way to do programmable LDO with commodity parts: a 12 bit I2C DAC and an "adjustable"-style LDO, and a 3-resistor weighted summer mixing Vout/GND/Vdac at the LDO's FB node.
+Should easily give about 1mV steps from around 50 mV to around 3.2-ish V.
+
+Well, technically Gemini did the looking for me but I'm pretty sure those parts are actually commodity (or very similar ones at least).
+
+I wasn't planning on deleting the pull-up but rather adding a preload to GND to overpower R12 and give the LDO some nicer operating conditions.
+
+I'll try to get a layout on Wednesday; if there's no plan yet regarding what kind of header that is, may I request that to be decreed by then to allow including a matching connector and board orientation to go with it?
+
+Any preference about I2C assignment to the two GPIOs on the header? I'd put one of them simple EEPROMs on it I guess...
+
+Should I provide precise 3.3V on it as well or would that be counter-productive due to how invasive the changes to the tester board would be for custom 3v3 supply? I could probably go for just calibrating the ADC by muxing COMA and COME together, I'd hope the existing 3v3 reference doesn't drift wildly within a minute or so at least...
+
+
+[2026-10-19 10:47 a.m.] lauri4332
+> I'll try to get a layout on Wednesday; if there's no plan yet regarding what kind of header that is, may I request that to be decreed by then to allow including a matching connector and board orientation to go with it?
+Tester boards have the J1 part unpopulated. You can choose the connector you like.
+
+
 ==============================================================
-Exported 8 message(s)
+Exported 12 message(s)
 ==============================================================

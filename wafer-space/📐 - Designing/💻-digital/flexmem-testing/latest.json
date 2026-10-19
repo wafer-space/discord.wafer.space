@@ -16,7 +16,7 @@
     "after": "2026-09-30T23:59:59.999+00:00",
     "before": "2026-11-01T00:00:00+00:00"
   },
-  "exportedAt": "2026-10-19T08:35:17.9867438+00:00",
+  "exportedAt": "2026-10-19T14:21:49.7229596+00:00",
   "messages": [
     {
       "id": "1561577482400825425",
@@ -300,7 +300,155 @@
           "imageUrl": "2026-10_media/1f604-BF863.svg"
         }
       ]
+    },
+    {
+      "id": "1561665295557460011",
+      "type": "Reply",
+      "timestamp": "2026-10-19T09:00:20.799+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "> Do you happen to know if the bond tester that's said to be tentatively scheduled to be sent to me (once I commit to teaching it FlexMem bitcell stress-testing) is in China?\nyes.\n\n> Would you consider the expansion header to be reasonable to put a programmable LDO on to support as here some testing at less than the 3.3V?\nAre you referring to the 7 pin J1 header? It has the signals you'd require, a power source, gpio's and one mux channel. You do need to remove the R12 pullup on this channel though. (I'm also assuming the mux Ron is not a problem for you?)",
+      "author": {
+        "id": "908721221682733106",
+        "name": "lauri4332",
+        "discriminator": "0000",
+        "nickname": "Lauri",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-10_media/5-E9BDB.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "262706220073222144",
+          "name": "namibj",
+          "discriminator": "0000",
+          "nickname": "namibj",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-10_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1561633427436998668",
+        "channelId": "1560159441125376001",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1561678328006578337",
+      "type": "Reply",
+      "timestamp": "2026-10-19T09:52:07.977+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Really shouldn't be a problem; I primarily care about voltage at static holding below 1.5V VDDD.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-10_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "908721221682733106",
+          "name": "lauri4332",
+          "discriminator": "0000",
+          "nickname": "Lauri",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-10_media/5-E9BDB.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1561665295557460011",
+        "channelId": "1560159441125376001",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
+    },
+    {
+      "id": "1561682145075011708",
+      "type": "Default",
+      "timestamp": "2026-10-19T10:07:18.037+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I've figured out a way to do programmable LDO with commodity parts: a 12 bit I2C DAC and an \"adjustable\"-style LDO, and a 3-resistor weighted summer mixing Vout/GND/Vdac at the LDO's FB node.\nShould easily give about 1mV steps from around 50 mV to around 3.2-ish V.\n\nWell, technically Gemini did the looking for me but I'm pretty sure those parts are actually commodity (or very similar ones at least).\n\nI wasn't planning on deleting the pull-up but rather adding a preload to GND to overpower R12 and give the LDO some nicer operating conditions.\n\nI'll try to get a layout on Wednesday; if there's no plan yet regarding what kind of header that is, may I request that to be decreed by then to allow including a matching connector and board orientation to go with it?\n\nAny preference about I2C assignment to the two GPIOs on the header? I'd put one of them simple EEPROMs on it I guess...\n\nShould I provide precise 3.3V on it as well or would that be counter-productive due to how invasive the changes to the tester board would be for custom 3v3 supply? I could probably go for just calibrating the ADC by muxing COMA and COME together, I'd hope the existing 3v3 reference doesn't drift wildly within a minute or so at least...",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-10_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1561692338647072779",
+      "type": "Reply",
+      "timestamp": "2026-10-19T10:47:48.374+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "> I'll try to get a layout on Wednesday; if there's no plan yet regarding what kind of header that is, may I request that to be decreed by then to allow including a matching connector and board orientation to go with it?\nTester boards have the J1 part unpopulated. You can choose the connector you like.",
+      "author": {
+        "id": "908721221682733106",
+        "name": "lauri4332",
+        "discriminator": "0000",
+        "nickname": "Lauri",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-10_media/5-E9BDB.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "262706220073222144",
+          "name": "namibj",
+          "discriminator": "0000",
+          "nickname": "namibj",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-10_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1561682145075011708",
+        "channelId": "1560159441125376001",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
     }
   ],
-  "messageCount": 8
+  "messageCount": 12
 }
