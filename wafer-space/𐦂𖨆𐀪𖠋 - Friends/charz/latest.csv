@@ -69,3 +69,14 @@ Thanks and sorry, I don't have the capacity to contribute, but am happy to facil
 "169786952432746498","mithro_","2026-10-21T00:14:46.1520000+00:00","I have no idea what SS125 and SS85 mean 😛","",""
 "169786952432746498","mithro_","2026-10-21T00:15:16.5720000+00:00","Open-silicon lab means things like SoC design?","",""
 "169786952432746498","mithro_","2026-10-21T00:15:36.9000000+00:00","@Agenxy -^","",""
+"262706220073222144","namibj","2026-10-21T03:23:39.3320000+00:00","the muxed e-test proposal?","",""
+"262706220073222144","namibj","2026-10-21T03:24:15.4790000+00:00","slow-slow corner at that temperature.","",""
+"262706220073222144","namibj","2026-10-21T03:27:18.0590000+00:00","I can almost certainly mentor what's needed on the actual coding/scripting front of it.
+As I've been a bit broken these past couple months I'm unlikely to manage to get enough in the flow on enough of the days left to do the coding myself, though, sadly.","",""
+"262706220073222144","namibj","2026-10-21T03:36:54.5010000+00:00","I'd love to hear if a muxed e-test chip that can give 4-wire-style measurements (two mux lines routed to each DUT LEF pin) at effectively DC conditions would be expected to allow sufficient calibration of the models with the SPICE around based on fine-tuning/fitting the extracted models to really fit the e-test results, as we could expect to measure such e-test over an entire batch of a thousand dies.
+I think a full die should work for about 300 DUTs if they're fairly large, or if they're SCL mix without being heavy on many-pin combinatorials probably up to around 500 DUTs.
+The spacing along the mux array for the ""width"" of a DUT's slot is given by M4 min pitch and how many wires that needs.
+All but GND I was planning on having two wires (GND only a sense, as drive/force is part of the latch up prevention globally distributed substrate taps).
+
+I was planning on harnessing Sandia National Laboratories 's Dakota and Xyce tools to do uncertainty quantification to accompolish an approximation to optimal experiment design to pick a set of ""interesting"" sample points, which would be voltages and/or currents applied at each of the drive pins.
+I also want to get data on vias and contacts (the PDK gives extremely wide and quite high magnitude resistance values for them) as well as thin oxide native NMOS and what's needed for local missmatch modeling of those devices where that isn't yet covered by the PDK's SPICE models.","",""
