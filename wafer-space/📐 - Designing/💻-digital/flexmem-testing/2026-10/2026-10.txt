@@ -122,7 +122,7 @@ Once I have a system quote from JLC (needs the board to pass their automated DRC
  * (5) We could probably put these items into shipment to people like @Chips4Makers aka Staf Verhaegen / @Tim Edwards / @Essen / etc when we ship them silicon.
 
 {Reactions}
-👍 🎉
+👍 🎉 (2)
 
 [2026-10-21 10:25 a.m.] lauri4332
 @Tim 'mithro' Ansell re: (3) no worries there, happy to help
@@ -167,6 +167,76 @@ I'm thinking to put a right angle male header on the top facing inwards (not ext
 Or, given this "assembled" geometry with the DUT adapter and an actual DUT present, maybe just have a regular vertical male header on the main board and a regular vertical female header on the add-on stacked above (with the PCB "planes" parallel to another and the add-on living conveninetly over top the mainboard, in the same area but not as low-profile as the right-angle solution would have been).
 
 
+[2026-10-23 9:47 a.m.] namibj
+10 boards, assembled, except for an optional single pin header that could be tied to the Pi Pico2's ADC_REF pin (floating on r2 tester board) via, as far as my plan goes, adding a single male header to both the Pi Pico 2 and the otherwise unpopulated side of the add-on board and connecting them via a jumper. They'are decoupled on both ends so I'm not too worried about it picking up EMI at least.
+That works via the suggested 3.0V shunt regulator that one can add there; it's otherwise used to regulate the DAC; there's also a strong buffer that should at least keep the COME side of the net on the mainboard close to the programmed voltage.
+There is no modification to the main board suggested other than adding the two pin headers (the expansion header and a lone one directly to the ADC_REF pin).
+
+{Attachments}
+2026-10_media/image-E1664.png
+
+
+[2026-10-23 9:54 a.m.] lauri4332
+>  As you said "no worries there, happy to help", can I request a judgement as to what kind of connector situation to go for with the still-unpopulated header on the tester mainboard, to then connect to the add-on board?
+Generally my first preference is for the powered side to have a female connector to guard against accidental shorting. But I think your suggestion of right angle (male) is also fine because this keep the tester compact and the addon board wouldn't be in the way.
+
+
+[2026-10-23 10:19 a.m.] namibj
+oh ok; I've selected the reverse as I think I mentioned, motivated by that the female side tends to be the wear item and I don't want to turn the mainboard into a wear item.
+Let me know if I have to swap that.
+
+
+[2026-10-23 10:22 a.m.] namibj
+
+
+{Attachments}
+2026-10_media/image-CFA7A.png
+
+
+[2026-10-23 10:22 a.m.] namibj
+full contents with PCB and such
+
+{Attachments}
+2026-10_media/ProPrj_BondTest72_MCP4725_ADC_add-on_r1_20-809DE.epro
+
+
+[2026-10-23 10:23 a.m.] namibj
+(iirc kicad imports that without complaints, but they iirc have a web version of their editor as well)
+
+
+[2026-10-23 10:26 a.m.] lauri4332
+you don't have to swap it.
+
+
+[2026-10-23 10:26 a.m.] namibj
+the Pi itself also has that 200 Ohm into 2.2uF to get it's ADC_REF from it's +3.3V; having that LM4040xxx-3.0 to pull that down to a stable 3.0V is explicitly suggested/recommended to do for a stable reference.
+The Op amp is a type that's safe for even large capacitive loads and it's offset exists but shouldn't be drifting enough for that to dominate.
+
+
+[2026-10-23 10:27 a.m.] namibj
+If this looks good enough so far, I'd finish eating and probably just click it (if I have the address on hand?)
+
+
+[2026-10-23 10:27 a.m.] lauri4332
+I'd suggest adding  pullups to i2c signals
+
+
+[2026-10-23 10:42 a.m.] namibj
+how high is acceptable?
+
+
+[2026-10-23 10:42 a.m.] namibj
+(this isn't fast)
+
+
+[2026-10-23 10:53 a.m.] lauri4332
+I'd add 4.7k just in case to avoid any  E9 related problems. These picos should be rev A2.
+
+
+[2026-10-23 10:54 a.m.] chips4makers
+I can also bear some extra costs for testing equipment. For me, main problem at the moment is lack of time to dive into the testing procedure and setup.
+
+
 ==============================================================
-Exported 23 message(s)
+Exported 37 message(s)
 ==============================================================

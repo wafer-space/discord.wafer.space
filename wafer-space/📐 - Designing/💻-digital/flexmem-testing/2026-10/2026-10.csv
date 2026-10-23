@@ -65,7 +65,7 @@ Once I have a system quote from JLC (needs the board to pass their automated DRC
  * (2) I'd happily drop $25 USD on something like this - I would probably do a 10-pack if other people think it is usable.
  * (3) The more concern would be if @Lauri / @stuart would need to charge me for work hours. They are a bit more expensive than the board. 🙂
  * (4) This is probably not something we would be using / doing in the factory.
- * (5) We could probably put these items into shipment to people like @Chips4Makers aka Staf Verhaegen / @Tim Edwards / @Essen / etc when we ship them silicon.","","👍 (1),🎉 (1)"
+ * (5) We could probably put these items into shipment to people like @Chips4Makers aka Staf Verhaegen / @Tim Edwards / @Essen / etc when we ship them silicon.","","👍 (1),🎉 (2)"
 "908721221682733106","lauri4332","2026-10-21T10:25:53.2900000+00:00","@Tim 'mithro' Ansell re: (3) no worries there, happy to help
 
 @namibj the testers should be ready to ship this week or early next week. If we wait for your addons to arrive first, your shipment will likely be delayed by few weeks. If you're happy to proceed then I can DM you the shipping address later","",""
@@ -81,3 +81,22 @@ It's looking to be just a tiny add-on board; I'm now actually thinking to use an
 "262706220073222144","namibj","2026-10-23T04:07:01.1010000+00:00","I'm thinking to put a right angle male header on the top facing inwards (not extending outside the mainboard PCB) and a female right angle header on the bottom of the add-on board so they fit ""over"" the wafer.space logo.","",""
 "262706220073222144","namibj","2026-10-23T04:16:35.9670000+00:00","","",""
 "262706220073222144","namibj","2026-10-23T04:16:36.9540000+00:00","Or, given this ""assembled"" geometry with the DUT adapter and an actual DUT present, maybe just have a regular vertical male header on the main board and a regular vertical female header on the add-on stacked above (with the PCB ""planes"" parallel to another and the add-on living conveninetly over top the mainboard, in the same area but not as low-profile as the right-angle solution would have been).","",""
+"262706220073222144","namibj","2026-10-23T09:47:13.1980000+00:00","10 boards, assembled, except for an optional single pin header that could be tied to the Pi Pico2's ADC_REF pin (floating on r2 tester board) via, as far as my plan goes, adding a single male header to both the Pi Pico 2 and the otherwise unpopulated side of the add-on board and connecting them via a jumper. They'are decoupled on both ends so I'm not too worried about it picking up EMI at least.
+That works via the suggested 3.0V shunt regulator that one can add there; it's otherwise used to regulate the DAC; there's also a strong buffer that should at least keep the COME side of the net on the mainboard close to the programmed voltage.
+There is no modification to the main board suggested other than adding the two pin headers (the expansion header and a lone one directly to the ADC_REF pin).","2026-10_media/image-E1664.png",""
+"908721221682733106","lauri4332","2026-10-23T09:54:49.2500000+00:00",">  As you said ""no worries there, happy to help"", can I request a judgement as to what kind of connector situation to go for with the still-unpopulated header on the tester mainboard, to then connect to the add-on board?
+Generally my first preference is for the powered side to have a female connector to guard against accidental shorting. But I think your suggestion of right angle (male) is also fine because this keep the tester compact and the addon board wouldn't be in the way.","",""
+"262706220073222144","namibj","2026-10-23T10:19:58.4830000+00:00","oh ok; I've selected the reverse as I think I mentioned, motivated by that the female side tends to be the wear item and I don't want to turn the mainboard into a wear item.
+Let me know if I have to swap that.","",""
+"262706220073222144","namibj","2026-10-23T10:22:12.3500000+00:00","","2026-10_media/image-CFA7A.png",""
+"262706220073222144","namibj","2026-10-23T10:22:55.8370000+00:00","full contents with PCB and such","2026-10_media/ProPrj_BondTest72_MCP4725_ADC_add-on_r1_20-809DE.epro",""
+"262706220073222144","namibj","2026-10-23T10:23:39.0940000+00:00","(iirc kicad imports that without complaints, but they iirc have a web version of their editor as well)","",""
+"908721221682733106","lauri4332","2026-10-23T10:26:10.1830000+00:00","you don't have to swap it.","",""
+"262706220073222144","namibj","2026-10-23T10:26:23.3910000+00:00","the Pi itself also has that 200 Ohm into 2.2uF to get it's ADC_REF from it's +3.3V; having that LM4040xxx-3.0 to pull that down to a stable 3.0V is explicitly suggested/recommended to do for a stable reference.
+The Op amp is a type that's safe for even large capacitive loads and it's offset exists but shouldn't be drifting enough for that to dominate.","",""
+"262706220073222144","namibj","2026-10-23T10:27:14.8340000+00:00","If this looks good enough so far, I'd finish eating and probably just click it (if I have the address on hand?)","",""
+"908721221682733106","lauri4332","2026-10-23T10:27:40.3860000+00:00","I'd suggest adding  pullups to i2c signals","",""
+"262706220073222144","namibj","2026-10-23T10:42:48.1830000+00:00","how high is acceptable?","",""
+"262706220073222144","namibj","2026-10-23T10:42:53.6310000+00:00","(this isn't fast)","",""
+"908721221682733106","lauri4332","2026-10-23T10:53:57.6630000+00:00","I'd add 4.7k just in case to avoid any  E9 related problems. These picos should be rev A2.","",""
+"728516105680846892","chips4makers","2026-10-23T10:54:02.5710000+00:00","I can also bear some extra costs for testing equipment. For me, main problem at the moment is lack of time to dive into the testing procedure and setup.","",""
