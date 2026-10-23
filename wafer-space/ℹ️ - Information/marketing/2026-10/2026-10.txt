@@ -423,6 +423,62 @@ If you’re going to do analog in that space, you’ll have to put probe pads of
 ohhhhh
 
 
+[2026-10-23 5:27 p.m.] velvetundergroundandy
+looking for someone to help out @namibj ‘s collaboration with @Tholin with librelane scripting!
+
+
+[2026-10-23 6:15 p.m.] namibj
+basically, get librelane to PnR an analog crossbar-ish switch matrix that can select a parametric number of columns to be connected to available shared rows; set up for a digital decoder to trigger the entire column group together once "that specific DUT" is selected out of all there are, and at least somewhat deal with placing DUTs in an area-economic packing arrangement on the side of the switch matrix. And wire/auto-route from the responsible switch columns up to the DUT's declared "pads" ("LEF pins").
+I'll be able to help with pretty much anything on it, I just don't have enough days of "flow state in the zone" coding to schedule for/on it until the deadline to do it alone.
+
+
+[2026-10-23 6:17 p.m.] velvetundergroundandy
+@судонет ?
+
+
+[2026-10-23 6:27 p.m.] velvetundergroundandy
+@brookieoz would you be interested in advising on this project? and perhaps @судонет and his friend would be interested in doing the implementation?
+
+
+[2026-10-23 6:39 p.m.] namibj
+@Agenxy _may_ also have some pertinent suggestions (once things are further along; there's some primitive devices I really want models for and the SCL stuff can wait until there's time left and the primitives are succesfully PnR'd) on affordably-enough-in-area-overhead and with enough ability to calibrate out muxing harnesses:
+ways to also measure DUT capacitances as needed for modeling AC behavior, not just DC operating points as the plain "muxed e-test" (with kelvin connections to calibrate out the MUX resistance) does.
+
+(Personally I'm not so sure that needs measuring by us like this, but idk for sure. I'd _expect_ the existing RLC e-test structures on iirc Run2 can sufficciently de-embed muxing-tolerant RLC measurement tactics that can affordable provide detailed statistical distribution data, with which then model/extraction fit tuning could be done using the measured DC op point behavior to find SPICE model fits of parasitics that together with the known statistics of DC behavior of DUTs can accurately explain compound-DUT-arrangements behavior under AC conditions.)
+
+
+[2026-10-23 6:40 p.m.] brookieoz
+maybe? I haven't kept up with what's going on; just been so busy. How in depth are we looking to characterize things?
+
+
+[2026-10-23 6:51 p.m.] namibj
+the base "muxed e-test" is just an analog switch matrix on the same die as a bunch of DUTs; a simple digital decoder selects one DUT, activates those switches and deactivates the others; there's two wires to each DUT "LEF pin"; off-chip multimeters are then scripted/remote-controlled to sample a few hundred/thousand "interesting" bias conditions of the DUT; then the mux is changed to select the next DUT; then this repeats; after a few minutes the setup rings a bell/buzzer/status-light and a nearby human swaps in the next COB at convenience; this allows measuring hundreds of dies under DC operating point conditions without very expensive raw wafer probe stations.
+
+_Might_ repeat it afterwards with the test chip and it's socket-board in a freezer and/or oven or if thermal mass works out small enough a 2/3 stage peltier chamber might even give the essentially-full specification range of die temperatures without being a genuinely expensive chamber and without the human having to touch each chip once for each temperature.
+
+The big things are just that thin oxide nvt NMOS have zero SPICE and zero e-test data (at least NDA-free), a bunch of stuff has zero local mismatch statistical models, that latter includes (notably!) plain vias which promise a factor of over 3 from typ to max and no min (breaks predictable matching of differential pair resistor divider kind-of structures, without spending a bunch of space and parasticic capacitance on spamming vias in hopes of the unspecified statistics being the type that's persuaded by such tricks).
+
+{Attachments}
+2026-10_media/image-2C9BA.png
+
+
+[2026-10-23 6:53 p.m.] namibj
+You probably don't have to do much tho.
+I'd likely just ask occassionally for some wisdom on some concept/larger decisions that exceed what I can handle with intuition and where precision isn't worth setting up enough SPICE testbench to "ask the models" for guidance.
+
+
+[2026-10-23 7:00 p.m.] brookieoz
+oh yeah testing NVT devices is a little bit tricky since you typically can't just tie the source to GND / you want to be able to control the source voltage while measuring the current
+
+
+[2026-10-23 7:01 p.m.] namibj
+....place the mux array in a dnwell? run negative bias to the lvpwell's inside that?
+
+
+[2026-10-23 7:05 p.m.] namibj
+but I don't think it really has to be measured accurately over exotic voltages anyways, and not all measurement bias conditions have to come from the very same DUT even if they are the same dimensions; e.g. a DUT could have a source diffusion very hard tied to a low impedance GND to handle substantial current on it if so desired. Not like similar situations don't affect many regular nmos DUTs.
+
+
 ==============================================================
-Exported 78 message(s)
+Exported 89 message(s)
 ==============================================================
