@@ -479,6 +479,90 @@ oh yeah testing NVT devices is a little bit tricky since you typically can't jus
 but I don't think it really has to be measured accurately over exotic voltages anyways, and not all measurement bias conditions have to come from the very same DUT even if they are the same dimensions; e.g. a DUT could have a source diffusion very hard tied to a low impedance GND to handle substantial current on it if so desired. Not like similar situations don't affect many regular nmos DUTs.
 
 
+[2026-10-23 8:19 p.m.] brookieoz
+It's mostly that I see NVT devices being used as cascodes or input pairs or other things (common gate amps, etc) where you definitely don't have source connected to GND and where you do somewhat care about body effect / gate coupling factors
+
+
+[2026-10-23 8:20 p.m.] brookieoz
+so having a model that accurately captures that would greatly benefit any designs that use the NVT devices
+
+
+[2026-10-23 8:21 p.m.] brookieoz
+Running a negative bias to the lvpwell is going to be a little difficult if you're putting them through a mux that uses NMOS's if those NMOS bodies are tied to GND
+
+
+[2026-10-23 8:46 p.m.] namibj
+No I meant the mux itself sits in a dnwell and uses local lvpwells to provide a negative body to the transmission gate's nmos parts.
+
+Coughing up that negative bias could worst case be done with a charge pump but tbf the concept would need analog IO pads that can carry a negative signal voltage w.r.t. substrate _anyways._
+
+
+[2026-10-23 8:47 p.m.] brookieoz
+🤔
+
+
+[2026-10-23 8:48 p.m.] namibj
+Yeah wouldn't all nodes of a thin oxide one be fully between 0V and 5V then, with substrate tied to 0V?
+
+
+[2026-10-23 8:50 p.m.] namibj
+Needs adapted ESD structures to not have a clamp diode to substrate but that can't be hard.
+
+
+[2026-10-23 8:51 p.m.] brookieoz
+To be honest if I can avoid it, i'd rather just not deal with negative body biasing and just be able to sweep Vs and Vg independently (with Vd connected to supply or another independent thing)
+
+
+[2026-10-23 8:52 p.m.] namibj
+(the only reason to need a negative lvpwell in the mux tgate is to switch signals below 0V, and one end of those switches is low impedance connected to a wire bond)
+
+
+[2026-10-23 8:53 p.m.] namibj
+It's a 3 terminal device, plus substrate; you get 7 wires muxed to it: a substrate sense wire and a kelvin pair for each of source/drain/gate.
+
+
+[2026-10-23 8:54 p.m.] brookieoz
+Oh neat
+
+
+[2026-10-23 8:55 p.m.] namibj
+I thought you wanted to apply negative gate at near zero source and drain because they PVT a threshold of like 50 +-300 mV or such.
+
+
+[2026-10-23 8:57 p.m.] brookieoz
+Oh nahh
+
+
+[2026-10-23 8:57 p.m.] brookieoz
+What I would do is apply a negative VGS but the actual values of Vg and Vs can still be positive, just that Vs can be greater than Vg
+
+
+[2026-10-23 8:58 p.m.] brookieoz
+So like, a Vg of 0.5V but a Vs sweep from 0->1.8V or something like that
+
+
+[2026-10-23 8:59 p.m.] brookieoz
+and to characterize the gate coupling factor you'd need to do a Vs sweep at different Vg's
+
+
+[2026-10-23 8:59 p.m.] brookieoz
+That kinda thing
+
+
+[2026-10-23 8:59 p.m.] namibj
+That's the power of the mux. The full large one can do that to an entire SCL oai33
+
+{Reactions}
+🩵
+
+[2026-10-23 9:01 p.m.] namibj
+The task is to calibrate an e.g. PSP103 SPICE model card.
+
+
+[2026-10-23 9:02 p.m.] namibj
+That's 17 wires (GND sense, power (x2), output (x2), 6 inputs (x2))
+
+
 ==============================================================
-Exported 89 message(s)
+Exported 109 message(s)
 ==============================================================
