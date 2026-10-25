@@ -837,6 +837,33 @@ Its running on my server’s Xeon E5-1620v4
 FeatherLane has no multithreading
 
 
+[2026-10-24 9:22 p.m.] anfroholic
+Hey @Tholin 
+I made a pull request. I hope everything is in order. 
+I would like the 4 pins [T1-T4] to be broken out to the cob please. 
+If there is budget, the other pins would be nice, but I would be happy to power on the digital part to test if needed. 
+
+Background on this request, I've been working on a BLDC motor controller and while talking with @Paul I realized adding an encoder directly to the die would be super cool!! 
+Thank you!!
+
+{Attachments}
+2026-10_media/hall_test_figure-F91A9.png
+
+
+[2026-10-24 9:30 p.m.] tholin
+I’m just looking at the blackbox verilog right now and it has multiple inout pins. If these are supposed to be analog, I can not provide that as there are no free pads left. I can only provide you with digital IO.
+
+
+[2026-10-24 9:32 p.m.] tholin
+Also, there are no power pins in the blackbox define. Are you SURE you don’t want PDN hookups?
+
+
+[2026-10-24 10:11 p.m.] bailey8889
+Are you using macros? There is an option to add diodes to inputs/outputs when hardening so that fewer problems occur once macros are integrated.
+
+Also long wires may require multiple diodes.
+
+
 ==============================================================
-Exported 147 message(s)
+Exported 151 message(s)
 ==============================================================
