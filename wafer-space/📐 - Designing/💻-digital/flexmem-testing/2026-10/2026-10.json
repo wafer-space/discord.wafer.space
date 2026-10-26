@@ -16,7 +16,7 @@
     "after": "2026-09-30T23:59:59.999+00:00",
     "before": "2026-11-01T00:00:00+00:00"
   },
-  "exportedAt": "2026-10-26T08:50:55.8016587+00:00",
+  "exportedAt": "2026-10-26T19:00:42.7121399+00:00",
   "messages": [
     {
       "id": "1561577482400825425",
@@ -1563,7 +1563,111 @@
       "reactions": [],
       "mentions": [],
       "inlineEmojis": []
+    },
+    {
+      "id": "1564264442709934182",
+      "type": "Default",
+      "timestamp": "2026-10-26T13:08:25.77+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "So, I just accidentally read `doi:10.1109/jssc.2019.2963002`, having gotten distracted by curiosity as to WTH they mean with nmos-only \"SRAM PUF bitcells\" (like, what the schematic is and why they're doing it; see attached schematic if curious ||and know the high seas have this specific paper at the very conveniently accessible place (thanks to it being released and people caring about it prior to the convenient place ceasing acceptance of new papers)||), and it said:\n> Compared with a **conventional CMOS SRAM**, whose **transition voltage is below 0.1 V**, the transition voltage of an EE SRAM bit cell is in the super-threshold region, and hence, the transistors have higher conductivity.\n(emphasis mine)\n\nSo, welp, I guess I may have accidentally mis-aligned the add-on-board's target voltage zone of particular voltage accuracy, having had assumed the relevant voltages to be more around the 500~1000 mV range (approximately).\nBrief further googling corroborates that \"roughly 100 mV\" for the approximately 90~350 nm process node families we've been looking at with the open PDK and related/derivative MPW efforts (||e.g. counting in the indian and the japanese old-node MPW announcements and PDK reveals (though the indian might still have the PDK natinality/export controlled? and the japanese one was iirc actually a 500nm process and therefore really bad for digital SCL designs, and IMO pure analog stuff is quite legacy by now at least for application tasks that would somewhat reasonably warrant a custom 500nm CMOS ASIC, as it can't be anything fast or efficient and slow inefficcient ASICs tend to target accuracy specs that would reasonably require per-die trimming to mitigate process mismatch, and doing such very trimming through DAC structures is far more accessible than laser trimming (no need for pre-packaging analog characterization of each die to employ that very laser trimming while the trimmable structures are still accessible to a laser), given that we e.g. have very tested functional polyfuse cells (at least with 5/6V programming instead of attempting programming at just 3.3V) on gf180mcuD (and AFAIK had already on sky130A and I _think_ also had on IHPSG13).....||)\n\n\n....at least https://mediatum.ub.tum.de/doc/1084703/1084703.pdf suggests in section 5.4.2 that triggering read conditions for a wordline while the supply voltage of the SRAM core array (not the periphery with decoders and amplifiers and multiplexers, just the bitcell VDD) is dropped, at least if it's possible to force the WL to stay active for several milliseconds, would provide effective measurements of read margin.\n\nIt's not perfect but I guess the wisdom from that dissertation (notably I'll point out it's convenient collation of applicable methodologies and their comparative nuances) should help in using the FlexMem test dies from Run2 to gather statistically significant information on bitcell behavior and specifically how those distributions actually look; if we're lucky \"muxed e-test\" happens on Run3 and we could drop some sense amplifiers and bitcells (at least if feasible given the array nature of repeating patterns affecting lithography if we try to PnR a lone one to wire it up to the mux to do DC-conditions e-tests on the bitcell), which should be effective for translating the then already collected statistical measurements from the FlexMem Run2 dies into practical-user-of-FlexMem-applicable-performance-numbers.\n\nI kinda now just hope that read states can be held with the limitations given by the sequencer machinery of the periphery on those Run2 dies (I admit I haven't _yet_ looked at those detailed enough to know this from memory).\n\nLet's just hope that the decoupling capacitors can genuinely effectively decouple VDD transients of accesses if I orchestrate the tester to insert sufficient delays into the sequencer/testing patterns, to allow proper read and write access stress-testing across temperatures and voltages up-to-3.0V.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-10_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [
+        {
+          "id": "1564264442013814804",
+          "url": "2026-10_media/image-BC576.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 102690
+        },
+        {
+          "id": "1564264442361946312",
+          "url": "2026-10_media/1084703-7F258.pdf",
+          "fileName": "1084703.pdf",
+          "fileSizeBytes": 4748933
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1564266025460174900",
+      "type": "Default",
+      "timestamp": "2026-10-26T13:14:43.127+00:00",
+      "timestampEdited": "2026-10-26T13:19:23.168+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "(Plain access testing at 3.3V from the PiPico2 supply, with the DAC add-on board removed, is also easily possible (likely would involve a single jumper plugged into the expansion header in place of the add-on board though to have a low-impedance 3.3V supply to the DUT, with on the order of 50 Ohm PDN resistance instead of the tester's native (r2 at least), and unless I mixed up the exact value 1k Ohm).\nTesting the thick oxide FlexMem die at supply voltages in excess of 3.3V will not be nearly as easy, as the tester hardware I'm piggybacking on won't handle that with it's ADC hardware and I've therefore skipped targeting support for such VDD supplies.\n.....swapping the PiPico2 for something like an analog discovery and adjusting the VDD supply infrastructure and I guess putting a 5/6V reference on the add-on board (or using the analog discovery type thingy to DAC such a voltage with acceptable accuracy) might allow re-using much of the test pattern/orchestration code, by basically swapping the HAL and porting what differences remain?)",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-10_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1564310362591858852",
+      "type": "Reply",
+      "timestamp": "2026-10-26T16:10:53.923+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I quoted NextPCB's auto-quote rev0 PCBA just to see if they'd have been less expensive or such, and.... well, with the one time use 500$ off (rev0 assembly only, doesn't discount the PCB production part or the component sourcing), it would have been 94ct (USD currency, i.e., just under 1 USD) _more expensive_ than JLC was, and that's not counting shipping costs (which were 2.07 USD at JLC).\nI'll try to make sure to quote them next time I'd go for a big \"fancy\" order that's of a kind/nature that isn't cheap at JLC.\n\nOpinion/attempted explanation for massive pricing difference:\nThe core issue seems to be lack of economically handling the boards as multi-customer panels until after assembly, not having a streamlined common-parts pick-and-place line set up that allowed 4 of the 8 parts at JLC to be picked from pre-setup feeders (instead of necessitating rolling in a shelf reel into a fresh feeder) at no per-bom-line cost as well as not having to set up the pick-and-place machines for any customer-specific panel size/fiducials.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-10_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "169786952432746498",
+          "name": "mithro_",
+          "discriminator": "0000",
+          "nickname": "Tim 'mithro' Ansell",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-10_media/9679bb77da48d47c905b398d98a83780-75B68.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1562366576223588353",
+        "channelId": "1560159441125376001",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
     }
   ],
-  "messageCount": 41
+  "messageCount": 44
 }
