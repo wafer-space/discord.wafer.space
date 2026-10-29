@@ -1027,7 +1027,7 @@ Seems like you could squeeze some more on there 😜
 -# well done, seems pretty full
 
 {Reactions}
-🤣
+🤣 (2)
 
 [2026-10-27 6:59 p.m.] essen__
 Yeah, turns out you can get so much done with a quarter slot. 
@@ -1037,11 +1037,168 @@ I really think it's the best size 🫡
 [2026-10-27 7:00 p.m.] anfroholic
 I'm currently working on a half slot size. They all have their place :)
 
+{Reactions}
+🤣
 
 [2026-10-27 8:55 p.m.] mithro_
 
 
 
+[2026-10-29 11:15 a.m.] velvetundergroundandy
+@Andrew Wingate @Tholin @namibj do you guys need another slot if analog pins are a bottleneck?
+
+
+[2026-10-29 11:16 a.m.] namibj
+I'd have to look at what Tholin's doing with all the pins right now regarding whether we could steal/MUX enough of them for the  "muxed e-test".
+
+
+[2026-10-29 11:17 a.m.] tholin
+I want this chip to be pad-out compatible with my run 2 submission so its a drop-in replacement for the bring-up hardware I already got (which will save me a couple hundred dollars). As a result, there are no free analog pins.
+
+
+[2026-10-29 11:26 a.m.] velvetundergroundandy
+ok, then maybe we can have a separate chip just for all of the analog goodies for nam and andrew?
+
+
+[2026-10-29 11:27 a.m.] velvetundergroundandy
+maybe we can find an interesting use for the 1/4 slot that advances the state of open source silicon
+
+
+[2026-10-29 11:48 a.m.] tholin
+Someone managed to fit a RISC-V SoC into a quarter slot. I’m sure it can hold the muxed e-test.
+
+
+[2026-10-29 12:23 p.m.] namibj
+I'm at IKEA rn planning to get some boxes and a like a kitchen ladle; then I planned to go to a mural at the bottom of the hill that the IKEA sits atop of and take a bunch of full resolution pictures of it with my phone to later stitch together in Hugin; it's a _long_ one (65m wide and about 3m high at the tall end; I'll forward the discord image for clarity and in case anyone's curious).
+
+On the way back I'll restock on bakery bread that's not full of seeds (e.g. linseed and such; that I have a few freshly-cut-at-bakery loaves in the freezer) to eat for dinner and tomorrow, then when I'm home I guess I might as well get on and do the diagram-of-analog-MUX-with-stacked-m3&m4-both-going-crosswise task.
+
+I think it would be good to figure out what switch sizing would be best to do for specific DUT connections, I.e., it's looking like we could adjust where the boundary between the PMOS and NMOS rectangles is in the 2D-crosspoint array, and probably also adjust to make certain DUTs get wider (extend in the lengthwise direction along the analog bus; ||if you compare to gf180mcuD and sky130A TinyTapeout, my "lengthwise" is their horizontal and my "cross-wise" is their vertical, specifically referring to the analog MUX strips that reach inwards from the die edge and are connected top and bottom to analog user projects||) switches for lower `R_(on)`.
+At least slightly adjusting the area ratio between NMOS and PMOS based on what DUT pin they are for is something I feel would make a difference at least for some of the higher-current DUTs.
+
+Which, I guess, would likely be focused on some structures that are high-speed current-mode-logic-cells:
+
+[Elaboration cut for brevity; I spent already way too long rambling on this especially given it was done on phone keyboard sitting at the bus stop just prior to actually walking across the parking lot into the IKEA...]
+
+
+[2026-10-29 12:23 p.m.] namibj
+
+
+
+[2026-10-29 12:34 p.m.] namibj
+@Andrew Wingate the "analog goodies" referred to are primarily/essentially your 5 hall effect sensor DUTs (c.f. https://discord.com/channels/1361349522684510449/1361349523724570941/1563664093167095808 ), correct?
+
+If so, then I'm confident. 
+I'd have to check the half slot uncut-split COB-default-opportunity bonding plan for compatibility, but it's likely we could also target "one half of an uncut half-height respectively half-width slot, only adjusting the pad frame "redistribution" to make up for the slightly different bond pad pitch and assignments of what shared-GND and what capacitor-having VDD-nets are.
+
+That'd be only for flexibility during late-stage https://platform.wafer.space submission, to perhaps have spare variants gone through filing and DRC in case any of the reserved slots fail to submit DRC-clean in-time.
+Or if you'd may want to re-group among your slot reservations, or such.
+I'd only look at the bond plans and briefly write a judgement/opinion btw., not actually put any "proper" work into it.
+
+{Embed}
+https://platform.wafer.space/
+Welcome to wafer.space
+…
+Platform for wafer.space low cost silicon manufacturing.
+
+
+[2026-10-29 12:43 p.m.] namibj
+The spare area on Tholin's die could probably hold some kind of VCSEL or epc-co eGaN-FET power amplifier driving such a low-impedance load with flip chip access, if I can hurry enough to confirm the Run2 `FC01` dies can successfully bond to at least JLCPCB's 1/3 oz 2L flex PCB (it's distinguished as having a truly low cost "MPW"-like prototyping offer, @Essen has some test "boards" for iirc a hypothetical full slot on _I think_ just the COB special bond plan but critically taped out with the flip chip seal ring (that doesn't expose top metal pad along the ring just a dozen-ish micrometers from the exposed bond pad itself)).
+
+
+[2026-10-29 12:44 p.m.] namibj
+Or one could stuff an image sensor with digital IO in the area.
+
+
+[2026-10-29 12:56 p.m.] velvetundergroundandy
+not quite understanding so there are no analog pins available but this is not a problem in @Tholin 's view but is in @namibj 's view?
+
+
+[2026-10-29 12:58 p.m.] namibj
+I feel Tholin might be thinking you have a separate quarter slot that's an individual die, not the bottom right quarter/corner of Tholin's digital/mixed Run3 die? (Notably to distinguish from Tholin's analog Run3 die.)
+
+
+[2026-10-29 12:59 p.m.] tholin
+Yeah, I read this as meaning you have a separate quarter slot
+
+
+[2026-10-29 1:00 p.m.] tholin
+I can not provide any more analog pads as I have digital designs that need all 46 digital IOs and I’d like this chip to be pin-out compatible with my run 2 submission so I don’t go broke bringing it up.
+
+
+[2026-10-29 1:06 p.m.] namibj
+Because, the "muxed e-test" requires around one to two dozen analog pins while being able to offer them MUXed similar to TinyTapeout for other purposes.
+
+If necessary, I could even have an (isolating from the dual-purpose analog pin's other task that would necessitate much reduced parasitic capacitance) series pass-gate between the fairly capacitive analog bus line (running length-wise along the crosspoint switch array that's the heart of the "muxed e-test") and the analog pad it's connected to.
+Especially if that'd be necessary to tape out on Run3.
+
+
+[2026-10-29 1:18 p.m.] tholin
+I think you will need a dedicated tapeout for that many pads
+
+
+[2026-10-29 2:36 p.m.] velvetundergroundandy
+ok, that’s no problem. let’s see what we can do with your remaining 1/4 slot
+
+
+[2026-10-29 2:37 p.m.] velvetundergroundandy
+we already have a team doing RISC V and USB 2.0 will announce soon
+
+
+[2026-10-29 2:37 p.m.] velvetundergroundandy
+so would have to be something else
+
+
+[2026-10-29 2:46 p.m.] namibj
+AFAIK FlexMem bitcell got upgraded since Run2; if not otherwise covered that'd probably be a good fit.
+
+
+[2026-10-29 2:49 p.m.] velvetundergroundandy
+any other ayes?
+
+
+[2026-10-29 2:49 p.m.] velvetundergroundandy
+(one other person saying yes it’s a good idea)
+
+
+[2026-10-29 2:49 p.m.] tholin
+What’s FlexMem?
+
+
+[2026-10-29 2:50 p.m.] namibj
+@Chips4Makers aka Staf Verhaegen
+
+
+[2026-10-29 2:50 p.m.] namibj
+The SRAM compiler from Staf that's AFAIK the densest single port SRAM for sizes smaller than like 1mm^2 per macro we have.
+
+
+[2026-10-29 2:52 p.m.] namibj
+(at some point you'd need periphery capable of handling very long bitlines, and it's maybe a thing, but there's a decent chance FlexMem even if split into blocks and externally multiplexed still beats the larger area ones we got)
+
+
+[2026-10-29 3:02 p.m.] tholin
+What’s the current limit for FlexMem? Like, the largest capacity single macro?
+
+
+[2026-10-29 5:14 p.m.] namibj
+I don't know how far the row decoder has been coded, but in theory, it should be very big.
+It's not hard macros, it's a compiler. And as it already takes care of inserting a row of taps every so often for DRC compliance, I don't think there's a layout schema limit to how many rows it should support to compile to with that very architecture/pattern.
+Access speeds should go down after a while, and I'm not _sure_ if the sequencer can actually account for the needed higher wordline-to-sense-amplifier and write-precharge-to-wordline (unless it's realistically not necessary at all to precharge the bitlines ahead of a wordline activation for write purposes; I'd assume after some many rows the resistance of the bitline could possibly block the write driver transistors from overpowering a far-away bitcell if it doesn't pre-charge the bitlines to use their capacitance to overpower the bitcell right at activation), but that's it.
+
+
+[2026-10-29 5:18 p.m.] tholin
+I have RTL for four custom microcontroller architectures that use an external ROM, but rely on on-die RAM that I could use to test this.
+
+
+[2026-10-29 5:18 p.m.] tholin
+(Holy f- I did not know it was that many until I counted just now!)
+
+
+[2026-10-29 5:18 p.m.] tholin
+(I may be a bit insane)
+
+
 ==============================================================
-Exported 179 message(s)
+Exported 211 message(s)
 ==============================================================
