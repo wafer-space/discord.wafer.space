@@ -351,3 +351,19 @@ Access speeds should go down after a while, and I'm not _sure_ if the sequencer 
 "262706220073222144","namibj","2026-10-29T18:45:30.0870000+00:00","@Chips4Makers aka Staf Verhaegen could you please unbrick the build tooling for https://gitlab.com/Chips4Makers/arrakeen-sram-testchip/ , it seems you had written in a bunch of mentions of `dev_SRAM` branches strewn across the dependency web and it appears you've since deleted the branch which breaks `uv`.
 Notably, the mere `uv run scripts/gen_views.py` doesn't work and even trying to rewrite some of the lockfiles and even cloning and locally editing it's `pyproject.toml` of `c4m-flexmem` didn't suffice; next step would have been to clone and edit similarly `PDKMaster` to keep that as a dependency of `c4m-flexmem` from trying and failing to fetch `@dev_SRAM` of `pdkmaster-io-spice`.","2026-10_media/image-C1C60.png",""
 "262706220073222144","namibj","2026-10-29T18:46:57.5040000+00:00","a 512x32 was the largest member taped out on the Run2 test dies; but as you see the project's build config isn't reproducible because someone did deletion work on branches _I think._","",""
+"262706220073222144","namibj","2026-10-30T00:42:18.5150000+00:00","AFAIK these are from bottom to top in that order (i.e., the vertical order between image and code is reversed). That's the 3v3 with SRAM DRC rules.
+```python
+# SP
+_fab = SPSRAMFactory(lib=memlib, sram_rules=True, name_prefix=""SP6TR"")
+sp1 = _fab.block(words=128, word_size=8, we_size=1, cell_name=""Block_128x8"")
+sp2 = _fab.block(words=256, word_size=16, we_size=2, cell_name=""Block_256x16"")
+sp3 = _fab.block(words=512, word_size=32, we_size=4, cell_name=""Block_512x32"")
+
+# DP
+_fab = DPSRAMFactory(lib=memlib, sram_rules=True, name_prefix=""DP8TR"")
+dp1 = _fab.block(words=128, word_size=8, we_size=1, cell_name=""Block_128x8"")
+dp2 = _fab.block(words=256, word_size=16, we_size=2, cell_name=""Block_256x16"")
+dp3 = _fab.block(words=512, word_size=32, we_size=4, cell_name=""Block_512x32"")
+```
+It's really not that large.","2026-10_media/image-67F74.png",""
+"262706220073222144","namibj","2026-10-30T01:17:24.4240000+00:00","so, in the quarter corner of a full slot, I'd eyeball about 1280x160, approximately?","",""
