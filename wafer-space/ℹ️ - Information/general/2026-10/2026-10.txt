@@ -1199,6 +1199,18 @@ I have RTL for four custom microcontroller architectures that use an external RO
 (I may be a bit insane)
 
 
+[2026-10-29 6:45 p.m.] namibj
+@Chips4Makers aka Staf Verhaegen could you please unbrick the build tooling for https://gitlab.com/Chips4Makers/arrakeen-sram-testchip/ , it seems you had written in a bunch of mentions of `dev_SRAM` branches strewn across the dependency web and it appears you've since deleted the branch which breaks `uv`.
+Notably, the mere `uv run scripts/gen_views.py` doesn't work and even trying to rewrite some of the lockfiles and even cloning and locally editing it's `pyproject.toml` of `c4m-flexmem` didn't suffice; next step would have been to clone and edit similarly `PDKMaster` to keep that as a dependency of `c4m-flexmem` from trying and failing to fetch `@dev_SRAM` of `pdkmaster-io-spice`.
+
+{Attachments}
+2026-10_media/image-C1C60.png
+
+
+[2026-10-29 6:46 p.m.] namibj
+a 512x32 was the largest member taped out on the Run2 test dies; but as you see the project's build config isn't reproducible because someone did deletion work on branches _I think._
+
+
 ==============================================================
-Exported 211 message(s)
+Exported 213 message(s)
 ==============================================================
