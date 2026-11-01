@@ -34,6 +34,209 @@ Chip-on-Board (COB) & Wire Bonding Assembly for High-Reliability Se...
 COB and wire bonding for sensor modules: bond selection, pull/shear tests, glob top, and DFM tips.
 
 
+[2026-11-01 10:29 a.m.] mithro_
+@stuart -^
+
+
+[2026-11-01 10:41 a.m.] namibj
+I uploaded a thing.... https://github.com/namibj/BondTest72-Programmable-LDO
+
+{Embed}
+https://github.com/namibj/BondTest72-Programmable-LDO
+GitHub - namibj/BondTest72-Programmable-LDO: MCP4725-based addon fo...
+MCP4725-based addon for BondTest72 r2, providing a programmable LDO and precision 3.0V reference - namibj/BondTest72-Programmable-LDO
+2026-11_media/BondTest72-Programmable-LDO-F30EC
+
+
+[2026-11-01 11:33 a.m.] chips4makers
+The latest dev branch should work.
+```console
+% uvx --refresh git+https://gitlab.com/Chips4Makers/c4m-arrakeen-memgen.git@dev
+This is project Arrakeen's memory generator.
+This is pre-alpha quality software; just above proof-of-concept level.
+Don't use it for production; no support is provided and use is at own risk!
+If it breaks you may keep the pieces.
+
+Select technologies:
+1) IHP SG13G2
+2) Sky130
+3) GF180MCU
+
+...```
+
+
+[2026-11-01 11:34 a.m.] chips4makers
+512 is max. number of words currently supported by the compiler. The decoder generation for bigger number of words is not implemented yet.
+
+
+[2026-11-01 12:35 p.m.] namibj
+I'm gonna draw up a 2L flex board using the JLC special (5pcs up to 100x100 2L 1/3oz thin PI core only no stiffeners no soldering); I'm currently planning to do a multi-opportunity breakout board that utilizes the 3 flip chip bond pad structures in various combinations/styles (there's 3 nets; 2 of the 3 structures only have one pad per net; the third structure has larger grid pads and offers each net twice and routed so that it's at most diagonally/corner adjacent not sidways to challenge bonding processes that may be prone to shorting out adjacent pins), wiring out the DUT nets to some sort of "connector" that an ohmmeter can then be connected to for testing bond quality.
+What kind of connector would you think I should go with there?
+Some kinda 4-wire ZIF style replicated around the outer border to hopefully cover all the DUT bonds so that a tester could be ZIF-connected to all of them in series to try them?
+Just a wider ZIF connector for like each DUT/bond site approximately and plan on using an external breakout from that to a pin header or such?
+Solder connections for attaching pin headers to the flex around the edge after the flip chip bonding has been done?
+
+Any opinions? @Essen @Lauri @Andrew Wingate ?
+
+
+[2026-11-01 12:47 p.m.] namibj
+Primary testing would be 4-wire measurements of nets through the bonds at both ends; where applicable isolation testing is also on the docket.
+Where there are more than 2 pads for each net bonded out (there are 4 pads on the die for each net, but most DUT bonding sites on the test flex won't have all of them), the results from pairwise 4-wire measurements ought to reveal per-bond resistance, though possibly it might require adding a third voltage measurement wire into it, I'm not sure off the top of my head.
+
+
+[2026-11-01 4:48 p.m.] namibj
+yeah works.
+
+I took a look at the decoder generation code and it seems `RowPreDecodersT` could be taught to handle `(address_groups[0] != 3)`, specifically, `(address_groups[0] == 4)`, for a straight forward one extra bit (so up to 1024 words), as well as an easy extension by allowing to layer another pre-decoder in front of the current pre-decoder, where the new pre-decoder would merely act on this new (optional) 4th input bit of the current pre-decoder stage.
+It'd have to spread them a bit more vertically I think to not get routing congestion at the current last level decoder/page pitch, but otherwise I think it should work? And like, without having to make the row periphery wider. Unless this would not possibly fit in the limited routing channels on the left side over the input DFFs; it does look quite tight there. On further look it does appear to be mighty tight already....
+Seems like it'd still be worth it though, at least with a word size notably larger than the tiny 8 bit (so that the extra decoder column of row periphery space doesn't dominate).
+
+@Tholin How large of an SRAM would you _want_ to stick in that corner if you would get to wish anything the FlexMem compiler could support if it had sufficient demand to warrant the implementation/support effort?
+
+
+[2026-11-01 4:49 p.m.] tholin
+4096 x 8
+
+
+[2026-11-01 4:51 p.m.] tholin
+Actually, make that 8192 x 8
+
+
+[2026-11-01 4:51 p.m.] tholin
+If possible
+
+
+[2026-11-01 4:51 p.m.] tholin
+Idk if that’d fit
+
+
+[2026-11-01 4:51 p.m.] tholin
+I don’t even know if 4096 would fit
+
+
+[2026-11-01 4:52 p.m.] namibj
+would you be happy with 512x64 with byte granularity write enable?
+
+
+[2026-11-01 4:53 p.m.] namibj
+single port, right?
+
+
+[2026-11-01 4:54 p.m.] tholin
+Yeah
+
+
+[2026-11-01 4:54 p.m.] namibj
+I'll generate the 512x64_8we first (oh, already done...), let's see how large it is.
+
+
+[2026-11-01 4:57 p.m.] namibj
+can you measure me the area allowance?
+
+
+[2026-11-01 4:58 p.m.] namibj
+this is 1102 wide and 246 tall
+
+
+[2026-11-01 4:59 p.m.] namibj
+2167 wide
+
+
+[2026-11-01 5:03 p.m.] tholin
+I can do 2167 by 246
+
+
+[2026-11-01 5:04 p.m.] namibj
+yeah the 512x64_8we should fit and actually you should be able to put 4 of them in horizontally I think.....
+
+
+[2026-11-01 5:05 p.m.] namibj
+have fun generating then! https://discord.com/channels/1361349522684510449/1361349523724570941/1566414975290056855
+
+
+[2026-11-01 5:05 p.m.] tholin
+Yep. Two of them, and I can do a version of the AS2650v2 that does not require caravel.
+
+
+[2026-11-01 5:06 p.m.] namibj
+the external column mux would be a "little" hard I fear
+
+
+[2026-11-01 5:06 p.m.] namibj
+well, density on it
+
+
+[2026-11-01 5:08 p.m.] namibj
+future works (inbuilt multiplexer/decoder support for getting more desiable aspect ratios despite narrow requested access bus width)
+
+
+[2026-11-01 5:09 p.m.] tholin
+What’s "uvx"?
+
+
+[2026-11-01 5:10 p.m.] namibj
+due to the native width being "excessive", you could in theory even consider doing SECDEC ECC on it.... e.g. a 9th byte of width (72 instead of 64) is cheap there... the size would be in the coder, not the array.
+
+
+[2026-11-01 5:10 p.m.] namibj
+like npx but uv
+
+
+[2026-11-01 5:10 p.m.] namibj
+AFAIK
+
+
+[2026-11-01 5:10 p.m.] namibj
+you can also run from in the cloned repo
+
+
+[2026-11-01 5:11 p.m.] namibj
+if you ask what specific config I shall put in I can do it and send you a zip
+
+
+[2026-11-01 5:14 p.m.] tholin
+
+
+{Attachments}
+2026-11_media/image-0A796.png
+
+
+[2026-11-01 5:14 p.m.] namibj
+welp 🙁
+Feel free to tell me what config I'll generate it for you with the LEF and ngspice and verilog folders.
+
+
+[2026-11-01 5:16 p.m.] tholin
+It doesn't like the nix shell
+
+
+[2026-11-01 5:16 p.m.] namibj
+yeah I see
+
+
+[2026-11-01 5:17 p.m.] namibj
+@Tholin If you can, I'd appreciate some opinionated insight for the decision of how to "pin out" the group of flip chip DUT chips.
+
+
+[2026-11-01 5:19 p.m.] tholin
+The what?
+
+
+[2026-11-01 5:21 p.m.] tholin
+I’m not sure what useful input I could give on that
+
+
+[2026-11-01 5:24 p.m.] namibj
+The `FC01` dies, I'm doing a 100x100 mm outline flex pcb with several footprint variants for this; to be tested and afterwards measured for bond resistance (you can see the traces somewhat on the die; those allow measuring continuity and also confirming that no adjacent pads got shorted out in the bonding process).
+
+{Attachments}
+2026-11_media/image-CDDD8.png
+
+
+[2026-11-01 5:26 p.m.] namibj
+I'm quite indecisive on the matter of 'what "connector footprint" to put around the edge(s) of the pcb to be convenient for subsequent measuring of whether the bonding attempts were successful'.
+
+
 ==============================================================
-Exported 5 message(s)
+Exported 46 message(s)
 ==============================================================
