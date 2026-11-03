@@ -283,6 +283,63 @@ wafer.space GF180MCU Run 2. Contribute to wafer-space/ws-run2 development by cre
 @RebelMike has a number of them I believe.
 
 
+[2026-11-03 8:42 a.m.] rebelmike
+Yes, the run 2 version of TinyQV is along those lines: https://github.com/MichaelBell/ws02-tinyqv
+
+No dedicated I2C peripheral though potentially you could bit bang it
+
+{Embed}
+https://github.com/MichaelBell/ws02-tinyqv
+GitHub - MichaelBell/ws02-tinyQV: TinyQV for Wafer Space run 2 on g...
+TinyQV for Wafer Space run 2 on gf180mcuD. Contribute to MichaelBell/ws02-tinyQV development by creating an account on GitHub.
+2026-11_media/ws02-tinyQV-824C7
+
+
+[2026-11-03 4:38 p.m.] tholin
+https://discord.com/channels/1361349522684510449/1361349523724570938/1567027653540581488
+
+
+[2026-11-03 4:38 p.m.] tholin
+Does this chip not contain layouts created using my SCL?
+
+
+[2026-11-03 4:38 p.m.] tholin
+@Andrew Wingate
+
+
+[2026-11-03 4:43 p.m.] anfroholic
+Correct (I think) This was tiny tapeout's experimental chip. 
+Maybe @tnt could give some better insight.
+
+
+[2026-11-03 4:45 p.m.] 246tnt
+Not usable ones.
+
+
+[2026-11-03 4:47 p.m.] 246tnt
+We had released the final GDS before the `buf_8` fix so all the designs using that SCL are expected DOA.
+
+
+[2026-11-03 4:47 p.m.] tholin
+That’s not the case
+
+
+[2026-11-03 4:47 p.m.] tholin
+The buff_8 will still work, just with excessive power consumption when on
+
+
+[2026-11-03 4:48 p.m.] tholin
+One out of 8 transistors was shorted, and the remaining 7 are enough to power the short and still generate a clean logic level.
+
+
+[2026-11-03 4:48 p.m.] tholin
+Remember that this bug only got past me because the cell still passed SPICE simulation.
+
+
+[2026-11-03 4:49 p.m.] tholin
+(also its buff_8 not buf_8, I always hated the abbreviation of "buffer" with one "f")
+
+
 ==============================================================
-Exported 56 message(s)
+Exported 68 message(s)
 ==============================================================

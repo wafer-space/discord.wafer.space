@@ -82,3 +82,18 @@ Feel free to tell me what config I'll generate it for you with the LEF and ngspi
 "262706220073222144","namibj","2026-11-03T04:15:35.0810000+00:00","`HZ80` plus `DPK1` (the former Z80 clone  bit banging firmware out of nonvolatile storage into the instruction memory of the bao IO controller thing (`DPK1`). ?","",""
 "262706220073222144","namibj","2026-11-03T04:15:48.6650000+00:00","https://github.com/wafer-space/ws-run2 check here","",""
 "756011607603019777","anfroholic","2026-11-03T04:22:57.1280000+00:00","@RebelMike has a number of them I believe.","",""
+"691780627338625077","rebelmike","2026-11-03T08:42:43.3740000+00:00","Yes, the run 2 version of TinyQV is along those lines: https://github.com/MichaelBell/ws02-tinyqv
+
+No dedicated I2C peripheral though potentially you could bit bang it","",""
+"220639106915368960","tholin","2026-11-03T16:38:07.8860000+00:00","https://discord.com/channels/1361349522684510449/1361349523724570938/1567027653540581488","",""
+"220639106915368960","tholin","2026-11-03T16:38:15.8120000+00:00","Does this chip not contain layouts created using my SCL?","",""
+"220639106915368960","tholin","2026-11-03T16:38:36.8160000+00:00","@Andrew Wingate","",""
+"756011607603019777","anfroholic","2026-11-03T16:43:46.6770000+00:00","Correct (I think) This was tiny tapeout's experimental chip. 
+Maybe @tnt could give some better insight.","",""
+"596068704471482370","246tnt","2026-11-03T16:45:58.2640000+00:00","Not usable ones.","",""
+"596068704471482370","246tnt","2026-11-03T16:47:00.7780000+00:00","We had released the final GDS before the `buf_8` fix so all the designs using that SCL are expected DOA.","",""
+"220639106915368960","tholin","2026-11-03T16:47:31.3100000+00:00","That’s not the case","",""
+"220639106915368960","tholin","2026-11-03T16:47:41.7340000+00:00","The buff_8 will still work, just with excessive power consumption when on","",""
+"220639106915368960","tholin","2026-11-03T16:48:12.0330000+00:00","One out of 8 transistors was shorted, and the remaining 7 are enough to power the short and still generate a clean logic level.","",""
+"220639106915368960","tholin","2026-11-03T16:48:26.5300000+00:00","Remember that this bug only got past me because the cell still passed SPICE simulation.","",""
+"220639106915368960","tholin","2026-11-03T16:49:32.3880000+00:00","(also its buff_8 not buf_8, I always hated the abbreviation of ""buffer"" with one ""f"")","",""
