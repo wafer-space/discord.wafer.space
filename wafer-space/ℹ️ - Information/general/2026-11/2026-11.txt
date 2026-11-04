@@ -419,7 +419,58 @@ Getting a TON of antenna violations around the RAM now that it seems to be unabl
 [2026-11-04 9:48 a.m.] tholin
 Using this RAM generator has been a pain so far
 
+{Reactions}
+👍 (2)
+
+[2026-11-04 4:27 p.m.] chips4makers
+Why do you need magic for LEF generation ? The compiler should also generate lef files.
+
+
+[2026-11-04 4:30 p.m.] tholin
+I modified the GDS file to have Metal4 strips for the PDN to contact
+
+
+[2026-11-04 4:31 p.m.] tholin
+I may have to edit it more. Getting lots of antenna violations still and what can usually help is moving the macro ports to a higher metal layer.
+
+
+[2026-11-04 4:32 p.m.] tholin
+I doubt I’ll be able to insert diodes inside the RAM, so I hope that’ll be enough.
+
+
+[2026-11-04 4:39 p.m.] 246tnt
+Ideally you wouldn't be editing the GDS but wrapping it.
+
+
+[2026-11-04 4:52 p.m.] chips4makers
+Ideally OpenROAD should be able to handle the SRAM as is and do proper supply connection and antenna diode insertion.
+@Tholin Are you using librelane ? For my tape-outs @Leo Moser (mole99) helped me doing the tape-outs without needing to wrap the memory block. If I remember correctly for the half slot test chip the blocks were rotated also. It did contain minimal amount of logic though.
+
+
+[2026-11-04 4:54 p.m.] 246tnt
+I'm pretty sure it can. You need an appropriate `pdngen` configuration to tell it what to connect how.
+
+
+[2026-11-04 5:03 p.m.] tholin
+Idk how the Metal5 power straps could possibly connect to the RAM if it has no rails on Metal4
+
+
+[2026-11-04 5:03 p.m.] tholin
+And indeed the PDN did not make any connections until I added those
+
+
+[2026-11-04 5:03 p.m.] tholin
+But right now I’m more concerned about the antenna violations
+
+
+[2026-11-04 5:12 p.m.] 246tnt
+pdn gen is perfectly capable to connect down from Met5 to lower metal, adding island and via stacks as needed.
+
+
+[2026-11-04 5:13 p.m.] 246tnt
+But that's not something it will just do with default config.
+
 
 ==============================================================
-Exported 81 message(s)
+Exported 93 message(s)
 ==============================================================
