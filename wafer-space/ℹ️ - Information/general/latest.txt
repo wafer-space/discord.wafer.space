@@ -485,7 +485,60 @@ Under normal circumstances, I’d do a LEF write from magic and have it generate
 {Attachments}
 2026-11_media/image-9DA29.png
 
+{Reactions}
+😬
+
+[2026-11-05 10:15 a.m.] mole99
+@Tholin You can find the pdn setup here: https://gitlab.com/Chips4Makers/arrakeen-sram-testchip/-/blob/main/template/librelane/pdn/pdn_TestChip.tcl?ref_type=heads
+It's as simple as telling pdngen to connect Metal5 (PDN_HORIZONTAL_LAYER) and Metal3.
+
+{Embed}
+https://gitlab.com/Chips4Makers/arrakeen-sram-testchip/-/blob/main/template/librelane/pdn/pdn_TestChip.tcl?ref_type=heads
+template/librelane/pdn/pdn_TestChip.tcl · main · Chips4Makers / A...
+GitLab.com
+2026-11_media/twitter_card-570ddb06edf56a2312253c5872489-60AF3.jpg
+
+
+[2026-11-05 10:17 a.m.] tholin
+I’m more concerned with the antenna errors
+
+
+[2026-11-05 10:18 a.m.] tholin
+I tried using insert ECO diodes to force diodes at all the RAM inputs and that made it *worse*
+
+
+[2026-11-05 10:21 a.m.] mole99
+You can load the `.lyrdb` file into KLayout to see exactly where and why antenna violations exist.
+
+
+[2026-11-05 10:24 a.m.] tholin
+I did
+
+
+[2026-11-05 10:24 a.m.] tholin
+Its all around the RAM
+
+
+[2026-11-05 10:25 a.m.] tholin
+The RAM generator does not put any antenna gate area information in the LEF.
+
+
+[2026-11-05 10:25 a.m.] tholin
+LibreLane doesn’t even pick up on the fact that there are these violations
+
+
+[2026-11-05 10:34 a.m.] mole99
+You could put some dummy antenna information in the LEF.
+
+And please open an issue at [c4m-flexmem](https://gitlab.com/Chips4Makers/c4m-flexmem) so Staf can keep it in mind.
+
+{Embed}
+https://gitlab.com/Chips4Makers/c4m-flexmem
+Chips4Makers / c4m-flexmem · GitLab
+A flexible, scalable memory generator.
+2026-11_media/twitter_card-570ddb06edf56a2312253c5872489-60AF3.jpg
+
 
 ==============================================================
-Exported 96 message(s)
+Exported 105 message(s)
 ==============================================================
