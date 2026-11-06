@@ -1,0 +1,123 @@
+{
+  "guild": {
+    "id": "1361349522684510449",
+    "name": "wafer.space Community",
+    "iconUrl": "2026-11_media/fb143eaa45770cbb40493d09b625e98b-09FD1.png"
+  },
+  "channel": {
+    "id": "1568182794188750879",
+    "type": "GuildPublicThread",
+    "categoryId": "1409660288822673408",
+    "category": "⁉️-questions",
+    "name": "Handling commercial DRC violations not covered by the open-source deck",
+    "topic": null
+  },
+  "dateRange": {
+    "after": "2026-10-31T23:59:59.999+00:00",
+    "before": "2026-12-01T00:00:00+00:00"
+  },
+  "exportedAt": "2026-11-06T10:54:29.2082654+00:00",
+  "messages": [
+    {
+      "id": "1568182794188750879",
+      "type": "Default",
+      "timestamp": "2026-11-06T08:38:33.562+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi all,\n\nOur design passed the open-source KLayout DRC checks and wafer.space precheck (not the lastest version), but a commercial DRC run reported additional violations.\n\nSome commercial checks appear to be absent from the open-source deck versions we used. In particular, we could not find an implementation of PAD.15, so passing the open-source checks does not appear to establish compliance with this guideline.\n\nFor example, the commercial run reported 87 PAD.15 results. The public GF180 bond-pad guidelines (https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_09_2.html) specify a 30 µm minimum distance between the pad opening and the inner edge of GUARD_RING_MK.\n\nAt a representative location along the left die edge, the inner edge of GUARD_RING_MK is at x = 16 µm, and the nearest pad-opening edge is at x = 28 µm, giving a separation of 12 µm.\n\nOur PAD_EDGE_SPACING is 26 µm, which is the default supplied by the GF180 PDK’s LibreLane I/O configuration in the version we use.\n\nCould anyone clarify whether these additional commercial DRC violations must be corrected before submission, or whether applicable exceptions allow them to be accepted despite the commercial results?\n\nSpecifically, is this 12 µm PAD.15 spacing acceptable, or does it require a layout change? \n\nOur design uses a 1×0.5 slot with COB, gf180mcuD, and gf180mcu_fd_io pads. The commercial run selected WEDGE bonding; the public PAD.15 table lists 30 µm for wedge, ball, and gold-bump options.\n\nThank you!",
+      "author": {
+        "id": "972892843964268564",
+        "name": "edmund1371",
+        "discriminator": "0000",
+        "nickname": "Edmund",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-11_media/43ef615eb86fbaae934f63112ea9454f-1C805.png"
+      },
+      "attachments": [
+        {
+          "id": "1568182794872557578",
+          "url": "2026-11_media/PAD15-B2ECE.png",
+          "fileName": "PAD15.png",
+          "fileSizeBytes": 2106
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1568193789351428258",
+      "type": "Default",
+      "timestamp": "2026-11-06T09:22:15.013+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hello @Edmund,\n\nSimilar as in your other question, the GF-MPW shuttles were previously taped out with the same configuration.\n\nPAD.15 is a bond pad guideline, however it always depends on what your assembly house is capable of. You can adjust the spacing to the guard ring to comply with PAD.15 if you wish, but this means that your chip won't be compatible with the default CoB packaging offered by wafer.space.\n\nYou can also just keep it as it is in the default LibreLane template. Many designs on https://github.com/wafer-space/ws-run1 and https://github.com/wafer-space/ws-run2 use the same configuration.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-11_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "972892843964268564",
+          "name": "edmund1371",
+          "discriminator": "0000",
+          "nickname": "Edmund",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-11_media/43ef615eb86fbaae934f63112ea9454f-1C805.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1568196966813536287",
+      "type": "Default",
+      "timestamp": "2026-11-06T09:34:52.579+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Got it, thanks a lot!",
+      "author": {
+        "id": "972892843964268564",
+        "name": "edmund1371",
+        "discriminator": "0000",
+        "nickname": "Edmund",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-11_media/43ef615eb86fbaae934f63112ea9454f-1C805.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    }
+  ],
+  "messageCount": 3
+}

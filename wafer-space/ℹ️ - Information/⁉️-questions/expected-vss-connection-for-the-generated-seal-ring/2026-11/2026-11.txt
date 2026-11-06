@@ -1,0 +1,59 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / ⁉️-questions / Expected VSS connection for the generated seal ring
+After: 2026-10-31 11:59 p.m.
+Before: 2026-12-01 12:00 a.m.
+==============================================================
+
+[2026-11-06 8:14 a.m.] edmund1371
+Hi all,
+
+In the final GDS of our design (after precheck), we could not find a direct metal/via connection between the generated seal ring and the VSS pads/bus.
+
+The ring contains substrate contacts, so we are not claiming that it is completely electrically floating. Our concern is specifically the direct metal connection.
+
+GF180 design manual Section 12.3.2 states (https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_12_3.html#guard-ring-and-vss-bus):
+
+> Scribe line guard ring and Metal1, 2, 3, 4,5 and/or 6 must be connected directly to Vss pad(s).
+
+Regarding verification:
+- Our open-source DRC and local precheck did not report this issue.
+- In the open-source deck versions we inspected, we found guard-ring geometry checks, but could not identify a check explicitly verifying the ring’s direct connection to VSS.
+- Our open-source LVS uses DEF/LEF-assisted extraction. The seal ring is added during GDS processing and is absent from that DEF, so the LVS result does not verify its connection.
+
+Does anyone know:
+1. Whether the absence of a direct metal connection between the generated seal ring and VSS is acceptable, or whether it must be corrected before tapeout?
+2. Is there a recommended implementation or reference layout?
+3. Is this connection checked by the current precheck or another signoff step?
+
+Thank you!
+
+
+[2026-11-06 8:58 a.m.] 246tnt
+It's been like that for previous tapeouts so it definitely doesn't cause a reject.
+
+{Reactions}
+👍
+
+[2026-11-06 9:01 a.m.] mole99
+Hello @Edmund,
+
+Yes, we are aware that the DRM states that the guard ring should be connected to VSS.
+In existing designs, however, this missing connection has not caused any problems.
+
+Even in the GF-MPW shuttles sponsored by Google and managed by Efabless, where the seal ring (guard ring) was inserted by GF, they did not make connections to the VSS pads. You can verify this in this die shot: http://infosecdj.net/map/efabless/gf180mcu-gfmpw1-leosoc-18019f00/infosecdj_mz_nikpa40x_66p
+
+I'm not sure what the reasons for connecting to VSS are (better ESD protection? bonded to guard ring? use the guard ring to carry current around the die?), but you can make the connection in your layout if you'd like.
+
+However, we would also need to find a way to update [GR.2](https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_12_4.html) in order to differentiate this metal connection from the rest of the prime die metal.
+
+
+[2026-11-06 9:09 a.m.] edmund1371
+Got it! Thank you both very much.
+
+{Reactions}
+👍
+
+==============================================================
+Exported 4 message(s)
+==============================================================

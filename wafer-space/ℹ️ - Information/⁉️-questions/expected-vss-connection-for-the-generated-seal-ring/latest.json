@@ -1,0 +1,185 @@
+{
+  "guild": {
+    "id": "1361349522684510449",
+    "name": "wafer.space Community",
+    "iconUrl": "2026-11_media/fb143eaa45770cbb40493d09b625e98b-09FD1.png"
+  },
+  "channel": {
+    "id": "1568176623881289870",
+    "type": "GuildPublicThread",
+    "categoryId": "1409660288822673408",
+    "category": "⁉️-questions",
+    "name": "Expected VSS connection for the generated seal ring",
+    "topic": null
+  },
+  "dateRange": {
+    "after": "2026-10-31T23:59:59.999+00:00",
+    "before": "2026-12-01T00:00:00+00:00"
+  },
+  "exportedAt": "2026-11-06T10:50:19.5907345+00:00",
+  "messages": [
+    {
+      "id": "1568176623881289870",
+      "type": "Default",
+      "timestamp": "2026-11-06T08:14:02.446+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi all,\n\nIn the final GDS of our design (after precheck), we could not find a direct metal/via connection between the generated seal ring and the VSS pads/bus.\n\nThe ring contains substrate contacts, so we are not claiming that it is completely electrically floating. Our concern is specifically the direct metal connection.\n\nGF180 design manual Section 12.3.2 states (https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_12_3.html#guard-ring-and-vss-bus):\n\n> Scribe line guard ring and Metal1, 2, 3, 4,5 and/or 6 must be connected directly to Vss pad(s).\n\nRegarding verification:\n- Our open-source DRC and local precheck did not report this issue.\n- In the open-source deck versions we inspected, we found guard-ring geometry checks, but could not identify a check explicitly verifying the ring’s direct connection to VSS.\n- Our open-source LVS uses DEF/LEF-assisted extraction. The seal ring is added during GDS processing and is absent from that DEF, so the LVS result does not verify its connection.\n\nDoes anyone know:\n1. Whether the absence of a direct metal connection between the generated seal ring and VSS is acceptable, or whether it must be corrected before tapeout?\n2. Is there a recommended implementation or reference layout?\n3. Is this connection checked by the current precheck or another signoff step?\n\nThank you!",
+      "author": {
+        "id": "972892843964268564",
+        "name": "edmund1371",
+        "discriminator": "0000",
+        "nickname": "Edmund",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-11_media/43ef615eb86fbaae934f63112ea9454f-1C805.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1568187738883100703",
+      "type": "Default",
+      "timestamp": "2026-11-06T08:58:12.469+00:00",
+      "timestampEdited": "2026-11-06T08:58:14.713+00:00",
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "It's been like that for previous tapeouts so it definitely doesn't cause a reject.",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-11_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "2026-11_media/1f44d-27259.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "323371864074485771",
+              "name": "mole99",
+              "discriminator": "0000",
+              "nickname": "mole99",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-11_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1568188482113904691",
+      "type": "Default",
+      "timestamp": "2026-11-06T09:01:09.669+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hello @Edmund,\n\nYes, we are aware that the DRM states that the guard ring should be connected to VSS.\nIn existing designs, however, this missing connection has not caused any problems.\n\nEven in the GF-MPW shuttles sponsored by Google and managed by Efabless, where the seal ring (guard ring) was inserted by GF, they did not make connections to the VSS pads. You can verify this in this die shot: http://infosecdj.net/map/efabless/gf180mcu-gfmpw1-leosoc-18019f00/infosecdj_mz_nikpa40x_66p\n\nI'm not sure what the reasons for connecting to VSS are (better ESD protection? bonded to guard ring? use the guard ring to carry current around the die?), but you can make the connection in your layout if you'd like.\n\nHowever, we would also need to find a way to update [GR.2](https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_12_4.html) in order to differentiate this metal connection from the rest of the prime die metal.",
+      "author": {
+        "id": "323371864074485771",
+        "name": "mole99",
+        "discriminator": "0000",
+        "nickname": "Leo Moser (mole99)",
+        "color": null,
+        "isBot": false,
+        "roles": [
+          {
+            "id": "1423020172595298314",
+            "name": "Mod",
+            "color": null,
+            "position": 4
+          }
+        ],
+        "avatarUrl": "2026-11_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "972892843964268564",
+          "name": "edmund1371",
+          "discriminator": "0000",
+          "nickname": "Edmund",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-11_media/43ef615eb86fbaae934f63112ea9454f-1C805.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1568190539655020565",
+      "type": "Default",
+      "timestamp": "2026-11-06T09:09:20.225+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Got it! Thank you both very much.",
+      "author": {
+        "id": "972892843964268564",
+        "name": "edmund1371",
+        "discriminator": "0000",
+        "nickname": "Edmund",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-11_media/43ef615eb86fbaae934f63112ea9454f-1C805.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [
+        {
+          "emoji": {
+            "id": "",
+            "name": "\uD83D\uDC4D",
+            "code": "thumbsup",
+            "isAnimated": false,
+            "imageUrl": "2026-11_media/1f44d-27259.svg"
+          },
+          "count": 1,
+          "users": [
+            {
+              "id": "323371864074485771",
+              "name": "mole99",
+              "discriminator": "0000",
+              "nickname": "Leo Moser (mole99)",
+              "color": null,
+              "isBot": false,
+              "avatarUrl": "2026-11_media/3c7c17f3225f6e56f4dccd83f14383f2-73F83.png"
+            }
+          ]
+        }
+      ],
+      "mentions": [],
+      "inlineEmojis": []
+    }
+  ],
+  "messageCount": 4
+}
