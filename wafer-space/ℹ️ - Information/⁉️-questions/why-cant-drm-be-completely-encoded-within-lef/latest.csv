@@ -1,0 +1,17 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"488155070052171816","rahulbhagwat","2026-11-05T19:06:57.6120000+00:00","since lef already specifies geometric constraints, what stops foundries from encoding all manufacturable geometry constraints solely within lef files so as to not have a non-standard design rule manual. similar for lib and electrical properties.
+
+
+is there a technical reason for the lef standard to not be able to encode all types of drm rules?","",""
+"596068704471482370","246tnt","2026-11-05T19:10:03.9170000+00:00","How exactly does LEF encode geometric constraints ?!?!","",""
+"488155070052171816","rahulbhagwat","2026-11-05T19:11:15.7450000+00:00","like min width, min spacing, placement sites, grid size etc. couldn't lef constructs be extended to indicate what is possible to manufacture?","",""
+"596068704471482370","246tnt","2026-11-05T19:13:29.1530000+00:00","""be extended"" ... well if you go with extension then everything is possible ... of course. you could extend LEF with a turing complete language.
+
+But as the current spec, it's not even close to being able to describe DRC rules ... it can barely even describe the min subset for routing ... even then some of the rules described in the LEF are not the actual rule but some more restrictive variation because you can't describe the actual rule.","","👍 (1)"
+"488155070052171816","rahulbhagwat","2026-11-05T19:15:55.0060000+00:00","just seems weird that signoff drc checking is one of the only things that doesn't yet have a 'dominant' standard/format and is still shipped as a manual that you implement","",""
+"596068704471482370","246tnt","2026-11-05T19:17:12.2810000+00:00","I think it comes down to they are really complicated and varied across process ...","","👍 (1)"
+"488155070052171816","rahulbhagwat","2026-11-05T19:24:39.5240000+00:00","Started thinking about this after looking at:-
+
+https://gitlab.com/Chips4Makers/PDKMaster
+
+and how difficult it would be to have a standard framework (if you could encode a process and then describe errors using a theorem prover like lean)","",""

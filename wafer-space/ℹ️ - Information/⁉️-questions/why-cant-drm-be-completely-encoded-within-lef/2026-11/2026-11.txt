@@ -1,0 +1,57 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / ⁉️-questions / why can't drm be completely encoded within lef
+After: 2026-10-31 11:59 p.m.
+Before: 2026-12-01 12:00 a.m.
+==============================================================
+
+[2026-11-05 7:06 p.m.] rahulbhagwat
+since lef already specifies geometric constraints, what stops foundries from encoding all manufacturable geometry constraints solely within lef files so as to not have a non-standard design rule manual. similar for lib and electrical properties.
+
+
+is there a technical reason for the lef standard to not be able to encode all types of drm rules?
+
+
+[2026-11-05 7:10 p.m.] 246tnt
+How exactly does LEF encode geometric constraints ?!?!
+
+
+[2026-11-05 7:11 p.m.] rahulbhagwat
+like min width, min spacing, placement sites, grid size etc. couldn't lef constructs be extended to indicate what is possible to manufacture?
+
+
+[2026-11-05 7:13 p.m.] 246tnt
+"be extended" ... well if you go with extension then everything is possible ... of course. you could extend LEF with a turing complete language.
+
+But as the current spec, it's not even close to being able to describe DRC rules ... it can barely even describe the min subset for routing ... even then some of the rules described in the LEF are not the actual rule but some more restrictive variation because you can't describe the actual rule.
+
+{Reactions}
+👍
+
+[2026-11-05 7:15 p.m.] rahulbhagwat
+just seems weird that signoff drc checking is one of the only things that doesn't yet have a 'dominant' standard/format and is still shipped as a manual that you implement
+
+
+[2026-11-05 7:17 p.m.] 246tnt
+I think it comes down to they are really complicated and varied across process ...
+
+{Reactions}
+👍
+
+[2026-11-05 7:24 p.m.] rahulbhagwat
+Started thinking about this after looking at:-
+
+https://gitlab.com/Chips4Makers/PDKMaster
+
+and how difficult it would be to have a standard framework (if you could encode a process and then describe errors using a theorem prover like lean)
+
+{Embed}
+https://gitlab.com/Chips4Makers/PDKMaster
+Chips4Makers / PDKMaster · GitLab
+Tools for managing and converting micro-electronics PDKs (process design kits)
+2026-11_media/twitter_card-570ddb06edf56a2312253c5872489-60AF3.jpg
+
+
+==============================================================
+Exported 7 message(s)
+==============================================================
