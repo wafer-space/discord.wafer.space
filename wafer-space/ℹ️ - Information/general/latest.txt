@@ -556,6 +556,235 @@ Thanks a lot!
 Wenn du willst, kann ich die Frage noch kürzer oder förmlicher machen, etwa für eine E-Mail statt Discord.
 
 
+[2026-11-06 1:28 p.m.] namibj
+Do we have any vaguely hard idea of the surface countour from a pad outwards?
+Or even in theory just around a pad?
+
+
+[2026-11-06 1:39 p.m.] namibj
+@InfoSecDJ that cross-section you did through the pads, would it be difficult for you to apply some focus stacking or whatever necessary to get a good understanding of how the top surface actually looks from a topography POV?
+I'm asking to hopefully be able to pick an appropriate ACF tape that won't necessitate applying plating on the die to build the natural pad up into a true raised bump that reaches above the passivation's height.
+
+
+[2026-11-06 1:42 p.m.] infosecdj
+the link below there is actually focus-stacked. see if that helps, and although passivation oxide is naturally invisible there, you can kinda infer where it ends -- that's where all the junk stuck in PI begins. looks quite a bit above the pad metal.
+
+
+[2026-11-06 1:45 p.m.] infosecdj
+🤷  at least that's how I interpret the visuals there, I might be wrong on that
+
+
+[2026-11-06 1:46 p.m.] namibj
+https://infosecdj.net/map/wafer-space/gf180mcu-ws1-xs1/infosecdj_nikpa100ncg/#x=11273&y=1053&z=6
+Is it about this recess (I cut off the other side to the right to maintain this zoom level)?
+
+{Attachments}
+2026-11_media/image-6CEC0.png
+
+
+[2026-11-06 1:47 p.m.] namibj
+<https://gf180mcu-pdk.readthedocs.io/en/latest/analog/layout/inter_specs/inter_specs_3_39.html>
+
+{Attachments}
+2026-11_media/2_cross_section_39-E5CE9.png
+
+
+[2026-11-06 1:47 p.m.] namibj
+<https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_09_2.html>
+
+{Attachments}
+2026-11_media/pad2-6C88D.png
+
+
+[2026-11-06 1:52 p.m.] namibj
+.....what direction to the pad frame was the image plane oriented, and while the die-thickness-reference and what's face of the die and what's backside-of-die are obvious, I'd like to have somewhat confirmed what's the right/left edge of the image region.
+
+
+[2026-11-06 1:59 p.m.] 246tnt
+On the right side is the corner of the pad frame. All the little square between the two pads are the fill pattern between the bond pads.
+
+
+[2026-11-06 2:02 p.m.] infosecdj
+https://infosecdj.net/map/wafer-space/gf180mcu-ws1-gd03/infosecdj_mz_nikpa40x/#x=4518&y=62416&z=4
+
+{Attachments}
+2026-11_media/image-C6D77.png
+
+
+[2026-11-06 2:04 p.m.] namibj
+<https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_12_2.html>
+
+{Attachments}
+2026-11_media/SCRIBE_LINE2-FCFFC.png
+2026-11_media/screencapture-gf180mcu-pdk-readthedocs-io--28375.png
+
+
+[2026-11-06 2:05 p.m.] namibj
+If I measure at the right edge I do indeed measure that "pad opening" to be the DRC spec "wire bond"-class sealring's "pad opening".
+
+
+[2026-11-06 2:09 p.m.] namibj
+ahhh hmmm
+
+
+[2026-11-06 2:12 p.m.] namibj
+@tnt Do you think that perhaps using some polishing/flattening technique to get rid of the currently-raised ....**_polyimide?_** down to the height of the aluminium pads would _work?_
+
+
+[2026-11-06 2:17 p.m.] 246tnt
+Seems unlikely ... maybe some special solvant ...
+
+
+[2026-11-06 2:19 p.m.] infosecdj
+polyimide is, unfortunately, very resistant to solvents I know of. in fact, removing polyimide before imaging has proven to be a challenge for me here, as nothing I am able to obtain can do anything about it. so either heat or aggressive chem, neither of which is a good approach.
+
+
+[2026-11-06 2:21 p.m.] 246tnt
+Monoethanolamine ... good luck finding some 😅
+
+
+[2026-11-06 2:24 p.m.] infosecdj
+does it actually work? is it worth the hassle of hunting for sources?
+
+
+[2026-11-06 2:26 p.m.] namibj
+Oh I meant in a sense of planarization.
+
+
+[2026-11-06 2:28 p.m.] 246tnt
+https://patentimages.storage.googleapis.com/57/b1/0f/1a678067b52dd4/US6319884B2.pdf
+
+Seems to work when mixed with some other one.
+
+There are dedicated solvants to it seems (made specifically for the Silicon industry), but those are probably harder to track down, although maybe @azonenberg knows where to get that kind of stuff ?
+
+
+[2026-11-06 2:28 p.m.] namibj
+In theory the easier treatment would be to run a zincate-ENIG plating though I don't think the "final" gold layer is as important for ACF tape as it is for soldering.
+
+
+[2026-11-06 2:31 p.m.] namibj
+I'm just rather poorly suited to do such properly, not alone because it sounds like it'd realistically involve nitric acid at around half of the regular non-fuming concentrate strength (i.e., 30 ish percent), and I recall concentrated nitric acid to be fairly regulated in and around Germany.
+
+
+[2026-11-06 2:33 p.m.] infosecdj
+you'd be very right on that.
+
+
+[2026-11-06 2:39 p.m.] azonenberg
+Concentrated sulfuric (at very elevated temps) or various oxygen/fluorine based plasmas are the usual options
+
+
+[2026-11-06 2:41 p.m.] 246tnt
+@azonenberg But wouldn't that attack the Aluminium too ?
+
+
+[2026-11-06 2:42 p.m.] azonenberg
+Not significantly, at least for the duration you need to get the polyimide off
+
+
+[2026-11-06 2:42 p.m.] azonenberg
+at least that's been my experience
+
+
+[2026-11-06 2:43 p.m.] azonenberg
+Backing up a bit: what is the overall goal?
+
+
+[2026-11-06 2:43 p.m.] azonenberg
+there will be overglass above the edge of the aluminum even if you remove the PI
+
+
+[2026-11-06 2:43 p.m.] namibj
+I guess there's hoping the pad thickness of around 4.5um and the passivation bump/buffer around it suffice to keep the 11um (c.f. stackup; the coverlay is pulled back around the relevant area anyways) copper traces that intersect the pads at the padframe and are otherwise aimed/oriented to escape from the die for now (there'll be tests to qualify an opportunity for future TinyTapeout to support direct pads over user tiles set up such that realistically a minimum analog project could hold 2 pads and an analog mux spine could sustain this, but there'd need to be probably at least one digital spine between two analog ones (vertical pitch) and if packing the die with this, there'd probably need to be two distinct flip-chip-fan-out setups where any given die can only support _either_ the even-rows _or_ the odd-rows of counting only analog spines).
+
+{Attachments}
+2026-11_media/img_1d2b4fa5-1E953.png
+
+
+[2026-11-06 2:44 p.m.] namibj
+Do you know how ACF tape interacts with surface topography of both sides in a face-bonding application?
+
+
+[2026-11-06 2:45 p.m.] azonenberg
+how large are the filler particles in your tape?
+
+
+[2026-11-06 2:45 p.m.] azonenberg
+i would expect "normal" ACF to be far too large particles/pitch
+
+
+[2026-11-06 2:47 p.m.] azonenberg
+Like 3M 7303 is 43um particles and wants a 250um pitch
+
+
+[2026-11-06 2:47 p.m.] azonenberg
+which is far bigger than a bond pad
+
+
+[2026-11-06 2:47 p.m.] azonenberg
+i assume you can get smaller pitch stuff for COB/COF applications but i dont have specs for how much
+
+
+[2026-11-06 2:56 p.m.] namibj
+I'm expecting "the fine stuff" that can realistically replace "classic" wafer level BGA-bumping for attaching to fine-pitch substrates.
+Like, the fine pitch stuffs that adapts from on the order of 100um pitch to 0.4~1mm BGA pitch as you may find in packages with multiple hundreds of balls.
+
+
+[2026-11-06 2:58 p.m.] namibj
+https://www.resonac.com/products/semi-backend-process/77/001.html their AC-10000 series is Minimum contact area 3000 μm2 (which I incidentally match exactly) and MInimum Space 10 μm.
+
+{Embed}
+https://www.resonac.com/products/semi-backend-process/77/001.html
+ACF (Anisotropic Conductive Film) for Film Substrate Connections​...
+Resonac’s ACF connects film substrates, such as FPC and COF, to display panels. Resonac pioneered this film material that combines thermosetting resins and conductive particles to achieve both conductive and insulative properties.
+2026-11_media/img-pickup-default-01-81FF5.png
+
+
+[2026-11-06 3:05 p.m.] azonenberg
+but no information on planarity requirement? does it list the sphere size?
+
+
+[2026-11-06 4:53 p.m.] namibj
+not directly, at least without "inquiry".
+As for planarity, well, it's generally a complex topic, due to how it interacts when manufacturing stuff.
+
+
+[2026-11-06 5:02 p.m.] namibj
+I had found a paper that did a test die they plated copper pillars onto and pushed face bonding rectangular array pad pitch substantially beyond what we could reasonably hope for on our stuff, at least without finding an MPW source for cheap silicon interposers or doing cursed stuff with face-to-face bonding of gf180mcuD dies (imagine face-bonding a half-height slot stuffed with SRAM and not having a bond pad ring, right over the core area of a full slot that otherwise gets "regular" COB wire bonding, to attach a comfy amount of fast RAM (_very_ many pins possible, and no need for remotely bulky drivers due to inherently small capacitances) to something like a "normal" microcontroller or other general purpose ASIC).
+
+Edit: yeah, like maybe 128 kiB or a bit less could probably fit, I guess...
+
+
+[2026-11-06 5:03 p.m.] namibj
+I'll have to get outside and take care of some stuff while places are still open, and will see to grab the paper and whatever ACF nuances it iirc mentioned/detailed when I'm back home.
+
+
+[2026-11-06 5:28 p.m.] namibj
+@azonenberg here, the paper:
+they did 55μm pitch with the following:
+>>> The bumps obtained were 6 µm high above the pad, with a diameter of 19 µm.
+For the flip-chip hybridisation, an ACF of 18 µm thickness containing 3 µm-diameter nickel-
+coated conductive particles (CP) with a density of 71,200 CP/mm² was used. The ACF was
+laminated on the Ti-LGAD sensors at 90 °C under a pressure of 3.2 kgf (Fig. 1b), followed by
+bonding at 160 °C under 20 kgf for 2 s using a SET ACCµRA100 flip-chip bonder [7].
+
+
+[2026-11-06 5:31 p.m.] namibj
+Excluding the weak center they attribute to vacuum grooves in the bonder head used (they could have done without the grooves but didn't have such a head ready/on hand), they got 99.5% well-connected bonds
+
+
+[2026-11-06 5:40 p.m.] namibj
+
+
+{Attachments}
+2026-11_media/Screenshot_2026-11-06-18-39-07-77_e2d5b3f3-046F1.jpg
+
+
+[2026-11-06 5:42 p.m.] namibj
+(for the record, we're aiming at like 30μm x 30μm pads at the small end, not 19μm diameter circles)
+
+
 ==============================================================
-Exported 107 message(s)
+Exported 153 message(s)
 ==============================================================
