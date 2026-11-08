@@ -1,0 +1,94 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / ⁉️-questions / False positive DRC PP5.a andV1.3c
+After: 2026-10-31 11:59 p.m.
+Before: 2026-12-01 12:00 a.m.
+==============================================================
+
+[2026-11-07 5:56 p.m.] 246tnt
+See the attached design.
+AFAICT the PP5.a errors and V1.3c errors are false positives ...
+
+{Attachments}
+2026-11_media/test-4F8B4.gds
+2026-11_media/drc_results-79A54.lyrdb
+
+
+[2026-11-07 6:02 p.m.] namibj
+https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_07_15.html
+V1.3c is the Vn.3 (iii) clause, right?
+
+
+[2026-11-07 6:04 p.m.] 246tnt
+I'm not sure because the limit is 0.06 ... and (iii) looks more like a recommendation ...
+
+
+[2026-11-07 6:08 p.m.] 246tnt
+I think it's `(ii)` because there is actually a rule before `(i)`
+
+
+[2026-11-07 6:16 p.m.] namibj
+oh right forgot that the plain one also ought to count as a sub-rule
+
+
+[2026-11-07 6:18 p.m.] namibj
+Though I can't see how (i) isn't superceeded by (ii), but oh well...
+
+
+[2026-11-07 6:24 p.m.] 246tnt
+Me either ... and TBH I can't make heads or tails of the rule implementation in the deck so no clue how to fix it ... it's obviously confused by the nearby 45deg corner but it's still a valid enclosure and shouldn't throw a DRC error.
+
+
+[2026-11-07 6:24 p.m.] 246tnt
+(and it doesn't even throw one at all such corner so obviously the rule is not even deterministic since the geometry orientation affects the result showing it's a bad rule implementation).
+
+
+[2026-11-07 6:42 p.m.] mole99
+@tnt Could you please open an issue at: https://github.com/fossi-foundation/globalfoundries-pdk-libs-gf180mcu_fd_pv
+I can probably take a closer look by the middle of next week.
+
+{Embed}
+https://github.com/fossi-foundation/globalfoundries-pdk-libs-gf180mcu_fd_pv
+GitHub - fossi-foundation/globalfoundries-pdk-libs-gf180mcu_fd_pv
+Contribute to fossi-foundation/globalfoundries-pdk-libs-gf180mcu_fd_pv development by creating an account on GitHub.
+2026-11_media/globalfoundries-pdk-libs-gf180mcu_fd_pv-3EDDB
+
+
+[2026-11-07 6:42 p.m.] 246tnt
+`PP5.a` can be worked around by using `run_mode=flat` ... but looks to me like the `deep` mode is completely broken because it doesn't even merge polygons at the same hierarchy level.
+
+
+[2026-11-07 6:42 p.m.] 246tnt
+@Leo Moser (mole99) Will do
+
+{Reactions}
+👌
+
+[2026-11-07 6:45 p.m.] mole99
+Some operations perform merging under the hood, while for others you either don't want due to performance reasons, or need to merge explicitly.
+https://www.klayout.de/drc_function_internals.html
+
+
+[2026-11-07 6:46 p.m.] 246tnt
+ATM there is 
+`merge = (ctx.options.run_mode != 'deep')`
+
+So if `run_mode` is anything but `deep` it performs a merge on the layer it extracts.
+
+
+[2026-11-07 6:51 p.m.] 246tnt
+ATM on a test design :
+* `deep` : 12 sec but wrong results
+* `flat`: 242 sec but corrects results
+* `deep` but with `merge = true` :  153 sec and different wrong results ...
+
+
+[2026-11-07 6:52 p.m.] 246tnt
+Ok, gtg now, but I'll open an issue tonight with example files.
+
+{Reactions}
+👍
+
+==============================================================
+Exported 15 message(s)
+==============================================================

@@ -1,0 +1,26 @@
+AuthorID,Author,Date,Content,Attachments,Reactions
+"596068704471482370","246tnt","2026-11-07T17:56:14.8140000+00:00","See the attached design.
+AFAICT the PP5.a errors and V1.3c errors are false positives ...","2026-11_media/test-4F8B4.gds,2026-11_media/drc_results-79A54.lyrdb",""
+"262706220073222144","namibj","2026-11-07T18:02:37.4370000+00:00","https://gf180mcu-pdk.readthedocs.io/en/latest/physical_verification/design_manual/drm_07_15.html
+V1.3c is the Vn.3 (iii) clause, right?","",""
+"596068704471482370","246tnt","2026-11-07T18:04:09.6940000+00:00","I'm not sure because the limit is 0.06 ... and (iii) looks more like a recommendation ...","",""
+"596068704471482370","246tnt","2026-11-07T18:08:28.2490000+00:00","I think it's `(ii)` because there is actually a rule before `(i)`","",""
+"262706220073222144","namibj","2026-11-07T18:16:35.5900000+00:00","oh right forgot that the plain one also ought to count as a sub-rule","",""
+"262706220073222144","namibj","2026-11-07T18:18:53.5720000+00:00","Though I can't see how (i) isn't superceeded by (ii), but oh well...","",""
+"596068704471482370","246tnt","2026-11-07T18:24:03.6540000+00:00","Me either ... and TBH I can't make heads or tails of the rule implementation in the deck so no clue how to fix it ... it's obviously confused by the nearby 45deg corner but it's still a valid enclosure and shouldn't throw a DRC error.","",""
+"596068704471482370","246tnt","2026-11-07T18:24:36.8340000+00:00","(and it doesn't even throw one at all such corner so obviously the rule is not even deterministic since the geometry orientation affects the result showing it's a bad rule implementation).","",""
+"323371864074485771","mole99","2026-11-07T18:42:04.1130000+00:00","@tnt Could you please open an issue at: https://github.com/fossi-foundation/globalfoundries-pdk-libs-gf180mcu_fd_pv
+I can probably take a closer look by the middle of next week.","",""
+"596068704471482370","246tnt","2026-11-07T18:42:06.4490000+00:00","`PP5.a` can be worked around by using `run_mode=flat` ... but looks to me like the `deep` mode is completely broken because it doesn't even merge polygons at the same hierarchy level.","",""
+"596068704471482370","246tnt","2026-11-07T18:42:50.5430000+00:00","@Leo Moser (mole99) Will do","","👌 (1)"
+"323371864074485771","mole99","2026-11-07T18:45:04.4000000+00:00","Some operations perform merging under the hood, while for others you either don't want due to performance reasons, or need to merge explicitly.
+https://www.klayout.de/drc_function_internals.html","",""
+"596068704471482370","246tnt","2026-11-07T18:46:48.8220000+00:00","ATM there is 
+`merge = (ctx.options.run_mode != 'deep')`
+
+So if `run_mode` is anything but `deep` it performs a merge on the layer it extracts.","",""
+"596068704471482370","246tnt","2026-11-07T18:51:54.3270000+00:00","ATM on a test design :
+* `deep` : 12 sec but wrong results
+* `flat`: 242 sec but corrects results
+* `deep` but with `merge = true` :  153 sec and different wrong results ...","",""
+"596068704471482370","246tnt","2026-11-07T18:52:17.0440000+00:00","Ok, gtg now, but I'll open an issue tonight with example files.","","👍 (1)"
