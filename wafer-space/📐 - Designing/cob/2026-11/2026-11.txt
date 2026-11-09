@@ -6,6 +6,112 @@ After: 2026-10-31 11:59 p.m.
 Before: 2026-12-01 12:00 a.m.
 ==============================================================
 
+[2026-11-09 11:43 a.m.] 246tnt
+@Andrew Wingate  / @Lauri  Can you remind me where the repo for the CoB tester ? Didn't find it on ws github at first glance.  I assume the one I received is already ready to use ?  The little wafer space logo needs to be aligned with pin 1 ( rather than the wafer.space logo on the COB ). ?
+
+
+[2026-11-09 11:46 a.m.] lauri4332
+https://github.com/szfate/BondTest72 and https://github.com/szfate/BondTest72-Firmware
+
+{Reactions}
+💜 (2)
+
+[2026-11-09 11:49 a.m.] lauri4332
+Yes, I it should be ready to use with the gui (in fw repo). Re: alignment - CoB corner hole to the adapter ws logo
+
+
+[2026-11-09 11:50 a.m.] 246tnt
+Ok thanks. That's what I expected but the 2 chips I tested failed so I was starting to think I was missing something.
+
+
+[2026-11-09 11:52 a.m.] lauri4332
+adapter eeprom specifies some chip type which may not be the one you have. Using GUI you can specify and set the correct chip type as default. After this the tester can be used without gui
+
+
+[2026-11-09 11:52 a.m.] 246tnt
+Ah I see.
+
+
+[2026-11-09 11:52 a.m.] 246tnt
+Will try that.
+
+{Reactions}
+👍
+
+[2026-11-09 11:53 a.m.] lauri4332
+I need to write up some FAQ or something for the tester. I'll add that to my todo list
+
+
+[2026-11-09 11:58 a.m.] 246tnt
+Mmm ... problem might be the tester 😅   pin 9 reports as faulty on 3 out of 3 chips I tested.
+
+
+[2026-11-09 11:59 a.m.] lauri4332
+you can try to reseat the adapter board
+
+
+[2026-11-09 12:01 p.m.] 246tnt
+Didn't help. I have another mezzanine from the v1 I got. I can try to swap it in.
+
+
+[2026-11-09 12:01 p.m.] lauri4332
+are you using 1x1 v2?
+
+
+[2026-11-09 12:02 p.m.] 246tnt
+Yes.
+
+
+[2026-11-09 12:03 p.m.] 246tnt
+Ah the other mezzanines I have are both `r1` so I guess not compatible.
+
+
+[2026-11-09 12:04 p.m.] lauri4332
+should be okay to use
+
+
+[2026-11-09 12:09 p.m.] lauri4332
+somehow i have no CoB's left on my desk to test with 😆
+
+
+[2026-11-09 12:18 p.m.] 246tnt
+Yeah, works with the `r1` mezzanine I have.
+
+
+[2026-11-09 12:37 p.m.] 246tnt
+So "Pad 9 - Adapter pin 1", it means pin 1 on the 70 pin connector right ?
+
+
+[2026-11-09 12:40 p.m.] lauri4332
+Yep
+
+
+[2026-11-09 1:19 p.m.] 246tnt
+Seems to be pin ch0 of the white mezzanine connector ...
+
+
+[2026-11-09 1:33 p.m.] 246tnt
+And if I try to use the `r1` mezzanine I have but that's marked "COB v2", then I always get  pad 51 and pad 53 as faulty ...
+
+So only combo that works is the new r2 tested with the r1 mezzanine marked COB v1 ( but still selecting COB v2 in the GUI )
+
+
+[2026-11-09 2:04 p.m.] 246tnt
+
+
+{Attachments}
+2026-11_media/2026-11-09_1918x1178_scrot_000-1ACB1.png
+2026-11_media/2026-11-09_1918x1178_scrot-DA7E0.png
+
+
+[2026-11-09 2:04 p.m.] 246tnt
+So those two register as "OK". But in reality some of the power rails are shorted.
+
+
+[2026-11-09 4:29 p.m.] namibj
+Started a thread.
+
+
 ==============================================================
-Exported 0 message(s)
+Exported 24 message(s)
 ==============================================================

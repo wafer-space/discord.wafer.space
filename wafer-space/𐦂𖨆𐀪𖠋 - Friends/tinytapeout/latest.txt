@@ -97,6 +97,44 @@ Ring-oscillator array for process variation and BTI aging on GF180MCU - maohansu
 2026-11_media/-tt-gf180-ro-aging-39146
 
 
+[2026-11-09 12:16 p.m.] TTBot#6027
+✅ mattvenn reported @algofoogle (Anton Maurovic)'s [Ring osc on VGA](https://www.tinytapeout.com/chips/ttgf0p2/tt_um_algofoogle_vgaringosc) as working: The rings run from 23.7 MHz (161 stages) to 220.5 MHz (3 stages); the fixed 5× inv_1 ring runs at about 320 MHz. 
+
+Period fits T = 0.240 ns × N + 4.19 ns: about 120 ps per inv_2 stage (T = 2·N·t_pd) plus about 4.2 ns fixed loop overhead (tap multiplexer and clock buffer). 
+
+uio[1] (clksel2[1]) wasn't working so we couldn't test the 5 × inv_4 ring
+
+{Embed}
+https://www.tinytapeout.com/chips/ttgf0p2/tt_um_algofoogle_vgaringosc
+614 Ring osc on VGA - Tiny Tapeout
+VGA display visualisation of a ring oscillator doing work
+2026-11_media/social-preview-BB690
+
+
+[2026-11-09 2:19 p.m.] TTBot#6027
+🔍 smunaut reported @urish's [Oscillating Bones](https://www.tinytapeout.com/chips/ttgf0p3/tt_um_oscillating_bones) as partially working: It oscillates at 127 MHz however it's not visible on the digital pins at all. The load from the analog external connection on the output inverter is too great, reducing the amplitude greatly and it's not enough for the digital logic that follows. You can see a tiny ( ~ 100 mV ) signal on the analog pin . If you inject an external bias through that pin to put it in the "right" zone, you can get some life out of the digital divider but barely and inconsistent.
+
+{Embed}
+https://www.tinytapeout.com/chips/ttgf0p3/tt_um_oscillating_bones
+294 Oscillating Bones - Tiny Tapeout
+A stylish SkullFET ring oscillator (~120 MHz) with an 8-bit /2../256 divider
+2026-11_media/social-preview-6EA00
+
+
+[2026-11-09 5:37 p.m.] TTBot#6027
+✅ smunaut reported @tnt's [tnt's recreation of a 555 on GF180mcu](https://www.tinytapeout.com/chips/ttgf0p3/tt_um_tnt_gf_555) as working: Works as designed. Both the one exposed entirely on external pins and the one configured as on-chip oscillator.
+
+The on-chip one is around 975 kHz and 67% duty cycle.
+
+I tested the external one using 4.7n cap, 0.5k / 1k resistors and got 151 kHz at 72.7% duty cycle.
+
+{Embed}
+https://www.tinytapeout.com/chips/ttgf0p3/tt_um_tnt_gf_555
+103 tnt's recreation of a 555 on GF180mcu - Tiny Tapeout
+Just a simple classic timer IC re-imagined
+2026-11_media/social-preview-F7905
+
+
 ==============================================================
-Exported 9 message(s)
+Exported 12 message(s)
 ==============================================================
