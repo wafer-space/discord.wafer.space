@@ -16,7 +16,7 @@
     "after": "2026-10-31T23:59:59.999+00:00",
     "before": "2026-12-01T00:00:00+00:00"
   },
-  "exportedAt": "2026-11-09T01:58:25.9139031+00:00",
+  "exportedAt": "2026-11-09T07:47:33.5783197+00:00",
   "messages": [
     {
       "id": "1566353535753261058",
@@ -224,7 +224,73 @@
       "reactions": [],
       "mentions": [],
       "inlineEmojis": []
+    },
+    {
+      "id": "1569175507071930410",
+      "type": "Default",
+      "timestamp": "2026-11-09T02:23:14.757+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "hi",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-11_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1569187715734437909",
+      "type": "Reply",
+      "timestamp": "2026-11-09T03:11:45.529+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Sooo.... yeah, for DC behavior of SCL cells and selected primitives the \"muxed e-test\" should fairly straight-forward be applicable, and the \"version\" without reaching for extended voltage range should also be fairly compact and straight-forward.\n\nCapacitance is unfortunately not a direct derivative from it, and not something that can be measured with good accuracy and effectiveness without setting up/arranging for up-front SPICE predictions of the actual AC impedance expectations at the frequencies and DC bias conditions (incl. the PVT parts) where the AC impedance/\"capacitance under not-neglecting resistive parasitics\" should be measured.\n\nRing oscillators, potentially with various combinatorial logic (that can be flexibly configured to allow excercising many more transition paths than a combinatorially entirely trivial setup could) in the oscillation's feedback/ring loop, appear the most promising substitute to actual \"direct\" AC capacitance measurements of DUTs under e-test conditions subject to the same boundary requirements as the \"muxed e-test\" of DC-behavior type.\n\nWhere dynamic power needs to be measured, isolate PDNs sufficciently and employ muxed e-test measuring with 4-wire kelvin configuration for this;\notherwise, set up ring oscillators that can be configured with statically decoded control lines (serially shifting in select/control bits is quite annoying to arrange for in an e-test setup, compared to performing DC multimeter measurements and select instances of frequency counting), such that only the small ring around a DUT is oscillating (into a divider reducing it as far as necessary to allow easy measurement with an off-chip frequency counter).\n\nControl lines can of course \"recycle\" a DUT in a ring for multiple transition paths of interest by adjusting other/non-ring inputs of the involved cells.\nThink a simple `NAND` or `NOR` gate in the loop blocking edge propagation when not selected, based on whether the path in question needs an extra inversion or not; there are probably a bunch of practically interesting \"critical path\" combinatorial arrangements that can be measured/excercised in practice here.\n\nSplitting/isolating supply voltages between paths of a single ring to allow individual dynamic power measurement and keeping the ring to as few transistors as practical should allow affordable SPICE-fitting of local mismatch modeling's random variable's individual values to squeeze out decently targeted calibration of capacitance/AC-only model parameters by taking the previously run \"muxed e-test\" data of dc behavior and statistical distribution of the local mismatch effects for those involved SCL cells (and of course the transistors making up those SCL cells!) as a Bayesian prior, to spend the much worse data situation of the ring oscillator setups focused on improving calibration of the capacitance/AC-only SPICE model parameters rather than wasting that measured data on parametrizing the statistical distributions of the SPICE model instance parameters (||those are basically global model parameters tweaked by binning consideration effects, as applicable local surrounding geometry/mechanical-strain effects, and critically local random mismatch effects from e.g. statistically random countably-small-number-of doping atoms in the electrically sensitive region of a tiny SCL transistor||) that describe the DC behavior.\n\nEven without such effort of calibrating primitive-device's SPICE models to ring oscillator measurements, it should be effective for calibrating cell-granularity (as suited for Liberty timing spec synthesis) propagation delay well enough for reliable static timing analysis.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-11_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "656862288099409940",
+          "name": "baragonaru",
+          "discriminator": "0000",
+          "nickname": "baragonaru",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-11_media/c6bdd965ea6645bd4df4c6a309f3d843-C2042.png"
+        }
+      ],
+      "reference": {
+        "messageId": "1568761530575749382",
+        "channelId": "1566353341028765736",
+        "guildId": "1361349522684510449"
+      },
+      "inlineEmojis": []
     }
   ],
-  "messageCount": 6
+  "messageCount": 8
 }
