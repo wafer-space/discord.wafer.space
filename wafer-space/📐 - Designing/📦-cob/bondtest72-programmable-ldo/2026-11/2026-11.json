@@ -1,0 +1,143 @@
+{
+  "guild": {
+    "id": "1361349522684510449",
+    "name": "wafer.space Community",
+    "iconUrl": "2026-11_media/fb143eaa45770cbb40493d09b625e98b-09FD1.png"
+  },
+  "channel": {
+    "id": "1569388372030390322",
+    "type": "GuildPublicThread",
+    "categoryId": "1408134567491145728",
+    "category": "\uD83D\uDCE6-cob",
+    "name": "BondTest72-Programmable-LDO",
+    "topic": null
+  },
+  "dateRange": {
+    "after": "2026-10-31T23:59:59.999+00:00",
+    "before": "2026-12-01T00:00:00+00:00"
+  },
+  "exportedAt": "2026-11-10T02:09:33.6939352+00:00",
+  "messages": [
+    {
+      "id": "1569388377701220525",
+      "type": "Default",
+      "timestamp": "2026-11-09T16:29:07.07+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "This add-on https://github.com/namibj/BondTest72-Programmable-LDO for the BondTest72 r2 https://github.com/szfate/BondTest72 has been distributed to a few people; some others are waiting for Run3 COBs to (as far as I undertand it) have theirs shipped together with a base BondTest72 and some of those initial Run3 test COBs.\n\nThe add-on provides a stable and from the factory already fairly precise 3.0V shunt reference that can be attached to the Pi Pico 2's `ADC_REF` as per the below image, though this connection is optional and will restrict the Pi's ADC input range from 3.3V to 3.0V.\n\nFurther it provides a `MCP4725` 12bit DAC programmable via I2C; it's fed from the local 3.0V rail and it's output is buffered by a `TP1562AL1`. This op-amp is unity gain stable at arbitrary load capacitance; for supply/stock reasons the 2-channel version was selected and the otherwise spare channel is wired to buffer the 3.0V reference to somewhat isolate the I2C pull-up's from the analog supply; the channel couldn't have been left floating anyways so this was the next best option.\n\nUnfortunately there seems to have been a BOM pick misclick/visual glitch/confusion, causing `C1` and `C3` to erroneously be populated with `100μF` in correspondingly rather bulky 1206. Thankfully that shouldn't be an actual problem, because the only effect other than poor dynamics on the I2C pull-up's supply and strong low pass filtering of the precision reference, is that the DAC's power-on-reset mechanism for auto-loading a startup state from it's EEPROM will not reliably actuate. The mitigation for that is to start off with an I2C general call reset at the earliest decent opportunity for doing so; this reliably resets the DAC without reliance on VDD ramp rate for it's POR.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-11_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [],
+      "embeds": [
+        {
+          "title": "GitHub - namibj/BondTest72-Programmable-LDO: MCP4725-based addon fo...",
+          "url": "https://github.com/namibj/BondTest72-Programmable-LDO",
+          "timestamp": null,
+          "description": "MCP4725-based addon for BondTest72 r2, providing a programmable LDO and precision 3.0V reference - namibj/BondTest72-Programmable-LDO",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "2026-11_media/BondTest72-Programmable-LDO-F30EC",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": [],
+          "inlineEmojis": []
+        },
+        {
+          "title": "GitHub - szfate/BondTest72: BondTest72 mainboard design files",
+          "url": "https://github.com/szfate/BondTest72",
+          "timestamp": null,
+          "description": "BondTest72 mainboard design files. Contribute to szfate/BondTest72 development by creating an account on GitHub.",
+          "color": "#1E2327",
+          "thumbnail": {
+            "url": "2026-11_media/BondTest72-B806E",
+            "width": 1200,
+            "height": 600
+          },
+          "images": [],
+          "fields": [],
+          "inlineEmojis": []
+        }
+      ],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1569389140343005285",
+      "type": "Default",
+      "timestamp": "2026-11-09T16:32:08.898+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Adding a header (female or male is not going to be _my_ decision :D) here on the `BondTest72 r2` mainboard allows connecting it to the add-on.",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-11_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [
+        {
+          "id": "1569389139902726327",
+          "url": "2026-11_media/image-0420E.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 2353696
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1569407942678151208",
+      "type": "Default",
+      "timestamp": "2026-11-09T17:46:51.724+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "The lone header that can be jumper-connected to the above visualized Pi Pico 2 `ADC_REF` (Pin 35).",
+      "author": {
+        "id": "262706220073222144",
+        "name": "namibj",
+        "discriminator": "0000",
+        "nickname": "namibj",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-11_media/f885abc0dddd0a33e4d4991b3c99091d-7ACD2.png"
+      },
+      "attachments": [
+        {
+          "id": "1569407942262788186",
+          "url": "2026-11_media/image-8285E.png",
+          "fileName": "image.png",
+          "fileSizeBytes": 156728
+        }
+      ],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    }
+  ],
+  "messageCount": 3
+}

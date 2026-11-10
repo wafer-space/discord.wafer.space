@@ -1,0 +1,46 @@
+==============================================================
+Guild: wafer.space Community
+Channel: 📐 - Designing / 📦-cob / BondTest72-Programmable-LDO
+After: 2026-10-31 11:59 p.m.
+Before: 2026-12-01 12:00 a.m.
+==============================================================
+
+[2026-11-09 4:29 p.m.] namibj
+This add-on https://github.com/namibj/BondTest72-Programmable-LDO for the BondTest72 r2 https://github.com/szfate/BondTest72 has been distributed to a few people; some others are waiting for Run3 COBs to (as far as I undertand it) have theirs shipped together with a base BondTest72 and some of those initial Run3 test COBs.
+
+The add-on provides a stable and from the factory already fairly precise 3.0V shunt reference that can be attached to the Pi Pico 2's `ADC_REF` as per the below image, though this connection is optional and will restrict the Pi's ADC input range from 3.3V to 3.0V.
+
+Further it provides a `MCP4725` 12bit DAC programmable via I2C; it's fed from the local 3.0V rail and it's output is buffered by a `TP1562AL1`. This op-amp is unity gain stable at arbitrary load capacitance; for supply/stock reasons the 2-channel version was selected and the otherwise spare channel is wired to buffer the 3.0V reference to somewhat isolate the I2C pull-up's from the analog supply; the channel couldn't have been left floating anyways so this was the next best option.
+
+Unfortunately there seems to have been a BOM pick misclick/visual glitch/confusion, causing `C1` and `C3` to erroneously be populated with `100μF` in correspondingly rather bulky 1206. Thankfully that shouldn't be an actual problem, because the only effect other than poor dynamics on the I2C pull-up's supply and strong low pass filtering of the precision reference, is that the DAC's power-on-reset mechanism for auto-loading a startup state from it's EEPROM will not reliably actuate. The mitigation for that is to start off with an I2C general call reset at the earliest decent opportunity for doing so; this reliably resets the DAC without reliance on VDD ramp rate for it's POR.
+
+{Embed}
+https://github.com/namibj/BondTest72-Programmable-LDO
+GitHub - namibj/BondTest72-Programmable-LDO: MCP4725-based addon fo...
+MCP4725-based addon for BondTest72 r2, providing a programmable LDO and precision 3.0V reference - namibj/BondTest72-Programmable-LDO
+2026-11_media/BondTest72-Programmable-LDO-F30EC
+
+{Embed}
+https://github.com/szfate/BondTest72
+GitHub - szfate/BondTest72: BondTest72 mainboard design files
+BondTest72 mainboard design files. Contribute to szfate/BondTest72 development by creating an account on GitHub.
+2026-11_media/BondTest72-B806E
+
+
+[2026-11-09 4:32 p.m.] namibj
+Adding a header (female or male is not going to be _my_ decision :D) here on the `BondTest72 r2` mainboard allows connecting it to the add-on.
+
+{Attachments}
+2026-11_media/image-0420E.png
+
+
+[2026-11-09 5:46 p.m.] namibj
+The lone header that can be jumper-connected to the above visualized Pi Pico 2 `ADC_REF` (Pin 35).
+
+{Attachments}
+2026-11_media/image-8285E.png
+
+
+==============================================================
+Exported 3 message(s)
+==============================================================

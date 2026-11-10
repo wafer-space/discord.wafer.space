@@ -849,7 +849,7 @@ You might want to check stability. A two stage op-amp without compensation could
 Has anyone started testing of run#2 chips ?
 
 {Reactions}
-👀
+👀 (2)
 
 [2026-11-09 3:36 p.m.] anfroholic
 Other than the small test we did, you are the first to receive any chips afaiu
@@ -863,6 +863,61 @@ Other than the small test we did, you are the first to receive any chips afaiu
 Is the COB being done for the others currently ?
 
 
+[2026-11-09 5:51 p.m.] namibj
+do tell what chips you got to try! ttgf0p3?
+
+
+[2026-11-09 5:51 p.m.] namibj
+(I thought that was a different COB base underneath?)
+
+
+[2026-11-09 5:56 p.m.] 246tnt
+Yes, `ttgf0p3` assembled on a standard wafer.space breakout. Most TT chips will be bonded on a custom breakout that directly goes to our standard demo board, but the padframe is compatible with wafer.space COB so a few chips were mounted to it and I got a few samples.
+
+
+[2026-11-09 6:40 p.m.] namibj
+ahhh I see.
+well, that LDO Add-On you AFAIK have gives you a fairly strong buffered DAC feed on `COME` if plugged in; it should suffice to e.g. read the ROM tile; unfortunately for this your reception of the gear was a surprise event to me; I didn't think anyone would actually have stuff they'd may wanna use the DAC Add-On for/with for at least the next several days.....
+
+
+[2026-11-09 6:42 p.m.] namibj
+oh reading helps; you've already connected it to a testbench driver setup of some sort given the reports made.
+
+
+[2026-11-09 6:43 p.m.] 246tnt
+I have a converter that allows me to connect those COB to the TT devboard, easier for testing 😅
+
+{Reactions}
+👀
+
+[2026-11-09 7:29 p.m.] namibj
+fair.
+I just checked and mathed some and I _think_ the short of `ua[1]` to `VSS` on https://tinytapeout.com/chips/ttgf0p3/tt_um_mcml_vco could be electromigrated away over the course of hours to maybe a couple days (seems to mostly depend on how close to melting fuse in seconds one wants to push the trace)....
+Do you think the MUX will cope with some 10~40 (ish) mA into a fairly low resistance short to VSS (should be less than 5 Ohm I'd guess, at least for anything within the tile)?
+
+{Embed}
+https://tinytapeout.com/chips/ttgf0p3/tt_um_mcml_vco
+454 MCML VCO - Tiny Tapeout
+An MCML VCO
+2026-11_media/social-preview-9F844
+
+
+[2026-11-09 7:30 p.m.] 246tnt
+huh, out of 6 samples, I have 2 working ones, so I'm not trying anything crazy 😅
+
+
+[2026-11-09 7:31 p.m.] namibj
+oh no I wasn't suggesting you try anything like that with your precious frist wafer lot's first COB batch 😄
+
+
+[2026-11-09 7:53 p.m.] namibj
+also the thing has only 12 `via3`'s to the `VSS` LEF pin :/
+
+
+[2026-11-10 12:19 a.m.] tholin
+I added a xor3 cell to my SCL, which was long overdue. This should help generate more efficient adders and thus improve the most common critical paths.
+
+
 ==============================================================
-Exported 168 message(s)
+Exported 179 message(s)
 ==============================================================

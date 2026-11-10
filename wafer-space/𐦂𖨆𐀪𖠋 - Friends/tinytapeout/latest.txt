@@ -110,6 +110,8 @@ https://www.tinytapeout.com/chips/ttgf0p2/tt_um_algofoogle_vgaringosc
 VGA display visualisation of a ring oscillator doing work
 2026-11_media/social-preview-BB690
 
+{Reactions}
+🎉
 
 [2026-11-09 2:19 p.m.] TTBot#6027
 🔍 smunaut reported @urish's [Oscillating Bones](https://www.tinytapeout.com/chips/ttgf0p3/tt_um_oscillating_bones) as partially working: It oscillates at 127 MHz however it's not visible on the digital pins at all. The load from the analog external connection on the output inverter is too great, reducing the amplitude greatly and it's not enough for the digital logic that follows. You can see a tiny ( ~ 100 mV ) signal on the analog pin . If you inject an external bias through that pin to put it in the "right" zone, you can get some life out of the digital divider but barely and inconsistent.
@@ -135,6 +137,80 @@ Just a simple classic timer IC re-imagined
 2026-11_media/social-preview-F7905
 
 
+[2026-11-09 6:13 p.m.] TTBot#6027
+✅ smunaut reported @algofoogle (Anton Maurovic)'s [algofoogle analog stuff](https://www.tinytapeout.com/chips/ttgf0p3/tt_um_algofoogle_gf_analog) as working: Seems to work fine. Tested only the analog VCO control since there was no instructions for the DAC controlled one.
+Oscillates ( very slowly ) even at 0V.  About 1.4 MHz at 0.55V. 167 MHz at 1.5V and roughtly 416 MHz at 3.3V.
+
+{Embed}
+https://www.tinytapeout.com/chips/ttgf0p3/tt_um_algofoogle_gf_analog
+37 algofoogle analog stuff - Tiny Tapeout
+Some analog and custom layout experiments in gf180mcuD for ttgf0p3 (the TT GF 1st analog experimental shuttle)
+2026-11_media/social-preview-2C5C6
+
+{Reactions}
+🤩
+
+[2026-11-09 6:33 p.m.] TTBot#6027
+✅ smunaut reported @Matt Venn's [GF R2R DAC](https://www.tinytapeout.com/chips/ttgf0p3/tt_um_gf_r2r_dac) as working: Works ( tested the sine generator mode ). Shows ~ 3 LSBs non-monotonicity in the middle of the range.
+
+{Embed}
+https://www.tinytapeout.com/chips/ttgf0p3/tt_um_gf_r2r_dac
+35 GF R2R DAC - Tiny Tapeout
+8 bit R2R DAC
+2026-11_media/social-preview-0C1C7
+
+{Reactions}
+👍
+
+[2026-11-09 9:50 p.m.] TTBot#6027
+✅ smunaut reported @htamas's [MoM capacitor](https://www.tinytapeout.com/chips/ttgf0p3/tt_um_htfab_momcap) as working: Measured at 112 pF .  
+
+Measure setup is looking at the time to rise to 2.5V through a 47k resistor and compare the dummy terminal vs the active terminal.
+
+Dummy measured at 38.7 pF and Active measured at 151.6 pF
+
+{Embed}
+https://www.tinytapeout.com/chips/ttgf0p3/tt_um_htfab_momcap
+39 MoM capacitor - Tiny Tapeout
+Simple metal-oxide-metal capacitor for gf180mcuD that fills an analog 1x2 tile
+2026-11_media/social-preview-897DC
+
+
+[2026-11-09 10:38 p.m.] TTBot#6027
+✅ smunaut reported @tnt's [Quadrature VCO](https://www.tinytapeout.com/chips/ttgf0p3/tt_um_tnt_gf_vco) as working: Seems to work. 2.0V gives 120 MHz, 2.5V = 240 MHz, 3.3V = 317 MHz.
+Measuring phase between quadrature outputs shows 90 deg difference ( measured at ~ 30 MHz since higher freq are too distorted ).
+
+{Embed}
+https://www.tinytapeout.com/chips/ttgf0p3/tt_um_tnt_gf_vco
+262 Quadrature VCO - Tiny Tapeout
+Quadrature VCO with nominal target frequency of 240 MHz
+2026-11_media/social-preview-B5323
+
+
+[2026-11-09 11:03 p.m.] namibj
+@tnt phase noise future when [probably not this week]....? https://www.youtube.com/watch?v=SOHjFtw0sgo .... for the frequencies you're dealing with, I think a pair of RTL-SDR's should actually be able to do it?
+I'm guessing there's some gnuradio or mayhaps more-dedicated DSP bundle around that can do the mentioned carrier lock, carrier-surpression, cross-correlation steps.
+Not gonna do _too well,_ but I can't expect that ASIC VCO to be hard-to-measure levels of low-phase-noise.
+
+{Embed}
+The Signal Path
+https://www.youtube.com/watch?v=SOHjFtw0sgo
+TSP #161 - Tutorial on Theory, Characterization & Measurement Techn...
+In this episode Shahriar demonstrates the fundamentals of Phase Noise. The theory behind phase noise is presented both from a time-domain and frequency domain points of view. Various mathematical equations which represent phase noise behavior is also presented.
+
+Phase noise measurement challenges and techniques are covered. Capabilities and limi...
+2026-11_media/maxresdefault-5605C.jpg
+
+
+[2026-11-09 11:05 p.m.] 246tnt
+I expect it to be abysmal because of noise on the Vctl line. I should have put some on-die filtering ...
+
+
+[2026-11-09 11:31 p.m.] namibj
+oh. oh noes. just two itty bitty gate fingers and their paired-up (at least more than one contact!) via stack up and out to the analog mux.....
+Though.... why should it be _that_ noisy? T-gates aren't big noise sources, or are they actually?
+
+
 ==============================================================
-Exported 12 message(s)
+Exported 19 message(s)
 ==============================================================
