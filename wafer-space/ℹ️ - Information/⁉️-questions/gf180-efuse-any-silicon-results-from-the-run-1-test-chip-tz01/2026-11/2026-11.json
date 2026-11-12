@@ -1,0 +1,134 @@
+{
+  "guild": {
+    "id": "1361349522684510449",
+    "name": "wafer.space Community",
+    "iconUrl": "2026-11_media/fb143eaa45770cbb40493d09b625e98b-09FD1.png"
+  },
+  "channel": {
+    "id": "1570251786629947442",
+    "type": "GuildPublicThread",
+    "categoryId": "1409660288822673408",
+    "category": "⁉️-questions",
+    "name": "GF180 eFuse: any silicon results from the Run 1 test chip (TZ01)?",
+    "topic": null
+  },
+  "dateRange": {
+    "after": "2026-10-31T23:59:59.999+00:00",
+    "before": "2026-12-01T00:00:00+00:00"
+  },
+  "exportedAt": "2026-11-12T09:51:09.3690675+00:00",
+  "messages": [
+    {
+      "id": "1570251786629947442",
+      "type": "Default",
+      "timestamp": "2026-11-12T01:39:59.8+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi all, we're looking at on-die eFuse (device identity, anti-rollback, lifecycle bits) for a future GF180 design. We found egorxe's gf180_efuse_compiler and the TillitisZedulo eFuse + SRAM test chip on Run 1, but no bring-up data yet. Does anyone (Egor / the Zedulo team?) have results to share?\n\n1. Programming: what voltage/current/pulse did you use, and does it need a dedicated higher-voltage supply pad or does it run from the normal rails?\n2. Yield and read margin: programmed vs unprogrammed resistance spread, and any bits that failed to blow or read wrong?\n3. Any retention or bake data after programming?\n4. For wafer.space runs: is eFuse fine to include as-is (no extra layer, mask option or approval needed)?\n\nHappy to share whatever we learn on our side. Thanks!",
+      "author": {
+        "id": "1557575379156213927",
+        "name": "0xaef",
+        "discriminator": "0000",
+        "nickname": "Agenxy",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-11_media/3d02d2c1593ba363a502a1e673af460b-E9B0A.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1570340695749951562",
+      "type": "Default",
+      "timestamp": "2026-11-12T07:33:17.386+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "I think @Egor Lukyanchenko  posted results. IIRC the gist of it was 5V works, 3v3 doesn't.  You'd have to find his post for the details ...",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-11_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [
+        {
+          "id": "709384666909507634",
+          "name": "egorxe",
+          "discriminator": "0000",
+          "nickname": "Egor Lukyanchenko",
+          "color": null,
+          "isBot": false,
+          "roles": [],
+          "avatarUrl": "2026-11_media/3-FB033.png"
+        }
+      ],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1570340765308031127",
+      "type": "Default",
+      "timestamp": "2026-11-12T07:33:33.97+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "And for (4) AFAIK it's all included, if it passes pre-check DRC you're good.",
+      "author": {
+        "id": "596068704471482370",
+        "name": "246tnt",
+        "discriminator": "0000",
+        "nickname": "tnt",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-11_media/88d17af9d19ab43565b0c46751ef7d12-DFEE5.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    },
+    {
+      "id": "1570346382118879243",
+      "type": "Default",
+      "timestamp": "2026-11-12T07:55:53.122+00:00",
+      "timestampEdited": null,
+      "callEndedTimestamp": null,
+      "isPinned": false,
+      "content": "Hi! So far, we've only tested 4 chips, but they contained quite a few eFuses, so we can be fairly sure the eFuse works. I hope to get more proper characterization results in the future when Zedulo tests more chips, including retention/bake, but I'm afraid that won't happen soon.\n1. It runs from the regular 5V rail as long as enough current is supplied. The maximum current during programming is about 15 mA per blown fuse, so you should make sure not to blow too many at once, I actually recommend to do it bit-by-bit. I'm yet to publish a dual-voltage version (3.3V interface and 5V supply for writing).\n2. Unfortunately, there is no data for the actual resistance spread. To measure that, a dedicated test chip is required. The only read errors we got were the bits that were intentionally current-starved during programming by blowing 32 bits at the same time, which is beyond the chip's supply capabilities. Such bits were stuck in the \"underprogrammed\" state with different readings. For some of them it was possible to program them a second time to bring to a steady \"1\", and for some not.\n3. Not yet. The only data is that chips retained all programmed bits for about a month and that two chips surpassed 5 million reads for a bunch of fuses without error.\n4. It passes DRC as-is, nothing special is required.",
+      "author": {
+        "id": "709384666909507634",
+        "name": "egorxe",
+        "discriminator": "0000",
+        "nickname": "Egor Lukyanchenko",
+        "color": null,
+        "isBot": false,
+        "roles": [],
+        "avatarUrl": "2026-11_media/3-FB033.png"
+      },
+      "attachments": [],
+      "embeds": [],
+      "stickers": [],
+      "reactions": [],
+      "mentions": [],
+      "inlineEmojis": []
+    }
+  ],
+  "messageCount": 4
+}

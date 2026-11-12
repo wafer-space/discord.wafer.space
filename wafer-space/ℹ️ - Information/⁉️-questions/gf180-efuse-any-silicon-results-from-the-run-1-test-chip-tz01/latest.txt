@@ -1,0 +1,37 @@
+==============================================================
+Guild: wafer.space Community
+Channel: ℹ️ - Information / ⁉️-questions / GF180 eFuse: any silicon results from the Run 1 test chip (TZ01)?
+After: 2026-10-31 11:59 p.m.
+Before: 2026-12-01 12:00 a.m.
+==============================================================
+
+[2026-11-12 1:39 a.m.] 0xaef
+Hi all, we're looking at on-die eFuse (device identity, anti-rollback, lifecycle bits) for a future GF180 design. We found egorxe's gf180_efuse_compiler and the TillitisZedulo eFuse + SRAM test chip on Run 1, but no bring-up data yet. Does anyone (Egor / the Zedulo team?) have results to share?
+
+1. Programming: what voltage/current/pulse did you use, and does it need a dedicated higher-voltage supply pad or does it run from the normal rails?
+2. Yield and read margin: programmed vs unprogrammed resistance spread, and any bits that failed to blow or read wrong?
+3. Any retention or bake data after programming?
+4. For wafer.space runs: is eFuse fine to include as-is (no extra layer, mask option or approval needed)?
+
+Happy to share whatever we learn on our side. Thanks!
+
+
+[2026-11-12 7:33 a.m.] 246tnt
+I think @Egor Lukyanchenko  posted results. IIRC the gist of it was 5V works, 3v3 doesn't.  You'd have to find his post for the details ...
+
+
+[2026-11-12 7:33 a.m.] 246tnt
+And for (4) AFAIK it's all included, if it passes pre-check DRC you're good.
+
+
+[2026-11-12 7:55 a.m.] egorxe
+Hi! So far, we've only tested 4 chips, but they contained quite a few eFuses, so we can be fairly sure the eFuse works. I hope to get more proper characterization results in the future when Zedulo tests more chips, including retention/bake, but I'm afraid that won't happen soon.
+1. It runs from the regular 5V rail as long as enough current is supplied. The maximum current during programming is about 15 mA per blown fuse, so you should make sure not to blow too many at once, I actually recommend to do it bit-by-bit. I'm yet to publish a dual-voltage version (3.3V interface and 5V supply for writing).
+2. Unfortunately, there is no data for the actual resistance spread. To measure that, a dedicated test chip is required. The only read errors we got were the bits that were intentionally current-starved during programming by blowing 32 bits at the same time, which is beyond the chip's supply capabilities. Such bits were stuck in the "underprogrammed" state with different readings. For some of them it was possible to program them a second time to bring to a steady "1", and for some not.
+3. Not yet. The only data is that chips retained all programmed bits for about a month and that two chips surpassed 5 million reads for a bunch of fuses without error.
+4. It passes DRC as-is, nothing special is required.
+
+
+==============================================================
+Exported 4 message(s)
+==============================================================
