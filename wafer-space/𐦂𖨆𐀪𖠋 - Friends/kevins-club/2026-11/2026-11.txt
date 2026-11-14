@@ -189,6 +189,95 @@ I just need to swap the chip and change the CH32 clock to 48 MHz. Then we’ll h
 2026-11_media/HXB-7MHXEAEBcqm-4A599.png
 
 
+[2026-11-14 7:25 a.m.] baragonaru
+Really cool to see. by the way, i'd be interested in building this into a laptop or similar one day, so if you have any thoughts on how to do graphics it's interesting. perhaps a second chip, idk.
+
+
+[2026-11-14 8:24 a.m.] logic_destroyer
+Thanks! But this is a microcontroller-class CPU with late 80s / early 90s Unix performance. It's a simple multicycle design, optimized for the limited area and resources of GF180MCU. Not really a laptop CPU.
+
+
+[2026-11-14 8:40 a.m.] sudonet
+Still way cooler than anything i will ever make
+
+{Reactions}
+❤️
+
+[2026-11-14 9:22 a.m.] logic_destroyer
+The GDSII passed DRC, LVS, antenna, density, XOR, and power-connectivity checks, with setup and hold timing met across all nine corners at 45 MHz and an estimated all-corner STA
+  Fmax of 46.61 MHz.
+
+{Attachments}
+2026-11_media/image-7E813.png
+
+
+[2026-11-14 9:34 a.m.] sudonet
+lot of sram macros! `:D`
+
+
+[2026-11-14 9:36 a.m.] rebelmike
+What standard cell library are you using?
+
+
+[2026-11-14 9:43 a.m.] sudonet
+i assume as_sc_mcu7t3v3?
+
+{Reactions}
+🔥
+
+[2026-11-14 9:50 a.m.] 246tnt
+Curious to see people testing their designs of run#2 using `as_sc_mcu7t3v3`. The fabulous using it on TT0p3 is exhibiting some strange behaviors in the config logic ( while the same designs using the foundry cells works as expected ).
+
+{Reactions}
+👀
+
+[2026-11-14 10:17 a.m.] sudonet
+👀
+
+
+[2026-11-14 10:24 a.m.] sudonet
+all my designs are currently just 7-track, 5v0
+
+{Reactions}
+🔥
+
+[2026-11-14 10:24 a.m.] sudonet
+even my 32-bit cpu design
+
+
+[2026-11-14 10:24 a.m.] sudonet
+my 16-year-old brain is too stupid for this (well, I *can* set it up in workflows and makefile, but not bothered to) Heck, I ain't even 16. Still have 3 days to wait.
+
+
+[2026-11-14 10:25 a.m.] logic_destroyer
+I'm definitely not going back to 5V. No way.
+
+
+[2026-11-14 10:36 a.m.] logic_destroyer
+Should I rather tape out in WS04?
+
+
+[2026-11-14 10:38 a.m.] 246tnt
+There is still plenty of people that should test their designs of run #2, it's just one data point and that design has the faulty buf_8 ( which in theory only affect power usage and not correctness but who knows ).  That's why I'm curious to see other people's results.
+
+
+[2026-11-14 10:39 a.m.] 246tnt
+I wouldn't jump to any conclusions based on a single person testing a single design ...
+
+
+[2026-11-14 11:07 a.m.] logic_destroyer
+@Tholin fixed both buffers in fa158ebd, then adjusted the drc margins in 765ae875. checked my ws03 pdk (5740c4a81c42), those fixes are in there. is this the same issue you're talking
+  about?
+
+
+[2026-11-14 11:16 a.m.] 246tnt
+I'm not sure. I didn't follow closely, I didn't design or hardened it.
+
+
+[2026-11-14 12:10 p.m.] logic_destroyer
+That's running Linux, not a bare-metal benchmark. Cache misses and memory stalls are included. Nearly 9 MIPS at 48 MHz is pretty  good for a simple multicycle CPU.
+
+
 ==============================================================
-Exported 26 message(s)
+Exported 45 message(s)
 ==============================================================
