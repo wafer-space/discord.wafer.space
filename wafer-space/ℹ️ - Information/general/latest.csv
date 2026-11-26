@@ -333,3 +333,13 @@ I'm just suggesting that it's likely not going to be unusable performance to do 
 "169786952432746498","mithro_","2026-11-26T04:21:21.4350000+00:00","I would prefer if we have shared publicly published logs with RSS feeds or something?","",""
 "169786952432746498","mithro_","2026-11-26T04:21:56.6280000+00:00","I was trying to do that @ https://discord.wafer.space/wafer-space/index.html but it never quite worked properly....","",""
 "169786952432746498","mithro_","2026-11-26T04:37:56.7120000+00:00","Did I ever share https://spiflash.readthedocs.io/en/latest/ ?","",""
+"928368481601208320","rjwalters","2026-11-26T05:33:40.3240000+00:00","a shared public log would be great! here are some PRs to help get us there:
+
+- #14 adds an index.json and Atom feeds (whole server, per channel, per forum) from the JSON you already publish.
+- #15 is why it never quite worked: each run spends 3.5 hours re-exporting every channel and retrying empty months, so the site updates every 8–10 hours. It skips whatever can't have changed. I couldn't test it against the server itself, so the first run is the real test.
+- #16 makes the lint job pass with current ruff (master fails it today). Worth merging first.
+- #17 reports the duplicate directories that renames leave behind, and removes them if you turn it on.
+- #19 stops gh-pages growing by a commit per deploy.
+- #18 is an issue about what gets published: the exclude list and a channel that is still up. Have a look at that one first.
+
+https://github.com/wafer-space/discord.wafer.space/pulls","",""
