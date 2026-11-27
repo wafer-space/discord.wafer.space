@@ -353,6 +353,83 @@ And done with Magic instead of KLayout (AFAIK).
 That’s what I was looking for! Thank you!
 
 
+[2026-11-27 3:37 p.m.] baal86
+What's the accepted way to do the analog top level routing? I.e. from my hard macros to the pin cells? Autorouter won't touch it since the pad cell sets the net at +SPECIAL. I am currently keeping all that routing on M2, very short and don't expect to use the routing space for anything else. Then I make a dedicated analog_routing.gds and place it as another hard macro. (needs some tweaking of the LEF for adjusting OBS) Is there a better way?
+
+
+[2026-11-27 3:39 p.m.] tholin
+You can get LibreLane to route to analog pads
+
+
+[2026-11-27 3:39 p.m.] tholin
+The problem is in the analog pad macro layout
+
+
+[2026-11-27 3:39 p.m.] tholin
+I use a modified GDS and LEF for the analog pad
+
+{Reactions}
+😮
+
+[2026-11-27 3:41 p.m.] baal86
+But you also made your own logic cell family 😆  It scares me a bit! Maybe I'll look into it. Copy the cell definition and make chip_top.sv include the custom macro? Is that the workflow you did?
+
+
+[2026-11-27 3:42 p.m.] 246tnt
+I made an "analog contact" pad that I place right next to the analog pad, it connects to it by abutment and exposes the pad analog signal as a normal signal and then use non-default-rule route for it.
+
+
+[2026-11-27 3:42 p.m.] 246tnt
+(it's really just a big piece of metal with 2 ports defined for it ... )
+
+
+[2026-11-27 3:43 p.m.] baal86
+Oh that sounds clever! how does the LVS handle abutment? I will need to do a bit of that elsewhere
+
+
+[2026-11-27 3:45 p.m.] baal86
+Will be this style (hard macro to the right will be moved as far left as PDN generation allows and I will forbid the placement of digital stuff in the gap. West side is analog, east side digitl for me
+
+{Attachments}
+2026-11_media/image-FDE44.png
+
+
+[2026-11-27 3:45 p.m.] 246tnt
+Yes, this passes LVS.
+
+
+[2026-11-27 3:47 p.m.] baal86
+Great! I think I'll try @Tholin 's method as well since that's the most elegant way. Wondering, is the +SPECIAL flag done purposefully for analog pins?
+
+
+[2026-11-27 3:48 p.m.] 246tnt
+It's more a side effect. It's because from the pad PoV it's the same signal on the bondpad and on the internal port ... and bondpads needs the special flag, if you try to remove it, things break.
+
+{Reactions}
+👍
+
+[2026-11-27 3:49 p.m.] tholin
+Yep. My fix was to just have a separate LEF pin for the chip side that LibreLane can use.
+
+{Reactions}
+👍
+
+[2026-11-27 3:51 p.m.] 246tnt
+Does that still pass LVS ? Or you need to modify the other views too ?
+
+
+[2026-11-27 3:51 p.m.] baal86
+Thanks! I guess I have three working methods now. I have only 18 connections, all on M2 and short so I guess my GDS method is not too painful either
+
+
+[2026-11-27 3:52 p.m.] rebelmike
+I used tnt's method in https://github.com/MichaelBell/ws02-tinyQV, grep for `analog_connect`
+
+
+[2026-11-27 3:53 p.m.] tholin
+Need to modify the GDS and lib
+
+
 ==============================================================
-Exported 66 message(s)
+Exported 83 message(s)
 ==============================================================
