@@ -76,6 +76,24 @@ uv run python scripts/test_bot_access.py
 ### Data Flow Pipeline
 
 1. **Export** (`scripts/export_channels.py`):
+   - First asks the Discord API (`scripts/discord_api.py`, GET only, same
+     bot token) for every channel's and thread's real type and the ID of its
+     newest message. `scripts/export_plan.py` uses that to skip work that is
+     provably unnecessary:
+       - a forum or category is never exported (its threads are);
+       - no month after the month of a channel's newest message is exported;
+       - the current month is skipped when the published JSON already holds
+         the newest message, unless that copy is older than
+         `refresh_unchanged_hours` (edits and deletions do not change the
+         newest message ID, so active channels are refreshed on a timer);
+       - a past month that exported empty is recorded and not retried.
+   - What the published files cannot show (empty months, and "exported while
+     message X was the newest" for a newest message that was later deleted)
+     is kept in `public/<server>/_export_state.json`. It lives in `public/`
+     on purpose: it is published and restored with the exports it describes.
+   - If the API lookup fails, the run logs an error (and so finishes red)
+     and exports every channel the way it did before the lookup existed. A
+     channel or thread missing from the lookup is treated the same way.
    - For each channel, computes the channel's earliest possible month from
      its Discord snowflake (no API call needed). Builds a list of months to
      export: always the current month, plus any past month not yet present
@@ -180,6 +198,8 @@ Forum channels export threads as separate files:
 discord-download/
 ├── scripts/                    # Python pipeline scripts
 │   ├── export_channels.py     # Main export orchestration (per-month)
+│   ├── discord_api.py         # Read-only API lookup: channel types, newest message IDs
+│   ├── export_plan.py         # Which months need exporting; _export_state.json
 │   ├── organize_exports.py    # File organization (per-month → public)
 │   ├── generate_navigation.py # Index page generation
 │   ├── months.py              # Month bounds, snowflake decoding, completion scan
@@ -271,6 +291,13 @@ Tests use pytest with fixtures for temporary directories:
 Test files mirror `scripts/` structure: `test_{module}.py` for each `{module}.py`.
 
 ## Common Issues and Solutions
+
+### A Channel Is Not Updating
+- The export summary prints "Channels unchanged (not re-exported)". A channel
+  is skipped only when the published JSON already holds the newest message
+  the API reports and the copy is younger than `refresh_unchanged_hours`.
+- To force a re-export of every channel active this month, set
+  `refresh_unchanged_hours = 0` for one run.
 
 ### Empty Exports
 - Verify `DISCORD_BOT_TOKEN` is set correctly

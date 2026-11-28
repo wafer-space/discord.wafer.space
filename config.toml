@@ -28,6 +28,16 @@ partition_by = "month"
 include_threads = "all"
 download_media = true  # Download Discord CDN assets (avatars, images, attachments) locally
 reuse_media = true  # Reuse previously downloaded media to avoid redundant requests
+# A channel whose newest message has not changed since its last export is not
+# re-exported. Edits and deletions do not change a channel's newest message,
+# so a channel that was active this month is re-exported anyway once its last
+# export is this many hours old. 0 re-exports every channel active this month
+# on every run (channels quiet this month are still skipped).
+refresh_unchanged_hours = 0
+# A past month that exported empty is not retried for this many days. An
+# empty export is also what a transient permission problem looks like, so the
+# record expires and the month is checked again. 0 retries every run.
+empty_month_recheck_days = 7
 # Note: Media is automatically stored per-channel in {channel_name}_media/ directories
 
 [github]

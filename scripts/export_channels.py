@@ -6,13 +6,29 @@ import os
 import subprocess
 import sys
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
 from scripts.channel_classifier import ChannelType, classify_channel, sanitize_thread_name
 from scripts.config import load_config
+from scripts.discord_api import (
+    ChannelActivity,
+    DiscordApiError,
+    fetch_guild_activity,
+    make_getter,
+)
+from scripts.export_plan import (
+    CACHE_FILE,
+    DEFAULT_EMPTY_RECHECK_DAYS,
+    DEFAULT_REFRESH_HOURS,
+    PHASE_BACKFILL,
+    PHASE_CURRENT,
+    ExportCache,
+    plan_months,
+    published_month_holds_messages,
+)
 from scripts.months import (
     count_divergent_months,
     count_nonempty_months,
@@ -37,6 +53,15 @@ class ChannelExportContext:
     token: str
     server_key: str
     state_manager: StateManager
+    # Channels skipped this run because nothing new was posted (current phase).
+    unchanged: int = 0
+    # Newest-message facts from the Discord API, keyed by channel ID. Empty
+    # when the lookup failed: every channel is then "activity unknown" and is
+    # exported the way it was before this lookup existed.
+    activity: dict[str, ChannelActivity] = field(default_factory=dict)
+    cache: ExportCache | None = None
+    refresh_hours: float = DEFAULT_REFRESH_HOURS
+    empty_recheck_days: float = DEFAULT_EMPTY_RECHECK_DAYS
 
 
 @dataclass
@@ -47,6 +72,8 @@ class ChannelInfo:
     channel_name: str
     safe_name: str
     forum_name: str
+    # Where this channel's months are published, when known.
+    public_channel_dir: Path | None = None
 
 
 @dataclass
@@ -263,30 +290,60 @@ def _export_one_month(
     # outputs that we don't want to keep — they'd just clutter public/. We
     # detect this via the JSON's messageCount and clean up the month.
     if exports_completed > 0 and not is_current_month:
-        _discard_if_empty_month(channel_export_dir, month)
+        discarded = _discard_if_empty_month(channel_export_dir, month)
+        if discarded and failures == 0:
+            _maybe_record_empty(context, channel_info, month)
 
     return exports_completed, failures, errors
 
 
-def _discard_if_empty_month(channel_export_dir: Path, month: str) -> None:
+def _maybe_record_empty(
+    context: ChannelExportContext,
+    channel_info: ChannelInfo,
+    month: str,
+) -> None:
+    """Record a past month that exported empty, unless it should have content.
+
+    "Zero messages, exit 0" is also what a bot without Read Message History
+    gets, so a month that is known to hold messages is not recorded: the
+    month of the channel's newest message, or one whose published copy has
+    messages. The record itself expires (see ``CacheEntry.known_empty``).
+    """
+    if context.cache is None:
+        return
+    activity = context.activity.get(channel_info.channel_id)
+    newest = activity.last_message_id if activity is not None else None
+    if newest and newest.isdigit() and snowflake_to_month(newest) == month:
+        print(f"      ⚠ {month} exported empty but holds the newest message; not recorded")
+        return
+    public_channel_dir = channel_info.public_channel_dir
+    if public_channel_dir is not None and published_month_holds_messages(public_channel_dir, month):
+        print(f"      ⚠ {month} exported empty but its published copy has messages; not recorded")
+        return
+    context.cache.record_empty(channel_info.channel_id, month, datetime.now(UTC))
+
+
+def _discard_if_empty_month(channel_export_dir: Path, month: str) -> bool:
     """Delete a month's output files if the JSON shows zero messages.
 
     Past months with no messages are noise. The current month is always
     kept (the channel might be silent right now but get a message tomorrow).
+
+    Returns True if the month was empty and its files were removed.
     """
     import json as _json
 
     json_path = channel_export_dir / f"{month}.json"
     if not json_path.exists():
-        return
+        return False
     try:
         with open(json_path, encoding="utf-8") as f:
             data = _json.load(f)
     except (OSError, _json.JSONDecodeError):
-        return
+        return False
     messages = data.get("messages") or []
     if messages:
-        return
+        return False
 
     # Remove all formats and the media directory for this month
     for fmt in ("html", "txt", "json", "csv"):
@@ -299,6 +356,7 @@ def _discard_if_empty_month(channel_export_dir: Path, month: str) -> None:
 
         _shutil.rmtree(media_dir)
     print(f"      (empty — discarded {month})")
+    return True
 
 
 def _update_channel_state_after_export(
@@ -333,10 +391,6 @@ def _update_channel_state_after_export(
             datetime.now(UTC).isoformat(),
             "placeholder_message_id",
         )
-
-
-PHASE_CURRENT = "current"
-PHASE_BACKFILL = "backfill"
 
 
 @dataclass
@@ -481,7 +535,94 @@ def _run_export_phase(  # noqa: PLR0913  # phase runner needs the per-server con
     return True
 
 
-def _process_single_channel(  # noqa: PLR0913,PLR0911,PLR0912,C901  # Orchestration glue
+def _months_for_phase(  # noqa: PLR0913  # needs the channel's full planning context
+    context: ChannelExportContext,
+    phase: str,
+    channel_id: str,
+    *,
+    public_channel_dir: Path,
+    current_month: str,
+    now: datetime,
+) -> list[str]:
+    """Return the months one phase should export for a channel.
+
+    With activity facts from the API the plan comes from `plan_months`, which
+    skips whatever is provably unchanged. Without them the plan is the
+    original one (current month always, every incomplete past month), minus
+    past months already known to be empty.
+    """
+    activity = _trusted_activity(context, phase, channel_id, public_channel_dir)
+    entry = context.cache.get(channel_id) if context.cache is not None else None
+    if activity is not None:
+        return plan_months(
+            phase,
+            channel_id,
+            activity,
+            entry,
+            public_channel_dir=public_channel_dir,
+            completed=scan_completed_months(public_channel_dir),
+            current_month=current_month,
+            now=now,
+            refresh_hours=context.refresh_hours,
+            empty_recheck_days=context.empty_recheck_days,
+        )
+    # planned == [current_month, *missing_past_months]
+    planned = _determine_months_to_export(channel_id, public_channel_dir, current_month)
+    if phase == PHASE_CURRENT:
+        return [current_month]
+    known_empty = entry.known_empty(now, context.empty_recheck_days) if entry else set()
+    return [m for m in planned if m != current_month and m not in known_empty]
+
+
+def _trusted_activity(
+    context: ChannelExportContext,
+    phase: str,
+    channel_id: str,
+    public_channel_dir: Path,
+) -> ChannelActivity | None:
+    """Return the API's activity facts for a channel if they can drive a plan.
+
+    None (plan as if the lookup had failed) when the API did not say what
+    the channel's newest message is, or said it has none although messages
+    from it are already published.
+    """
+    activity = context.activity.get(channel_id)
+    if activity is None or not activity.last_message_known:
+        return None
+    if activity.last_message_id is None and count_nonempty_months(public_channel_dir) > 0:
+        if phase == PHASE_CURRENT:
+            print(
+                f"    ⚠ API reports no messages for {channel_id} but {public_channel_dir} "
+                "has published messages; exporting as if activity were unknown"
+            )
+        return None
+    return activity
+
+
+def _record_exported(
+    context: ChannelExportContext,
+    channel_id: str,
+    months_exported: list[str],
+    current_month: str,
+    now: datetime,
+) -> None:
+    """Remember that the published copy now reflects the channel's newest message.
+
+    Called only when every format succeeded. Records nothing unless this
+    phase exported the month that message belongs to, so the next run can
+    skip the channel only for work that was really done.
+    """
+    activity = context.activity.get(channel_id)
+    if activity is None or context.cache is None:
+        return
+    newest = activity.last_message_id
+    if not newest or not newest.isdigit():
+        return
+    if min(snowflake_to_month(newest), current_month) in months_exported:
+        context.cache.record_export(channel_id, newest, now)
+
+
+def _process_single_channel(  # noqa: PLR0913,PLR0911,PLR0912,PLR0915,C901  # Orchestration glue
     context: ChannelExportContext,
     channel: dict[str, str | None],
     channel_type: ChannelType,
@@ -521,6 +662,16 @@ def _process_single_channel(  # noqa: PLR0913,PLR0911,PLR0912,C901  # Orchestrat
     channel_name: str = channel_name_raw
     channel_id: str = channel_id_raw
 
+    # The API's own channel type is authoritative where we have it. A forum
+    # that sits inside a category reaches here classified as a THREAD of that
+    # category, and DiscordChatExporter refuses to export a forum directly,
+    # which used to log an error for every month and format on every run.
+    activity = context.activity.get(channel_id)
+    if activity is not None and activity.is_container:
+        if phase == PHASE_CURRENT:
+            print(f"  Skipping #{channel_name} (forum or category — its threads are exported)")
+        return 0, 0, 0, 0, []
+
     # Forum parent channels have no messages of their own — their threads
     # are exported separately. Only create the dir once (current phase).
     if channel_type == ChannelType.FORUM:
@@ -541,33 +692,37 @@ def _process_single_channel(  # noqa: PLR0913,PLR0911,PLR0912,C901  # Orchestrat
             print(f"  Skipping {channel_name} (excluded by pattern)")
         return 0, 0, 0, 0, []
 
+    # Determine which months this phase is responsible for.
+    public_channel_dir = _public_channel_dir(
+        public_dir, context.server_key, channel_type, safe_name, forum_name
+    )
     channel_info = ChannelInfo(
         channel_id=channel_id,
         channel_name=channel_name,
         safe_name=safe_name,
         forum_name=forum_name,
-    )
-
-    # Determine which months this phase is responsible for.
-    public_channel_dir = _public_channel_dir(
-        public_dir, context.server_key, channel_type, safe_name, forum_name
+        public_channel_dir=public_channel_dir,
     )
     current_month = current_month_utc()
+    now = datetime.now(UTC)
     try:
-        planned = _determine_months_to_export(channel_id, public_channel_dir, current_month)
+        months_to_export = _months_for_phase(
+            context,
+            phase,
+            channel_id,
+            public_channel_dir=public_channel_dir,
+            current_month=current_month,
+            now=now,
+        )
     except ValueError as e:
         print(f"    ERROR computing months: {e}")
         return 0, 0, 1, 0, [{"channel": channel_name, "format": "N/A", "error": str(e)}]
 
-    # planned == [current_month, *missing_past_months]
-    if phase == PHASE_CURRENT:
-        months_to_export = [current_month]
-    else:  # PHASE_BACKFILL
-        months_to_export = [m for m in planned if m != current_month]
-
     if not months_to_export:
         if phase == PHASE_BACKFILL:
             return 0, 0, 0, 0, []  # nothing to backfill; already counted in current phase
+        if activity is not None:
+            context.unchanged += 1
         return 0, 1, 0, 0, []
 
     label = "current" if phase == PHASE_CURRENT else "backfill"
@@ -595,6 +750,9 @@ def _process_single_channel(  # noqa: PLR0913,PLR0911,PLR0912,C901  # Orchestrat
             print(f"    SKIPPED #{channel_name} (forbidden — bot lacks read access)")
             return 0, 0, 0, 1, []
         return 0, 0, 0, 0, []
+
+    if total_failures == 0:
+        _record_exported(context, channel_id, months_to_export, current_month, now)
 
     # Update the observational last-export timestamp once per run, in the
     # current phase only. The backfill phase touches the same channel later
@@ -956,6 +1114,7 @@ def export_all_channels(  # noqa: C901,PLR0915  # Orchestration top-level
         "channels_updated": 0,
         "channels_failed": 0,
         "channels_skipped_forbidden": 0,
+        "channels_unchanged": 0,
         "total_exports": 0,
         "errors": [],
         "time_budget_exhausted": False,
@@ -978,12 +1137,40 @@ def export_all_channels(  # noqa: C901,PLR0915  # Orchestration top-level
     for server_key, server_config in config["servers"].items():
         print(f"\nProcessing server: {server_config['name']}")
 
+        # Ask Discord which channels have anything new. A failure here is
+        # reported as an error (the run goes red) but does not stop the
+        # export: with no activity facts, every channel is exported as before.
+        activity: dict[str, ChannelActivity] = {}
+        try:
+            activity = fetch_guild_activity(str(server_config["guild_id"]), make_getter(token))
+            print(f"  Fetched activity for {len(activity)} channels and threads")
+        except DiscordApiError as e:
+            print(f"  ERROR: could not fetch channel activity ({e}); exporting every channel")
+            summary["errors"].append(
+                {
+                    "channel": "N/A",
+                    "format": "N/A",
+                    "error": f"Failed to fetch channel activity, so nothing was skipped: {e}",
+                }
+            )
+
+        cache = ExportCache(public_dir / server_key / CACHE_FILE)
+        cache.load()
+
         # Create export context for this server
         context = ChannelExportContext(
             config=config,
             token=token,
             server_key=server_key,
             state_manager=state_manager,
+            activity=activity,
+            cache=cache,
+            refresh_hours=float(
+                config["export"].get("refresh_unchanged_hours", DEFAULT_REFRESH_HOURS)
+            ),
+            empty_recheck_days=float(
+                config["export"].get("empty_month_recheck_days", DEFAULT_EMPTY_RECHECK_DAYS)
+            ),
         )
 
         server_dir = exports_dir / server_key
@@ -1032,33 +1219,32 @@ def export_all_channels(  # noqa: C901,PLR0915  # Orchestration top-level
         #     missing historical months. Resumes across runs.
         filters = (include_patterns, exclude_patterns)
 
-        print(f"\n  Phase 1/2: current month for all {len(channels)} channels")
-        if not _run_export_phase(
-            PHASE_CURRENT,
-            channels,
-            channel_classifications,
-            context,
-            server_dir,
-            filters,
-            channel_path_map,
-            public_dir,
-            summary,
-            budget,
+        finished = True
+        for phase, heading in (
+            (PHASE_CURRENT, f"Phase 1/2: current month for all {len(channels)} channels"),
+            (PHASE_BACKFILL, "Phase 2/2: historical backfill (budget-limited)"),
         ):
-            break
-        print("\n  Phase 2/2: historical backfill (budget-limited)")
-        if not _run_export_phase(
-            PHASE_BACKFILL,
-            channels,
-            channel_classifications,
-            context,
-            server_dir,
-            filters,
-            channel_path_map,
-            public_dir,
-            summary,
-            budget,
-        ):
+            print(f"\n  {heading}")
+            finished = _run_export_phase(
+                phase,
+                channels,
+                channel_classifications,
+                context,
+                server_dir,
+                filters,
+                channel_path_map,
+                public_dir,
+                summary,
+                budget,
+            )
+            if not finished:
+                break
+
+        # Written even when the budget ran out, so the work that did finish
+        # is not repeated next run.
+        cache.save()
+        summary["channels_unchanged"] += context.unchanged
+        if not finished:
             break
 
     # Save state
@@ -1086,6 +1272,7 @@ def main() -> None:
         print(f"  Channels updated: {summary['channels_updated']}")
         print(f"  Channels failed: {summary['channels_failed']}")
         print(f"  Channels skipped (forbidden): {summary.get('channels_skipped_forbidden', 0)}")
+        print(f"  Channels unchanged (not re-exported): {summary.get('channels_unchanged', 0)}")
         print(f"  Total exports: {summary['total_exports']}")
         if summary.get("time_budget_exhausted"):
             print("  NOTE: stopped early due to time budget; backfill resumes next run")
@@ -1130,6 +1317,7 @@ def _write_summary_file(summary: dict[str, Any]) -> None:
                     "channels_updated": summary["channels_updated"],
                     "channels_failed": summary["channels_failed"],
                     "channels_skipped_forbidden": summary.get("channels_skipped_forbidden", 0),
+                    "channels_unchanged": summary.get("channels_unchanged", 0),
                     "total_exports": summary["total_exports"],
                     "error_count": len(summary["errors"]),
                     "timestamp": datetime.now(UTC).isoformat(),
