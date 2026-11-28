@@ -20,6 +20,7 @@ make all
 make export      # Export Discord channels using DiscordChatExporter
 make organize    # Organize exports into public/ directory structure
 make navigate    # Generate navigation HTML pages from templates
+make feeds       # Generate index.json and Atom feeds from public/
 ```
 
 ### Testing
@@ -110,6 +111,21 @@ uv run python scripts/test_bot_access.py
    - Creates hierarchical indexes: site → server → channel/forum → archives.
    - Templates in `templates/` directory.
 
+4. **Feeds** (`scripts/generate_feeds.py`):
+   - Reads the same per-month JSON in `public/` and writes
+     `public/<server>/index.json` (every channel, thread and forum keyed by
+     Discord ID) plus an Atom feed for the server and for each channel
+     directory. No Discord API calls and no change to any export.
+   - A channel is identified by the ID inside its JSON, not its path. When a
+     rename has left two directories for one ID, the one with the newest
+     `exportedAt` is the live `path`; the rest are listed in `stale_paths`
+     and get a copy of the live feed so their index pages do not link to a
+     missing file.
+   - A forum has no export of its own. It is inferred from the threads
+     beneath it, which carry its ID as their parent.
+   - Output is a pure function of `public/`: no wall-clock timestamps, so an
+     unchanged archive produces byte-identical files.
+
 ### Month-based partitioning
 
 `scripts/months.py` contains the primitives:
@@ -182,6 +198,7 @@ discord-download/
 │   ├── export_channels.py     # Main export orchestration (per-month)
 │   ├── organize_exports.py    # File organization (per-month → public)
 │   ├── generate_navigation.py # Index page generation
+│   ├── generate_feeds.py      # index.json and Atom feeds
 │   ├── months.py              # Month bounds, snowflake decoding, completion scan
 │   ├── state.py               # State tracking
 │   ├── config.py              # Configuration loading

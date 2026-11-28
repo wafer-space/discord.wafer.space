@@ -1,6 +1,6 @@
 # Makefile for discord.wafer.space
 
-.PHONY: help setup test export organize navigate clean all
+.PHONY: help setup test export organize navigate feeds clean all
 
 # Variables
 EXPORTER_DIR := bin/discord-exporter
@@ -18,7 +18,8 @@ help:
 	@echo "  export     - Run Discord export script"
 	@echo "  organize   - Organize exports into public/ directory"
 	@echo "  navigate   - Generate navigation HTML pages"
-	@echo "  all        - Run complete pipeline: export → organize → navigate"
+	@echo "  feeds      - Generate index.json and Atom feeds from public/"
+	@echo "  all        - Run complete pipeline: export → organize → navigate → feeds"
 	@echo "  clean      - Remove exports, public, and state.json"
 	@echo "  clean-all  - Remove everything including DiscordChatExporter.Cli"
 	@echo ""
@@ -62,8 +63,13 @@ navigate:
 	@echo "Generating navigation pages..."
 	PYTHONPATH=. $(PYTHON) scripts/generate_navigation.py
 
+# Generate the machine-readable index and Atom feeds
+feeds:
+	@echo "Generating index.json and Atom feeds..."
+	PYTHONPATH=. $(PYTHON) scripts/generate_feeds.py
+
 # Run complete pipeline
-all: export organize navigate
+all: export organize navigate feeds
 	@echo ""
 	@echo "✓ Complete pipeline finished!"
 	@echo "  - Exports: exports/"
