@@ -26,7 +26,10 @@
                 <p class="stats">Forum with discussion threads</p>
                 <p><a href="/{{ server.name }}/{{ channel.name }}/index.html">View all threads →</a></p>
                 {% else %}
-                <p class="stats">{{ channel.message_count }} messages this month</p>
+                {# message_count is the newest archive's count, which is not always the current month. #}
+                {% if channel.archives %}
+                <p class="stats">{{ channel.message_count }} message{{ '' if channel.message_count == 1 else 's' }} in {{ channel.archives[0].date }}</p>
+                {% endif %}
                 <div class="formats">
                     Formats:
                     <a href="/{{ server.name }}/{{ channel.name }}/latest.html">HTML</a> |

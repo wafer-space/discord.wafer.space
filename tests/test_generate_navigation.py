@@ -239,6 +239,42 @@ def test_generate_server_index() -> None:
         assert "#general" in html
 
 
+def test_server_index_labels_count_with_its_month() -> None:
+    """The count beside a channel is its newest archive's, so name that month.
+
+    It used to read "N messages this month" even when the newest archive was
+    months old (a quiet or renamed channel).
+    """
+    with tempfile.TemporaryDirectory() as tmpdir:
+        output_path = Path(tmpdir) / "public" / "test-server" / "index.html"
+        config = {"site": {"title": "Test Discord Logs"}}
+        server = {"name": "test-server", "display_name": "Test Server"}
+        channels = [
+            {
+                "name": "quiet",
+                "message_count": 40,
+                "archive_count": 2,
+                "archives": [
+                    {"date": "2026-07", "message_count": 40},
+                    {"date": "2026-06", "message_count": 9},
+                ],
+            },
+            {
+                "name": "single",
+                "message_count": 1,
+                "archive_count": 1,
+                "archives": [{"date": "2026-11", "message_count": 1}],
+            },
+        ]
+
+        generate_server_index(config, server, channels, output_path)
+
+        html = output_path.read_text()
+        assert "40 messages in 2026-07" in html
+        assert "1 message in 2026-11" in html
+        assert "this month" not in html
+
+
 def test_generate_channel_index() -> None:
     """Test generating channel index page"""
     with tempfile.TemporaryDirectory() as tmpdir:
