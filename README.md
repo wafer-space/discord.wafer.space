@@ -10,12 +10,41 @@ Automated Discord log archival website for wafer.space Discord server.
 - 🔍 **SEO-friendly**: Static HTML indexed by search engines
 - 🎨 **Discord-themed UI**: Familiar look and feel
 - 📊 **Message statistics**: Counts and archive history
+- 📡 **Feeds and index**: Atom feeds and an `index.json` for feed readers, scripts and agents
 
 ## Architecture
 
 See [Design Document](docs/plans/2025-11-14-discord-wafer-space-design.md) for complete architecture.
 
 **Pipeline**: Discord API → DiscordChatExporter → Python Scripts → GitHub Pages
+
+## Reading the archive from a feed reader, script or agent
+
+Nothing here needs a Discord account or a bot token. Everything is a static
+file under `https://discord.wafer.space/<server>/`.
+
+| File | What it is |
+|---|---|
+| `index.json` | Every channel, thread and forum, keyed by its Discord ID: name, category, parent, path, URLs, months available, message count, last message. Start here. |
+| `feed.atom` | The newest 200 messages across the server. |
+| `<channel path>/feed.atom` | The newest 100 messages in that channel and its threads. For a forum, the newest messages in its posts. |
+| `<channel path>/latest.json` | The channel's newest month, complete. |
+| `<channel path>/<YYYY-MM>/<YYYY-MM>.json` | One month, complete. Also `.html`, `.txt` and `.csv`. |
+
+Notes for anything that reads these automatically:
+
+- **Use the ID, not the path.** Paths are built from category and channel
+  names, so they change when a channel is renamed. `index.json` gives each
+  ID's current `path`, and lists the directories a rename left behind in
+  `stale_paths`.
+- **Feeds carry only what people wrote.** Joins, pins, renames and
+  "thread created" notices are left out; the JSON exports have them.
+- **A feed is a window, not a log.** In a busy hour a channel can pass 100
+  messages between two fetches. To miss nothing, read `latest.json` and
+  keep the last message ID you saw.
+- **Freshness is the export's.** `index.json` has `updated_at` for the
+  archive and `exported_at` per channel. The feeds are rebuilt on every run
+  from the JSON already published, with no Discord API calls.
 
 ## Setup Guide
 
@@ -91,6 +120,9 @@ uv run python scripts/export_channels.py
 
 # Generate navigation
 uv run python scripts/generate_navigation.py
+
+# Generate index.json and Atom feeds
+uv run python scripts/generate_feeds.py
 
 # Preview locally
 python -m http.server --directory public 8000

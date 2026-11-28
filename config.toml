@@ -26,6 +26,11 @@ exclude_channels = [
 formats = ["html", "txt", "json", "csv"]
 partition_by = "month"
 include_threads = "all"
+# Renaming a channel or category leaves its old directory published beside the
+# new one. Every run reports those directories. Set this to true to remove
+# them, leaving a redirect page; a directory holding a month that its live
+# copy lacks is always kept.
+prune_stale_paths = false
 download_media = true  # Download Discord CDN assets (avatars, images, attachments) locally
 reuse_media = true  # Reuse previously downloaded media to avoid redundant requests
 # Note: Media is automatically stored per-channel in {channel_name}_media/ directories

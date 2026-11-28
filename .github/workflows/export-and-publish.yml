@@ -101,6 +101,16 @@ jobs:
           uv run python scripts/organize_exports.py
         id: organize
 
+      # Reports directories left behind by channel/category renames. Removes
+      # them only when [export] prune_stale_paths = true in config.toml. Runs
+      # before navigation so the index pages are built from what is left.
+      - name: Prune directories left by renames
+        env:
+          PYTHONPATH: .
+        run: |
+          uv run python scripts/prune_stale.py
+        id: prune
+
       - name: Run navigation generator
         env:
           PYTHONPATH: .
@@ -108,6 +118,16 @@ jobs:
           echo "Generating navigation..."
           uv run python scripts/generate_navigation.py
         id: navigation
+
+      # Reads the JSON exports already in public/ and writes index.json plus
+      # Atom feeds beside them. No Discord API calls; a few seconds.
+      - name: Generate index.json and Atom feeds
+        env:
+          PYTHONPATH: .
+        run: |
+          echo "Generating index.json and Atom feeds..."
+          uv run python scripts/generate_feeds.py
+        id: feeds
 
       # GitHub rejects any file >100MB on push and Pages can't serve files
       # that big, so a single oversized Discord attachment (e.g. a 215MB GDS
@@ -370,6 +390,7 @@ jobs:
           echo "- **Export Step**: ${{ steps.export.outcome }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Organize Step**: ${{ steps.organize.outcome }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Navigation Step**: ${{ steps.navigation.outcome }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Feeds Step**: ${{ steps.feeds.outcome }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Changes Detected**: ${{ steps.check_changes.outputs.has_changes }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Deploy Step**: ${{ steps.deploy.outcome }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
