@@ -31,3 +31,40 @@ AuthorID,Author,Date,Content,Attachments,Reactions
 "691780627338625077","rebelmike","2026-11-25T11:46:38.1620000+00:00","Brilliant, thank you! I’ll try to get that integrated this evening.","",""
 "596068704471482370","246tnt","2026-11-26T15:10:51.9290000+00:00","@RebelMike Did you try / manage ?","",""
 "691780627338625077","rebelmike","2026-11-26T15:22:43.0280000+00:00","I did try, didn't quite succeed yet.  I'm busy this evening but hopefully will figure it out tomorrow","",""
+"691780627338625077","rebelmike","2026-11-27T19:42:49.3990000+00:00","OK, I think I have it working - I need to do a full run with DRC but LVS passed.  My mistake was to generate a new LEF from Magic - that picked up some metal just outside the declared bounds of the pad, which I assume just overlaps with the surrounding fill, but it was making various things unhappy in the flow.
+
+You can see what I've done here: https://github.com/MichaelBell/ws03-tinyqv-bio/tree/main/ip/gf180mcu_tnt_io","",""
+"596068704471482370","246tnt","2026-11-27T20:39:34.6190000+00:00","Damn, it's been building for 2h ???","",""
+"691780627338625077","rebelmike","2026-11-27T21:02:41.9510000+00:00","It does take a while, but these have TinyQV plus 3 or 4 BIO cores. If I was sensible I’d have made a trivial design just to test the USB pad…","",""
+"691780627338625077","rebelmike","2026-11-27T21:35:52.0040000+00:00","Hmm, DRC errors.  NP.9,10 and PP.9,10, within the pad.  I guess the flatten lost something?","2026-11_media/usb_drc_err-2A541.tgz",""
+"596068704471482370","246tnt","2026-11-27T21:38:09.4910000+00:00","How did you flatten it ?","",""
+"596068704471482370","246tnt","2026-11-27T21:41:37.7230000+00:00","Oh yeah, look like you just loaded it into magic and used flatten, that won't work because there are `MASKHINTS` used to tweak various layers that magic doesn't generate automatically in the IO and the flatten will loose those.","",""
+"691780627338625077","rebelmike","2026-11-27T21:42:16.3060000+00:00","How should I have done it?","",""
+"596068704471482370","246tnt","2026-11-27T21:42:45.4330000+00:00","Probably the best is using something like `gdstk`","",""
+"596068704471482370","246tnt","2026-11-27T21:43:06.6210000+00:00","Maybe klayout has something too, I'm not super familiar with it.","",""
+"691780627338625077","rebelmike","2026-11-27T21:44:21.2930000+00:00","_googles gdstk_","",""
+"691780627338625077","rebelmike","2026-11-27T21:44:42.5990000+00:00","(which is the verb I use for searching on ddg 😆 )","",""
+"262706220073222144","namibj","2026-11-27T21:45:17.2590000+00:00","This is via a sheet resistor right?
+Or did you do the DSS pmos sized to manage to be in-spec with it's channel while that's active?","",""
+"596068704471482370","246tnt","2026-11-27T21:48:06.8210000+00:00","@RebelMike 
+```python
+import gdstk
+lib = gdstk.read_gds('gf180mcu_ocd_io__bi_24t_5lm.gds')
+top = lib.top_level()[0]
+top.name = 'gf180mcu_tnt_io__bi_24t_usb'
+top.flatten()
+nl = gdstk.Library()
+nl.add(top)
+nl.write_gds('gf180mcu_tnt_io__bi_24t_usb.gds')
+```","",""
+"691780627338625077","rebelmike","2026-11-27T21:48:33.5300000+00:00","Thank you!","",""
+"596068704471482370","246tnt","2026-11-27T21:52:19.2130000+00:00","","2026-11_media/gf180mcu_tnt_io__bi_24t_usb.gds-C15CC.gz",""
+"596068704471482370","246tnt","2026-11-27T21:53:02.8690000+00:00","There is no `DSS` pmos, just a poly resistor and a standard pmos driver, but I had to size up the pmos driver because the existing one was way too weak.","",""
+"691780627338625077","rebelmike","2026-11-27T22:11:03.6330000+00:00","I put to together a trivial test project, so we'll get a result more quickly: https://github.com/MichaelBell/usb-pad-test","",""
+"262706220073222144","namibj","2026-11-27T22:18:38.0070000+00:00","I see.
+Yeah, I had just thought it might be enough for the spec and should be substantially smaller, that's all.","",""
+"596068704471482370","246tnt","2026-11-27T22:21:05.0120000+00:00","In the existing pad the driver is in one place and the existing poly resistor is another place (they squeezed things where they could ..).
+
+And the place where the driver is, there isn't that much space to put a DSS fet with any substantial resistance, too crammed.  And bringing the control signal over to where the poly is more work.","",""
+"691780627338625077","rebelmike","2026-11-27T22:40:59.1020000+00:00","Looks like that worked","","🎉 (1)"
+"262706220073222144","namibj","2026-11-27T22:54:12.0480000+00:00","Yeah fair.","",""

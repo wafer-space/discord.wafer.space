@@ -915,6 +915,32 @@ Implementable on my FPAA 🧙
 Not yet. Probably will? There's a lot of interconnected magic, because as I have noted privately to @Archit3ch (George) -- noisy audio techniques like BBD are particularly hard to outrun in a 5V process. I had set a goal for "not much worse than Reticon", which was a notoriously noisy and glitchy process. Barely achieved in simulation (who knows in practice)... but then, Reticon chips now go for hundreds of dollars each.
 
 
+[2026-11-27 4:16 p.m.] archit3ch
+`Reticon explicitly recommends driving its two 512-stage sections differentially and subtracting their outputs to cancel even-harmonic distortion`
+
+
+[2026-11-27 4:17 p.m.] archit3ch
+Oof. chips so bad, you need to buy two of them. 🙃 no wonder they're super expensive on the secondary market for "character"
+
+
+[2026-11-27 4:21 p.m.] 246tnt
+How to double your sales 😅
+
+{Reactions}
+📈
+
+[2026-11-27 5:07 p.m.] .dmv
+Not quite. They were sold as SAD1024, but internally built as 2x512 rather than 1x1024 like the name would imply.
+
+I mean, they're bad -- noisy, etc. BBD lost as a delay technique pretty much as soon as 32kB of RAM dropped to a feasible price in the early 80s, because a noisy 12-bit serial ADC & 32kB was still easier to make sound clean than getting BBD to get to >300ms. [Boss DD-2 -> DD-3 change, for historic reference]
+
+
+[2026-11-27 5:12 p.m.] .dmv
+But good-bad: people have done some pretty crazy design work to match the degrading sounds of a Reticon. One famous version of the sound that's best achieved with a Reticon is Nirvana's "Radio Friendly Unit Shifter", which is an EHX PolyChorus tuned just so. Reticon chips, if you can find them, go for big money to repair or replicate such devices.
+
+(There are, of course, perfect digital simulations. Cabintech even makes an "analog-like" embedded DSP module that you can pick various BBD to simulate but interface with entirely analog. There's just a touch of CODEC latency, so you generally need to use some of the 4 channels for maintaining a "dry" delay)
+
+
 ==============================================================
-Exported 183 message(s)
+Exported 188 message(s)
 ==============================================================
