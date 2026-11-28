@@ -63,22 +63,44 @@ jobs:
 
       - name: Fetch existing gh-pages content
         # Pulls the previously-published site into public/ so the export step
-        # can see which months are already complete (and skip them). On a
-        # fresh repo gh-pages won't exist yet; that's fine — we start empty.
+        # can see which months are already complete (and skip them). Past
+        # months exist only on gh-pages, so a run must never deploy from an
+        # empty public/ just because the fetch failed. Start fresh only when
+        # the remote positively reports that gh-pages does not exist.
         run: |
           set -euo pipefail
           echo "Fetching existing gh-pages content into public/..."
           rm -rf public
 
-          if git fetch origin gh-pages:gh-pages; then
-            git worktree add public gh-pages
-            # Remove .git reference so peaceiris/actions-gh-pages can work properly
-            rm -f public/.git
-            echo "✓ Fetched $(find public -type f | wc -l) files from gh-pages"
-          else
-            echo "No existing gh-pages branch yet — starting fresh"
+          # --exit-code: 0 = branch exists, 2 = no such branch, anything else
+          # = we could not tell (network, auth) and must not guess.
+          status=0
+          git ls-remote --exit-code --heads origin gh-pages > /dev/null || status=$?
+          if [ "$status" -eq 2 ]; then
+            echo "No gh-pages branch on origin yet — starting fresh"
             mkdir -p public
+            exit 0
+          elif [ "$status" -ne 0 ]; then
+            echo "::error::Could not check for gh-pages on origin (git ls-remote exit $status); refusing to publish from an empty public/"
+            exit 1
           fi
+
+          for attempt in 1 2 3; do
+            if git fetch origin gh-pages:gh-pages; then
+              break
+            fi
+            if [ "$attempt" -eq 3 ]; then
+              echo "::error::gh-pages exists but could not be fetched after 3 attempts; refusing to publish from an empty public/"
+              exit 1
+            fi
+            echo "Fetch attempt $attempt failed; retrying in $((attempt * 15))s..."
+            sleep $((attempt * 15))
+          done
+
+          git worktree add public gh-pages
+          # Remove .git reference so peaceiris/actions-gh-pages can work properly
+          rm -f public/.git
+          echo "✓ Fetched $(find public -type f | wc -l) files from gh-pages"
 
       - name: Run export script
         env:
